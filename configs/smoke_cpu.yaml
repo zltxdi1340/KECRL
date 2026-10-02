@@ -1,0 +1,1 @@
+{"device":"cpu","seed":7,"max_steps":2,"num_workers":0,"mixed_precision":false,"results_dir":"results/smoke","qualification":{"min_samples":1,"success_threshold":1.0,"contract_threshold":1.0},"knowledge":{"alpha_0":1.0,"beta_0":1.0,"n_min":1,"tau_confirm":0.5,"tau_reject":0.2,"confidence":0.95,"budget":4,"evidence_cost":1}}

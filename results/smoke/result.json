@@ -1,0 +1,170 @@
+{
+  "metadata": {
+    "python": "3.12.7 | packaged by Anaconda, Inc. | (main, Oct  4 2024, 13:17:27) [MSC v.1929 64 bit (AMD64)]",
+    "platform": "Windows-11-10.0.26300-SP0",
+    "requested_device": "cpu",
+    "resolved_device": "cpu",
+    "seed": 7,
+    "git_commit": "unknown",
+    "framework": {
+      "name": "torch",
+      "version": "2.6.0",
+      "cuda": null,
+      "gpu": null
+    }
+  },
+  "config": {
+    "device": "cpu",
+    "seed": 7,
+    "max_steps": 2,
+    "num_workers": 0,
+    "mixed_precision": false,
+    "results_dir": "results/smoke",
+    "qualification": {
+      "min_samples": 1,
+      "success_threshold": 1.0,
+      "contract_threshold": 1.0
+    },
+    "knowledge": {
+      "alpha_0": 1.0,
+      "beta_0": 1.0,
+      "n_min": 1,
+      "tau_confirm": 0.5,
+      "tau_reject": 0.2,
+      "confidence": 0.95,
+      "budget": 4,
+      "evidence_cost": 1
+    }
+  },
+  "task_result": "completed",
+  "transition": {
+    "target_achieved": true,
+    "observed_state_changes": {
+      "value": 1,
+      "delta": 1
+    },
+    "consumed_resources": {},
+    "released_resources": {},
+    "produced_capabilities": [
+      {
+        "name": "value_at_least",
+        "value": 1
+      }
+    ],
+    "execution_status": "success"
+  },
+  "knowledge_feedback": [
+    {
+      "before_state": {
+        "value": 0,
+        "target": 1
+      },
+      "after_state": {
+        "value": 1,
+        "delta": 1
+      },
+      "public_observation": {
+        "value": 1,
+        "delta": 1
+      },
+      "environment_scope": {
+        "environment": "controlled"
+      },
+      "intervention_metadata": {
+        "performed": false
+      },
+      "evidence_validity": "unknown"
+    }
+  ],
+  "skill_feedback": [
+    {
+      "spi_id": "spi:increment:1",
+      "module_id": "module:spi:increment:1:1",
+      "target_achieved": true,
+      "execution_status": "success"
+    }
+  ],
+  "knowledge_evolution": {
+    "propositions": {
+      "increment_reachability": {
+        "proposition_id": "increment_reachability",
+        "alpha_0": 1.0,
+        "beta_0": 1.0,
+        "support": 0,
+        "counterevidence": 0,
+        "status": "candidate"
+      }
+    },
+    "mechanisms": {},
+    "evidence": [
+      {
+        "proposition_id": "increment_reachability",
+        "observation": "bottom",
+        "evidence": {
+          "before_state": {
+            "value": 0,
+            "target": 1
+          },
+          "after_state": {
+            "value": 1,
+            "delta": 1
+          },
+          "public_observation": {
+            "value": 1,
+            "delta": 1
+          },
+          "environment_scope": {
+            "environment": "controlled"
+          },
+          "intervention_metadata": {
+            "performed": false
+          },
+          "evidence_validity": "unknown"
+        }
+      }
+    ]
+  },
+  "module": {
+    "module_id": "module:spi:increment:1:1",
+    "spi_id": "spi:increment:1",
+    "policy_ref": "controlled-policy",
+    "implementation_contract": {
+      "start_capabilities": [
+        {
+          "name": "value_at_least",
+          "value": 0
+        }
+      ],
+      "hold_capabilities": [],
+      "declared_output_capabilities": [
+        {
+          "name": "value_at_least",
+          "value": 1
+        }
+      ],
+      "resource_consumption": {},
+      "resource_release": {},
+      "implementation_constraints": {},
+      "applicability_scope": {
+        "environment": "controlled"
+      }
+    },
+    "experience_summary": {
+      "samples": 1,
+      "successes": 1
+    },
+    "statistics": {
+      "success_rate": 1.0,
+      "contract_rate": 1.0
+    },
+    "metadata": {
+      "spt_id": "spt:increment",
+      "spt_version": "v1",
+      "qualification": {
+        "min_samples": 1,
+        "success_threshold": 1.0,
+        "contract_threshold": 1.0
+      }
+    }
+  }
+}

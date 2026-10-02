@@ -1,0 +1,14 @@
+Empowering GUI Agents via Autonomous Experience Exploration and Hindsight Experience Utilization for Task Planning
+Compositional Skill Routing for LLM Agents: Decompose, Retrieve, and Compose
+SkillOps: Managing LLM Agent Skill Libraries as Self-Maintaining Software Ecosystems
+SkillComposer: Learning to Evolve Agent Skills for Specification and Generalization
+Skill Discovery using Language Models
+Towards Continual Reinforcement Learning: A Review and Perspectives
+Rolnick et al., “Experience Replay for Continual Learning,” NeurIPS 2019
+Wołczyk et al., “Continual World: A Robotic Benchmark for Continual Reinforcement Learning,” NeurIPS 2021
+Meta-World: A Benchmark and Evaluation for Multi-Task and Meta Reinforcement Learning
+Ahmed et al., “CausalWorld: A Robotic Manipulation Benchmark for Causal Structure and Transfer Learning,”
+Hafner, Pasukonis, Ba, Lillicrap, “Benchmarking the Spectrum of Agent Capabilities,” ICLR 2022
+Bacon, Harb, Precup, “The Option-Critic Architecture,” AAAI 2017
+Eysenbach et al., “Diversity is All You Need: Learning Skills without a Reward Function,” ICLR 2019
+Judea Pearl, Causality: Models, Reasoning, and Inference, 2nd ed.
