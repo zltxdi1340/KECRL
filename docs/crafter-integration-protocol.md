@@ -148,3 +148,17 @@ outer capture script pre-created the output directory, while the runner
 correctly refuses to overwrite an existing directory. Its trace is retained
 under `results/crafter_context_policy_smoke_clean_v1_failed_preflight/` and
 is not an experiment result.
+
+Commit `d8d10ed` adds a first-order context-conditioned policy FOMAML update.
+Its commit-aligned Crafter smoke is stored in
+`results/crafter_context_fomaml_smoke_clean_v1/` and ran on visible GPU0.
+PyTorch 2.14.1+cu130 resolved CUDA and verified CUDA policy tensors. The
+training support/query seeds and independent evaluation support/query seeds
+were disjoint. Across the wood and stone gather task contexts, the candidate's
+context generator and policy template both changed while the active SPT state
+remained unchanged. The candidate was not accepted, no active pointer was
+switched, and no Module was registered. On the two tiny independent query
+tasks, success was 0/2 before and 0/2 after the candidate update. This run
+validates the context-to-generator FOMAML gradient path and candidate version
+isolation only; it provides no evidence of improved query learning efficiency
+and is not a formal result.
