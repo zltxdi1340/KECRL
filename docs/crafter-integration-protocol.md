@@ -131,3 +131,20 @@ visible GPUs were occupied by external processes at implementation time. No
 CUDA result is claimed until a device is available; a future run must use the
 commit-aligned config, a fresh result directory, and retain
 `formal_result=false`.
+
+The commit-aligned CUDA run completed at commit `fce69a4` in
+`results/crafter_context_policy_smoke_clean_v2/`, using only visible GPU0.
+CUDA was resolved successfully with PyTorch 2.14.1+cu130 on an RTX 4090, and
+CUDA tensors were verified. The shared template stayed unchanged and the two
+candidate contexts generated distinct initial action logits. Each context was
+evaluated on two independent query seeds at the 64-step diagnostic horizon;
+neither reached the wood target. This confirms context-conditioned
+initialization and query execution plumbing only. It does not show that the
+context helps learning, and it does not perform policy training, FOMAML,
+qualification, SPT updates, Module registration, or a formal comparison.
+
+The initial `clean_v1` invocation was rejected before execution because the
+outer capture script pre-created the output directory, while the runner
+correctly refuses to overwrite an existing directory. Its trace is retained
+under `results/crafter_context_policy_smoke_clean_v1_failed_preflight/` and
+is not an experiment result.
