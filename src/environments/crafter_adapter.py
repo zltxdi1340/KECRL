@@ -1,0 +1,72 @@
+"""Thin adapter for the external Crafter environment.
+
+The adapter exposes only the environment contract needed by KECRL. It does
+not infer mechanisms, store trajectories, or update Knowledge/Skill state.
+"""
+from __future__ import annotations
+
+from typing import Any
+
+
+class CrafterEnvironmentAdapter:
+    """Normalize Crafter's reset/step API for runtime integration."""
+
+    def __init__(
+        self,
+        *,
+        seed: int | None = None,
+        reward: bool = True,
+        length: int = 10_000,
+        environment: Any | None = None,
+    ) -> None:
+        if environment is None:
+            try:
+                import crafter
+            except ImportError as exc:  # pragma: no cover - depends on optional extra
+                raise RuntimeError(
+                    "Crafter is not installed; install the optional 'crafter' extra"
+                ) from exc
+            environment = crafter.Env(seed=seed, reward=reward, length=length)
+        self.environment = environment
+        self.observation_shape = tuple(int(value) for value in environment.observation_space.shape)
+        self.action_count = int(environment.action_space.n)
+        if self.observation_shape != (64, 64, 3):
+            raise ValueError(f"unexpected Crafter observation shape: {self.observation_shape}")
+        if self.action_count != 17:
+            raise ValueError(f"unexpected Crafter action count: {self.action_count}")
+        self.step_count = 0
+
+    def reset(self):
+        observation = self.environment.reset()
+        self.step_count = 0
+        return self._validate_observation(observation)
+
+    def step(self, action: int):
+        if isinstance(action, bool) or not isinstance(action, int):
+            raise TypeError("Crafter action must be an integer")
+        if not 0 <= action < self.action_count:
+            raise ValueError(f"Crafter action must be in [0, {self.action_count})")
+        observation, reward, done, info = self.environment.step(action)
+        self.step_count += 1
+        return self._validate_observation(observation), float(reward), bool(done), dict(info)
+
+    def state(self) -> dict[str, Any]:
+        """Return contract metadata without exposing a trajectory or policy state."""
+        return {
+            "environment": "crafter",
+            "observation_shape": self.observation_shape,
+            "action_count": self.action_count,
+            "step_count": self.step_count,
+        }
+
+    def close(self) -> None:
+        close = getattr(self.environment, "close", None)
+        if callable(close):
+            close()
+
+    @staticmethod
+    def _validate_observation(observation):
+        shape = tuple(int(value) for value in getattr(observation, "shape", ()))
+        if shape != (64, 64, 3):
+            raise ValueError(f"unexpected Crafter observation shape: {shape}")
+        return observation
