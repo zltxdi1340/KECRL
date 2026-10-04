@@ -162,3 +162,19 @@ tasks, success was 0/2 before and 0/2 after the candidate update. This run
 validates the context-to-generator FOMAML gradient path and candidate version
 isolation only; it provides no evidence of improved query learning efficiency
 and is not a formal result.
+
+The expanded pilot at commit `7c0fc67` is stored in
+`results/crafter_context_fomaml_pilot_v1/` and ran on visible GPU0 with the
+same CUDA/PyTorch stack. It used a 256-step horizon and ten task instances
+covering wood/stone gather contexts labelled across seed IDs 0--4. Training
+support/query and independent evaluation support/query seeds were disjoint;
+CUDA tensors were verified, active SPT state remained unchanged, and both the
+candidate context generator and policy template changed. The independent
+evaluation query result was 0/10 before and 1/10 after the candidate update;
+mean query loss was 3.6006 before and 2.6160 after. The one candidate success
+was `collect_wood_seed3`. Candidate acceptance was not evaluated, no active
+pointer was switched, and no Module was registered. Because these ten task
+instances were processed in one shared candidate outer update, this is a
+single pilot diagnostic rather than five independent training repetitions; its
+success difference cannot support formal seed statistics or an effectiveness
+claim.
