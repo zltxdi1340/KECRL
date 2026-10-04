@@ -10,6 +10,9 @@ from src.environments.crafter_tasks import (
     crafter_transition_result,
     inventory_at_least,
 )
+from src.skills.crafter_policy_module import CrafterPolicyModuleExecutor
+from src.skills.torch_policy import CategoricalResourcePolicy, PolicyConfig
+import torch
 
 
 @pytest.mark.parametrize("inventory", [None, {}, {"wood": None}, {"wood": -1}, {"wood": float("nan")}, {"wood": True}])
@@ -38,6 +41,22 @@ def test_transition_and_evidence_keep_unknown_and_feedback_boundaries():
     assert evidence.evidence_validity == "unknown"
     assert evidence.intervention_metadata["performed"] is False
     assert "trajectory" not in evidence.before_state
+
+
+def test_real_policy_module_executor_checks_response_and_returns_public_transition():
+    from src.environments.crafter_adapter import CrafterEnvironmentAdapter
+    from src.skills.contracts import ImplementationContract, ImplementationResponse
+
+    target = {"name": "inventory_at_least", "item": "wood", "threshold": 1}
+    contract = ImplementationContract((), (), (target,), {}, {}, {}, {"environment": "crafter"})
+    response = ImplementationResponse("reused_module", "module:test", "spi:test", "spt:test", contract)
+    policy = CategoricalResourcePolicy(PolicyConfig(observation_dim=192, action_count=17))
+    environment = CrafterEnvironmentAdapter(seed=0, length=1)
+    executor = CrafterPolicyModuleExecutor("module:test", policy, environment, target, torch.device("cpu"), 1)
+    result = executor.execute(response, {"inventory": None})
+    assert result.target_achieved in (False, "unknown")
+    assert executor.last_steps == 1
+    environment.close()
 
 
 def test_protocol_reproducibility_and_actual_seed_isolation():

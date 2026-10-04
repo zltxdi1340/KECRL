@@ -50,12 +50,14 @@ The candidate task and role preview is recorded in
 `docs/crafter-task-protocol-v1.md`; it is intentionally not a formal freeze.
 
 A single-transition Pipeline smoke is recorded under
-`results/crafter_pipeline_smoke_v2/result.json`. It uses a clearly marked
-fixture mechanism and fixture Module only to verify `TransitionResult`,
-Knowledge Evidence, Skill Feedback, and task version routing. The observed
-wood target remained incomplete, the task result was `continued`, and ordinary
-evidence remained `unknown`; this is not a Crafter success, qualification
-result, or method comparison.
+`results/crafter_policy_module_pipeline_smoke/result.json`. It uses a clearly
+marked fixture mechanism and fixture qualification record, but the returned
+Module ID is checked against and executed by a real categorical policy wrapper.
+This verifies `TransitionResult`, Knowledge Evidence, Skill Feedback, task
+version routing, and Module-to-policy execution. The observed wood target
+remained incomplete, the task result was `continued`, and ordinary evidence
+remained `unknown`; this is not a Crafter success, qualification result, or
+method comparison. The policy is not updated during this smoke.
 
 Next: freeze task/observation contracts and independent episode roles, connect
 real Policy initialization to context-conditioned FOMAML, then connect qualified

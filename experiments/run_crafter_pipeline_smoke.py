@@ -7,6 +7,7 @@ from dataclasses import asdict
 from pathlib import Path
 
 import crafter
+import torch
 
 from src.continual_learning.contracts import InMemoryContinualLearningPipeline, TaskVersionView
 from src.environments.crafter_adapter import CrafterEnvironmentAdapter
@@ -14,6 +15,8 @@ from src.environments.crafter_tasks import crafter_knowledge_evidence, crafter_t
 from src.knowledge.contracts import InMemoryKnowledgeBank, Mechanism
 from src.skills.contracts import ImplementationContract, TransitionRequest
 from src.skills.models import InMemoryQualifiedSkillLibrary, QualificationConfig, SPT, SPI
+from src.skills.crafter_policy_module import CrafterPolicyModuleExecutor
+from src.skills.torch_policy import CategoricalResourcePolicy, PolicyConfig
 
 
 def run(output_path: str) -> dict:
@@ -35,15 +38,15 @@ def run(output_path: str) -> dict:
     if module is None:
         raise RuntimeError("pipeline smoke fixture qualification failed")
     environment = CrafterEnvironmentAdapter(seed=0, length=1)
-    environment.reset()
-    before_inventory = environment.state()["inventory"]
+    policy = CategoricalResourcePolicy(PolicyConfig(observation_dim=192, action_count=17))
+    executor = CrafterPolicyModuleExecutor(
+        module.module_id, policy, environment, target, torch.device("cpu"), max_steps=1
+    )
+    before_inventory = None
     evidence, feedback = [], []
 
     def execute(response, current_state):
-        del response, current_state
-        _, _, done, info = environment.step(0)
-        after_inventory = info.get("inventory")
-        return crafter_transition_result(before_inventory, after_inventory, target, done)
+        return executor.execute(response, current_state)
 
     pipeline = InMemoryContinualLearningPipeline(
         bank, library, execute, evidence.append, feedback.append,
@@ -68,6 +71,7 @@ def run(output_path: str) -> dict:
         "skill_feedback": feedback,
         "task_view": {"knowledge_version": "kb:crafter-smoke", "spt_version": spt.version},
         "qualification": {"performed": False, "fixture_only": True},
+        "policy_module": {"module_id": module.module_id, "last_steps": executor.last_steps, "training": False},
     }
     output.mkdir(parents=True)
     (output / "result.json").write_text(json.dumps(result, indent=2) + "\n", encoding="utf-8")
