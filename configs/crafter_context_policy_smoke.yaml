@@ -1,0 +1,16 @@
+{
+  "status": "crafter_context_conditioned_initialization_smoke",
+  "formal_result": false,
+  "device": "cuda",
+  "context_dim": 2,
+  "contexts": {
+    "gather": [1.0, 0.0],
+    "craft": [0.0, 1.0]
+  },
+  "policy": {"observation_dim": 192, "action_count": 17, "hidden_dim": 32, "learning_rate": 0.001, "gamma": 0.99},
+  "query_seeds": [400000, 400001],
+  "max_steps": 64,
+  "task": {"task_id": "collect_wood", "skill_family": "gather", "item": "wood", "threshold": 1},
+  "seed": 0,
+  "smoke_note": "Context-conditioned policy initialization plumbing only; no policy training, SPT update, Module qualification, or formal comparison."
+}
