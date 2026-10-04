@@ -5,6 +5,9 @@ import math
 from numbers import Real
 from typing import Literal, Mapping
 
+from src.continual_learning.contracts import TransitionResult
+from src.knowledge.contracts import KnowledgeEvidence
+
 
 def inventory_at_least(
     inventory: Mapping | None, item: str, threshold: int,
@@ -22,3 +25,54 @@ def inventory_at_least(
     if not math.isfinite(value) or value < 0 or value != int(value):
         return "unknown"
     return bool(value >= threshold)
+
+
+def crafter_transition_result(
+    before_inventory: Mapping | None,
+    after_inventory: Mapping | None,
+    target: Mapping,
+    done: bool,
+) -> TransitionResult:
+    """Map one public Crafter observation transition to the KECRL contract."""
+    if target.get("name") != "inventory_at_least":
+        raise ValueError("Crafter smoke targets must use inventory_at_least")
+    achieved = inventory_at_least(
+        after_inventory, str(target["item"]), int(target["threshold"])
+    )
+    if achieved is True:
+        status = "completed"
+    elif achieved == "unknown":
+        status = "unknown"
+    elif done:
+        status = "terminated"
+    else:
+        status = "continued"
+    return TransitionResult(
+        target_achieved=achieved,
+        observed_state_changes={
+            "before": {"inventory": dict(before_inventory) if before_inventory is not None else None},
+            "after": {"inventory": dict(after_inventory) if after_inventory is not None else None},
+        },
+        # Inventory differences are not treated as causal resource accounting.
+        consumed_resources={},
+        released_resources={},
+        produced_capabilities=(dict(target),) if achieved is True else (),
+        execution_status=status,
+    )
+
+
+def crafter_knowledge_evidence(
+    before_inventory: Mapping | None,
+    after_inventory: Mapping | None,
+    environment_scope: Mapping,
+    intervention_metadata: Mapping | None = None,
+) -> KnowledgeEvidence:
+    """Create ordinary execution evidence without structural validation."""
+    return KnowledgeEvidence(
+        before_state={"inventory": dict(before_inventory) if before_inventory is not None else None},
+        after_state={"inventory": dict(after_inventory) if after_inventory is not None else None},
+        public_observation={"inventory_observed": after_inventory is not None},
+        environment_scope=dict(environment_scope),
+        intervention_metadata=dict(intervention_metadata or {"performed": False}),
+        evidence_validity="unknown",
+    )

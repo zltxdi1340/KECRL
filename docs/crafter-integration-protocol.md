@@ -49,6 +49,14 @@ The candidate task and role preview is recorded in
 `configs/crafter_task_protocol_v1.yaml` and
 `docs/crafter-task-protocol-v1.md`; it is intentionally not a formal freeze.
 
+A single-transition Pipeline smoke is recorded under
+`results/crafter_pipeline_smoke_v2/result.json`. It uses a clearly marked
+fixture mechanism and fixture Module only to verify `TransitionResult`,
+Knowledge Evidence, Skill Feedback, and task version routing. The observed
+wood target remained incomplete, the task result was `continued`, and ordinary
+evidence remained `unknown`; this is not a Crafter success, qualification
+result, or method comparison.
+
 Next: freeze task/observation contracts and independent episode roles, connect
 real Policy initialization to context-conditioned FOMAML, then connect qualified
 Modules to actual policy execution. Baseline retains Module reuse with both

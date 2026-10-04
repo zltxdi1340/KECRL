@@ -145,6 +145,7 @@
 - [x] 环境迁移（原生 reset/step 薄适配）
 - [x] 观测/动作契约适配（RGB 64x64x3、inventory allowlist、17 动作）
 - [x] 单环境 GPU smoke（仅连通性验证，`formal_result=false`）
+- [x] 单步 Pipeline smoke（fixture Module；验证反馈分流，`formal_result=false`）
 - [ ] Knowledge Evolution
 - [ ] Skill Evolution
 - [ ] Module Reuse
