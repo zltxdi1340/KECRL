@@ -1,0 +1,18 @@
+{
+  "status": "crafter_context_conditioned_fomaml_smoke",
+  "formal_result": false,
+  "device": "cuda",
+  "context_dim": 2,
+  "tasks": [
+    {"name": "collect_wood", "context": [1.0, 0.0], "target": {"task_id": "collect_wood", "item": "wood", "threshold": 1}},
+    {"name": "collect_stone", "context": [0.0, 1.0], "target": {"task_id": "collect_stone", "item": "stone", "threshold": 1}}
+  ],
+  "policy": {"observation_dim": 192, "action_count": 17, "hidden_dim": 32, "learning_rate": 0.001, "gamma": 0.99},
+  "fomaml": {"inner_lr": 0.001, "meta_lr": 0.001, "inner_steps": 1},
+  "training_seeds": {"support": [10101, 10102], "query": [20101, 20102]},
+  "evaluation": {"support": [410001, 410002], "query": [420001, 420002]},
+  "max_steps": 64,
+  "success_bonus": 1.0,
+  "seed": 0,
+  "smoke_note": "Context-conditioned FOMAML candidate-update plumbing only; tiny Crafter diagnostic, not formal effectiveness or candidate acceptance."
+}
