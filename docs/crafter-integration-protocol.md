@@ -95,10 +95,10 @@ diagnostic and does not justify changing the formal horizon or qualification
 thresholds.
 
 The next backend diagnostic used the real RGB policy path with a short
-REINFORCE loop on CUDA (`results/crafter_policy_training_smoke_clean/`). It ran
-20 training episodes and 20 optimizer updates; policy parameters changed and
-CUDA tensors were verified. On 10 fresh evaluation episodes the trained smoke
-policy reached wood in 2 episodes (0.20). No Module qualification or
-registration was attempted. This confirms the policy update and held-out
-evaluation plumbing, while the small run provides no evidence of KECRL method
-effectiveness and is not a formal result.
+REINFORCE loop on CUDA (`results/crafter_policy_training_smoke_clean_v2/`). At
+the recorded commit `ea1f7ce`, it ran 20 training episodes and 20 optimizer
+updates; policy parameters changed and CUDA tensors were verified. On 10 fresh
+evaluation episodes the trained smoke policy reached wood in 4 episodes (0.40).
+No Module qualification or registration was attempted. This confirms the
+policy update and held-out evaluation plumbing, while the small run provides no
+evidence of KECRL method effectiveness and is not a formal result.
