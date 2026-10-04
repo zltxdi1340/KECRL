@@ -77,29 +77,29 @@
 
 # Stage 3：代码重构（Framework Refactoring）
 
-**状态：🟡 最小类型与接口骨架已开始；运行时行为尚未实现**
+**状态：✅ 最小 GPU-capable 实现、受控回归和归档已完成；目标环境适配待开始**
 
 ## 目标
 
 将本科 HRC 项目升级为新的 KECRL 框架。
 
-2026-09-29 只读盘点：当前 `src/` 与 `legacy/HRC_Bachelor/` 仅有占位文件，没有可复用或迁移的源码及依赖清单。阶段实现尚未开始；先进行最小接口实现设计。详见 [实现准备盘点与边界](docs/implementation-readiness.md)。
+2026-10-04：核心接口、Knowledge/Skill 对象、Pipeline、CUDA policy backend、受控离散回归和结果追踪已实现。受控离散环境已封存为接口回归基准，不作为方法有效性主环境。详见 [受控环境归档说明](docs/controlled-discrete-environment-archive.md)。
 
 ## 计划内容
 
-- [ ] 重构整体目录
-- [ ] 重构 Environment Interface
-- [ ] 建立 Knowledge Bank
-- [ ] 建立 Skill Library
-- [ ] 建立 SPT Framework
-- [ ] 建立 SPI Framework
-- [ ] 重构 Continual Learning Pipeline
+- [x] 重构整体目录
+- [x] 重构 Environment Interface
+- [x] 建立 Knowledge Bank
+- [x] 建立 Skill Library
+- [x] 建立 SPT Framework
+- [x] 建立 SPI Framework
+- [x] 重构 Continual Learning Pipeline
 
 ---
 
 # Stage 4：算法实现（Algorithm Development）
 
-**状态：⚪ 未开始**
+**状态：🟡 参考实现和受控回归已完成；目标环境验证待开始**
 
 ## 目标
 
@@ -107,18 +107,18 @@
 
 ## 计划内容
 
-- [ ] Knowledge 更新机制
-- [ ] SPI 实例化机制
-- [ ] SPT 演化机制
-- [ ] Module 管理机制
+- [x] Knowledge 更新机制
+- [x] SPI 实例化机制
+- [x] SPT 演化机制
+- [x] Module 管理机制
 - [ ] Counterfactual Verification
-- [ ] Continual Learning Pipeline
+- [x] Continual Learning Pipeline
 
 ---
 
 # Stage 5：实验设计（Experiments）
 
-**状态：🟡 研究问题已明确，实验设计与实现尚未开始**
+**状态：🟡 受控环境回归已完成；Crafter 目标环境适配待开始**
 
 当前实验方面的准确进展是：理论层已经明确需要验证的对象、模块边界和主要反馈路径，但尚未完成环境部署、实验代码、正式训练、对照实验或结果统计。当前不把候选环境、基线和指标写成已确定方案。
 
@@ -131,8 +131,9 @@
 - 已明确实验需要分别检验 Knowledge Evolution、Skill Evolution、Module 复用和持续任务闭环。
 - 已明确实验应区分环境结构证据、技能学习反馈和任务层表现，不能用 Module 性能直接替代 Knowledge 证据。
 - 已明确需要验证知识更新、SPT 更新、Module 资格与版本恢复等核心规则是否按理论工作。
-- 尚未开始环境部署、实验代码重构、正式训练、基线运行、消融实验和结果分析。
-- 环境组合、基线集合、指标数值、任务划分和资源配置将在实验设计阶段单独确认。
+- 已完成受控离散环境的 GPU smoke、20-run 候选比较、holdout 回归和 400-episode 预算敏感性实验；全部保留为 `formal_result=false`。
+- 受控环境由于任务简单且 query success 饱和，不能区分方法有效性，已封存而非删除。
+- 下一阶段先完成 Crafter 依赖、观测/动作适配和单环境 smoke，再冻结 Crafter 任务划分、baseline、指标和预算。
 
 ## MiniGrid
 
@@ -140,7 +141,10 @@
 
 ## Crafter
 
+- [ ] 依赖与版本锁定
 - [ ] 环境迁移
+- [ ] 观测/动作契约适配
+- [ ] 单环境 GPU smoke
 - [ ] Knowledge Evolution
 - [ ] Skill Evolution
 - [ ] Module Reuse
@@ -155,7 +159,7 @@
 
 # Stage 6：论文撰写（Paper Writing）
 
-**状态：🟡 Method 已形成并完成本轮内部一致性评审；其他论文部分尚未完成**
+**状态：🟡 Method、实验候选记录和局限性草稿已形成；Crafter 正式结果尚未开始**
 
 ## Method
 
