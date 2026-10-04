@@ -85,3 +85,11 @@ policy tensor was verified; 10/10 contract checks passed, 0/10 episodes reached
 the wood target, and the candidate remained unregistered. The run took 6.11 s;
 the environment check reported Python 3.10.22, PyTorch 2.14.1+cu130, CUDA 13.0,
 and an RTX 4090. The repository regression suite remained green (`39 passed`).
+
+A separate horizon diagnostic at the same commit used the untrained policy,
+the same five seeds and two episodes per seed, but allowed 256 steps. It
+reached wood in 2/10 episodes (0.20), so the longer horizon exposes occasional
+random success while remaining far below the candidate 0.80 gate. Its trace is
+stored under `results/crafter_horizon256_random_diagnostic/`; this is still a
+diagnostic and does not justify changing the formal horizon or qualification
+thresholds.
