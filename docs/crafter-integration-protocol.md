@@ -112,3 +112,12 @@ split were verified; query success was 4/10 before adaptation and 6/10 after
 adaptation. No SPT candidate, Knowledge state, or Module was changed. This is
 only evidence that the support/query policy plumbing executes; the small
 stochastic diagnostic is not a FOMAML result or a formal method comparison.
+
+The commit-aligned CUDA policy FOMAML smoke is stored under
+`results/crafter_fomaml_smoke_clean_v2/` and ran at commit `2ace696` on the
+idle visible GPU1. It performed five support/query meta updates with disjoint
+episode seeds, verified CUDA tensors and changed the active policy parameters.
+On ten independent evaluation episodes, success was 1/10 before and 1/10
+after the meta updates. No SPT candidate or Module was created. This validates
+the first-order policy gradient plumbing only; it is not evidence of method
+effectiveness and is not a formal experiment.
