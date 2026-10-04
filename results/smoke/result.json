@@ -5,7 +5,7 @@
     "requested_device": "cpu",
     "resolved_device": "cpu",
     "seed": 7,
-    "git_commit": "5760fbff9c25ddd67675539beb46c2281aa2ff50",
+    "git_commit": "0864a282ed5f0fa5cd3772f07f8c4b1fde75f438",
     "framework": {
       "name": "torch",
       "version": "2.14.1",
