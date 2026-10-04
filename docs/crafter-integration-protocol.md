@@ -102,3 +102,13 @@ evaluation episodes the trained smoke policy reached wood in 4 episodes (0.40).
 No Module qualification or registration was attempted. This confirms the
 policy update and held-out evaluation plumbing, while the small run provides no
 evidence of KECRL method effectiveness and is not a formal result.
+
+The commit-aligned support/query adaptation smoke is stored under
+`results/crafter_policy_adaptation_smoke_clean_v2/` and was run at commit
+`a0d6c3b` on the idle visible GPU0. For each of five seeds, one support
+episode was used for a single policy adaptation update and two disjoint query
+episodes were evaluated with matched action RNG. CUDA tensors and the disjoint
+split were verified; query success was 4/10 before adaptation and 6/10 after
+adaptation. No SPT candidate, Knowledge state, or Module was changed. This is
+only evidence that the support/query policy plumbing executes; the small
+stochastic diagnostic is not a FOMAML result or a formal method comparison.
