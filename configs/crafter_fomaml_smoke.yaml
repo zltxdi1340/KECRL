@@ -1,0 +1,15 @@
+{
+  "status": "crafter_policy_fomaml_smoke",
+  "formal_result": false,
+  "device": "cuda",
+  "seeds": [0, 1, 2, 3, 4],
+  "meta_tasks_per_seed": 1,
+  "evaluation_episodes_per_seed": 2,
+  "max_steps": 256,
+  "task": {"task_id": "collect_wood", "skill_family": "gather", "item": "wood", "threshold": 1},
+  "policy": {"observation_dim": 192, "action_count": 17, "hidden_dim": 32, "learning_rate": 0.001, "gamma": 0.99},
+  "fomaml": {"inner_lr": 0.001, "meta_lr": 0.001, "inner_steps": 1},
+  "success_bonus": 1.0,
+  "seed": 0,
+  "smoke_note": "CUDA policy FOMAML plumbing diagnostic; no formal method comparison or Module registration."
+}

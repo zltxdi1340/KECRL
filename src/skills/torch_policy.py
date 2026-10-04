@@ -47,20 +47,35 @@ class CategoricalResourcePolicy(nn.Module):
     def update_episode(self, log_probs: list[torch.Tensor], rewards: list[float]) -> float:
         if not log_probs or len(log_probs) != len(rewards):
             raise ValueError("policy update requires matching non-empty episode data")
-        returns = []
-        value = 0.0
-        for reward in reversed(rewards):
-            value = reward + self.config.gamma * value
-            returns.append(value)
-        returns.reverse()
-        targets = torch.tensor(returns, dtype=torch.float32, device=log_probs[0].device)
-        if len(targets) > 1 and targets.std(unbiased=False) > 1e-8:
-            targets = (targets - targets.mean()) / (targets.std(unbiased=False) + 1e-8)
-        loss = -(torch.stack(log_probs) * targets).sum()
+        loss = policy_loss(log_probs, rewards, self.config.gamma)
         self.optimizer.zero_grad(set_to_none=True)
         loss.backward()
         self.optimizer.step()
         return float(loss.detach().cpu())
+
+
+def discounted_returns(rewards: list[float] | tuple[float, ...], gamma: float, device) -> torch.Tensor:
+    """Return normalized discounted returns using the existing REINFORCE rule."""
+    if not rewards:
+        raise ValueError("at least one reward is required")
+    returns = []
+    value = 0.0
+    for reward in reversed(rewards):
+        value = float(reward) + gamma * value
+        returns.append(value)
+    returns.reverse()
+    targets = torch.tensor(returns, dtype=torch.float32, device=device)
+    if len(targets) > 1 and targets.std(unbiased=False) > 1e-8:
+        targets = (targets - targets.mean()) / (targets.std(unbiased=False) + 1e-8)
+    return targets
+
+
+def policy_loss(log_probs: list[torch.Tensor], rewards: list[float] | tuple[float, ...], gamma: float) -> torch.Tensor:
+    """Compute the policy loss without applying an optimizer update."""
+    if not log_probs or len(log_probs) != len(rewards):
+        raise ValueError("policy loss requires matching non-empty episode data")
+    targets = discounted_returns(rewards, gamma, log_probs[0].device)
+    return -(torch.stack(log_probs) * targets).sum()
 
 
 def capture_checkpoint(policy: CategoricalResourcePolicy) -> dict:
