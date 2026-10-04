@@ -77,3 +77,11 @@ executions passed the contract path, but 0 reached the inventory target within
 32 steps. The candidate therefore failed the success gate and no Module was
 registered. This is a diagnostic negative result for an untrained policy, not a
 method comparison or an environment impossibility claim.
+
+The result was independently rerun after commit `d5224ef` with only visible
+GPU1 (`CUDA_VISIBLE_DEVICES=1`). The fresh trace is stored under
+`results/crafter_qualification_smoke_clean_v2/`: CUDA was resolved and a CUDA
+policy tensor was verified; 10/10 contract checks passed, 0/10 episodes reached
+the wood target, and the candidate remained unregistered. The run took 6.11 s;
+the environment check reported Python 3.10.22, PyTorch 2.14.1+cu130, CUDA 13.0,
+and an RTX 4090. The repository regression suite remained green (`39 passed`).
