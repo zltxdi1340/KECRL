@@ -8,6 +8,21 @@ results/**
 !results/smoke/
 !results/smoke/result.json
 !results/smoke/result.csv
+# Keep compact provenance and analysis summaries; exclude raw checkpoints and dumps.
+!results/**/run_metadata.json
+!results/**/environment.txt
+!results/**/nvidia-smi.txt
+!results/**/git_commit.txt
+!results/**/readiness_audit.json
+!results/**/analysis/
+!results/**/analysis/*.json
+!results/**/analysis/*.csv
+!results/**/summary.json
+# Server-side raw runs and generated manifests stay outside the source archive.
+datasets/*
+!datasets/.gitkeep
+src/kecrl.egg-info/
+logs/
 checkpoints/*
 !checkpoints/.gitkeep
 datasets/*

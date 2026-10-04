@@ -30,6 +30,10 @@ class AtomicProposition:
 class KnowledgeEvolution:
     def __init__(self, config):
         self.config = config
+        tau_confirm = float(config.get("tau_confirm", 0.8))
+        tau_reject = float(config.get("tau_reject", 0.2))
+        if not 0.0 <= tau_reject < tau_confirm <= 1.0:
+            raise ValueError("knowledge thresholds must satisfy 0 <= tau_reject < tau_confirm <= 1")
         self.propositions = {}
         self.evidence = []
         self._seen = set()

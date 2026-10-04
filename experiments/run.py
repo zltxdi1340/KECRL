@@ -18,7 +18,11 @@ def run(config_path):
     contract = ImplementationContract(({"name": "value_at_least", "value": 0},), (), (target,), {}, {}, {}, scope)
     mechanism = Mechanism("increment", ({"name": "value_at_least", "value": 0},), (), target, scope, {"seconds": 1}, "confirmed")
     kb = InMemoryKnowledgeBank((mechanism,)); spt = SPT("spt:increment", "increment", "v1", {"family":"increment"})
-    skills = InMemoryQualifiedSkillLibrary(spt, QualificationConfig(**config.get("qualification", {})))
+    # This entry point is an interface smoke only. A server config may retain
+    # stricter formal qualification settings while explicitly supplying the
+    # one-sample gate appropriate to this controlled run.
+    qualification_settings = config.get("smoke_qualification", config.get("qualification", {}))
+    skills = InMemoryQualifiedSkillLibrary(spt, QualificationConfig(**qualification_settings))
     req = TransitionRequest(({"name":"value_at_least", "value":0},), target, {}, scope, {})
     spi = SPI("spi:increment:1", "increment", spt.spt_id, spt.version, {}, req, contract, {"target": target}, {}, {"steps": 1})
     module = skills.qualify(spi, "controlled-policy", 1, 1, 1)
@@ -30,7 +34,7 @@ def run(config_path):
     # Ordinary execution evidence is intentionally UNKNOWN and cannot update structural claims.
     evolution.record("increment_reachability", "bottom", knowledge_feedback[0])
     out_dir=Path(config.get("results_dir", "results/smoke")); out_dir.mkdir(parents=True, exist_ok=True)
-    result={"metadata":runtime_metadata(config, resolved_device),"config":config,"task_result":outcome,"transition":asdict(transition) if transition else None,"knowledge_feedback":[asdict(x) if is_dataclass(x) else x for x in knowledge_feedback],"skill_feedback":skill_feedback,"knowledge_evolution":evolution.to_dict(),"module":asdict(module)}
+    result={"metadata":runtime_metadata(config, resolved_device),"config":config,"qualification_used":asdict(skills.qualification),"task_result":outcome,"transition":asdict(transition) if transition else None,"knowledge_feedback":[asdict(x) if is_dataclass(x) else x for x in knowledge_feedback],"skill_feedback":skill_feedback,"knowledge_evolution":evolution.to_dict(),"module":asdict(module)}
     (out_dir/"result.json").write_text(json.dumps(result, indent=2, default=str), encoding="utf-8")
     with (out_dir/"result.csv").open("w", newline="", encoding="utf-8") as f:
         w=csv.DictWriter(f, fieldnames=["task_result","execution_status","target_achieved"]); w.writeheader(); w.writerow({"task_result":outcome,"execution_status":transition.execution_status if transition else "unavailable","target_achieved":transition.target_achieved if transition else "unknown"})

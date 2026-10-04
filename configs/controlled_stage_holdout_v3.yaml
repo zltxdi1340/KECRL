@@ -1,0 +1,15 @@
+{
+  "status": "diagnostic_holdout_query_curve",
+  "formal_result": false,
+  "device": "cuda",
+  "seeds": [5, 6, 7, 8, 9],
+  "episodes_per_role": 200,
+  "method_variants": ["method", "baseline", "ablation_knowledge", "ablation_skill"],
+  "results_root": "results/holdout_prior_v3/strength_0",
+  "manifest": "datasets/discrete_resource_manifest_holdout_v1.json",
+  "qualification": {"min_samples": 20, "success_threshold": 0.8, "contract_threshold": 1.0},
+  "knowledge": {"n_min": 10, "tau_confirm": 0.8, "tau_reject": 0.2, "confidence": 0.95, "budget_per_seed": 200, "action_prior_strength": 0.0},
+  "fomaml": {"inner_lr": 0.1, "meta_lr": 0.01, "inner_steps": 2},
+  "spt": {"min_improvement": 0.10, "max_existing_spi_regression": 0.05, "validation_batches": 2, "status": "candidate_values_to_validate"},
+  "metrics": {"primary": "independent_query_learning_efficiency", "query_success_threshold": 0.8, "support_curve_checkpoints": [0, 50, 100, 200], "secondary": ["query_success", "query_loss", "qualification_rate", "module_reuse", "task_result_counts", "knowledge_status_accuracy", "runtime_seconds", "peak_gpu_memory"]}
+}

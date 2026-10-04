@@ -12,6 +12,16 @@ def test_cpu_smoke(tmp_path):
     assert result["knowledge_feedback"] and result["skill_feedback"]
     assert json.loads(open("results/smoke/result.json", encoding="utf-8").read())["task_result"] == "completed"
 
+def test_server_smoke_uses_explicit_gate_without_lowering_formal_gate():
+    config = json.load(open("configs/server_gpu.yaml", encoding="utf-8"))
+    assert config["qualification"]["min_samples"] == 5
+    assert config["qualification"]["success_threshold"] == 0.8
+    assert config["smoke_qualification"] == {
+        "min_samples": 1,
+        "success_threshold": 1.0,
+        "contract_threshold": 1.0,
+    }
+
 def test_cuda_request_does_not_fallback_when_unavailable():
     try:
         InMemoryContinualLearningPipeline.resolve_device("cuda", cuda_available=False)
@@ -48,6 +58,19 @@ def test_mechanism_requires_all_claims_and_retests_after_refutation():
     for index in range(6):
         evo.record("parent", 0, {"id": f"counter-{index}"})
     assert evo.assess_mechanism("m")["status"] == "testing"
+
+def test_knowledge_thresholds_reject_ambiguous_configuration():
+    try:
+        KnowledgeEvolution({"n_min": 1, "tau_confirm": 0.0, "tau_reject": 0.0})
+    except ValueError:
+        return
+    raise AssertionError("ambiguous knowledge thresholds were accepted")
+
+def test_counterevidence_cannot_be_confirmed():
+    evo = KnowledgeEvolution({"n_min": 20, "tau_confirm": .8, "tau_reject": .2, "confidence": .95, "budget": 25})
+    for index in range(20):
+        result = evo.record("false_claim", 0, {"id": index})
+    assert result["status"] == "rejected"
 
 def test_skill_reuse_and_unavailable_paths():
     target = {"name": "goal"}; scope = {"environment": "controlled"}

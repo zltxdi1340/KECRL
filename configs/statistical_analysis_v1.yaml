@@ -1,0 +1,16 @@
+{
+  "analysis_version": "statistical_analysis_v1",
+  "status": "stage_analysis_freeze",
+  "formal_result": false,
+  "primary_metric": "independent_query_learning_efficiency",
+  "query_success_threshold": 0.8,
+  "support_curve_checkpoints": [0, 50, 100, 200],
+  "primary_summary": "query_success_curve_by_support_budget",
+  "secondary_summaries": ["final_query_success", "query_loss", "qualification_rate", "pipeline_task_result", "knowledge_status_accuracy", "runtime_seconds", "peak_gpu_memory"],
+  "comparison": "paired_by_seed_against_baseline",
+  "reported_seed_statistics": ["mean", "sample_standard_deviation", "per_seed_delta"],
+  "bootstrap": {"enabled": true, "resamples": 2000, "percentile_interval": [0.025, 0.975], "random_seed": 0, "status": "diagnostic_only_until_more_seeds"},
+  "right_censoring": "retain_unreached_runs_with_right_censored=true",
+  "multiple_comparison_correction": "not_applicable_for_stage_diagnostic",
+  "formal_inference": "pending_final_seed_budget_and_statistical_review"
+}
