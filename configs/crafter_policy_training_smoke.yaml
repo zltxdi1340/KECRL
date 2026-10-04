@@ -1,0 +1,14 @@
+{
+  "status": "crafter_policy_training_smoke",
+  "formal_result": false,
+  "device": "cuda",
+  "train_seeds": [0, 1, 2, 3, 4],
+  "episodes_per_seed": 4,
+  "evaluation_episodes_per_seed": 2,
+  "max_steps": 256,
+  "task": {"task_id": "collect_wood", "skill_family": "gather", "item": "wood", "threshold": 1},
+  "policy": {"observation_dim": 192, "action_count": 17, "hidden_dim": 32, "learning_rate": 0.001, "gamma": 0.99},
+  "success_bonus": 1.0,
+  "seed": 0,
+  "training_note": "Pre-formal CUDA REINFORCE smoke; no Module registration or formal comparison."
+}
