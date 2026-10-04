@@ -121,3 +121,13 @@ On ten independent evaluation episodes, success was 1/10 before and 1/10
 after the meta updates. No SPT candidate or Module was created. This validates
 the first-order policy gradient plumbing only; it is not evidence of method
 effectiveness and is not a formal experiment.
+
+Commit `d39d143` adds a context-conditioned policy initializer and the
+`crafter_context_policy_smoke` runner. The initializer creates a fresh policy
+clone with a context-generated action-bias offset and verifies that the shared
+template remains unchanged; it does not update an SPT, register a Module, or
+write Knowledge state. The associated CUDA smoke is pending because both
+visible GPUs were occupied by external processes at implementation time. No
+CUDA result is claimed until a device is available; a future run must use the
+commit-aligned config, a fresh result directory, and retain
+`formal_result=false`.
