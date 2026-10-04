@@ -141,10 +141,10 @@
 
 ## Crafter
 
-- [ ] 依赖与版本锁定
-- [ ] 环境迁移
-- [ ] 观测/动作契约适配
-- [ ] 单环境 GPU smoke
+- [x] 依赖与版本锁定（Crafter 1.8.3；正式依赖仍需最终冻结）
+- [x] 环境迁移（原生 reset/step 薄适配）
+- [x] 观测/动作契约适配（RGB 64x64x3、inventory allowlist、17 动作）
+- [x] 单环境 GPU smoke（仅连通性验证，`formal_result=false`）
 - [ ] Knowledge Evolution
 - [ ] Skill Evolution
 - [ ] Module Reuse
