@@ -1,0 +1,29 @@
+{
+  "protocol_version": "crafter_task_protocol_v1",
+  "status": "candidate_protocol_preview",
+  "formal_result": false,
+  "crafter_version": "1.8.3",
+  "observation_interface": "rgb64_inventory_v1",
+  "seeds": [0, 1, 2, 3, 4],
+  "preview_episodes_per_task_phase": 2,
+  "tasks": [
+    {"task_id": "collect_wood", "candidate_skill_family": "gather", "item": "wood", "threshold": 1},
+    {"task_id": "collect_stone", "candidate_skill_family": "gather", "item": "stone", "threshold": 1},
+    {"task_id": "collect_coal", "candidate_skill_family": "gather", "item": "coal", "threshold": 1},
+    {"task_id": "obtain_wood_pickaxe", "candidate_skill_family": "craft", "item": "wood_pickaxe", "threshold": 1},
+    {"task_id": "obtain_stone_pickaxe", "candidate_skill_family": "craft", "item": "stone_pickaxe", "threshold": 1},
+    {"task_id": "obtain_iron_pickaxe", "candidate_skill_family": "craft", "item": "iron_pickaxe", "threshold": 1}
+  ],
+  "roles": ["train", "support", "query", "qualification", "spt_validation", "evaluation"],
+  "initialization": "fresh_native_environment_per_episode",
+  "formal_training_budget": null,
+  "formal_evaluation_budget": null,
+  "episode_horizon": null,
+  "reward_definition": null,
+  "context_encoder": null,
+  "transfer_task_split": null,
+  "continual_task_order": null,
+  "qualification": {"min_samples": null, "success_threshold": null, "contract_threshold": null},
+  "spt_acceptance": {"min_improvement": null, "max_existing_spi_regression": null, "validation_batches": null},
+  "knowledge_validation": {"intervention_protocol": null, "reference_verifier": null, "budget": null}
+}

@@ -45,6 +45,10 @@ and one unknown public transition evidence example. It saves JSON/CSV, a real
 rendered frame, full log, dependency snapshot, and GPU captures in a fresh run
 directory. All outputs carry formal_result=false.
 
+The candidate task and role preview is recorded in
+`configs/crafter_task_protocol_v1.yaml` and
+`docs/crafter-task-protocol-v1.md`; it is intentionally not a formal freeze.
+
 Next: freeze task/observation contracts and independent episode roles, connect
 real Policy initialization to context-conditioned FOMAML, then connect qualified
 Modules to actual policy execution. Baseline retains Module reuse with both
