@@ -65,3 +65,15 @@ Modules to actual policy execution. Baseline retains Module reuse with both
 Evolution components off; ablations switch each separately. Seeds 0-4 are the
 user-selected candidate set. Crafter budgets, qualification thresholds, SPT
 acceptance/non-regression values, and formal statistics remain pending.
+
+The qualification smoke evaluates a candidate policy on fresh episodes before
+creating a Module. It records samples, target successes, contract passes, and
+exceptions. A failed gate keeps the candidate out of the Skill Library; a pass
+at this diagnostic scale would still not freeze formal thresholds or establish
+method effectiveness.
+
+The first GPU qualification smoke used 10 episodes for `collect_wood`: all 10
+executions passed the contract path, but 0 reached the inventory target within
+32 steps. The candidate therefore failed the success gate and no Module was
+registered. This is a diagnostic negative result for an untrained policy, not a
+method comparison or an environment impossibility claim.

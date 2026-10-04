@@ -1,0 +1,12 @@
+{
+  "status": "crafter_policy_module_qualification_smoke",
+  "formal_result": false,
+  "device": "cuda",
+  "seeds": [0, 1, 2, 3, 4],
+  "episodes_per_seed": 2,
+  "task": {"task_id": "collect_wood", "skill_family": "gather", "item": "wood", "threshold": 1},
+  "max_steps": 32,
+  "policy": {"observation_dim": 192, "action_count": 17, "hidden_dim": 32, "learning_rate": 0.001, "gamma": 0.99},
+  "qualification": {"min_samples": 10, "success_threshold": 0.8, "contract_threshold": 1.0},
+  "qualification_note": "candidate gate for smoke only; values are not frozen formal thresholds"
+}

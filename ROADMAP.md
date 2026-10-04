@@ -147,6 +147,7 @@
 - [x] 单环境 GPU smoke（仅连通性验证，`formal_result=false`）
 - [x] 单步 Pipeline smoke（fixture Module；验证反馈分流，`formal_result=false`）
 - [x] 真实 Policy Module 执行 smoke（未训练、未资格冻结，`formal_result=false`）
+- [x] Policy Module qualification smoke（候选 policy 未通过 gate，未形成正式 Module）
 - [ ] Knowledge Evolution
 - [ ] Skill Evolution
 - [ ] Module Reuse
