@@ -1,0 +1,12 @@
+{
+  "status": "crafter_environment_policy_smoke",
+  "formal_result": false,
+  "device": "cuda",
+  "seed": 0,
+  "max_steps": 64,
+  "policy": {"observation_dim": 192, "action_count": 17, "hidden_dim": 32, "learning_rate": 0.001, "gamma": 0.99},
+  "observation_interface": "rgb64_inventory_v1",
+  "formal_tasks": "pending",
+  "qualification": "not_performed",
+  "spt_acceptance": "not_performed"
+}

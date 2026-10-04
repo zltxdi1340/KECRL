@@ -35,10 +35,12 @@ class CrafterEnvironmentAdapter:
         if self.action_count != 17:
             raise ValueError(f"unexpected Crafter action count: {self.action_count}")
         self.step_count = 0
+        self._inventory = None
 
     def reset(self):
         observation = self.environment.reset()
         self.step_count = 0
+        self._inventory = None
         return self._validate_observation(observation)
 
     def step(self, action: int):
@@ -48,7 +50,12 @@ class CrafterEnvironmentAdapter:
             raise ValueError(f"Crafter action must be in [0, {self.action_count})")
         observation, reward, done, info = self.environment.step(action)
         self.step_count += 1
-        return self._validate_observation(observation), float(reward), bool(done), dict(info)
+        inventory = info.get("inventory")
+        self._inventory = dict(inventory) if inventory is not None else None
+        # Crafter also returns a full semantic map and global position. Those
+        # fields are oracle-only under KECRL's reviewed observation contract.
+        public_info = {"inventory": dict(inventory)} if inventory is not None else {}
+        return self._validate_observation(observation), float(reward), bool(done), public_info
 
     def state(self) -> dict[str, Any]:
         """Return contract metadata without exposing a trajectory or policy state."""
@@ -57,6 +64,7 @@ class CrafterEnvironmentAdapter:
             "observation_shape": self.observation_shape,
             "action_count": self.action_count,
             "step_count": self.step_count,
+            "inventory": dict(self._inventory) if self._inventory is not None else None,
         }
 
     def close(self) -> None:
@@ -69,4 +77,6 @@ class CrafterEnvironmentAdapter:
         shape = tuple(int(value) for value in getattr(observation, "shape", ()))
         if shape != (64, 64, 3):
             raise ValueError(f"unexpected Crafter observation shape: {shape}")
+        if str(getattr(observation, "dtype", "")) != "uint8":
+            raise ValueError("Crafter observation must have uint8 dtype")
         return observation

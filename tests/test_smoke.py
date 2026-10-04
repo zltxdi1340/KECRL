@@ -7,10 +7,14 @@ from src.skills.contracts import ImplementationContract, TransitionRequest, Impl
 from src.skills.models import SPT, SPI, InMemoryQualifiedSkillLibrary, QualificationConfig
 from src.skills.evolution import ContextConditionedFOMAML, FOMAMLConfig, SPIEpisode
 def test_cpu_smoke(tmp_path):
-    result=run("configs/smoke_cpu.yaml")
+    config = json.load(open("configs/smoke_cpu.yaml", encoding="utf-8"))
+    config["results_dir"] = str(tmp_path / "results")
+    config_path = tmp_path / "config.json"
+    config_path.write_text(json.dumps(config), encoding="utf-8")
+    result=run(str(config_path))
     assert result["task_result"] == "completed"
     assert result["knowledge_feedback"] and result["skill_feedback"]
-    assert json.loads(open("results/smoke/result.json", encoding="utf-8").read())["task_result"] == "completed"
+    assert json.loads((tmp_path / "results/result.json").read_text())["task_result"] == "completed"
 
 def test_server_smoke_uses_explicit_gate_without_lowering_formal_gate():
     config = json.load(open("configs/server_gpu.yaml", encoding="utf-8"))

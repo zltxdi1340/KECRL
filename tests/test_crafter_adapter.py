@@ -15,8 +15,35 @@ def test_crafter_reset_step_and_contract_metadata():
     assert isinstance(reward, float)
     assert isinstance(done, bool)
     assert isinstance(info, dict)
+    assert set(info) == {"inventory"}
+    assert "semantic" not in info
+    assert "player_pos" not in info
+    assert environment.state()["inventory"] == info["inventory"]
+    info["inventory"]["wood"] = -999
+    assert environment.state()["inventory"]["wood"] != -999
     assert environment.state()["step_count"] == 1
+    environment.reset()
+    assert environment.state()["inventory"] is None
     environment.close()
+
+
+def test_adapter_filters_unapproved_info_fields():
+    import numpy as np
+    from types import SimpleNamespace
+
+    class Environment:
+        observation_space = SimpleNamespace(shape=(64, 64, 3))
+        action_space = SimpleNamespace(n=17)
+
+        def step(self, action):
+            return np.zeros((64, 64, 3), dtype=np.uint8), 0, False, {
+                "semantic": "hidden map", "player_pos": (1, 2),
+                "achievements": {"collect_wood": 1}, "unexpected": "hidden",
+            }
+
+    environment = CrafterEnvironmentAdapter(environment=Environment())
+    assert environment.step(0)[3] == {}
+    assert environment.state()["inventory"] is None
 
 
 def test_crafter_rejects_invalid_actions():
