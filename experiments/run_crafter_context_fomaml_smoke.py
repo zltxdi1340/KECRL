@@ -84,6 +84,17 @@ def _evaluate_task(initializer, learner, task, support_seed, query_seed, index, 
 
 def run(config_path: str, output_path: str) -> dict:
     config = load_config(config_path)
+    task_count = len(config["tasks"])
+    for section, values in (
+        ("training_seeds.support", config["training_seeds"]["support"]),
+        ("training_seeds.query", config["training_seeds"]["query"]),
+        ("evaluation.support", config["evaluation"]["support"]),
+        ("evaluation.query", config["evaluation"]["query"]),
+    ):
+        if len(values) != task_count:
+            raise ValueError(
+                f"{section} must contain one seed per task ({task_count}), got {len(values)}"
+            )
     output = Path(output_path)
     if output.exists():
         raise FileExistsError(f"refusing to overwrite {output}")

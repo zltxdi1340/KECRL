@@ -1,0 +1,24 @@
+{
+  "status": "crafter_context_conditioned_fomaml_diverse_v1",
+  "formal_result": false,
+  "device": "cuda",
+  "context_dim": 6,
+  "tasks": [
+    {"name": "collect_wood", "context": [1.0, 0.0, 0.0, 0.0, 0.0, 0.0], "target": {"task_id": "collect_wood", "item": "wood", "threshold": 1}},
+    {"name": "collect_stone", "context": [0.0, 1.0, 0.0, 0.0, 0.0, 0.0], "target": {"task_id": "collect_stone", "item": "stone", "threshold": 1}},
+    {"name": "collect_coal", "context": [0.0, 0.0, 1.0, 0.0, 0.0, 0.0], "target": {"task_id": "collect_coal", "item": "coal", "threshold": 1}},
+    {"name": "obtain_wood_pickaxe", "context": [0.0, 0.0, 0.0, 1.0, 0.0, 0.0], "target": {"task_id": "obtain_wood_pickaxe", "item": "wood_pickaxe", "threshold": 1}},
+    {"name": "obtain_stone_pickaxe", "context": [0.0, 0.0, 0.0, 0.0, 1.0, 0.0], "target": {"task_id": "obtain_stone_pickaxe", "item": "stone_pickaxe", "threshold": 1}},
+    {"name": "obtain_iron_pickaxe", "context": [0.0, 0.0, 0.0, 0.0, 0.0, 1.0], "target": {"task_id": "obtain_iron_pickaxe", "item": "iron_pickaxe", "threshold": 1}}
+  ],
+  "policy": {"observation_dim": 192, "action_count": 17, "hidden_dim": 32, "learning_rate": 0.001, "gamma": 0.99},
+  "fomaml": {"inner_lr": 0.001, "meta_lr": 0.001, "inner_steps": 1},
+  "training_seeds": {"support": [60100, 60101, 60102, 60103, 60104, 60105], "query": [60200, 60201, 60202, 60203, 60204, 60205]},
+  "evaluation": {"support": [60400, 60401, 60402, 60403, 60404, 60405], "query": [60500, 60501, 60502, 60503, 60504, 60505]},
+  "max_steps": 256,
+  "success_bonus": 1.0,
+  "seed": 0,
+  "seed_set": [0, 1, 2, 3, 4],
+  "replicate_seed_stride": 1000000,
+  "smoke_note": "Five independent context-conditioned FOMAML replicas over six distinct gather/craft targets; diagnostic only, no formal comparison, candidate acceptance, SPT pointer switch, or Module registration."
+}
