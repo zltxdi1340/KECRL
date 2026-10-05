@@ -136,3 +136,13 @@ Evolution is disabled. These heterogeneous gates are evidence that the
 protocol is exercising the intended boundaries, not evidence of final method
 effectiveness. The result directory remains diagnostic and is not promoted to
 a paper result.
+
+At commit `3fcd533`, the candidate runner also wires the qualified Skill
+Library into the controlled execution path and checks Module output targets
+during compatibility matching. A two-variant seed-0 gate check reused 150 of
+200 query episodes through target-compatible Modules and returned
+`unavailable` for all 50 `craft_shelter` episodes because that task failed its
+held-out qualification gate; all 150 actual Module executions completed. The
+compatibility fix prevents a Module for one resource target from being reused
+for a different target. This is an interface and execution-path validation,
+not a performance result.
