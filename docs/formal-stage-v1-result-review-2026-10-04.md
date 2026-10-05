@@ -16,3 +16,12 @@ These outputs remain `formal_result=false`. The interval crosses zero, the
 environment is controlled, and the Policy/FOMAML implementation is still the
 stage backend. The values therefore support reproducibility and pipeline
 validation, not a final paper performance claim.
+
+The runner audit at commit `bd58d20` adds an explicit limitation: its
+`ContextConditionedFOMAML` object is a scalar reference implementation and is
+not connected to the CUDA categorical policy. The recorded method and
+ablation-skill flags therefore do not constitute a policy-level Skill
+Evolution comparison. These archived results remain useful for controlled
+pipeline, Knowledge, qualification, and provenance checks, but a valid
+policy-level comparison requires a torch FOMAML runner whose candidate update
+changes the policy used for query evaluation.

@@ -17,6 +17,7 @@ def test_stage_analysis_reports_all_variants(tmp_path):
             "query_episodes": 2,
             "pipeline": {"query_completed": 2, "query_unavailable": 0, "knowledge_evidence_validity": ["unknown"], "skill_feedback_count": 2},
             "components": {"knowledge_evolution": variant == "method", "skill_evolution": variant == "method", "module_reuse": True},
+            "skill_evolution_policy_connected": False,
         })
     (root / "summary.json").write_text(json.dumps({"runs": runs}), encoding="utf-8")
     manifest = tmp_path / "manifest.json"
@@ -50,6 +51,7 @@ def test_stage_analysis_counts_unknown_observation_as_candidate(tmp_path):
                       "skill_feedback_count": 1},
         "components": {"knowledge_evolution": True,
                        "skill_evolution": True, "module_reuse": True},
+        "skill_evolution_policy_connected": False,
         "knowledge": {"statuses": {"unknown_prop": "candidate"}},
     }
     (root / "summary.json").write_text(json.dumps({"runs": [run]}), encoding="utf-8")
