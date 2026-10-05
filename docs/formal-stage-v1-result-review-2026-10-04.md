@@ -81,3 +81,18 @@ The method curve was not monotonic in the earlier three-update diagnostic,
 but v5 gives a more stable multi-episode estimate. These values remain
 diagnostic: the policy is still a small controlled backend, qualification and
 SPT acceptance are not part of this runner, and `formal_result=false`.
+
+The v5 analysis artifacts are in
+`results/controlled_torch_fomaml_v5/analysis/`. The analyzer validates the
+historical run against `datasets/discrete_resource_manifest_stage_v1.json`
+because these raw results predate the recorded `role_episode_ids_disjoint`
+field. It reports the full outer curve, a predeclared final-checkpoint rule,
+per-seed paired deltas, and thresholded query-learning efficiency with right
+censoring. At threshold `0.8`, method reached the threshold for all five
+seeds, ablation-knowledge for all five, and baseline and ablation-skill for
+four of five seeds. The method versus baseline paired success delta was
+`+0.050` (bootstrap interval `[0.000, 0.100]`), and the method versus
+ablation-knowledge delta was `+0.020` (interval `[-0.010, 0.050]`). The
+method versus ablation-skill success interval crosses zero, so these results
+do not establish a formal effectiveness claim. Bootstrap intervals are
+descriptive only; all generated analysis files retain `formal_result=false`.
