@@ -61,3 +61,23 @@ was `0.80`. The method curve therefore did not improve monotonically, which
 is a useful warning against selecting the final update by convenience. This
 remains a controlled learning-curve diagnostic with `formal_result=false`,
 not a formal budget or effectiveness result.
+
+The resampled multi-episode diagnostic run at commit `4319840` is stored in
+`results/controlled_torch_fomaml_v5/`. It uses five seeds and four variants;
+each Skill Evolution variant performs five outer updates with two fresh
+train support/query pairs per task per update. Fixed evaluation uses five
+independent support episodes and ten independent query episodes per task, for
+40 query episodes per checkpoint. Train support/query IDs are disjoint, the
+evaluation query set is fixed across checkpoints, and all 20 runs verify CUDA
+policy tensors.
+
+At the final checkpoint, mean query success was `0.905` for method, `0.885`
+for ablation-knowledge, `0.870` for ablation-skill, and `0.855` for baseline.
+Mean support interaction steps were `56.8`, `68.2`, `66.2`, and `77.2`,
+respectively. The paired method versus ablation-skill delta was `+0.035`
+success rate (sample SD `0.0627`) and `-9.4` support steps (sample SD `5.08`);
+the per-seed success deltas were `[+0.025, +0.050, -0.050, +0.125, +0.025]`.
+The method curve was not monotonic in the earlier three-update diagnostic,
+but v5 gives a more stable multi-episode estimate. These values remain
+diagnostic: the policy is still a small controlled backend, qualification and
+SPT acceptance are not part of this runner, and `formal_result=false`.

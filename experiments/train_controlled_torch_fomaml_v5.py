@@ -144,6 +144,13 @@ def run_variant(config, manifest, variant, seed, output):
     start_time = time.perf_counter()
     tasks = {task.task_id: task for task in default_resource_tasks()}
     split = manifest["episode_specs"][str(seed)]
+    role_ids = {
+        role: {item["episode_id"] for item in split[role]}
+        for role in ("train", "support", "query", "qualification", "spt_validation")
+    }
+    roles = tuple(role_ids)
+    if any(role_ids[left] & role_ids[right] for index, left in enumerate(roles) for right in roles[index + 1:]):
+        raise ValueError("episode roles must be disjoint")
     train_pool, support_pool, query_pool = map(
         _group, (split["train"], split["support"], split["query"])
     )
@@ -160,6 +167,12 @@ def run_variant(config, manifest, variant, seed, output):
     eval_query_count = int(config["eval_query_episodes_per_task"])
     if outer_updates <= 0 or per_task <= 0 or eval_support_count <= 0 or eval_query_count <= 0:
         raise ValueError("all v5 episode/update budgets must be positive")
+    if any(len(train_pool[task_id]) < 2 * outer_updates * per_task for task_id in tasks):
+        raise ValueError("train pool is too small for the configured resampling budget")
+    if any(len(support_pool[task_id]) < eval_support_count for task_id in tasks):
+        raise ValueError("support pool is too small for the fixed evaluation budget")
+    if any(len(query_pool[task_id]) < eval_query_count for task_id in tasks):
+        raise ValueError("query pool is too small for the fixed evaluation budget")
     fomaml_config = TorchFOMAMLConfig(**config["fomaml"])
     active = ContextConditionedPolicyInitializer(policy, len(tasks)).to(device)
     candidate = copy.deepcopy(active)
@@ -224,6 +237,7 @@ def run_variant(config, manifest, variant, seed, output):
         "cuda_tensor_verified": device.type == "cuda" and next(policy.parameters()).is_cuda,
         "knowledge": knowledge,
         "data_roles": {"train": len(split["train"]), "support": len(split["support"]), "query": len(split["query"]), "qualification": len(split["qualification"]), "spt_validation": len(split["spt_validation"])},
+        "role_episode_ids_disjoint": True,
         "budgets": {"outer_updates": outer_updates if skill_enabled else 0, "train_episodes_per_task_per_update": per_task, "eval_support_episodes_per_task": eval_support_count, "eval_query_episodes_per_task": eval_query_count, "horizon": config["horizon"]},
         "train_episode_ids": all_train_ids,
         "fixed_evaluation_query": True,
