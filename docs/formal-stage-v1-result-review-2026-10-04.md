@@ -120,3 +120,19 @@ the controlled policy/task budget remains small. All outputs keep
 `formal_result=false`; the next review must decide whether to enlarge the
 qualification/validation budgets or revise the candidate protocol before any
 paper claim.
+
+After the design freeze gates were implemented at commit `6319c8c`, the
+candidate runner was rerun on GPU0 in
+`results/controlled_torch_fomaml_formal_v1_commit_6319c8c/`. All 20 runs record
+that commit, verify CUDA tensors, retain `formal_result=false`, and include the
+configuration, command, environment, dependency, Git, and GPU provenance.
+The runner now reports four support checkpoints (`0, 50, 100, 200`), evaluates
+qualification separately for each task/SPI, and registers a Module only when
+all task gates pass. Qualification/module registration passed for 3/5 method
+seeds, 1/5 baseline seeds, 3/5 ablation-knowledge seeds, and 1/5 ablation-skill
+seeds. Method SPT decisions were accepted for seeds 0 and 1 and rejected for
+seeds 2--4; baseline and ablation-skill keep the active SPT because Skill
+Evolution is disabled. These heterogeneous gates are evidence that the
+protocol is exercising the intended boundaries, not evidence of final method
+effectiveness. The result directory remains diagnostic and is not promoted to
+a paper result.
