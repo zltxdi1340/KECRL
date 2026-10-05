@@ -43,3 +43,24 @@ def test_module_reuse_path_returns_reused_and_unavailable():
     assert result["reused"] == 1
     assert result["unavailable"] == 1
     assert result["completed"] == 1
+
+
+def test_support_curve_records_task_strata():
+    import torch
+    from experiments.train_controlled_torch_fomaml_formal_v1 import _support_curve
+    from src.skills.context_fomaml import ContextConditionedPolicyFOMAML
+    from src.skills.context_policy import ContextConditionedPolicyInitializer
+    from src.skills.torch_fomaml import TorchFOMAMLConfig
+    from src.skills.torch_policy import CategoricalResourcePolicy, PolicyConfig
+
+    tasks = {task.task_id: task for task in default_resource_tasks()}
+    pools = {task_id: [{"episode_id": f"{task_id}:0", "initial_resources": {}}]
+             for task_id in tasks}
+    policy = CategoricalResourcePolicy(PolicyConfig(hidden_dim=4))
+    initializer = ContextConditionedPolicyInitializer(policy, len(tasks))
+    learner = ContextConditionedPolicyFOMAML(initializer, TorchFOMAMLConfig())
+    config = {"metrics": {"support_curve_checkpoints": [0], "query_success_threshold": 0.8},
+              "eval_query_episodes_per_task": 1}
+    rows = _support_curve(initializer, learner, tasks, pools, pools, config,
+                          torch.device("cpu"), 2, {}, 0.0, 0)
+    assert set(rows[0]["task_query_success_rates"]) == set(tasks)

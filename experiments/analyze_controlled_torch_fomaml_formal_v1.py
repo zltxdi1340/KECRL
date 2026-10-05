@@ -155,11 +155,29 @@ def analyze(root: str, output: str, query_threshold=0.8, bootstrap_repetitions=2
 
     variants = []
     curve = []
+    task_curve = []
     efficiency = []
     qualification = []
     module_reuse = []
     for variant, runs in sorted(grouped.items()):
         curve.extend(_curve_rows(variant, runs))
+        for checkpoint in REQUIRED_CURVE:
+            checkpoint_rows = [next(row for row in run["support_query_curve"]
+                                    if row["support_episodes"] == checkpoint)
+                               for run in runs]
+            task_ids = sorted({task_id for row in checkpoint_rows
+                               for task_id in row.get("task_query_success_rates", {})})
+            for task_id in task_ids:
+                values = [row["task_query_success_rates"][task_id]
+                          for row in checkpoint_rows]
+                task_curve.append({
+                    "variant": variant,
+                    "task_id": task_id,
+                    "support_episodes": checkpoint,
+                    "n_seeds": len(values),
+                    "query_success_rate_mean": _mean(values),
+                    "query_success_rate_std": _std(values),
+                })
         selected = [_selected_outer(run)[0] for run in runs]
         efficiency_rows = [_efficiency(run, query_threshold) for run in runs]
         reached_steps = [row["support_interaction_steps"] for row in efficiency_rows if row["reached"]]
@@ -218,6 +236,7 @@ def analyze(root: str, output: str, query_threshold=0.8, bootstrap_repetitions=2
         "bootstrap_repetitions": bootstrap_repetitions,
         "variants": variants,
         "curve": curve,
+        "task_curve": task_curve,
         "learning_efficiency": efficiency,
         "qualification": qualification,
         "module_reuse": module_reuse,
@@ -234,6 +253,7 @@ def analyze(root: str, output: str, query_threshold=0.8, bootstrap_repetitions=2
     (output_path / "paired.json").write_text(json.dumps(paired, indent=2) + "\n", encoding="utf-8")
     _write_csv(output_path / "summary.csv", variants)
     _write_csv(output_path / "curve.csv", curve)
+    _write_csv(output_path / "task_curve.csv", task_curve)
     _write_csv(output_path / "learning_efficiency.csv", efficiency)
     _write_csv(output_path / "qualification.csv", qualification)
     _write_csv(output_path / "module_reuse.csv", module_reuse)

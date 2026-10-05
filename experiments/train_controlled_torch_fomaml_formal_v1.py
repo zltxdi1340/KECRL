@@ -190,6 +190,7 @@ def _support_curve(initializer, learner, tasks, support_pool, query_pool, config
     for checkpoint in checkpoints:
         per_task = min(len(next(iter(support_pool.values()))), checkpoint // task_count)
         query_rows = []
+        task_query_rows = {}
         support_steps = 0
         for task_id, task in tasks.items():
             context = _context(task_id).to(device)
@@ -218,6 +219,7 @@ def _support_curve(initializer, learner, tasks, support_pool, query_pool, config
                     "query_loss": float(learner.query_loss(adapted, batch, learner.config.entropy_coef).detach().cpu()),
                     "support_loss": support_loss,
                 })
+                task_query_rows.setdefault(task_id, []).append(bool(summary["success"]))
         success_rate = sum(row["success"] for row in query_rows) / len(query_rows)
         rows.append({
             "support_episodes": checkpoint,
@@ -225,6 +227,10 @@ def _support_curve(initializer, learner, tasks, support_pool, query_pool, config
             "query_episodes": len(query_rows),
             "query_success_rate": success_rate,
             "mean_query_loss": sum(row["query_loss"] for row in query_rows) / len(query_rows),
+            "task_query_success_rates": {
+                task_id: sum(values) / len(values)
+                for task_id, values in task_query_rows.items()
+            },
             "reached": success_rate >= float(config.get("metrics", {}).get("query_success_threshold", 0.8)),
         })
     return rows
