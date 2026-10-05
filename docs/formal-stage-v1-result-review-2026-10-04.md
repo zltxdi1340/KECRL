@@ -146,3 +146,13 @@ held-out qualification gate; all 150 actual Module executions completed. The
 compatibility fix prevents a Module for one resource target from being reused
 for a different target. This is an interface and execution-path validation,
 not a performance result.
+
+The complete rerun at HEAD `752fb27` is archived in
+`results/controlled_torch_fomaml_formal_v1_commit_752fb27/`. All 20 runs carry
+this commit and the new `module_reuse.json` records. Mean query success stayed
+at `0.932` for method, `0.917` for baseline, `0.930` for ablation-knowledge,
+and `0.928` for ablation-skill. Mean Module reuse rates were `0.90`, `0.80`,
+`0.90`, and `0.80`, respectively; unavailable query transitions corresponded
+to tasks without a qualified Module and were not counted as execution
+failures. These are still controlled diagnostic measurements with
+`formal_result=false`.
