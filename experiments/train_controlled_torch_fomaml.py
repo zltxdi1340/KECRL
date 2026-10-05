@@ -64,17 +64,17 @@ def _collect(
 
 
 def _evaluate(
-    initializer, learner, task, item, device, seed, phase, horizon,
+    initializer, learner, task, support_item, query_item, device, seed, phase, horizon,
     preferred_action=None, prior_strength=0.0,
 ):
     context = _context(task.task_id).to(device)
     support, support_summary = _collect(
-        initializer.initialize(context), task, dict(item["initial_resources"]), device,
+        initializer.initialize(context), task, dict(support_item["initial_resources"]), device,
         seed, horizon, preferred_action, prior_strength,
     )
     adapted, support_loss = learner.adapt(context, support)
     query, query_summary = _collect(
-        adapted, task, dict(item["initial_resources"]), device,
+        adapted, task, dict(query_item["initial_resources"]), device,
         seed + 100_000, horizon, preferred_action, prior_strength,
     )
     return {
@@ -138,7 +138,7 @@ def run_variant(config, manifest, variant, seed, output):
     before_rows = []
     for index, task_id in enumerate(tasks):
         before_rows.append(_evaluate(
-            active, active_learner, tasks[task_id], query_items[task_id], device,
+            active, active_learner, tasks[task_id], support_items[task_id], query_items[task_id], device,
             seed * 30_000 + index, "active_before", config["horizon"],
             knowledge_guidance.get(task_id), prior_strength,
         ))
@@ -150,8 +150,8 @@ def run_variant(config, manifest, variant, seed, output):
         after_rows.append(_evaluate(
             candidate if skill_enabled else active,
             candidate_learner if skill_enabled else active_learner,
-            tasks[task_id], query_items[task_id], device,
-            seed * 40_000 + index, "candidate_after" if skill_enabled else "no_skill_update",
+            tasks[task_id], support_items[task_id], query_items[task_id], device,
+            seed * 30_000 + index, "candidate_after" if skill_enabled else "no_skill_update",
             config["horizon"], knowledge_guidance.get(task_id), prior_strength,
         ))
     policy_changed = any(
