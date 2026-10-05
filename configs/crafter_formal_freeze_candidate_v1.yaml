@@ -1,0 +1,127 @@
+{
+  "config_version": "crafter_formal_freeze_candidate_v1",
+  "status": "formal_freeze_candidate_draft",
+  "freeze_status": "draft_candidate_values_to_validate",
+  "formal_result": false,
+  "environment": {
+    "name": "crafter",
+    "version": "1.8.3",
+    "adapter": "rgb64_inventory_v1",
+    "observation_shape": [64, 64, 3],
+    "observation_dtype": "uint8",
+    "action_count": 17,
+    "initialization": "fresh_native_environment_per_episode",
+    "single_gpu_only": true
+  },
+  "seeds": [0, 1, 2, 3, 4],
+  "task_manifest_source": "configs/crafter_task_protocol_v1.yaml",
+  "task_manifest_generator": "experiments.prepare_crafter_protocol",
+  "method_variants": ["method", "baseline", "ablation_knowledge", "ablation_skill"],
+  "task_split": {
+    "meta_train": ["collect_wood", "collect_stone"],
+    "meta_validation": ["collect_coal"],
+    "transfer_evaluation": ["obtain_wood_pickaxe", "obtain_stone_pickaxe", "obtain_iron_pickaxe"],
+    "continual_order": ["collect_wood", "collect_stone", "collect_coal", "obtain_wood_pickaxe", "obtain_stone_pickaxe", "obtain_iron_pickaxe"],
+    "split_status": "candidate_values_to_validate"
+  },
+  "tasks": [
+    {"task_id": "collect_wood", "skill_family": "gather", "target": {"name": "inventory_at_least", "item": "wood", "threshold": 1}},
+    {"task_id": "collect_stone", "skill_family": "gather", "target": {"name": "inventory_at_least", "item": "stone", "threshold": 1}},
+    {"task_id": "collect_coal", "skill_family": "gather", "target": {"name": "inventory_at_least", "item": "coal", "threshold": 1}},
+    {"task_id": "obtain_wood_pickaxe", "skill_family": "craft", "target": {"name": "inventory_at_least", "item": "wood_pickaxe", "threshold": 1}},
+    {"task_id": "obtain_stone_pickaxe", "skill_family": "craft", "target": {"name": "inventory_at_least", "item": "stone_pickaxe", "threshold": 1}},
+    {"task_id": "obtain_iron_pickaxe", "skill_family": "craft", "target": {"name": "inventory_at_least", "item": "iron_pickaxe", "threshold": 1}}
+  ],
+  "roles": ["train", "support", "query", "qualification", "spt_validation", "evaluation"],
+  "budget": {
+    "train_episodes_per_meta_train_task": 20,
+    "support_episodes_per_task": 20,
+    "query_episodes_per_task": 20,
+    "qualification_episodes_per_task": 20,
+    "spt_validation_batches": 2,
+    "spt_validation_episodes_per_task_per_batch": 10,
+    "evaluation_query_episodes_per_task": 30,
+    "max_steps_per_episode": 256,
+    "knowledge_validation_units_per_seed": 200,
+    "status": "candidate_values_to_validate"
+  },
+  "reward": {
+    "native_crafter_reward": "recorded",
+    "success_bonus": 1.0,
+    "step_cost": 0.0,
+    "success_predicate": "inventory_at_least",
+    "terminal_on_success": true,
+    "timeout_is_failure_or_unknown": "failure_for_skill_feedback_unknown_for_knowledge",
+    "status": "candidate_values_to_validate"
+  },
+  "policy": {
+    "backend": "torch_categorical_policy",
+    "observation_features": "rgb64_to_8x8_average_pool",
+    "observation_dim": 192,
+    "action_count": 17,
+    "hidden_dim": 32,
+    "learning_rate": 0.001,
+    "gamma": 0.99
+  },
+  "fomaml": {
+    "inner_lr": 0.001,
+    "meta_lr": 0.001,
+    "inner_steps": 1,
+    "entropy_coef": 0.01,
+    "status": "candidate_values_to_validate"
+  },
+  "qualification": {
+    "unit": "per_task_spi",
+    "min_samples": 20,
+    "success_threshold": 0.8,
+    "contract_threshold": 1.0,
+    "unknown_or_invalid_policy": "report_separately_and_fail_gate",
+    "module_registration": "only_after_every_required_task_gate_passes",
+    "status": "candidate_values_to_validate"
+  },
+  "spt_acceptance": {
+    "validation_batches": 2,
+    "validation_episodes_per_task_per_batch": 10,
+    "min_efficiency_improvement": 0.10,
+    "max_existing_spi_success_rate_regression": 0.05,
+    "require_each_batch_to_pass": true,
+    "hard_contract_violation": "reject_and_keep_active",
+    "insufficient_evidence": "inconclusive_and_keep_active",
+    "candidate_active_previous_stable": true,
+    "status": "candidate_values_to_validate"
+  },
+  "knowledge_validation": {
+    "intervention_protocol": "paired_world_reference_verifier_v1",
+    "reference_verifier_outputs": ["FOUND", "PROVEN_UNREACHABLE", "UNKNOWN"],
+    "n_min": 10,
+    "tau_confirm": 0.8,
+    "tau_reject": 0.2,
+    "confidence": 0.95,
+    "budget_per_seed": 200,
+    "ordinary_execution_evidence": "unknown",
+    "status": "pending_implementation_and_validation"
+  },
+  "metrics": {
+    "primary": "independent_query_learning_efficiency",
+    "query_success_threshold": 0.8,
+    "right_censoring": true,
+    "support_curve_checkpoints": [0, 50, 100, 200, 400],
+    "secondary": ["query_success", "query_loss", "qualification_rate", "module_reuse", "task_result_counts", "knowledge_status_accuracy", "runtime_seconds", "peak_gpu_memory"],
+    "paired_comparison": "by_seed_against_baseline",
+    "report_per_seed": true,
+    "status": "candidate_values_to_validate"
+  },
+  "provenance": {
+    "required": ["config", "task_manifest", "seed", "git_commit", "python", "pytorch", "cuda", "gpu", "dependencies", "command", "structured_log", "result_json", "result_csv", "failure_log"],
+    "result_overwrite": "forbidden"
+  },
+  "freeze_gates": {
+    "adapter_contract_tests": true,
+    "independent_role_manifest": true,
+    "real_policy_fomaml_connected": false,
+    "qualified_module_pipeline_connected": false,
+    "knowledge_reference_verifier_connected": false,
+    "formal_training_allowed": false
+  },
+  "candidate_note": "This is a formal experiment freeze draft. Values marked candidate_values_to_validate are not frozen and must pass feasibility, cost, and contract audits before any formal training."
+}
