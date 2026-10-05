@@ -209,6 +209,11 @@ def run(config_path: str, output_path: str) -> dict:
         "candidate_acceptance": "not_evaluated",
         "spt_pointer_switched": False,
         "module_registered": False,
+        "comparison_scope": {
+            "paired_baseline": "active_before_no_update_same_initialization",
+            "knowledge_evolution_ablation": "not_available_in_crafter_runner",
+            "skill_evolution_ablation": "not_available_in_crafter_runner",
+        },
         "mean_meta_query_loss": mean_meta_query_loss,
         "evaluation_query_success_rate": rates,
         "training_tasks": train_rows,
