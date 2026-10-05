@@ -193,3 +193,19 @@ query loss changed from `0.4324` to `0.5434` (delta `+0.1111`). This is a
 small non-formal regression diagnostic: it shows no consistent query-efficiency
 improvement in this Crafter setup and cannot support a method-effectiveness
 claim or a frozen hyperparameter decision.
+
+The diverse-task diagnostic at commit `ace14d8` is stored in
+`results/crafter_context_fomaml_diverse_v1/`. It used six distinct task targets
+from the candidate Crafter protocol (wood, stone, coal, and three pickaxe
+targets), six-dimensional one-hot contexts, and five independent candidate
+updates on visible GPU0. All replicas verified CUDA tensors, disjoint episode
+roles, unchanged active SPT state, and candidate-only parameter changes. Across
+30 independent evaluation episodes, active and candidate query success were
+both 1/30 (`0.0333`); the only success was collect wood. By task, collect wood
+was 1/5 before and 1/5 after, while the other five targets were 0/5 in both
+phases. Mean query loss changed from `-1.2346` to `-1.0209`, which is not used
+as a standalone effectiveness claim because the current normalized REINFORCE
+loss is not yet a frozen cross-task efficiency estimator. This remains a
+diagnostic task-diversity check, not a formal comparison; the craft targets in
+particular require a trained multi-step policy and should not be interpreted as
+evidence that those tasks are unreachable.
