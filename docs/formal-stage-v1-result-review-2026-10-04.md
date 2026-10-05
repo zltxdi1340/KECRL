@@ -156,3 +156,19 @@ and `0.928` for ablation-skill. Mean Module reuse rates were `0.90`, `0.80`,
 to tasks without a qualified Module and were not counted as execution
 failures. These are still controlled diagnostic measurements with
 `formal_result=false`.
+
+The formal-candidate analysis is stored in
+`results/controlled_torch_fomaml_formal_v1_commit_752fb27/analysis/`. The
+paired final-checkpoint success deltas were `+0.015` for method versus
+baseline (descriptive bootstrap interval `[-0.029, 0.056]`), `+0.004` versus
+ablation-skill (`[-0.033, 0.032]`), and `+0.002` versus ablation-knowledge
+(`[-0.008, 0.014]`). Qualification/module registration rates were `0.6` for
+method and ablation-knowledge, and `0.2` for baseline and ablation-skill;
+these gate rates are part of the diagnostic rather than performance claims.
+
+The frozen `0.8` query threshold has a floor effect in the support-curve
+analysis: every method seed reaches the threshold at support budget zero, so
+the reported method mean of zero support steps is not evidence of zero-cost
+learning. A future formal protocol must raise or task-stratify the threshold,
+or define an improvement-based efficiency endpoint, before using this metric
+for a paper comparison. All analysis outputs retain `formal_result=false`.
