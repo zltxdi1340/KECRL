@@ -194,6 +194,22 @@ small non-formal regression diagnostic: it shows no consistent query-efficiency
 improvement in this Crafter setup and cannot support a method-effectiveness
 claim or a frozen hyperparameter decision.
 
+The repeated-query diagnostic at commit `a05042e` is stored in
+`results/crafter_context_fomaml_diverse_query3_v1/`. It keeps one support
+adaptation per task and evaluates three independent query episodes per task,
+with a documented query-seed stride, across the same six targets and five
+independent replicas. All episode roles remained disjoint and all replicas
+verified CUDA tensors and candidate isolation. Across 90 active query episodes,
+success was 4/90 (`0.0444`); after the candidate update it was 1/90
+(`0.0111`). Collect wood accounted for all successes (4/15 active and 1/15
+candidate); collect stone, collect coal, and all three pickaxe targets were
+0/15 in both phases. Mean normalized query loss changed from `0.1225` to
+`0.1009`, but this remains a diagnostic quantity rather than a frozen
+cross-task efficiency estimator. Repeating query episodes makes the variance
+visible; it does not establish a benefit and suggests that the current policy
+and reward setup cannot learn the diverse targets within this one-update
+budget.
+
 The diverse-task diagnostic at commit `ace14d8` is stored in
 `results/crafter_context_fomaml_diverse_v1/`. It used six distinct task targets
 from the candidate Crafter protocol (wood, stone, coal, and three pickaxe
