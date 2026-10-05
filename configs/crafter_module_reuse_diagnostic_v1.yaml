@@ -1,0 +1,11 @@
+{
+  "status": "crafter_module_reuse_diagnostic_v1",
+  "formal_result": false,
+  "device": "cuda",
+  "seed": 0,
+  "task": {"task_id": "collect_wood", "skill_family": "gather", "item": "wood", "threshold": 1},
+  "policy": {"observation_dim": 192, "action_count": 17, "hidden_dim": 32, "learning_rate": 0.001, "gamma": 0.99},
+  "max_steps": 8,
+  "fixture_qualification": {"min_samples": 1, "successes": 1, "contract_passes": 1},
+  "diagnostic_note": "Fixture-qualified Module reuse path only; qualification is not a real policy result and no Knowledge Evolution or SPT update is performed."
+}
