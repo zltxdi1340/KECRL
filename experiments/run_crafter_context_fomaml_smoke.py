@@ -63,23 +63,30 @@ def _evaluate_task(initializer, learner, task, support_seed, query_seed, index, 
         config["max_steps"], config["success_bonus"],
     )
     adapted, support_loss = learner.adapt(context, support)
-    torch.manual_seed(_rng_seed(config, 90_000, index))
-    query, query_summary = _collect(
-        adapted, query_seed, task["target"], device, config["max_steps"], 0.0
-    )
-    query_loss = float(learner.query_loss(adapted, query).detach().cpu())
-    return {
-        "phase": phase,
-        "task": task["name"],
-        "support_seed": support_seed,
-        "query_seed": query_seed,
-        "support_success": support_summary["success"],
-        "query_success": query_summary["success"],
-        "support_loss": support_loss,
-        "query_loss": query_loss,
-        "query_steps": query_summary["steps"],
-        "query_native_reward": query_summary["native_reward"],
-    }
+    query_repeats = int(config.get("evaluation_query_repeats", 1))
+    query_stride = int(config.get("evaluation_query_seed_stride", 1_000))
+    rows = []
+    for repeat in range(query_repeats):
+        actual_query_seed = int(query_seed) + repeat * query_stride
+        torch.manual_seed(_rng_seed(config, 90_000 + repeat, index))
+        query, query_summary = _collect(
+            adapted, actual_query_seed, task["target"], device, config["max_steps"], 0.0
+        )
+        query_loss = float(learner.query_loss(adapted, query).detach().cpu())
+        rows.append({
+            "phase": phase,
+            "task": task["name"],
+            "support_seed": support_seed,
+            "query_seed": actual_query_seed,
+            "query_repeat": repeat,
+            "support_success": support_summary["success"],
+            "query_success": query_summary["success"],
+            "support_loss": support_loss,
+            "query_loss": query_loss,
+            "query_steps": query_summary["steps"],
+            "query_native_reward": query_summary["native_reward"],
+        })
+    return rows
 
 
 def run(config_path: str, output_path: str) -> dict:
@@ -112,10 +119,15 @@ def run(config_path: str, output_path: str) -> dict:
     candidate_learner = ContextConditionedPolicyFOMAML(candidate, fomaml_config)
 
     eval_rows = []
+    query_repeats = int(config.get("evaluation_query_repeats", 1))
+    if query_repeats <= 0:
+        raise ValueError("evaluation_query_repeats must be positive")
+    if int(config.get("evaluation_query_seed_stride", 1_000)) <= 0:
+        raise ValueError("evaluation_query_seed_stride must be positive")
     for index, (task, support_seed, query_seed) in enumerate(zip(
         config["tasks"], config["evaluation"]["support"], config["evaluation"]["query"]
     )):
-        eval_rows.append(_evaluate_task(
+        eval_rows.extend(_evaluate_task(
             active, active_learner, task, support_seed, query_seed, index,
             "active_before", config, device,
         ))
@@ -151,7 +163,7 @@ def run(config_path: str, output_path: str) -> dict:
     for index, (task, support_seed, query_seed) in enumerate(zip(
         config["tasks"], config["evaluation"]["support"], config["evaluation"]["query"]
     )):
-        eval_rows.append(_evaluate_task(
+        eval_rows.extend(_evaluate_task(
             candidate, candidate_learner, task, support_seed, query_seed, index,
             "candidate_after", config, device,
         ))
@@ -169,7 +181,12 @@ def run(config_path: str, output_path: str) -> dict:
         for name, value in candidate.template.state_dict().items()
     )
     train_seeds = set(config["training_seeds"]["support"] + config["training_seeds"]["query"])
-    evaluation_seeds = set(config["evaluation"]["support"] + config["evaluation"]["query"])
+    evaluation_query_seeds = {
+        int(seed) + repeat * int(config.get("evaluation_query_seed_stride", 1_000))
+        for seed in config["evaluation"]["query"]
+        for repeat in range(query_repeats)
+    }
+    evaluation_seeds = set(config["evaluation"]["support"]) | evaluation_query_seeds
     rates = {}
     for phase in ("active_before", "candidate_after"):
         rows = [row for row in eval_rows if row["phase"] == phase]
@@ -183,7 +200,9 @@ def run(config_path: str, output_path: str) -> dict:
         "device": str(device),
         "cuda_tensor_verified": next(active.template.parameters()).is_cuda,
         "train_eval_seed_disjoint": train_seeds.isdisjoint(evaluation_seeds),
-        "support_query_seed_disjoint": set(config["training_seeds"]["support"]).isdisjoint(config["training_seeds"]["query"]) and set(config["evaluation"]["support"]).isdisjoint(config["evaluation"]["query"]),
+        "support_query_seed_disjoint": set(config["training_seeds"]["support"]).isdisjoint(config["training_seeds"]["query"]) and set(config["evaluation"]["support"]).isdisjoint(evaluation_query_seeds),
+        "evaluation_query_repeats": query_repeats,
+        "evaluation_query_seed_stride": int(config.get("evaluation_query_seed_stride", 1_000)),
         "active_spt_unchanged": active_unchanged,
         "candidate_context_generator_changed": candidate_generator_changed,
         "candidate_policy_template_changed": candidate_template_changed,
