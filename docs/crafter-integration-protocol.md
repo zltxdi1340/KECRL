@@ -178,3 +178,18 @@ instances were processed in one shared candidate outer update, this is a
 single pilot diagnostic rather than five independent training repetitions; its
 success difference cannot support formal seed statistics or an effectiveness
 claim.
+
+The independent replica diagnostic at commit `172e320` is stored in
+`results/crafter_context_fomaml_independent_v1/`. It ran one serial Python
+process on visible GPU0 for seeds 0--4. Each replica used a separate candidate
+outer update, disjoint training/evaluation and support/query episode seeds, and
+a deterministic seed offset for action sampling. CUDA tensors were verified in
+all five replicas; active SPT state stayed unchanged, both candidate parameter
+groups changed, and no SPT pointer or Module was registered. Per-seed
+independent query success rates before versus after the update were
+`0.0/0.0`, `0.3/0.4`, `0.3/0.3`, `0.2/0.2`, and `0.2/0.1`. The across-seed
+mean was `0.20` before and `0.20` after, with mean per-seed change `0.00`; mean
+query loss changed from `0.4324` to `0.5434` (delta `+0.1111`). This is a
+small non-formal regression diagnostic: it shows no consistent query-efficiency
+improvement in this Crafter setup and cannot support a method-effectiveness
+claim or a frozen hyperparameter decision.
