@@ -1,0 +1,20 @@
+{
+  "status": "crafter_module_pipeline_diagnostic_v1",
+  "formal_result": false,
+  "device": "cuda",
+  "seeds": [0, 1, 2, 3, 4],
+  "tasks": [
+    {"task_id": "collect_wood", "skill_family": "gather", "item": "wood", "threshold": 1},
+    {"task_id": "collect_stone", "skill_family": "gather", "item": "stone", "threshold": 1},
+    {"task_id": "collect_coal", "skill_family": "gather", "item": "coal", "threshold": 1},
+    {"task_id": "obtain_wood_pickaxe", "skill_family": "craft", "item": "wood_pickaxe", "threshold": 1},
+    {"task_id": "obtain_stone_pickaxe", "skill_family": "craft", "item": "stone_pickaxe", "threshold": 1},
+    {"task_id": "obtain_iron_pickaxe", "skill_family": "craft", "item": "iron_pickaxe", "threshold": 1}
+  ],
+  "policy": {"observation_dim": 192, "action_count": 17, "hidden_dim": 32, "learning_rate": 0.001, "gamma": 0.99},
+  "qualification": {"episodes_per_seed": 2, "min_samples": 10, "success_threshold": 0.8, "contract_threshold": 1.0},
+  "query_episodes_per_seed": 2,
+  "max_steps": 256,
+  "fixture_mechanism": true,
+  "diagnostic_note": "Real policy qualification and Pipeline routing diagnostic. The confirmed mechanism is a fixture only; no Knowledge Evolution or formal Module claim is made."
+}
