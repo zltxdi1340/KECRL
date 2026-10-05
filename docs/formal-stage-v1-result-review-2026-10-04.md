@@ -36,3 +36,17 @@ implemented in the new diagnostic path. The smoke manifest has no mechanism
 evidence field, so Knowledge guidance was recorded as
 `knowledge_evidence_unavailable`; consequently this single-seed run does not
 provide a valid Knowledge ablation or any formal comparison.
+
+The evidence-backed, paired-role diagnostic at commit `1bed153` is stored in
+`results/controlled_torch_fomaml_stage_v3/`. It ran five seeds and all four
+variants on visible GPU0 with the real Torch policy FOMAML backend. Support
+episodes use the support role and query episodes use the query role; active and
+candidate evaluations reuse the same action-sampling seed per task. CUDA
+policy tensors were verified in all 20 runs. Knowledge-enabled variants
+recorded 60 evidence items and the expected confirmed/rejected/candidate
+statuses; the Knowledge-disabled variant recorded no Knowledge evidence.
+Method query success changed from 16/20 (`0.80`) to 17/20 (`0.85`), a paired
+delta of `+1/20`; baseline stayed 15/20, ablation-knowledge stayed 15/20, and
+ablation-skill stayed 16/20. This is the first diagnostic with a policy-level,
+paired variant path, but it remains a short controlled run with one outer
+update and `formal_result=false`; it is not a formal effectiveness result.
