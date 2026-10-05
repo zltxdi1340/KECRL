@@ -109,6 +109,9 @@ def run_variant(config, manifest, variant, seed, output):
         }
         knowledge_guidance = {}
     prior_strength = float(config.get("knowledge", {}).get("action_prior_strength", 0.0))
+    outer_updates = int(config.get("outer_updates", 1))
+    if outer_updates < 0:
+        raise ValueError("outer_updates must be non-negative")
     fomaml_config = TorchFOMAMLConfig(**config["fomaml"])
     active = ContextConditionedPolicyInitializer(policy, context_dim=len(tasks)).to(device)
     candidate = copy.deepcopy(active)
@@ -143,17 +146,39 @@ def run_variant(config, manifest, variant, seed, output):
             knowledge_guidance.get(task_id), prior_strength,
         ))
     mean_meta_query_loss = None
+    outer_update_losses = []
+    outer_curve = []
+
+    def evaluate_policy(policy, learner, phase):
+        rows = []
+        for index, task_id in enumerate(tasks):
+            rows.append(_evaluate(
+                policy, learner, tasks[task_id], support_items[task_id], query_items[task_id], device,
+                seed * 30_000 + index, phase, config["horizon"],
+                knowledge_guidance.get(task_id), prior_strength,
+            ))
+        return rows
+
     if skill_enabled:
-        mean_meta_query_loss = candidate_learner.meta_update(tuple(train_tasks))
-    after_rows = []
-    for index, task_id in enumerate(tasks):
-        after_rows.append(_evaluate(
-            candidate if skill_enabled else active,
-            candidate_learner if skill_enabled else active_learner,
-            tasks[task_id], support_items[task_id], query_items[task_id], device,
-            seed * 30_000 + index, "candidate_after" if skill_enabled else "no_skill_update",
-            config["horizon"], knowledge_guidance.get(task_id), prior_strength,
-        ))
+        after_rows = []
+        for update_index in range(outer_updates):
+            mean_meta_query_loss = candidate_learner.meta_update(tuple(train_tasks))
+            outer_update_losses.append(mean_meta_query_loss)
+            after_rows = evaluate_policy(
+                candidate, candidate_learner, f"candidate_after_update_{update_index + 1}"
+            )
+            outer_curve.append({
+                "outer_update": update_index + 1,
+                "query_success_rate": sum(row["query_success"] for row in after_rows) / len(after_rows),
+                "mean_query_loss": sum(row["query_loss"] for row in after_rows) / len(after_rows),
+            })
+    else:
+        after_rows = evaluate_policy(active, active_learner, "no_skill_update")
+        outer_curve.append({
+            "outer_update": 0,
+            "query_success_rate": sum(row["query_success"] for row in after_rows) / len(after_rows),
+            "mean_query_loss": sum(row["query_loss"] for row in after_rows) / len(after_rows),
+        })
     policy_changed = any(
         not torch.equal(active.template.state_dict()[name], candidate.template.state_dict()[name])
         for name in active.template.state_dict()
@@ -180,6 +205,9 @@ def run_variant(config, manifest, variant, seed, output):
         "cuda_tensor_verified": device.type == "cuda" and next(policy.parameters()).is_cuda,
         "knowledge": knowledge_summary,
         "mean_meta_query_loss": mean_meta_query_loss,
+        "outer_updates": outer_updates if skill_enabled else 0,
+        "outer_update_losses": outer_update_losses,
+        "outer_curve": outer_curve,
         "candidate_policy_changed": policy_changed if skill_enabled else False,
         "evaluation": query_rows,
         "pipeline": pipeline_rows,
