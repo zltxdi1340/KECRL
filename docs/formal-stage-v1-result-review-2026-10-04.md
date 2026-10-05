@@ -96,3 +96,27 @@ ablation-knowledge delta was `+0.020` (interval `[-0.010, 0.050]`). The
 method versus ablation-skill success interval crosses zero, so these results
 do not establish a formal effectiveness claim. Bootstrap intervals are
 descriptive only; all generated analysis files retain `formal_result=false`.
+
+The next candidate runner, `experiments/train_controlled_torch_fomaml_formal_v1.py`,
+adds the previously missing held-out qualification and SPT validation paths.
+Its configuration is `configs/controlled_torch_fomaml_formal_v1.yaml`, and the
+20-run GPU0 execution is archived under
+`results/controlled_torch_fomaml_formal_v1/`. The run used the same five seeds,
+four variants, disjoint role manifest, CUDA policy tensors, five Skill outer
+updates, 20 qualification episodes per task, and two independent SPT validation
+batches of 10 episodes per task. It writes per-run qualification and SPT
+decision records plus command, environment, dependency, Git, and GPU
+provenance files.
+
+This candidate run is not promoted to a formal result. Qualification passed in
+4/5 seeds for every variant (`0.80` pass rate); seed 0 failed the success
+threshold in every variant while contract pass rates remained `1.0`. SPT
+candidate decisions for `method` were accepted in 2/5 seeds, rejected in 3/5;
+the rejections include insufficient improvement or an existing-SPI regression.
+The final query-success means were `0.932` (method), `0.917` (baseline),
+`0.930` (ablation-knowledge), and `0.928` (ablation-skill), but they are
+descriptive only because qualification and SPT decisions are heterogeneous and
+the controlled policy/task budget remains small. All outputs keep
+`formal_result=false`; the next review must decide whether to enlarge the
+qualification/validation budgets or revise the candidate protocol before any
+paper claim.
