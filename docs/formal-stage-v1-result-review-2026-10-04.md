@@ -50,3 +50,14 @@ delta of `+1/20`; baseline stayed 15/20, ablation-knowledge stayed 15/20, and
 ablation-skill stayed 16/20. This is the first diagnostic with a policy-level,
 paired variant path, but it remains a short controlled run with one outer
 update and `formal_result=false`; it is not a formal effectiveness result.
+
+The outer-update curve diagnostic at commit `86b89fe` is stored in
+`results/controlled_torch_fomaml_stage_v4/`. It predeclared three candidate
+outer updates and evaluated the same paired query roles after each update.
+Across five seeds, method query success averaged `0.85`, `0.85`, and `0.80`
+after updates 1, 2, and 3; ablation-knowledge averaged `0.75`, `0.75`, and
+`0.75`; the zero-update baseline was `0.75`; and zero-update ablation-skill
+was `0.80`. The method curve therefore did not improve monotonically, which
+is a useful warning against selecting the final update by convenience. This
+remains a controlled learning-curve diagnostic with `formal_result=false`,
+not a formal budget or effectiveness result.
