@@ -34,7 +34,10 @@ def _context(task_id: str) -> torch.Tensor:
     return torch.tensor(values, dtype=torch.float32)
 
 
-def _collect(policy, task, initial_resources, device, seed, horizon=8):
+def _collect(
+    policy, task, initial_resources, device, seed, horizon=8,
+    preferred_action=None, prior_strength=0.0,
+):
     torch.manual_seed(int(seed))
     env = DiscreteResourceEnvironment(initial_resources)
     observations, actions, rewards = [], [], []
@@ -43,7 +46,9 @@ def _collect(policy, task, initial_resources, device, seed, horizon=8):
     success = False
     for step in range(horizon):
         observation = torch.tensor(env.observation(), dtype=torch.float32, device=device)
-        distribution = policy.action_distribution(observation, tuple(range(len(env.ACTIONS))))
+        distribution = policy.action_distribution(
+            observation, tuple(range(len(env.ACTIONS))), preferred_action, prior_strength
+        )
         action = distribution.sample()
         transition = env.step(env.ACTIONS[int(action.item())])
         success = env.resources.get(target_resource, 0) > start_value
@@ -58,14 +63,19 @@ def _collect(policy, task, initial_resources, device, seed, horizon=8):
     )
 
 
-def _evaluate(initializer, learner, task, item, device, seed, phase, horizon):
+def _evaluate(
+    initializer, learner, task, item, device, seed, phase, horizon,
+    preferred_action=None, prior_strength=0.0,
+):
     context = _context(task.task_id).to(device)
     support, support_summary = _collect(
-        initializer.initialize(context), task, dict(item["initial_resources"]), device, seed, horizon
+        initializer.initialize(context), task, dict(item["initial_resources"]), device,
+        seed, horizon, preferred_action, prior_strength,
     )
     adapted, support_loss = learner.adapt(context, support)
     query, query_summary = _collect(
-        adapted, task, dict(item["initial_resources"]), device, seed + 100_000, horizon
+        adapted, task, dict(item["initial_resources"]), device,
+        seed + 100_000, horizon, preferred_action, prior_strength,
     )
     return {
         "phase": phase,
@@ -98,6 +108,7 @@ def run_variant(config, manifest, variant, seed, output):
             "evidence_count": 0,
         }
         knowledge_guidance = {}
+    prior_strength = float(config.get("knowledge", {}).get("action_prior_strength", 0.0))
     fomaml_config = TorchFOMAMLConfig(**config["fomaml"])
     active = ContextConditionedPolicyInitializer(policy, context_dim=len(tasks)).to(device)
     candidate = copy.deepcopy(active)
@@ -116,11 +127,11 @@ def run_variant(config, manifest, variant, seed, output):
         context = _context(task_id).to(device)
         support, _ = _collect(
             candidate.initialize(context), task, dict(support_items[task_id]["initial_resources"]), device,
-            seed * 10_000 + index, config["horizon"]
+            seed * 10_000 + index, config["horizon"], knowledge_guidance.get(task_id), prior_strength
         )
         query, _ = _collect(
             candidate.initialize(context), task, dict(query_items[task_id]["initial_resources"]), device,
-            seed * 20_000 + index, config["horizon"]
+            seed * 20_000 + index, config["horizon"], knowledge_guidance.get(task_id), prior_strength
         )
         train_tasks.append(ContextTaskBatch(context, support, query))
 
@@ -129,6 +140,7 @@ def run_variant(config, manifest, variant, seed, output):
         before_rows.append(_evaluate(
             active, active_learner, tasks[task_id], query_items[task_id], device,
             seed * 30_000 + index, "active_before", config["horizon"],
+            knowledge_guidance.get(task_id), prior_strength,
         ))
     mean_meta_query_loss = None
     if skill_enabled:
@@ -140,7 +152,7 @@ def run_variant(config, manifest, variant, seed, output):
             candidate_learner if skill_enabled else active_learner,
             tasks[task_id], query_items[task_id], device,
             seed * 40_000 + index, "candidate_after" if skill_enabled else "no_skill_update",
-            config["horizon"],
+            config["horizon"], knowledge_guidance.get(task_id), prior_strength,
         ))
     policy_changed = any(
         not torch.equal(active.template.state_dict()[name], candidate.template.state_dict()[name])

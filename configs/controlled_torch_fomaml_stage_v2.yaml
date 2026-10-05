@@ -1,0 +1,14 @@
+{
+  "status": "controlled_torch_fomaml_stage_v2_knowledge_prior",
+  "formal_result": false,
+  "device": "cuda",
+  "seeds": [0, 1, 2, 3, 4],
+  "method_variants": ["method", "baseline", "ablation_knowledge", "ablation_skill"],
+  "results_root": "results/controlled_torch_fomaml_stage_v2",
+  "manifest": "datasets/discrete_resource_manifest_stage_v1.json",
+  "policy": {"observation_dim": 4, "action_count": 4, "hidden_dim": 16, "learning_rate": 0.01, "gamma": 0.99},
+  "fomaml": {"inner_lr": 0.05, "meta_lr": 0.01, "inner_steps": 1, "entropy_coef": 0.0},
+  "knowledge": {"n_min": 10, "tau_confirm": 0.8, "tau_reject": 0.2, "confidence": 0.95, "budget_per_seed": 200, "action_prior_strength": 1.5},
+  "horizon": 8,
+  "smoke_note": "Five-seed policy-connected FOMAML variant diagnostic with evidence-derived action prior; not a formal comparison, qualification study, or paper result."
+}
