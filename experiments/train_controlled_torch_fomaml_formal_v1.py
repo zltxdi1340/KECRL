@@ -354,6 +354,43 @@ def _validation_batches(pool, tasks, batch_count, episodes_per_task):
     ]
 
 
+def _decide_spt(validation_rows, spt_config):
+    """Apply the frozen SPT gate to every validation batch.
+
+    Aggregate values remain useful for reporting, but acceptance is conjunctive:
+    every batch must satisfy the contract, improvement, and non-regression gates.
+    """
+    min_improvement = float(spt_config["min_improvement"])
+    max_allowed_regression = float(spt_config["max_existing_spi_regression"])
+    for row in validation_rows:
+        row["passes"] = (
+            bool(row["contract_pass"])
+            and float(row["efficiency_improvement"]) >= min_improvement
+            and float(row["max_existing_spi_regression"]) <= max_allowed_regression
+        )
+    improvement = sum(row["efficiency_improvement"] for row in validation_rows) / max(len(validation_rows), 1)
+    max_regression = max((row["max_existing_spi_regression"] for row in validation_rows), default=0.0)
+    hard_contract_pass = all(row["contract_pass"] for row in validation_rows)
+    enough = len(validation_rows) >= int(spt_config["validation_batches"])
+    all_validation_batches_pass = bool(validation_rows) and all(row["passes"] for row in validation_rows)
+    if not enough:
+        decision, reason = "inconclusive", "insufficient_validation_batches"
+    elif not hard_contract_pass:
+        decision, reason = "rejected", "contract_violation"
+    elif not all_validation_batches_pass:
+        decision, reason = "rejected", "validation_batch_threshold_failed"
+    else:
+        decision, reason = "accepted", "all_validation_batches_met_thresholds"
+    return {
+        "decision": decision,
+        "reason": reason,
+        "mean_efficiency_improvement": improvement,
+        "max_existing_spi_regression": max_regression,
+        "hard_contract_pass": hard_contract_pass,
+        "all_validation_batches_pass": all_validation_batches_pass,
+    }
+
+
 def _review_spt(active, candidate, active_learner, candidate_learner, tasks, support_pool,
                 validation_pool, config, device, horizon, guidance, prior_strength, seed):
     spt_config = config["spt"]
@@ -395,20 +432,12 @@ def _review_spt(active, candidate, active_learner, candidate_learner, tasks, sup
             "active_query_loss": sum(row["query_loss"] for row in active_rows) / len(active_rows),
             "candidate_query_loss": sum(row["query_loss"] for row in candidate_rows) / len(candidate_rows),
         })
-    improvement = sum(row["efficiency_improvement"] for row in validation_rows) / len(validation_rows)
-    max_regression = max(row["max_existing_spi_regression"] for row in validation_rows)
-    hard_contract_pass = all(row["contract_pass"] for row in validation_rows)
-    enough = len(validation_rows) >= int(spt_config["validation_batches"])
-    if not enough:
-        decision, reason = "inconclusive", "insufficient_validation_batches"
-    elif not hard_contract_pass:
-        decision, reason = "rejected", "contract_violation"
-    elif improvement < float(spt_config["min_improvement"]):
-        decision, reason = "rejected", "insufficient_learning_efficiency_improvement"
-    elif max_regression > float(spt_config["max_existing_spi_regression"]):
-        decision, reason = "rejected", "existing_spi_regression_exceeded"
-    else:
-        decision, reason = "accepted", "learning_efficiency_and_non_regression_thresholds_met"
+    spt_decision = _decide_spt(validation_rows, spt_config)
+    decision = spt_decision["decision"]
+    reason = spt_decision["reason"]
+    improvement = spt_decision["mean_efficiency_improvement"]
+    max_regression = spt_decision["max_existing_spi_regression"]
+    hard_contract_pass = spt_decision["hard_contract_pass"]
     active_spt = SPT("spt:controlled_resource", "controlled_resource", "v1", {"task_family": "discrete_resource"})
     manager = SPTVersionManager(active_spt)
     candidate_parameters = (float(improvement), float(max_regression))
@@ -434,6 +463,7 @@ def _review_spt(active, candidate, active_learner, candidate_learner, tasks, sup
         "mean_efficiency_improvement": improvement,
         "max_existing_spi_regression": max_regression,
         "hard_contract_pass": hard_contract_pass,
+        "all_validation_batches_pass": spt_decision["all_validation_batches_pass"],
         "config": spt_config,
         "validation_batches": validation_rows,
     }

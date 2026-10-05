@@ -1,6 +1,7 @@
 from experiments.train_controlled_torch_fomaml_formal_v1 import (
     _build_skill_library,
     _contract_execution_check,
+    _decide_spt,
     _module_reuse_evaluation,
     _review_spt,
     _task_contract,
@@ -20,6 +21,26 @@ def test_formal_runner_config_is_explicitly_diagnostic():
 
 def test_formal_runner_module_exposes_spt_review_entrypoint():
     assert callable(_review_spt)
+
+
+def test_spt_acceptance_requires_every_validation_batch_to_pass():
+    config = {
+        "validation_batches": 2,
+        "min_improvement": 0.10,
+        "max_existing_spi_regression": 0.05,
+    }
+    rows = [
+        {"contract_pass": True, "efficiency_improvement": 0.20,
+         "max_existing_spi_regression": 0.00},
+        {"contract_pass": True, "efficiency_improvement": 0.00,
+         "max_existing_spi_regression": 0.00},
+    ]
+    result = _decide_spt(rows, config)
+    assert result["mean_efficiency_improvement"] == 0.10
+    assert result["all_validation_batches_pass"] is False
+    assert result["decision"] == "rejected"
+    assert result["reason"] == "validation_batch_threshold_failed"
+    assert [row["passes"] for row in rows] == [True, False]
 
 
 def test_contract_check_uses_controlled_transition():

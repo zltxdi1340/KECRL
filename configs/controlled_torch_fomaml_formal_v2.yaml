@@ -1,0 +1,22 @@
+{
+  "config_version": "controlled_torch_fomaml_formal_candidate_v2",
+  "status": "controlled_torch_fomaml_formal_candidate",
+  "formal_result": false,
+  "device": "cuda",
+  "seeds": [0, 1, 2, 3, 4],
+  "method_variants": ["method", "baseline", "ablation_knowledge", "ablation_skill"],
+  "results_root": "results/controlled_torch_fomaml_formal_v2",
+  "manifest": "datasets/discrete_resource_manifest_stage_v1.json",
+  "policy": {"observation_dim": 4, "action_count": 4, "hidden_dim": 16, "learning_rate": 0.01, "gamma": 0.99},
+  "fomaml": {"inner_lr": 0.05, "meta_lr": 0.01, "inner_steps": 1, "entropy_coef": 0.0},
+  "knowledge": {"n_min": 10, "tau_confirm": 0.8, "tau_reject": 0.2, "confidence": 0.95, "budget_per_seed": 200, "action_prior_strength": 1.5},
+  "outer_updates": 5,
+  "train_episodes_per_task_per_update": 2,
+  "eval_support_episodes_per_task": 5,
+  "eval_query_episodes_per_task": 10,
+  "horizon": 8,
+  "qualification": {"episodes_per_task": 30, "min_samples": 30, "success_threshold": 0.8, "contract_threshold": 1.0},
+  "spt": {"validation_batches": 2, "validation_episodes_per_task_per_batch": 15, "min_improvement": 0.10, "max_existing_spi_regression": 0.05},
+  "metrics": {"primary": "independent_query_learning_efficiency", "query_success_threshold": 0.95, "support_curve_checkpoints": [0, 50, 100, 200]},
+  "candidate_note": "Expanded-budget diagnostic candidate: higher query threshold and larger qualification/SPT validation samples; outputs remain non-formal until statistical review."
+}
