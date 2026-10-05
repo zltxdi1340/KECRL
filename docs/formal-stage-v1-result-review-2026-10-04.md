@@ -25,3 +25,14 @@ Evolution comparison. These archived results remain useful for controlled
 pipeline, Knowledge, qualification, and provenance checks, but a valid
 policy-level comparison requires a torch FOMAML runner whose candidate update
 changes the policy used for query evaluation.
+
+The new policy-connected runner was smoke-tested at commit `6252e2b` in
+`results/controlled_torch_fomaml_gpu_smoke/` on visible GPU0. All four
+variants resolved CUDA and verified CUDA policy tensors. `method` and
+`ablation_knowledge` changed the candidate Torch policy through the FOMAML
+outer update; `baseline` and `ablation_skill` left the policy unchanged by the
+outer Skill update. This confirms the missing policy connection has been
+implemented in the new diagnostic path. The smoke manifest has no mechanism
+evidence field, so Knowledge guidance was recorded as
+`knowledge_evidence_unavailable`; consequently this single-seed run does not
+provide a valid Knowledge ablation or any formal comparison.
