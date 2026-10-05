@@ -103,6 +103,85 @@ def _build_skill_library(tasks, qualification_config, spt_version):
     return library
 
 
+def _contract_execution_check(task, initial_resources):
+    """Check the declared contract against an actual controlled transition."""
+    _, contract, _ = _task_contract(task)
+    transition = DiscreteResourceEnvironment(initial_resources).execute(task)
+    target = task.produces_map
+    produced_match = dict(transition.produced) == target
+    consumed_match = dict(transition.consumed) == task.consumes_map
+    nonnegative = all(value >= 0 for value in transition.after.values())
+    target_reached = all(
+        transition.after.get(resource, 0) >= initial_resources.get(resource, 0) + amount
+        for resource, amount in target.items()
+    )
+    return bool(
+        transition.success
+        and produced_match
+        and consumed_match
+        and nonnegative
+        and target_reached
+        and contract.declared_output_capabilities
+    )
+
+
+def _module_reuse_evaluation(library, tasks, query_pool, spt_version):
+    """Run the qualified Module path through actual controlled transitions."""
+    rows = []
+    for task_id, task in tasks.items():
+        for item in query_pool[task_id]:
+            environment = DiscreteResourceEnvironment(item["initial_resources"])
+            _, contract, _ = _task_contract(task, spt_version)
+            request = TransitionRequest(
+                tuple(environment.capabilities()),
+                {"name": "resource_at_least", "resource": task.produces[0][0], "value": 1},
+                dict(task.consumes),
+                dict(task.scope),
+                {},
+            )
+            response = library.request_implementation(request)
+            if response.status == "reused_module":
+                transition = environment.execute(task)
+                contract_pass = _contract_execution_check(task, item["initial_resources"])
+                task_result = "completed" if transition.success and contract_pass else "continued"
+                rows.append({
+                    "episode_id": item["episode_id"], "task_id": task_id,
+                    "implementation_status": response.status,
+                    "module_id": response.module_id, "spi_id": response.spi_id,
+                    "task_result": task_result, "contract_pass": contract_pass,
+                    "execution_status": transition.reason,
+                    "before": dict(transition.before), "after": dict(transition.after),
+                })
+            else:
+                rows.append({
+                    "episode_id": item["episode_id"], "task_id": task_id,
+                    "implementation_status": response.status,
+                    "module_id": None, "spi_id": None,
+                    "task_result": "unavailable", "contract_pass": None,
+                    "execution_status": "no_qualified_module",
+                })
+    reused = sum(row["implementation_status"] == "reused_module" for row in rows)
+    completed = sum(row["task_result"] == "completed" for row in rows)
+    unavailable = sum(row["task_result"] == "unavailable" for row in rows)
+    contracts = sum(row["contract_pass"] is True for row in rows)
+    by_task = {}
+    for task_id in tasks:
+        task_rows = [row for row in rows if row["task_id"] == task_id]
+        by_task[task_id] = {
+            "episodes": len(task_rows),
+            "reused": sum(row["implementation_status"] == "reused_module" for row in task_rows),
+            "completed": sum(row["task_result"] == "completed" for row in task_rows),
+            "unavailable": sum(row["task_result"] == "unavailable" for row in task_rows),
+        }
+    return {
+        "episodes": len(rows), "reused": reused,
+        "reuse_rate": reused / max(len(rows), 1),
+        "completed": completed, "completed_rate": completed / max(len(rows), 1),
+        "unavailable": unavailable, "contract_passes": contracts,
+        "by_task": by_task, "spt_version": spt_version, "rows": rows,
+    }
+
+
 def _support_curve(initializer, learner, tasks, support_pool, query_pool, config,
                    device, horizon, guidance, prior_strength, seed):
     checkpoints = tuple(config.get("metrics", {}).get("support_curve_checkpoints", (0, 50, 100, 200)))
@@ -179,7 +258,7 @@ def _evaluate_role(initializer, learner, tasks, support_pool, eval_items, suppor
                 "task_id": task_id,
                 "episode_id": item["episode_id"],
                 "success": bool(summary["success"]),
-                "contract_pass": bool(summary["steps"] > 0 and summary["steps"] <= horizon and math.isfinite(summary["reward"])),
+                "contract_pass": _contract_execution_check(task, item["initial_resources"]),
                 "steps": summary["steps"],
                 "reward": summary["reward"],
                 "query_loss": float(learner.query_loss(adapted, batch, learner.config.entropy_coef).detach().cpu()),
@@ -255,6 +334,8 @@ def _qualification(initializer, learner, tasks, support_pool, qualification_pool
         "per_task": per_task,
         "module_count": len(library.modules),
         "module_ids": sorted(library.modules),
+        "library": library,
+        "spi_by_task": {task_id: _task_contract(tasks[task_id], spt_version)[2] for task_id in tasks},
         "rows": rows,
     }
 
@@ -430,6 +511,9 @@ def _run_variant(config, manifest, variant, seed, output):
         selected, selected_learner, tasks, support_pool, qualification_pool, config,
         device, config["horizon"], guidance, prior_strength, seed, selected_spt_version,
     )
+    module_reuse = _module_reuse_evaluation(
+        qualification["library"], tasks, query_pool, selected_spt_version
+    )
     support_curve = _support_curve(
         selected, selected_learner, tasks, support_pool, query_pool, config,
         device, config["horizon"], guidance, prior_strength, seed,
@@ -456,15 +540,21 @@ def _run_variant(config, manifest, variant, seed, output):
         "support_query_curve": support_curve,
         "candidate_policy_changed": policy_changed if skill_enabled else False,
         "spt_versioning": spt_review,
-        "qualification": {key: value for key, value in qualification.items() if key != "rows"},
+        "qualification": {key: value for key, value in qualification.items() if key not in {"rows", "library", "spi_by_task"}},
         "module": {"registered": qualification["qualified"], "module_ids": qualification["module_ids"], "spt_version": selected_spt_version, "qualification_basis": "held_out_qualification", "reuse_library": "in_memory_qualified_skill_library"},
+        "module_reuse": {key: value for key, value in module_reuse.items() if key != "rows"},
         "formal_result_note": config["candidate_note"],
         "elapsed_seconds": time.perf_counter() - start,
     }
     output.mkdir(parents=True, exist_ok=False)
     (output / "result.json").write_text(json.dumps(result, indent=2) + "\n", encoding="utf-8")
-    (output / "qualification.json").write_text(json.dumps(qualification, indent=2) + "\n", encoding="utf-8")
+    qualification_record = {
+        key: value for key, value in qualification.items()
+        if key not in {"rows", "library", "spi_by_task"}
+    }
+    (output / "qualification.json").write_text(json.dumps(qualification_record, indent=2) + "\n", encoding="utf-8")
     (output / "spt_validation.json").write_text(json.dumps(spt_review, indent=2) + "\n", encoding="utf-8")
+    (output / "module_reuse.json").write_text(json.dumps(module_reuse, indent=2) + "\n", encoding="utf-8")
     return result
 
 

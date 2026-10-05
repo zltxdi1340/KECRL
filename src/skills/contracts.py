@@ -96,6 +96,9 @@ class InMemorySkillLibrary(SkillLibrary):
     ) -> bool:
         if not cls._mapping_contains(request.environment_scope, contract.applicability_scope):
             return False
+        if not any(cls._mapping_contains(output, request.target_capability)
+                   for output in contract.declared_output_capabilities):
+            return False
         if not cls._capabilities_satisfy(request.input_capabilities, contract.start_capabilities):
             return False
         if not cls._resources_compatible(request.resource_requirements, contract.resource_consumption):

@@ -62,6 +62,9 @@ class InMemoryQualifiedSkillLibrary(SkillLibrary):
     def _compatible(self, request, contract):
         if not self._contains(request.environment_scope, contract.applicability_scope):
             return False
+        if not any(self._contains(output, request.target_capability)
+                   for output in contract.declared_output_capabilities):
+            return False
         if not all(any(self._contains(a, r) for a in request.input_capabilities) for r in contract.start_capabilities):
             return False
         for key, value in request.resource_requirements.items():

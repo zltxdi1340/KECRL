@@ -1,4 +1,11 @@
-from experiments.train_controlled_torch_fomaml_formal_v1 import _review_spt
+from experiments.train_controlled_torch_fomaml_formal_v1 import (
+    _build_skill_library,
+    _contract_execution_check,
+    _module_reuse_evaluation,
+    _review_spt,
+    _task_contract,
+)
+from src.environments.discrete_resources import default_resource_tasks
 
 
 def test_formal_runner_config_is_explicitly_diagnostic():
@@ -13,3 +20,26 @@ def test_formal_runner_config_is_explicitly_diagnostic():
 
 def test_formal_runner_module_exposes_spt_review_entrypoint():
     assert callable(_review_spt)
+
+
+def test_contract_check_uses_controlled_transition():
+    task = default_resource_tasks()[0]
+    assert _contract_execution_check(task, {}) is True
+    assert _contract_execution_check(default_resource_tasks()[1], {}) is False
+
+
+def test_module_reuse_path_returns_reused_and_unavailable():
+    tasks = {task.task_id: task for task in default_resource_tasks()[:2]}
+    library = _build_skill_library(tasks, {
+        "min_samples": 1, "success_threshold": 1.0, "contract_threshold": 1.0,
+    }, "v1")
+    _, contract, spi = _task_contract(tasks["gather_wood"], "v1")
+    library.qualify(spi, "test-policy", 1, 1, 1)
+    query = {
+        "gather_wood": [{"episode_id": "q0", "initial_resources": {}}],
+        "craft_tool": [{"episode_id": "q1", "initial_resources": {"wood": 1}}],
+    }
+    result = _module_reuse_evaluation(library, tasks, query, "v1")
+    assert result["reused"] == 1
+    assert result["unavailable"] == 1
+    assert result["completed"] == 1
