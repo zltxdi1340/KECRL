@@ -1,0 +1,28 @@
+{
+  "status": "crafter_context_conditioned_fomaml_independent_v1",
+  "formal_result": false,
+  "device": "cuda",
+  "context_dim": 2,
+  "tasks": [
+    {"name": "collect_wood_seed0", "context": [1.0, 0.0], "target": {"task_id": "collect_wood", "item": "wood", "threshold": 1}},
+    {"name": "collect_stone_seed0", "context": [0.0, 1.0], "target": {"task_id": "collect_stone", "item": "stone", "threshold": 1}},
+    {"name": "collect_wood_seed1", "context": [1.0, 0.0], "target": {"task_id": "collect_wood", "item": "wood", "threshold": 1}},
+    {"name": "collect_stone_seed1", "context": [0.0, 1.0], "target": {"task_id": "collect_stone", "item": "stone", "threshold": 1}},
+    {"name": "collect_wood_seed2", "context": [1.0, 0.0], "target": {"task_id": "collect_wood", "item": "wood", "threshold": 1}},
+    {"name": "collect_stone_seed2", "context": [0.0, 1.0], "target": {"task_id": "collect_stone", "item": "stone", "threshold": 1}},
+    {"name": "collect_wood_seed3", "context": [1.0, 0.0], "target": {"task_id": "collect_wood", "item": "wood", "threshold": 1}},
+    {"name": "collect_stone_seed3", "context": [0.0, 1.0], "target": {"task_id": "collect_stone", "item": "stone", "threshold": 1}},
+    {"name": "collect_wood_seed4", "context": [1.0, 0.0], "target": {"task_id": "collect_wood", "item": "wood", "threshold": 1}},
+    {"name": "collect_stone_seed4", "context": [0.0, 1.0], "target": {"task_id": "collect_stone", "item": "stone", "threshold": 1}}
+  ],
+  "policy": {"observation_dim": 192, "action_count": 17, "hidden_dim": 32, "learning_rate": 0.001, "gamma": 0.99},
+  "fomaml": {"inner_lr": 0.001, "meta_lr": 0.001, "inner_steps": 1},
+  "training_seeds": {"support": [10100, 10101, 10102, 10103, 10104, 10105, 10106, 10107, 10108, 10109], "query": [20100, 20101, 20102, 20103, 20104, 20105, 20106, 20107, 20108, 20109]},
+  "evaluation": {"support": [41000, 41001, 41002, 41003, 41004, 41005, 41006, 41007, 41008, 41009], "query": [42000, 42001, 42002, 42003, 42004, 42005, 42006, 42007, 42008, 42009]},
+  "max_steps": 256,
+  "success_bonus": 1.0,
+  "seed": 0,
+  "seed_set": [0, 1, 2, 3, 4],
+  "replicate_seed_stride": 1000000,
+  "smoke_note": "Five independent context-conditioned FOMAML replicas; diagnostic only, no formal comparison, candidate acceptance, SPT pointer switch, or Module registration."
+}

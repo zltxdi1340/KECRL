@@ -50,15 +50,20 @@ def _collect(policy, seed, target, device, max_steps, success_bonus):
     return batch, {"success": success, "steps": step + 1, "native_reward": native_reward}
 
 
+def _rng_seed(config, base, index):
+    """Give each independent pilot seed a disjoint action-sampling stream."""
+    return int(base) + 1_000_000 * int(config.get("seed", 0)) + int(index)
+
+
 def _evaluate_task(initializer, learner, task, support_seed, query_seed, index, phase, config, device):
     context = torch.tensor(task["context"], dtype=torch.float32, device=device)
-    torch.manual_seed(80_000 + index)
+    torch.manual_seed(_rng_seed(config, 80_000, index))
     support, support_summary = _collect(
         initializer.initialize(context), support_seed, task["target"], device,
         config["max_steps"], config["success_bonus"],
     )
     adapted, support_loss = learner.adapt(context, support)
-    torch.manual_seed(90_000 + index)
+    torch.manual_seed(_rng_seed(config, 90_000, index))
     query, query_summary = _collect(
         adapted, query_seed, task["target"], device, config["max_steps"], 0.0
     )
@@ -110,13 +115,13 @@ def run(config_path: str, output_path: str) -> dict:
         config["tasks"], config["training_seeds"]["support"], config["training_seeds"]["query"]
     )):
         context = torch.tensor(task["context"], dtype=torch.float32, device=device)
-        torch.manual_seed(10_000 + index)
+        torch.manual_seed(_rng_seed(config, 10_000, index))
         support, support_summary = _collect(
             candidate.initialize(context), support_seed, task["target"], device,
             config["max_steps"], config["success_bonus"],
         )
         adapted, support_loss = candidate_learner.adapt(context, support)
-        torch.manual_seed(20_000 + index)
+        torch.manual_seed(_rng_seed(config, 20_000, index))
         query, query_summary = _collect(
             adapted, query_seed, task["target"], device, config["max_steps"],
             config["success_bonus"],
