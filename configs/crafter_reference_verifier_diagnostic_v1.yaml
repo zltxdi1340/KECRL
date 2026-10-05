@@ -1,0 +1,9 @@
+{
+  "status": "crafter_reference_verifier_diagnostic_v1",
+  "formal_result": false,
+  "fixture_oracle_summaries": true,
+  "environment_scope": {"environment": "crafter", "adapter": "rgb64_inventory_v1", "version": "1.8.3"},
+  "target": {"name": "inventory_at_least", "item": "wood_pickaxe", "threshold": 1},
+  "intervention": {"mode": "necessity_ablation", "capability": {"name": "inventory_at_least", "item": "wood", "threshold": 1}, "window_steps": 256},
+  "cases": ["found", "proven_unreachable", "unknown_budget", "confounded"]
+}
