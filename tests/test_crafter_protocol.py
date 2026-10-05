@@ -4,7 +4,11 @@ from pathlib import Path
 
 import pytest
 
-from experiments.prepare_crafter_protocol import audit_manifest, build_manifest
+from experiments.prepare_crafter_protocol import (
+    _derived_world_seed,
+    audit_manifest,
+    build_manifest,
+)
 from src.environments.crafter_tasks import (
     crafter_knowledge_evidence,
     crafter_transition_result,
@@ -71,3 +75,10 @@ def test_protocol_reproducibility_and_actual_seed_isolation():
     config["seeds"] = [0, 0]
     with pytest.raises(ValueError):
         build_manifest(config)
+
+
+def test_derived_world_seed_is_stable_and_process_independent():
+    first = _derived_world_seed(12345, 1)
+    second = _derived_world_seed(12345, 1)
+    assert first == second
+    assert first != _derived_world_seed(12345, 2)

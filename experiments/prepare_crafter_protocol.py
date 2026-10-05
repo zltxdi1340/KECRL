@@ -9,6 +9,13 @@ from pathlib import Path
 ROLES = ("train", "support", "query", "qualification", "spt_validation", "evaluation")
 
 
+def _derived_world_seed(env_seed: int, native_reset_index: int) -> int:
+    """Derive a stable verifier-only world seed across Python processes."""
+    payload = f"{int(env_seed)}:{int(native_reset_index)}".encode("ascii")
+    digest = hashlib.sha256(payload).digest()
+    return int.from_bytes(digest[:8], "big") % (2**31 - 1)
+
+
 def build_manifest(config: dict) -> dict:
     seeds = config["seeds"]
     count = config["preview_episodes_per_task_phase"]
@@ -54,7 +61,7 @@ def audit_manifest(manifest: dict) -> dict:
     env_seeds = [entry["env_seed"] for entry in entries]
     # Crafter 1.8.3 reset derives its native world seed from this integer tuple.
     # This is verifier-only provenance, never a learner observation feature.
-    world_seeds = [hash((entry["env_seed"], entry["native_reset_index"])) % (2**31 - 1) for entry in entries]
+    world_seeds = [_derived_world_seed(entry["env_seed"], entry["native_reset_index"]) for entry in entries]
     checks = {
         "nonempty": bool(entries), "episode_ids_unique": len(set(ids)) == len(ids),
         "env_seeds_unique": len(set(env_seeds)) == len(env_seeds),
