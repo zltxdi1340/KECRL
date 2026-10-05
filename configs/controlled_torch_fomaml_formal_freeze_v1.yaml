@@ -1,0 +1,106 @@
+{
+  "config_version": "controlled_torch_fomaml_formal_freeze_v1",
+  "status": "formal_design_freeze",
+  "formal_result": false,
+  "environment": {
+    "name": "controlled_discrete_resource_v1",
+    "manifest": "datasets/discrete_resource_manifest_stage_v1.json",
+    "task_ids": ["gather_wood", "craft_tool", "craft_shelter", "use_tool"]
+  },
+  "seeds": [0, 1, 2, 3, 4],
+  "method_variants": ["method", "baseline", "ablation_knowledge", "ablation_skill"],
+  "roles": ["train", "support", "query", "qualification", "spt_validation"],
+  "episodes_per_role": 200,
+  "policy": {
+    "backend": "torch_categorical_policy",
+    "device": "cuda",
+    "require_cuda": true,
+    "visible_device": "1",
+    "observation_dim": 4,
+    "action_count": 4,
+    "hidden_dim": 16,
+    "learning_rate": 0.01,
+    "gamma": 0.99,
+    "horizon": 8
+  },
+  "fomaml": {
+    "inner_lr": 0.05,
+    "meta_lr": 0.01,
+    "inner_steps": 1,
+    "entropy_coef": 0.0,
+    "outer_updates": 5,
+    "train_episodes_per_task_per_update": 2
+  },
+  "knowledge": {
+    "n_min": 10,
+    "tau_confirm": 0.8,
+    "tau_reject": 0.2,
+    "confidence": 0.95,
+    "budget_per_seed": 200,
+    "action_prior_strength": 1.5
+  },
+  "qualification": {
+    "unit": "per_task_spi",
+    "episodes_per_task": 20,
+    "min_samples_per_task": 20,
+    "success_threshold": 0.8,
+    "contract_threshold": 1.0,
+    "unknown_or_invalid_policy": "report_separately_and_fail_gate",
+    "hard_contract_violation": "reject",
+    "module_registration": "only_after_every_task_gate_passes"
+  },
+  "spt_acceptance": {
+    "validation_batches": 2,
+    "validation_episodes_per_task_per_batch": 10,
+    "comparison_unit": "same_spi_set_and_budget",
+    "metric": "query_learning_efficiency",
+    "min_efficiency_improvement": 0.10,
+    "max_existing_spi_success_rate_regression": 0.05,
+    "require_each_batch_to_pass": true,
+    "hard_contract_violation": "reject_and_keep_active",
+    "insufficient_evidence": "inconclusive_and_keep_active",
+    "version_pointer_policy": "candidate_active_previous_stable"
+  },
+  "metrics": {
+    "primary": "independent_query_learning_efficiency",
+    "query_success_threshold": 0.8,
+    "support_curve_checkpoints": [0, 50, 100, 200],
+    "right_censoring": true,
+    "secondary": [
+      "query_success",
+      "query_loss",
+      "qualification_rate",
+      "module_reuse",
+      "task_result_counts",
+      "knowledge_status_accuracy",
+      "runtime_seconds",
+      "peak_gpu_memory"
+    ]
+  },
+  "provenance": {
+    "required": [
+      "config",
+      "manifest",
+      "seed",
+      "git_commit",
+      "python",
+      "pytorch",
+      "cuda",
+      "gpu",
+      "dependencies",
+      "command",
+      "structured_log",
+      "result_json",
+      "result_csv",
+      "checkpoint",
+      "failure_log"
+    ],
+    "one_gpu_only": true
+  },
+  "runner_gate": {
+    "static_config_audit_required": true,
+    "formal_runner_implementation_required": true,
+    "long_training_started_in_this_freeze": false,
+    "formal_result_promotion": "blocked_until_statistical_review"
+  }
+}

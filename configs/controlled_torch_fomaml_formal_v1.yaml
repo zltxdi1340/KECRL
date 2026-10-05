@@ -17,6 +17,6 @@
   "horizon": 8,
   "qualification": {"episodes_per_task": 20, "min_samples": 20, "success_threshold": 0.8, "contract_threshold": 1.0},
   "spt": {"validation_batches": 2, "validation_episodes_per_task_per_batch": 10, "min_improvement": 0.10, "max_existing_spi_regression": 0.05},
-  "metrics": {"primary": "independent_query_learning_efficiency", "query_success_threshold": 0.8},
+  "metrics": {"primary": "independent_query_learning_efficiency", "query_success_threshold": 0.8, "support_curve_checkpoints": [0, 50, 100, 200]},
   "candidate_note": "Formal candidate runner with independent qualification and SPT validation; all outputs remain diagnostic until final statistical review."
 }

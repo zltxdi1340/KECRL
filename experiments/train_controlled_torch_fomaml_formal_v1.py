@@ -29,10 +29,12 @@ from experiments.train_controlled_torch_fomaml_v5 import (
 )
 from src.skills.context_fomaml import ContextConditionedPolicyFOMAML, ContextTaskBatch
 from src.skills.context_policy import ContextConditionedPolicyInitializer
+from src.skills.contracts import ImplementationContract, TransitionRequest
 from src.skills.evolution import SPTCandidate, SPTVersionManager
-from src.skills.models import SPT
+from src.skills.models import InMemoryQualifiedSkillLibrary, QualificationConfig, SPI, SPT
 from src.skills.torch_fomaml import TorchFOMAMLConfig
 from src.skills.torch_policy import CategoricalResourcePolicy, PolicyConfig
+from src.environments.discrete_resources import DiscreteResourceEnvironment, default_resource_tasks
 
 
 def _validate_roles(split):
@@ -63,6 +65,90 @@ def _validate_budget(split, tasks, config):
             raise ValueError(f"qualification pool is too small for {task_id}")
         if len(validation[task_id]) < validation_batches * validation_count:
             raise ValueError(f"SPT validation pool is too small for {task_id}")
+
+
+def _task_contract(task, spt_version="v1"):
+    target = {"name": "resource_at_least", "resource": task.produces[0][0], "value": 1}
+    start = tuple({"name": "resource_at_least", "resource": name, "value": amount}
+                  for name, amount in task.required)
+    contract = ImplementationContract(
+        start_capabilities=start,
+        hold_capabilities=(),
+        declared_output_capabilities=(target,),
+        resource_consumption=dict(task.consumes),
+        resource_release={},
+        implementation_constraints={},
+        applicability_scope=dict(task.scope),
+    )
+    request = TransitionRequest(start, target, dict(task.consumes), dict(task.scope), {})
+    spi = SPI(
+        spi_id=f"spi:{task.task_id}",
+        skill_family=task.skill_family,
+        spt_id=f"spt:{task.skill_family}",
+        spt_version=spt_version,
+        parameter_binding={"task_id": task.task_id},
+        transition_request=request,
+        implementation_contract=contract,
+        program_spec={"target": target},
+        initialization_state={},
+        adaptation_spec={"backend": "torch_categorical_policy"},
+    )
+    return request, contract, spi
+
+
+def _build_skill_library(tasks, qualification_config, spt_version):
+    spt = SPT("spt:controlled_resource", "controlled_resource", spt_version,
+              {"task_family": "discrete_resource"})
+    library = InMemoryQualifiedSkillLibrary(spt, QualificationConfig(**qualification_config))
+    return library
+
+
+def _support_curve(initializer, learner, tasks, support_pool, query_pool, config,
+                   device, horizon, guidance, prior_strength, seed):
+    checkpoints = tuple(config.get("metrics", {}).get("support_curve_checkpoints", (0, 50, 100, 200)))
+    task_count = len(tasks)
+    rows = []
+    for checkpoint in checkpoints:
+        per_task = min(len(next(iter(support_pool.values()))), checkpoint // task_count)
+        query_rows = []
+        support_steps = 0
+        for task_id, task in tasks.items():
+            context = _context(task_id).to(device)
+            if per_task:
+                batches = []
+                for item in support_pool[task_id][:per_task]:
+                    batch, summary = _collect(
+                        initializer.initialize(context), task, dict(item["initial_resources"]),
+                        device, _episode_seed(seed, "curve_support", item["episode_id"], str(checkpoint)),
+                        horizon, guidance.get(task_id), prior_strength,
+                    )
+                    batches.append(batch)
+                    support_steps += summary["steps"]
+                adapted, support_loss = learner.adapt(context, _merge_batches(batches))
+            else:
+                adapted = initializer.initialize(context)
+                support_loss = None
+            for item in query_pool[task_id][:int(config["eval_query_episodes_per_task"])]:
+                batch, summary = _collect(
+                    adapted, task, dict(item["initial_resources"]), device,
+                    _episode_seed(seed, "curve_query", item["episode_id"], str(checkpoint)),
+                    horizon, guidance.get(task_id), prior_strength,
+                )
+                query_rows.append({
+                    "success": bool(summary["success"]),
+                    "query_loss": float(learner.query_loss(adapted, batch, learner.config.entropy_coef).detach().cpu()),
+                    "support_loss": support_loss,
+                })
+        success_rate = sum(row["success"] for row in query_rows) / len(query_rows)
+        rows.append({
+            "support_episodes": checkpoint,
+            "support_interaction_steps": support_steps,
+            "query_episodes": len(query_rows),
+            "query_success_rate": success_rate,
+            "mean_query_loss": sum(row["query_loss"] for row in query_rows) / len(query_rows),
+            "reached": success_rate >= float(config.get("metrics", {}).get("query_success_threshold", 0.8)),
+        })
+    return rows
 
 
 def _evaluate_role(initializer, learner, tasks, support_pool, eval_items, support_count,
@@ -105,18 +191,54 @@ def _evaluate_role(initializer, learner, tasks, support_pool, eval_items, suppor
 def _qualification(initializer, learner, tasks, support_pool, qualification_pool, config,
                    device, horizon, guidance, prior_strength, seed, spt_version):
     count = int(config["qualification"]["episodes_per_task"])
-    rows, support_steps = _evaluate_role(
-        initializer, learner, tasks, support_pool,
-        {task_id: items[:count] for task_id, items in qualification_pool.items()},
-        int(config["eval_support_episodes_per_task"]), device, horizon, guidance,
-        prior_strength, seed, "qualification", spt_version,
-    )
+    rows = []
+    per_task = {}
+    library = _build_skill_library(tasks, {
+        "min_samples": int(config["qualification"]["min_samples"]),
+        "success_threshold": float(config["qualification"]["success_threshold"]),
+        "contract_threshold": float(config["qualification"]["contract_threshold"]),
+    }, spt_version)
+    for task_id, task in tasks.items():
+        task_rows, _ = _evaluate_role(
+            initializer, learner, {task_id: task}, {task_id: support_pool[task_id]},
+            {task_id: qualification_pool[task_id][:count]},
+            int(config["eval_support_episodes_per_task"]), device, horizon, guidance,
+            prior_strength, seed, "qualification", spt_version,
+        )
+        rows.extend(task_rows)
+        successes = sum(row["success"] for row in task_rows)
+        contract_passes = sum(row["contract_pass"] for row in task_rows)
+        task_config = config["qualification"]
+        task_qualified = (
+            len(task_rows) >= int(task_config["min_samples"])
+            and successes / max(len(task_rows), 1) >= float(task_config["success_threshold"])
+            and contract_passes / max(len(task_rows), 1) >= float(task_config["contract_threshold"])
+        )
+        request, contract, spi = _task_contract(task, spt_version)
+        module = None
+        if task_qualified:
+            module = library.qualify(spi, "torch-categorical-policy", successes, contract_passes, len(task_rows))
+        per_task[task_id] = {
+            "samples": len(task_rows),
+            "successes": successes,
+            "success_rate": successes / max(len(task_rows), 1),
+            "contract_passes": contract_passes,
+            "contract_rate": contract_passes / max(len(task_rows), 1),
+            "qualified": task_qualified,
+            "module_id": module.module_id if module else None,
+            "spi_id": spi.spi_id,
+            "spt_id": spi.spt_id,
+            "spt_version": spi.spt_version,
+            "request_target": request.target_capability,
+            "contract": {"applicability_scope": dict(contract.applicability_scope), "declared_output_capabilities": contract.declared_output_capabilities},
+        }
     successes = sum(row["success"] for row in rows)
     contract_passes = sum(row["contract_pass"] for row in rows)
     samples = len(rows)
     qualification_config = config["qualification"]
     qualified = (
-        samples >= int(qualification_config["min_samples"])
+        all(item["qualified"] for item in per_task.values())
+        and samples >= int(qualification_config["min_samples"]) * len(tasks)
         and successes / max(samples, 1) >= float(qualification_config["success_threshold"])
         and contract_passes / max(samples, 1) >= float(qualification_config["contract_threshold"])
     )
@@ -129,7 +251,10 @@ def _qualification(initializer, learner, tasks, support_pool, qualification_pool
         "qualified": qualified,
         "config": qualification_config,
         "spt_version": spt_version,
-        "support_interaction_steps": support_steps,
+        "support_interaction_steps": sum(row["steps"] for row in rows),
+        "per_task": per_task,
+        "module_count": len(library.modules),
+        "module_ids": sorted(library.modules),
         "rows": rows,
     }
 
@@ -236,7 +361,9 @@ def _run_variant(config, manifest, variant, seed, output):
     train_pool, support_pool, query_pool = map(_group, (split["train"], split["support"], split["query"]))
     qualification_pool = _group(split["qualification"])
     validation_pool = _group(split["spt_validation"])
-    device = torch.device(config["device"] if config["device"] == "cpu" or torch.cuda.is_available() else "cpu")
+    if config["device"] == "cuda" and not torch.cuda.is_available():
+        raise RuntimeError("device=cuda requested but CUDA is unavailable; refusing CPU fallback")
+    device = torch.device(config["device"])
     torch.manual_seed(seed)
     policy = CategoricalResourcePolicy(PolicyConfig(**config["policy"])).to(device)
     knowledge_enabled = variant in {"method", "ablation_skill"}
@@ -303,6 +430,10 @@ def _run_variant(config, manifest, variant, seed, output):
         selected, selected_learner, tasks, support_pool, qualification_pool, config,
         device, config["horizon"], guidance, prior_strength, seed, selected_spt_version,
     )
+    support_curve = _support_curve(
+        selected, selected_learner, tasks, support_pool, query_pool, config,
+        device, config["horizon"], guidance, prior_strength, seed,
+    )
     result = {
         "status": config["status"],
         "formal_result": False,
@@ -322,10 +453,11 @@ def _run_variant(config, manifest, variant, seed, output):
         "train_episode_ids": train_episode_ids,
         "fixed_evaluation_query": True,
         "outer_curve": curve,
+        "support_query_curve": support_curve,
         "candidate_policy_changed": policy_changed if skill_enabled else False,
         "spt_versioning": spt_review,
         "qualification": {key: value for key, value in qualification.items() if key != "rows"},
-        "module": {"registered": qualification["qualified"], "spt_version": selected_spt_version, "qualification_basis": "held_out_qualification"},
+        "module": {"registered": qualification["qualified"], "module_ids": qualification["module_ids"], "spt_version": selected_spt_version, "qualification_basis": "held_out_qualification", "reuse_library": "in_memory_qualified_skill_library"},
         "formal_result_note": config["candidate_note"],
         "elapsed_seconds": time.perf_counter() - start,
     }
