@@ -225,3 +225,15 @@ loss is not yet a frozen cross-task efficiency estimator. This remains a
 diagnostic task-diversity check, not a formal comparison; the craft targets in
 particular require a trained multi-step policy and should not be interpreted as
 evidence that those tasks are unreachable.
+
+The paired entropy diagnostic at commit `081d1b6` is stored in
+`results/crafter_context_fomaml_diverse_query3_entropy_paired_v1/`. It uses the
+same six tasks, five replica seeds, training seeds, support seeds, and query
+seeds as the non-entropy query3 run, with `entropy_coef=0.01` as the only
+backend change. Active-before success stayed 4/90 in both runs. Candidate-after
+success was 1/90 without entropy and 3/90 with entropy, with both additional
+successes on collect wood; all other task families remained 0/15. Candidate
+mean normalized query loss changed from `0.1009` to `0.1284`, so the success
+increase is not a consistent loss improvement. This supports retaining entropy
+regularization as a hyperparameter-scan candidate, but does not freeze `0.01`
+or establish method effectiveness.
