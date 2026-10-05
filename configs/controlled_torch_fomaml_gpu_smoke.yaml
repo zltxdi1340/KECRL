@@ -1,0 +1,13 @@
+{
+  "status": "controlled_torch_fomaml_gpu_smoke",
+  "formal_result": false,
+  "device": "cuda",
+  "seeds": [0],
+  "method_variants": ["method", "baseline", "ablation_knowledge", "ablation_skill"],
+  "results_root": "results/controlled_torch_fomaml_gpu_smoke",
+  "manifest": "datasets/discrete_resource_manifest_pilot.json",
+  "policy": {"observation_dim": 4, "action_count": 4, "hidden_dim": 16, "learning_rate": 0.01, "gamma": 0.99},
+  "fomaml": {"inner_lr": 0.05, "meta_lr": 0.01, "inner_steps": 1, "entropy_coef": 0.0},
+  "horizon": 8,
+  "smoke_note": "GPU policy-level FOMAML variant smoke; candidate update is connected to the Torch policy, but this is not a formal comparison."
+}
