@@ -72,7 +72,9 @@ def _evaluate_task(initializer, learner, task, support_seed, query_seed, index, 
         query, query_summary = _collect(
             adapted, actual_query_seed, task["target"], device, config["max_steps"], 0.0
         )
-        query_loss = float(learner.query_loss(adapted, query).detach().cpu())
+        query_loss = float(
+            learner.query_loss(adapted, query, learner.config.entropy_coef).detach().cpu()
+        )
         rows.append({
             "phase": phase,
             "task": task["name"],

@@ -42,7 +42,7 @@ class ContextConditionedPolicyFOMAML:
         policy = self.initializer.initialize(context)
         loss_value = 0.0
         for _ in range(self.config.inner_steps):
-            loss = TorchPolicyFOMAML._loss(policy, support)
+            loss = TorchPolicyFOMAML._loss(policy, support, self.config.entropy_coef)
             gradients = torch.autograd.grad(loss, tuple(policy.parameters()))
             with torch.no_grad():
                 for parameter, gradient in zip(policy.parameters(), gradients):
@@ -62,7 +62,9 @@ class ContextConditionedPolicyFOMAML:
         for task in tasks:
             context = self._validate_context(task.context)
             adapted, _ = self.adapt(context, task.support)
-            query_loss = TorchPolicyFOMAML._loss(adapted, task.query)
+            query_loss = TorchPolicyFOMAML._loss(
+                adapted, task.query, self.config.entropy_coef
+            )
             gradients = torch.autograd.grad(query_loss, tuple(adapted.parameters()))
             query_losses.append(float(query_loss.detach().cpu()))
             for total, gradient in zip(accumulated, gradients):
@@ -83,8 +85,10 @@ class ContextConditionedPolicyFOMAML:
         return sum(query_losses) / len(query_losses)
 
     @staticmethod
-    def query_loss(policy, episode: PolicyEpisodeBatch) -> torch.Tensor:
-        return TorchPolicyFOMAML._loss(policy, episode)
+    def query_loss(
+        policy, episode: PolicyEpisodeBatch, entropy_coef: float = 0.0
+    ) -> torch.Tensor:
+        return TorchPolicyFOMAML._loss(policy, episode, entropy_coef)
 
     def _validate_context(self, context: torch.Tensor) -> torch.Tensor:
         expected = self.initializer.context_to_action_bias.in_features

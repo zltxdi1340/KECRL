@@ -1,4 +1,5 @@
 import torch
+import pytest
 
 from src.skills.torch_fomaml import PolicyEpisodeBatch, TorchFOMAMLConfig, TorchPolicyFOMAML
 from src.skills.torch_policy import CategoricalResourcePolicy, PolicyConfig
@@ -33,3 +34,13 @@ def test_meta_update_changes_active_policy_from_query_gradient():
 
     assert isinstance(loss, float)
     assert any(not torch.equal(before[name], value) for name, value in policy.state_dict().items())
+
+
+def test_entropy_regularization_changes_loss_and_rejects_negative_coefficient():
+    torch.manual_seed(5)
+    policy = CategoricalResourcePolicy(PolicyConfig(observation_dim=2, action_count=2, hidden_dim=4))
+    base = TorchPolicyFOMAML._loss(policy, batch(), entropy_coef=0.0)
+    regularized = TorchPolicyFOMAML._loss(policy, batch(), entropy_coef=0.1)
+    assert not torch.equal(base, regularized)
+    with pytest.raises(ValueError):
+        TorchPolicyFOMAML(policy, TorchFOMAMLConfig(entropy_coef=-0.1))

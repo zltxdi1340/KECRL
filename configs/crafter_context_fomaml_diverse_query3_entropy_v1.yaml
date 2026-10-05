@@ -1,5 +1,5 @@
 {
-  "status": "crafter_context_conditioned_fomaml_diverse_query3_v1",
+  "status": "crafter_context_conditioned_fomaml_diverse_query3_entropy_v1",
   "formal_result": false,
   "device": "cuda",
   "context_dim": 6,
@@ -12,9 +12,9 @@
     {"name": "obtain_iron_pickaxe", "context": [0.0, 0.0, 0.0, 0.0, 0.0, 1.0], "target": {"task_id": "obtain_iron_pickaxe", "item": "iron_pickaxe", "threshold": 1}}
   ],
   "policy": {"observation_dim": 192, "action_count": 17, "hidden_dim": 32, "learning_rate": 0.001, "gamma": 0.99},
-  "fomaml": {"inner_lr": 0.001, "meta_lr": 0.001, "inner_steps": 1, "entropy_coef": 0.0},
-  "training_seeds": {"support": [70100, 70101, 70102, 70103, 70104, 70105], "query": [70200, 70201, 70202, 70203, 70204, 70205]},
-  "evaluation": {"support": [70400, 70401, 70402, 70403, 70404, 70405], "query": [70500, 70501, 70502, 70503, 70504, 70505]},
+  "fomaml": {"inner_lr": 0.001, "meta_lr": 0.001, "inner_steps": 1, "entropy_coef": 0.01},
+  "training_seeds": {"support": [71100, 71101, 71102, 71103, 71104, 71105], "query": [71200, 71201, 71202, 71203, 71204, 71205]},
+  "evaluation": {"support": [71400, 71401, 71402, 71403, 71404, 71405], "query": [71500, 71501, 71502, 71503, 71504, 71505]},
   "evaluation_query_repeats": 3,
   "evaluation_query_seed_stride": 100,
   "max_steps": 256,
@@ -22,5 +22,5 @@
   "seed": 0,
   "seed_set": [0, 1, 2, 3, 4],
   "replicate_seed_stride": 1000000,
-  "smoke_note": "Five independent context-conditioned FOMAML replicas over six distinct targets with three independent query episodes per task; diagnostic only, no formal comparison, candidate acceptance, SPT pointer switch, or Module registration."
+  "smoke_note": "Five independent context-conditioned FOMAML replicas with entropy-regularized policy loss; diagnostic only, no formal comparison, candidate acceptance, SPT pointer switch, or Module registration."
 }
