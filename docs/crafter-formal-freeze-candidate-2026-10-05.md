@@ -276,3 +276,12 @@ claiming that wood collection is unreachable. The next feasibility decision is
 whether to validate a longer horizon or redesign the RGB policy/training pilot;
 downstream table and pickaxe Modules remain blocked until this prerequisite is
 qualified.
+
+The final direct horizon check used 512 steps with 40 training and 20
+qualification episodes, stored in
+`results/crafter_auxiliary_gather_wood3_horizon512_pilot_e10d900/`. Training
+reached `1/40`, qualification remained `0/20`, and contract rate remained
+`1.0`. Extending the horizon alone therefore did not produce a qualified
+auxiliary Module. The current blocker is policy learnability under the RGB
+interface, rather than a missing task prerequisite declaration or a short
+horizon alone.
