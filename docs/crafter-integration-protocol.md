@@ -39,6 +39,13 @@ returned `continued` after the 32-step limit, with one unknown ordinary
 Knowledge evidence record per episode. This confirms routing and boundary
 behavior; it is not a qualification, learnability, or method result.
 
+The task-local composition candidate now decomposes the former `wood >= 3`
+prerequisite into three repeated `wood >= 1` transitions in the same episode.
+This preserves the formal primary targets and lets a qualified low-threshold
+gather Module be reused for each unit while public inventory accumulates. The
+decomposition is a candidate protocol change and still requires independent
+qualification and end-to-end validation.
+
 ## Candidate Tasks and Evidence
 
 Candidate resource targets include collecting wood/stone and acquiring tools.

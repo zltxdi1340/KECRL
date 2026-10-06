@@ -16,7 +16,9 @@
     {"task_id": "obtain_iron_pickaxe", "skill_family": "craft", "target": {"name": "inventory_at_least", "item": "iron_pickaxe", "threshold": 1}, "required_capabilities": [{"name": "inventory_at_least", "item": "wood", "threshold": 1}, {"name": "inventory_at_least", "item": "coal", "threshold": 1}, {"name": "inventory_at_least", "item": "iron", "threshold": 1}, {"name": "crafter_world_object_setup", "objects": ["table", "furnace"]}]}
   ],
   "auxiliary_steps": {
-    "gather_wood_3": {"target": {"name": "inventory_at_least", "item": "wood", "threshold": 3}, "input_capabilities": []},
+    "gather_wood_1_a": {"target": {"name": "inventory_at_least", "item": "wood", "threshold": 1}, "input_capabilities": []},
+    "gather_wood_1_b": {"target": {"name": "inventory_at_least", "item": "wood", "threshold": 1}, "input_capabilities": []},
+    "gather_wood_1_c": {"target": {"name": "inventory_at_least", "item": "wood", "threshold": 1}, "input_capabilities": []},
     "place_table": {"target": {"name": "crafter_world_object_setup", "objects": ["table"]}, "input_capabilities": [{"name": "inventory_at_least", "item": "wood", "threshold": 2}]},
     "make_wood_pickaxe": {"target": {"name": "inventory_at_least", "item": "wood_pickaxe", "threshold": 1}, "input_capabilities": [{"name": "inventory_at_least", "item": "wood", "threshold": 1}, {"name": "crafter_world_object_setup", "objects": ["table"]}]},
     "gather_stone_1": {"target": {"name": "inventory_at_least", "item": "stone", "threshold": 1}, "input_capabilities": [{"name": "inventory_at_least", "item": "wood_pickaxe", "threshold": 1}]},
@@ -28,11 +30,11 @@
   },
   "task_plans": {
     "collect_wood": [],
-    "collect_stone": ["gather_wood_3", "place_table", "make_wood_pickaxe", "collect_stone_target"],
-    "collect_coal": ["gather_wood_3", "place_table", "make_wood_pickaxe", "collect_coal_target"],
-    "obtain_wood_pickaxe": ["gather_wood_3", "place_table", "make_wood_pickaxe"],
-    "obtain_stone_pickaxe": ["gather_wood_3", "place_table", "make_wood_pickaxe", "gather_stone_1", "make_stone_pickaxe"],
-    "obtain_iron_pickaxe": ["gather_wood_3", "place_table", "make_wood_pickaxe", "gather_stone_4", "make_stone_pickaxe", "place_furnace", "gather_coal_1", "gather_iron_1", "obtain_iron_pickaxe_target"]
+    "collect_stone": ["gather_wood_1_a", "gather_wood_1_b", "gather_wood_1_c", "place_table", "make_wood_pickaxe", "collect_stone_target"],
+    "collect_coal": ["gather_wood_1_a", "gather_wood_1_b", "gather_wood_1_c", "place_table", "make_wood_pickaxe", "collect_coal_target"],
+    "obtain_wood_pickaxe": ["gather_wood_1_a", "gather_wood_1_b", "gather_wood_1_c", "place_table", "make_wood_pickaxe"],
+    "obtain_stone_pickaxe": ["gather_wood_1_a", "gather_wood_1_b", "gather_wood_1_c", "place_table", "make_wood_pickaxe", "gather_stone_1", "make_stone_pickaxe"],
+    "obtain_iron_pickaxe": ["gather_wood_1_a", "gather_wood_1_b", "gather_wood_1_c", "place_table", "make_wood_pickaxe", "gather_stone_4", "make_stone_pickaxe", "place_furnace", "gather_coal_1", "gather_iron_1", "obtain_iron_pickaxe_target"]
   },
   "candidate_note": "Task-local composition candidate. Auxiliary steps are not primary metrics. World setup target execution, independent qualification of auxiliary Modules, budgets, and SPT/query evaluation remain pending; formal_result=false."
 }
