@@ -121,6 +121,7 @@
     "real_policy_fomaml_connected": false,
     "qualified_module_pipeline_connected": false,
     "knowledge_reference_verifier_connected": false,
+    "task_prerequisites_validated": false,
     "formal_training_allowed": false
   },
   "candidate_note": "This is a formal experiment freeze draft. Values marked candidate_values_to_validate are not frozen and must pass feasibility, cost, and contract audits before any formal training."

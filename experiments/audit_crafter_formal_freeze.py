@@ -77,6 +77,7 @@ def audit(config: dict) -> dict:
         and policy.get("backend") == "torch_categorical_policy"
     )
     gates = config.get("freeze_gates", {})
+    checks["task_prerequisite_gate_declared"] = gates.get("task_prerequisites_validated") is False
     checks["formal_training_blocked"] = gates.get("formal_training_allowed") is False
     checks["implementation_gates_not_claimed"] = not all(
         bool(gates.get(key)) for key in (
@@ -97,6 +98,7 @@ def audit(config: dict) -> dict:
             "real_policy_fomaml_connected",
             "qualified_module_pipeline_connected",
             "knowledge_reference_verifier_connected",
+            "task_prerequisites_validated",
             "feasibility_and_cost_pilot",
             "final_threshold_review",
         ],
