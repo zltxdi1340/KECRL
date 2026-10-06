@@ -30,14 +30,36 @@ class PPOCrafterPolicy(nn.Module):
         self.critic = nn.Linear(hidden, 1)
         self.optimizer = torch.optim.Adam(self.parameters(), lr=float(config["learning_rate"]))
 
-    def distribution_value(self, features: torch.Tensor):
+    def distribution_value(self, features: torch.Tensor, legal_actions=None):
         hidden = self.encoder(features)
-        return torch.distributions.Categorical(logits=self.actor(hidden)), self.critic(hidden).squeeze(-1)
+        logits = self.actor(hidden)
+        if legal_actions is not None:
+            if not legal_actions:
+                raise ValueError("action allowlist must contain at least one action")
+            mask = torch.full_like(logits, float("-inf"))
+            mask[..., list(legal_actions)] = 0.0
+            logits = logits + mask
+        return torch.distributions.Categorical(logits=logits), self.critic(hidden).squeeze(-1)
 
-    def update(self, features, actions, old_log_probs, returns, advantages):
+    def update(self, features, actions, old_log_probs, returns, advantages, legal_actions=None):
         losses = []
         for _ in range(int(self.config["update_epochs"])):
-            distribution, values = self.distribution_value(features)
+            if legal_actions is None:
+                distribution, values = self.distribution_value(features)
+            else:
+                distributions = []
+                values = []
+                for feature, allowed in zip(features, legal_actions):
+                    distribution, value = self.distribution_value(feature, allowed)
+                    distributions.append(distribution)
+                    values.append(value)
+                # All rollout steps use the same task-local allowlist. Keeping
+                # this explicit makes the PPO old/new action distributions
+                # identical even when a diagnostic chooses a restricted set.
+                distribution = torch.distributions.Categorical(
+                    logits=torch.stack([item.logits for item in distributions])
+                )
+                values = torch.stack(values)
             log_probs = distribution.log_prob(actions)
             ratio = torch.exp(log_probs - old_log_probs)
             clipped = torch.clamp(
@@ -75,10 +97,16 @@ def _rollout(policy, seed, target, device, config, train):
     native_reward = 0.0
     done = False
     steps = 0
+    action_allowlist = tuple(
+        int(action) for action in config.get("action_allowlist", range(int(config["policy"]["action_count"])))
+    )
+    if not action_allowlist or any(action < 0 or action >= int(config["policy"]["action_count"]) for action in action_allowlist):
+        raise ValueError("action_allowlist must contain valid action IDs")
+    legal_actions = []
     while steps < int(config["max_steps"]) and not done and not success:
         feature = _features(observation, device)
         with torch.set_grad_enabled(train):
-            distribution, value = policy.distribution_value(feature)
+            distribution, value = policy.distribution_value(feature, action_allowlist)
             action_tensor = distribution.sample()
             log_prob = distribution.log_prob(action_tensor)
         observation, reward, done, info = env.step(int(action_tensor.item()))
@@ -90,6 +118,7 @@ def _rollout(policy, seed, target, device, config, train):
         if train:
             features.append(feature)
             actions.append(action_tensor.reshape(()))
+            legal_actions.append(action_allowlist)
             rewards.append(shaped)
             values.append(value.reshape(()))
             log_probs.append(log_prob.reshape(()))
@@ -97,7 +126,7 @@ def _rollout(policy, seed, target, device, config, train):
     loss = None
     if train:
         with torch.no_grad():
-            next_value = torch.zeros((), device=device) if done or success else policy.distribution_value(_features(observation, device))[1]
+            next_value = torch.zeros((), device=device) if done or success else policy.distribution_value(_features(observation, device), action_allowlist)[1]
         gae = torch.zeros((), device=device)
         advantages = []
         returns = []
@@ -113,7 +142,7 @@ def _rollout(policy, seed, target, device, config, train):
             advantages = (advantages - advantages.mean()) / (advantages.std(unbiased=False) + 1e-8)
         loss = policy.update(
             torch.stack(features), torch.stack(actions), torch.stack(log_probs).detach(),
-            returns, advantages,
+            returns, advantages, legal_actions,
         )
     env.close()
     return {"success": success, "steps": steps, "native_reward": native_reward, "loss": loss}
@@ -154,6 +183,7 @@ def run(config_path: str, output_path: str) -> dict:
         "metadata": runtime_metadata(config, resolved), "device": str(device),
         "cuda_tensor_verified": bool(torch.cuda.is_available() and device.type == "cuda"),
         "task": target,
+        "action_allowlist": list(config.get("action_allowlist", range(int(config["policy"]["action_count"])))),
         "training": {"episodes": int(config["train_episodes"]), "successes": train_successes, "success_rate": train_successes / int(config["train_episodes"]), "mean_loss": sum(losses) / len(losses)},
         "qualification": {"episodes": int(config["qualification_episodes"]), "successes": qualification_successes, "success_rate": qualification_successes / int(config["qualification_episodes"]), "qualified": qualification_successes / int(config["qualification_episodes"]) >= float(config["qualification_threshold"])},
         "module_registered": False, "knowledge_evolution_updated": False, "formal_training_allowed": False,
