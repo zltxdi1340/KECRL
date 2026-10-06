@@ -26,6 +26,11 @@ RGB inference are not used as setup confirmation. A confirmed setup produces
 the corresponding public capability and can be carried to the next step in the
 same task-local plan.
 
+`CrafterTaskPlanExecutor` enforces this plan boundary: the first qualified
+Module resets the native environment, while later prerequisite and target
+Modules reuse the current observation. A plan reset is explicit via
+`begin_episode`; it does not create a persistent world or store a trajectory.
+
 ## Candidate Tasks and Evidence
 
 Candidate resource targets include collecting wood/stone and acquiring tools.

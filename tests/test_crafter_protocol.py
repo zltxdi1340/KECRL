@@ -21,6 +21,7 @@ from src.environments.crafter_continual import (
     WorldObjectSetupObservation,
 )
 from src.skills.crafter_policy_module import CrafterPolicyModuleExecutor
+from src.skills.crafter_task_plan_executor import CrafterTaskPlanExecutor
 from src.skills.torch_policy import CategoricalResourcePolicy, PolicyConfig
 import torch
 
@@ -136,5 +137,36 @@ def test_policy_module_executor_can_preserve_a_continual_world():
     first_steps = environment.state()["step_count"]
     executor.execute(response, {"inventory": None})
     assert first_steps == 1
+    assert environment.state()["step_count"] == 2
+    environment.close()
+
+
+def test_task_plan_executor_resets_once_then_preserves_episode():
+    from src.environments.crafter_adapter import CrafterEnvironmentAdapter
+    from src.skills.contracts import ImplementationContract, ImplementationResponse
+
+    target = {"name": "inventory_at_least", "item": "wood", "threshold": 1}
+    contract = ImplementationContract((), (), (target,), {}, {}, {}, {"environment": "crafter"})
+    first_response = ImplementationResponse(
+        "reused_module", "module:plan:first", "spi:first", "spt:plan", contract
+    )
+    second_response = ImplementationResponse(
+        "reused_module", "module:plan:second", "spi:second", "spt:plan", contract
+    )
+    policy = CategoricalResourcePolicy(PolicyConfig(observation_dim=192, action_count=17))
+    environment = CrafterEnvironmentAdapter(seed=0, length=3)
+    first = CrafterPolicyModuleExecutor(
+        first_response.module_id, policy, environment, target, torch.device("cpu"), 1,
+        reset_before_execute=False,
+    )
+    second = CrafterPolicyModuleExecutor(
+        second_response.module_id, policy, environment, target, torch.device("cpu"), 1,
+        reset_before_execute=True,
+    )
+    plan_executor = CrafterTaskPlanExecutor({first_response.module_id: first, second_response.module_id: second})
+    plan_executor.begin_episode()
+    plan_executor.execute(first_response, {"inventory": None})
+    assert environment.state()["step_count"] == 1
+    plan_executor.execute(second_response, {"inventory": None})
     assert environment.state()["step_count"] == 2
     environment.close()
