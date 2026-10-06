@@ -141,6 +141,24 @@ qualification threshold or the full task split. This remains a non-formal
 learnability observation, does not imply that any task is unreachable, and
 keeps formal training blocked.
 
+## RGB representation feasibility update (2026-10-06)
+
+The representation pilot is implemented by
+`experiments/run_crafter_policy_representation_pilot.py` and configured by
+`configs/crafter_policy_representation_pilot_v1.yaml`. It compares the
+reviewed `8x8` average-pool MLP with a small RGB CNN on independent wood,
+stone, and coal tasks. Both use 40 training episodes and 10 qualification
+episodes at horizon 256. The result is stored in
+`results/crafter_policy_representation_pilot_391672a/`.
+
+The CNN raised wood qualification from `3/10` to `6/10`, while both
+representations scored `0/10` on stone and coal. No representation reached
+the formal `0.8` qualification threshold. This is evidence that the current
+RGB representation affects learnability, but it does not validate a new
+formal policy contract or imply that stone or coal is unreachable. The audit
+at `results/crafter_policy_representation_audit_391672a/` keeps formal
+training blocked.
+
 The machine-readable boundary check is
 `experiments/audit_crafter_task_learnability_budget.py`; its report is stored
 in `results/crafter_task_learnability_budget_audit_cdfbc86/` and keeps the
