@@ -1,0 +1,9 @@
+{
+  "status": "crafter_action_inventory_diagnostic_v1",
+  "formal_result": false,
+  "device": "cpu",
+  "one_step_seed": 700000,
+  "rollout_seeds": [700100, 700101],
+  "rollout_steps": 256,
+  "diagnostic_note": "Read-only Crafter action and public inventory diagnostic. It does not train, qualify, register Modules, update Knowledge, or produce a formal result."
+}

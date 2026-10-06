@@ -362,3 +362,10 @@ connected Knowledge result remains `support=0`, `counterevidence=5`,
 or confirm a mechanism and does not permit formal training. UNKNOWN mapping is
 covered by the verifier and boundary-audit tests but was not produced by these
 five complete reference searches.
+
+The read-only action/inventory diagnostic at
+`results/crafter_action_inventory_diagnostic_worktree/result.json` confirms the
+adapter contract: Crafter exposes 17 actions in the native order and every
+action step returns public inventory. Two deterministic action-cycle rollouts
+ended by health depletion with zero wood, which is expected for a non-policy
+probe. No reset, action mapping, or inventory allowlist fault was observed.
