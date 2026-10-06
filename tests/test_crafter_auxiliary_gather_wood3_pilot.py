@@ -35,3 +35,10 @@ def test_auxiliary_unit_wood_pilot_matches_repeated_plan_capability():
     config = json.loads(Path("configs/crafter_auxiliary_gather_wood1_pilot_v1.yaml").read_text())
     assert config["formal_result"] is False
     assert config["tasks"][0]["threshold"] == 1
+
+
+def test_auxiliary_unit_wood_representation_pilot_uses_exact_target():
+    config = json.loads(Path("configs/crafter_auxiliary_gather_wood1_representation_pilot_v1.yaml").read_text())
+    assert config["formal_result"] is False
+    assert config["representations"] == ["avgpool_linear", "cnn"]
+    assert config["tasks"] == [{"task_id": "gather_wood_1", "item": "wood", "threshold": 1}]

@@ -1,0 +1,22 @@
+{
+  "status": "crafter_auxiliary_gather_wood1_representation_pilot_v1",
+  "formal_result": false,
+  "device": "cuda",
+  "seed": 0,
+  "representations": ["avgpool_linear", "cnn"],
+  "train_episodes": 40,
+  "qualification_episodes": 20,
+  "qualification_threshold": 0.8,
+  "max_steps": 256,
+  "success_bonus": 1.0,
+  "train_seed_base": 640000,
+  "qualification_seed_base": 650000,
+  "action_seed_base": 660000,
+  "qualification_action_seed_base": 670000,
+  "avgpool_policy": {"observation_dim": 192, "action_count": 17, "hidden_dim": 32, "learning_rate": 0.001, "gamma": 0.99},
+  "cnn_policy": {"action_count": 17, "channels": [16, 32], "hidden_dim": 64, "learning_rate": 0.001, "gamma": 0.99},
+  "tasks": [
+    {"task_id": "gather_wood_1", "item": "wood", "threshold": 1}
+  ],
+  "pilot_note": "Non-formal RGB representation pilot for the exact unit-capability prerequisite. Training and qualification use independent seeds; no Module registration, Knowledge update, or formal result is claimed."
+}
