@@ -28,6 +28,7 @@ class CrafterPolicyModuleExecutor:
         target: dict[str, Any],
         device: torch.device,
         max_steps: int = 1,
+        reset_before_execute: bool = True,
     ) -> None:
         if not module_id:
             raise ValueError("module_id must be non-empty")
@@ -39,6 +40,7 @@ class CrafterPolicyModuleExecutor:
         self.target = dict(target)
         self.device = device
         self.max_steps = max_steps
+        self.reset_before_execute = bool(reset_before_execute)
         self.last_steps = 0
 
     @staticmethod
@@ -55,7 +57,7 @@ class CrafterPolicyModuleExecutor:
             raise ValueError("ImplementationResponse does not identify this Module")
         if response.status not in {"reused_module", "created_module_from_spi"}:
             raise ValueError("an unavailable response cannot be executed")
-        observation = self.environment.reset()
+        observation = self.environment.reset() if self.reset_before_execute else self.environment.current_observation()
         before_inventory = self.environment.state()["inventory"]
         done = False
         after_inventory = None

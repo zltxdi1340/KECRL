@@ -22,8 +22,19 @@ def test_crafter_reset_step_and_contract_metadata():
     info["inventory"]["wood"] = -999
     assert environment.state()["inventory"]["wood"] != -999
     assert environment.state()["step_count"] == 1
+    assert environment.state()["episode_done"] is False
     environment.reset()
     assert environment.state()["inventory"] is None
+    environment.close()
+
+
+def test_adapter_exposes_current_observation_for_persistent_execution():
+    pytest.importorskip("crafter")
+    environment = CrafterEnvironmentAdapter(seed=0, length=2)
+    observation = environment.reset()
+    assert environment.current_observation() is observation
+    environment.step(0)
+    assert environment.current_observation().shape == (64, 64, 3)
     environment.close()
 
 

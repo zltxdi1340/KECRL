@@ -14,6 +14,11 @@ from src.environments.crafter_tasks import (
     crafter_transition_result,
     inventory_at_least,
 )
+from src.environments.crafter_continual import (
+    CrafterContinualSession,
+    WorldObjectSetupContract,
+    WorldObjectSetupObservation,
+)
 from src.skills.crafter_policy_module import CrafterPolicyModuleExecutor
 from src.skills.torch_policy import CategoricalResourcePolicy, PolicyConfig
 import torch
@@ -82,3 +87,39 @@ def test_derived_world_seed_is_stable_and_process_independent():
     second = _derived_world_seed(12345, 1)
     assert first == second
     assert first != _derived_world_seed(12345, 2)
+
+
+def test_continual_session_and_world_object_contract_keep_state_boundary():
+    from src.environments.crafter_adapter import CrafterEnvironmentAdapter
+    environment = CrafterEnvironmentAdapter(seed=0, length=2)
+    session = CrafterContinualSession(environment)
+    session.start()
+    setup = WorldObjectSetupContract(("table", "furnace"))
+    task_state = session.begin_task("obtain_iron_pickaxe", setup)
+    assert task_state["world_state_mode"] == "persistent_continual_world_per_seed"
+    assert session.state()["task_id"] == "obtain_iron_pickaxe"
+    assert WorldObjectSetupObservation(("table", "furnace")).satisfies(setup)
+    session.end_task()
+    assert session.state()["task_index"] == 1
+    session.close()
+
+
+def test_policy_module_executor_can_preserve_a_continual_world():
+    from src.environments.crafter_adapter import CrafterEnvironmentAdapter
+    from src.skills.contracts import ImplementationContract, ImplementationResponse
+    target = {"name": "inventory_at_least", "item": "wood", "threshold": 1}
+    contract = ImplementationContract((), (), (target,), {}, {}, {}, {"environment": "crafter"})
+    response = ImplementationResponse("reused_module", "module:persistent", "spi:test", "spt:test", contract)
+    policy = CategoricalResourcePolicy(PolicyConfig(observation_dim=192, action_count=17))
+    environment = CrafterEnvironmentAdapter(seed=0, length=3)
+    environment.reset()
+    executor = CrafterPolicyModuleExecutor(
+        "module:persistent", policy, environment, target, torch.device("cpu"), 1,
+        reset_before_execute=False,
+    )
+    executor.execute(response, {"inventory": None})
+    first_steps = environment.state()["step_count"]
+    executor.execute(response, {"inventory": None})
+    assert first_steps == 1
+    assert environment.state()["step_count"] == 2
+    environment.close()

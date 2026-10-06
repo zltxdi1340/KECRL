@@ -36,12 +36,16 @@ class CrafterEnvironmentAdapter:
             raise ValueError(f"unexpected Crafter action count: {self.action_count}")
         self.step_count = 0
         self._inventory = None
+        self._observation = None
+        self._done = False
 
     def reset(self):
         observation = self.environment.reset()
         self.step_count = 0
         self._inventory = None
-        return self._validate_observation(observation)
+        self._done = False
+        self._observation = self._validate_observation(observation)
+        return self._observation
 
     def step(self, action: int):
         if isinstance(action, bool) or not isinstance(action, int):
@@ -50,12 +54,22 @@ class CrafterEnvironmentAdapter:
             raise ValueError(f"Crafter action must be in [0, {self.action_count})")
         observation, reward, done, info = self.environment.step(action)
         self.step_count += 1
+        self._observation = self._validate_observation(observation)
+        self._done = bool(done)
         inventory = info.get("inventory")
         self._inventory = dict(inventory) if inventory is not None else None
         # Crafter also returns a full semantic map and global position. Those
         # fields are oracle-only under KECRL's reviewed observation contract.
         public_info = {"inventory": dict(inventory)} if inventory is not None else {}
-        return self._validate_observation(observation), float(reward), bool(done), public_info
+        return self._observation, float(reward), self._done, public_info
+
+    def current_observation(self):
+        """Return the current RGB observation for a persistent session."""
+        if self._observation is None:
+            raise RuntimeError("Crafter environment has not been reset")
+        if self._done:
+            raise RuntimeError("Crafter environment episode has terminated")
+        return self._observation
 
     def state(self) -> dict[str, Any]:
         """Return contract metadata without exposing a trajectory or policy state."""
@@ -65,6 +79,7 @@ class CrafterEnvironmentAdapter:
             "action_count": self.action_count,
             "step_count": self.step_count,
             "inventory": dict(self._inventory) if self._inventory is not None else None,
+            "episode_done": self._done,
         }
 
     def close(self) -> None:

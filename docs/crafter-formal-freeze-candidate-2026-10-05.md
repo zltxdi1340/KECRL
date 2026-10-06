@@ -154,6 +154,21 @@ fails readiness until world-object setup and state transfer are implemented
 and independently validated. The existing six-task formal candidate is
 unchanged.
 
+## Continual session boundary implementation (2026-10-06)
+
+`src/environments/crafter_continual.py` now defines a candidate
+`CrafterContinualSession` that keeps one native world alive across ordered
+task boundaries, plus explicit table/furnace setup and confirmation
+contracts. `CrafterEnvironmentAdapter` records the current RGB observation so
+`CrafterPolicyModuleExecutor` can opt into persistent execution with
+`reset_before_execute=false`; its default remains fresh reset behavior.
+
+The implementation is covered by the adapter and protocol regression tests,
+but it does not perform world-object placement, persist a formal task state,
+or authorize training. The dependency-aware candidate therefore remains
+blocked until setup execution, state transfer, qualification data separation,
+and the revised task manifest are validated together.
+
 ## Qualification feasibility update (2026-10-06)
 
 The candidate-budget qualification pilot is implemented by
