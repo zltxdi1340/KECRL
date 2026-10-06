@@ -285,3 +285,19 @@ reached `1/40`, qualification remained `0/20`, and contract rate remained
 auxiliary Module. The current blocker is policy learnability under the RGB
 interface, rather than a missing task prerequisite declaration or a short
 horizon alone.
+
+## Unit-capability composition update (2026-10-06)
+
+The task-local candidate now represents the former `wood >= 3` prerequisite as
+three repeated `wood >= 1` steps in one episode. The six formal primary targets
+are unchanged; only ephemeral prerequisite composition changed. The fresh
+structural audit at `results/crafter_task_local_composition_audit_ef654a1/`
+passes.
+
+The independent unit-capability pilot is stored in
+`results/crafter_auxiliary_gather_wood1_pilot_5bbe3cf/`. With 40 training and
+20 qualification episodes at horizon 256, training reached `10/40`, while
+qualification reached `3/20` (`0.15`) with contract rate `1.0`. The unit split
+improves training signal compared with `wood >= 3`, but it still does not form
+a qualified Module under the candidate `0.8` gate. Downstream table and pickaxe
+steps remain blocked pending a better RGB policy or training procedure.
