@@ -319,3 +319,16 @@ respectively; independent qualification was `7/20`, `5/20`, and `7/20`.
 Frame stacking improved training-side success but did not improve independent
 qualification beyond the MLP baseline, so it does not produce a qualified
 Module or justify changing the formal observation contract.
+
+## PPO/GAE auxiliary training update (2026-10-06)
+
+The non-formal PPO/GAE runner is configured by
+`configs/crafter_auxiliary_gather_wood1_ppo_pilot_v1.yaml` and stores its result
+under `results/crafter_auxiliary_gather_wood1_ppo_pilot_978a478/`. It keeps the
+RGB average-pool input, target `wood >= 1`, 40 training episodes, and 20
+independent qualification episodes. Training reached `15/40` and qualification
+reached `10/20` (`0.50`), compared with the prior MLP REINFORCE result of
+`7/20` qualification. PPO/GAE therefore improves this feasibility signal but
+does not meet the candidate `0.8` gate or create a Module. The next budget
+check can use PPO/GAE, while formal thresholds and the formal policy backend
+remain unchanged.
