@@ -3,7 +3,7 @@ from pathlib import Path
 
 import torch
 
-from experiments.run_crafter_auxiliary_ppo_pilot import PPOCrafterPolicy
+from experiments.run_crafter_auxiliary_ppo_pilot import PPOCrafterPolicy, _features
 
 
 def test_ppo_pilot_is_non_formal_and_uses_exact_unit_target():
@@ -27,3 +27,11 @@ def test_goal_action_allowlist_masks_only_diagnostic_actions():
     policy = PPOCrafterPolicy(config["policy"])
     distribution, _ = policy.distribution_value(torch.zeros(192), config["action_allowlist"])
     assert torch.equal(torch.nonzero(distribution.probs > 0).flatten(), torch.tensor(config["action_allowlist"]))
+
+
+def test_temporal_pilot_uses_four_frame_feature_contract():
+    config = json.loads(Path("configs/crafter_auxiliary_gather_wood1_ppo_goal_actions_temporal_pilot_v1.yaml").read_text())
+    assert config["formal_result"] is False
+    assert config["frame_stack"] == 4
+    observations = tuple(torch.zeros(64, 64, 3, dtype=torch.uint8).numpy() for _ in range(4))
+    assert _features(observations, torch.device("cpu")).shape == (768,)

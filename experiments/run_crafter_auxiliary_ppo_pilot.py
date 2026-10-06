@@ -83,9 +83,15 @@ class PPOCrafterPolicy(nn.Module):
         return sum(losses) / max(len(losses), 1)
 
 
-def _features(observation, device):
-    tensor = torch.as_tensor(observation, dtype=torch.float32, device=device)
-    tensor = tensor.permute(2, 0, 1).unsqueeze(0) / 255.0
+def _features(observations, device):
+    if not isinstance(observations, (tuple, list)):
+        observations = (observations,)
+    tensors = [
+        torch.as_tensor(observation, dtype=torch.float32, device=device)
+        .permute(2, 0, 1).unsqueeze(0) / 255.0
+        for observation in observations
+    ]
+    tensor = torch.cat(tensors, dim=1)
     return functional.adaptive_avg_pool2d(tensor, (8, 8)).flatten()
 
 
@@ -97,6 +103,10 @@ def _rollout(policy, seed, target, device, config, train):
     native_reward = 0.0
     done = False
     steps = 0
+    frame_stack_size = int(config.get("frame_stack", 1))
+    if frame_stack_size <= 0:
+        raise ValueError("frame_stack must be positive")
+    frame_stack = (observation,) * frame_stack_size
     action_allowlist = tuple(
         int(action) for action in config.get("action_allowlist", range(int(config["policy"]["action_count"])))
     )
@@ -104,12 +114,14 @@ def _rollout(policy, seed, target, device, config, train):
         raise ValueError("action_allowlist must contain valid action IDs")
     legal_actions = []
     while steps < int(config["max_steps"]) and not done and not success:
-        feature = _features(observation, device)
+        feature = _features(frame_stack if frame_stack_size > 1 else observation, device)
         with torch.set_grad_enabled(train):
             distribution, value = policy.distribution_value(feature, action_allowlist)
             action_tensor = distribution.sample()
             log_prob = distribution.log_prob(action_tensor)
         observation, reward, done, info = env.step(int(action_tensor.item()))
+        if frame_stack_size > 1:
+            frame_stack = (*frame_stack[1:], observation)
         native_reward += float(reward)
         shaped = float(reward)
         if inventory_at_least(info.get("inventory"), target["item"], target["threshold"]) is True:
@@ -126,7 +138,8 @@ def _rollout(policy, seed, target, device, config, train):
     loss = None
     if train:
         with torch.no_grad():
-            next_value = torch.zeros((), device=device) if done or success else policy.distribution_value(_features(observation, device), action_allowlist)[1]
+            next_observation = frame_stack if frame_stack_size > 1 else observation
+            next_value = torch.zeros((), device=device) if done or success else policy.distribution_value(_features(next_observation, device), action_allowlist)[1]
         gae = torch.zeros((), device=device)
         advantages = []
         returns = []
@@ -184,6 +197,7 @@ def run(config_path: str, output_path: str) -> dict:
         "cuda_tensor_verified": bool(torch.cuda.is_available() and device.type == "cuda"),
         "task": target,
         "action_allowlist": list(config.get("action_allowlist", range(int(config["policy"]["action_count"])))),
+        "frame_stack": int(config.get("frame_stack", 1)),
         "training": {"episodes": int(config["train_episodes"]), "successes": train_successes, "success_rate": train_successes / int(config["train_episodes"]), "mean_loss": sum(losses) / len(losses)},
         "qualification": {"episodes": int(config["qualification_episodes"]), "successes": qualification_successes, "success_rate": qualification_successes / int(config["qualification_episodes"]), "qualified": qualification_successes / int(config["qualification_episodes"]) >= float(config["qualification_threshold"])},
         "module_registered": False, "knowledge_evolution_updated": False, "formal_training_allowed": False,
