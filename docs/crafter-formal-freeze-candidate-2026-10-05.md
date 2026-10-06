@@ -362,3 +362,25 @@ verified CUDA tensors, kept `formal_result=false`, and left Module registration
 and Knowledge Evolution disabled. PPO/GAE therefore remains a useful
 feasibility diagnostic but does not establish a qualified prerequisite Module
 or permit formal training.
+
+## Goal-action allowlist feasibility update (2026-10-06)
+
+The PPO feasibility runner now supports an explicit task-local action allowlist
+that is applied consistently during sampling and PPO updates. The diagnostic
+configuration `configs/crafter_auxiliary_gather_wood1_ppo_goal_actions_pilot_v1.yaml`
+keeps only the public Crafter actions `noop`, four directional moves, `do`,
+and `sleep` for `gather_wood_1`; it does not expose maps, coordinates, recipes,
+or private state. This allowlist is a diagnostic task constraint and is not
+part of the formal observation or policy contract.
+
+The five-seed run is stored under
+`results/crafter_auxiliary_gather_wood1_ppo_goal_actions_pilot_17ab5fe_s0/`
+through `_s4/`. Training success was `0.6225 +/- 0.0634` (population standard
+deviation), and independent qualification was
+`0.75`, `0.80`, `0.60`, `0.55`, and `0.60`, for a mean of `0.66` and population
+standard deviation `0.0970`. One of five seeds reached the candidate `0.8`
+threshold; the runner still registered no Module and kept
+`formal_result=false`. The allowlist improves the previous seed-0 qualification
+from `0.35` to `0.75`, but the multi-seed result is not stable enough to change
+formal thresholds or permit formal training. The next performance bottleneck
+is RGB spatial and temporal credit assignment after exploration reduction.
