@@ -34,6 +34,15 @@ def _cnn_features(observation, device):
     return torch.as_tensor(observation, dtype=torch.float32, device=device).permute(2, 0, 1).unsqueeze(0) / 255.0
 
 
+def _frame_stack_features(observations, device):
+    tensors = [
+        torch.as_tensor(observation, dtype=torch.float32, device=device)
+        .permute(2, 0, 1).unsqueeze(0) / 255.0
+        for observation in observations
+    ]
+    return functional.adaptive_avg_pool2d(torch.cat(tensors, dim=1), (8, 8)).flatten()
+
+
 class CrafterCNNPolicy(nn.Module):
     def __init__(self, config: dict):
         super().__init__()
@@ -70,18 +79,25 @@ class CrafterCNNPolicy(nn.Module):
 def _rollout(policy, representation: str, seed: int, target: dict, device, config: dict, train: bool):
     env = CrafterEnvironmentAdapter(seed=int(seed), length=int(config["max_steps"]))
     observation = env.reset()
+    frame_stack = (observation, observation, observation, observation)
     log_probs, rewards = [], []
     success, native_reward = False, 0.0
     for step in range(int(config["max_steps"])):
-        features = _avg_pool_features(observation, device) if representation == "avgpool_linear" else _cnn_features(observation, device)
         if representation == "avgpool_linear":
+            features = _avg_pool_features(observation, device)
+            distribution = policy.action_distribution(features, tuple(range(env.action_count)))
+        elif representation == "frame_stack_avgpool":
+            features = _frame_stack_features(frame_stack, device)
             distribution = policy.action_distribution(features, tuple(range(env.action_count)))
         else:
+            features = _cnn_features(observation, device)
             distribution = policy.action_distribution(features, tuple(range(env.action_count)))
         action = distribution.sample()
         if train:
             log_probs.append(distribution.log_prob(action).reshape(()))
         observation, reward, done, info = env.step(int(action.item()))
+        if representation == "frame_stack_avgpool":
+            frame_stack = (*frame_stack[1:], observation)
         native_reward += float(reward)
         shaped = float(reward)
         if not success and inventory_at_least(info.get("inventory"), target["item"], target["threshold"]) is True:
@@ -98,6 +114,8 @@ def _rollout(policy, representation: str, seed: int, target: dict, device, confi
 def _make_policy(representation: str, config: dict, device):
     if representation == "avgpool_linear":
         return CategoricalResourcePolicy(PolicyConfig(**config["avgpool_policy"])).to(device)
+    if representation == "frame_stack_avgpool":
+        return CategoricalResourcePolicy(PolicyConfig(**config["frame_stack_policy"])).to(device)
     return CrafterCNNPolicy(config["cnn_policy"]).to(device)
 
 

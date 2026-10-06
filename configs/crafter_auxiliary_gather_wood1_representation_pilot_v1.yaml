@@ -3,7 +3,7 @@
   "formal_result": false,
   "device": "cuda",
   "seed": 0,
-  "representations": ["avgpool_linear", "cnn"],
+  "representations": ["avgpool_linear", "cnn", "frame_stack_avgpool"],
   "train_episodes": 40,
   "qualification_episodes": 20,
   "qualification_threshold": 0.8,
@@ -15,6 +15,7 @@
   "qualification_action_seed_base": 670000,
   "avgpool_policy": {"observation_dim": 192, "action_count": 17, "hidden_dim": 32, "learning_rate": 0.001, "gamma": 0.99},
   "cnn_policy": {"action_count": 17, "channels": [16, 32], "hidden_dim": 64, "learning_rate": 0.001, "gamma": 0.99},
+  "frame_stack_policy": {"observation_dim": 768, "action_count": 17, "hidden_dim": 64, "learning_rate": 0.001, "gamma": 0.99},
   "tasks": [
     {"task_id": "gather_wood_1", "item": "wood", "threshold": 1}
   ],
