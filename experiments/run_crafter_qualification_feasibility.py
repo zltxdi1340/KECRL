@@ -42,9 +42,15 @@ def _rollout(policy, seed: int, target: dict, device, config: dict, train: bool)
         action = distribution.sample()
         if train:
             log_probs.append(distribution.log_prob(action))
+        before_inventory = info.get("inventory") if step > 0 else None
         observation, reward, done, info = env.step(int(action.item()))
         native_reward += float(reward)
         shaped = float(reward)
+        if train and before_inventory is not None:
+            before_value = before_inventory.get(target["item"])
+            after_value = info.get("inventory", {}).get(target["item"])
+            if isinstance(before_value, int) and isinstance(after_value, int) and after_value > before_value:
+                shaped += float(config.get("progress_bonus", 0.0)) * (after_value - before_value)
         if not success and inventory_at_least(info.get("inventory"), target["item"], target["threshold"]) is True:
             success = True
             shaped += float(config["success_bonus"])
