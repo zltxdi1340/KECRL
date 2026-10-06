@@ -272,3 +272,32 @@ mean normalized query loss changed from `0.1009` to `0.1284`, so the success
 increase is not a consistent loss improvement. This supports retaining entropy
 regularization as a hyperparameter-scan candidate, but does not freeze `0.01`
 or establish method effectiveness.
+
+The real-policy qualification and Pipeline routing diagnostic at commit
+`afa24b0` is stored in `results/crafter_module_pipeline_diagnostic_afa24b0/`.
+It used the CUDA RGB policy wrapper, five seeds, ten held-out qualification
+episodes per task, and the fixture mechanism required by this diagnostic. All
+60 qualification episodes completed the contract path (`contract_rate=1.0`),
+but `collect_wood` reached the target only 3/10 times and the other five task
+targets reached 0/10. No candidate passed the `0.8` success gate, so no Module
+was registered and all 60 Pipeline requests correctly returned `unavailable`
+without calling the executor or producing feedback. This confirms the
+unavailable routing and hard qualification behavior; it also leaves the formal
+gate `qualified_module_pipeline_connected` blocked until a trained Policy is
+qualified on independent data. The run remains `formal_result=false`.
+
+The split-aware feasibility pilot at commit `afa24b0` is stored in
+`results/crafter_split_feasibility_pilot_afa24b0/` and was run as one serial
+process on visible GPU0 with the 256-step candidate horizon. It used
+`collect_wood` and `collect_stone` for the training-side update and all six
+candidate tasks for independent evaluation, with three query repeats per task.
+All five replicas resolved CUDA, verified CUDA policy tensors, kept training,
+support, and query roles disjoint, changed only the candidate policy, and left
+the active policy/SPT and Module/Knowledge state untouched. Mean independent
+query success was `0.0333` before and `0.0556` after the candidate update; all
+observed successes were on `collect_wood`, while `collect_stone`, `collect_coal`,
+and the three pickaxe targets remained at zero in every replica. This is a
+feasibility and cost diagnostic showing that the current budget does not make
+the diverse tasks reliably learnable. It is not a formal comparison, threshold
+validation, Module qualification, or method-effectiveness result; the aggregate
+and per-replica files retain `formal_result=false`.
