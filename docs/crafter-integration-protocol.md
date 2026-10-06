@@ -301,3 +301,20 @@ feasibility and cost diagnostic showing that the current budget does not make
 the diverse tasks reliably learnable. It is not a formal comparison, threshold
 validation, Module qualification, or method-effectiveness result; the aggregate
 and per-replica files retain `formal_result=false`.
+
+The first end-to-end real-policy connection diagnostic at commit `79c0507` is
+stored in `results/crafter_fomaml_module_pipeline_diagnostic_79c0507/` and is
+configured by `configs/crafter_fomaml_module_pipeline_diagnostic_v1.yaml`. It
+connects one real RGB gather task through context-conditioned FOMAML, an
+independent adaptation support episode, held-out qualification, Module
+registration/reuse, and the actual Pipeline. All five replicas verified CUDA,
+kept role seeds disjoint, left the active SPT unchanged, and changed the
+candidate Policy. Every replica registered and reused a Module under the
+explicit diagnostic qualification threshold `0.1`; qualification success was
+`0.1--0.4`, and fresh Pipeline episodes returned only `completed` or
+`continued`. Each reused execution generated one ordinary Knowledge Evidence
+record with `evidence_validity=unknown` and one Skill Feedback record. The
+threshold is deliberately below the formal candidate `0.8` and is plumbing
+diagnostic metadata only, so this run does not validate formal qualification,
+SPT acceptance, or method effectiveness. The aggregate remains
+`formal_result=false`.

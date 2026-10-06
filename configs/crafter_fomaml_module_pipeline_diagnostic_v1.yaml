@@ -1,0 +1,30 @@
+{
+  "status": "crafter_fomaml_module_pipeline_diagnostic_v1",
+  "formal_result": false,
+  "device": "cuda",
+  "context_dim": 2,
+  "seed_set": [0, 1, 2, 3, 4],
+  "replicate_seed_stride": 1000000,
+  "tasks": [
+    {"task_id": "collect_wood", "skill_family": "gather", "context": [1.0, 0.0], "item": "wood", "threshold": 1}
+  ],
+  "policy": {"observation_dim": 192, "action_count": 17, "hidden_dim": 32, "learning_rate": 0.001, "gamma": 0.99},
+  "fomaml": {"inner_lr": 0.001, "meta_lr": 0.001, "inner_steps": 1, "entropy_coef": 0.01},
+  "role_seed_bases": {
+    "train_support": 10000,
+    "train_query": 20000,
+    "adapt_support": 30000,
+    "qualification": 40000,
+    "evaluation": 50000
+  },
+  "qualification": {
+    "episodes_per_task": 10,
+    "min_samples": 10,
+    "success_threshold": 0.1,
+    "contract_threshold": 1.0
+  },
+  "pipeline_episodes": 4,
+  "max_steps": 256,
+  "success_bonus": 1.0,
+  "diagnostic_note": "Real RGB context FOMAML to independent qualification and Pipeline reuse plumbing diagnostic. The 0.1 qualification threshold is diagnostic only; no formal Module claim, Knowledge update, SPT pointer switch, or method comparison."
+}
