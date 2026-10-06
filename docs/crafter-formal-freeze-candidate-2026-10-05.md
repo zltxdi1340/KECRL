@@ -252,3 +252,27 @@ The machine-readable boundary check is
 `experiments/audit_crafter_task_learnability_budget.py`; its report is stored
 in `results/crafter_task_learnability_budget_audit_cdfbc86/` and keeps the
 formal gate closed.
+
+## First auxiliary prerequisite feasibility update (2026-10-06)
+
+The first task-local prerequisite, `gather_wood_3`, was tested separately with
+the candidate 256-step horizon and 20 independent qualification episodes. The
+baseline 20-episode training run is stored in
+`results/crafter_auxiliary_gather_wood3_pilot_3e623b9/`: training reached
+`1/20`, qualification reached `0/20`, and the contract rate was `1.0`.
+
+The training-only inventory progress reward was then added to the diagnostic
+runner, while qualification remained unchanged and independent. The rerun at
+`results/crafter_auxiliary_gather_wood3_pilot_eb490ee/` reached `0/20` in both
+training and qualification. An 80-episode training comparison at
+`results/crafter_auxiliary_gather_wood3_pilot_f491458/` also reached `0/20`
+qualification. Finally, the average-pool MLP and CNN representation comparison
+at `results/crafter_auxiliary_gather_wood3_representation_pilot_cabafba/`
+reached `0/20` qualification for both representations.
+
+These diagnostics show that the first auxiliary Module is not currently
+qualified under the candidate budget. They do not justify lowering the gate or
+claiming that wood collection is unreachable. The next feasibility decision is
+whether to validate a longer horizon or redesign the RGB policy/training pilot;
+downstream table and pickaxe Modules remain blocked until this prerequisite is
+qualified.
