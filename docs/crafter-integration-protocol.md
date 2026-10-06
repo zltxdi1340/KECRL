@@ -216,6 +216,19 @@ small non-formal regression diagnostic: it shows no consistent query-efficiency
 improvement in this Crafter setup and cannot support a method-effectiveness
 claim or a frozen hyperparameter decision.
 
+The commit-aligned repeat at `84e604a` is stored under
+`results/crafter_context_fomaml_independent_84e604a/` and used one serial
+Python process with only visible GPU0. All five replicas resolved `cuda` with
+PyTorch 2.14.1+cu130 on an RTX 4090; training/evaluation and support/query
+episode seeds were disjoint, CUDA tensors were verified, active SPT state was
+unchanged, and both candidate parameter groups changed. Independent query
+success rates before versus after the candidate update were `0.0/0.1`,
+`0.3/0.4`, `0.3/0.2`, `0.2/0.2`, and `0.0/0.0`. The across-seed mean changed
+from `0.16` to `0.18` (mean per-seed change `+0.02`), with about 6.49 seconds
+of measured replica time. This repeat remains a non-formal feasibility
+diagnostic: the small change does not establish query-efficiency improvement,
+candidate acceptance, Module qualification, or a formal comparison.
+
 The repeated-query diagnostic at commit `a05042e` is stored in
 `results/crafter_context_fomaml_diverse_query3_v1/`. It keeps one support
 adaptation per task and evaluates three independent query episodes per task,
