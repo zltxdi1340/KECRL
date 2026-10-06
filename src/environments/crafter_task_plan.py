@@ -20,7 +20,7 @@ def build_crafter_task_plan(config: Mapping[str, Any], task_id: str, environment
             if step_id != f"{task_id}_target":
                 raise ValueError(f"target step {step_id} does not match task {task_id}")
             target = primary_target
-            inputs = ()
+            inputs = tuple(dict(item) for item in primary[task_id].get("required_capabilities", ()))
             role = "target"
         else:
             spec = auxiliary.get(step_id)

@@ -11,6 +11,7 @@ def test_task_local_plan_keeps_primary_target_separate_from_prerequisites():
     plan = build_crafter_task_plan(config, "collect_stone", {"environment": "crafter"})
     assert [step.role for step in plan.steps] == ["prerequisite"] * 3 + ["target"]
     assert plan.steps[-1].request.target_capability == {"name": "inventory_at_least", "item": "stone", "threshold": 1}
+    assert plan.steps[-1].request.input_capabilities == ({"name": "inventory_at_least", "item": "wood_pickaxe", "threshold": 1},)
     assert plan.steps[0].request.target_capability["threshold"] == 3
 
 

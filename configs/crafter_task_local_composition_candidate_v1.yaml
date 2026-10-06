@@ -8,12 +8,12 @@
   "plan_scope": "task_local_same_episode",
   "target_handling": "inventory_targets_and_world_setup_targets_pending_validation",
   "primary_tasks": [
-    {"task_id": "collect_wood", "skill_family": "gather", "target": {"name": "inventory_at_least", "item": "wood", "threshold": 1}},
-    {"task_id": "collect_stone", "skill_family": "gather", "target": {"name": "inventory_at_least", "item": "stone", "threshold": 1}},
-    {"task_id": "collect_coal", "skill_family": "gather", "target": {"name": "inventory_at_least", "item": "coal", "threshold": 1}},
+    {"task_id": "collect_wood", "skill_family": "gather", "target": {"name": "inventory_at_least", "item": "wood", "threshold": 1}, "required_capabilities": []},
+    {"task_id": "collect_stone", "skill_family": "gather", "target": {"name": "inventory_at_least", "item": "stone", "threshold": 1}, "required_capabilities": [{"name": "inventory_at_least", "item": "wood_pickaxe", "threshold": 1}]},
+    {"task_id": "collect_coal", "skill_family": "gather", "target": {"name": "inventory_at_least", "item": "coal", "threshold": 1}, "required_capabilities": [{"name": "inventory_at_least", "item": "wood_pickaxe", "threshold": 1}]},
     {"task_id": "obtain_wood_pickaxe", "skill_family": "craft", "target": {"name": "inventory_at_least", "item": "wood_pickaxe", "threshold": 1}},
     {"task_id": "obtain_stone_pickaxe", "skill_family": "craft", "target": {"name": "inventory_at_least", "item": "stone_pickaxe", "threshold": 1}},
-    {"task_id": "obtain_iron_pickaxe", "skill_family": "craft", "target": {"name": "inventory_at_least", "item": "iron_pickaxe", "threshold": 1}}
+    {"task_id": "obtain_iron_pickaxe", "skill_family": "craft", "target": {"name": "inventory_at_least", "item": "iron_pickaxe", "threshold": 1}, "required_capabilities": [{"name": "inventory_at_least", "item": "wood", "threshold": 1}, {"name": "inventory_at_least", "item": "coal", "threshold": 1}, {"name": "inventory_at_least", "item": "iron", "threshold": 1}, {"name": "crafter_world_object_setup", "objects": ["table", "furnace"]}]}
   ],
   "auxiliary_steps": {
     "gather_wood_3": {"target": {"name": "inventory_at_least", "item": "wood", "threshold": 3}, "input_capabilities": []},
