@@ -91,6 +91,15 @@ method comparison; its result records commit, dirty state, source hashes,
 runtime version, paired outcomes, and Knowledge Evidence. The recorded run is
 `results/crafter_paired_reference_v1_v2/result.json`.
 
+The paired-world output is connected to the Beta-Binomial Knowledge Evolution
+diagnostic by `experiments/run_crafter_knowledge_evolution.py`. Using the five
+real counterevidence cases gives support `0`, counterevidence `5`, and
+effective sample count `5`; with the diagnostic `n_min=10`, the proposition
+remains `candidate` and the mechanism remains `testing`. This deliberately
+does not reject the mechanism from an under-budget run. The trace is stored at
+`results/crafter_knowledge_evolution_v1/result.json` and is not a formal
+experiment result.
+
 The result was independently rerun after commit `d5224ef` with only visible
 GPU1 (`CUDA_VISIBLE_DEVICES=1`). The fresh trace is stored under
 `results/crafter_qualification_smoke_clean_v2/`: CUDA was resolved and a CUDA

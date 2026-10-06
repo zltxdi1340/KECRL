@@ -1,0 +1,13 @@
+{
+  "status": "crafter_knowledge_evolution_v1",
+  "proposition_id": "crafter:wood_necessary_for:wood_pickaxe",
+  "mechanism_id": "crafter:wood_pickaxe_recipe_v1",
+  "knowledge_evolution": {
+    "n_min": 10,
+    "tau_confirm": 0.8,
+    "tau_reject": 0.2,
+    "confidence": 0.95,
+    "budget": 20,
+    "evidence_cost": 1
+  }
+}
