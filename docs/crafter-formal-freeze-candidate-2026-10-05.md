@@ -83,3 +83,23 @@ validated:
 
 The controlled discrete environment remains archived for regression only. No
 Crafter value in this draft is a method-effectiveness result.
+
+## Threshold review update (2026-10-06)
+
+The read-only review at
+`experiments/audit_crafter_thresholds.py` compares the candidate values with
+the current Knowledge budget scan, verifier boundary audit, feasibility pilot,
+and real-policy connection diagnostic. Under the current Beta/normal-bound
+implementation, pure support and pure counterevidence reach their local
+`n_min=10`, `tau_confirm=0.8`, or `tau_reject=0.2` decision after 13 valid
+observations, within the candidate 200-unit Knowledge budget. The current real
+paired-world evidence has only five valid counterevidence cases, so it remains
+below `n_min` and does not confirm or reject a mechanism.
+
+The review does not validate the formal `0.8` Module qualification threshold:
+the diagnostic connection run used an explicitly non-formal `0.1` threshold,
+and its observed qualification rates were `0.1--0.4`. The feasibility pilot
+also produced no stable signal for stone, coal, or the three pickaxe tasks.
+SPT validation batches and formal query-budget curves have not been run. The
+review therefore keeps all numerical values as candidates and keeps formal
+training blocked.
