@@ -369,3 +369,13 @@ adapter contract: Crafter exposes 17 actions in the native order and every
 action step returns public inventory. Two deterministic action-cycle rollouts
 ended by health depletion with zero wood, which is expected for a non-policy
 probe. No reset, action mapping, or inventory allowlist fault was observed.
+
+The same end-to-end real-policy connection diagnostic was rerun at commit
+`1a889b7` under `results/crafter_fomaml_module_pipeline_diagnostic_1a889b7/`.
+All five replicas again verified CUDA, preserved the active SPT, changed the
+candidate Policy, registered and reused a Module, and routed execution through
+the actual Pipeline. Qualification rates for `collect_wood` were `0.3`, `0.4`,
+`0.1`, `0.2`, and `0.1`; Pipeline outcomes remained within `completed` and
+`continued`. The run therefore confirms current-code plumbing continuity, but
+the diagnostic threshold is still `0.1` rather than the candidate formal `0.8`.
+It does not validate formal qualification or permit formal training.
