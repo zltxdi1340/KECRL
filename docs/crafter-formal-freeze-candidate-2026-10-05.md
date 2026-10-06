@@ -140,3 +140,8 @@ task and budget. The larger budget therefore did not validate the candidate
 qualification threshold or the full task split. This remains a non-formal
 learnability observation, does not imply that any task is unreachable, and
 keeps formal training blocked.
+
+The machine-readable boundary check is
+`experiments/audit_crafter_task_learnability_budget.py`; its report is stored
+in `results/crafter_task_learnability_budget_audit_cdfbc86/` and keeps the
+formal gate closed.
