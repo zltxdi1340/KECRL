@@ -35,3 +35,13 @@ def test_temporal_pilot_uses_four_frame_feature_contract():
     assert config["frame_stack"] == 4
     observations = tuple(torch.zeros(64, 64, 3, dtype=torch.uint8).numpy() for _ in range(4))
     assert _features(observations, torch.device("cpu")).shape == (768,)
+
+
+def test_cnn_pilot_preserves_spatial_rgb_contract():
+    config = json.loads(Path("configs/crafter_auxiliary_gather_wood1_ppo_goal_actions_cnn_pilot_v1.yaml").read_text())
+    assert config["formal_result"] is False
+    policy = PPOCrafterPolicy(config["policy"])
+    observation = torch.zeros(3, 64, 64)
+    distribution, value = policy.distribution_value(observation, config["action_allowlist"])
+    assert distribution.probs.shape == (17,)
+    assert value.shape == ()

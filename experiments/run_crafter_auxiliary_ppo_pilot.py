@@ -23,15 +23,35 @@ class PPOCrafterPolicy(nn.Module):
         super().__init__()
         self.config = config
         hidden = int(config["hidden_dim"])
-        self.encoder = nn.Sequential(
-            nn.Linear(int(config["observation_dim"]), hidden), nn.Tanh(),
-        )
-        self.actor = nn.Linear(hidden, int(config["action_count"]))
-        self.critic = nn.Linear(hidden, 1)
+        self.encoder_type = str(config.get("encoder", "avgpool"))
+        if self.encoder_type == "cnn":
+            channels = config.get("cnn_channels", [16, 32])
+            self.encoder = nn.Sequential(
+                nn.Conv2d(3, int(channels[0]), 5, stride=2, padding=2),
+                nn.Tanh(),
+                nn.Conv2d(int(channels[0]), int(channels[1]), 3, stride=2, padding=1),
+                nn.Tanh(),
+                nn.AdaptiveAvgPool2d((4, 4)),
+                nn.Flatten(),
+            )
+            feature_dim = int(channels[1]) * 16
+        elif self.encoder_type == "avgpool":
+            self.encoder = nn.Sequential(
+                nn.Linear(int(config["observation_dim"]), hidden), nn.Tanh(),
+            )
+            feature_dim = hidden
+        else:
+            raise ValueError(f"unsupported PPO encoder: {self.encoder_type}")
+        self.actor = nn.Linear(feature_dim, int(config["action_count"]))
+        self.critic = nn.Linear(feature_dim, 1)
         self.optimizer = torch.optim.Adam(self.parameters(), lr=float(config["learning_rate"]))
 
     def distribution_value(self, features: torch.Tensor, legal_actions=None):
+        if self.encoder_type == "cnn" and features.ndim == 3:
+            features = features.unsqueeze(0)
         hidden = self.encoder(features)
+        if hidden.ndim > 1 and hidden.shape[0] == 1:
+            hidden = hidden.squeeze(0)
         logits = self.actor(hidden)
         if legal_actions is not None:
             if not legal_actions:
@@ -83,9 +103,13 @@ class PPOCrafterPolicy(nn.Module):
         return sum(losses) / max(len(losses), 1)
 
 
-def _features(observations, device):
+def _features(observations, device, encoder="avgpool"):
     if not isinstance(observations, (tuple, list)):
         observations = (observations,)
+    if encoder == "cnn":
+        if len(observations) != 1:
+            raise ValueError("CNN PPO diagnostic accepts one RGB frame at a time")
+        return torch.as_tensor(observations[0], dtype=torch.float32, device=device).permute(2, 0, 1) / 255.0
     tensors = [
         torch.as_tensor(observation, dtype=torch.float32, device=device)
         .permute(2, 0, 1).unsqueeze(0) / 255.0
@@ -107,6 +131,9 @@ def _rollout(policy, seed, target, device, config, train):
     if frame_stack_size <= 0:
         raise ValueError("frame_stack must be positive")
     frame_stack = (observation,) * frame_stack_size
+    encoder = str(config["policy"].get("encoder", "avgpool"))
+    if encoder == "cnn" and frame_stack_size != 1:
+        raise ValueError("CNN PPO diagnostic does not support frame_stack > 1")
     action_allowlist = tuple(
         int(action) for action in config.get("action_allowlist", range(int(config["policy"]["action_count"])))
     )
@@ -114,7 +141,7 @@ def _rollout(policy, seed, target, device, config, train):
         raise ValueError("action_allowlist must contain valid action IDs")
     legal_actions = []
     while steps < int(config["max_steps"]) and not done and not success:
-        feature = _features(frame_stack if frame_stack_size > 1 else observation, device)
+        feature = _features(frame_stack if frame_stack_size > 1 else observation, device, encoder)
         with torch.set_grad_enabled(train):
             distribution, value = policy.distribution_value(feature, action_allowlist)
             action_tensor = distribution.sample()
@@ -139,7 +166,7 @@ def _rollout(policy, seed, target, device, config, train):
     if train:
         with torch.no_grad():
             next_observation = frame_stack if frame_stack_size > 1 else observation
-            next_value = torch.zeros((), device=device) if done or success else policy.distribution_value(_features(next_observation, device), action_allowlist)[1]
+            next_value = torch.zeros((), device=device) if done or success else policy.distribution_value(_features(next_observation, device, encoder), action_allowlist)[1]
         gae = torch.zeros((), device=device)
         advantages = []
         returns = []
@@ -198,6 +225,7 @@ def run(config_path: str, output_path: str) -> dict:
         "task": target,
         "action_allowlist": list(config.get("action_allowlist", range(int(config["policy"]["action_count"])))),
         "frame_stack": int(config.get("frame_stack", 1)),
+        "encoder": str(config["policy"].get("encoder", "avgpool")),
         "training": {"episodes": int(config["train_episodes"]), "successes": train_successes, "success_rate": train_successes / int(config["train_episodes"]), "mean_loss": sum(losses) / len(losses)},
         "qualification": {"episodes": int(config["qualification_episodes"]), "successes": qualification_successes, "success_rate": qualification_successes / int(config["qualification_episodes"]), "qualified": qualification_successes / int(config["qualification_episodes"]) >= float(config["qualification_threshold"])},
         "module_registered": False, "knowledge_evolution_updated": False, "formal_training_allowed": False,
