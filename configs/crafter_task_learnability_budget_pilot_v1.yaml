@@ -1,0 +1,25 @@
+{
+  "status": "crafter_task_learnability_budget_pilot_v1",
+  "formal_result": false,
+  "device": "cuda",
+  "seed": 0,
+  "train_episode_budgets": [20, 80],
+  "qualification_episodes": 20,
+  "qualification_threshold": 0.8,
+  "max_steps": 256,
+  "success_bonus": 1.0,
+  "train_seed_base": 400000,
+  "qualification_seed_base": 500000,
+  "action_seed_base": 600000,
+  "qualification_action_seed_base": 700000,
+  "policy": {"observation_dim": 192, "action_count": 17, "hidden_dim": 32, "learning_rate": 0.001, "gamma": 0.99},
+  "tasks": [
+    {"task_id": "collect_wood", "skill_family": "gather", "item": "wood", "threshold": 1},
+    {"task_id": "collect_stone", "skill_family": "gather", "item": "stone", "threshold": 1},
+    {"task_id": "collect_coal", "skill_family": "gather", "item": "coal", "threshold": 1},
+    {"task_id": "obtain_wood_pickaxe", "skill_family": "craft", "item": "wood_pickaxe", "threshold": 1},
+    {"task_id": "obtain_stone_pickaxe", "skill_family": "craft", "item": "stone_pickaxe", "threshold": 1},
+    {"task_id": "obtain_iron_pickaxe", "skill_family": "craft", "item": "iron_pickaxe", "threshold": 1}
+  ],
+  "pilot_note": "Non-formal budget comparison for task learnability. It uses independent qualification data and keeps formal_result=false; it does not authorize formal training or persistent Module registration."
+}
