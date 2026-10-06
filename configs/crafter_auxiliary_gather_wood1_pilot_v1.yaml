@@ -1,0 +1,20 @@
+{
+  "status": "crafter_auxiliary_gather_wood1_pilot_v1",
+  "formal_result": false,
+  "device": "cuda",
+  "seed": 0,
+  "train_episodes": 40,
+  "qualification_episodes": 20,
+  "qualification_threshold": 0.8,
+  "max_steps": 256,
+  "success_bonus": 1.0,
+  "progress_bonus": 0.5,
+  "train_seed_base": 610000,
+  "qualification_seed_base": 620000,
+  "action_seed_base": 630000,
+  "policy": {"observation_dim": 192, "action_count": 17, "hidden_dim": 32, "learning_rate": 0.001, "gamma": 0.99},
+  "tasks": [
+    {"task_id": "gather_wood_1", "skill_family": "gather", "item": "wood", "threshold": 1}
+  ],
+  "pilot_note": "Non-formal unit-capability feasibility pilot for repeated task-local wood gathering. Independent qualification remains separate; no Module registration, Knowledge update, or formal result is claimed."
+}

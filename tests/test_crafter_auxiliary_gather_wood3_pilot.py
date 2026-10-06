@@ -29,3 +29,9 @@ def test_auxiliary_gather_wood3_horizon_pilot_changes_only_horizon():
     assert config["formal_result"] is False
     assert config["max_steps"] == 512
     assert config["qualification_episodes"] == 20
+
+
+def test_auxiliary_unit_wood_pilot_matches_repeated_plan_capability():
+    config = json.loads(Path("configs/crafter_auxiliary_gather_wood1_pilot_v1.yaml").read_text())
+    assert config["formal_result"] is False
+    assert config["tasks"][0]["threshold"] == 1
