@@ -119,6 +119,23 @@ checks and keeps formal training blocked. The result does not establish
 unreachability; it shows that doubling the candidate horizon did not solve
 the current policy learnability problem.
 
+## Task prerequisite audit (2026-10-06)
+
+The protocol audit
+`experiments/audit_crafter_task_prerequisites.py` reads the Crafter 1.8.3
+versioned collect/make rules and the candidate task order. Its report is
+stored in `results/crafter_task_prerequisite_audit_f03c013_retry/`.
+
+Crafter requires `wood_pickaxe: 1` to collect both stone and coal. The
+candidate continual order places `obtain_wood_pickaxe` after those two tasks,
+while the environment contract starts every episode with a fresh inventory.
+The audit therefore reports direct prerequisite gaps for `collect_stone` and
+`collect_coal`. `obtain_iron_pickaxe` also requires iron, for which the
+candidate task list has no producer. These are task-protocol gaps under the
+current fresh-episode design, not proofs that the resources are unreachable.
+Formal training remains blocked until the task split, prerequisite handling,
+and qualification protocol are revised and re-audited.
+
 ## Qualification feasibility update (2026-10-06)
 
 The candidate-budget qualification pilot is implemented by
