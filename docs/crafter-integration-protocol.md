@@ -318,3 +318,18 @@ threshold is deliberately below the formal candidate `0.8` and is plumbing
 diagnostic metadata only, so this run does not validate formal qualification,
 SPT acceptance, or method effectiveness. The aggregate remains
 `formal_result=false`.
+
+At commit `b58c0e4`, the paired verifier was rerun in
+`results/crafter_paired_reference_b58c0e4/` and consumed by Knowledge Evolution
+under `results/crafter_knowledge_evolution_b58c0e4/`. All five baseline worlds
+were `FOUND`, all five intervention worlds were
+`PROVEN_UNREACHABLE`, and every emitted evidence record had the expected
+`knowledge_observation=0` and `evidence_validity=invalid`. The read-only
+boundary audit is stored in `results/crafter_knowledge_boundary_b58c0e4/` and
+passed scope matching, pair/world uniqueness, three-state mapping, forbidden
+skill-field checks, duplicate-safe count checks, and commit provenance. The
+connected Knowledge result remains `support=0`, `counterevidence=5`,
+`effective_n=5`, `n_min=10`, status `candidate`; it therefore does not reject
+or confirm a mechanism and does not permit formal training. UNKNOWN mapping is
+covered by the verifier and boundary-audit tests but was not produced by these
+five complete reference searches.
