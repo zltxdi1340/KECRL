@@ -1,0 +1,24 @@
+{
+  "status": "crafter_qualification_feasibility_pilot_v1",
+  "formal_result": false,
+  "device": "cuda",
+  "seed": 0,
+  "train_episodes": 20,
+  "qualification_episodes": 20,
+  "qualification_threshold": 0.8,
+  "max_steps": 256,
+  "success_bonus": 1.0,
+  "train_seed_base": 100000,
+  "qualification_seed_base": 200000,
+  "action_seed_base": 300000,
+  "policy": {"observation_dim": 192, "action_count": 17, "hidden_dim": 32, "learning_rate": 0.001, "gamma": 0.99},
+  "tasks": [
+    {"task_id": "collect_wood", "skill_family": "gather", "item": "wood", "threshold": 1},
+    {"task_id": "collect_stone", "skill_family": "gather", "item": "stone", "threshold": 1},
+    {"task_id": "collect_coal", "skill_family": "gather", "item": "coal", "threshold": 1},
+    {"task_id": "obtain_wood_pickaxe", "skill_family": "craft", "item": "wood_pickaxe", "threshold": 1},
+    {"task_id": "obtain_stone_pickaxe", "skill_family": "craft", "item": "stone_pickaxe", "threshold": 1},
+    {"task_id": "obtain_iron_pickaxe", "skill_family": "craft", "item": "iron_pickaxe", "threshold": 1}
+  ],
+  "pilot_note": "Candidate 20-episode training and 20-episode independent qualification feasibility pilot. Values remain non-formal; no SPT acceptance, Knowledge update, or formal Module registration."
+}

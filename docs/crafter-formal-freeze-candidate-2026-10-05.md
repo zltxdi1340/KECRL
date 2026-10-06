@@ -103,3 +103,22 @@ also produced no stable signal for stone, coal, or the three pickaxe tasks.
 SPT validation batches and formal query-budget curves have not been run. The
 review therefore keeps all numerical values as candidates and keeps formal
 training blocked.
+
+## Qualification feasibility update (2026-10-06)
+
+The candidate-budget qualification pilot is implemented by
+`experiments/run_crafter_qualification_feasibility.py` and configured by
+`configs/crafter_qualification_feasibility_pilot_v1.yaml`. It trained one
+isolated real RGB policy per task for 20 episodes and evaluated 20 independent
+qualification episodes at the candidate 256-step horizon and formal `0.8`
+success threshold. The run is stored in
+`results/crafter_qualification_feasibility_pilot_eba9b2f_retry/`.
+
+All six tasks had contract rate `1.0` and zero UNKNOWN qualification outcomes.
+`collect_wood` reached `7/20` (`0.35`); `collect_stone`, `collect_coal`, and
+all three pickaxe tasks reached `0/20`. No task formed a Module under the
+formal gate. This is a feasibility result for the candidate budget, not a
+method comparison or an environment-unreachability claim. The result keeps
+formal training blocked and provides no basis for lowering the qualification
+threshold; the current policy/training setup must first be made capable of
+learning the candidate task set within an explicitly reviewed pilot.
