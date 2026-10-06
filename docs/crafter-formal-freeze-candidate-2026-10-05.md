@@ -402,3 +402,20 @@ not form a Module and remains `formal_result=false`. Four-frame stacking is
 therefore not sufficient to clear the qualification gate. The next diagnostic
 should target spatial credit assignment or explicit public progress features,
 while keeping the formal RGB contract unchanged.
+
+## Paired spatial-CNN feasibility update (2026-10-06)
+
+A small two-layer CNN encoder was added to the PPO feasibility runner and
+evaluated with the same single-frame RGB input, action allowlist, and seed bases
+as the average-pool comparison. The configuration is
+`configs/crafter_auxiliary_gather_wood1_ppo_goal_actions_cnn_pilot_v1.yaml`,
+with output in
+`results/crafter_auxiliary_gather_wood1_ppo_goal_actions_cnn_pilot_89f3b86/`.
+
+The CNN reached `52/80` training episodes (`0.65`) but only `10/20`
+independent qualification episodes (`0.50`), compared with `44/80` (`0.55`)
+and `15/20` (`0.75`) for the paired average-pool policy. The CNN therefore
+improves training-side success while degrading held-out qualification in this
+budget, does not register a Module, and remains `formal_result=false`. The
+average-pool policy remains the current diagnostic baseline; neither temporal
+stacking nor this small CNN justifies a formal observation-contract change.
