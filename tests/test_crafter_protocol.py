@@ -12,6 +12,7 @@ from experiments.prepare_crafter_protocol import (
 from src.environments.crafter_tasks import (
     crafter_knowledge_evidence,
     crafter_transition_result,
+    crafter_world_object_transition_result,
     inventory_at_least,
 )
 from src.environments.crafter_continual import (
@@ -50,6 +51,20 @@ def test_transition_and_evidence_keep_unknown_and_feedback_boundaries():
     assert evidence.evidence_validity == "unknown"
     assert evidence.intervention_metadata["performed"] is False
     assert "trajectory" not in evidence.before_state
+
+
+def test_world_object_target_requires_explicit_public_setup_observation():
+    target = {"name": "crafter_world_object_setup", "objects": ["table"]}
+    unknown = crafter_world_object_transition_result({}, {}, target, False)
+    assert unknown.target_achieved == "unknown"
+    completed = crafter_world_object_transition_result(
+        {"world_object_setup": None},
+        {"world_object_setup": ["table", "furnace"]},
+        target,
+        False,
+    )
+    assert completed.target_achieved is True
+    assert completed.produced_capabilities == (target,)
 
 
 def test_real_policy_module_executor_checks_response_and_returns_public_transition():

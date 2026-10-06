@@ -8,6 +8,9 @@ from __future__ import annotations
 from typing import Any
 
 
+WORLD_OBJECTS = frozenset({"table", "furnace"})
+
+
 class CrafterEnvironmentAdapter:
     """Normalize Crafter's reset/step API for runtime integration."""
 
@@ -36,6 +39,7 @@ class CrafterEnvironmentAdapter:
             raise ValueError(f"unexpected Crafter action count: {self.action_count}")
         self.step_count = 0
         self._inventory = None
+        self._world_object_setup: tuple[str, ...] | None = None
         self._observation = None
         self._done = False
 
@@ -43,6 +47,7 @@ class CrafterEnvironmentAdapter:
         observation = self.environment.reset()
         self.step_count = 0
         self._inventory = None
+        self._world_object_setup = None
         self._done = False
         self._observation = self._validate_observation(observation)
         return self._observation
@@ -58,9 +63,19 @@ class CrafterEnvironmentAdapter:
         self._done = bool(done)
         inventory = info.get("inventory")
         self._inventory = dict(inventory) if inventory is not None else None
+        setup = info.get("world_object_setup")
+        if setup is not None:
+            if not isinstance(setup, (list, tuple)):
+                raise ValueError("Crafter world_object_setup must be a list or tuple")
+            setup_names = tuple(str(name) for name in setup)
+            if len(set(setup_names)) != len(setup_names) or not set(setup_names).issubset(WORLD_OBJECTS):
+                raise ValueError("Crafter world_object_setup contains unsupported or duplicate objects")
+            self._world_object_setup = setup_names
         # Crafter also returns a full semantic map and global position. Those
         # fields are oracle-only under KECRL's reviewed observation contract.
         public_info = {"inventory": dict(inventory)} if inventory is not None else {}
+        if self._world_object_setup is not None:
+            public_info["world_object_setup"] = list(self._world_object_setup)
         return self._observation, float(reward), self._done, public_info
 
     def current_observation(self):
@@ -79,6 +94,7 @@ class CrafterEnvironmentAdapter:
             "action_count": self.action_count,
             "step_count": self.step_count,
             "inventory": dict(self._inventory) if self._inventory is not None else None,
+            "world_object_setup": list(self._world_object_setup) if self._world_object_setup is not None else None,
             "episode_done": self._done,
         }
 

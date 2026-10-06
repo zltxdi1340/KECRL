@@ -17,6 +17,15 @@ Native reset has no inventory info. Inventory remains unknown until a public
 step observation supplies it; reset does not read private player state or take
 an implicit noop. Unknown inventory must not be interpreted as empty inventory.
 
+Task-local composition may also declare `crafter_world_object_setup` targets
+for table and furnace placement. The adapter accepts this field only when an
+explicit environment wrapper supplies it in the reviewed public info
+allowlist. Native Crafter 1.8.3 does not supply such a field, so the learner
+result remains `unknown`; semantic maps, player coordinates, achievements, and
+RGB inference are not used as setup confirmation. A confirmed setup produces
+the corresponding public capability and can be carried to the next step in the
+same task-local plan.
+
 ## Candidate Tasks and Evidence
 
 Candidate resource targets include collecting wood/stone and acquiring tools.

@@ -8,7 +8,10 @@ import torch.nn.functional as functional
 
 from src.continual_learning.contracts import TransitionResult
 from src.environments.crafter_adapter import CrafterEnvironmentAdapter
-from src.environments.crafter_tasks import crafter_transition_result
+from src.environments.crafter_tasks import (
+    crafter_transition_result,
+    crafter_world_object_transition_result,
+)
 from src.skills.contracts import ImplementationResponse
 from src.skills.torch_policy import CategoricalResourcePolicy
 
@@ -58,7 +61,8 @@ class CrafterPolicyModuleExecutor:
         if response.status not in {"reused_module", "created_module_from_spi"}:
             raise ValueError("an unavailable response cannot be executed")
         observation = self.environment.reset() if self.reset_before_execute else self.environment.current_observation()
-        before_inventory = self.environment.state()["inventory"]
+        before_state = self.environment.state()
+        before_inventory = before_state["inventory"]
         done = False
         after_inventory = None
         self.last_steps = 0
@@ -74,6 +78,11 @@ class CrafterPolicyModuleExecutor:
                 after_inventory = info.get("inventory")
                 if done:
                     break
-        return crafter_transition_result(
-            before_inventory, after_inventory, self.target, done
-        )
+        if self.target.get("name") == "crafter_world_object_setup":
+            return crafter_world_object_transition_result(
+                before_state,
+                self.environment.state(),
+                self.target,
+                done,
+            )
+        return crafter_transition_result(before_inventory, after_inventory, self.target, done)
