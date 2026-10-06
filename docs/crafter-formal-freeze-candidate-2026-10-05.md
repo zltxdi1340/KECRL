@@ -332,3 +332,14 @@ reached `10/20` (`0.50`), compared with the prior MLP REINFORCE result of
 does not meet the candidate `0.8` gate or create a Module. The next budget
 check can use PPO/GAE, while formal thresholds and the formal policy backend
 remain unchanged.
+
+An 80-episode PPO/GAE budget check is stored under
+`results/crafter_auxiliary_gather_wood1_ppo_pilot_b70fa43/` and uses
+`configs/crafter_auxiliary_gather_wood1_ppo_pilot_80_v1.yaml`. Training reached
+`27/80` (`0.3375`), while the independent 20-episode qualification reached
+`7/20` (`0.35`). This did not reproduce the 40-episode qualification signal;
+the auxiliary Module remains unqualified, `module_registered` remains false,
+and `formal_training_allowed` remains false. The result supports treating the
+PPO improvement as a feasibility diagnostic rather than a stable estimate and
+does not justify changing the formal threshold, observation contract, or
+training budget.
