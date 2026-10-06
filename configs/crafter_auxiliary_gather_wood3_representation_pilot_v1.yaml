@@ -1,0 +1,22 @@
+{
+  "status": "crafter_auxiliary_gather_wood3_representation_pilot_v1",
+  "formal_result": false,
+  "device": "cuda",
+  "seed": 0,
+  "representations": ["avgpool_linear", "cnn"],
+  "train_episodes": 40,
+  "qualification_episodes": 20,
+  "qualification_threshold": 0.8,
+  "max_steps": 256,
+  "success_bonus": 1.0,
+  "train_seed_base": 470000,
+  "qualification_seed_base": 480000,
+  "action_seed_base": 490000,
+  "qualification_action_seed_base": 500000,
+  "avgpool_policy": {"observation_dim": 192, "action_count": 17, "hidden_dim": 32, "learning_rate": 0.001, "gamma": 0.99},
+  "cnn_policy": {"action_count": 17, "channels": [16, 32], "hidden_dim": 64, "learning_rate": 0.001, "gamma": 0.99},
+  "tasks": [
+    {"task_id": "gather_wood_3", "item": "wood", "threshold": 3}
+  ],
+  "pilot_note": "Non-formal RGB representation pilot for the first task-local prerequisite. It compares average-pool MLP and CNN with independent qualification data; no Module, Knowledge update, or formal registration is claimed."
+}

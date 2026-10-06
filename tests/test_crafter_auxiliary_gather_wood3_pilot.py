@@ -15,3 +15,10 @@ def test_auxiliary_gather_wood3_longer_budget_remains_non_formal():
     assert config["formal_result"] is False
     assert config["train_episodes"] == 80
     assert config["qualification_episodes"] == 20
+
+
+def test_auxiliary_gather_wood3_representation_pilot_compares_rgb_backends():
+    config = json.loads(Path("configs/crafter_auxiliary_gather_wood3_representation_pilot_v1.yaml").read_text())
+    assert config["formal_result"] is False
+    assert config["representations"] == ["avgpool_linear", "cnn"]
+    assert config["tasks"][0]["threshold"] == 3
