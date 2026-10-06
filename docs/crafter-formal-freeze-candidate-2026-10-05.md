@@ -310,3 +310,12 @@ were `1.0`, and neither reached the candidate `0.8` threshold. The CNN therefore
 does not solve independent qualification for the actual repeated-plan unit
 target. Static RGB representation is no longer the next diagnostic axis;
 temporal context is the next candidate change.
+
+The four-frame RGB diagnostic at
+`results/crafter_auxiliary_gather_wood1_temporal_pilot_ce9cbcb/` compared the
+existing average-pool MLP, CNN, and a four-frame average-pool stack on the exact
+`gather_wood_1` target. Training success was `10/40`, `9/40`, and `19/40`,
+respectively; independent qualification was `7/20`, `5/20`, and `7/20`.
+Frame stacking improved training-side success but did not improve independent
+qualification beyond the MLP baseline, so it does not produce a qualified
+Module or justify changing the formal observation contract.
