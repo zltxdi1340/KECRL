@@ -343,3 +343,22 @@ and `formal_training_allowed` remains false. The result supports treating the
 PPO improvement as a feasibility diagnostic rather than a stable estimate and
 does not justify changing the formal threshold, observation contract, or
 training budget.
+
+## PPO/GAE multi-seed feasibility update (2026-10-06)
+
+To check whether the 80-episode signal was seed-specific, the same non-formal
+PPO/GAE candidate was run for seeds `1` through `4`, with independent training,
+qualification, and action seeds. The outputs are stored in
+`results/crafter_auxiliary_gather_wood1_ppo_multiseed_s1_8b2adce/` through
+`results/crafter_auxiliary_gather_wood1_ppo_multiseed_s4_8b2adce/`; seed `0` is
+the preceding result in
+`results/crafter_auxiliary_gather_wood1_ppo_pilot_b70fa43/`.
+
+Across the five seeds, training success was `0.3075 +/- 0.0376` (population
+standard deviation), and independent qualification was `0.42 +/- 0.0678`.
+Per-seed qualification rates were `0.35`, `0.40`, `0.55`, `0.40`, and `0.40`
+for seeds `0` through `4`; none reached the candidate `0.8` gate. Every run
+verified CUDA tensors, kept `formal_result=false`, and left Module registration
+and Knowledge Evolution disabled. PPO/GAE therefore remains a useful
+feasibility diagnostic but does not establish a qualified prerequisite Module
+or permit formal training.
