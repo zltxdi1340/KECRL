@@ -1,0 +1,29 @@
+{
+  "protocol_version": "crafter_prerequisite_aware_protocol_candidate_v1",
+  "status": "candidate_values_to_validate",
+  "formal_result": false,
+  "crafter_version": "1.8.3",
+  "observation_interface": "rgb64_inventory_v1",
+  "state_transfer_mode": "persistent_continual_world_per_seed",
+  "adapter_support": "pending_implementation",
+  "continual_order": [
+    "collect_wood",
+    "obtain_wood_pickaxe",
+    "collect_stone",
+    "obtain_stone_pickaxe",
+    "collect_coal",
+    "collect_iron",
+    "obtain_iron_pickaxe"
+  ],
+  "tasks": [
+    {"task_id": "collect_wood", "skill_family": "gather", "target": {"name": "inventory_at_least", "item": "wood", "threshold": 3}, "required_inventory": {}, "produced_inventory": {"wood": 3}, "required_world_objects": []},
+    {"task_id": "obtain_wood_pickaxe", "skill_family": "craft", "target": {"name": "inventory_at_least", "item": "wood_pickaxe", "threshold": 1}, "required_inventory": {"wood": 3}, "produced_inventory": {"wood_pickaxe": 1}, "required_world_objects": []},
+    {"task_id": "collect_stone", "skill_family": "gather", "target": {"name": "inventory_at_least", "item": "stone", "threshold": 4}, "required_inventory": {"wood_pickaxe": 1}, "produced_inventory": {"stone": 4}, "required_world_objects": []},
+    {"task_id": "obtain_stone_pickaxe", "skill_family": "craft", "target": {"name": "inventory_at_least", "item": "stone_pickaxe", "threshold": 1}, "required_inventory": {"wood": 1, "stone": 1}, "produced_inventory": {"stone_pickaxe": 1}, "required_world_objects": ["table"]},
+    {"task_id": "collect_coal", "skill_family": "gather", "target": {"name": "inventory_at_least", "item": "coal", "threshold": 1}, "required_inventory": {"wood_pickaxe": 1}, "produced_inventory": {"coal": 1}, "required_world_objects": []},
+    {"task_id": "collect_iron", "skill_family": "gather", "target": {"name": "inventory_at_least", "item": "iron", "threshold": 1}, "required_inventory": {"stone_pickaxe": 1}, "produced_inventory": {"iron": 1}, "required_world_objects": []},
+    {"task_id": "obtain_iron_pickaxe", "skill_family": "craft", "target": {"name": "inventory_at_least", "item": "iron_pickaxe", "threshold": 1}, "required_inventory": {"wood": 1, "coal": 1, "iron": 1}, "produced_inventory": {"iron_pickaxe": 1}, "required_world_objects": ["table", "furnace"]}
+  ],
+  "qualification": {"min_samples": null, "success_threshold": null, "contract_threshold": null},
+  "candidate_note": "Dependency-aware protocol candidate only. Persistent world state, world-object setup, target handling, budgets, and qualification values require implementation and feasibility validation before any formal freeze."
+}

@@ -136,6 +136,24 @@ current fresh-episode design, not proofs that the resources are unreachable.
 Formal training remains blocked until the task split, prerequisite handling,
 and qualification protocol are revised and re-audited.
 
+## Dependency-aware protocol candidate (2026-10-06)
+
+The proposed revision is recorded separately in
+`configs/crafter_prerequisite_aware_protocol_candidate_v1.yaml`. It keeps the
+current RGB observation contract, changes the continual order to
+wood → wood pickaxe → stone → stone pickaxe → coal/iron → iron pickaxe, raises
+the wood and stone collection targets to cover the crafting costs, and adds an
+explicit `collect_iron` producer. It marks persistent per-seed world state and
+adapter support as pending implementation.
+
+The audit at
+`results/crafter_prerequisite_aware_candidate_audit_8fe5914/audit.json` finds
+that inventory dependencies are ordered correctly, but table and furnace
+setup are still undeclared. The candidate therefore remains non-formal and
+fails readiness until world-object setup and state transfer are implemented
+and independently validated. The existing six-task formal candidate is
+unchanged.
+
 ## Qualification feasibility update (2026-10-06)
 
 The candidate-budget qualification pilot is implemented by
