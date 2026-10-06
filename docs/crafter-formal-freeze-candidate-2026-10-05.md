@@ -122,3 +122,21 @@ method comparison or an environment-unreachability claim. The result keeps
 formal training blocked and provides no basis for lowering the qualification
 threshold; the current policy/training setup must first be made capable of
 learning the candidate task set within an explicitly reviewed pilot.
+
+## Task learnability budget update (2026-10-06)
+
+The independent budget pilot is implemented by
+`experiments/run_crafter_task_learnability_budget_pilot.py` and configured by
+`configs/crafter_task_learnability_budget_pilot_v1.yaml`. It compares fresh
+RGB policies trained for 20 and 80 episodes per task, then evaluates 20
+independent qualification episodes at the same 256-step horizon and `0.8`
+threshold. The result is stored in
+`results/crafter_task_learnability_budget_pilot_cdfbc86/`.
+
+At 20 episodes, `collect_wood` reached `5/20`; at 80 episodes it reached
+`9/20`. Stone, coal, and all three pickaxe tasks reached `0/20` at both
+budgets. Contract pass rate was `1.0` and UNKNOWN count was zero for every
+task and budget. The larger budget therefore did not validate the candidate
+qualification threshold or the full task split. This remains a non-formal
+learnability observation, does not imply that any task is unreachable, and
+keeps formal training blocked.
