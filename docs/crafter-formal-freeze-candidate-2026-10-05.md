@@ -104,6 +104,21 @@ SPT validation batches and formal query-budget curves have not been run. The
 review therefore keeps all numerical values as candidates and keeps formal
 training blocked.
 
+## Stone/coal horizon feasibility update (2026-10-06)
+
+Because the CNN representation still produced no stone or coal successes at
+horizon 256, a separate pilot fixed the CNN and 40-episode training budget
+while increasing the horizon to 512. It is configured by
+`configs/crafter_policy_horizon_pilot_v1.yaml` and stored in
+`results/crafter_policy_horizon_pilot_9a78532/`.
+
+Both `collect_stone` and `collect_coal` remained at `0/40` training success
+and `0/10` independent qualification success. The audit in
+`results/crafter_policy_horizon_audit_9a78532/` passes the non-formal boundary
+checks and keeps formal training blocked. The result does not establish
+unreachability; it shows that doubling the candidate horizon did not solve
+the current policy learnability problem.
+
 ## Qualification feasibility update (2026-10-06)
 
 The candidate-budget qualification pilot is implemented by
