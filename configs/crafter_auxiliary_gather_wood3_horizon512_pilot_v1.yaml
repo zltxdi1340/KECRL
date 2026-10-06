@@ -1,0 +1,20 @@
+{
+  "status": "crafter_auxiliary_gather_wood3_horizon512_pilot_v1",
+  "formal_result": false,
+  "device": "cuda",
+  "seed": 0,
+  "train_episodes": 40,
+  "qualification_episodes": 20,
+  "qualification_threshold": 0.8,
+  "max_steps": 512,
+  "success_bonus": 1.0,
+  "progress_bonus": 0.5,
+  "train_seed_base": 510000,
+  "qualification_seed_base": 520000,
+  "action_seed_base": 530000,
+  "policy": {"observation_dim": 192, "action_count": 17, "hidden_dim": 32, "learning_rate": 0.001, "gamma": 0.99},
+  "tasks": [
+    {"task_id": "gather_wood_3", "skill_family": "gather", "item": "wood", "threshold": 3}
+  ],
+  "pilot_note": "Non-formal horizon feasibility pilot for the first task-local prerequisite. Only the horizon changes from the 256-step candidate; independent qualification remains 20 episodes and no Module or formal result is claimed."
+}
