@@ -301,3 +301,12 @@ qualification reached `3/20` (`0.15`) with contract rate `1.0`. The unit split
 improves training signal compared with `wood >= 3`, but it still does not form
 a qualified Module under the candidate `0.8` gate. Downstream table and pickaxe
 steps remain blocked pending a better RGB policy or training procedure.
+
+The exact unit-capability representation comparison is stored in
+`results/crafter_auxiliary_gather_wood1_representation_pilot_9520da1/`. At 40
+training and 20 independent qualification episodes, the average-pool MLP
+reached `7/20` qualification and the CNN reached `6/20`; both contract rates
+were `1.0`, and neither reached the candidate `0.8` threshold. The CNN therefore
+does not solve independent qualification for the actual repeated-plan unit
+target. Static RGB representation is no longer the next diagnostic axis;
+temporal context is the next candidate change.
