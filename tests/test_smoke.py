@@ -89,6 +89,26 @@ def test_skill_reuse_and_unavailable_paths():
     incompatible = TransitionRequest(({"name": "other"},), target, {}, scope, {})
     assert library.request_implementation(incompatible).status == "unavailable"
 
+
+def test_capability_compatibility_accepts_inventory_and_setup_supersets():
+    target = {"name": "inventory_at_least", "item": "wood_pickaxe", "threshold": 1}
+    scope = {"environment": "crafter"}
+    contract = ImplementationContract(
+        ({"name": "inventory_at_least", "item": "wood", "threshold": 2},
+         {"name": "crafter_world_object_setup", "objects": ["table"]}),
+        (), (target,), {}, {}, {}, scope,
+    )
+    request = TransitionRequest(
+        ({"name": "inventory_at_least", "item": "wood", "threshold": 3},
+         {"name": "crafter_world_object_setup", "objects": ["table", "furnace"]}),
+        target, {}, scope, {},
+    )
+    spt = SPT("spt:monotonic", "craft", "v1", {})
+    library = InMemoryQualifiedSkillLibrary(spt, QualificationConfig())
+    spi = SPI("spi:monotonic", "craft", spt.spt_id, spt.version, {}, request, contract, {}, {}, {})
+    assert library.qualify(spi, "policy:monotonic", 1, 1, 1) is not None
+    assert library.request_implementation(request).status == "reused_module"
+
 def test_fomaml_support_query_and_candidate_decision():
     episode = SPIEpisode(
         context=(1.0,), support_x=((1.0,),), support_y=(2.0,),

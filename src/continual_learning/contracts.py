@@ -56,6 +56,42 @@ class TaskVersionView:
             raise ValueError("SPT family and version references must be non-empty")
 
 
+@dataclass(frozen=True)
+class TaskPlanStep:
+    """One task-local prerequisite or target transition.
+
+    A plan is ephemeral execution context. It is not persisted in Knowledge
+    Bank and carries no Policy parameters or trajectory data.
+    """
+
+    step_id: str
+    role: Literal["prerequisite", "target"]
+    request: TransitionRequest
+
+    def __post_init__(self) -> None:
+        if not self.step_id:
+            raise ValueError("task plan step_id must be non-empty")
+
+
+@dataclass(frozen=True)
+class TaskPlan:
+    task_id: str
+    steps: tuple[TaskPlanStep, ...]
+
+    def __post_init__(self) -> None:
+        if not self.task_id:
+            raise ValueError("task plan task_id must be non-empty")
+        if not self.steps:
+            raise ValueError("task plan must contain at least one step")
+        step_ids = [step.step_id for step in self.steps]
+        if len(set(step_ids)) != len(step_ids):
+            raise ValueError("task plan step IDs must be unique")
+        if self.steps[-1].role != "target":
+            raise ValueError("task plan must end with a target step")
+        if any(step.role == "target" for step in self.steps[:-1]):
+            raise ValueError("task plan may contain only one final target step")
+
+
 class ContinualLearningPipeline:
     """Runtime orchestration boundary; no planner or learning algorithm yet."""
 
@@ -113,6 +149,8 @@ class InMemoryContinualLearningPipeline(ContinualLearningPipeline):
         environment_scope: Mapping[str, Any],
         request: TransitionRequest,
         current_state: Mapping[str, Any],
+        *,
+        plan_step: TaskPlanStep | None = None,
     ) -> tuple[TaskResult, TransitionResult | None]:
         mechanisms = self.knowledge_bank.retrieve_mechanisms(
             target_capability, current_capability_facts, environment_scope
@@ -136,12 +174,50 @@ class InMemoryContinualLearningPipeline(ContinualLearningPipeline):
                 evidence_validity="unknown",
             )
         )
-        self._record_skill_feedback(
-            {
-                "spi_id": response.spi_id,
-                "module_id": response.module_id,
-                "target_achieved": result.target_achieved,
-                "execution_status": result.execution_status,
-            }
-        )
+        feedback = {
+            "spi_id": response.spi_id,
+            "module_id": response.module_id,
+            "target_achieved": result.target_achieved,
+            "execution_status": result.execution_status,
+        }
+        if plan_step is not None:
+            feedback.update({"plan_step_id": plan_step.step_id, "plan_step_role": plan_step.role})
+        self._record_skill_feedback(feedback)
         return task_result_from_transition(result), result
+
+    def run_task_plan(
+        self,
+        plan: TaskPlan,
+        current_capability_facts: Sequence[Mapping[str, Any]],
+        environment_scope: Mapping[str, Any],
+        current_state: Mapping[str, Any],
+    ) -> tuple[TaskResult, tuple[TransitionResult, ...], Mapping[str, Any]]:
+        """Execute a prerequisite chain inside one already-started episode.
+
+        Role-level callers create a fresh environment before invoking this
+        method. Each step reuses that environment through its executor; the
+        method only carries public capability facts and boundary state between
+        steps.
+        """
+        facts = list(current_capability_facts)
+        state: Mapping[str, Any] = dict(current_state)
+        transitions: list[TransitionResult] = []
+        for step in plan.steps:
+            status, transition = self.run_transition(
+                step.request.target_capability,
+                facts,
+                environment_scope,
+                step.request,
+                state,
+                plan_step=step,
+            )
+            if transition is None:
+                return status, tuple(transitions), state
+            transitions.append(transition)
+            facts.extend(transition.produced_capabilities)
+            after_state = transition.observed_state_changes.get("after")
+            if isinstance(after_state, Mapping):
+                state = dict(after_state)
+            if status != "completed":
+                return status, tuple(transitions), state
+        return "completed", tuple(transitions), state

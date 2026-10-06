@@ -169,6 +169,30 @@ or authorize training. The dependency-aware candidate therefore remains
 blocked until setup execution, state transfer, qualification data separation,
 and the revised task manifest are validated together.
 
+## Task-local composition candidate (2026-10-06)
+
+The next candidate keeps the six primary targets unchanged and describes
+their prerequisites as ephemeral same-episode plans in
+`configs/crafter_task_local_composition_candidate_v1.yaml`. For example,
+`collect_stone` keeps target `stone >= 1`, while its plan requests wood,
+table setup, and wood pickaxe steps before the target step. The larger
+quantities needed for crafting remain prerequisite capabilities rather than
+new primary metrics.
+
+`src/continual_learning/contracts.py` now provides `TaskPlan` and
+`TaskPlanStep`; `InMemoryContinualLearningPipeline.run_task_plan` executes
+the chain while recording each step's Skill Feedback and keeping runtime
+evidence in the existing unknown Knowledge boundary. Capability compatibility
+now treats inventory thresholds and world-object sets monotonically, so
+`wood >= 3` satisfies a `wood >= 2` requirement and `{table, furnace}`
+satisfies `{table}`.
+
+The candidate plan audit at
+`results/crafter_task_local_composition_audit_469d1bb_v2/` passes structural
+checks, but world-object execution, auxiliary Module qualification, and
+end-to-end Crafter validation remain pending. Formal training is still
+blocked.
+
 ## Qualification feasibility update (2026-10-06)
 
 The candidate-budget qualification pilot is implemented by

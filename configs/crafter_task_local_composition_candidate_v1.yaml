@@ -1,0 +1,38 @@
+{
+  "protocol_version": "crafter_task_local_composition_candidate_v1",
+  "status": "candidate_values_to_validate",
+  "formal_result": false,
+  "crafter_version": "1.8.3",
+  "observation_interface": "rgb64_inventory_v1",
+  "role_episode_initialization": "fresh_native_environment_per_episode",
+  "plan_scope": "task_local_same_episode",
+  "target_handling": "inventory_targets_and_world_setup_targets_pending_validation",
+  "primary_tasks": [
+    {"task_id": "collect_wood", "skill_family": "gather", "target": {"name": "inventory_at_least", "item": "wood", "threshold": 1}},
+    {"task_id": "collect_stone", "skill_family": "gather", "target": {"name": "inventory_at_least", "item": "stone", "threshold": 1}},
+    {"task_id": "collect_coal", "skill_family": "gather", "target": {"name": "inventory_at_least", "item": "coal", "threshold": 1}},
+    {"task_id": "obtain_wood_pickaxe", "skill_family": "craft", "target": {"name": "inventory_at_least", "item": "wood_pickaxe", "threshold": 1}},
+    {"task_id": "obtain_stone_pickaxe", "skill_family": "craft", "target": {"name": "inventory_at_least", "item": "stone_pickaxe", "threshold": 1}},
+    {"task_id": "obtain_iron_pickaxe", "skill_family": "craft", "target": {"name": "inventory_at_least", "item": "iron_pickaxe", "threshold": 1}}
+  ],
+  "auxiliary_steps": {
+    "gather_wood_3": {"target": {"name": "inventory_at_least", "item": "wood", "threshold": 3}, "input_capabilities": []},
+    "place_table": {"target": {"name": "crafter_world_object_setup", "objects": ["table"]}, "input_capabilities": [{"name": "inventory_at_least", "item": "wood", "threshold": 2}]},
+    "make_wood_pickaxe": {"target": {"name": "inventory_at_least", "item": "wood_pickaxe", "threshold": 1}, "input_capabilities": [{"name": "inventory_at_least", "item": "wood", "threshold": 1}, {"name": "crafter_world_object_setup", "objects": ["table"]}]},
+    "gather_stone_1": {"target": {"name": "inventory_at_least", "item": "stone", "threshold": 1}, "input_capabilities": [{"name": "inventory_at_least", "item": "wood_pickaxe", "threshold": 1}]},
+    "gather_stone_4": {"target": {"name": "inventory_at_least", "item": "stone", "threshold": 4}, "input_capabilities": [{"name": "inventory_at_least", "item": "wood_pickaxe", "threshold": 1}]},
+    "make_stone_pickaxe": {"target": {"name": "inventory_at_least", "item": "stone_pickaxe", "threshold": 1}, "input_capabilities": [{"name": "inventory_at_least", "item": "wood", "threshold": 1}, {"name": "inventory_at_least", "item": "stone", "threshold": 1}, {"name": "crafter_world_object_setup", "objects": ["table"]}]},
+    "gather_coal_1": {"target": {"name": "inventory_at_least", "item": "coal", "threshold": 1}, "input_capabilities": [{"name": "inventory_at_least", "item": "wood_pickaxe", "threshold": 1}]},
+    "place_furnace": {"target": {"name": "crafter_world_object_setup", "objects": ["furnace"]}, "input_capabilities": [{"name": "inventory_at_least", "item": "stone", "threshold": 4}]},
+    "gather_iron_1": {"target": {"name": "inventory_at_least", "item": "iron", "threshold": 1}, "input_capabilities": [{"name": "inventory_at_least", "item": "stone_pickaxe", "threshold": 1}]}
+  },
+  "task_plans": {
+    "collect_wood": [],
+    "collect_stone": ["gather_wood_3", "place_table", "make_wood_pickaxe", "collect_stone_target"],
+    "collect_coal": ["gather_wood_3", "place_table", "make_wood_pickaxe", "collect_coal_target"],
+    "obtain_wood_pickaxe": ["gather_wood_3", "place_table", "make_wood_pickaxe"],
+    "obtain_stone_pickaxe": ["gather_wood_3", "place_table", "make_wood_pickaxe", "gather_stone_1", "make_stone_pickaxe"],
+    "obtain_iron_pickaxe": ["gather_wood_3", "place_table", "make_wood_pickaxe", "gather_stone_4", "make_stone_pickaxe", "place_furnace", "gather_coal_1", "gather_iron_1", "obtain_iron_pickaxe_target"]
+  },
+  "candidate_note": "Task-local composition candidate. Auxiliary steps are not primary metrics. World setup target execution, independent qualification of auxiliary Modules, budgets, and SPT/query evaluation remain pending; formal_result=false."
+}

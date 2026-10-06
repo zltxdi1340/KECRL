@@ -57,7 +57,23 @@ class InMemoryQualifiedSkillLibrary(SkillLibrary):
 
     @staticmethod
     def _contains(actual, required):
-        return all(actual.get(k) == v for k, v in required.items())
+        if actual.get("name") != required.get("name"):
+            return False
+        for key, value in required.items():
+            actual_value = actual.get(key)
+            if key == "threshold" and actual.get("name") == "inventory_at_least":
+                if not isinstance(actual_value, (int, float)) or not isinstance(value, (int, float)):
+                    return False
+                if actual_value < value:
+                    return False
+            elif key == "objects" and actual.get("name") == "crafter_world_object_setup":
+                if not isinstance(actual_value, (list, tuple)) or not isinstance(value, (list, tuple)):
+                    return False
+                if not set(value).issubset(actual_value):
+                    return False
+            elif actual_value != value:
+                return False
+        return True
 
     def _compatible(self, request, contract):
         if not self._contains(request.environment_scope, contract.applicability_scope):
