@@ -1,0 +1,11 @@
+{
+  "status": "crafter_task_local_runtime_diagnostic_v1",
+  "formal_result": false,
+  "fixture_modules": true,
+  "device": "cuda",
+  "task_id": "collect_stone",
+  "seeds": [0, 1],
+  "max_steps": 32,
+  "policy": {"observation_dim": 192, "action_count": 17, "hidden_dim": 32, "learning_rate": 0.001, "gamma": 0.99},
+  "diagnostic_note": "Runtime-only task-local composition diagnostic. Fixture Modules exercise real Crafter execution and Pipeline routing; no qualification, Knowledge update, or formal result is claimed."
+}

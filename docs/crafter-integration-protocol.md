@@ -31,6 +31,14 @@ Module resets the native environment, while later prerequisite and target
 Modules reuse the current observation. A plan reset is explicit via
 `begin_episode`; it does not create a persistent world or store a trajectory.
 
+The runtime-only diagnostic in
+`experiments/run_crafter_task_local_runtime_diagnostic.py` exercises the
+`collect_stone` chain with fixture-qualified Modules and the real RGB Policy
+executor. The two-seed run reached only the first `gather_wood_3` step and
+returned `continued` after the 32-step limit, with one unknown ordinary
+Knowledge evidence record per episode. This confirms routing and boundary
+behavior; it is not a qualification, learnability, or method result.
+
 ## Candidate Tasks and Evidence
 
 Candidate resource targets include collecting wood/stone and acquiring tools.
