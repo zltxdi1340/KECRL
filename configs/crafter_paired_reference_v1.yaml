@@ -1,0 +1,10 @@
+{
+  "status": "crafter_paired_reference_v1",
+  "formal_result": false,
+  "oracle_reference_run": true,
+  "environment_scope": {"environment": "crafter", "adapter": "rgb64_inventory_v1", "version": "1.8.3"},
+  "target": {"name": "inventory_at_least", "item": "wood_pickaxe", "threshold": 1},
+  "intervention": {"mode": "necessity_ablation", "capability": {"name": "inventory_at_least", "item": "wood", "threshold": 1}, "window_steps": 256},
+  "seeds": [0, 1, 2, 3, 4],
+  "max_steps": 256
+}

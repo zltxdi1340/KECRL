@@ -78,6 +78,19 @@ executions passed the contract path, but 0 reached the inventory target within
 registered. This is a diagnostic negative result for an untrained policy, not a
 method comparison or an environment impossibility claim.
 
+The real paired-world reference runner is implemented in
+`src/counterfactual/crafter_reference_runner.py` and configured by
+`configs/crafter_paired_reference_v1.yaml`. It uses Crafter's private world
+state and transition rules only on the verifier side. For seeds 0--4, the
+oracle planner reached the wood-pickaxe target in every baseline world within
+11--15 actions (including the public-inventory noop). Removing all tree
+materials in the paired intervention world made the target
+`PROVEN_UNREACHABLE` in all five worlds. No episode policy was run. This is an
+executable structural-verification diagnostic, not a learner result or formal
+method comparison; its result records commit, dirty state, source hashes,
+runtime version, paired outcomes, and Knowledge Evidence. The recorded run is
+`results/crafter_paired_reference_v1_v2/result.json`.
+
 The result was independently rerun after commit `d5224ef` with only visible
 GPU1 (`CUDA_VISIBLE_DEVICES=1`). The fresh trace is stored under
 `results/crafter_qualification_smoke_clean_v2/`: CUDA was resolved and a CUDA
