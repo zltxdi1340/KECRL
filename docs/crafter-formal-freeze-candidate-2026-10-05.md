@@ -384,3 +384,21 @@ threshold; the runner still registered no Module and kept
 from `0.35` to `0.75`, but the multi-seed result is not stable enough to change
 formal thresholds or permit formal training. The next performance bottleneck
 is RGB spatial and temporal credit assignment after exploration reduction.
+
+## Paired temporal-stack feasibility update (2026-10-06)
+
+Four-frame average-pool RGB input was added to the same PPO goal-action
+allowlist runner. The paired configuration uses the same training and
+qualification environment/action seed bases as the single-frame allowlist
+comparison, with only `frame_stack=4` and the policy input dimension changed.
+The result is stored in
+`results/crafter_auxiliary_gather_wood1_ppo_goal_actions_temporal_pilot_28218f2_paired/`.
+
+The temporal stack reached `51/80` training episodes (`0.6375`) and `14/20`
+independent qualification episodes (`0.70`), compared with `44/80` (`0.55`)
+and `15/20` (`0.75`) for the paired single-frame run. Temporal context improved
+training-side success but reduced independent qualification by `0.05`; it did
+not form a Module and remains `formal_result=false`. Four-frame stacking is
+therefore not sufficient to clear the qualification gate. The next diagnostic
+should target spatial credit assignment or explicit public progress features,
+while keeping the formal RGB contract unchanged.
