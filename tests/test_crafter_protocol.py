@@ -111,9 +111,11 @@ def test_continual_session_and_world_object_contract_keep_state_boundary():
     session = CrafterContinualSession(environment)
     session.start()
     setup = WorldObjectSetupContract(("table", "furnace"))
-    task_state = session.begin_task("obtain_iron_pickaxe", setup)
+    with pytest.raises(RuntimeError, match="unconfirmed world-object setup"):
+        session.begin_task("obtain_iron_pickaxe", setup)
+    task_state = session.begin_task("collect_wood")
     assert task_state["world_state_mode"] == "persistent_continual_world_per_seed"
-    assert session.state()["task_id"] == "obtain_iron_pickaxe"
+    assert session.state()["task_id"] == "collect_wood"
     assert WorldObjectSetupObservation(("table", "furnace")).satisfies(setup)
     session.end_task()
     assert session.state()["task_index"] == 1

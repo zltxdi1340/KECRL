@@ -68,6 +68,14 @@ class CrafterContinualSession:
             raise RuntimeError("a Crafter continual task is already active")
         if not task_id:
             raise ValueError("task_id must be non-empty")
+        if setup is not None:
+            observed = self.adapter.state().get("world_object_setup")
+            observation = WorldObjectSetupObservation(tuple(observed or ()))
+            if not observation.satisfies(setup):
+                raise RuntimeError(
+                    "Crafter task requires unconfirmed world-object setup: "
+                    f"{list(setup.required_objects)}"
+                )
         self._task_id = task_id
         return {
             "task_id": task_id,

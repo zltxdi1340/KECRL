@@ -177,11 +177,11 @@ route. The configuration is
 `results/crafter_continual_session_boundary_diagnostic_reachable_v3/`.
 After fixing the verifier's nearest-source greedy choice, all five seeds
 produced a route through wood, table, wood pickaxe, four stone, and furnace.
-Four of five public-action replays completed all five task boundaries; one
-replay still diverged at furnace placement. Inventory and setup state were
-preserved at every completed boundary. The verifier reachability gap is closed
-for this route, but replay stability remains a feasibility risk, so this is
-still not a learned-policy or formal result.
+All five public-action replays completed all five task boundaries, and the
+compact public trace comparison found no first divergence. Inventory and setup
+state were preserved at every boundary. This closes the current verifier and
+session-boundary diagnostic for the selected route, but it remains a
+verifier/action replay result rather than a learned-policy or formal result.
 
 ## Continual session boundary implementation (2026-10-06)
 

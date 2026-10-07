@@ -79,13 +79,13 @@ The persistent candidate order has a separate boundary diagnostic using
 `CrafterContinualSession`. It confirms that public inventory and table/furnace
 setup survive task boundaries on the successful replay. After the verifier
 started checking all reachable material candidates, all five seeds yielded a
-complete route through four stone and furnace; four of five routes replayed
-through the learner-facing
-adapter after furnace facing was changed to public movement actions. Reachability
-must therefore be measured before using this route for qualification or formal
-training. The verifier now checks all reachable material candidates instead of
+complete route through four stone and furnace. All five routes replayed through
+the learner-facing adapter after furnace facing was changed to public movement
+actions. The verifier now checks all reachable material candidates instead of
 declaring failure after an inaccessible nearest resource; the current replay
-diagnostic reaches `5/5` verifier routes and completes `4/5` replays.
+diagnostic reaches `5/5` verifier routes and completes `5/5` replays, with no
+first public trace divergence. This remains a boundary diagnostic and does not
+qualify a learned Module.
 
 ## Candidate Tasks and Evidence
 
