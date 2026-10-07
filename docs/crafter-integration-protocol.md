@@ -61,6 +61,14 @@ and five `unknown` ordinary Knowledge Evidence records per episode. This is a
 state-transfer and routing diagnostic only. It does not train, qualify, or
 register a real Module and remains `formal_result=false`.
 
+The same runner also has a separate `collect_stone` configuration. Its
+verifier script first reaches the wood-pickaxe prerequisite, then gathers a
+stone through the private-map oracle; replay still uses only public adapter
+actions. Five seeds completed the six-step candidate chain, and the
+wood-pickaxe fact was available to the final stone request. This is still a
+fixture and routing diagnostic, not a real-policy qualification or formal
+result.
+
 ## Candidate Tasks and Evidence
 
 Candidate resource targets include collecting wood/stone and acquiring tools.

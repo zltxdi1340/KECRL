@@ -649,3 +649,14 @@ Modules do not establish policy learnability, qualification, or method
 effectiveness; `formal_result=false` remains in force. Independent qualification
 of real learned Modules and the stone/coal/furnace prerequisite chains are
 still open.
+
+The same diagnostic was extended to the `collect_stone` task using a
+verifier-only wood, table, wood-pickaxe, and stone action script. All five
+seeds completed the six-step candidate plan, including the `wood_pickaxe`
+prerequisite capability and the final stone target. The final stone request
+received the accumulated `wood_pickaxe` capability, while ordinary runtime
+evidence remained `unknown`. The output is stored in
+`results/crafter_collect_stone_oracle_pipeline_diagnostic_fix1/`. This confirms
+candidate capability routing and public state transfer for one additional
+chain; it does not validate a learned Module or establish that the policy can
+discover the chain.

@@ -128,15 +128,32 @@ def _fixture_library(plan, scope):
     return library, InMemoryKnowledgeBank(mechanisms), modules_by_step
 
 
-def _reference_actions(seed: int, max_steps: int) -> tuple[list[str], bool]:
-    target = {"name": "inventory_at_least", "item": "wood_pickaxe", "threshold": 1}
+def _reference_actions(seed: int, max_steps: int, task_id: str) -> tuple[list[str], bool]:
+    target = {
+        "name": "inventory_at_least",
+        "item": "stone" if task_id == "collect_stone" else "wood_pickaxe",
+        "threshold": 1,
+    }
     environment = CrafterEnvironmentAdapter(seed=int(seed), reward=False, length=int(max_steps))
     environment.reset()
     planner = RecordingReferencePlanner(environment, target, int(max_steps), True)
-    summary = planner.run()
+    if task_id == "collect_stone":
+        # The private map is used only to generate a bounded verifier script.
+        # All replayed actions still cross the public adapter boundary.
+        reached = planner._step("noop")
+        wood = planner._collect_item("tree", "wood", 3)
+        reached = reached and bool(wood.target_achieved)
+        reached = reached and planner._place_table()
+        reached = reached and planner._step("make_wood_pickaxe")
+        if reached:
+            stone = planner._collect_item("stone", "stone", 1)
+            reached = bool(stone.target_achieved)
+    else:
+        summary = planner.run()
+        reached = bool(summary.target_achieved)
     actions = [environment.environment.action_names[action] for _, action in planner.samples]
     environment.close()
-    return actions, bool(summary.target_achieved)
+    return actions, reached
 
 
 def run(config_path: str, output_path: str) -> dict:
@@ -153,7 +170,9 @@ def run(config_path: str, output_path: str) -> dict:
     episodes = []
     start = time.perf_counter()
     for seed in config["seeds"]:
-        actions, oracle_success = _reference_actions(int(seed), int(config["max_steps"]))
+        actions, oracle_success = _reference_actions(
+            int(seed), int(config["max_steps"]), str(config["task_id"])
+        )
         environment = CrafterEnvironmentAdapter(seed=int(seed), reward=False, length=int(config["max_steps"]))
         queue = _ActionQueue(actions)
         executors = {}
