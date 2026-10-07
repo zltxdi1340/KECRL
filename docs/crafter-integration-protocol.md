@@ -85,7 +85,8 @@ actions. The verifier now checks all reachable material candidates instead of
 declaring failure after an inaccessible nearest resource; the current replay
 diagnostic reaches `5/5` verifier routes and completes `5/5` replays, with no
 first public trace divergence. This remains a boundary diagnostic and does not
-qualify a learned Module.
+qualify a learned Module. `CrafterContinualSession.begin_task()` also rejects
+unconfirmed setup requirements before activating the task boundary.
 
 ## Candidate Tasks and Evidence
 

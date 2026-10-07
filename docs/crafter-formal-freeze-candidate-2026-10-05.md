@@ -174,7 +174,7 @@ The v2 setup order was exercised through
 `CrafterContinualSession` with a verifier-generated public-action-consistent
 route. The configuration is
 `configs/crafter_continual_session_boundary_diagnostic_v1.yaml`, with output in
-`results/crafter_continual_session_boundary_diagnostic_reachable_v3/`.
+`results/crafter_continual_session_boundary_diagnostic_trace_v4/`.
 After fixing the verifier's nearest-source greedy choice, all five seeds
 produced a route through wood, table, wood pickaxe, four stone, and furnace.
 All five public-action replays completed all five task boundaries, and the
@@ -182,6 +182,8 @@ compact public trace comparison found no first divergence. Inventory and setup
 state were preserved at every boundary. This closes the current verifier and
 session-boundary diagnostic for the selected route, but it remains a
 verifier/action replay result rather than a learned-policy or formal result.
+`begin_task()` now rejects a task whose required public setup has not been
+confirmed, so this boundary cannot be satisfied by metadata alone.
 
 ## Continual session boundary implementation (2026-10-06)
 
