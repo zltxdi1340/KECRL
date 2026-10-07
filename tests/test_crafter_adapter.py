@@ -107,6 +107,15 @@ def test_adapter_does_not_confirm_setup_without_matching_public_delta():
     assert environment.state()["world_object_setup"] is None
 
 
+def test_setup_boundary_diagnostic_is_non_formal():
+    import json
+    from pathlib import Path
+
+    config = json.loads(Path("configs/crafter_setup_boundary_diagnostic_v1.yaml").read_text())
+    assert config["formal_result"] is False
+    assert config["observation_interface"] == "rgb64_inventory_v1"
+
+
 def test_crafter_rejects_invalid_actions():
     environment = CrafterEnvironmentAdapter(seed=0)
     with pytest.raises(ValueError):

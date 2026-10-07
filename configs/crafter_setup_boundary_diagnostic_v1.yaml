@@ -1,0 +1,10 @@
+{
+  "status": "crafter_setup_boundary_diagnostic_v1",
+  "formal_result": false,
+  "device": "cpu",
+  "crafter_version": "1.8.3",
+  "observation_interface": "rgb64_inventory_v1",
+  "seeds": [0, 1, 2, 3, 4],
+  "max_steps": 512,
+  "diagnostic_note": "Non-formal oracle-side setup boundary diagnostic. Private world state is used only by the verifier to choose executable actions; the adapter confirms table/furnace setup from public inventory deltas and never exposes semantic maps, coordinates, achievements, or recipes to the learner. No Module registration, Knowledge update, or formal result is claimed."
+}
