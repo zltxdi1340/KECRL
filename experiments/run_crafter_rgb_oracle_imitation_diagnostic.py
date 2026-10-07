@@ -48,6 +48,14 @@ class RGBActionClassifier(nn.Module):
         return self.network(features)
 
 
+def _target(task: dict) -> dict:
+    return {
+        "name": "inventory_at_least",
+        "item": str(task["item"]),
+        "threshold": int(task["threshold"]),
+    }
+
+
 def _teacher_episode(seed: int, target: dict, max_steps: int):
     environment = CrafterEnvironmentAdapter(seed=int(seed), length=int(max_steps))
     environment.reset()
@@ -89,7 +97,7 @@ def run(config_path: str, output_path: str) -> dict:
     if output.exists():
         raise FileExistsError(f"refusing to overwrite {output}")
     device = torch.device(ContinualLearningPipeline.resolve_device(config["device"]))
-    target = config["task"]
+    target = _target(config["task"])
     start = time.perf_counter()
     teacher_rows = []
     observations, labels = [], []
@@ -104,6 +112,8 @@ def run(config_path: str, output_path: str) -> dict:
                              "reference_steps": summary.reference_steps, "sample_count": len(samples)})
     policy = RGBActionClassifier(int(config["policy"]["observation_dim"]), int(config["policy"]["action_count"]), int(config["policy"]["hidden_dim"])).to(device)
     optimizer = torch.optim.Adam(policy.parameters(), lr=float(config["policy"]["learning_rate"]))
+    if not observations:
+        raise RuntimeError("oracle teacher produced no RGB/action samples")
     features = torch.stack(observations)
     targets = torch.tensor(labels, dtype=torch.long, device=device)
     torch.manual_seed(int(config["seed"]))
