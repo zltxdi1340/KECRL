@@ -20,11 +20,14 @@ an implicit noop. Unknown inventory must not be interpreted as empty inventory.
 Task-local composition may also declare `crafter_world_object_setup` targets
 for table and furnace placement. The adapter accepts this field only when an
 explicit environment wrapper supplies it in the reviewed public info
-allowlist. Native Crafter 1.8.3 does not supply such a field, so the learner
-result remains `unknown`; semantic maps, player coordinates, achievements, and
-RGB inference are not used as setup confirmation. A confirmed setup produces
-the corresponding public capability and can be carried to the next step in the
-same task-local plan.
+allowlist. Native Crafter 1.8.3 does not supply such a field, so the adapter
+may confirm setup only from the public transition contract: the executed
+`place_table`/`place_furnace` action must reduce the corresponding public
+inventory by exactly its versioned resource cost. Semantic maps, player
+coordinates, achievements, and RGB inference are not used as setup
+confirmation. A confirmed setup produces the corresponding public capability
+and can be carried to the next step in the same task-local plan; any missing or
+ambiguous transition remains `unknown`.
 
 `CrafterTaskPlanExecutor` enforces this plan boundary: the first qualified
 Module resets the native environment, while later prerequisite and target

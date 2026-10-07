@@ -57,6 +57,56 @@ def test_adapter_filters_unapproved_info_fields():
     assert environment.state()["inventory"] is None
 
 
+def test_adapter_confirms_world_setup_from_public_placement_delta():
+    import numpy as np
+    from types import SimpleNamespace
+
+    class Environment:
+        observation_space = SimpleNamespace(shape=(64, 64, 3))
+        action_space = SimpleNamespace(n=17)
+        action_names = ["noop"] * 17
+
+        def __init__(self):
+            self.action_names[8] = "place_table"
+            self.inventory = {"wood": 2}
+            self.steps = 0
+
+        def step(self, action):
+            self.steps += 1
+            if self.steps == 1:
+                assert action == 0
+                self.inventory = {"wood": 2}
+            else:
+                assert action == 8
+                self.inventory = {"wood": 0}
+            return np.zeros((64, 64, 3), dtype=np.uint8), 0, False, {
+                "inventory": dict(self.inventory), "semantic": "hidden"
+            }
+
+    environment = CrafterEnvironmentAdapter(environment=Environment())
+    environment.step(0)
+    _, _, _, info = environment.step(8)
+    assert info["world_object_setup"] == ["table"]
+    assert environment.state()["world_object_setup"] == ["table"]
+
+
+def test_adapter_does_not_confirm_setup_without_matching_public_delta():
+    import numpy as np
+    from types import SimpleNamespace
+
+    class Environment:
+        observation_space = SimpleNamespace(shape=(64, 64, 3))
+        action_space = SimpleNamespace(n=17)
+        action_names = ["noop"] * 17
+
+        def step(self, action):
+            return np.zeros((64, 64, 3), dtype=np.uint8), 0, False, {"inventory": {"wood": 2}}
+
+    environment = CrafterEnvironmentAdapter(environment=Environment())
+    assert environment.step(8)[3] == {"inventory": {"wood": 2}}
+    assert environment.state()["world_object_setup"] is None
+
+
 def test_crafter_rejects_invalid_actions():
     environment = CrafterEnvironmentAdapter(seed=0)
     with pytest.raises(ValueError):

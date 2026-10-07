@@ -9,6 +9,10 @@ from typing import Any
 
 
 WORLD_OBJECTS = frozenset({"table", "furnace"})
+_SETUP_ACTION_REQUIREMENTS = {
+    "place_table": ("wood", 2, "table"),
+    "place_furnace": ("stone", 4, "furnace"),
+}
 
 
 class CrafterEnvironmentAdapter:
@@ -57,6 +61,7 @@ class CrafterEnvironmentAdapter:
             raise TypeError("Crafter action must be an integer")
         if not 0 <= action < self.action_count:
             raise ValueError(f"Crafter action must be in [0, {self.action_count})")
+        before_inventory = self._inventory
         observation, reward, done, info = self.environment.step(action)
         self.step_count += 1
         self._observation = self._validate_observation(observation)
@@ -70,13 +75,31 @@ class CrafterEnvironmentAdapter:
             setup_names = tuple(str(name) for name in setup)
             if len(set(setup_names)) != len(setup_names) or not set(setup_names).issubset(WORLD_OBJECTS):
                 raise ValueError("Crafter world_object_setup contains unsupported or duplicate objects")
-            self._world_object_setup = setup_names
+            self._world_object_setup = tuple(sorted(set(self._world_object_setup or ()) | set(setup_names)))
+        self._record_public_setup_transition(action, before_inventory, self._inventory)
         # Crafter also returns a full semantic map and global position. Those
         # fields are oracle-only under KECRL's reviewed observation contract.
         public_info = {"inventory": dict(inventory)} if inventory is not None else {}
         if self._world_object_setup is not None:
             public_info["world_object_setup"] = list(self._world_object_setup)
         return self._observation, float(reward), self._done, public_info
+
+    def _record_public_setup_transition(self, action: int, before_inventory, after_inventory) -> None:
+        """Confirm setup from an explicit action and public inventory delta only."""
+        action_names = getattr(self.environment, "action_names", ())
+        if not isinstance(action_names, (list, tuple)) or not 0 <= action < len(action_names):
+            return
+        requirement = _SETUP_ACTION_REQUIREMENTS.get(str(action_names[action]))
+        if requirement is None or not isinstance(before_inventory, dict) or not isinstance(after_inventory, dict):
+            return
+        item, amount, object_name = requirement
+        before_value, after_value = before_inventory.get(item), after_inventory.get(item)
+        if (
+            isinstance(before_value, int) and not isinstance(before_value, bool)
+            and isinstance(after_value, int) and not isinstance(after_value, bool)
+            and before_value - after_value == amount
+        ):
+            self._world_object_setup = tuple(sorted(set(self._world_object_setup or ()) | {object_name}))
 
     def current_observation(self):
         """Return the current RGB observation for a persistent session."""
