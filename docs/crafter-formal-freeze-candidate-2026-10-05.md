@@ -539,3 +539,30 @@ inverse-square-root weighting to ordinary cross-entropy. It is stored in
 reached `0/20`. Thus the failure is not explained by the action-class
 weighting choice. The RGB spatial action-generalization gate remains open, and
 formal training remains disallowed.
+
+## Diagnostic boundary audit (2026-10-07)
+
+The extended oracle imitation diagnostic exposed two methodological issues that
+must be separated from RGB learnability. The original recording teacher used
+the oracle planner's private `_face` operation, which directly changed the
+player's facing without a Crafter action. Across 100 wood episodes this
+occurred in 20 of 100 facing events, so the corresponding interaction labels
+were not all executable from the preceding learner observation.
+
+The diagnostic now has a `public_action_consistent` teacher mode. It changes
+facing through a legal `move_*` action and moves the subsequent interaction
+observation after that action. The corrected run is stored in
+`results/crafter_rgb_oracle_imitation_public_teacher_e0c6db1/`. The teacher
+still succeeds on `100/100` worlds and supplies `622` samples; the average-pool
+student reaches `3/20`, close to the previous `4/20` result. The hidden facing
+mutation was therefore a real boundary defect, but not the sole performance
+bottleneck.
+
+The corrected run also reports `584` unique exact RGB observations and four
+exact observations with conflicting action labels. This is direct evidence of
+single-frame state aliasing: the same reviewed RGB can require different
+movement actions because the oracle target and global route are outside the
+observation. A feed-forward RGB classifier cannot be treated as a sufficient
+state policy for this navigation target. The result remains non-formal and
+does not authorize changing the observation contract or starting formal
+training.
