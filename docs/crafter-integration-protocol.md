@@ -49,6 +49,18 @@ gather Module be reused for each unit while public inventory accumulates. The
 decomposition is a candidate protocol change and still requires independent
 qualification and end-to-end validation.
 
+The non-formal diagnostic
+`experiments/run_crafter_task_local_oracle_pipeline_diagnostic.py` now runs the
+`obtain_wood_pickaxe` plan through this complete boundary. A verifier-side
+public-action-consistent script is replayed on a fresh learner-facing adapter;
+fixture Modules are requested through the Skill Library, routed by
+`CrafterTaskPlanExecutor`, and executed through the Continual Learning
+Pipeline. Five seeds completed all five plan steps, with the same gather Module
+reused three times, table setup confirmed from the public inventory decrement,
+and five `unknown` ordinary Knowledge Evidence records per episode. This is a
+state-transfer and routing diagnostic only. It does not train, qualify, or
+register a real Module and remains `formal_result=false`.
+
 ## Candidate Tasks and Evidence
 
 Candidate resource targets include collecting wood/stone and acquiring tools.

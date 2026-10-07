@@ -627,3 +627,25 @@ failures. The run remains `formal_result=false`, uses private world state only
 on the verifier side, and performs no Module or Knowledge update. Full
 prerequisite task feasibility, persistent state transfer, and independent
 qualification remain open.
+
+## Task-local Pipeline boundary update (2026-10-08)
+
+The task-local plan was next exercised end to end with the real
+`CrafterTaskPlanExecutor` and `InMemoryContinualLearningPipeline`. The
+verifier generated a public-action-consistent Crafter action script in a
+separate shadow world, then the learner-facing RGB/inventory adapter replayed
+that script with fixture-qualified Modules. The diagnostic is configured by
+`configs/crafter_task_local_oracle_pipeline_diagnostic_v1.yaml` and stored in
+`results/crafter_task_local_oracle_pipeline_diagnostic_fix2/`.
+
+All five seeds completed the `obtain_wood_pickaxe` plan: three accumulated wood
+steps, public table setup, and the final wood-pickaxe target. The three repeated
+`wood >= 1` requests correctly reused the same qualified fixture Module three
+times; the executor now advances its internal scripted progress by invocation,
+which makes the same-episode resource accumulation explicit. Each episode
+returned five Skill Feedback records and five ordinary Knowledge Evidence
+records with `evidence_validity=unknown`. The verifier action script and fixture
+Modules do not establish policy learnability, qualification, or method
+effectiveness; `formal_result=false` remains in force. Independent qualification
+of real learned Modules and the stone/coal/furnace prerequisite chains are
+still open.

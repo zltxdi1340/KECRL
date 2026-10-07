@@ -1,0 +1,12 @@
+{
+  "protocol_version": "crafter_task_local_oracle_pipeline_diagnostic_v1",
+  "status": "diagnostic_only",
+  "formal_result": false,
+  "fixture_modules": true,
+  "oracle_action_script": true,
+  "public_boundary_only": true,
+  "task_id": "obtain_wood_pickaxe",
+  "seeds": [0, 1, 2, 3, 4],
+  "max_steps": 256,
+  "diagnostic_note": "Verifier-generated public-action-consistent script is replayed through fixture Modules, the real same-episode TaskPlanExecutor, and the real Continual Learning Pipeline. This tests state/setup/feedback boundaries only and is not a learning, qualification, or formal result."
+}
