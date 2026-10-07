@@ -496,3 +496,16 @@ updated, and `formal_result=false` is retained. The result indicates that the
 current RGB encoder and data coverage cannot generalize the spatial action
 mapping even when exploration is removed; further PPO tuning alone is unlikely
 to clear the formal qualification gate.
+
+An extended oracle-data check used 100 teacher seeds and 607 RGB/action samples
+with the same student architecture, stored in
+`results/crafter_rgb_oracle_imitation_extended_diagnostic_1755723/` and
+configured by `configs/crafter_rgb_oracle_imitation_extended_diagnostic_v1.yaml`.
+The teacher again succeeded on `100/100` worlds, while the RGB student reached
+`4/20` (`0.20`) on disjoint evaluation seeds. More teacher coverage improves
+over the small diagnostic (`0/10`), so data coverage contributes to the
+bottleneck, but the result remains far below the candidate `0.8` qualification
+gate. It still registers no Module, keeps `formal_result=false`, and does not
+justify formal training; the next work should target a representation or
+training method designed for spatial generalization rather than isolated PPO
+hyperparameter changes.
