@@ -699,13 +699,13 @@ world per seed, with no teacher, Policy update, FOMAML step, Module, Knowledge
 update, or SPT switch. The runner is
 `experiments/run_crafter_persistent_policy_feasibility.py`, configured by
 `configs/crafter_persistent_policy_feasibility_pilot_v1.yaml`, and the output
-is in `results/crafter_persistent_policy_feasibility_pilot_8536d53/`.
+is in `results/crafter_persistent_policy_feasibility_pilot_d472815/`.
 
 The validated five-task chain was `collect_wood`, `setup_table`,
 `obtain_wood_pickaxe`, `collect_stone`, and `setup_furnace`. All five seeds
-terminated in the first task before reaching the target (`0/25` task
-completions). Death occurred after `92--207` environment steps; one seed had
-one wood but no three-wood target. The public boundary audit still reported
+failed the first task before reaching the target (`0/25` task completions).
+Four seeds terminated after `92--207` environment steps and one exhausted its
+256-step task budget; one seed had one wood but no three-wood target. The public boundary audit still reported
 continuous step, inventory, setup, and episode state across every attempted
 task boundary. This isolates the current performance blocker as basic RGB
 navigation/survival/resource acquisition under the current untrained Policy,
