@@ -174,15 +174,14 @@ The v2 setup order was exercised through
 `CrafterContinualSession` with a verifier-generated public-action-consistent
 route. The configuration is
 `configs/crafter_continual_session_boundary_diagnostic_v1.yaml`, with output in
-`results/crafter_continual_session_boundary_diagnostic_public_furnace_v2/`.
-Two of five seeds produced a verifier route through wood, table, wood pickaxe,
-four stone, and furnace, and both routes replayed all five task boundaries
-successfully. Inventory and public table/furnace setup survived every
-`end_task()` boundary. The furnace route now uses only public movement and
-placement actions; the earlier verifier-only facing mutation was removed. The
-remaining 3/5 failures are bounded stone reachability failures, so this is
-still a feasibility/boundary diagnostic rather than a learned-policy or formal
-result.
+`results/crafter_continual_session_boundary_diagnostic_reachable_v3/`.
+After fixing the verifier's nearest-source greedy choice, all five seeds
+produced a route through wood, table, wood pickaxe, four stone, and furnace.
+Four of five public-action replays completed all five task boundaries; one
+replay still diverged at furnace placement. Inventory and setup state were
+preserved at every completed boundary. The verifier reachability gap is closed
+for this route, but replay stability remains a feasibility risk, so this is
+still not a learned-policy or formal result.
 
 ## Continual session boundary implementation (2026-10-06)
 

@@ -80,13 +80,19 @@ class CrafterReferencePlanner:
         while int(self.player.inventory.get(item, 0)) < threshold:
             if self.steps >= self.max_steps:
                 return ReferenceRun(False, False, reference_steps=self.steps, reason="reference_budget_exhausted")
-            target = self._nearest_material(material)
+            reachable = self._nearest_reachable_material(material)
+            if reachable is None:
+                target = self._nearest_material(material)
+            else:
+                target, actions = reachable
             if target is None:
                 return ReferenceRun(
                     False, True, proven_unreachable=True, reference_steps=self.steps,
                     reason=f"no_{material}_source_remains",
                 )
-            if not self._move_adjacent(target):
+            if reachable is None:
+                return ReferenceRun(False, True, proven_unreachable=True, reference_steps=self.steps, reason="no_path_to_source")
+            if not all(self._step(action) for action in actions):
                 return ReferenceRun(False, True, proven_unreachable=True, reference_steps=self.steps, reason="no_path_to_source")
             self._face(target)
             if not self._step("do"):
@@ -117,16 +123,30 @@ class CrafterReferencePlanner:
 
     def _nearest_material(self, material: str) -> tuple[int, int] | None:
         px, py = (int(value) for value in self.player.pos)
-        candidates = [
+        candidates = self._material_candidates(material)
+        candidates.sort(key=lambda pos: abs(pos[0] - px) + abs(pos[1] - py))
+        return candidates[0] if candidates else None
+
+    def _material_candidates(self, material: str) -> list[tuple[int, int]]:
+        return [
             (x, y)
             for x in range(self.world.area[0])
             for y in range(self.world.area[1])
             if self.world[x, y][0] == material and self.world[x, y][1] is None
         ]
-        candidates.sort(key=lambda pos: abs(pos[0] - px) + abs(pos[1] - py))
-        return candidates[0] if candidates else None
 
-    def _move_adjacent(self, target: tuple[int, int]) -> bool:
+    def _nearest_reachable_material(self, material: str):
+        px, py = (int(value) for value in self.player.pos)
+        candidates = self._material_candidates(material)
+        candidates.sort(key=lambda pos: abs(pos[0] - px) + abs(pos[1] - py))
+        for target in candidates:
+            goals = self._adjacent_walkable_goals(target)
+            actions = self._path_to(goals)
+            if actions is not None:
+                return target, actions
+        return None
+
+    def _adjacent_walkable_goals(self, target: tuple[int, int]) -> set[tuple[int, int]]:
         goals = set()
         for (dx, dy), _ in _DIRECTIONS:
             pos = (target[0] + dx, target[1] + dy)
@@ -135,7 +155,10 @@ class CrafterReferencePlanner:
             material, obj = self.world[pos]
             if obj is None and material in _WALKABLE:
                 goals.add(pos)
-        actions = self._path_to(goals)
+        return goals
+
+    def _move_adjacent(self, target: tuple[int, int]) -> bool:
+        actions = self._path_to(self._adjacent_walkable_goals(target))
         if actions is None:
             return False
         return all(self._step(action) for action in actions)

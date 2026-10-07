@@ -36,3 +36,26 @@ def test_runner_keeps_unsupported_target_unknown():
     )
     assert result["verification"].outcome == "UNKNOWN"
     assert result["knowledge_evidence"].evidence_validity == "unknown"
+
+
+def test_reference_planner_skips_unreachable_nearest_stone_sources():
+    from experiments.run_crafter_rgb_oracle_imitation_diagnostic import RecordingReferencePlanner
+    from src.environments.crafter_adapter import CrafterEnvironmentAdapter
+
+    for seed in (1, 2, 3):
+        environment = CrafterEnvironmentAdapter(seed=seed, reward=False, length=512)
+        environment.reset()
+        planner = RecordingReferencePlanner(
+            environment,
+            {"name": "inventory_at_least", "item": "wood_pickaxe", "threshold": 1},
+            512,
+            True,
+        )
+        try:
+            assert planner._step("noop")
+            assert planner._collect_item("tree", "wood", 3).target_achieved
+            assert planner._place_table()
+            assert planner._step("make_wood_pickaxe")
+            assert planner._collect_item("stone", "stone", 4).target_achieved
+        finally:
+            environment.close()
