@@ -540,6 +540,23 @@ reached `0/20`. Thus the failure is not explained by the action-class
 weighting choice. The RGB spatial action-generalization gate remains open, and
 formal training remains disallowed.
 
+The same audit found that this is not only a memory problem. Among the 100
+teacher episodes, the first movement observation had 85 exact RGB values, and
+three repeated values were paired with different movement labels. At those
+states the nearest tree is outside the reviewed local view, so the label is
+determined by the oracle's private global map. No deterministic feed-forward or
+recurrent policy can recover that hidden direction from the identical initial
+observation alone. This is an identifiability failure for the current
+oracle-to-RGB target, not evidence that a larger CNN would solve the task.
+
+The feasible protocol options are therefore: constrain a diagnostic task so a
+target resource is locally visible at the decision point; define the teacher
+around a public-observation exploration policy instead of the private
+global-nearest-tree route; or explicitly add a reviewed public goal signal to
+the observation contract. Each option changes the task or interface and must
+be re-audited and frozen before formal training. Keeping the current hidden
+target labels while increasing model size or horizon does not close this gate.
+
 ## Diagnostic boundary audit (2026-10-07)
 
 The extended oracle imitation diagnostic exposed two methodological issues that
