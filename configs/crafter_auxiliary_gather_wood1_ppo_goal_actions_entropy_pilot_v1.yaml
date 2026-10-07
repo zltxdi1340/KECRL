@@ -1,0 +1,19 @@
+{
+  "status": "crafter_auxiliary_gather_wood1_ppo_goal_actions_entropy_pilot_v1",
+  "formal_result": false,
+  "device": "cuda",
+  "seed": 0,
+  "train_episodes": 80,
+  "qualification_episodes": 20,
+  "qualification_threshold": 0.8,
+  "max_steps": 256,
+  "success_bonus": 1.0,
+  "train_seed_base": 760000,
+  "qualification_seed_base": 770000,
+  "action_seed_base": 780000,
+  "qualification_action_seed_base": 790000,
+  "action_allowlist": [0, 1, 2, 3, 4, 5, 6],
+  "policy": {"action_count": 17, "observation_dim": 192, "hidden_dim": 64, "learning_rate": 0.0003, "gamma": 0.99, "gae_lambda": 0.95, "clip_epsilon": 0.2, "value_coef": 0.5, "entropy_coef": 0.01, "entropy_coef_start": 0.02, "entropy_coef_end": 0.001, "update_epochs": 4},
+  "task": {"task_id": "gather_wood_1", "item": "wood", "threshold": 1},
+  "pilot_note": "Non-formal PPO/GAE entropy-annealing diagnostic for gather_wood_1. Uses the same RGB average-pool input, public-action allowlist, and independent qualification split; no Module, Knowledge update, or formal result is claimed."
+}

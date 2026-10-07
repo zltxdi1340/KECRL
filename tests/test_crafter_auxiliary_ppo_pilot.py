@@ -62,3 +62,10 @@ def test_inventory_observability_pilot_preserves_unknown_mask():
     known = _inventory_features({"wood": 1}, ("wood",), torch.device("cpu"))
     assert torch.equal(unknown, torch.tensor([0.0, 0.0]))
     assert torch.allclose(known, torch.tensor([1.0 / 9.0, 1.0]))
+
+
+def test_entropy_annealing_pilot_has_explicit_schedule():
+    config = json.loads(Path("configs/crafter_auxiliary_gather_wood1_ppo_goal_actions_entropy_pilot_v1.yaml").read_text())
+    assert config["formal_result"] is False
+    assert config["policy"]["entropy_coef_start"] > config["policy"]["entropy_coef_end"]
+    assert config["action_allowlist"] == [0, 1, 2, 3, 4, 5, 6]

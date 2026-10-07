@@ -62,8 +62,9 @@ class PPOCrafterPolicy(nn.Module):
             logits = logits + mask
         return torch.distributions.Categorical(logits=logits), self.critic(hidden).squeeze(-1)
 
-    def update(self, features, actions, old_log_probs, returns, advantages, legal_actions=None):
+    def update(self, features, actions, old_log_probs, returns, advantages, legal_actions=None, entropy_coef=None):
         losses = []
+        entropy_weight = float(self.config["entropy_coef"] if entropy_coef is None else entropy_coef)
         for _ in range(int(self.config["update_epochs"])):
             if legal_actions is None:
                 distribution, values = self.distribution_value(features)
@@ -94,7 +95,7 @@ class PPOCrafterPolicy(nn.Module):
             loss = (
                 policy_loss
                 + float(self.config["value_coef"]) * value_loss
-                - float(self.config["entropy_coef"]) * entropy
+                - entropy_weight * entropy
             )
             self.optimizer.zero_grad(set_to_none=True)
             loss.backward()
@@ -223,9 +224,14 @@ def _rollout(policy, seed, target, device, config, train):
         returns = torch.stack(list(reversed(returns))).detach()
         if advantages.numel() > 1:
             advantages = (advantages - advantages.mean()) / (advantages.std(unbiased=False) + 1e-8)
+        start_entropy = float(config["policy"].get("entropy_coef_start", config["policy"].get("entropy_coef", 0.0)))
+        end_entropy = float(config["policy"].get("entropy_coef_end", start_entropy))
+        total_train = max(int(config["train_episodes"]), 1)
+        progress = min(max(float(config.get("episode_index", 0)) / total_train, 0.0), 1.0)
+        entropy_coef = start_entropy + (end_entropy - start_entropy) * progress
         loss = policy.update(
             torch.stack(features), torch.stack(actions), torch.stack(log_probs).detach(),
-            returns, advantages, legal_actions,
+            returns, advantages, legal_actions, entropy_coef,
         )
     env.close()
     return {"success": success, "steps": steps, "native_reward": native_reward, "loss": loss}
@@ -249,6 +255,7 @@ def run(config_path: str, output_path: str) -> dict:
     losses = []
     for episode in range(int(config["train_episodes"])):
         torch.manual_seed(int(config["action_seed_base"]) + episode)
+        config["episode_index"] = episode
         summary = _rollout(policy, int(config["train_seed_base"]) + episode, target, device, config, True)
         train_successes += int(summary["success"])
         losses.append(float(summary["loss"]))
@@ -271,6 +278,8 @@ def run(config_path: str, output_path: str) -> dict:
         "encoder": str(config["policy"].get("encoder", "avgpool")),
         "progress_bonus": float(config.get("progress_bonus", 0.0)),
         "inventory_feature_items": list(config.get("inventory_feature_items", ())),
+        "entropy_coef_start": float(config["policy"].get("entropy_coef_start", config["policy"].get("entropy_coef", 0.0))),
+        "entropy_coef_end": float(config["policy"].get("entropy_coef_end", config["policy"].get("entropy_coef", 0.0))),
         "training": {"episodes": int(config["train_episodes"]), "successes": train_successes, "success_rate": train_successes / int(config["train_episodes"]), "mean_loss": sum(losses) / len(losses)},
         "qualification": {"episodes": int(config["qualification_episodes"]), "successes": qualification_successes, "success_rate": qualification_successes / int(config["qualification_episodes"]), "qualified": qualification_successes / int(config["qualification_episodes"]) >= float(config["qualification_threshold"])},
         "module_registered": False, "knowledge_evolution_updated": False, "formal_training_allowed": False,
