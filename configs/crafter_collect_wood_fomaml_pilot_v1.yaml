@@ -1,0 +1,25 @@
+{
+  "status": "crafter_collect_wood_fomaml_pilot_v1",
+  "formal_result": false,
+  "device": "cuda",
+  "context_dim": 1,
+  "tasks": [
+    {"name": "collect_wood_context0", "context": [1.0], "target": {"task_id": "collect_wood", "item": "wood", "threshold": 1}},
+    {"name": "collect_wood_context1", "context": [1.0], "target": {"task_id": "collect_wood", "item": "wood", "threshold": 1}},
+    {"name": "collect_wood_context2", "context": [1.0], "target": {"task_id": "collect_wood", "item": "wood", "threshold": 1}},
+    {"name": "collect_wood_context3", "context": [1.0], "target": {"task_id": "collect_wood", "item": "wood", "threshold": 1}},
+    {"name": "collect_wood_context4", "context": [1.0], "target": {"task_id": "collect_wood", "item": "wood", "threshold": 1}}
+  ],
+  "policy": {"observation_dim": 192, "action_count": 17, "hidden_dim": 32, "learning_rate": 0.001, "gamma": 0.99},
+  "fomaml": {"inner_lr": 0.001, "meta_lr": 0.001, "inner_steps": 1},
+  "training_seeds": {"support": [10100, 10101, 10102, 10103, 10104], "query": [20100, 20101, 20102, 20103, 20104]},
+  "evaluation": {"support": [41000, 41001, 41002, 41003, 41004], "query": [42000, 42001, 42002, 42003, 42004]},
+  "max_steps": 256,
+  "success_bonus": 1.0,
+  "evaluation_query_repeats": 3,
+  "evaluation_query_seed_stride": 10000,
+  "seed": 0,
+  "seed_set": [0, 1, 2, 3, 4],
+  "replicate_seed_stride": 1000000,
+  "smoke_note": "Non-formal no-teacher real RGB context-conditioned FOMAML pilot for the independent collect_wood prerequisite. Training, support, and query seeds are disjoint; no Module registration, Knowledge update, SPT acceptance, or formal result is claimed."
+}

@@ -101,3 +101,11 @@ def test_oracle_public_teacher_mode_is_explicit():
     assert "public_action_consistent" in inspect.signature(
         RecordingReferencePlanner
     ).parameters
+
+
+def test_collect_wood_fomaml_pilot_excludes_unresolved_prerequisite_tasks():
+    config = json.loads(Path("configs/crafter_collect_wood_fomaml_pilot_v1.yaml").read_text())
+    assert config["formal_result"] is False
+    assert {task["target"]["item"] for task in config["tasks"]} == {"wood"}
+    assert set(config["training_seeds"]["support"]).isdisjoint(config["training_seeds"]["query"])
+    assert set(config["evaluation"]["support"]).isdisjoint(config["evaluation"]["query"])
