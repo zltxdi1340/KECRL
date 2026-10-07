@@ -3,6 +3,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import math
 import subprocess
 import time
 from pathlib import Path
@@ -119,6 +120,34 @@ def _features(observations, device, encoder="avgpool"):
     return functional.adaptive_avg_pool2d(tensor, (8, 8)).flatten()
 
 
+def _inventory_features(inventory, items, device, maximum=9.0):
+    """Encode optional public inventory facts without collapsing unknown to zero."""
+    values = []
+    for item in items:
+        value = inventory.get(item) if isinstance(inventory, dict) else None
+        known = (
+            isinstance(value, (int, float))
+            and not isinstance(value, bool)
+            and math.isfinite(float(value))
+            and float(value) >= 0.0
+        )
+        values.extend((min(float(value) / float(maximum), 1.0) if known else 0.0, 1.0 if known else 0.0))
+    return torch.tensor(values, dtype=torch.float32, device=device)
+
+
+def _policy_features(observations, inventory, device, config):
+    encoder = str(config["policy"].get("encoder", "avgpool"))
+    feature = _features(observations, device, encoder)
+    items = tuple(str(item) for item in config.get("inventory_feature_items", ()))
+    if items:
+        if encoder != "avgpool":
+            raise ValueError("inventory features currently require the avgpool PPO encoder")
+        feature = torch.cat((feature, _inventory_features(
+            inventory, items, device, float(config.get("inventory_feature_max", 9.0))
+        )))
+    return feature
+
+
 def _rollout(policy, seed, target, device, config, train):
     env = CrafterEnvironmentAdapter(seed=int(seed), length=int(config["max_steps"]))
     observation = env.reset()
@@ -142,7 +171,10 @@ def _rollout(policy, seed, target, device, config, train):
         raise ValueError("action_allowlist must contain valid action IDs")
     legal_actions = []
     while steps < int(config["max_steps"]) and not done and not success:
-        feature = _features(frame_stack if frame_stack_size > 1 else observation, device, encoder)
+        feature = _policy_features(
+            frame_stack if frame_stack_size > 1 else observation,
+            previous_inventory, device, config,
+        )
         with torch.set_grad_enabled(train):
             distribution, value = policy.distribution_value(feature, action_allowlist)
             action_tensor = distribution.sample()
@@ -174,7 +206,10 @@ def _rollout(policy, seed, target, device, config, train):
     if train:
         with torch.no_grad():
             next_observation = frame_stack if frame_stack_size > 1 else observation
-            next_value = torch.zeros((), device=device) if done or success else policy.distribution_value(_features(next_observation, device, encoder), action_allowlist)[1]
+            next_value = torch.zeros((), device=device) if done or success else policy.distribution_value(
+                _policy_features(next_observation, previous_inventory, device, config),
+                action_allowlist,
+            )[1]
         gae = torch.zeros((), device=device)
         advantages = []
         returns = []
@@ -235,6 +270,7 @@ def run(config_path: str, output_path: str) -> dict:
         "frame_stack": int(config.get("frame_stack", 1)),
         "encoder": str(config["policy"].get("encoder", "avgpool")),
         "progress_bonus": float(config.get("progress_bonus", 0.0)),
+        "inventory_feature_items": list(config.get("inventory_feature_items", ())),
         "training": {"episodes": int(config["train_episodes"]), "successes": train_successes, "success_rate": train_successes / int(config["train_episodes"]), "mean_loss": sum(losses) / len(losses)},
         "qualification": {"episodes": int(config["qualification_episodes"]), "successes": qualification_successes, "success_rate": qualification_successes / int(config["qualification_episodes"]), "qualified": qualification_successes / int(config["qualification_episodes"]) >= float(config["qualification_threshold"])},
         "module_registered": False, "knowledge_evolution_updated": False, "formal_training_allowed": False,

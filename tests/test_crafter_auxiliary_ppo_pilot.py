@@ -3,7 +3,7 @@ from pathlib import Path
 
 import torch
 
-from experiments.run_crafter_auxiliary_ppo_pilot import PPOCrafterPolicy, _features
+from experiments.run_crafter_auxiliary_ppo_pilot import PPOCrafterPolicy, _features, _inventory_features
 
 
 def test_ppo_pilot_is_non_formal_and_uses_exact_unit_target():
@@ -52,3 +52,13 @@ def test_progress_pilot_keeps_training_only_inventory_bonus():
     assert config["formal_result"] is False
     assert config["progress_bonus"] == 0.5
     assert config["action_allowlist"] == [0, 1, 2, 3, 4, 5, 6]
+
+
+def test_inventory_observability_pilot_preserves_unknown_mask():
+    config = json.loads(Path("configs/crafter_auxiliary_gather_wood1_ppo_goal_actions_inventory_pilot_v1.yaml").read_text())
+    assert config["formal_result"] is False
+    assert config["policy"]["observation_dim"] == 194
+    unknown = _inventory_features(None, ("wood",), torch.device("cpu"))
+    known = _inventory_features({"wood": 1}, ("wood",), torch.device("cpu"))
+    assert torch.equal(unknown, torch.tensor([0.0, 0.0]))
+    assert torch.allclose(known, torch.tensor([1.0 / 9.0, 1.0]))
