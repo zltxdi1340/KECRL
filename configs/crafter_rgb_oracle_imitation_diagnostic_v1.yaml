@@ -1,0 +1,14 @@
+{
+  "status": "crafter_rgb_oracle_imitation_diagnostic_v1",
+  "formal_result": false,
+  "device": "cuda",
+  "seed": 0,
+  "max_steps": 256,
+  "teacher_seeds": [0, 1, 2, 3, 4, 5, 6, 7, 8, 9],
+  "evaluation_seeds": [100, 101, 102, 103, 104, 105, 106, 107, 108, 109],
+  "epochs": 40,
+  "action_allowlist": [0, 1, 2, 3, 4, 5, 6],
+  "policy": {"observation_dim": 192, "action_count": 17, "hidden_dim": 64, "learning_rate": 0.001},
+  "task": {"task_id": "gather_wood_1", "item": "wood", "threshold": 1},
+  "diagnostic_note": "Non-formal oracle-to-RGB behavior-cloning upper-bound diagnostic. The teacher may inspect private Crafter state only to emit action labels; the student receives RGB and public action IDs. No Module registration, Knowledge update, or formal result is claimed."
+}
