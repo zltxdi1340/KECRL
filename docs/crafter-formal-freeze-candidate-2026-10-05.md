@@ -608,3 +608,22 @@ CUDA tensors, disjoint train/support/query seeds, an unchanged active SPT, and
 a changed candidate policy/template. The candidate update therefore executed
 through the real FOMAML path but did not show stable query improvement, form a
 Module, or authorize formal training.
+
+## Public world-object setup boundary update (2026-10-08)
+
+The adapter now confirms Crafter table/furnace setup from a public transition
+only: a `place_table` or `place_furnace` action must produce the exact
+versioned inventory decrement. It does not inspect semantic maps, player
+coordinates, achievements, or RGB pixels for setup confirmation. The boundary
+diagnostic is configured by
+`configs/crafter_setup_boundary_diagnostic_v1.yaml` and stored in
+`results/crafter_setup_boundary_diagnostic_c21379d/`.
+
+The oracle-side executable diagnostic completed table and furnace setup on
+`3/5` seeds, and all completed seeds reported both public setup capabilities.
+The other two seeds had no path to a stone source before furnace placement;
+they are reachability failures in the verifier route, not setup confirmation
+failures. The run remains `formal_result=false`, uses private world state only
+on the verifier side, and performs no Module or Knowledge update. Full
+prerequisite task feasibility, persistent state transfer, and independent
+qualification remain open.
