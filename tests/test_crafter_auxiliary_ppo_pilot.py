@@ -76,3 +76,10 @@ def test_oracle_imitation_diagnostic_is_non_formal_and_split():
     assert config["formal_result"] is False
     assert set(config["teacher_seeds"]).isdisjoint(config["evaluation_seeds"])
     assert config["action_allowlist"] == [0, 1, 2, 3, 4, 5, 6]
+
+
+def test_extended_oracle_imitation_keeps_teacher_eval_disjoint():
+    config = json.loads(Path("configs/crafter_rgb_oracle_imitation_extended_diagnostic_v1.yaml").read_text())
+    assert config["formal_result"] is False
+    assert len(config["teacher_seeds"]) == 100
+    assert set(config["teacher_seeds"]).isdisjoint(config["evaluation_seeds"])
