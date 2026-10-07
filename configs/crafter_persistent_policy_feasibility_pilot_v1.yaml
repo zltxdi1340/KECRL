@@ -1,0 +1,24 @@
+{
+  "status": "crafter_persistent_policy_feasibility_pilot_v1",
+  "formal_result": false,
+  "device": "cuda",
+  "crafter_version": "1.8.3",
+  "observation_interface": "rgb64_inventory_v1",
+  "state_transfer_mode": "persistent_continual_world_per_seed",
+  "teacher_used": false,
+  "policy_updated": false,
+  "seed_set": [0, 1, 2, 3, 4],
+  "context_dim": 5,
+  "max_steps": 256,
+  "max_steps_per_task": 256,
+  "policy_action_seed_stride": 100000,
+  "policy": {"observation_dim": 192, "action_count": 17, "hidden_dim": 32, "learning_rate": 0.001, "gamma": 0.99},
+  "tasks": [
+    {"task_id": "collect_wood", "context": [1.0, 0.0, 0.0, 0.0, 0.0], "target": {"name": "inventory_at_least", "item": "wood", "threshold": 3}, "required_inventory": {}, "required_world_objects": []},
+    {"task_id": "setup_table", "context": [0.0, 1.0, 0.0, 0.0, 0.0], "target": {"name": "crafter_world_object_setup", "objects": ["table"]}, "required_inventory": {"wood": 2}, "required_world_objects": []},
+    {"task_id": "obtain_wood_pickaxe", "context": [0.0, 0.0, 1.0, 0.0, 0.0], "target": {"name": "inventory_at_least", "item": "wood_pickaxe", "threshold": 1}, "required_inventory": {"wood": 1}, "required_world_objects": ["table"]},
+    {"task_id": "collect_stone", "context": [0.0, 0.0, 0.0, 1.0, 0.0], "target": {"name": "inventory_at_least", "item": "stone", "threshold": 4}, "required_inventory": {"wood_pickaxe": 1}, "required_world_objects": []},
+    {"task_id": "setup_furnace", "context": [0.0, 0.0, 0.0, 0.0, 1.0], "target": {"name": "crafter_world_object_setup", "objects": ["furnace"]}, "required_inventory": {"stone": 4}, "required_world_objects": []}
+  ],
+  "pilot_note": "Non-formal persistent-world RGB Policy feasibility pilot. One world is retained per seed across the validated task chain; no teacher, FOMAML update, Module registration, Knowledge update, SPT switch, qualification, or formal comparison is performed."
+}

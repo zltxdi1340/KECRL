@@ -88,6 +88,16 @@ first public trace divergence. This remains a boundary diagnostic and does not
 qualify a learned Module. `CrafterContinualSession.begin_task()` also rejects
 unconfirmed setup requirements before activating the task boundary.
 
+The first no-teacher Policy check over this persistent route is stored in
+`results/crafter_persistent_policy_feasibility_pilot_8536d53/`. It used one
+RGB Policy world per seed across `collect_wood`, `setup_table`,
+`obtain_wood_pickaxe`, `collect_stone`, and `setup_furnace`. All five seeds
+ended in the first task before reaching three wood, so the chain completed
+`0/25` task targets. Public state remained continuous across attempted
+boundaries; this is a feasibility bottleneck in RGB navigation, survival, and
+resource acquisition, not evidence that the persistent session lost state.
+The run has `formal_result=false` and performs no learning or library update.
+
 ## Candidate Tasks and Evidence
 
 Candidate resource targets include collecting wood/stone and acquiring tools.

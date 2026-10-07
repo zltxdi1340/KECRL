@@ -21,3 +21,5 @@ def test_dependency_aware_v2_declares_setup_producers_without_allowing_formal_tr
     assert report["checks"]["formal_training_blocked"]
     assert report["formal_training_allowed"] is False
     assert report["checks_passed"] is True
+    tasks = {task["task_id"]: task for task in config["tasks"]}
+    assert tasks["obtain_wood_pickaxe"]["required_inventory"] == {"wood": 1}
