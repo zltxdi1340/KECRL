@@ -531,3 +531,11 @@ This result does not support changing the formal RGB contract or claiming a
 spatial CNN solution. It also shows that representation and class weighting
 must be evaluated separately; the next diagnostic should keep one variable
 fixed while testing the other, before any formal feasibility decision.
+
+The paired uniform-loss control used the same spatial CNN, teacher seeds,
+evaluation seeds, and RGB/action pairs, with only the loss changed from
+inverse-square-root weighting to ordinary cross-entropy. It is stored in
+`results/crafter_rgb_oracle_imitation_spatial_uniform_760911f/` and also
+reached `0/20`. Thus the failure is not explained by the action-class
+weighting choice. The RGB spatial action-generalization gate remains open, and
+formal training remains disallowed.
