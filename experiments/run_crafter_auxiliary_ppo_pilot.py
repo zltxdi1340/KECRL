@@ -127,6 +127,7 @@ def _rollout(policy, seed, target, device, config, train):
     native_reward = 0.0
     done = False
     steps = 0
+    previous_inventory = None
     frame_stack_size = int(config.get("frame_stack", 1))
     if frame_stack_size <= 0:
         raise ValueError("frame_stack must be positive")
@@ -151,9 +152,16 @@ def _rollout(policy, seed, target, device, config, train):
             frame_stack = (*frame_stack[1:], observation)
         native_reward += float(reward)
         shaped = float(reward)
+        if train and previous_inventory is not None:
+            before_value = previous_inventory.get(target["item"])
+            after_value = info.get("inventory", {}).get(target["item"])
+            if isinstance(before_value, int) and isinstance(after_value, int) and after_value > before_value:
+                shaped += float(config.get("progress_bonus", 0.0)) * (after_value - before_value)
         if inventory_at_least(info.get("inventory"), target["item"], target["threshold"]) is True:
             success = True
             shaped += float(config["success_bonus"])
+        current_inventory = info.get("inventory")
+        previous_inventory = dict(current_inventory) if isinstance(current_inventory, dict) else None
         if train:
             features.append(feature)
             actions.append(action_tensor.reshape(()))
@@ -226,6 +234,7 @@ def run(config_path: str, output_path: str) -> dict:
         "action_allowlist": list(config.get("action_allowlist", range(int(config["policy"]["action_count"])))),
         "frame_stack": int(config.get("frame_stack", 1)),
         "encoder": str(config["policy"].get("encoder", "avgpool")),
+        "progress_bonus": float(config.get("progress_bonus", 0.0)),
         "training": {"episodes": int(config["train_episodes"]), "successes": train_successes, "success_rate": train_successes / int(config["train_episodes"]), "mean_loss": sum(losses) / len(losses)},
         "qualification": {"episodes": int(config["qualification_episodes"]), "successes": qualification_successes, "success_rate": qualification_successes / int(config["qualification_episodes"]), "qualified": qualification_successes / int(config["qualification_episodes"]) >= float(config["qualification_threshold"])},
         "module_registered": False, "knowledge_evolution_updated": False, "formal_training_allowed": False,

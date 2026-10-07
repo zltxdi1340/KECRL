@@ -45,3 +45,10 @@ def test_cnn_pilot_preserves_spatial_rgb_contract():
     distribution, value = policy.distribution_value(observation, config["action_allowlist"])
     assert distribution.probs.shape == (17,)
     assert value.shape == ()
+
+
+def test_progress_pilot_keeps_training_only_inventory_bonus():
+    config = json.loads(Path("configs/crafter_auxiliary_gather_wood1_ppo_goal_actions_progress_pilot_v1.yaml").read_text())
+    assert config["formal_result"] is False
+    assert config["progress_bonus"] == 0.5
+    assert config["action_allowlist"] == [0, 1, 2, 3, 4, 5, 6]
