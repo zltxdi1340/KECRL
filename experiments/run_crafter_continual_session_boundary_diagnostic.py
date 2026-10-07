@@ -1,0 +1,191 @@
+"""Audit persistent Crafter task boundaries without training.
+
+The verifier generates a public-action-consistent prerequisite route in a
+shadow world. A fresh learner-facing adapter replays only those public actions
+through CrafterContinualSession, and records state preservation at task
+boundaries. Private world state never enters the session state or output.
+"""
+from __future__ import annotations
+
+import argparse
+import json
+import subprocess
+import time
+from pathlib import Path
+from typing import Any, Callable
+
+from experiments.run_crafter_rgb_oracle_imitation_diagnostic import RecordingReferencePlanner
+from src.environments.crafter_adapter import CrafterEnvironmentAdapter
+from src.environments.crafter_continual import (
+    CrafterContinualSession,
+    WorldObjectSetupContract,
+)
+from src.utils.config import load_config, runtime_metadata
+
+
+_WALKABLE = {"grass", "path", "sand"}
+_DIRECTIONS = ((-1, 0), (1, 0), (0, -1), (0, 1))
+
+
+def _reference_route(seed: int, max_steps: int) -> tuple[list[str], bool, str | None]:
+    environment = CrafterEnvironmentAdapter(seed=int(seed), reward=False, length=int(max_steps))
+    environment.reset()
+    planner = RecordingReferencePlanner(
+        environment,
+        {"name": "inventory_at_least", "item": "wood_pickaxe", "threshold": 1},
+        int(max_steps),
+        True,
+    )
+    try:
+        if not planner._step("noop"):
+            return [], False, "reference_budget_exhausted"
+        wood = planner._collect_item("tree", "wood", 3)
+        if not wood.target_achieved:
+            return [], False, f"wood:{wood.reason}"
+        if not planner._place_table() or not planner._step("make_wood_pickaxe"):
+            return [], False, "wood_pickaxe_setup_failed"
+        stone = planner._collect_item("stone", "stone", 4)
+        if not stone.target_achieved:
+            return [], False, f"stone:{stone.reason}"
+        px, py = (int(value) for value in planner.player.pos)
+        candidates = []
+        for x in range(planner.world.area[0]):
+            for y in range(planner.world.area[1]):
+                material, obj = planner.world[x, y]
+                if obj is not None or material not in _WALKABLE:
+                    continue
+                if any((x - dx, y - dy) == (px, py) for dx, dy in _DIRECTIONS):
+                    candidates.append((x, y))
+        if not candidates:
+            return [], False, "furnace:no_adjacent_public_setup_target"
+        planner._face(candidates[0])
+        if not planner._step("place_furnace"):
+            return [], False, "furnace:reference_budget_exhausted"
+        actions = [environment.environment.action_names[action] for _, action in planner.samples]
+        return actions, True, None
+    finally:
+        environment.close()
+
+
+def _inventory_at_least(session: CrafterContinualSession, item: str, threshold: int) -> bool:
+    inventory = session.state().get("inventory")
+    return isinstance(inventory, dict) and int(inventory.get(item, 0)) >= int(threshold)
+
+
+def _setup_contains(session: CrafterContinualSession, object_name: str) -> bool:
+    setup = session.state().get("world_object_setup")
+    return isinstance(setup, list) and object_name in setup
+
+
+def _replay(seed: int, actions: list[str], max_steps: int) -> dict[str, Any]:
+    adapter = CrafterEnvironmentAdapter(seed=int(seed), reward=False, length=int(max_steps))
+    session = CrafterContinualSession(adapter)
+    session.start()
+    cursor = 0
+    rows = []
+    task_specs: tuple[tuple[str, Callable[[], bool], WorldObjectSetupContract | None], ...] = (
+        ("collect_wood", lambda: _inventory_at_least(session, "wood", 3), None),
+        ("setup_table", lambda: _setup_contains(session, "table"), None),
+        ("obtain_wood_pickaxe", lambda: _inventory_at_least(session, "wood_pickaxe", 1), WorldObjectSetupContract(("table",))),
+        ("collect_stone", lambda: _inventory_at_least(session, "stone", 4), WorldObjectSetupContract(("table",))),
+        ("setup_furnace", lambda: _setup_contains(session, "furnace"), None),
+    )
+    try:
+        for task_id, reached, setup_contract in task_specs:
+            begin_state = session.begin_task(task_id, setup_contract)
+            before = session.state()
+            steps = 0
+            while not reached() and cursor < len(actions):
+                action_name = actions[cursor]
+                cursor += 1
+                adapter.step(adapter.environment.action_names.index(action_name))
+                steps += 1
+                if adapter.state()["episode_done"]:
+                    break
+            reached_value = bool(reached())
+            after = session.state()
+            session.end_task()
+            ended = session.state()
+            rows.append({
+                "task_id": task_id,
+                "begin_task_index": begin_state["task_index"],
+                "steps": steps,
+                "reached": reached_value,
+                "inventory": after.get("inventory"),
+                "world_object_setup": after.get("world_object_setup"),
+                "state_preserved_after_end_task": (
+                    ended.get("inventory") == after.get("inventory")
+                    and ended.get("world_object_setup") == after.get("world_object_setup")
+                ),
+            })
+            if not reached_value:
+                break
+        final_state = session.state()
+        return {
+            "status": "completed" if len(rows) == len(task_specs) and all(row["reached"] for row in rows) else "replay_boundary_failure",
+            "script_cursor": cursor,
+            "action_count": len(actions),
+            "tasks": rows,
+            "final_public_state": final_state,
+            "all_task_states_preserved": bool(rows) and all(row["state_preserved_after_end_task"] for row in rows),
+        }
+    finally:
+        session.close()
+
+
+def run(config_path: str, output_path: str) -> dict[str, Any]:
+    config = load_config(config_path)
+    if config.get("formal_result") is not False or config.get("verifier_action_script") is not True:
+        raise ValueError("continual session diagnostic requires formal_result=false and verifier_action_script=true")
+    output = Path(output_path)
+    if output.exists():
+        raise FileExistsError(f"refusing to overwrite {output}")
+    start = time.perf_counter()
+    rows = []
+    for seed in config["seeds"]:
+        actions, route_success, route_failure = _reference_route(int(seed), int(config["max_steps"]))
+        row = {
+            "seed": int(seed),
+            "reference_route_success": route_success,
+            "reference_route_failure": route_failure,
+            "action_count": len(actions),
+        }
+        if route_success:
+            row["replay"] = _replay(int(seed), actions, int(config["max_steps"]))
+        rows.append(row)
+    replay_rows = [row["replay"] for row in rows if "replay" in row]
+    result = {
+        "status": config["status"],
+        "formal_result": False,
+        "config": config_path,
+        "git_commit": subprocess.check_output(["git", "rev-parse", "HEAD"], text=True).strip(),
+        "metadata": runtime_metadata(config, "cpu"),
+        "device": "cpu",
+        "verifier_action_script": True,
+        "public_boundary_only": True,
+        "seeds": [int(seed) for seed in config["seeds"]],
+        "rows": rows,
+        "reference_route_successes": sum(row["reference_route_success"] for row in rows),
+        "persistent_replay_successes": sum(row.get("replay", {}).get("status") == "completed" for row in rows),
+        "state_preservation_verified": bool(replay_rows) and all(row["all_task_states_preserved"] for row in replay_rows),
+        "knowledge_evolution_updated": False,
+        "module_registered": False,
+        "formal_training_allowed": False,
+        "elapsed_seconds": time.perf_counter() - start,
+        "diagnostic_note": config["diagnostic_note"],
+    }
+    output.mkdir(parents=True)
+    (output / "result.json").write_text(json.dumps(result, indent=2) + "\n", encoding="utf-8")
+    return result
+
+
+def main() -> None:
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--config", default="configs/crafter_continual_session_boundary_diagnostic_v1.yaml")
+    parser.add_argument("--output", default="results/crafter_continual_session_boundary_diagnostic_v1")
+    args = parser.parse_args()
+    print(json.dumps(run(args.config, args.output), indent=2))
+
+
+if __name__ == "__main__":
+    main()

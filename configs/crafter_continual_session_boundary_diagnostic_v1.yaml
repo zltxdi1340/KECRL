@@ -1,0 +1,10 @@
+{
+  "protocol_version": "crafter_continual_session_boundary_diagnostic_v1",
+  "status": "diagnostic_only",
+  "formal_result": false,
+  "verifier_action_script": true,
+  "public_boundary_only": true,
+  "seeds": [0, 1, 2, 3, 4],
+  "max_steps": 512,
+  "diagnostic_note": "A verifier-only public-action-consistent route is replayed through CrafterContinualSession to audit persistent inventory and world-object state across task boundaries. Reachability failures remain separate from learner boundary failures; no Policy, Module, Knowledge, or formal result is produced."
+}

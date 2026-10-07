@@ -168,6 +168,23 @@ session execution, independent setup qualification, budgets, and threshold
 validation remain open. The v2 audit reports no inventory or world-object
 producer gaps while retaining `formal_training_allowed=false`.
 
+## Persistent session boundary diagnostic (2026-10-08)
+
+The v2 setup order was exercised through
+`CrafterContinualSession` with a verifier-generated public-action-consistent
+route. The configuration is
+`configs/crafter_continual_session_boundary_diagnostic_v1.yaml`, with output in
+`results/crafter_continual_session_boundary_diagnostic_v1/`. Two of five seeds
+produced a verifier route through wood, table, wood pickaxe, four stone, and
+furnace; one of those two routes replayed all five task boundaries successfully.
+For that successful replay, inventory and public table/furnace setup survived
+every `end_task()` boundary. The other replay stopped at furnace placement even
+though the verifier route had succeeded; the preceding four task states were
+still preserved. This exposes a reproducibility risk in treating a same-seed
+oracle action script as deterministic across shadow and learner environments,
+and remains a feasibility/boundary diagnostic rather than a learned-policy or
+formal result.
+
 ## Continual session boundary implementation (2026-10-06)
 
 `src/environments/crafter_continual.py` now defines a candidate
