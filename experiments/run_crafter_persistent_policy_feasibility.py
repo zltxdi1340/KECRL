@@ -117,7 +117,6 @@ def _run_task(
             _, _, done, _ = session.adapter.step(int(distribution.sample().item()))
             steps += 1
             target_status = _target_satisfied(session.state(), target)
-    after = session.state()
     if target_status is True:
         task_result = "completed"
         reason = "target_reached"
@@ -131,6 +130,7 @@ def _run_task(
         task_result = "continued"
         reason = "task_budget_exhausted"
     session.end_task()
+    after = session.state()
     return {
         "task_id": task["task_id"], "task_result": task_result, "reason": reason,
         "steps": steps, "task_index": begin["task_index"],
