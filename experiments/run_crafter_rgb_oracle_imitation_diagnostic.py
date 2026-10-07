@@ -37,15 +37,42 @@ class RecordingReferencePlanner(CrafterReferencePlanner):
 
 
 class RGBActionClassifier(nn.Module):
-    def __init__(self, observation_dim: int, action_count: int, hidden_dim: int):
+    def __init__(self, observation_dim: int, action_count: int, hidden_dim: int,
+                 encoder: str = "avgpool", cnn_channels=(16, 32)):
         super().__init__()
-        self.network = nn.Sequential(
-            nn.Linear(observation_dim, hidden_dim), nn.Tanh(),
-            nn.Linear(hidden_dim, action_count),
-        )
+        self.encoder_type = str(encoder)
+        if self.encoder_type == "avgpool":
+            self.network = nn.Sequential(
+                nn.Linear(observation_dim, hidden_dim), nn.Tanh(),
+                nn.Linear(hidden_dim, action_count),
+            )
+            self.feature_encoder = None
+        elif self.encoder_type == "spatial_cnn":
+            first, second = (int(value) for value in cnn_channels)
+            self.feature_encoder = nn.Sequential(
+                nn.Conv2d(3, first, 5, stride=2, padding=2),
+                nn.Tanh(),
+                nn.Conv2d(first, second, 3, stride=2, padding=1),
+                nn.Tanh(),
+                nn.AdaptiveAvgPool2d((4, 4)),
+                nn.Flatten(),
+            )
+            self.network = nn.Sequential(
+                nn.Linear(second * 16, hidden_dim), nn.Tanh(),
+                nn.Linear(hidden_dim, action_count),
+            )
+        else:
+            raise ValueError(f"unsupported RGB imitation encoder: {self.encoder_type}")
 
     def logits(self, features):
-        return self.network(features)
+        squeeze = False
+        if self.encoder_type == "spatial_cnn":
+            if features.ndim == 3:
+                features = features.unsqueeze(0)
+                squeeze = True
+            features = self.feature_encoder(features)
+        logits = self.network(features)
+        return logits.squeeze(0) if squeeze else logits
 
 
 def _target(task: dict) -> dict:
@@ -73,9 +100,10 @@ def _student_episode(policy, seed: int, target: dict, device, config: dict):
     success = False
     done = False
     steps = 0
+    encoder = str(config["policy"].get("encoder", "avgpool"))
     with torch.no_grad():
         while steps < int(config["max_steps"]) and not done and not success:
-            features = _features(observation, device)
+            features = _features(observation, device, "cnn" if encoder == "spatial_cnn" else "avgpool")
             logits = policy.logits(features)
             masked = torch.full_like(logits, float("-inf"))
             masked[list(allowlist)] = logits[list(allowlist)]
@@ -102,25 +130,45 @@ def run(config_path: str, output_path: str) -> dict:
     teacher_rows = []
     observations, labels = [], []
     teacher_successes = 0
+    encoder = str(config["policy"].get("encoder", "avgpool"))
     for seed in config["teacher_seeds"]:
         summary, samples = _teacher_episode(seed, target, int(config["max_steps"]))
         teacher_successes += int(summary.target_achieved)
         for observation, action in samples:
-            observations.append(_features(observation, device).detach())
+            features = _features(observation, device, "cnn" if encoder == "spatial_cnn" else "avgpool")
+            observations.append(features.detach())
             labels.append(action)
         teacher_rows.append({"seed": int(seed), "target_achieved": summary.target_achieved,
                              "reference_steps": summary.reference_steps, "sample_count": len(samples)})
-    policy = RGBActionClassifier(int(config["policy"]["observation_dim"]), int(config["policy"]["action_count"]), int(config["policy"]["hidden_dim"])).to(device)
+    policy = RGBActionClassifier(
+        int(config["policy"]["observation_dim"]),
+        int(config["policy"]["action_count"]),
+        int(config["policy"]["hidden_dim"]),
+        encoder=encoder,
+        cnn_channels=config["policy"].get("cnn_channels", (16, 32)),
+    ).to(device)
     optimizer = torch.optim.Adam(policy.parameters(), lr=float(config["policy"]["learning_rate"]))
     if not observations:
         raise RuntimeError("oracle teacher produced no RGB/action samples")
     features = torch.stack(observations)
     targets = torch.tensor(labels, dtype=torch.long, device=device)
     torch.manual_seed(int(config["seed"]))
+    action_counts = torch.bincount(
+        targets, minlength=int(config["policy"]["action_count"])
+    )
+    loss_mode = str(config["policy"].get("action_loss", "uniform"))
+    loss_weights = None
+    if loss_mode == "inverse_sqrt":
+        observed = action_counts > 0
+        loss_weights = torch.zeros_like(action_counts, dtype=torch.float32)
+        loss_weights[observed] = action_counts[observed].to(torch.float32).rsqrt()
+        loss_weights[observed] *= observed.sum().to(torch.float32) / loss_weights[observed].sum()
+    elif loss_mode != "uniform":
+        raise ValueError(f"unsupported action_loss: {loss_mode}")
     losses = []
     for _ in range(int(config["epochs"])):
         logits = policy.logits(features)
-        loss = nn.functional.cross_entropy(logits, targets)
+        loss = nn.functional.cross_entropy(logits, targets, weight=loss_weights)
         optimizer.zero_grad(set_to_none=True)
         loss.backward()
         optimizer.step()
@@ -133,13 +181,16 @@ def run(config_path: str, output_path: str) -> dict:
         "cuda_tensor_verified": bool(torch.cuda.is_available() and device.type == "cuda"),
         "teacher": {"episodes": len(teacher_rows), "successes": teacher_successes,
                     "success_rate": teacher_successes / max(len(teacher_rows), 1),
-                    "rows": teacher_rows, "samples": len(labels)},
+                    "rows": teacher_rows, "samples": len(labels),
+                    "action_counts": [int(value) for value in action_counts.cpu().tolist()],
+                    "observed_action_count": int((action_counts > 0).sum().item())},
         "student": {"epochs": int(config["epochs"]), "final_loss": losses[-1],
                     "losses": losses, "evaluation": evaluation_rows,
                     "successes": sum(row["success"] for row in evaluation_rows),
                     "episodes": len(evaluation_rows),
                     "success_rate": sum(row["success"] for row in evaluation_rows) / max(len(evaluation_rows), 1)},
         "action_allowlist": list(config["action_allowlist"]),
+        "student_encoder": encoder, "action_loss": loss_mode,
         "module_registered": False, "knowledge_evolution_updated": False,
         "formal_training_allowed": False, "elapsed_seconds": time.perf_counter() - start,
         "diagnostic_note": config["diagnostic_note"],

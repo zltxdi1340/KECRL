@@ -4,6 +4,7 @@ from pathlib import Path
 import torch
 
 from experiments.run_crafter_auxiliary_ppo_pilot import PPOCrafterPolicy, _features, _inventory_features
+from experiments.run_crafter_rgb_oracle_imitation_diagnostic import RGBActionClassifier
 
 
 def test_ppo_pilot_is_non_formal_and_uses_exact_unit_target():
@@ -83,3 +84,13 @@ def test_extended_oracle_imitation_keeps_teacher_eval_disjoint():
     assert config["formal_result"] is False
     assert len(config["teacher_seeds"]) == 100
     assert set(config["teacher_seeds"]).isdisjoint(config["evaluation_seeds"])
+
+
+def test_spatial_oracle_imitation_preserves_rgb_and_reports_balanced_loss():
+    config = json.loads(Path("configs/crafter_rgb_oracle_imitation_spatial_v1.yaml").read_text())
+    assert config["formal_result"] is False
+    assert config["policy"]["encoder"] == "spatial_cnn"
+    assert config["policy"]["action_loss"] == "inverse_sqrt"
+    policy = RGBActionClassifier(192, 17, 64, encoder="spatial_cnn")
+    assert policy.logits(torch.zeros(3, 64, 64)).shape == (17,)
+    assert policy.logits(torch.zeros(2, 3, 64, 64)).shape == (2, 17)
