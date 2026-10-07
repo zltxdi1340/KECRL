@@ -69,6 +69,12 @@ wood-pickaxe fact was available to the final stone request. This is still a
 fixture and routing diagnostic, not a real-policy qualification or formal
 result.
 
+The dependency-aware candidate now has a separate v2 manifest with explicit
+`setup_table` and `setup_furnace` task boundaries. This removes the audit's
+missing-producer ambiguity for world objects while keeping adapter support and
+persistent execution pending. The manifest is a protocol candidate only and
+does not authorize formal training.
+
 ## Candidate Tasks and Evidence
 
 Candidate resource targets include collecting wood/stone and acquiring tools.

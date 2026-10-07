@@ -154,6 +154,20 @@ fails readiness until world-object setup and state transfer are implemented
 and independently validated. The existing six-task formal candidate is
 unchanged.
 
+## Dependency-aware manifest v2 (2026-10-08)
+
+The first dependency-aware manifest left table and furnace as required objects
+without declaring a producing task. The new candidate
+`configs/crafter_prerequisite_aware_protocol_candidate_v2.yaml` keeps the
+candidate non-formal and adds explicit `setup_table` and `setup_furnace` task
+boundaries. Its order is wood -> table -> wood pickaxe -> stone -> stone
+pickaxe -> coal/iron -> furnace -> iron pickaxe, so the audit can check both
+inventory producers and setup producers. This is a manifest consistency repair,
+not evidence that a learned policy can execute the full order. Persistent
+session execution, independent setup qualification, budgets, and threshold
+validation remain open. The v2 audit reports no inventory or world-object
+producer gaps while retaining `formal_training_allowed=false`.
+
 ## Continual session boundary implementation (2026-10-06)
 
 `src/environments/crafter_continual.py` now defines a candidate
