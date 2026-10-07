@@ -419,3 +419,22 @@ improves training-side success while degrading held-out qualification in this
 budget, does not register a Module, and remains `formal_result=false`. The
 average-pool policy remains the current diagnostic baseline; neither temporal
 stacking nor this small CNN justifies a formal observation-contract change.
+
+## Training-only progress-reward feasibility update (2026-10-07)
+
+The PPO runner was extended with the same public inventory increment shaping
+used by the earlier REINFORCE diagnostic. A positive increase in the target
+inventory contributes `progress_bonus=0.5` during training only; qualification
+episodes use the native reward and terminal success bonus without this shaping.
+The configuration is
+`configs/crafter_auxiliary_gather_wood1_ppo_goal_actions_progress_pilot_v1.yaml`,
+and the result is stored in
+`results/crafter_auxiliary_gather_wood1_ppo_goal_actions_progress_pilot_b75da37/`.
+
+With the same seed bases and public action allowlist as the average-pool
+baseline, training reached `53/80` (`0.6625`) while independent qualification
+reached `13/20` (`0.65`). The paired no-progress run reached `44/80` (`0.55`)
+and `15/20` (`0.75`). Progress shaping therefore raises training-side success
+but lowers held-out qualification in this budget. It does not register a
+Module, keeps `formal_result=false`, and does not justify changing the formal
+reward contract or qualification threshold.
