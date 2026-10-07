@@ -532,13 +532,15 @@ spatial CNN solution. It also shows that representation and class weighting
 must be evaluated separately; the next diagnostic should keep one variable
 fixed while testing the other, before any formal feasibility decision.
 
-The paired uniform-loss control used the same spatial CNN, teacher seeds,
-evaluation seeds, and RGB/action pairs, with only the loss changed from
-inverse-square-root weighting to ordinary cross-entropy. It is stored in
+The uniform-loss control used the same spatial CNN configuration, teacher
+seeds, evaluation seeds, and RGB/action generation, with ordinary
+cross-entropy instead of inverse-square-root weighting. It is stored in
 `results/crafter_rgb_oracle_imitation_spatial_uniform_760911f/` and also
-reached `0/20`. Thus the failure is not explained by the action-class
-weighting choice. The RGB spatial action-generalization gate remains open, and
-formal training remains disallowed.
+reached `0/20`. Those two historical runs were made before model
+initialization was seeded, so they are not an exact initialization-paired
+ablation; they provide a consistent warning signal, not a causal conclusion
+about the loss weighting. The RGB spatial action-generalization gate remains
+open, and formal training remains disallowed.
 
 The same audit found that this is not only a memory problem. Among the 100
 teacher episodes, the first movement observation had 85 exact RGB values, and
@@ -574,6 +576,10 @@ still succeeds on `100/100` worlds and supplies `622` samples; the average-pool
 student reaches `3/20`, close to the previous `4/20` result. The hidden facing
 mutation was therefore a real boundary defect, but not the sole performance
 bottleneck.
+
+The same revision moves the diagnostic seed before policy construction. Older
+CNN results remain valid non-formal observations but are not treated as strict
+reproducibility or paired-loss evidence.
 
 The corrected run also reports `584` unique exact RGB observations and four
 exact observations with conflicting action labels. This is direct evidence of
