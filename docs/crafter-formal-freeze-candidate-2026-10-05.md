@@ -589,3 +589,22 @@ observation. A feed-forward RGB classifier cannot be treated as a sufficient
 state policy for this navigation target. The result remains non-formal and
 does not authorize changing the observation contract or starting formal
 training.
+
+## No-teacher collect-wood FOMAML feasibility update (2026-10-08)
+
+To remove the oracle-teacher confound, a separate non-formal pilot used only
+the real RGB policy, context-conditioned FOMAML, and the independent
+`collect_wood` prerequisite. The configuration is
+`configs/crafter_collect_wood_fomaml_pilot_v1.yaml`, with five independent
+replicas in
+`results/crafter_collect_wood_fomaml_pilot_253b557/`. Stone, coal, and craft
+targets were intentionally excluded because their task-local prerequisites are
+not yet validated.
+
+The three independent query repeats per replica gave mean success `0.280` for
+the active policy and `0.267` after the candidate update. Per-replica changes
+were `0.000`, `+0.067`, `0.000`, `+0.067`, and `-0.200`. Every replica used
+CUDA tensors, disjoint train/support/query seeds, an unchanged active SPT, and
+a changed candidate policy/template. The candidate update therefore executed
+through the real FOMAML path but did not show stable query improvement, form a
+Module, or authorize formal training.
