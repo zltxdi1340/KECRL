@@ -78,9 +78,10 @@ does not authorize formal training.
 The persistent candidate order has a separate boundary diagnostic using
 `CrafterContinualSession`. It confirms that public inventory and table/furnace
 setup survive task boundaries on the successful replay, while also exposing
-that a verifier action script generated with the same seed is not reliably
-replayable in every shadow/learner pair. Reachability and replay stability must
-therefore be measured before using this route for qualification or formal
+that only 2/5 seeds currently yield a complete verifier route through four
+stone and furnace. Both successful routes replayed through the learner-facing
+adapter after furnace facing was changed to public movement actions. Reachability
+must therefore be measured before using this route for qualification or formal
 training.
 
 ## Candidate Tasks and Evidence

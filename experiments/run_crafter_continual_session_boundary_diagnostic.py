@@ -24,7 +24,12 @@ from src.utils.config import load_config, runtime_metadata
 
 
 _WALKABLE = {"grass", "path", "sand"}
-_DIRECTIONS = ((-1, 0), (1, 0), (0, -1), (0, 1))
+_DIRECTIONS = (
+    (-1, 0, "move_left"),
+    (1, 0, "move_right"),
+    (0, -1, "move_up"),
+    (0, 1, "move_down"),
+)
 
 
 def _reference_route(seed: int, max_steps: int) -> tuple[list[str], bool, str | None]:
@@ -48,18 +53,25 @@ def _reference_route(seed: int, max_steps: int) -> tuple[list[str], bool, str | 
         if not stone.target_achieved:
             return [], False, f"stone:{stone.reason}"
         px, py = (int(value) for value in planner.player.pos)
-        candidates = []
-        for x in range(planner.world.area[0]):
-            for y in range(planner.world.area[1]):
-                material, obj = planner.world[x, y]
-                if obj is not None or material not in _WALKABLE:
-                    continue
-                if any((x - dx, y - dy) == (px, py) for dx, dy in _DIRECTIONS):
-                    candidates.append((x, y))
-        if not candidates:
-            return [], False, "furnace:no_adjacent_public_setup_target"
-        planner._face(candidates[0])
-        if not planner._step("place_furnace"):
+        # A movement action updates facing but also enters a walkable cell. Use
+        # a two-cell route so the following place action targets the second
+        # cell; this avoids the verifier-only direct facing mutation.
+        route = None
+        for dx, dy, move_action in _DIRECTIONS:
+            middle = (px + dx, py + dy)
+            target = (px + 2 * dx, py + 2 * dy)
+            if not (0 <= target[0] < planner.world.area[0] and 0 <= target[1] < planner.world.area[1]):
+                continue
+            cells = (middle, target)
+            if all(
+                planner.world[pos][1] is None and planner.world[pos][0] in _WALKABLE
+                for pos in cells
+            ):
+                route = (move_action, "place_furnace")
+                break
+        if route is None:
+            return [], False, "furnace:no_two_cell_public_setup_route"
+        if not all(planner._step(action) for action in route):
             return [], False, "furnace:reference_budget_exhausted"
         actions = [environment.environment.action_names[action] for _, action in planner.samples]
         return actions, True, None
