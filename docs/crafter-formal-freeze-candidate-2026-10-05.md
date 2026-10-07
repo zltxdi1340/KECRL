@@ -458,3 +458,21 @@ held-out performance in this budget. It intentionally extends the formal RGB
 contract, remains `formal_result=false`, and does not register a Module. The
 diagnostic points to unstable spatial exploration and optimization rather than
 inventory visibility alone; no observation-contract change is justified.
+
+## Entropy-annealing feasibility update (2026-10-07)
+
+The non-formal PPO runner was extended with an explicit linear entropy schedule
+for training updates. The diagnostic starts at `entropy_coef=0.02` and ends at
+`0.001` over the 80 training episodes, while qualification remains unchanged.
+The configuration is
+`configs/crafter_auxiliary_gather_wood1_ppo_goal_actions_entropy_pilot_v1.yaml`,
+and the result is stored in
+`results/crafter_auxiliary_gather_wood1_ppo_goal_actions_entropy_pilot_454f510/`.
+
+With the same RGB average-pool input, public action allowlist, and independent
+seed split as the fixed-entropy baseline, training reached `54/80` (`0.675`)
+and independent qualification reached `10/20` (`0.50`), compared with
+`44/80` (`0.55`) and `15/20` (`0.75`) for the paired fixed-entropy run. Entropy
+annealing therefore improves training-side success but reduces held-out
+qualification. It remains a non-formal diagnostic, registers no Module, and
+does not justify changing the formal optimizer schedule or qualification gate.
