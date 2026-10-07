@@ -476,3 +476,23 @@ and independent qualification reached `10/20` (`0.50`), compared with
 annealing therefore improves training-side success but reduces held-out
 qualification. It remains a non-formal diagnostic, registers no Module, and
 does not justify changing the formal optimizer schedule or qualification gate.
+
+## Oracle-to-RGB imitation upper-bound update (2026-10-07)
+
+To isolate RGB representation and spatial action learning from online
+exploration, a non-formal behavior-cloning diagnostic used the existing Crafter
+reference planner as a teacher. The teacher could inspect private world state
+only to emit movement and interaction labels; the student received only the
+reviewed RGB representation and the public action allowlist. The configuration
+is `configs/crafter_rgb_oracle_imitation_diagnostic_v1.yaml`, with output in
+`results/crafter_rgb_oracle_imitation_diagnostic_e8d549a/`.
+
+All 10 teacher seeds reached `gather_wood_1` in 5--8 reference steps and
+produced 64 RGB/action samples. After 40 supervised epochs, the RGB student
+reached `0/10` on independent evaluation seeds. This is an upper-bound
+diagnostic rather than a formal result: the teacher labels are oracle-side,
+the sample set is intentionally small, no Module or Knowledge state was
+updated, and `formal_result=false` is retained. The result indicates that the
+current RGB encoder and data coverage cannot generalize the spatial action
+mapping even when exploration is removed; further PPO tuning alone is unlikely
+to clear the formal qualification gate.
