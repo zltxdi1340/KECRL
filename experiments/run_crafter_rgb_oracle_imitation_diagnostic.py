@@ -7,6 +7,8 @@ trajectories, and teacher internals never enter the student observation.
 from __future__ import annotations
 
 import argparse
+from collections import Counter, defaultdict
+import hashlib
 import json
 import subprocess
 import time
@@ -25,9 +27,27 @@ from src.utils.config import load_config, runtime_metadata
 class RecordingReferencePlanner(CrafterReferencePlanner):
     """Oracle planner that exposes only RGB/action training pairs."""
 
-    def __init__(self, adapter, target, max_steps):
+    def __init__(self, adapter, target, max_steps, public_action_consistent=False):
         super().__init__(adapter, target, max_steps)
         self.samples = []
+        self.public_action_consistent = bool(public_action_consistent)
+
+    def _face(self, target):
+        if not self.public_action_consistent:
+            return super()._face(target)
+        delta = (int(target[0] - int(self.player.pos[0])),
+                 int(target[1] - int(self.player.pos[1])))
+        actions = {
+            (-1, 0): "move_left", (1, 0): "move_right",
+            (0, -1): "move_up", (0, 1): "move_down",
+        }
+        if delta not in actions:
+            raise ValueError(f"reference target must be adjacent, got delta={delta}")
+        if tuple(int(value) for value in self.player.facing) != delta:
+            # Crafter's move action updates facing even when the adjacent tree
+            # blocks movement, so this keeps the oracle trajectory executable.
+            if not self._step(actions[delta]):
+                raise RuntimeError("reference budget exhausted while facing target")
 
     def _step(self, action_name: str) -> bool:
         observation = self.adapter.current_observation()
@@ -83,10 +103,12 @@ def _target(task: dict) -> dict:
     }
 
 
-def _teacher_episode(seed: int, target: dict, max_steps: int):
+def _teacher_episode(seed: int, target: dict, max_steps: int, public_action_consistent=False):
     environment = CrafterEnvironmentAdapter(seed=int(seed), length=int(max_steps))
     environment.reset()
-    planner = RecordingReferencePlanner(environment, target, int(max_steps))
+    planner = RecordingReferencePlanner(
+        environment, target, int(max_steps), public_action_consistent
+    )
     result = planner.run()
     samples = list(planner.samples)
     environment.close()
@@ -117,7 +139,8 @@ def _student_episode(policy, seed: int, target: dict, device, config: dict):
     return {"seed": int(seed), "success": bool(success), "steps": steps}
 
 
-def run(config_path: str, output_path: str, action_loss_override: str | None = None) -> dict:
+def run(config_path: str, output_path: str, action_loss_override: str | None = None,
+        teacher_mode_override: str | None = None) -> dict:
     config = load_config(config_path)
     if config.get("formal_result") is not False:
         raise ValueError("oracle imitation diagnostic requires formal_result=false")
@@ -125,20 +148,31 @@ def run(config_path: str, output_path: str, action_loss_override: str | None = N
         config = dict(config)
         config["policy"] = dict(config["policy"])
         config["policy"]["action_loss"] = str(action_loss_override)
+    teacher_mode = str(config.get("teacher_mode", "private_face_oracle"))
+    if teacher_mode_override is not None:
+        teacher_mode = str(teacher_mode_override)
+    if teacher_mode not in {"private_face_oracle", "public_action_consistent"}:
+        raise ValueError(f"unsupported teacher_mode: {teacher_mode}")
+    public_action_consistent = teacher_mode == "public_action_consistent"
     output = Path(output_path)
     if output.exists():
         raise FileExistsError(f"refusing to overwrite {output}")
     device = torch.device(ContinualLearningPipeline.resolve_device(config["device"]))
     target = _target(config["task"])
+    torch.manual_seed(int(config["seed"]))
     start = time.perf_counter()
     teacher_rows = []
     observations, labels = [], []
     teacher_successes = 0
     encoder = str(config["policy"].get("encoder", "avgpool"))
+    observation_hashes = defaultdict(Counter)
     for seed in config["teacher_seeds"]:
-        summary, samples = _teacher_episode(seed, target, int(config["max_steps"]))
+        summary, samples = _teacher_episode(
+            seed, target, int(config["max_steps"]), public_action_consistent
+        )
         teacher_successes += int(summary.target_achieved)
         for observation, action in samples:
+            observation_hashes[hashlib.sha256(observation.tobytes()).hexdigest()][int(action)] += 1
             features = _features(observation, device, "cnn" if encoder == "spatial_cnn" else "avgpool")
             observations.append(features.detach())
             labels.append(action)
@@ -156,7 +190,6 @@ def run(config_path: str, output_path: str, action_loss_override: str | None = N
         raise RuntimeError("oracle teacher produced no RGB/action samples")
     features = torch.stack(observations)
     targets = torch.tensor(labels, dtype=torch.long, device=device)
-    torch.manual_seed(int(config["seed"]))
     action_counts = torch.bincount(
         targets, minlength=int(config["policy"]["action_count"])
     )
@@ -187,7 +220,14 @@ def run(config_path: str, output_path: str, action_loss_override: str | None = N
                     "success_rate": teacher_successes / max(len(teacher_rows), 1),
                     "rows": teacher_rows, "samples": len(labels),
                     "action_counts": [int(value) for value in action_counts.cpu().tolist()],
-                    "observed_action_count": int((action_counts > 0).sum().item())},
+                    "observed_action_count": int((action_counts > 0).sum().item()),
+                    "unique_rgb_observations": len(observation_hashes),
+                    "repeated_rgb_observations": sum(
+                        sum(counts.values()) > 1 for counts in observation_hashes.values()
+                    ),
+                    "conflicting_rgb_observations": sum(
+                        len(counts) > 1 for counts in observation_hashes.values()
+                    )},
         "student": {"epochs": int(config["epochs"]), "final_loss": losses[-1],
                     "losses": losses, "evaluation": evaluation_rows,
                     "successes": sum(row["success"] for row in evaluation_rows),
@@ -195,7 +235,11 @@ def run(config_path: str, output_path: str, action_loss_override: str | None = N
                     "success_rate": sum(row["success"] for row in evaluation_rows) / max(len(evaluation_rows), 1)},
         "action_allowlist": list(config["action_allowlist"]),
         "student_encoder": encoder, "action_loss": loss_mode,
-        "effective_overrides": ({"action_loss": loss_mode} if action_loss_override is not None else {}),
+        "teacher_mode": teacher_mode,
+        "effective_overrides": {
+            **({"action_loss": loss_mode} if action_loss_override is not None else {}),
+            **({"teacher_mode": teacher_mode} if teacher_mode_override is not None else {}),
+        },
         "module_registered": False, "knowledge_evolution_updated": False,
         "formal_training_allowed": False, "elapsed_seconds": time.perf_counter() - start,
         "diagnostic_note": config["diagnostic_note"],
@@ -210,8 +254,9 @@ def main():
     parser.add_argument("--config", default="configs/crafter_rgb_oracle_imitation_diagnostic_v1.yaml")
     parser.add_argument("--output", default="results/crafter_rgb_oracle_imitation_diagnostic_v1")
     parser.add_argument("--action-loss", choices=("uniform", "inverse_sqrt"))
+    parser.add_argument("--teacher-mode", choices=("private_face_oracle", "public_action_consistent"))
     args = parser.parse_args()
-    print(json.dumps(run(args.config, args.output, args.action_loss), indent=2))
+    print(json.dumps(run(args.config, args.output, args.action_loss, args.teacher_mode), indent=2))
 
 
 if __name__ == "__main__":

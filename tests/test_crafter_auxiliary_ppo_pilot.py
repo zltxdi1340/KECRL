@@ -1,10 +1,11 @@
 import json
+import inspect
 from pathlib import Path
 
 import torch
 
 from experiments.run_crafter_auxiliary_ppo_pilot import PPOCrafterPolicy, _features, _inventory_features
-from experiments.run_crafter_rgb_oracle_imitation_diagnostic import RGBActionClassifier
+from experiments.run_crafter_rgb_oracle_imitation_diagnostic import RGBActionClassifier, RecordingReferencePlanner
 
 
 def test_ppo_pilot_is_non_formal_and_uses_exact_unit_target():
@@ -94,3 +95,9 @@ def test_spatial_oracle_imitation_preserves_rgb_and_reports_balanced_loss():
     policy = RGBActionClassifier(192, 17, 64, encoder="spatial_cnn")
     assert policy.logits(torch.zeros(3, 64, 64)).shape == (17,)
     assert policy.logits(torch.zeros(2, 3, 64, 64)).shape == (2, 17)
+
+
+def test_oracle_public_teacher_mode_is_explicit():
+    assert "public_action_consistent" in inspect.signature(
+        RecordingReferencePlanner
+    ).parameters
