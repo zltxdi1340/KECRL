@@ -438,3 +438,23 @@ and `15/20` (`0.75`). Progress shaping therefore raises training-side success
 but lowers held-out qualification in this budget. It does not register a
 Module, keeps `formal_result=false`, and does not justify changing the formal
 reward contract or qualification threshold.
+
+## Public-inventory observability isolation update (2026-10-07)
+
+To separate RGB observability from optimization difficulty, the non-formal PPO
+runner was given an optional auxiliary input containing the public `wood`
+inventory value and an observed mask. Missing inventory remains represented as
+unknown (`value=0`, `observed=0`); the diagnostic does not expose map, position,
+recipe, or other private state. The configuration is
+`configs/crafter_auxiliary_gather_wood1_ppo_goal_actions_inventory_pilot_v1.yaml`,
+and the result is stored in
+`results/crafter_auxiliary_gather_wood1_ppo_goal_actions_inventory_pilot_5c6e394/`.
+
+Using the same action allowlist and seed bases as the RGB-only comparison,
+training reached `53/80` (`0.6625`) and independent qualification reached
+`10/20` (`0.50`), versus `44/80` (`0.55`) and `15/20` (`0.75`) for the paired
+RGB-only baseline. The auxiliary inventory feature therefore did not improve
+held-out performance in this budget. It intentionally extends the formal RGB
+contract, remains `formal_result=false`, and does not register a Module. The
+diagnostic points to unstable spatial exploration and optimization rather than
+inventory visibility alone; no observation-contract change is justified.
