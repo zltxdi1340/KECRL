@@ -509,3 +509,25 @@ gate. It still registers no Module, keeps `formal_result=false`, and does not
 justify formal training; the next work should target a representation or
 training method designed for spatial generalization rather than isolated PPO
 hyperparameter changes.
+
+## Spatial imitation and action-balance feasibility update (2026-10-07)
+
+The next diagnostic separated spatial representation from online exploration by
+replacing the RGB student's average-pool MLP with a two-layer spatial CNN and
+using inverse-square-root class weights in the supervised action loss. The
+configuration is
+`configs/crafter_rgb_oracle_imitation_spatial_v1.yaml`, with output in
+`results/crafter_rgb_oracle_imitation_spatial_205a7b4/`.
+
+The oracle teacher again succeeded on all `100/100` worlds and produced `607`
+RGB/action pairs. Six public actions were represented, with counts
+`[100, 176, 76, 87, 68, 100]` for action IDs `0` through `5`; no private
+state entered the student. The spatial CNN student reached `0/20` on disjoint
+evaluation worlds, compared with `4/20` for the previous average-pool MLP
+student trained on the same extended teacher set. The experiment remains
+`formal_result=false`, registers no Module, and performs no Knowledge update.
+
+This result does not support changing the formal RGB contract or claiming a
+spatial CNN solution. It also shows that representation and class weighting
+must be evaluated separately; the next diagnostic should keep one variable
+fixed while testing the other, before any formal feasibility decision.

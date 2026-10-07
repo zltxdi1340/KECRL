@@ -117,10 +117,14 @@ def _student_episode(policy, seed: int, target: dict, device, config: dict):
     return {"seed": int(seed), "success": bool(success), "steps": steps}
 
 
-def run(config_path: str, output_path: str) -> dict:
+def run(config_path: str, output_path: str, action_loss_override: str | None = None) -> dict:
     config = load_config(config_path)
     if config.get("formal_result") is not False:
         raise ValueError("oracle imitation diagnostic requires formal_result=false")
+    if action_loss_override is not None:
+        config = dict(config)
+        config["policy"] = dict(config["policy"])
+        config["policy"]["action_loss"] = str(action_loss_override)
     output = Path(output_path)
     if output.exists():
         raise FileExistsError(f"refusing to overwrite {output}")
@@ -191,6 +195,7 @@ def run(config_path: str, output_path: str) -> dict:
                     "success_rate": sum(row["success"] for row in evaluation_rows) / max(len(evaluation_rows), 1)},
         "action_allowlist": list(config["action_allowlist"]),
         "student_encoder": encoder, "action_loss": loss_mode,
+        "effective_overrides": ({"action_loss": loss_mode} if action_loss_override is not None else {}),
         "module_registered": False, "knowledge_evolution_updated": False,
         "formal_training_allowed": False, "elapsed_seconds": time.perf_counter() - start,
         "diagnostic_note": config["diagnostic_note"],
@@ -204,8 +209,9 @@ def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--config", default="configs/crafter_rgb_oracle_imitation_diagnostic_v1.yaml")
     parser.add_argument("--output", default="results/crafter_rgb_oracle_imitation_diagnostic_v1")
+    parser.add_argument("--action-loss", choices=("uniform", "inverse_sqrt"))
     args = parser.parse_args()
-    print(json.dumps(run(args.config, args.output), indent=2))
+    print(json.dumps(run(args.config, args.output, args.action_loss), indent=2))
 
 
 if __name__ == "__main__":
