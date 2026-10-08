@@ -751,3 +751,13 @@ Independent qualification was `0.35`, `0.15`, `0.55`, `0.25`, and `0.35`
 feasibility signal, but it cannot attribute the difference to horizon alone or
 freeze `512` as a formal value. Long-horizon credit assignment and training
 stability remain open before Module qualification.
+
+The metadata-corrected rerun at commit `94e617b` is stored in
+`results/crafter_auxiliary_gather_wood3_ppo_goal_actions_horizon512_pilot_94e617b/`.
+It reports `policy_updated=true` and verifies disjoint training/qualification
+and replica seed ranges. Qualification rates were `0.25`, `0.15`, `0.50`,
+`0.40`, and `0.20` (mean `0.30`), with no qualified replica. They differ from
+the earlier run with the same behavioral configuration; cross-process exact
+reproducibility remains unresolved and must be checked before interpreting a
+paired budget comparison. Neither run establishes horizon as the cause of an
+improvement. PPO trains the pilot Policy; it does not update an active SPT.

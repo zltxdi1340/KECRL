@@ -114,6 +114,14 @@ still produced zero qualified seeds. It is not a paired horizon comparison,
 so the result cannot isolate the effect of the longer budget; horizon `512`
 remains a candidate diagnostic value, not a formal freeze.
 
+The metadata-corrected rerun in
+`results/crafter_auxiliary_gather_wood3_ppo_goal_actions_horizon512_pilot_94e617b/`
+reports qualification mean `0.30` and no qualified seed. Its per-seed rates
+differ from the earlier run despite the same behavioral configuration, so
+exact cross-process reproducibility remains to be audited before a paired
+comparison. Training updates the pilot Policy, while SPT and Knowledge remain
+unchanged. Role and replica seed ranges are checked for overlap before running.
+
 ## Candidate Tasks and Evidence
 
 Candidate resource targets include collecting wood/stone and acquiring tools.
