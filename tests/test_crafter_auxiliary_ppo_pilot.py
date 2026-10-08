@@ -109,3 +109,13 @@ def test_collect_wood_fomaml_pilot_excludes_unresolved_prerequisite_tasks():
     assert {task["target"]["item"] for task in config["tasks"]} == {"wood"}
     assert set(config["training_seeds"]["support"]).isdisjoint(config["training_seeds"]["query"])
     assert set(config["evaluation"]["support"]).isdisjoint(config["evaluation"]["query"])
+
+
+def test_wood3_ppo_independent_pilot_matches_first_v2_boundary():
+    config = json.loads(Path("configs/crafter_auxiliary_gather_wood3_ppo_goal_actions_pilot_v1.yaml").read_text())
+    assert config["formal_result"] is False
+    assert config["seed_set"] == [0, 1, 2, 3, 4]
+    assert config["task"] == {"task_id": "gather_wood_3", "item": "wood", "threshold": 3}
+    assert config["action_allowlist"] == [0, 1, 2, 3, 4, 5, 6]
+    assert config["teacher_used"] is False
+    assert config["policy_updated"] is False
