@@ -119,3 +119,13 @@ def test_wood3_ppo_independent_pilot_matches_first_v2_boundary():
     assert config["action_allowlist"] == [0, 1, 2, 3, 4, 5, 6]
     assert config["teacher_used"] is False
     assert config["policy_updated"] is False
+
+
+def test_wood3_ppo_horizon_candidate_changes_only_budget_axis():
+    base = json.loads(Path("configs/crafter_auxiliary_gather_wood3_ppo_goal_actions_pilot_v1.yaml").read_text())
+    horizon = json.loads(Path("configs/crafter_auxiliary_gather_wood3_ppo_goal_actions_horizon512_pilot_v1.yaml").read_text())
+    assert horizon["formal_result"] is False
+    assert horizon["max_steps"] == 512
+    assert horizon["task"] == base["task"]
+    assert horizon["action_allowlist"] == base["action_allowlist"]
+    assert horizon["policy"] == base["policy"]
