@@ -717,3 +717,21 @@ During pilot preparation, the v2 prerequisite manifest was corrected so
 `obtain_wood_pickaxe` requires `wood: 1` at its task boundary after
 `setup_table` consumes two wood; `wood: 3` remains the cumulative chain cost,
 not the immediate boundary inventory requirement.
+
+## PPO feasibility for the first v2 resource boundary (2026-10-08)
+
+The first v2 boundary was tested directly with the existing no-teacher
+PPO/GAE runner, public RGB input, the diagnostic movement/interact action
+allowlist, and independent qualification episodes. The configuration is
+`configs/crafter_auxiliary_gather_wood3_ppo_goal_actions_pilot_v1.yaml`, and
+the five independent replicas are stored in
+`results/crafter_auxiliary_gather_wood3_ppo_goal_actions_pilot_2f0e2e4/`.
+
+For the `gather_wood_3` target, training success averaged `0.235` and the
+independent qualification rates were `0.15`, `0.50`, `0.20`, `0.20`, and
+`0.05` (mean `0.22`). No seed reached the candidate `0.8` qualification gate.
+All replicas verified CUDA tensors and retained `formal_result=false`; no
+teacher, Module, Knowledge update, or SPT update was used. This confirms that
+the first persistent resource boundary is currently not feasible for the
+candidate RGB Policy budget. It blocks real Module qualification and formal
+training; changing the formal threshold would hide a learnability failure.

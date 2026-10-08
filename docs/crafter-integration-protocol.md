@@ -98,6 +98,14 @@ boundaries; this is a feasibility bottleneck in RGB navigation, survival, and
 resource acquisition, not evidence that the persistent session lost state.
 The run has `formal_result=false` and performs no learning or library update.
 
+The direct five-seed PPO/GAE check for the first v2 resource boundary is in
+`results/crafter_auxiliary_gather_wood3_ppo_goal_actions_pilot_2f0e2e4/`.
+For `wood >= 3`, independent qualification was `0.15`, `0.50`, `0.20`,
+`0.20`, and `0.05` (mean `0.22`), with zero seeds reaching the candidate
+`0.8` gate. The result keeps the formal gate closed and identifies the first
+task-local RGB Policy learnability as the next blocker before Module or
+continual-chain validation.
+
 ## Candidate Tasks and Evidence
 
 Candidate resource targets include collecting wood/stone and acquiring tools.
