@@ -7,6 +7,7 @@ import math
 import random
 import subprocess
 import time
+from collections import Counter
 from pathlib import Path
 
 import numpy as np
@@ -64,8 +65,8 @@ class PPOCrafterPolicy(nn.Module):
             logits = logits + mask
         return torch.distributions.Categorical(logits=logits), self.critic(hidden).squeeze(-1)
 
-    def update(self, features, actions, old_log_probs, returns, advantages, legal_actions=None, entropy_coef=None):
-        losses = []
+    def update(self, features, actions, old_log_probs, returns, advantages, legal_actions=None, entropy_coef=None, return_metrics=False):
+        metrics = []
         entropy_weight = float(self.config["entropy_coef"] if entropy_coef is None else entropy_coef)
         for _ in range(int(self.config["update_epochs"])):
             if legal_actions is None:
@@ -94,6 +95,11 @@ class PPOCrafterPolicy(nn.Module):
             policy_loss = -torch.minimum(ratio * advantages, clipped * advantages).mean()
             value_loss = 0.5 * (returns - values).pow(2).mean()
             entropy = distribution.entropy().mean()
+            approx_kl = (old_log_probs - log_probs.detach()).mean()
+            clip_fraction = ((ratio.detach() - 1.0).abs() > float(self.config["clip_epsilon"])).float().mean()
+            explained_variance = 1.0 - (returns - values.detach()).var(unbiased=False) / (
+                returns.var(unbiased=False) + 1e-8
+            )
             loss = (
                 policy_loss
                 + float(self.config["value_coef"]) * value_loss
@@ -103,8 +109,20 @@ class PPOCrafterPolicy(nn.Module):
             loss.backward()
             torch.nn.utils.clip_grad_norm_(self.parameters(), 1.0)
             self.optimizer.step()
-            losses.append(float(loss.detach().cpu()))
-        return sum(losses) / max(len(losses), 1)
+            metrics.append({
+                "loss": float(loss.detach().cpu()),
+                "policy_loss": float(policy_loss.detach().cpu()),
+                "value_loss": float(value_loss.detach().cpu()),
+                "entropy": float(entropy.detach().cpu()),
+                "approx_kl": float(approx_kl.detach().cpu()),
+                "clip_fraction": float(clip_fraction.detach().cpu()),
+                "explained_variance": float(explained_variance.detach().cpu()),
+            })
+        summary = {
+            key: sum(row[key] for row in metrics) / max(len(metrics), 1)
+            for key in metrics[0]
+        }
+        return summary if return_metrics else summary["loss"]
 
 
 def _features(observations, device, encoder="avgpool"):
@@ -151,8 +169,28 @@ def _policy_features(observations, inventory, device, config):
     return feature
 
 
+def _save_checkpoint(path: Path, policy: PPOCrafterPolicy, config: dict, episode: int) -> None:
+    path.parent.mkdir(parents=True, exist_ok=True)
+    checkpoint = {
+        "episode": int(episode),
+        "policy": policy.state_dict(),
+        "optimizer": policy.optimizer.state_dict(),
+        "python_rng": random.getstate(),
+        "numpy_rng": np.random.get_state(),
+        "torch_rng": torch.get_rng_state(),
+        "cuda_rng": torch.cuda.get_rng_state_all() if torch.cuda.is_available() else None,
+        "config": dict(config),
+    }
+    torch.save(checkpoint, path)
+
+
 def _rollout(policy, seed, target, device, config, train):
-    env = CrafterEnvironmentAdapter(seed=int(seed), length=int(config["max_steps"]))
+    external_horizon = int(config["max_steps"])
+    environment_length = int(config.get("environment_length", external_horizon))
+    diagnostics_enabled = bool(config.get("collect_failure_diagnostics", False))
+    env = CrafterEnvironmentAdapter(
+        seed=int(seed), length=environment_length, diagnostics=diagnostics_enabled
+    )
     observation = env.reset()
     features, actions, rewards, values, log_probs = [], [], [], [], []
     success = False
@@ -173,6 +211,12 @@ def _rollout(policy, seed, target, device, config, train):
     if not action_allowlist or any(action < 0 or action >= int(config["policy"]["action_count"]) for action in action_allowlist):
         raise ValueError("action_allowlist must contain valid action IDs")
     legal_actions = []
+    action_counts = Counter()
+    entropy_values = []
+    first_wood_steps = {}
+    reward_components = Counter()
+    life_trace = []
+    video_frames = [np.asarray(observation).copy()] if config.get("record_video", False) else None
     while steps < int(config["max_steps"]) and not done and not success:
         feature = _policy_features(
             frame_stack if frame_stack_size > 1 else observation,
@@ -182,7 +226,18 @@ def _rollout(policy, seed, target, device, config, train):
             distribution, value = policy.distribution_value(feature, action_allowlist)
             action_tensor = distribution.sample()
             log_prob = distribution.log_prob(action_tensor)
-        observation, reward, done, info = env.step(int(action_tensor.item()))
+            entropy_values.append(float(distribution.entropy().detach().cpu()))
+        action = int(action_tensor.item())
+        action_counts[action] += 1
+        observation, reward, done, info = env.step(action)
+        if video_frames is not None:
+            video_frames.append(np.asarray(observation).copy())
+        diagnostic = info.get("diagnostics", {})
+        if diagnostics_enabled:
+            life_trace.append(diagnostic)
+            reward_components["native"] += float(reward)
+            reward_components["health"] += float(diagnostic.get("reward_health") or 0.0)
+            reward_components["achievement"] += float(diagnostic.get("reward_achievement") or 0.0)
         if frame_stack_size > 1:
             frame_stack = (*frame_stack[1:], observation)
         native_reward += float(reward)
@@ -191,11 +246,21 @@ def _rollout(policy, seed, target, device, config, train):
             before_value = previous_inventory.get(target["item"])
             after_value = info.get("inventory", {}).get(target["item"])
             if isinstance(before_value, int) and isinstance(after_value, int) and after_value > before_value:
-                shaped += float(config.get("progress_bonus", 0.0)) * (after_value - before_value)
+                progress_reward = float(config.get("progress_bonus", 0.0)) * (after_value - before_value)
+                shaped += progress_reward
+                reward_components["progress"] += progress_reward
         if inventory_at_least(info.get("inventory"), target["item"], target["threshold"]) is True:
             success = True
-            shaped += float(config["success_bonus"])
+            success_reward = float(config["success_bonus"])
+            shaped += success_reward
+            reward_components["success"] += success_reward
         current_inventory = info.get("inventory")
+        if isinstance(current_inventory, dict) and target["item"] == "wood":
+            wood = current_inventory.get("wood")
+            if isinstance(wood, int):
+                for threshold in (1, 2, 3):
+                    if wood >= threshold and threshold not in first_wood_steps:
+                        first_wood_steps[threshold] = steps + 1
         previous_inventory = dict(current_inventory) if isinstance(current_inventory, dict) else None
         if train:
             features.append(feature)
@@ -205,11 +270,14 @@ def _rollout(policy, seed, target, device, config, train):
             values.append(value.reshape(()))
             log_probs.append(log_prob.reshape(()))
         steps += 1
+    truncated = not done and not success and steps >= external_horizon
     loss = None
+    ppo_metrics = None
     if train:
         with torch.no_grad():
             next_observation = frame_stack if frame_stack_size > 1 else observation
-            next_value = torch.zeros((), device=device) if done or success else policy.distribution_value(
+            bootstrap = not done and not success and (not truncated or bool(config.get("bootstrap_on_truncation", True)))
+            next_value = torch.zeros((), device=device) if not bootstrap else policy.distribution_value(
                 _policy_features(next_observation, previous_inventory, device, config),
                 action_allowlist,
             )[1]
@@ -231,12 +299,55 @@ def _rollout(policy, seed, target, device, config, train):
         total_train = max(int(config["train_episodes"]), 1)
         progress = min(max(float(config.get("episode_index", 0)) / total_train, 0.0), 1.0)
         entropy_coef = start_entropy + (end_entropy - start_entropy) * progress
-        loss = policy.update(
+        update_result = policy.update(
             torch.stack(features), torch.stack(actions), torch.stack(log_probs).detach(),
             returns, advantages, legal_actions, entropy_coef,
+            return_metrics=diagnostics_enabled,
         )
+        if isinstance(update_result, dict):
+            ppo_metrics = update_result
+            loss = update_result["loss"]
+        else:
+            loss = update_result
+    video_path = None
+    selected_video_episodes = set(int(value) for value in config.get("video_episode_indices", ()))
+    if video_frames is not None and int(config.get("episode_index", -1)) in selected_video_episodes:
+        video_dir = Path(config.get("video_dir", "videos"))
+        video_dir.mkdir(parents=True, exist_ok=True)
+        video_path = str(video_dir / f"episode_{int(config['episode_index']):04d}_seed_{int(seed)}.mp4")
+        import imageio.v2 as imageio
+        imageio.mimsave(video_path, video_frames, fps=int(config.get("video_fps", 8)))
+    terminal_reason = "success" if success else (
+        (life_trace[-1].get("terminal_reason") if life_trace else "death") if done
+        else "external_truncation" if truncated else "unknown"
+    )
     env.close()
-    return {"success": success, "steps": steps, "native_reward": native_reward, "loss": loss}
+    summary = {"success": success, "steps": steps, "native_reward": native_reward, "loss": loss}
+    if diagnostics_enabled:
+        fields = ("health", "food", "drink", "energy")
+        life_summary = {}
+        for field in fields:
+            values = [row[field] for row in life_trace if row.get(field) is not None]
+            life_summary[field] = {
+                "initial": values[0] if values else None,
+                "final": values[-1] if values else None,
+                "minimum": min(values) if values else None,
+            }
+        summary.update({
+            "terminal_reason": terminal_reason,
+            "environment_done": bool(done),
+            "truncated": truncated,
+            "bootstrap_on_truncation": bool(config.get("bootstrap_on_truncation", True)),
+            "first_wood_steps": {str(key): value for key, value in first_wood_steps.items()},
+            "action_counts": {str(key): action_counts[key] for key in sorted(action_counts)},
+            "mean_action_entropy": sum(entropy_values) / max(len(entropy_values), 1),
+            "reward_components": dict(reward_components),
+            "life_summary": life_summary,
+            "life_trace": life_trace,
+            "video_path": video_path,
+            "ppo_metrics": ppo_metrics,
+        })
+    return summary
 
 
 def run(config_path: str, output_path: str) -> dict:
@@ -246,6 +357,7 @@ def run(config_path: str, output_path: str) -> dict:
     output = Path(output_path)
     if output.exists():
         raise FileExistsError(f"refusing to overwrite {output}")
+    output.mkdir(parents=True)
     resolved = ContinualLearningPipeline.resolve_device(config["device"])
     device = torch.device(resolved)
     seed = int(config["seed"])
@@ -265,6 +377,12 @@ def run(config_path: str, output_path: str) -> dict:
         train_successes += int(summary["success"])
         losses.append(float(summary["loss"]))
         rows.append({"role": "train", "episode": episode, **summary})
+        checkpoint_every = int(config.get("checkpoint_every_episodes", 0))
+        if checkpoint_every > 0 and (episode + 1) % checkpoint_every == 0:
+            _save_checkpoint(
+                output / "checkpoints" / f"episode_{episode + 1:04d}.pt",
+                policy, config, episode + 1,
+            )
     qualification_successes = 0
     for episode in range(int(config["qualification_episodes"])):
         torch.manual_seed(int(config["qualification_action_seed_base"]) + episode)
@@ -290,7 +408,6 @@ def run(config_path: str, output_path: str) -> dict:
         "module_registered": False, "knowledge_evolution_updated": False, "formal_training_allowed": False,
         "rows": rows, "elapsed_seconds": time.perf_counter() - start, "pilot_note": config["pilot_note"],
     }
-    output.mkdir(parents=True)
     (output / "result.json").write_text(json.dumps(result, indent=2) + "\n", encoding="utf-8")
     return result
 

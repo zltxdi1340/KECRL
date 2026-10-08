@@ -25,6 +25,7 @@ class CrafterEnvironmentAdapter:
         reward: bool = True,
         length: int = 10_000,
         environment: Any | None = None,
+        diagnostics: bool = False,
     ) -> None:
         if environment is None:
             try:
@@ -35,6 +36,7 @@ class CrafterEnvironmentAdapter:
                 ) from exc
             environment = crafter.Env(seed=seed, reward=reward, length=length)
         self.environment = environment
+        self.diagnostics = bool(diagnostics)
         self.observation_shape = tuple(int(value) for value in environment.observation_space.shape)
         self.action_count = int(environment.action_space.n)
         if self.observation_shape != (64, 64, 3):
@@ -46,6 +48,8 @@ class CrafterEnvironmentAdapter:
         self._world_object_setup: tuple[str, ...] | None = None
         self._observation = None
         self._done = False
+        self._previous_health = None
+        self._previous_achievements = set()
 
     def reset(self):
         observation = self.environment.reset()
@@ -54,6 +58,12 @@ class CrafterEnvironmentAdapter:
         self._world_object_setup = None
         self._done = False
         self._observation = self._validate_observation(observation)
+        self._previous_health = self._player_value("health")
+        player = getattr(self.environment, "_player", None)
+        achievements = getattr(player, "achievements", {})
+        self._previous_achievements = {
+            str(name) for name, count in achievements.items() if count > 0
+        } if isinstance(achievements, dict) else set()
         return self._observation
 
     def step(self, action: int):
@@ -82,7 +92,51 @@ class CrafterEnvironmentAdapter:
         public_info = {"inventory": dict(inventory)} if inventory is not None else {}
         if self._world_object_setup is not None:
             public_info["world_object_setup"] = list(self._world_object_setup)
+        if self.diagnostics:
+            public_info["diagnostics"] = self._diagnostic_info(info, float(reward))
         return self._observation, float(reward), self._done, public_info
+
+    def _player_value(self, name: str):
+        player = getattr(self.environment, "_player", None)
+        value = getattr(player, name, None)
+        if isinstance(value, (int, float)) and not isinstance(value, bool):
+            return float(value)
+        return None
+
+    def _diagnostic_info(self, native_info: dict, reward: float) -> dict[str, Any]:
+        health = self._player_value("health")
+        achievements = native_info.get("achievements", {})
+        current_achievements = {
+            str(name) for name, count in achievements.items() if count > 0
+        } if isinstance(achievements, dict) else set()
+        achievement_reward = float(len(current_achievements - self._previous_achievements))
+        health_reward = (
+            (health - self._previous_health) / 10.0
+            if health is not None and self._previous_health is not None else None
+        )
+        length = getattr(self.environment, "_length", None)
+        if self._done and health is not None and health <= 0:
+            terminal_reason = "death"
+        elif self._done and length and self.step_count >= int(length):
+            terminal_reason = "environment_horizon"
+        elif self._done:
+            terminal_reason = "native_done"
+        else:
+            terminal_reason = None
+        self._previous_health = health
+        self._previous_achievements = current_achievements
+        return {
+            "step": self.step_count,
+            "terminal_reason": terminal_reason,
+            "health": health,
+            "food": self._player_value("food"),
+            "drink": self._player_value("drink"),
+            "energy": self._player_value("energy"),
+            "reward": reward,
+            "reward_health": health_reward,
+            "reward_achievement": achievement_reward,
+            "achievements": sorted(current_achievements),
+        }
 
     def _record_public_setup_transition(self, action: int, before_inventory, after_inventory) -> None:
         """Confirm setup from an explicit action and public inventory delta only."""
