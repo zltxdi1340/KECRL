@@ -11,6 +11,26 @@ from experiments.run_crafter_auxiliary_ppo_pilot import run
 from src.utils.config import load_config
 
 
+def _validate_role_seeds(base: dict, replica_count: int) -> None:
+    stride = int(base.get("replicate_seed_stride", 1_000_000))
+    train_count = int(base["train_episodes"])
+    qualification_count = int(base["qualification_episodes"])
+    if stride <= 0 or train_count <= 0 or qualification_count <= 0:
+        raise ValueError("replica stride and episode budgets must be positive")
+    for fields in (
+        ("train_seed_base", "qualification_seed_base"),
+        ("action_seed_base", "qualification_action_seed_base"),
+    ):
+        seen = set()
+        for replica in range(replica_count):
+            for field, count in zip(fields, (train_count, qualification_count)):
+                start = int(base[field]) + replica * stride
+                seeds = set(range(start, start + count))
+                if seen.intersection(seeds):
+                    raise ValueError("training/qualification or replica seed ranges overlap")
+                seen.update(seeds)
+
+
 def run_independent(config_path: str, output_path: str) -> dict:
     base = load_config(config_path)
     if base.get("formal_result") is not False:
@@ -18,6 +38,7 @@ def run_independent(config_path: str, output_path: str) -> dict:
     seeds = [int(seed) for seed in base.get("seed_set", [base.get("seed", 0)])]
     if not seeds or len(set(seeds)) != len(seeds):
         raise ValueError("seed_set must be non-empty and unique")
+    _validate_role_seeds(base, len(seeds))
     output = Path(output_path)
     if output.exists():
         raise FileExistsError(f"refusing to overwrite {output}")
@@ -28,6 +49,7 @@ def run_independent(config_path: str, output_path: str) -> dict:
         config = copy.deepcopy(base)
         config["seed"] = seed
         config["seed_set"] = [seed]
+        config["policy_updated"] = True
         config["status"] = f"{base['status']}_seed{seed}"
         for field in (
             "train_seed_base", "qualification_seed_base",
@@ -55,6 +77,9 @@ def run_independent(config_path: str, output_path: str) -> dict:
         "task": base["task"],
         "independent_replicas": True,
         "teacher_used": False,
+        "policy_updated": True,
+        "train_qualification_seed_disjoint": True,
+        "replica_seed_ranges_disjoint": True,
         "module_registered": False,
         "knowledge_evolution_updated": False,
         "formal_training_allowed": False,

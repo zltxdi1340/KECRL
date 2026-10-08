@@ -5,7 +5,7 @@
   "seed": 0,
   "seed_set": [0, 1, 2, 3, 4],
   "teacher_used": false,
-  "policy_updated": false,
+  "policy_updated": true,
   "replicate_seed_stride": 1000000,
   "train_episodes": 40,
   "qualification_episodes": 20,
@@ -20,5 +20,5 @@
   "action_allowlist": [0, 1, 2, 3, 4, 5, 6],
   "policy": {"observation_dim": 192, "action_count": 17, "hidden_dim": 64, "learning_rate": 0.0003, "gamma": 0.99, "gae_lambda": 0.95, "clip_epsilon": 0.2, "value_coef": 0.5, "entropy_coef": 0.01, "update_epochs": 4},
   "task": {"task_id": "gather_wood_3", "item": "wood", "threshold": 3},
-  "pilot_note": "Non-formal horizon cost diagnostic for wood >= 3. It changes only the episode horizon from the 256-step PPO candidate; no teacher, Module registration, Knowledge update, SPT acceptance, or formal result is claimed."
+  "pilot_note": "Non-formal exploratory wood >= 3 PPO diagnostic with horizon 512, 40 training episodes, and new role seed bases. It is not a paired horizon comparison with the 256-step/80-episode pilot; no teacher, Module registration, Knowledge update, SPT acceptance, or formal result is claimed."
 }

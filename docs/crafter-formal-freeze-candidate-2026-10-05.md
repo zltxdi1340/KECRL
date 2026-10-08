@@ -735,3 +735,19 @@ teacher, Module, Knowledge update, or SPT update was used. This confirms that
 the first persistent resource boundary is currently not feasible for the
 candidate RGB Policy budget. It blocks real Module qualification and formal
 training; changing the formal threshold would hide a learnability failure.
+
+## Horizon cost check for wood >= 3 (2026-10-08)
+
+To explore episode budget as one possible bottleneck, a second five-seed
+PPO/GAE diagnostic used a 512-step horizon and 40 training episodes per seed.
+It uses new role seed bases and is therefore not a paired horizon comparison
+with the 256-step/80-episode run. It is configured by
+`configs/crafter_auxiliary_gather_wood3_ppo_goal_actions_horizon512_pilot_v1.yaml`
+and stored in
+`results/crafter_auxiliary_gather_wood3_ppo_goal_actions_horizon512_pilot_869e3b2/`.
+
+Independent qualification was `0.35`, `0.15`, `0.55`, `0.25`, and `0.35`
+(mean `0.33`). No seed reached `0.8`. The result is a useful exploratory
+feasibility signal, but it cannot attribute the difference to horizon alone or
+freeze `512` as a formal value. Long-horizon credit assignment and training
+stability remain open before Module qualification.

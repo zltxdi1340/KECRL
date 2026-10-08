@@ -3,8 +3,10 @@ import inspect
 from pathlib import Path
 
 import torch
+import pytest
 
 from experiments.run_crafter_auxiliary_ppo_pilot import PPOCrafterPolicy, _features, _inventory_features
+from experiments.run_crafter_auxiliary_ppo_independent import _validate_role_seeds
 from experiments.run_crafter_rgb_oracle_imitation_diagnostic import RGBActionClassifier, RecordingReferencePlanner
 
 
@@ -118,10 +120,11 @@ def test_wood3_ppo_independent_pilot_matches_first_v2_boundary():
     assert config["task"] == {"task_id": "gather_wood_3", "item": "wood", "threshold": 3}
     assert config["action_allowlist"] == [0, 1, 2, 3, 4, 5, 6]
     assert config["teacher_used"] is False
-    assert config["policy_updated"] is False
+    assert config["policy_updated"] is True
+    _validate_role_seeds(config, len(config["seed_set"]))
 
 
-def test_wood3_ppo_horizon_candidate_changes_only_budget_axis():
+def test_wood3_ppo_horizon_candidate_declares_exploratory_budget():
     base = json.loads(Path("configs/crafter_auxiliary_gather_wood3_ppo_goal_actions_pilot_v1.yaml").read_text())
     horizon = json.loads(Path("configs/crafter_auxiliary_gather_wood3_ppo_goal_actions_horizon512_pilot_v1.yaml").read_text())
     assert horizon["formal_result"] is False
@@ -129,3 +132,19 @@ def test_wood3_ppo_horizon_candidate_changes_only_budget_axis():
     assert horizon["task"] == base["task"]
     assert horizon["action_allowlist"] == base["action_allowlist"]
     assert horizon["policy"] == base["policy"]
+    assert horizon["train_episodes"] == 40
+    assert base["train_episodes"] == 80
+    assert horizon["train_seed_base"] != base["train_seed_base"]
+    assert horizon["policy_updated"] is True
+    _validate_role_seeds(horizon, len(horizon["seed_set"]))
+
+
+def test_independent_ppo_rejects_overlapping_role_and_replica_seeds():
+    config = json.loads(Path("configs/crafter_auxiliary_gather_wood3_ppo_goal_actions_pilot_v1.yaml").read_text())
+    config["qualification_seed_base"] = config["train_seed_base"] + 10
+    with pytest.raises(ValueError, match="overlap"):
+        _validate_role_seeds(config, 5)
+    config["qualification_seed_base"] = 850000
+    config["replicate_seed_stride"] = 10
+    with pytest.raises(ValueError, match="overlap"):
+        _validate_role_seeds(config, 5)

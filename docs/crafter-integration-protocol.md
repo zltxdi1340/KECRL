@@ -106,6 +106,14 @@ For `wood >= 3`, independent qualification was `0.15`, `0.50`, `0.20`,
 task-local RGB Policy learnability as the next blocker before Module or
 continual-chain validation.
 
+A 512-step exploratory follow-up with 40 training episodes and new role seed
+bases at
+`results/crafter_auxiliary_gather_wood3_ppo_goal_actions_horizon512_pilot_869e3b2/`
+reported mean independent qualification `0.33` (`0.15--0.55` per seed), but
+still produced zero qualified seeds. It is not a paired horizon comparison,
+so the result cannot isolate the effect of the longer budget; horizon `512`
+remains a candidate diagnostic value, not a formal freeze.
+
 ## Candidate Tasks and Evidence
 
 Candidate resource targets include collecting wood/stone and acquiring tools.
