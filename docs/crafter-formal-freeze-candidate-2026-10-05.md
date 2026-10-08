@@ -790,3 +790,28 @@ it does not establish that memory or spatial representation is sufficient.
 Both runs retain `formal_result=false`, register no Module, and perform no
 Knowledge or SPT update. The next decision should be a smaller controlled
 representation and reward/credit-assignment study, not formal training.
+
+### Corrected CUDA follow-up
+
+The earlier directory `results/crafter_wood3_budget_continuation_cuda_20261008/`
+actually records CPU results and must not be cited as CUDA evidence. The
+corrected runners resolve the requested config device, reject unavailable
+CUDA without CPU fallback, and record actual parameter placement.
+
+Five-seed CUDA continuation under
+`results/crafter_wood3_budget_continuation_cuda_20261008_v1/` yielded
+qualification mean `0.29 -> 0.26` at 80 -> 160 episodes, with `0/5` seeds
+reaching the candidate `0.8` at either checkpoint. The CUDA spatial CNN + GRU
+follow-up at commit `3cdfbbe` in
+`results/crafter_wood3_spatial_gru_cuda_3cdfbbe_v1/` yielded mean `0.34`, also
+`0/5` at the gate. Both verified CUDA for every seed. Larger budgets remain
+untested; CNN and GRU effects were not separated, and equal Crafter seeds
+do not guarantee identical evaluation trajectories. This is descriptive
+feasibility evidence, not a formal paired effectiveness comparison.
+
+The current decision is to retain the formal gate and all candidate values,
+then audit early episode termination, survival/exploration and reward/credit
+assignment; a CNN-only control is needed to attribute recurrent memory's
+effect. No active SPT or existing Module was changed. Complete per-seed
+statistics, interaction steps and wall time are in the continuation directory's
+`cuda_comparison.json` and `cuda_comparison.csv`; all results remain non-formal.

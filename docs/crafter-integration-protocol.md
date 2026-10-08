@@ -152,6 +152,39 @@ strict paired causal claims. Continuation uses one Policy training stream
 per seed; matching evaluation seeds still does not guarantee matching full
 world trajectories. These limitations remain relevant before formal freezing.
 
+The corrected CUDA continuation result is in
+`results/crafter_wood3_budget_continuation_cuda_20261008_v1/`. All five
+replicas verified CUDA. Qualification rates at 80 episodes were
+`0.25, 0.35, 0.25, 0.30, 0.30` (mean `0.29`, sample SD `0.0418`); at 160
+they were `0.15, 0.45, 0.30, 0.15, 0.25` (mean `0.26`, SD `0.1245`).
+The mean within-run checkpoint difference was `-0.03` (SD `0.1037`), and
+neither checkpoint had a seed reaching the candidate `0.8` success gate.
+The launch HEAD was `d76daa3` with uncommitted diagnostic code; its saved
+runner snapshots were subsequently verified identical to the source committed
+as `3cdfbbe`. See the result directory's `provenance.md` and snapshots.
+
+The CUDA spatial CNN + GRU run at commit `3cdfbbe` is in
+`results/crafter_wood3_spatial_gru_cuda_3cdfbbe_v1/`, with a sibling `.run.log`.
+All replicas verified CUDA. Its 160-episode qualification rates were
+`0.45, 0.35, 0.45, 0.25, 0.20` (mean `0.34`, SD `0.1140`), with zero seeds
+at `0.8`. The descriptive difference from the CUDA avgpool final checkpoint
+was `+0.08` (SD across seed differences `0.1605`); no statistical improvement
+or isolated memory effect is claimed. Average training interactions were
+`23378.4` for avgpool and `24036.6` for CNN + GRU, despite equal 160-episode
+budgets. Average wall time was `182.7` and `144.2` seconds per seed,
+respectively; avgpool includes an extra qualification checkpoint, so these
+times do not isolate encoder cost or measure pure GPU compute time.
+
+Training episodes ending before horizon without success comprised `0.675`
+for avgpool and `0.64875` for CNN + GRU. This suggests auditing survival,
+exploration and reward/credit assignment next, alongside a CNN-only control
+if the recurrent contribution is to be separated. It does not establish a
+causal diagnosis. The descriptive JSON/CSV comparison is saved as
+`cuda_comparison.json` and `cuda_comparison.csv` in the continuation directory.
+All runs remain `formal_result=false`, with no Module registration, Knowledge
+update, SPT update or formal-training permission. These success-rate probes
+do not replace independent full contract qualification.
+
 ## Candidate Tasks and Evidence
 
 Candidate resource targets include collecting wood/stone and acquiring tools.
