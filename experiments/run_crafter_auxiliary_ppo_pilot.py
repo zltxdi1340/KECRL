@@ -4,10 +4,12 @@ from __future__ import annotations
 import argparse
 import json
 import math
+import random
 import subprocess
 import time
 from pathlib import Path
 
+import numpy as np
 import torch
 from torch import nn
 import torch.nn.functional as functional
@@ -246,7 +248,10 @@ def run(config_path: str, output_path: str) -> dict:
         raise FileExistsError(f"refusing to overwrite {output}")
     resolved = ContinualLearningPipeline.resolve_device(config["device"])
     device = torch.device(resolved)
-    torch.manual_seed(int(config["seed"]))
+    seed = int(config["seed"])
+    random.seed(seed)
+    np.random.seed(seed)
+    torch.manual_seed(seed)
     policy = PPOCrafterPolicy(config["policy"]).to(device)
     target = config["task"]
     start = time.perf_counter()

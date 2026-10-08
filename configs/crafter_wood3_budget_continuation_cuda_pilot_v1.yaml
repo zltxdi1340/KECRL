@@ -1,0 +1,13 @@
+{
+  "status": "crafter_wood3_budget_continuation_cuda_pilot_v1",
+  "formal_result": false,
+  "device": "cuda",
+  "seed_set": [0, 1, 2, 3, 4],
+  "baseline_train_episodes": 80,
+  "extended_train_episodes": 160,
+  "qualification_episodes": 20,
+  "max_steps": 256,
+  "replicate_seed_stride": 1000000,
+  "base_config": "configs/crafter_auxiliary_gather_wood3_ppo_goal_actions_pilot_v1.yaml",
+  "pilot_note": "Non-formal CUDA continuation budget diagnostic. Each seed evaluates one frozen Policy after 80 and 160 training episodes on held-out qualification seeds. Equal seeds do not guarantee identical Crafter trajectories. No Module, Knowledge or SPT update; no formal training."
+}

@@ -1,0 +1,13 @@
+{
+  "status": "crafter_wood3_paired_budget_pilot_v1",
+  "formal_result": false,
+  "device": "cpu",
+  "seed_set": [0, 1, 2, 3, 4],
+  "baseline_train_episodes": 80,
+  "extended_train_episodes": 160,
+  "qualification_episodes": 20,
+  "max_steps": 256,
+  "replicate_seed_stride": 1000000,
+  "base_config": "configs/crafter_auxiliary_gather_wood3_ppo_goal_actions_pilot_v1.yaml",
+  "pilot_note": "CPU-only non-formal continuation budget diagnostic. Each seed evaluates the same policy after 80 and 160 training episodes using a shared held-out qualification set; no independent-arm equality is assumed. Python hash is fixed by the launch environment for Crafter episode reproducibility."
+}

@@ -761,3 +761,32 @@ the earlier run with the same behavioral configuration; cross-process exact
 reproducibility remains unresolved and must be checked before interpreting a
 paired budget comparison. Neither run establishes horizon as the cause of an
 improvement. PPO trains the pilot Policy; it does not update an active SPT.
+
+## Budget continuation and RGB representation check (2026-10-08)
+
+The budget question was rerun with a same-policy continuation diagnostic at
+base commit `d76daa3` with uncommitted diagnostic changes. Each seed used one PPO Policy instance, evaluated on the
+same held-out qualification seeds after 80 training episodes and again after
+160 episodes. The run is stored in
+`results/crafter_wood3_budget_continuation_cpu_20261008/` and configured by
+`configs/crafter_wood3_paired_budget_pilot_v1.yaml`. It ran on CPU because
+the current host could not communicate with the NVIDIA driver. The mean
+qualification rate changed from `0.28` to `0.26`; per-seed changes were
+`-0.15`, `-0.05`, `+0.05`, `0.00`, and `+0.05`, and no seed reached `0.8`.
+The continuation uses one Policy's initialization and training prefix, but
+it remains a non-formal budget diagnostic. It does not support the claim
+that doubling this training budget solves the wood >= 3 qualification
+failure.
+
+The representation follow-up used a spatial CNN plus within-episode GRU on
+RGB observations, with the same 160-episode budget and no teacher or KECRL
+state update. Its aggregate is stored in
+`results/crafter_wood3_spatial_gru_pilot_cpu_20261008/` and configured by
+`configs/crafter_wood3_spatial_gru_pilot_v1.yaml`. The mean independent
+qualification rate was `0.34` (`0.35`, `0.45`, `0.25`, `0.25`, `0.40`), with
+zero qualified seeds. This is higher than the continuation baseline's final
+`0.26` in this CPU diagnostic, but still far below the candidate `0.8` gate;
+it does not establish that memory or spatial representation is sufficient.
+Both runs retain `formal_result=false`, register no Module, and perform no
+Knowledge or SPT update. The next decision should be a smaller controlled
+representation and reward/credit-assignment study, not formal training.

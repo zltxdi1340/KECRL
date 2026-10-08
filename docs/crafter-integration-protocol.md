@@ -122,6 +122,36 @@ exact cross-process reproducibility remains to be audited before a paired
 comparison. Training updates the pilot Policy, while SPT and Knowledge remain
 unchanged. Role and replica seed ranges are checked for overlap before running.
 
+The CPU continuation budget diagnostic is stored in
+`results/crafter_wood3_budget_continuation_cpu_20261008/`: qualification mean
+was `0.28` after 80 training episodes and `0.26` after 160; no replica reached
+the candidate `0.8` gate. The CPU spatial CNN + GRU diagnostic in
+`results/crafter_wood3_spatial_gru_pilot_cpu_20261008/` reached mean `0.34`,
+also with zero replicas meeting that gate. These runs use five seeds, held-out
+qualification, and `formal_result=false`. They show that this budget doubling
+did not solve the qualification failure, without excluding larger budgets.
+CNN and GRU were changed together, so memory's contribution is not isolated.
+
+The subsequent directory
+`results/crafter_wood3_budget_continuation_cuda_20261008/` is misleadingly
+named: its config and results explicitly say `device=cpu` because the runner
+was then hard-coded to CPU. Its means were `0.26 -> 0.24`; it must not be
+cited as CUDA evidence. The corrected CUDA runners read and resolve the
+requested device, refuse silent CUDA-to-CPU fallback, and report actual model
+parameter placement in every replica and aggregate. Dedicated CUDA configs
+are `configs/crafter_wood3_budget_continuation_cuda_pilot_v1.yaml` and
+`configs/crafter_wood3_spatial_gru_cuda_pilot_v1.yaml`. The corrected routing
+smoke is stored in `results/crafter_wood3_cuda_routing_smoke_20261008_v1/`;
+both runners verified CUDA tensors, without qualifying or registering Modules.
+
+Fixed Python, NumPy and Torch RNG seeds do not guarantee exact replay of
+independently constructed Crafter episodes. Earlier separate-arm attempts in
+`results/crafter_wood3_paired_budget_pilot_cpu_20261008_retry2/` and `retry3/`
+reported `same_initialization_and_seed_prefix=false` and are unsuitable for
+strict paired causal claims. Continuation uses one Policy training stream
+per seed; matching evaluation seeds still does not guarantee matching full
+world trajectories. These limitations remain relevant before formal freezing.
+
 ## Candidate Tasks and Evidence
 
 Candidate resource targets include collecting wood/stone and acquiring tools.

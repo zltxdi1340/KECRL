@@ -8,6 +8,9 @@ import pytest
 from experiments.run_crafter_auxiliary_ppo_pilot import PPOCrafterPolicy, _features, _inventory_features
 from experiments.run_crafter_auxiliary_ppo_independent import _validate_role_seeds
 from experiments.run_crafter_rgb_oracle_imitation_diagnostic import RGBActionClassifier, RecordingReferencePlanner
+from experiments.run_crafter_wood3_spatial_gru_pilot import SpatialGRUPolicy
+from experiments.run_crafter_wood3_spatial_gru_pilot import run as run_gru
+from experiments.run_crafter_wood3_paired_budget_pilot import _run_seed as run_budget_seed
 
 
 def test_ppo_pilot_is_non_formal_and_uses_exact_unit_target():
@@ -148,3 +151,66 @@ def test_independent_ppo_rejects_overlapping_role_and_replica_seeds():
     config["replicate_seed_stride"] = 10
     with pytest.raises(ValueError, match="overlap"):
         _validate_role_seeds(config, 5)
+
+
+def test_wood3_budget_pair_and_spatial_gru_pilots_are_non_formal_and_disjoint():
+    budget = json.loads(Path("configs/crafter_wood3_paired_budget_pilot_v1.yaml").read_text())
+    gru = json.loads(Path("configs/crafter_wood3_spatial_gru_pilot_v1.yaml").read_text())
+    assert budget["formal_result"] is False
+    assert budget["baseline_train_episodes"] < budget["extended_train_episodes"]
+    assert budget["device"] == "cpu"
+    assert "continuation" in budget["pilot_note"]
+    assert gru["formal_result"] is False
+    assert gru["teacher_used"] is False
+    assert gru["task"] == {"task_id": "gather_wood_3", "item": "wood", "threshold": 3}
+    _validate_role_seeds(gru, len(gru["seed_set"]))
+    policy = SpatialGRUPolicy(gru["policy"])
+    distribution, value, hidden = policy.distribution_value(
+        torch.zeros(3, 64, 64), None, gru["action_allowlist"]
+    )
+    assert distribution.probs.shape == (17,)
+    assert value.shape == ()
+    assert hidden.shape == (1, 1, gru["policy"]["recurrent_hidden_dim"])
+
+
+def test_cuda_wood3_configs_keep_budget_task_and_role_boundaries():
+    budget = json.loads(Path("configs/crafter_wood3_budget_continuation_cuda_pilot_v1.yaml").read_text())
+    gru = json.loads(Path("configs/crafter_wood3_spatial_gru_cuda_pilot_v1.yaml").read_text())
+    assert budget["device"] == gru["device"] == "cuda"
+    assert budget["formal_result"] is gru["formal_result"] is False
+    assert budget["extended_train_episodes"] == gru["train_episodes"] == 160
+    assert budget["max_steps"] == gru["max_steps"] == 256
+    assert budget["seed_set"] == gru["seed_set"] == [0, 1, 2, 3, 4]
+    assert gru["teacher_used"] is False
+    _validate_role_seeds(gru, len(gru["seed_set"]))
+
+
+def test_gru_sequence_replay_matches_stepwise_hidden_state():
+    config = json.loads(Path("configs/crafter_wood3_spatial_gru_pilot_v1.yaml").read_text())
+    policy = SpatialGRUPolicy(config["policy"])
+    observations = torch.rand(4, 3, 64, 64)
+    hidden = None
+    probabilities, values = [], []
+    with torch.no_grad():
+        for observation in observations:
+            distribution, value, hidden = policy.distribution_value(
+                observation, hidden, config["action_allowlist"]
+            )
+            probabilities.append(distribution.probs)
+            values.append(value)
+        replay, replay_values = policy.sequence_logits_values(observations, config["action_allowlist"])
+    assert torch.allclose(replay.probs, torch.stack(probabilities), atol=1e-6)
+    assert torch.allclose(replay_values, torch.stack(values), atol=1e-6)
+
+
+def test_wood3_runners_reject_unavailable_cuda_before_rollout(monkeypatch, tmp_path):
+    monkeypatch.setattr(torch.cuda, "is_available", lambda: False)
+    config = json.loads(Path("configs/crafter_wood3_spatial_gru_cuda_pilot_v1.yaml").read_text())
+    path = tmp_path / "config.json"
+    path.write_text(json.dumps(config))
+    with pytest.raises(RuntimeError, match="refusing silent CPU fallback"):
+        run_gru(str(path), str(tmp_path / "gru"))
+    with pytest.raises(RuntimeError, match="refusing silent CPU fallback"):
+        run_budget_seed(config, tmp_path / "budget")
+    assert not (tmp_path / "gru").exists()
+    assert not (tmp_path / "budget").exists()
