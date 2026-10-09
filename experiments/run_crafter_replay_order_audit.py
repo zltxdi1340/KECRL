@@ -11,6 +11,8 @@ from pathlib import Path
 
 import numpy as np
 
+from src.environments.crafter_determinism import stable_crafter_object_order
+
 
 def _digest(value) -> str:
     if isinstance(value, np.ndarray):
@@ -43,19 +45,10 @@ def _worker(seed: int, actions: list[int], stable: bool, output: Path) -> None:
     import crafter
 
     if stable:
-        native_balance = crafter.Env._balance_object
-
-        def stable_balance(self, chunk, objs, *args, **kwargs):
-            def order_key(obj):
-                try:
-                    return int(self._world._obj_map[tuple(obj.pos)])
-                except (KeyError, TypeError, ValueError):
-                    return (obj.__class__.__name__, tuple(int(v) for v in obj.pos))
-            return native_balance(self, chunk, sorted(objs, key=order_key), *args, **kwargs)
-
-        crafter.Env._balance_object = stable_balance
-
-    traces = [_run_trace(seed, actions, stable) for _ in range(3)]
+        with stable_crafter_object_order():
+            traces = [_run_trace(seed, actions, stable) for _ in range(3)]
+    else:
+        traces = [_run_trace(seed, actions, stable) for _ in range(3)]
     output.write_text(json.dumps({"seed": seed, "stable": stable, "traces": traces}, indent=2) + "\n")
 
 
@@ -114,6 +107,7 @@ def run(output_path: str) -> dict:
     result = {
         "formal_result": False,
         "status": "crafter_replay_order_audit",
+        "stable_order_version": "balance-object-insertion-order-v1",
         "seeds": seeds,
         "hash_seeds": hash_seeds,
         "action_streams": actions_by_seed,

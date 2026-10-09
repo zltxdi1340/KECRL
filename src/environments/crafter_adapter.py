@@ -99,21 +99,54 @@ class CrafterEnvironmentAdapter:
     def _player_value(self, name: str):
         player = getattr(self.environment, "_player", None)
         value = getattr(player, name, None)
+        if value is None and name in {"food", "drink", "energy"}:
+            inventory = getattr(player, "inventory", None)
+            value = inventory.get(name) if isinstance(inventory, dict) else None
         if isinstance(value, (int, float)) and not isinstance(value, bool):
             return float(value)
         return None
 
+    def _player_terrain(self):
+        player = getattr(self.environment, "_player", None)
+        world = getattr(self.environment, "_world", None)
+        position = getattr(player, "pos", None)
+        if world is None or position is None:
+            return None
+        try:
+            material, _object = world[position]
+        except (KeyError, TypeError, IndexError):
+            return None
+        return str(material)
+
     def _diagnostic_info(self, native_info: dict, reward: float) -> dict[str, Any]:
         health = self._player_value("health")
+        food = self._player_value("food")
+        drink = self._player_value("drink")
+        energy = self._player_value("energy")
+        terrain = self._player_terrain()
         achievements = native_info.get("achievements", {})
         current_achievements = {
             str(name) for name, count in achievements.items() if count > 0
         } if isinstance(achievements, dict) else set()
         achievement_reward = float(len(current_achievements - self._previous_achievements))
-        health_reward = (
-            (health - self._previous_health) / 10.0
+        health_delta = (
+            health - self._previous_health
             if health is not None and self._previous_health is not None else None
         )
+        health_reward = health_delta / 10.0 if health_delta is not None else None
+        depleted = any(
+            value is not None and value <= 0 for value in (food, drink, energy)
+        )
+        if health_delta is None or health_delta >= 0:
+            damage_source_hint = None
+        elif terrain == "lava":
+            damage_source_hint = "lava"
+        elif health_delta == -1 and depleted:
+            damage_source_hint = "depletion"
+        elif health_delta in {-2, -7}:
+            damage_source_hint = "hostile_or_projectile"
+        else:
+            damage_source_hint = "mixed_or_unknown"
         length = getattr(self.environment, "_length", None)
         if self._done and health is not None and health <= 0:
             terminal_reason = "death"
@@ -129,9 +162,12 @@ class CrafterEnvironmentAdapter:
             "step": self.step_count,
             "terminal_reason": terminal_reason,
             "health": health,
-            "food": self._player_value("food"),
-            "drink": self._player_value("drink"),
-            "energy": self._player_value("energy"),
+            "food": food,
+            "drink": drink,
+            "energy": energy,
+            "terrain": terrain,
+            "health_delta": health_delta,
+            "damage_source_hint": damage_source_hint,
             "reward": reward,
             "reward_health": health_reward,
             "reward_achievement": achievement_reward,

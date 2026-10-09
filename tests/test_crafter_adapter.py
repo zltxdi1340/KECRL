@@ -28,6 +28,21 @@ def test_crafter_reset_step_and_contract_metadata():
     environment.close()
 
 
+def test_diagnostics_read_life_stats_from_player_inventory():
+    environment = CrafterEnvironmentAdapter(seed=0, diagnostics=True)
+    environment.reset()
+    _, _, _, info = environment.step(0)
+
+    diagnostics = info["diagnostics"]
+    for name in ("food", "drink", "energy"):
+        assert diagnostics[name] == float(info["inventory"][name])
+    assert diagnostics["health"] is not None
+    assert isinstance(diagnostics["terrain"], str)
+    assert diagnostics["health_delta"] == 0.0
+    assert diagnostics["damage_source_hint"] is None
+    environment.close()
+
+
 def test_adapter_exposes_current_observation_for_persistent_execution():
     pytest.importorskip("crafter")
     environment = CrafterEnvironmentAdapter(seed=0, length=2)

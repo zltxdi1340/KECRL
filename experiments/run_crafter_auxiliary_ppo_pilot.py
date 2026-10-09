@@ -169,7 +169,10 @@ def _policy_features(observations, inventory, device, config):
     return feature
 
 
-def _save_checkpoint(path: Path, policy: PPOCrafterPolicy, config: dict, episode: int) -> None:
+def _save_checkpoint(
+    path: Path, policy: PPOCrafterPolicy, config: dict, episode: int,
+    extra: dict | None = None,
+) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
     checkpoint = {
         "episode": int(episode),
@@ -181,6 +184,8 @@ def _save_checkpoint(path: Path, policy: PPOCrafterPolicy, config: dict, episode
         "cuda_rng": torch.cuda.get_rng_state_all() if torch.cuda.is_available() else None,
         "config": dict(config),
     }
+    if extra:
+        checkpoint.update(extra)
     torch.save(checkpoint, path)
 
 
@@ -297,7 +302,8 @@ def _rollout(policy, seed, target, device, config, train):
         start_entropy = float(config["policy"].get("entropy_coef_start", config["policy"].get("entropy_coef", 0.0)))
         end_entropy = float(config["policy"].get("entropy_coef_end", start_entropy))
         total_train = max(int(config["train_episodes"]), 1)
-        progress = min(max(float(config.get("episode_index", 0)) / total_train, 0.0), 1.0)
+        default_progress = float(config.get("episode_index", 0)) / total_train
+        progress = min(max(float(config.get("training_progress", default_progress)), 0.0), 1.0)
         entropy_coef = start_entropy + (end_entropy - start_entropy) * progress
         update_result = policy.update(
             torch.stack(features), torch.stack(actions), torch.stack(log_probs).detach(),

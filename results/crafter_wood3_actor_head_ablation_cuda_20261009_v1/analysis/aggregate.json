@@ -1,0 +1,743 @@
+{
+  "formal_result": false,
+  "mean_unit": "three source PPO policy seeds; one MLP initialization",
+  "fresh_backgrounds": 16,
+  "fresh_candidates_examined": 40,
+  "excluded_prior_backgrounds": 96,
+  "datasets": {
+    "reused_heldout": {
+      "baseline": {
+        "action_means": {
+          "balanced_accuracy": 0.16666666666666666,
+          "tree_present_balanced_accuracy": 0.20000000000000004,
+          "ready_do_rate": 0.3333333333333333,
+          "unaligned_target_move_rate": 0.16666666666666666
+        },
+        "rollout_means": {
+          "sample": {
+            "tree_present": {
+              "success_mean": 0.27447916666666666,
+              "success_by_policy_seed": [
+                0.33880208333333334,
+                0.2859375,
+                0.19869791666666667
+              ],
+              "deaths": 0,
+              "health_lost": 0,
+              "other_tree_wood_gain": 559
+            },
+            "aligned": {
+              "success_mean": 0.5368055555555555,
+              "success_by_policy_seed": [
+                0.6875,
+                0.51875,
+                0.4041666666666667
+              ],
+              "deaths": 0,
+              "health_lost": 0,
+              "other_tree_wood_gain": 126
+            },
+            "needs_turn": {
+              "success_mean": 0.18703703703703703,
+              "success_by_policy_seed": [
+                0.22256944444444443,
+                0.20833333333333334,
+                0.13020833333333334
+              ],
+              "deaths": 0,
+              "health_lost": 0,
+              "other_tree_wood_gain": 433
+            },
+            "no_tree": {
+              "success_mean": 0.0,
+              "success_by_policy_seed": [
+                0.0,
+                0.0,
+                0.0
+              ],
+              "deaths": 0,
+              "health_lost": 0,
+              "other_tree_wood_gain": 220
+            }
+          },
+          "greedy": {
+            "tree_present": {
+              "success_mean": 0.0842013888888889,
+              "success_by_policy_seed": [
+                0.2526041666666667,
+                0.0,
+                0.0
+              ],
+              "deaths": 0,
+              "health_lost": 0,
+              "other_tree_wood_gain": 43
+            },
+            "aligned": {
+              "success_mean": 0.3333333333333333,
+              "success_by_policy_seed": [
+                1.0,
+                0.0,
+                0.0
+              ],
+              "deaths": 0,
+              "health_lost": 0,
+              "other_tree_wood_gain": 9
+            },
+            "needs_turn": {
+              "success_mean": 0.0011574074074074073,
+              "success_by_policy_seed": [
+                0.003472222222222222,
+                0.0,
+                0.0
+              ],
+              "deaths": 0,
+              "health_lost": 0,
+              "other_tree_wood_gain": 34
+            },
+            "no_tree": {
+              "success_mean": 0.0,
+              "success_by_policy_seed": [
+                0.0,
+                0.0,
+                0.0
+              ],
+              "deaths": 0,
+              "health_lost": 0,
+              "other_tree_wood_gain": 24
+            }
+          }
+        },
+        "greedy_background_min": 0.0,
+        "greedy_background_max": 0.2708333333333333,
+        "background_seed_cells_below_080": 48,
+        "background_seed_cells": 48
+      },
+      "raw_linear": {
+        "action_means": {
+          "balanced_accuracy": 0.7598379629629629,
+          "tree_present_balanced_accuracy": 0.7486111111111112,
+          "ready_do_rate": 0.10416666666666667,
+          "unaligned_target_move_rate": 0.9097222222222223
+        },
+        "rollout_means": {
+          "sample": {
+            "tree_present": {
+              "success_mean": 0.48342013888888885,
+              "success_by_policy_seed": [
+                0.5356770833333333,
+                0.43802083333333336,
+                0.4765625
+              ],
+              "deaths": 0,
+              "health_lost": 0,
+              "other_tree_wood_gain": 6
+            },
+            "aligned": {
+              "success_mean": 0.5503472222222222,
+              "success_by_policy_seed": [
+                0.58125,
+                0.5135416666666667,
+                0.55625
+              ],
+              "deaths": 0,
+              "health_lost": 0,
+              "other_tree_wood_gain": 2
+            },
+            "needs_turn": {
+              "success_mean": 0.4611111111111111,
+              "success_by_policy_seed": [
+                0.5204861111111111,
+                0.4128472222222222,
+                0.45
+              ],
+              "deaths": 0,
+              "health_lost": 0,
+              "other_tree_wood_gain": 4
+            },
+            "no_tree": {
+              "success_mean": 0.0,
+              "success_by_policy_seed": [
+                0.0,
+                0.0,
+                0.0
+              ],
+              "deaths": 0,
+              "health_lost": 0,
+              "other_tree_wood_gain": 2
+            }
+          },
+          "greedy": {
+            "tree_present": {
+              "success_mean": 0.08246527777777778,
+              "success_by_policy_seed": [
+                0.11979166666666667,
+                0.033854166666666664,
+                0.09375
+              ],
+              "deaths": 0,
+              "health_lost": 0,
+              "other_tree_wood_gain": 0
+            },
+            "aligned": {
+              "success_mean": 0.10416666666666667,
+              "success_by_policy_seed": [
+                0.14583333333333334,
+                0.046875,
+                0.11979166666666667
+              ],
+              "deaths": 0,
+              "health_lost": 0,
+              "other_tree_wood_gain": 0
+            },
+            "needs_turn": {
+              "success_mean": 0.07523148148148148,
+              "success_by_policy_seed": [
+                0.1111111111111111,
+                0.029513888888888888,
+                0.08506944444444445
+              ],
+              "deaths": 0,
+              "health_lost": 0,
+              "other_tree_wood_gain": 0
+            },
+            "no_tree": {
+              "success_mean": 0.0,
+              "success_by_policy_seed": [
+                0.0,
+                0.0,
+                0.0
+              ],
+              "deaths": 0,
+              "health_lost": 0,
+              "other_tree_wood_gain": 0
+            }
+          }
+        },
+        "greedy_background_min": 0.0,
+        "greedy_background_max": 0.3333333333333333,
+        "background_seed_cells_below_080": 48,
+        "background_seed_cells": 48
+      },
+      "standardized_linear": {
+        "action_means": {
+          "balanced_accuracy": 0.8927469135802469,
+          "tree_present_balanced_accuracy": 0.8962962962962964,
+          "ready_do_rate": 0.7916666666666666,
+          "unaligned_target_move_rate": 0.9224537037037037
+        },
+        "rollout_means": {
+          "sample": {
+            "tree_present": {
+              "success_mean": 0.8119791666666667,
+              "success_by_policy_seed": [
+                0.6854166666666667,
+                0.84140625,
+                0.9091145833333333
+              ],
+              "deaths": 0,
+              "health_lost": 0,
+              "other_tree_wood_gain": 0
+            },
+            "aligned": {
+              "success_mean": 0.8222222222222223,
+              "success_by_policy_seed": [
+                0.6958333333333333,
+                0.8520833333333333,
+                0.91875
+              ],
+              "deaths": 0,
+              "health_lost": 0,
+              "other_tree_wood_gain": 0
+            },
+            "needs_turn": {
+              "success_mean": 0.8085648148148148,
+              "success_by_policy_seed": [
+                0.6819444444444445,
+                0.8378472222222222,
+                0.9059027777777777
+              ],
+              "deaths": 0,
+              "health_lost": 0,
+              "other_tree_wood_gain": 0
+            },
+            "no_tree": {
+              "success_mean": 0.0,
+              "success_by_policy_seed": [
+                0.0,
+                0.0,
+                0.0
+              ],
+              "deaths": 0,
+              "health_lost": 0,
+              "other_tree_wood_gain": 1
+            }
+          },
+          "greedy": {
+            "tree_present": {
+              "success_mean": 0.7838541666666666,
+              "success_by_policy_seed": [
+                0.6184895833333334,
+                0.8268229166666666,
+                0.90625
+              ],
+              "deaths": 0,
+              "health_lost": 0,
+              "other_tree_wood_gain": 0
+            },
+            "aligned": {
+              "success_mean": 0.796875,
+              "success_by_policy_seed": [
+                0.6302083333333334,
+                0.8385416666666666,
+                0.921875
+              ],
+              "deaths": 0,
+              "health_lost": 0,
+              "other_tree_wood_gain": 0
+            },
+            "needs_turn": {
+              "success_mean": 0.7795138888888888,
+              "success_by_policy_seed": [
+                0.6145833333333334,
+                0.8229166666666666,
+                0.9010416666666666
+              ],
+              "deaths": 0,
+              "health_lost": 0,
+              "other_tree_wood_gain": 0
+            },
+            "no_tree": {
+              "success_mean": 0.0,
+              "success_by_policy_seed": [
+                0.0,
+                0.0,
+                0.0
+              ],
+              "deaths": 0,
+              "health_lost": 0,
+              "other_tree_wood_gain": 0
+            }
+          }
+        },
+        "greedy_background_min": 0.0,
+        "greedy_background_max": 1.0,
+        "background_seed_cells_below_080": 14,
+        "background_seed_cells": 48
+      },
+      "mlp64": {
+        "action_means": {
+          "balanced_accuracy": 0.802469135802469,
+          "tree_present_balanced_accuracy": 0.7931712962962963,
+          "ready_do_rate": 0.359375,
+          "unaligned_target_move_rate": 0.9016203703703703
+        },
+        "rollout_means": {
+          "sample": {
+            "tree_present": {
+              "success_mean": 0.6526909722222222,
+              "success_by_policy_seed": [
+                0.7125,
+                0.7044270833333334,
+                0.5411458333333333
+              ],
+              "deaths": 0,
+              "health_lost": 0,
+              "other_tree_wood_gain": 0
+            },
+            "aligned": {
+              "success_mean": 0.7083333333333334,
+              "success_by_policy_seed": [
+                0.765625,
+                0.7697916666666667,
+                0.5895833333333333
+              ],
+              "deaths": 0,
+              "health_lost": 0,
+              "other_tree_wood_gain": 0
+            },
+            "needs_turn": {
+              "success_mean": 0.6341435185185186,
+              "success_by_policy_seed": [
+                0.6947916666666667,
+                0.6826388888888889,
+                0.525
+              ],
+              "deaths": 0,
+              "health_lost": 0,
+              "other_tree_wood_gain": 0
+            },
+            "no_tree": {
+              "success_mean": 0.0,
+              "success_by_policy_seed": [
+                0.0,
+                0.0,
+                0.0
+              ],
+              "deaths": 0,
+              "health_lost": 0,
+              "other_tree_wood_gain": 0
+            }
+          },
+          "greedy": {
+            "tree_present": {
+              "success_mean": 0.32074652777777773,
+              "success_by_policy_seed": [
+                0.4622395833333333,
+                0.33203125,
+                0.16796875
+              ],
+              "deaths": 0,
+              "health_lost": 0,
+              "other_tree_wood_gain": 0
+            },
+            "aligned": {
+              "success_mean": 0.359375,
+              "success_by_policy_seed": [
+                0.5,
+                0.390625,
+                0.1875
+              ],
+              "deaths": 0,
+              "health_lost": 0,
+              "other_tree_wood_gain": 0
+            },
+            "needs_turn": {
+              "success_mean": 0.3078703703703704,
+              "success_by_policy_seed": [
+                0.4496527777777778,
+                0.3125,
+                0.16145833333333334
+              ],
+              "deaths": 0,
+              "health_lost": 0,
+              "other_tree_wood_gain": 0
+            },
+            "no_tree": {
+              "success_mean": 0.0,
+              "success_by_policy_seed": [
+                0.0,
+                0.0,
+                0.0
+              ],
+              "deaths": 0,
+              "health_lost": 0,
+              "other_tree_wood_gain": 0
+            }
+          }
+        },
+        "greedy_background_min": 0.0,
+        "greedy_background_max": 0.75,
+        "background_seed_cells_below_080": 48,
+        "background_seed_cells": 48
+      }
+    },
+    "fresh_heldout": {
+      "baseline": {
+        "action_means": {
+          "balanced_accuracy": 0.16531635802469136,
+          "tree_present_balanced_accuracy": 0.19837962962962963,
+          "ready_do_rate": 0.3090277777777778,
+          "unaligned_target_move_rate": 0.1707175925925926
+        },
+        "rollout_means": {
+          "greedy": {
+            "tree_present": {
+              "success_mean": 0.07986111111111112,
+              "success_by_policy_seed": [
+                0.22786458333333334,
+                0.0,
+                0.01171875
+              ],
+              "deaths": 0,
+              "health_lost": 0,
+              "other_tree_wood_gain": 68
+            },
+            "aligned": {
+              "success_mean": 0.3090277777777778,
+              "success_by_policy_seed": [
+                0.8802083333333334,
+                0.0,
+                0.046875
+              ],
+              "deaths": 0,
+              "health_lost": 0,
+              "other_tree_wood_gain": 17
+            },
+            "needs_turn": {
+              "success_mean": 0.003472222222222222,
+              "success_by_policy_seed": [
+                0.010416666666666666,
+                0.0,
+                0.0
+              ],
+              "deaths": 0,
+              "health_lost": 0,
+              "other_tree_wood_gain": 51
+            },
+            "no_tree": {
+              "success_mean": 0.0,
+              "success_by_policy_seed": [
+                0.0,
+                0.0,
+                0.0
+              ],
+              "deaths": 0,
+              "health_lost": 0,
+              "other_tree_wood_gain": 24
+            }
+          }
+        },
+        "greedy_background_min": 0.0,
+        "greedy_background_max": 0.2916666666666667,
+        "background_seed_cells_below_080": 48,
+        "background_seed_cells": 48
+      },
+      "raw_linear": {
+        "action_means": {
+          "balanced_accuracy": 0.7392939814814814,
+          "tree_present_balanced_accuracy": 0.7298611111111111,
+          "ready_do_rate": 0.11458333333333333,
+          "unaligned_target_move_rate": 0.8836805555555555
+        },
+        "rollout_means": {
+          "greedy": {
+            "tree_present": {
+              "success_mean": 0.09722222222222222,
+              "success_by_policy_seed": [
+                0.15364583333333334,
+                0.016927083333333332,
+                0.12109375
+              ],
+              "deaths": 0,
+              "health_lost": 0,
+              "other_tree_wood_gain": 0
+            },
+            "aligned": {
+              "success_mean": 0.11458333333333333,
+              "success_by_policy_seed": [
+                0.16145833333333334,
+                0.020833333333333332,
+                0.16145833333333334
+              ],
+              "deaths": 0,
+              "health_lost": 0,
+              "other_tree_wood_gain": 0
+            },
+            "needs_turn": {
+              "success_mean": 0.09143518518518519,
+              "success_by_policy_seed": [
+                0.15104166666666666,
+                0.015625,
+                0.1076388888888889
+              ],
+              "deaths": 0,
+              "health_lost": 0,
+              "other_tree_wood_gain": 0
+            },
+            "no_tree": {
+              "success_mean": 0.0,
+              "success_by_policy_seed": [
+                0.0,
+                0.0,
+                0.0
+              ],
+              "deaths": 0,
+              "health_lost": 0,
+              "other_tree_wood_gain": 0
+            }
+          }
+        },
+        "greedy_background_min": 0.0,
+        "greedy_background_max": 0.25,
+        "background_seed_cells_below_080": 48,
+        "background_seed_cells": 48
+      },
+      "standardized_linear": {
+        "action_means": {
+          "balanced_accuracy": 0.8622685185185185,
+          "tree_present_balanced_accuracy": 0.8753472222222222,
+          "ready_do_rate": 0.7864583333333334,
+          "unaligned_target_move_rate": 0.8975694444444443
+        },
+        "rollout_means": {
+          "greedy": {
+            "tree_present": {
+              "success_mean": 0.7686631944444445,
+              "success_by_policy_seed": [
+                0.7552083333333334,
+                0.7330729166666666,
+                0.8177083333333334
+              ],
+              "deaths": 0,
+              "health_lost": 0,
+              "other_tree_wood_gain": 11
+            },
+            "aligned": {
+              "success_mean": 0.7934027777777778,
+              "success_by_policy_seed": [
+                0.8125,
+                0.7395833333333334,
+                0.828125
+              ],
+              "deaths": 0,
+              "health_lost": 0,
+              "other_tree_wood_gain": 3
+            },
+            "needs_turn": {
+              "success_mean": 0.7604166666666666,
+              "success_by_policy_seed": [
+                0.7361111111111112,
+                0.7309027777777778,
+                0.8142361111111112
+              ],
+              "deaths": 0,
+              "health_lost": 0,
+              "other_tree_wood_gain": 8
+            },
+            "no_tree": {
+              "success_mean": 0.0,
+              "success_by_policy_seed": [
+                0.0,
+                0.0,
+                0.0
+              ],
+              "deaths": 0,
+              "health_lost": 0,
+              "other_tree_wood_gain": 9
+            }
+          }
+        },
+        "greedy_background_min": 0.0,
+        "greedy_background_max": 1.0,
+        "background_seed_cells_below_080": 18,
+        "background_seed_cells": 48
+      },
+      "mlp64": {
+        "action_means": {
+          "balanced_accuracy": 0.7448881172839507,
+          "tree_present_balanced_accuracy": 0.7331018518518517,
+          "ready_do_rate": 0.32291666666666663,
+          "unaligned_target_move_rate": 0.8356481481481483
+        },
+        "rollout_means": {
+          "greedy": {
+            "tree_present": {
+              "success_mean": 0.2855902777777778,
+              "success_by_policy_seed": [
+                0.4231770833333333,
+                0.2994791666666667,
+                0.13411458333333334
+              ],
+              "deaths": 0,
+              "health_lost": 0,
+              "other_tree_wood_gain": 0
+            },
+            "aligned": {
+              "success_mean": 0.32291666666666663,
+              "success_by_policy_seed": [
+                0.46875,
+                0.3333333333333333,
+                0.16666666666666666
+              ],
+              "deaths": 0,
+              "health_lost": 0,
+              "other_tree_wood_gain": 0
+            },
+            "needs_turn": {
+              "success_mean": 0.27314814814814814,
+              "success_by_policy_seed": [
+                0.4079861111111111,
+                0.2881944444444444,
+                0.1232638888888889
+              ],
+              "deaths": 0,
+              "health_lost": 0,
+              "other_tree_wood_gain": 0
+            },
+            "no_tree": {
+              "success_mean": 0.0,
+              "success_by_policy_seed": [
+                0.0,
+                0.0,
+                0.0
+              ],
+              "deaths": 0,
+              "health_lost": 0,
+              "other_tree_wood_gain": 0
+            }
+          }
+        },
+        "greedy_background_min": 0.0,
+        "greedy_background_max": 0.75,
+        "background_seed_cells_below_080": 48,
+        "background_seed_cells": 48
+      }
+    }
+  },
+  "counts": {
+    "paired": {
+      "supervised_optimizer_updates": {
+        "main": 54000,
+        "repeat": 18000,
+        "total": 72000
+      },
+      "diagnostic_rollout_episodes": {
+        "main": 69120,
+        "repeat": 23040,
+        "total": 92160
+      },
+      "diagnostic_rollout_interaction_steps": {
+        "main": 400692,
+        "repeat": 132587,
+        "total": 533279
+      },
+      "ppo_training_interaction_steps": {
+        "main": 0,
+        "repeat": 0,
+        "total": 0
+      },
+      "observer_control_interaction_steps": {
+        "main": 52,
+        "repeat": 20,
+        "total": 72
+      },
+      "fixture_validation_interaction_steps": {
+        "main": 0,
+        "repeat": 0,
+        "total": 0
+      }
+    },
+    "fresh": {
+      "supervised_optimizer_updates": {
+        "main": 0,
+        "repeat": 0,
+        "total": 0
+      },
+      "diagnostic_rollout_episodes": {
+        "main": 11520,
+        "repeat": 3840,
+        "total": 15360
+      },
+      "diagnostic_rollout_interaction_steps": {
+        "main": 74314,
+        "repeat": 23104,
+        "total": 97418
+      },
+      "ppo_training_interaction_steps": {
+        "main": 0,
+        "repeat": 0,
+        "total": 0
+      },
+      "observer_control_interaction_steps": {
+        "main": 82,
+        "repeat": 32,
+        "total": 114
+      },
+      "fixture_validation_interaction_steps": {
+        "main": 32,
+        "repeat": 32,
+        "total": 64
+      }
+    }
+  }
+}

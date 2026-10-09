@@ -1,0 +1,49 @@
+{
+  "status": "crafter_wood3_controlled_collection_cuda_v1",
+  "formal_result": false,
+  "teacher_used": false,
+  "policy_updates_allowed": false,
+  "artificial_scenes": true,
+  "pilot_note": "Frozen CNN-only policy ability test on paired quiet grass fixtures with one adjacent tree or no tree. Native player and RGB rules are preserved. Balanced tree/facing directions and wood stages, eight-step windows, no training or qualification.",
+  "checkpoint_roots": {
+    "baseline": "results/crafter_wood3_spatial_representation_deterministic_v3_cuda_pilot_20261008_v1",
+    "auxiliary": "results/crafter_wood3_do_wood_gain_auxiliary_cuda_pilot_20261009_v1"
+  },
+  "previous_diagnostic_configs": [
+    "configs/crafter_wood3_local_event_diagnostic_cuda_v1.yaml",
+    "configs/crafter_wood3_collection_opportunity_cuda_v1.yaml"
+  ],
+  "python_hash_seed": 0,
+  "torch_deterministic_algorithms": true,
+  "cublas_workspace_config": ":4096:8",
+  "device": "cuda",
+  "seed_set": [0, 1, 2],
+  "replicate_seed_stride": 1000000,
+  "diagnostic_checkpoints": [25000, 100000],
+  "initial_wood_stages": [0, 1, 2],
+  "tree_move_actions": [1, 2, 3, 4],
+  "initial_facing_actions": [1, 2, 3, 4],
+  "tree_presence_pair": [true, false],
+  "sample_repetitions_per_scene": 20,
+  "greedy_repetitions_per_scene": 1,
+  "diagnostic_seed_base": 21000000,
+  "diagnostic_action_seed_base": 25000000,
+  "observer_audit_episodes_per_policy": 1,
+  "max_steps": 8,
+  "environment_length": 10000,
+  "action_allowlist": [0, 1, 2, 3, 4, 5, 6],
+  "local_success": "wood increases by one from the constructed initial stage",
+  "policy": {
+    "cnn_channels": [16, 32],
+    "embedding_dim": 128,
+    "recurrent_hidden_dim": 128,
+    "action_count": 17,
+    "learning_rate": 0.0003,
+    "gamma": 0.99,
+    "gae_lambda": 0.95,
+    "clip_epsilon": 0.2,
+    "value_coef": 0.5,
+    "entropy_coef": 0.01,
+    "update_epochs": 4
+  }
+}

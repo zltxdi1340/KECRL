@@ -1,0 +1,221 @@
+{
+  "rows": 960,
+  "backgrounds": [
+    {
+      "background_id": 0,
+      "environment_seed": 51000000,
+      "split": "heldout"
+    },
+    {
+      "background_id": 1,
+      "environment_seed": 51000001,
+      "split": "heldout"
+    },
+    {
+      "background_id": 2,
+      "environment_seed": 51000002,
+      "split": "heldout"
+    },
+    {
+      "background_id": 3,
+      "environment_seed": 51000004,
+      "split": "heldout"
+    },
+    {
+      "background_id": 4,
+      "environment_seed": 51000008,
+      "split": "heldout"
+    },
+    {
+      "background_id": 5,
+      "environment_seed": 51000009,
+      "split": "heldout"
+    },
+    {
+      "background_id": 6,
+      "environment_seed": 51000011,
+      "split": "heldout"
+    },
+    {
+      "background_id": 7,
+      "environment_seed": 51000013,
+      "split": "heldout"
+    },
+    {
+      "background_id": 8,
+      "environment_seed": 51000015,
+      "split": "heldout"
+    },
+    {
+      "background_id": 9,
+      "environment_seed": 51000018,
+      "split": "heldout"
+    },
+    {
+      "background_id": 10,
+      "environment_seed": 51000020,
+      "split": "heldout"
+    },
+    {
+      "background_id": 11,
+      "environment_seed": 51000025,
+      "split": "heldout"
+    },
+    {
+      "background_id": 12,
+      "environment_seed": 51000028,
+      "split": "heldout"
+    },
+    {
+      "background_id": 13,
+      "environment_seed": 51000029,
+      "split": "heldout"
+    },
+    {
+      "background_id": 14,
+      "environment_seed": 51000034,
+      "split": "heldout"
+    },
+    {
+      "background_id": 15,
+      "environment_seed": 51000039,
+      "split": "heldout"
+    }
+  ],
+  "background_candidates_examined": 40,
+  "rejected_backgrounds": [
+    {
+      "environment_seed": 51000003,
+      "background_rgb_sha256": "af71ddfb085fad52c35f9ab18069fa061bc7887319d7164c99043f878bd068ce",
+      "reason": "previous_spatial_readout_background"
+    },
+    {
+      "environment_seed": 51000005,
+      "background_rgb_sha256": "fa3156b3e9786ab2e3fe50861944968872945abbad25c2839ec49cf80038e234",
+      "reason": "previous_spatial_readout_background"
+    },
+    {
+      "environment_seed": 51000006,
+      "background_rgb_sha256": "fa3156b3e9786ab2e3fe50861944968872945abbad25c2839ec49cf80038e234",
+      "reason": "previous_spatial_readout_background"
+    },
+    {
+      "environment_seed": 51000007,
+      "background_rgb_sha256": "fa3156b3e9786ab2e3fe50861944968872945abbad25c2839ec49cf80038e234",
+      "reason": "previous_spatial_readout_background"
+    },
+    {
+      "environment_seed": 51000010,
+      "background_rgb_sha256": "c9b63a15f67e9a0b4c66910e3ddd13deb53b5033d2d3b6caaaa8d1f4c0ceea83",
+      "reason": "previous_spatial_readout_background"
+    },
+    {
+      "environment_seed": 51000012,
+      "background_rgb_sha256": "f3e63435118581bab22a4d995a4f7190a449903256ef01c73830e124537f5009",
+      "reason": "previous_spatial_readout_background"
+    },
+    {
+      "environment_seed": 51000014,
+      "background_rgb_sha256": "90bcecfa647817f3b8093df51a0289e18ce12ddb7795f348fc2e6fc32abd8c66",
+      "reason": "previous_spatial_readout_background"
+    },
+    {
+      "environment_seed": 51000016,
+      "background_rgb_sha256": "fa3156b3e9786ab2e3fe50861944968872945abbad25c2839ec49cf80038e234",
+      "reason": "previous_spatial_readout_background"
+    },
+    {
+      "environment_seed": 51000017,
+      "background_rgb_sha256": "8c57b2df369224d98c9a884658b8127a0a75664d920a97874d719fe01d1add0b",
+      "reason": "previous_spatial_readout_background"
+    },
+    {
+      "environment_seed": 51000019,
+      "background_rgb_sha256": "1451c48be488feb617ea80b5297ae6f8805f97bb0b488102d5c38600683c00db",
+      "reason": "previous_spatial_readout_background"
+    },
+    {
+      "environment_seed": 51000021,
+      "background_rgb_sha256": "b5df2026672732f842aed5e17c4621f49f8a6685b4a59ea31c7386ef08077852",
+      "reason": "previous_spatial_readout_background"
+    },
+    {
+      "environment_seed": 51000022,
+      "background_rgb_sha256": "af71ddfb085fad52c35f9ab18069fa061bc7887319d7164c99043f878bd068ce",
+      "reason": "previous_spatial_readout_background"
+    },
+    {
+      "environment_seed": 51000023,
+      "background_rgb_sha256": "fa3156b3e9786ab2e3fe50861944968872945abbad25c2839ec49cf80038e234",
+      "reason": "previous_spatial_readout_background"
+    },
+    {
+      "environment_seed": 51000024,
+      "background_rgb_sha256": "b5df2026672732f842aed5e17c4621f49f8a6685b4a59ea31c7386ef08077852",
+      "reason": "previous_spatial_readout_background"
+    },
+    {
+      "environment_seed": 51000026,
+      "background_rgb_sha256": "fbe2d56c9d1c510b6a81d52f1804be1748137bb32ce90c0976277804b91c3e26",
+      "reason": "previous_spatial_readout_background"
+    },
+    {
+      "environment_seed": 51000027,
+      "background_rgb_sha256": "8c57b2df369224d98c9a884658b8127a0a75664d920a97874d719fe01d1add0b",
+      "reason": "previous_spatial_readout_background"
+    },
+    {
+      "environment_seed": 51000030,
+      "background_rgb_sha256": "f3e63435118581bab22a4d995a4f7190a449903256ef01c73830e124537f5009",
+      "reason": "previous_spatial_readout_background"
+    },
+    {
+      "environment_seed": 51000031,
+      "background_rgb_sha256": "cee236ae32b59476155e4697343572b13c4aa780b46192f0efdd08d552dcd7f4",
+      "reason": "previous_spatial_readout_background"
+    },
+    {
+      "environment_seed": 51000032,
+      "background_rgb_sha256": "c9b63a15f67e9a0b4c66910e3ddd13deb53b5033d2d3b6caaaa8d1f4c0ceea83",
+      "reason": "previous_spatial_readout_background"
+    },
+    {
+      "environment_seed": 51000033,
+      "background_rgb_sha256": "fa3156b3e9786ab2e3fe50861944968872945abbad25c2839ec49cf80038e234",
+      "reason": "previous_spatial_readout_background"
+    },
+    {
+      "environment_seed": 51000035,
+      "background_rgb_sha256": "fa3156b3e9786ab2e3fe50861944968872945abbad25c2839ec49cf80038e234",
+      "reason": "previous_spatial_readout_background"
+    },
+    {
+      "environment_seed": 51000036,
+      "background_rgb_sha256": "fa3156b3e9786ab2e3fe50861944968872945abbad25c2839ec49cf80038e234",
+      "reason": "previous_spatial_readout_background"
+    },
+    {
+      "environment_seed": 51000037,
+      "background_rgb_sha256": "fa3156b3e9786ab2e3fe50861944968872945abbad25c2839ec49cf80038e234",
+      "reason": "previous_spatial_readout_background"
+    },
+    {
+      "environment_seed": 51000038,
+      "background_rgb_sha256": "fa3156b3e9786ab2e3fe50861944968872945abbad25c2839ec49cf80038e234",
+      "reason": "previous_spatial_readout_background"
+    }
+  ],
+  "previous_backgrounds_excluded": 96,
+  "all_accepted_backgrounds_visually_disjoint_from_previous": true,
+  "background_deduplication_precedes_labels_features_and_performance": true,
+  "canonical_digest": "7ff892083a0dcee7e2cb6f1f34359d08ad780ec54eea993c807573168177225f",
+  "records_canonical_digest": "b81a5553cc462f3bdbba29e391a300d12dcaf70d4bd66f7eed71ba06996b1096",
+  "npz_sha256": "bafb06451ca63f5eb04a8e4cee3a3e970de8a0d3345f2f1a5423be85a74952f2",
+  "group_boundary_audit": {
+    "backgrounds": 16,
+    "unique_visible_backgrounds": 16,
+    "full_rgb_images_do_not_cross_splits": true,
+    "paired_variants_do_not_cross_splits": true
+  },
+  "fixture_validation_interaction_steps": 32
+}

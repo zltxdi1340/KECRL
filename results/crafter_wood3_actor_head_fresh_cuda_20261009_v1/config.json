@@ -1,0 +1,55 @@
+{
+  "status": "crafter_wood3_actor_head_fresh_cuda_v1",
+  "formal_result": false,
+  "teacher_scope": "previous_supervised_actor_heads_frozen_evaluation_only",
+  "evaluation_only": true,
+  "policy_updates_allowed": false,
+  "formal_training_allowed": false,
+  "head_result_root": "results/crafter_wood3_actor_head_ablation_cuda_20261009_v1",
+  "exclude_background_roots": [
+    "results/crafter_wood3_spatial_readout_cuda_20261009_v2",
+    "results/crafter_wood3_actor_only_local_cuda_20261009_v1"
+  ],
+  "python_hash_seed": 0,
+  "torch_deterministic_algorithms": true,
+  "cublas_workspace_config": ":4096:8",
+  "device": "cuda",
+  "seed_set": [
+    0,
+    1,
+    2
+  ],
+  "variants": [
+    "baseline",
+    "raw_linear",
+    "standardized_linear",
+    "mlp64"
+  ],
+  "background_seed_base": 51000000,
+  "background_candidate_limit": 2048,
+  "background_counts": {
+    "train": 0,
+    "validation": 0,
+    "heldout": 16
+  },
+  "scenes_per_background": 60,
+  "environment_length": 10000,
+  "feature_batch_size": 64,
+  "action_allowlist": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6
+  ],
+  "max_steps": 8,
+  "evaluation_modes": [
+    "greedy"
+  ],
+  "diagnostic_action_seed_base": 55000000,
+  "replicate_seed_stride": 1000000,
+  "new_fit_or_selection_allowed": false,
+  "purpose": "Evaluate every saved variant on visually disjoint new backgrounds; no model selection or fine-tuning. Native eight-step designated-tree success, not natural task qualification."
+}

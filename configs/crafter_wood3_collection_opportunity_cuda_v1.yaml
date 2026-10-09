@@ -1,0 +1,41 @@
+{
+  "status": "crafter_wood3_collection_opportunity_cuda_v1",
+  "formal_result": false,
+  "teacher_used": false,
+  "policy_updates_allowed": false,
+  "pilot_note": "Read-only diagnostic of pre-action local collection opportunities, turning, sleep overrides and hostile proximity. Uses fresh diagnostic seeds; oracle labels never enter the RGB policy. Baseline and auxiliary policies are frozen.",
+  "checkpoint_roots": {
+    "baseline": "results/crafter_wood3_spatial_representation_deterministic_v3_cuda_pilot_20261008_v1",
+    "auxiliary": "results/crafter_wood3_do_wood_gain_auxiliary_cuda_pilot_20261009_v1"
+  },
+  "previous_local_event_config": "results/crafter_wood3_local_event_diagnostic_cuda_20261009_v1/config.json",
+  "python_hash_seed": 0,
+  "torch_deterministic_algorithms": true,
+  "cublas_workspace_config": ":4096:8",
+  "device": "cuda",
+  "seed_set": [0, 1, 2],
+  "replicate_seed_stride": 1000000,
+  "diagnostic_checkpoints": [25000, 100000],
+  "diagnostic_episode_count": 20,
+  "diagnostic_seed_base": 13000000,
+  "diagnostic_action_seed_base": 17000000,
+  "observer_audit_episodes_per_policy": 1,
+  "hostile_radius": 3,
+  "max_steps": 256,
+  "environment_length": 10000,
+  "task": {"item": "wood", "threshold": 3},
+  "action_allowlist": [0, 1, 2, 3, 4, 5, 6],
+  "policy": {
+    "cnn_channels": [16, 32],
+    "embedding_dim": 128,
+    "recurrent_hidden_dim": 128,
+    "action_count": 17,
+    "learning_rate": 0.0003,
+    "gamma": 0.99,
+    "gae_lambda": 0.95,
+    "clip_epsilon": 0.2,
+    "value_coef": 0.5,
+    "entropy_coef": 0.01,
+    "update_epochs": 4
+  }
+}

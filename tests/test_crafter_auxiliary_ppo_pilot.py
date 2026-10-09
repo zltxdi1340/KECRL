@@ -11,6 +11,7 @@ from experiments.run_crafter_rgb_oracle_imitation_diagnostic import RGBActionCla
 from experiments.run_crafter_wood3_spatial_gru_pilot import SpatialGRUPolicy
 from experiments.run_crafter_wood3_spatial_gru_pilot import run as run_gru
 from experiments.run_crafter_wood3_paired_budget_pilot import _run_seed as run_budget_seed
+from experiments.run_crafter_wood3_budget_curve import _validate_seed_roles
 
 
 def test_ppo_pilot_is_non_formal_and_uses_exact_unit_target():
@@ -183,6 +184,23 @@ def test_cuda_wood3_configs_keep_budget_task_and_role_boundaries():
     assert budget["seed_set"] == gru["seed_set"] == [0, 1, 2, 3, 4]
     assert gru["teacher_used"] is False
     _validate_role_seeds(gru, len(gru["seed_set"]))
+
+
+def test_stable_wood3_budget_curve_uses_exact_checkpoints_and_disjoint_roles():
+    config = json.loads(Path("configs/crafter_wood3_budget_curve_cuda_pilot_v1.yaml").read_text())
+    assert config["formal_result"] is False
+    assert config["update_mode"] == "episode"
+    assert config["checkpoint_steps"] == [25000, 100000]
+    assert config["seed_set"] == [0, 1, 2]
+    assert config["teacher_used"] is False
+    _validate_seed_roles(config)
+
+
+def test_stable_wood3_budget_curve_rejects_overlapping_role_seeds():
+    config = json.loads(Path("configs/crafter_wood3_budget_curve_cuda_pilot_v1.yaml").read_text())
+    config["qualification_seed_base"] = config["development_seed_base"]
+    with pytest.raises(ValueError, match="overlapping"):
+        _validate_seed_roles(config)
 
 
 def test_gru_sequence_replay_matches_stepwise_hidden_state():
