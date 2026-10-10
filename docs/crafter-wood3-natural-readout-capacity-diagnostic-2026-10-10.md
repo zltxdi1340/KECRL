@@ -26,6 +26,42 @@ seed 0 smoke 已完成：fresh heldout 224 个状态，三种 head 共执行 201
 
 smoke 使用 `--repeat-seed0`，没有生成独立进程重复目录；它只验证执行链，不是正式结果。
 
+## 三 seed 诊断结果
+
+正式诊断于 2026-10-10 完成。三个来源策略均为固定 100k-step CNN checkpoint；每个 head 只用原有 376 个训练状态和 153 个验证状态拟合/选型。24 个新环境 episode 产生 224 个去重 heldout 状态（ready 56、turn 66、approach 102），三个 seed 共评估 6,048 个相同的 8-step 窗口。策略、encoder、critic 和 PPO optimizer 均保持冻结。
+
+Heldout 的类别宏准确率（合法动作集合读出，不是环境成功率）：
+
+| policy seed | 原始 actor | 标准化线性 head | 标准化 MLP64 |
+| ---: | ---: | ---: | ---: |
+| 0 | 0.285 | 0.363 | 0.366 |
+| 1 | 0.236 | 0.436 | 0.379 |
+| 2 | 0.232 | 0.399 | 0.389 |
+| 均值 | 0.251 | 0.399 | 0.378 |
+
+标准化线性 head 的 heldout 宏准确率三个 seed 都高于原始 actor。MLP64 只在 seed 0 略高于线性 head，seed 1 和 2 都更低；平均低 0.021。MLP 的 heldout 集合 NLL 均值为 2.627，线性 head 为 2.173，且 seed 2 的 MLP NLL 达 3.611（线性为 1.801）。因此本协议没有显示稳定的非线性容量收益；在这份数据和拟合设置下，线性适配比扩大到 MLP 更可靠。
+
+固定自然状态上 8-step 内成功采到指定目标树木（同一场景的短窗重复，按三个 seed 合并）：
+
+| 动作模式 | 原始 actor | 标准化线性 head | 标准化 MLP64 |
+| --- | ---: | ---: | ---: |
+| greedy | 90/672 (13.4%) | 156/672 (23.2%) | 119/672 (17.7%) |
+| sample | 306/1344 (22.8%) | 434/1344 (32.3%) | 319/1344 (23.7%) |
+
+greedy 的线性 head 在 ready、turn、approach 三类状态分别为 56.0%、13.1%、11.8%；原始 actor 分别为 48.8%、0.5%、2.3%。三类都有局部提升，turn/approach 的提升最大。按每个 seed 单独看，线性 head 在 seed 0 的 greedy 窗口略低于原始 actor（21.0% 对 21.4%），但 seed 1、2 更高；sample 窗口三个 seed 全部更高。合并窗口是描述性统计：同一批目标状态和多个 seed/重复并非独立样本，不能据此报告独立 episode 置信区间。
+
+## 独立复核
+
+运行器的跨进程 seed 0 重复中，数据数组、记录、采集轨迹、CNN 特征、预测、窗口轨迹和 MLP 权重摘要 7 项全部一致。独立分析器再次从原始 RGB 和 checkpoint 重算三个 seed 的 CNN 特征、head logits、MLP 训练/验证指标及验证集选型，并复算全部 6,048 个窗口；全部通过。主运行和重复运行的 48 项输入哈希均未变化。
+
+独立分析文件位于 `results/crafter_wood3_natural_readout_capacity_cuda_20261010_v1/analysis_verified/verification.json`，逐窗 CSV 位于同目录 `window_metrics.csv`。
+
+## 判断与下一步
+
+这个实验说明冻结 CNN 表征上存在可由线性 actor head 利用的局部木材采集信号；因此当前证据不支持把“actor head 容量不足”作为主要阻塞点。MLP64 没有稳定收益。线性 head 的局部收益仍不足以证明它能跨场景生存、导航或达成 `wood>=3`，本实验也没有把 teacher head 注册成 Module。
+
+下一步是对三个冻结策略 seed 做完整 `wood>=3` episode 配对：原始 actor 与标准化线性 head 使用同一组全新环境 seed 和 action seed，记录 success、death/截断、最终 wood、首次 wood 1/2/3 步数及伤害来源。该测试可区分局部树木交互改进是否传递到完整任务链；它仍是冻结策略评估，不启动 PPO 正式训练，也不构成 Module 资格。
+
 ## 正式运行
 
 ```bash
