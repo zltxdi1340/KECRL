@@ -35,7 +35,7 @@ def _mean(rows, field: str):
 
 
 def _validate(config: dict, head_config: dict, head_summary: dict, source_config: dict) -> None:
-    required = {
+    common = {
         "formal_result": False,
         "teacher_used": False,
         "source_head_teacher_used": True,
@@ -53,8 +53,6 @@ def _validate(config: dict, head_config: dict, head_summary: dict, source_config
         "max_steps": 256,
         "initial_wood": 0,
         "action_allowlist": [0, 1, 2, 3, 4, 5, 6],
-        "environment_seed_base": 61000000,
-        "action_seed_base": 62000000,
         "replicate_seed_stride": 1000000,
         "hostile_radius": 3,
         "observer_audit_episodes_per_policy": 1,
@@ -64,7 +62,19 @@ def _validate(config: dict, head_config: dict, head_summary: dict, source_config
         "torch_deterministic_algorithms": True,
         "cublas_workspace_config": ":4096:8",
     }
-    for key, expected in required.items():
+    protocol = config.get("status")
+    if protocol == "crafter_wood3_actor_natural_migration_cuda_v1":
+        profile = {"environment_seed_base": 61000000, "action_seed_base": 62000000}
+    elif protocol == "crafter_wood3_natural_readout_task_chain_cuda_v1":
+        profile = {
+            "head_result_root": "results/crafter_wood3_natural_readout_capacity_cuda_20261010_v1",
+            "head_artifact_root": "results/crafter_wood3_natural_readout_cuda_20261010_v1",
+            "environment_seed_base": 99000000,
+            "action_seed_base": 101000000,
+        }
+    else:
+        raise ValueError(f"unsupported natural migration protocol: {protocol}")
+    for key, expected in (common | profile).items():
         if config.get(key) != expected or (isinstance(expected, bool) and config.get(key) is not expected):
             raise ValueError(f"fixed natural migration protocol differs: {key}")
     if os.environ.get("PYTHONHASHSEED") != str(config["python_hash_seed"]):
@@ -77,8 +87,13 @@ def _validate(config: dict, head_config: dict, head_summary: dict, source_config
         raise ValueError("wood task boundary differs from source checkpoint")
     if head_config["formal_result"] is not False or head_summary["cross_process_repetition"]["passed"] is not True:
         raise ValueError("saved actor-head diagnostic is not a completed non-formal run")
-    if head_config["teacher_used"] is not True or head_config["baseline_result_root"] != config["source_result_root"]:
+    head_source_root = head_config.get("baseline_result_root", head_config.get("source_result_root"))
+    if head_config["teacher_used"] is not True or head_source_root != config["source_result_root"]:
         raise ValueError("saved head source or teacher provenance differs")
+    if protocol == "crafter_wood3_natural_readout_task_chain_cuda_v1":
+        if (head_config.get("status") != "crafter_wood3_natural_readout_capacity_cuda_v1"
+                or head_config.get("natural_readout_root") != config["head_artifact_root"]):
+            raise ValueError("capacity readout artifact boundary differs")
     if config["environment_seed_base"] in range(51000000, 51000000 + 3 * config["replicate_seed_stride"]):
         raise ValueError("natural environment seed range overlaps fresh actor-head backgrounds")
     if config["action_seed_base"] in range(47000000, 47000000 + 3 * config["replicate_seed_stride"]):
@@ -104,21 +119,51 @@ def _snapshot_inputs(
         "src/environments/crafter_collection_diagnostics.py",
         "src/environments/crafter_determinism.py",
     )
+    head_root = Path(config["head_result_root"])
+    artifact_root = Path(config.get("head_artifact_root", head_root))
+    capacity_sources = ()
+    capacity_inputs = ()
+    if artifact_root != head_root:
+        capacity_sources = (
+            "experiments/run_crafter_wood3_natural_readout_capacity.py",
+            "experiments/crafter_natural_readout_capacity.py",
+            "experiments/analyze_crafter_wood3_natural_readout_capacity.py",
+            "experiments/run_crafter_wood3_natural_readout.py",
+            "experiments/crafter_natural_readout.py",
+            "experiments/crafter_natural_state_window.py",
+            "experiments/crafter_spatial_readout_data.py",
+            "experiments/run_crafter_wood3_natural_state_window.py",
+            "experiments/analyze_crafter_wood3_natural_readout.py",
+            "experiments/analyze_crafter_wood3_natural_state_window.py",
+        )
+        capacity_inputs = tuple(
+            artifact_root / name for name in (
+                "config.json", "summary.json", "provenance.json", "dataset_summary.json",
+                "natural_dataset.npz", "natural_records.json", "collection.jsonl", "selection_lock.json",
+            )
+        ) + tuple(
+            path for seed in config["seed_set"] for path in (
+                artifact_root / f"seed{seed}_features.npz",
+                artifact_root / f"seed{seed}_summary.json",
+            )
+        )
+        sources = sources + capacity_sources
     source_snapshot = output / "source_snapshot"
     source_snapshot.mkdir()
     for name in sources:
         shutil.copy2(name, source_snapshot / Path(name).name)
     import crafter
     package_root = Path(crafter.__file__).parent
-    package_paths = [package_root / name for name in ("env.py", "objects.py", "engine.py", "worldgen.py", "data.yaml")]
+    package_paths = [package_root / name for name in (
+        "env.py", "objects.py", "engine.py", "worldgen.py", "constants.py", "data.yaml")]
     installed = source_snapshot / "installed_crafter"
     installed.mkdir()
     for path in package_paths:
         shutil.copy2(path, installed / path.name)
     config_paths = [config_path, source_config_path,
-                    Path(config["head_result_root"]) / "config.json",
-                    Path(config["head_result_root"]) / "summary.json"]
-    optional_path = Path(config["head_result_root"]) / "provenance.json"
+                    head_root / "config.json", head_root / "summary.json",
+                    *capacity_inputs]
+    optional_path = head_root / "provenance.json"
     missing_inputs = []
     if optional_path.exists():
         config_paths.append(optional_path)
@@ -338,6 +383,7 @@ def _summarize(episodes: list[dict]) -> dict:
 def run(config_path: str, output_path: str, repeat: bool = False) -> dict:
     config = _read(Path(config_path))
     head_root = Path(config["head_result_root"])
+    artifact_root = Path(config.get("head_artifact_root", head_root))
     source_root = Path(config["source_result_root"])
     head_config = _read(head_root / "config.json")
     head_summary = _read(head_root / "summary.json")
@@ -345,7 +391,8 @@ def run(config_path: str, output_path: str, repeat: bool = False) -> dict:
     _validate(config, head_config, head_summary, source_config)
     seeds = [config["seed_set"][0]] if repeat else config["seed_set"]
     checkpoint_paths = [source_root / "cnn_only" / f"seed_{seed}" / "checkpoints" / "interaction_0100000.pt" for seed in seeds]
-    head_paths = [head_root / f"seed{seed}_standardized_linear.pt" for seed in seeds]
+    artifact_name = "seed{}_natural_standardized.pt" if artifact_root != head_root else "seed{}_standardized_linear.pt"
+    head_paths = [artifact_root / artifact_name.format(seed) for seed in seeds]
     output = Path(output_path)
     if output.exists():
         raise FileExistsError(f"refusing to overwrite {output}")
@@ -376,7 +423,7 @@ def run(config_path: str, output_path: str, repeat: bool = False) -> dict:
                 parameter.grad = None
             original_before = copy.deepcopy((source.state_dict(), source.optimizer.state_dict()))
             policies = {"baseline": source}
-            artifact = torch.load(head_root / f"seed{seed}_standardized_linear.pt", map_location="cuda", weights_only=False)
+            artifact = torch.load(artifact_root / artifact_name.format(seed), map_location="cuda", weights_only=False)
             if artifact["selection_uses_heldout"] is not False or artifact["source_checkpoint_sha256"] != _sha256(checkpoint_path):
                 raise RuntimeError("standardized head provenance or selection boundary differs")
             policies["standardized_linear"] = load_saved_head(source, artifact)

@@ -26,6 +26,27 @@ def test_natural_migration_protocol_is_frozen_and_non_formal(monkeypatch):
             _validate({**config, key: value}, head_config, head_summary, source_config)
 
 
+def test_natural_readout_task_chain_uses_locked_capacity_artifacts(monkeypatch):
+    monkeypatch.setenv("PYTHONHASHSEED", "0")
+    config = json.loads(Path("configs/crafter_wood3_natural_readout_task_chain_cuda_v1.yaml").read_text())
+    head_config = {
+        "status": "crafter_wood3_natural_readout_capacity_cuda_v1",
+        "formal_result": False,
+        "teacher_used": True,
+        "source_result_root": config["source_result_root"],
+        "natural_readout_root": config["head_artifact_root"],
+    }
+    head_summary = {"cross_process_repetition": {"passed": True}}
+    source_config = json.loads(Path(
+        "configs/crafter_wood3_spatial_representation_deterministic_v3_cuda_pilot_v1.yaml"
+    ).read_text())
+    _validate(config, head_config, head_summary, source_config)
+    with pytest.raises(ValueError):
+        _validate({**config, "action_seed_base": 97000000}, head_config, head_summary, source_config)
+    with pytest.raises(ValueError):
+        _validate(config, {**head_config, "natural_readout_root": "other"}, head_summary, source_config)
+
+
 def test_natural_migration_event_context_and_replay_payload():
     before = {"sleep_override_active": False, "target_object": None,
               "unblocked_adjacent_tree": True}
