@@ -65,6 +65,17 @@ def _run_rows(summary: dict, root: Path):
         if not digest_matches:
             raise RuntimeError(f"trace digest mismatch: {trace}")
         variant = run["variant"]
+        if any(episode["variant"] != variant or episode["policy_seed"] != run["policy_seed"]
+               for episode in episodes):
+            raise RuntimeError(f"trace metadata differs from run summary: {trace}")
+        if len(episodes) != run["summary"]["episodes"]:
+            raise RuntimeError(f"episode count differs from run summary: {trace}")
+        if [{key: value for key, value in episode.items() if key != "events"} for episode in episodes] != run["episodes"]:
+            raise RuntimeError(f"episode metadata differs from run summary: {trace}")
+        recomputed = _recompute_run(episodes)
+        for key, value in recomputed.items():
+            if run["summary"].get(key) != value:
+                raise RuntimeError(f"recomputed {key} differs from run summary: {trace}")
         episodes_by_variant.setdefault(variant, []).extend(episodes)
         metric = run["summary"]
         terminal = metric["terminal_counts"]
@@ -104,20 +115,76 @@ def _run_rows(summary: dict, root: Path):
     return outcomes, stages, decisions, failures, traces, episodes_by_variant
 
 
+def _recompute_run(episodes: list[dict]) -> dict:
+    return {
+        "episodes": len(episodes),
+        "interaction_steps": sum(len(episode["events"]) for episode in episodes),
+        "successes": sum(bool(episode["success"]) for episode in episodes),
+        "success_rate": sum(bool(episode["success"]) for episode in episodes) / len(episodes),
+        "terminal_counts": dict(sorted(Counter(episode["terminal_reason"] for episode in episodes).items())),
+        "wood_milestone_episode_counts": {
+            str(stage): sum(str(stage) in episode["first_wood_steps"] for episode in episodes)
+            for stage in (1, 2, 3)
+        },
+    }
+
+
 def _paired_rows(episodes_by_variant: dict[str, list[dict]]) -> list[dict]:
-    baseline = {episode["environment_seed"]: episode for episode in episodes_by_variant["baseline"]}
-    standardized = {episode["environment_seed"]: episode for episode in episodes_by_variant["standardized_linear"]}
+    baseline = {(episode["policy_seed"], episode["episode"]): episode
+                for episode in episodes_by_variant["baseline"]}
+    standardized = {(episode["policy_seed"], episode["episode"]): episode
+                    for episode in episodes_by_variant["standardized_linear"]}
     if set(baseline) != set(standardized):
-        raise RuntimeError("paired environment/action manifests differ")
+        raise RuntimeError("paired policy seed/episode manifests differ")
     rows = []
-    for seed in sorted(baseline):
-        left, right = baseline[seed], standardized[seed]
-        rows.append({"environment_seed": seed, "action_seed": left["action_seed"],
+    for key in sorted(baseline):
+        left, right = baseline[key], standardized[key]
+        if left["environment_seed"] != right["environment_seed"] or left["action_seed"] != right["action_seed"]:
+            raise RuntimeError("paired environment/action seeds differ")
+        if left["initial_rgb_digest"] != right["initial_rgb_digest"]:
+            raise RuntimeError("paired initial RGB observations differ")
+        rows.append({"policy_seed": key[0], "episode": key[1],
+                     "environment_seed": left["environment_seed"], "action_seed": left["action_seed"],
+                     "initial_rgb_identical": True,
                      "baseline_success": left["success"], "standardized_success": right["success"],
                      "baseline_terminal_reason": left["terminal_reason"],
                      "standardized_terminal_reason": right["terminal_reason"],
-                     "baseline_final_wood": left["final_wood"], "standardized_final_wood": right["final_wood"]})
+                     "baseline_final_wood": left["final_wood"], "standardized_final_wood": right["final_wood"],
+                     **{f"baseline_first_wood{stage}_steps": left["first_wood_steps"].get(str(stage))
+                        for stage in (1, 2, 3)},
+                     **{f"standardized_first_wood{stage}_steps": right["first_wood_steps"].get(str(stage))
+                        for stage in (1, 2, 3)}})
     return rows
+
+
+def _check_manifest(episodes_by_variant: dict[str, list[dict]], config: dict,
+                    expected_seeds: list[int]) -> None:
+    expected_by_variant = config["variants"]
+    for variant in expected_by_variant:
+        episodes = episodes_by_variant.get(variant, [])
+        if {episode["policy_seed"] for episode in episodes} != set(expected_seeds):
+            raise RuntimeError(f"unexpected policy seeds for {variant}")
+        expected_count = len(expected_seeds) * config["episode_count"]
+        if len(episodes) != expected_count:
+            raise RuntimeError(f"unexpected episode count for {variant}")
+        seed_index = {seed: index for index, seed in enumerate(config["seed_set"])}
+        seen = set()
+        for episode in episodes:
+            policy_seed = episode["policy_seed"]
+            index = episode["episode"]
+            key = (policy_seed, index)
+            if key in seen or not 0 <= index < config["episode_count"]:
+                raise RuntimeError(f"duplicate or invalid episode index: {key}")
+            seen.add(key)
+            offset = seed_index[policy_seed] * config["replicate_seed_stride"] + index
+            if (episode["environment_seed"] != config["environment_seed_base"] + offset
+                    or episode["action_seed"] != config["action_seed_base"] + offset):
+                raise RuntimeError(f"episode seeds differ from frozen manifest: {key}")
+            if (episode["steps"] != len(episode["events"]) or episode["steps"] > config["max_steps"]
+                    or episode["initial_snapshot"]["wood"] != config["initial_wood"]):
+                raise RuntimeError(f"episode boundary differs from protocol: {key}")
+            if episode["success"] != (episode["final_wood"] >= config["task"]["threshold"]):
+                raise RuntimeError(f"episode success differs from final inventory: {key}")
 
 
 def run(input_path: str, output_path: str) -> dict:
@@ -125,6 +192,7 @@ def run(input_path: str, output_path: str) -> dict:
     if output.exists():
         raise FileExistsError(f"refusing to overwrite {output}")
     summary = _read(root / "summary.json")
+    config = _read(root / "config.json")
     if summary["formal_result"] or summary["evaluation_only"] is not True:
         raise ValueError("analysis requires a non-formal evaluation-only result")
     if summary["training_interaction_steps"] != 0 or summary["supervised_optimizer_updates"] != 0:
@@ -134,7 +202,22 @@ def run(input_path: str, output_path: str) -> dict:
     if not all(summary["files_unchanged"].values()):
         raise ValueError("input file hashes changed during evaluation")
     outcomes, stages, decisions, _failures, traces, episodes = _run_rows(summary, root)
+    _check_manifest(episodes, config, config["seed_set"])
     paired = _paired_rows(episodes)
+    repeat_root = root / "cross_process_repeat"
+    repeat_summary = _read(repeat_root / "summary.json")
+    if not repeat_summary["observer_audits_passed"]:
+        raise ValueError("cross-process observer audit failed")
+    _repeat_outcomes, _repeat_stages, _repeat_decisions, _repeat_failures, repeat_traces, repeated = _run_rows(
+        repeat_summary, repeat_root)
+    _check_manifest(repeated, config, [config["seed_set"][0]])
+    repeat_matches = {}
+    for variant in config["variants"]:
+        main_seed0 = [row for row in episodes[variant] if row["policy_seed"] == config["seed_set"][0]]
+        repeat_seed0 = [row for row in repeated[variant] if row["policy_seed"] == config["seed_set"][0]]
+        repeat_matches[variant] = _digest(main_seed0) == _digest(repeat_seed0)
+    if not all(repeat_matches.values()):
+        raise RuntimeError("independently loaded seed 0 cross-process traces differ")
     output.mkdir(parents=True)
     _write_csv(output / "outcomes.csv", outcomes)
     _write_csv(output / "stage_funnel.csv", stages)
@@ -152,15 +235,27 @@ def run(input_path: str, output_path: str) -> dict:
     verification = {
         "formal_result": False,
         "trace_checks": traces,
+        "repeat_trace_checks": repeat_traces,
+        "independent_repeat_matches": repeat_matches,
         "observer_audits_passed": summary["observer_audits_passed"],
         "cross_process_repetition": summary["cross_process_repetition"],
         "files_unchanged": summary["files_unchanged"],
         "paired_episode_count": len(paired),
+        "paired_initial_rgb_identical_count": sum(row["initial_rgb_identical"] for row in paired),
         "paired_outcomes": {
             "both_success": sum(row["baseline_success"] and row["standardized_success"] for row in paired),
             "baseline_only_success": sum(row["baseline_success"] and not row["standardized_success"] for row in paired),
             "standardized_only_success": sum(not row["baseline_success"] and row["standardized_success"] for row in paired),
             "neither_success": sum(not row["baseline_success"] and not row["standardized_success"] for row in paired),
+        },
+        "paired_outcomes_by_policy_seed": {
+            str(seed): {
+                "both_success": sum(row["policy_seed"] == seed and row["baseline_success"] and row["standardized_success"] for row in paired),
+                "baseline_only_success": sum(row["policy_seed"] == seed and row["baseline_success"] and not row["standardized_success"] for row in paired),
+                "standardized_only_success": sum(row["policy_seed"] == seed and not row["baseline_success"] and row["standardized_success"] for row in paired),
+                "neither_success": sum(row["policy_seed"] == seed and not row["baseline_success"] and not row["standardized_success"] for row in paired),
+            }
+            for seed in config["seed_set"]
         },
         "pooled_outcomes": pooled,
         "analysis_source_sha256": hashlib.sha256(Path(__file__).read_bytes()).hexdigest(),
