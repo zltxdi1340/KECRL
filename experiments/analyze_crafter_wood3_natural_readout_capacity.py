@@ -13,11 +13,14 @@ from experiments.analyze_crafter_wood3_natural_state_window import (
     _close, _csv, _digest, _lines, _provenance_check, _read, _require, _sha256, _write,
     aggregate_windows, recompute_window,
 )
-from experiments.crafter_natural_readout import CATEGORIES, natural_action_target
-from experiments.crafter_natural_readout_capacity import load_natural_mlp_head
+from experiments.crafter_actor_head_ablation import ActorMLP, train_standardizer
+from experiments.crafter_natural_readout import CATEGORIES, action_set_metrics, natural_action_target
 from experiments.crafter_natural_state_window import image_digest
 from experiments.crafter_spatial_readout_data import array_digest
+from experiments.run_crafter_wood3_natural_readout import extract_features
+from experiments.run_crafter_wood3_collection_opportunity import _sha256
 from experiments.run_crafter_spatial_training_determinism_audit import _state_equal
+from src.algorithms.spatial_crafter_policy import build_matched_spatial_policy
 
 
 VARIANTS = ("baseline", "natural_standardized", "natural_standardized_mlp64")
@@ -116,7 +119,6 @@ def _verify_predictions(root, config, summary, arrays, records):
             _close(probabilities, exp / exp.sum(axis=1, keepdims=True), "capacity probabilities differ from logits")
             for code, split in enumerate(("train", "validation", "heldout")):
                 mask = arrays["split_code"] == code
-                from experiments.crafter_natural_readout import action_set_metrics
                 metric = {"seed": seed, "variant": variant, "split": split,
                           **action_set_metrics(logits[mask], arrays["target_mask"][mask], arrays["category_code"][mask])}
                 saved = next(row for row in seed_result["readout_metrics"] if row["variant"] == variant and row["split"] == split)
@@ -162,6 +164,85 @@ def _verify_predictions(root, config, summary, arrays, records):
     return all_metrics, all_windows
 
 
+def _equal_metrics(left, right):
+    _require(left.keys() == right.keys(), "metric keys differ")
+    for key, value in left.items():
+        other = right[key]
+        if isinstance(value, dict):
+            _equal_metrics(value, other)
+        elif isinstance(value, (int, str)) or value is None:
+            _require(value == other, f"metric differs: {key}")
+        else:
+            _close(value, other, f"metric differs: {key}", atol=3e-5, rtol=2e-5)
+
+
+def _verify_locked_heads(root, config, summary, arrays):
+    prior_root = Path(config["natural_readout_root"])
+    source_root = Path(config["source_result_root"])
+    source_config = _read(source_root / "config.json")
+    locks = _read(root / "selection_lock.json")
+    locked = {(row["seed"], row["variant"]): row for row in locks["heads"]}
+    train = np.flatnonzero(arrays["split_code"] == 0)
+    validation = np.flatnonzero(arrays["split_code"] == 1)
+    audits = []
+    for seed_result in summary["seeds"]:
+        seed = seed_result["seed"]
+        with np.load(root / f"seed{seed}_features.npz") as archive:
+            features = dict(archive)
+        embedding = features["embedding"]
+        checkpoint_path = source_root / "cnn_only" / f"seed_{seed}" / "checkpoints/interaction_0100000.pt"
+        checkpoint = torch.load(checkpoint_path, map_location="cpu", weights_only=False)
+        source = checkpoint["policy"]
+        encoder = build_matched_spatial_policy(source_config["policy"], "cnn_only")
+        encoder.load_state_dict(source, strict=True)
+        encoder.eval()
+        recomputed_embedding = extract_features(encoder, arrays["images"], np.arange(len(arrays["images"])),
+                                                config["feature_batch_size"])
+        _close(embedding, recomputed_embedding, "cached CNN features differ from RGB/checkpoint", atol=3e-3, rtol=2e-5)
+        source_logits = torch.nn.functional.linear(torch.as_tensor(embedding), source["actor.weight"], source["actor.bias"])[:, :7].numpy()
+        _close(features["baseline_logits"], source_logits, "baseline logits differ from checkpoint", atol=3e-3, rtol=2e-5)
+        linear_path = prior_root / f"seed{seed}_natural_standardized.pt"
+        linear = torch.load(linear_path, map_location="cpu", weights_only=False)
+        linear_lock = locked[seed, "natural_standardized"]
+        _require(linear_lock["file_sha256"] == _sha256(linear_path)
+                 and linear_lock["head_state_canonical_digest"] == linear["head_state_canonical_digest"], "reused linear lock differs")
+        linear_logits = torch.nn.functional.linear(torch.as_tensor(embedding), linear["head_state"]["weight"], linear["head_state"]["bias"])[:, :7].numpy()
+        _close(features["natural_standardized_logits"], linear_logits, "linear logits differ from locked head", atol=3e-3, rtol=2e-5)
+        mlp_path = root / f"seed{seed}_natural_standardized_mlp64.pt"
+        mlp = torch.load(mlp_path, map_location="cpu", weights_only=False)
+        mlp_lock = locked[seed, "natural_standardized_mlp64"]
+        canonical = array_digest({key: value.numpy() for key, value in mlp["head_state"].items()})
+        _require(mlp_lock["file_sha256"] == _sha256(mlp_path)
+                 and mlp_lock["head_state_canonical_digest"] == canonical == mlp["head_state_canonical_digest"], "MLP lock/digest differs")
+        _require(mlp["source_checkpoint_sha256"] == _sha256(checkpoint_path), "MLP source checkpoint differs")
+        _require(mlp["fit_feature_digest"] == array_digest({"train": embedding[train], "validation": embedding[validation]}), "MLP fit feature digest differs")
+        _require(mlp["train_row_digest"] == _digest(train.tolist()) and mlp["validation_row_digest"] == _digest(validation.tolist()), "MLP fit rows differ")
+        mean, std = train_standardizer(embedding[train], config["feature_std_floor"])
+        _require(np.array_equal(np.asarray(mlp["standardizer_mean"], dtype=np.float32), mean)
+                 and np.array_equal(np.asarray(mlp["standardizer_std"], dtype=np.float32), std), "MLP standardizer is not train-only")
+        head = ActorMLP()
+        head.load_state_dict(mlp["head_state"], strict=True)
+        with torch.no_grad():
+            mlp_logits = head(torch.as_tensor(embedding, dtype=torch.float32)).numpy()[:, :7]
+        _close(features["natural_standardized_mlp64_logits"], mlp_logits, "MLP logits differ from locked weights", atol=3e-3, rtol=2e-5)
+        for name, rows in (("train", train), ("validation", validation)):
+            direct = action_set_metrics(mlp_logits[rows], arrays["target_mask"][rows], arrays["category_code"][rows])
+            _equal_metrics(direct, mlp[f"{name}_metrics"])
+        trials = [(trial["learning_rate"], point) for trial in mlp["trials"] for point in trial["history"]]
+        selected_lr, selected_point = max(trials, key=lambda pair: (pair[1]["validation_macro_accuracy"], -pair[1]["validation_macro_set_nll"]))
+        _require(selected_lr == mlp["selected_learning_rate"] and selected_point["epoch"] == mlp["selected_epoch"], "MLP validation selection differs")
+        _close(selected_point["validation_macro_accuracy"], mlp["validation_metrics"]["category_macro_accuracy"], "selected MLP validation accuracy differs")
+        _close(selected_point["validation_macro_set_nll"], mlp["validation_metrics"]["category_macro_set_nll"], "selected MLP validation NLL differs")
+        _close(selected_point["train_macro_accuracy"], mlp["train_metrics"]["category_macro_accuracy"], "selected MLP train accuracy differs")
+        _require(mlp["supervised_optimizer_updates"] == len(config["actor_learning_rates"]) * config["actor_fit_epochs"], "MLP update count differs")
+        _require(mlp["selection_uses_heldout"] is False and mlp["source_policy_and_optimizer_unchanged"] is True, "MLP fit boundary differs")
+        audits.append({"seed": seed, "rgb_to_frozen_encoder_features_verified": True,
+                       "source_logits_verified": True, "linear_head_verified": True,
+                       "mlp_head_verified": True, "train_only_standardizer_verified": True,
+                       "validation_metrics_recomputed": True, "validation_selection_verified": True})
+    return audits
+
+
 def run(input_path, output_path):
     root, output = Path(input_path), Path(output_path)
     _require(not output.exists(), f"refusing to overwrite {output}")
@@ -171,10 +252,26 @@ def run(input_path, output_path):
     provenance = _provenance_check(root, summary)
     arrays, records, episodes, dataset_check = _verify_dataset(root, config, summary)
     metrics, windows = _verify_predictions(root, config, summary, arrays, records)
+    locked_head_checks = _verify_locked_heads(root, config, summary, arrays)
     repeat_root = root / "cross_process_repeat"
+    _require((repeat_root / "summary.json").is_file(), "capacity cross-process repeat summary missing")
     repeat = _read(repeat_root / "summary.json")
     repeat_provenance = _provenance_check(repeat_root, repeat)
     _require(summary["cross_process_repetition"]["passed"] is True and all(summary["cross_process_repetition"]["checks"].values()), "capacity cross-process repetition failed")
+    repeat_arrays, repeat_records, _, _ = _verify_dataset(repeat_root, config, repeat)
+    _verify_predictions(repeat_root, config, repeat, repeat_arrays, repeat_records)
+    main_seed = next(row for row in summary["seeds"] if row["seed"] == 0)
+    repeat_seed = next(row for row in repeat["seeds"] if row["seed"] == 0)
+    _require(array_digest(arrays) == array_digest(repeat_arrays), "main/repeat dataset arrays differ")
+    _require(_digest(records) == _digest(repeat_records), "main/repeat dataset records differ")
+    with np.load(root / "seed0_features.npz") as archive:
+        main_features = dict(archive)
+    with np.load(repeat_root / "seed0_features.npz") as archive:
+        repeat_features = dict(archive)
+    _require(array_digest(main_features) == array_digest(repeat_features), "main/repeat seed 0 feature arrays differ")
+    _require(_digest(_read(root / "seed0_predictions.json")) == _digest(_read(repeat_root / "seed0_predictions.json")), "main/repeat seed 0 predictions differ")
+    _require(_digest(_lines(root / "seed0_windows.jsonl")) == _digest(_lines(repeat_root / "seed0_windows.jsonl")), "main/repeat seed 0 windows differ")
+    _require(main_seed["head"]["head_state_canonical_digest"] == repeat_seed["head"]["head_state_canonical_digest"], "main/repeat seed 0 MLP weights differ")
     pooled = []
     for key in sorted({(row["variant"], row["category"], row["mode"]) for row in windows}):
         group = [row for row in windows if tuple(row[field] for field in ("variant", "category", "mode")) == key]
@@ -182,7 +279,8 @@ def run(input_path, output_path):
     verification = {"all_checks_passed": True, "formal_result": False,
                     "frozen_encoder_and_source_ppo_verified": True, "teacher_assisted_diagnostic": True,
                     "dataset": dataset_check, "source_hash_check": provenance,
-                    "repeat_source_hash_check": repeat_provenance, "readout_metrics": metrics,
+                    "repeat_source_hash_check": repeat_provenance, "locked_head_checks": locked_head_checks,
+                    "main_repeat_seed0_artifacts_equal": True, "readout_metrics": metrics,
                     "fresh_window_count": len(windows), "pooled_execution": pooled,
                     "supervised_mlp_updates": summary["supervised_head_optimizer_updates"],
                     "limitations": ["MLP uses a fixed initialization while the reused linear head was fitted previously; this is a capacity diagnostic, not a perfect architecture-only causal comparison.",
