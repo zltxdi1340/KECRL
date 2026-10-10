@@ -12,6 +12,7 @@ from experiments.crafter_natural_readout import (
     action_set_metrics, assert_split_boundary, episode_manifest, fit_natural_head,
     natural_action_target, target_set_nll,
 )
+from experiments.crafter_natural_readout_capacity import fit_natural_mlp_head, load_natural_mlp_head
 from experiments.run_crafter_spatial_training_determinism_audit import _state_equal
 from experiments.run_crafter_wood3_natural_readout import _collection_episode, _public_episode, _validate
 from src.algorithms.spatial_crafter_policy import build_matched_spatial_policy
@@ -125,3 +126,35 @@ def test_geometry_collection_and_state_copies_do_not_change_public_native_trace(
         observed = _collection_episode(_UniformPolicy(), manifest, config, [], [], {}, {})
         control = _collection_episode(_UniformPolicy(), manifest, config, [], [], {}, {}, observe=False)
     assert _state_equal(_public_episode(observed), _public_episode(control))
+
+
+def test_mlp_capacity_fit_uses_set_loss_and_preserves_frozen_source():
+    config = json.loads(Path("configs/crafter_wood3_natural_readout_capacity_cuda_v1.yaml").read_text())
+    source_config = json.loads(Path("configs/crafter_wood3_actor_head_ablation_cuda_v1.yaml").read_text())
+    source = build_matched_spatial_policy(source_config["policy"], "cnn_only")
+    for parameter in source.parameters():
+        parameter.requires_grad_(False)
+        parameter.grad = None
+    frozen = copy.deepcopy((source.state_dict(), source.optimizer.state_dict()))
+    rng = np.random.default_rng(29)
+    train = rng.normal(size=(18, 128)).astype(np.float32)
+    validation = rng.normal(size=(9, 128)).astype(np.float32) + 1
+    categories = np.repeat(np.arange(3), 6)
+    validation_categories = np.repeat(np.arange(3), 3)
+    masks = np.zeros((18, 7), dtype=bool)
+    validation_masks = np.zeros((9, 7), dtype=bool)
+    for code, actions in enumerate(([5], [1, 4], [2, 3])):
+        masks[np.ix_(categories == code, actions)] = True
+        validation_masks[np.ix_(validation_categories == code, actions)] = True
+    small = {**config, "actor_fit_epochs": 4, "validation_interval": 2, "actor_learning_rates": [.03]}
+    head, artifact = fit_natural_mlp_head(
+        source, train, masks, categories, validation, validation_masks, validation_categories,
+        small, "standardized_mlp64", init_seed=1234)
+    assert _state_equal(frozen, (source.state_dict(), source.optimizer.state_dict()))
+    assert artifact["selection_uses_heldout"] is False
+    assert artifact["supervised_optimizer_updates"] == 4
+    assert artifact["validation_probability_delta_after_folding"] < 1e-3
+    assert all(not parameter.requires_grad and parameter.grad is None for parameter in head.parameters())
+    loaded = load_natural_mlp_head(source, artifact)
+    assert all(not parameter.requires_grad and parameter.grad is None for parameter in loaded.parameters())
+    assert isinstance(loaded.actor, torch.nn.Module)
