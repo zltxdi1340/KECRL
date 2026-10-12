@@ -1,0 +1,13 @@
+seed,head_variant,condition,episodes,successes,success_rate,deaths,external_truncations,native_terminal_events,successful_but_native_terminal_episodes,interaction_steps,wood_gained,oracle_gate_steps,replaced_action_steps,ready_steps,ready_do_actions,ready_blocked_moves
+0,matched_baseline_only,native,30,2,0.06666666666666667,27,1,27,0,4545,23,0,0,375,23,250
+0,matched_baseline_only,ready_do,30,4,0.13333333333333333,25,1,25,0,4076,27,27,17,27,27,0
+0,matched_mixed_coverage,native,30,5,0.16666666666666666,25,0,25,0,4781,31,0,0,512,31,380
+0,matched_mixed_coverage,ready_do,30,14,0.4666666666666667,16,0,16,0,3580,49,49,35,49,49,0
+1,matched_baseline_only,native,30,11,0.36666666666666664,17,2,17,0,4190,45,0,0,155,45,56
+1,matched_baseline_only,ready_do,30,15,0.5,13,2,13,0,3286,51,51,38,51,51,0
+1,matched_mixed_coverage,native,30,14,0.4666666666666667,15,1,15,0,4413,48,0,0,190,48,93
+1,matched_mixed_coverage,ready_do,30,13,0.43333333333333335,17,0,17,0,4021,55,55,40,55,55,0
+2,matched_baseline_only,native,30,8,0.26666666666666666,22,0,22,0,4428,35,0,0,318,35,250
+2,matched_baseline_only,ready_do,30,11,0.36666666666666664,19,0,19,0,4026,43,43,31,43,43,0
+2,matched_mixed_coverage,native,30,9,0.3,20,1,20,0,4568,42,0,0,567,42,454
+2,matched_mixed_coverage,ready_do,30,19,0.6333333333333333,11,0,11,0,3118,67,67,47,67,67,0

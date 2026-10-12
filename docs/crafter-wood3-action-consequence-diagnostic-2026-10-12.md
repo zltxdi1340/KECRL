@@ -115,6 +115,10 @@ Module 资格。如果仅补齐 ready->do 就明显改善完整阶段漏斗，�
 和完整 Module 契约资格检查，才可注册 Module。候选 0.8 门槛仍未验证，本轮没有
 stone、coal、pickaxe 或持续任务链的新资格结论。
 
+上述最小干预已完成，见[ready->do 干预报告](crafter-wood3-ready-do-intervention-diagnostic-2026-10-12.md)。
+新批次配对结果支持衔接缺口影响完整任务，但 oracle gate 后 pooled 成功率仍仅为
+33.3%/51.1%；下一项定位到达 ready 之前的局部转向与接近问题。
+
 ## 产物
 
 - [分析配置](../configs/crafter_wood3_action_consequence_analysis_v1.yaml)

@@ -1,0 +1,250 @@
+{
+  "formal_result": false,
+  "run_profile": "main",
+  "oracle_intervention_only": true,
+  "module_registered": false,
+  "policy_training_steps": 0,
+  "encoder_updated": false,
+  "input_files_unchanged": true,
+  "rgb_policy_sampling_and_environment_replay_passed": true,
+  "replay_checks": [
+    {
+      "seed": 0,
+      "head_variant": "matched_baseline_only",
+      "condition": "native",
+      "episodes_replayed": 30,
+      "max_probability_error": 0.0
+    },
+    {
+      "seed": 0,
+      "head_variant": "matched_baseline_only",
+      "condition": "ready_do",
+      "episodes_replayed": 30,
+      "max_probability_error": 0.0
+    },
+    {
+      "seed": 0,
+      "head_variant": "matched_mixed_coverage",
+      "condition": "native",
+      "episodes_replayed": 30,
+      "max_probability_error": 0.0
+    },
+    {
+      "seed": 0,
+      "head_variant": "matched_mixed_coverage",
+      "condition": "ready_do",
+      "episodes_replayed": 30,
+      "max_probability_error": 0.0
+    },
+    {
+      "seed": 1,
+      "head_variant": "matched_baseline_only",
+      "condition": "native",
+      "episodes_replayed": 30,
+      "max_probability_error": 0.0
+    },
+    {
+      "seed": 1,
+      "head_variant": "matched_baseline_only",
+      "condition": "ready_do",
+      "episodes_replayed": 30,
+      "max_probability_error": 0.0
+    },
+    {
+      "seed": 1,
+      "head_variant": "matched_mixed_coverage",
+      "condition": "native",
+      "episodes_replayed": 30,
+      "max_probability_error": 0.0
+    },
+    {
+      "seed": 1,
+      "head_variant": "matched_mixed_coverage",
+      "condition": "ready_do",
+      "episodes_replayed": 30,
+      "max_probability_error": 0.0
+    },
+    {
+      "seed": 2,
+      "head_variant": "matched_baseline_only",
+      "condition": "native",
+      "episodes_replayed": 30,
+      "max_probability_error": 0.0
+    },
+    {
+      "seed": 2,
+      "head_variant": "matched_baseline_only",
+      "condition": "ready_do",
+      "episodes_replayed": 30,
+      "max_probability_error": 0.0
+    },
+    {
+      "seed": 2,
+      "head_variant": "matched_mixed_coverage",
+      "condition": "native",
+      "episodes_replayed": 30,
+      "max_probability_error": 0.0
+    },
+    {
+      "seed": 2,
+      "head_variant": "matched_mixed_coverage",
+      "condition": "ready_do",
+      "episodes_replayed": 30,
+      "max_probability_error": 0.0
+    }
+  ],
+  "frozen_checks": [
+    {
+      "seed": 0,
+      "head_variant": "matched_baseline_only",
+      "policy_and_optimizer_unchanged": true
+    },
+    {
+      "seed": 0,
+      "head_variant": "matched_mixed_coverage",
+      "policy_and_optimizer_unchanged": true
+    },
+    {
+      "seed": 1,
+      "head_variant": "matched_baseline_only",
+      "policy_and_optimizer_unchanged": true
+    },
+    {
+      "seed": 1,
+      "head_variant": "matched_mixed_coverage",
+      "policy_and_optimizer_unchanged": true
+    },
+    {
+      "seed": 2,
+      "head_variant": "matched_baseline_only",
+      "policy_and_optimizer_unchanged": true
+    },
+    {
+      "seed": 2,
+      "head_variant": "matched_mixed_coverage",
+      "policy_and_optimizer_unchanged": true
+    }
+  ],
+  "reference_audits_passed": true,
+  "cross_process_repetition_passed": true,
+  "paired_prefix_and_sampling_rng_checks_passed": true,
+  "pooled_outcomes": [
+    {
+      "head_variant": "matched_baseline_only",
+      "condition": "native",
+      "episodes": 90,
+      "successes": 21,
+      "success_rate": 0.23333333333333334,
+      "deaths": 66,
+      "external_truncations": 3,
+      "native_terminal_events": 66,
+      "successful_but_native_terminal_episodes": 0,
+      "interaction_steps": 13163,
+      "wood_gained": 103,
+      "oracle_gate_steps": 0,
+      "replaced_action_steps": 0,
+      "ready_steps": 848,
+      "ready_do_actions": 103,
+      "ready_blocked_moves": 556
+    },
+    {
+      "head_variant": "matched_baseline_only",
+      "condition": "ready_do",
+      "episodes": 90,
+      "successes": 30,
+      "success_rate": 0.3333333333333333,
+      "deaths": 57,
+      "external_truncations": 3,
+      "native_terminal_events": 57,
+      "successful_but_native_terminal_episodes": 0,
+      "interaction_steps": 11388,
+      "wood_gained": 121,
+      "oracle_gate_steps": 121,
+      "replaced_action_steps": 86,
+      "ready_steps": 121,
+      "ready_do_actions": 121,
+      "ready_blocked_moves": 0
+    },
+    {
+      "head_variant": "matched_mixed_coverage",
+      "condition": "native",
+      "episodes": 90,
+      "successes": 28,
+      "success_rate": 0.3111111111111111,
+      "deaths": 60,
+      "external_truncations": 2,
+      "native_terminal_events": 60,
+      "successful_but_native_terminal_episodes": 0,
+      "interaction_steps": 13762,
+      "wood_gained": 121,
+      "oracle_gate_steps": 0,
+      "replaced_action_steps": 0,
+      "ready_steps": 1269,
+      "ready_do_actions": 121,
+      "ready_blocked_moves": 927
+    },
+    {
+      "head_variant": "matched_mixed_coverage",
+      "condition": "ready_do",
+      "episodes": 90,
+      "successes": 46,
+      "success_rate": 0.5111111111111111,
+      "deaths": 44,
+      "external_truncations": 0,
+      "native_terminal_events": 44,
+      "successful_but_native_terminal_episodes": 0,
+      "interaction_steps": 10719,
+      "wood_gained": 171,
+      "oracle_gate_steps": 171,
+      "replaced_action_steps": 122,
+      "ready_steps": 171,
+      "ready_do_actions": 171,
+      "ready_blocked_moves": 0
+    }
+  ],
+  "paired_outcomes": [
+    {
+      "head_variant": "matched_baseline_only",
+      "paired_episodes": 90,
+      "native_only_successes": 2,
+      "ready_do_only_successes": 11,
+      "both_successes": 19,
+      "neither_successes": 58
+    },
+    {
+      "head_variant": "matched_mixed_coverage",
+      "paired_episodes": 90,
+      "native_only_successes": 3,
+      "ready_do_only_successes": 21,
+      "both_successes": 25,
+      "neither_successes": 41
+    }
+  ],
+  "analysis_source_sha256": "05450b1a314f4b5ccc6f986526b309a212d331fb6faecc7ea395fde0731c6c5d",
+  "input_hashes": {
+    "results/crafter_wood3_ready_do_intervention_cuda_20261012_v1/config.json": "0d0d870f04d8c4aa52dcce91ec93ebd458617876de3ef4ed2ea1629cf5721976",
+    "results/crafter_wood3_ready_do_intervention_cuda_20261012_v1/summary.json": "1bdc759684fc37f4876ff8b330515a1adcd4b0b6065376660c80e35f680a64dd",
+    "results/crafter_wood3_ready_do_intervention_cuda_20261012_v1/provenance.json": "e8a1929fe0a9a488f76e236ab5658a1f0d46bad2c21d6d2872eee16f49464abf",
+    "results/crafter_wood3_ready_do_intervention_cuda_20261012_v1/selection_lock.json": "6c176f97714c32ad2903653392ef64731384a0f9f5f0baec1ff6076b40fd127d",
+    "results/crafter_wood3_ready_do_intervention_cuda_20261012_v1/seed0_matched_baseline_only_native_episodes.jsonl": "c50dcadf72efdc3898f89bf8f3d2a9b19a9ccb4e19425a4ad0746b41251c157f",
+    "results/crafter_wood3_ready_do_intervention_cuda_20261012_v1/seed0_matched_baseline_only_ready_do_episodes.jsonl": "7221512ac4f7879212fe524d7ab0331f075580478823b025bef8df5d81a3ff4b",
+    "results/crafter_wood3_ready_do_intervention_cuda_20261012_v1/seed0_matched_mixed_coverage_native_episodes.jsonl": "5b2d9dba814306e00d86aba2c8594c4f8807323ae9934ed288ef30bb503700ed",
+    "results/crafter_wood3_ready_do_intervention_cuda_20261012_v1/seed0_matched_mixed_coverage_ready_do_episodes.jsonl": "eb701606a6d604186dc7abbad3c7889216802ca45da9742a3945222e73c48efd",
+    "results/crafter_wood3_ready_do_intervention_cuda_20261012_v1/seed1_matched_baseline_only_native_episodes.jsonl": "0f574bbf72e5b03a72b1987ccd2726ce6f5684a0288d93023a88894660a9c19e",
+    "results/crafter_wood3_ready_do_intervention_cuda_20261012_v1/seed1_matched_baseline_only_ready_do_episodes.jsonl": "63628ccc492f42e614cfc4cd26a34266b5941e5b27caa6622b847a31b25dbc3a",
+    "results/crafter_wood3_ready_do_intervention_cuda_20261012_v1/seed1_matched_mixed_coverage_native_episodes.jsonl": "d0152ce0b598df12c47f3f9fb96762e0a5ec33b6f4ffce76e572b0637351a59c",
+    "results/crafter_wood3_ready_do_intervention_cuda_20261012_v1/seed1_matched_mixed_coverage_ready_do_episodes.jsonl": "264bfcd3c6991f785b400abd23f95ee376a13009955beb800bc65a3418db0c40",
+    "results/crafter_wood3_ready_do_intervention_cuda_20261012_v1/seed2_matched_baseline_only_native_episodes.jsonl": "5ab1a36a9ac7df8478c33b76d02ff3c2fda110fba0892c1e905a3fe69d764e99",
+    "results/crafter_wood3_ready_do_intervention_cuda_20261012_v1/seed2_matched_baseline_only_ready_do_episodes.jsonl": "c0859e3d9cb23b1db316bc9b6af91f3958f1409d99d37d475f2e3a5bcfc11dcf",
+    "results/crafter_wood3_ready_do_intervention_cuda_20261012_v1/seed2_matched_mixed_coverage_native_episodes.jsonl": "2ca97ebc911754af668134140265402a046f954f338ea8f766a2b3116ff0b778",
+    "results/crafter_wood3_ready_do_intervention_cuda_20261012_v1/seed2_matched_mixed_coverage_ready_do_episodes.jsonl": "416d7399b9d6d546b6854231bbf9ff418615438b1a64fed85ca9d0d163f76f0a",
+    "/home/zl202621/project/KECRL/experiments/analyze_crafter_wood3_ready_do_intervention.py": "05450b1a314f4b5ccc6f986526b309a212d331fb6faecc7ea395fde0731c6c5d",
+    "experiments/analyze_crafter_wood3_action_consequence.py": "5ad86c338d9fecdb2d0edbf6e19a6983fcf5326250496bbbca38ebda8943b128"
+  },
+  "output_sha256": {
+    "outcomes.csv": "dae3641fc2cb02ae549aad9cf10c559bc13f744c612b006b91f9153ac7cc65b7",
+    "paired_episodes.csv": "b9173aa891bf5da72436b758062ce85b918a2be4b4eaa59b6c7d513659d65101",
+    "pooled_outcomes.csv": "20a54ce850afe0610af413eea83addb42813cab921ec5a3206a33f4f2c137755",
+    "stage_funnel.csv": "b25285dd4805c1f1ea97a8e06820cdfa9a4af2c9894d3b8ff0888c082ae1f88a"
+  }
+}

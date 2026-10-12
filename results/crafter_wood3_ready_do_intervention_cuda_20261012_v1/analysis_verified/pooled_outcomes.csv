@@ -1,0 +1,5 @@
+head_variant,condition,episodes,successes,success_rate,deaths,external_truncations,native_terminal_events,successful_but_native_terminal_episodes,interaction_steps,wood_gained,oracle_gate_steps,replaced_action_steps,ready_steps,ready_do_actions,ready_blocked_moves
+matched_baseline_only,native,90,21,0.23333333333333334,66,3,66,0,13163,103,0,0,848,103,556
+matched_baseline_only,ready_do,90,30,0.3333333333333333,57,3,57,0,11388,121,121,86,121,121,0
+matched_mixed_coverage,native,90,28,0.3111111111111111,60,2,60,0,13762,121,0,0,1269,121,927
+matched_mixed_coverage,ready_do,90,46,0.5111111111111111,44,0,44,0,10719,171,171,122,171,171,0
