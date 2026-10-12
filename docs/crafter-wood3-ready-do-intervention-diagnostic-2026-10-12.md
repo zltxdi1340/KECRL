@@ -145,6 +145,10 @@ approach 或生存，也不将局部距离减少解释成全局导航安全。
 死亡前路径；若转向有稳定增益，再据此收紧只用 RGB 学习选择与衔接的目标。本轮
 还未实现或验证 RGB-only ready gate，不能直接把 oracle 规则接入正式 SPI 执行器。
 
+局部转向增量诊断已完成，见[turn->ready->do 报告](crafter-wood3-turn-ready-do-intervention-diagnostic-2026-10-12.md)。
+它显示转向能进一步改善本批完整 wood 任务，但剩余失败集中在到达相邻树之前；下一项
+转为只读审计 approach 与死亡时点。
+
 这轮工作为 wood SPI 的执行与学习规格提供可区分的证据。SPT/SPI 的理论边界不变：
 只有真实 RGB executor 通过独立成功率评估及完整 Module 契约检查，才可注册和复用。
 `0.8` 仍是待验证候选门槛，本轮不是 Module 资格评估；stone、coal、pickaxe 和持续

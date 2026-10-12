@@ -1,0 +1,5 @@
+head_variant,condition,episodes,successes,success_rate,deaths,external_truncations,native_terminal_events,successful_but_native_terminal_episodes,interaction_steps,wood_gained,oracle_gate_steps,replaced_action_steps,ready_steps,ready_do_actions,ready_blocked_moves,ready_gate_steps,turn_gate_steps,ready_replaced_action_steps,turn_replaced_action_steps
+matched_baseline_only,ready_do,90,24,0.26666666666666666,56,10,56,0,12613,119,119,79,119,119,0,119,0,79,0
+matched_baseline_only,turn_ready_do,90,38,0.4222222222222222,43,9,43,0,10318,143,225,170,143,143,0,143,82,100,70
+matched_mixed_coverage,ready_do,90,43,0.4777777777777778,44,3,44,0,11495,165,165,128,165,165,0,165,0,128,0
+matched_mixed_coverage,turn_ready_do,90,49,0.5444444444444444,38,3,38,0,10236,177,276,216,177,177,0,177,99,130,86

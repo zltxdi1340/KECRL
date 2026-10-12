@@ -1,0 +1,279 @@
+{
+  "formal_result": false,
+  "run_profile": "main",
+  "oracle_intervention_only": true,
+  "module_registered": false,
+  "policy_training_steps": 0,
+  "encoder_updated": false,
+  "approach_intervention_used": false,
+  "survival_intervention_used": false,
+  "input_files_unchanged": true,
+  "rgb_policy_sampling_and_environment_replay_passed": true,
+  "replay_checks": [
+    {
+      "seed": 0,
+      "head_variant": "matched_baseline_only",
+      "condition": "ready_do",
+      "episodes_replayed": 30,
+      "max_probability_error": 0.0
+    },
+    {
+      "seed": 0,
+      "head_variant": "matched_baseline_only",
+      "condition": "turn_ready_do",
+      "episodes_replayed": 30,
+      "max_probability_error": 0.0
+    },
+    {
+      "seed": 0,
+      "head_variant": "matched_mixed_coverage",
+      "condition": "ready_do",
+      "episodes_replayed": 30,
+      "max_probability_error": 0.0
+    },
+    {
+      "seed": 0,
+      "head_variant": "matched_mixed_coverage",
+      "condition": "turn_ready_do",
+      "episodes_replayed": 30,
+      "max_probability_error": 0.0
+    },
+    {
+      "seed": 1,
+      "head_variant": "matched_baseline_only",
+      "condition": "ready_do",
+      "episodes_replayed": 30,
+      "max_probability_error": 0.0
+    },
+    {
+      "seed": 1,
+      "head_variant": "matched_baseline_only",
+      "condition": "turn_ready_do",
+      "episodes_replayed": 30,
+      "max_probability_error": 0.0
+    },
+    {
+      "seed": 1,
+      "head_variant": "matched_mixed_coverage",
+      "condition": "ready_do",
+      "episodes_replayed": 30,
+      "max_probability_error": 0.0
+    },
+    {
+      "seed": 1,
+      "head_variant": "matched_mixed_coverage",
+      "condition": "turn_ready_do",
+      "episodes_replayed": 30,
+      "max_probability_error": 0.0
+    },
+    {
+      "seed": 2,
+      "head_variant": "matched_baseline_only",
+      "condition": "ready_do",
+      "episodes_replayed": 30,
+      "max_probability_error": 0.0
+    },
+    {
+      "seed": 2,
+      "head_variant": "matched_baseline_only",
+      "condition": "turn_ready_do",
+      "episodes_replayed": 30,
+      "max_probability_error": 0.0
+    },
+    {
+      "seed": 2,
+      "head_variant": "matched_mixed_coverage",
+      "condition": "ready_do",
+      "episodes_replayed": 30,
+      "max_probability_error": 0.0
+    },
+    {
+      "seed": 2,
+      "head_variant": "matched_mixed_coverage",
+      "condition": "turn_ready_do",
+      "episodes_replayed": 30,
+      "max_probability_error": 0.0
+    }
+  ],
+  "frozen_checks": [
+    {
+      "seed": 0,
+      "head_variant": "matched_baseline_only",
+      "policy_and_optimizer_unchanged": true,
+      "source_policy_and_optimizer_unchanged": true,
+      "real_cuda": true
+    },
+    {
+      "seed": 0,
+      "head_variant": "matched_mixed_coverage",
+      "policy_and_optimizer_unchanged": true,
+      "source_policy_and_optimizer_unchanged": true,
+      "real_cuda": true
+    },
+    {
+      "seed": 1,
+      "head_variant": "matched_baseline_only",
+      "policy_and_optimizer_unchanged": true,
+      "source_policy_and_optimizer_unchanged": true,
+      "real_cuda": true
+    },
+    {
+      "seed": 1,
+      "head_variant": "matched_mixed_coverage",
+      "policy_and_optimizer_unchanged": true,
+      "source_policy_and_optimizer_unchanged": true,
+      "real_cuda": true
+    },
+    {
+      "seed": 2,
+      "head_variant": "matched_baseline_only",
+      "policy_and_optimizer_unchanged": true,
+      "source_policy_and_optimizer_unchanged": true,
+      "real_cuda": true
+    },
+    {
+      "seed": 2,
+      "head_variant": "matched_mixed_coverage",
+      "policy_and_optimizer_unchanged": true,
+      "source_policy_and_optimizer_unchanged": true,
+      "real_cuda": true
+    }
+  ],
+  "reference_audits_passed": true,
+  "cross_process_repetition_passed": true,
+  "paired_prefix_before_incremental_turn_and_sampling_rng_checks_passed": true,
+  "pooled_outcomes": [
+    {
+      "head_variant": "matched_baseline_only",
+      "condition": "ready_do",
+      "episodes": 90,
+      "successes": 24,
+      "success_rate": 0.26666666666666666,
+      "deaths": 56,
+      "external_truncations": 10,
+      "native_terminal_events": 56,
+      "successful_but_native_terminal_episodes": 0,
+      "interaction_steps": 12613,
+      "wood_gained": 119,
+      "oracle_gate_steps": 119,
+      "replaced_action_steps": 79,
+      "ready_steps": 119,
+      "ready_do_actions": 119,
+      "ready_blocked_moves": 0,
+      "ready_gate_steps": 119,
+      "turn_gate_steps": 0,
+      "ready_replaced_action_steps": 79,
+      "turn_replaced_action_steps": 0
+    },
+    {
+      "head_variant": "matched_baseline_only",
+      "condition": "turn_ready_do",
+      "episodes": 90,
+      "successes": 38,
+      "success_rate": 0.4222222222222222,
+      "deaths": 43,
+      "external_truncations": 9,
+      "native_terminal_events": 43,
+      "successful_but_native_terminal_episodes": 0,
+      "interaction_steps": 10318,
+      "wood_gained": 143,
+      "oracle_gate_steps": 225,
+      "replaced_action_steps": 170,
+      "ready_steps": 143,
+      "ready_do_actions": 143,
+      "ready_blocked_moves": 0,
+      "ready_gate_steps": 143,
+      "turn_gate_steps": 82,
+      "ready_replaced_action_steps": 100,
+      "turn_replaced_action_steps": 70
+    },
+    {
+      "head_variant": "matched_mixed_coverage",
+      "condition": "ready_do",
+      "episodes": 90,
+      "successes": 43,
+      "success_rate": 0.4777777777777778,
+      "deaths": 44,
+      "external_truncations": 3,
+      "native_terminal_events": 44,
+      "successful_but_native_terminal_episodes": 0,
+      "interaction_steps": 11495,
+      "wood_gained": 165,
+      "oracle_gate_steps": 165,
+      "replaced_action_steps": 128,
+      "ready_steps": 165,
+      "ready_do_actions": 165,
+      "ready_blocked_moves": 0,
+      "ready_gate_steps": 165,
+      "turn_gate_steps": 0,
+      "ready_replaced_action_steps": 128,
+      "turn_replaced_action_steps": 0
+    },
+    {
+      "head_variant": "matched_mixed_coverage",
+      "condition": "turn_ready_do",
+      "episodes": 90,
+      "successes": 49,
+      "success_rate": 0.5444444444444444,
+      "deaths": 38,
+      "external_truncations": 3,
+      "native_terminal_events": 38,
+      "successful_but_native_terminal_episodes": 0,
+      "interaction_steps": 10236,
+      "wood_gained": 177,
+      "oracle_gate_steps": 276,
+      "replaced_action_steps": 216,
+      "ready_steps": 177,
+      "ready_do_actions": 177,
+      "ready_blocked_moves": 0,
+      "ready_gate_steps": 177,
+      "turn_gate_steps": 99,
+      "ready_replaced_action_steps": 130,
+      "turn_replaced_action_steps": 86
+    }
+  ],
+  "paired_outcomes": [
+    {
+      "head_variant": "matched_baseline_only",
+      "paired_episodes": 90,
+      "ready_do_only_successes": 2,
+      "turn_ready_do_only_successes": 16,
+      "both_successes": 22,
+      "neither_successes": 50
+    },
+    {
+      "head_variant": "matched_mixed_coverage",
+      "paired_episodes": 90,
+      "ready_do_only_successes": 2,
+      "turn_ready_do_only_successes": 8,
+      "both_successes": 41,
+      "neither_successes": 39
+    }
+  ],
+  "analysis_source_sha256": "7d67aec58e7e51a6b8aaa26cb9150b0a5b6efa897b9ae90f047fa9256ed6338e",
+  "input_hashes": {
+    "results/crafter_wood3_turn_ready_do_intervention_cuda_20261012_v1/config.json": "a6686afdd0e390eb9585dcc6bfc1c33e3b7a6bbbc0fa31e13a0878cb5a14aac5",
+    "results/crafter_wood3_turn_ready_do_intervention_cuda_20261012_v1/summary.json": "6093cda7071134c639999d803b861223a79912e242413e82144062cf4c2dca2c",
+    "results/crafter_wood3_turn_ready_do_intervention_cuda_20261012_v1/provenance.json": "f044042a47a74c364f9aaf3aa67b63adfbd5cb89d773d93f241341528ea58279",
+    "results/crafter_wood3_turn_ready_do_intervention_cuda_20261012_v1/selection_lock.json": "6c176f97714c32ad2903653392ef64731384a0f9f5f0baec1ff6076b40fd127d",
+    "results/crafter_wood3_turn_ready_do_intervention_cuda_20261012_v1/seed0_matched_baseline_only_ready_do_episodes.jsonl": "f51c544907b494c634768d5dc4bfdeccf347404ee6a691333e0d1fcdef372be7",
+    "results/crafter_wood3_turn_ready_do_intervention_cuda_20261012_v1/seed0_matched_baseline_only_turn_ready_do_episodes.jsonl": "c0424188707142ad6ba306800668082a9a360d1ba2afafb76fd881199b842667",
+    "results/crafter_wood3_turn_ready_do_intervention_cuda_20261012_v1/seed0_matched_mixed_coverage_ready_do_episodes.jsonl": "bc6ce870c2961f43e9c532b5855fb28f496aa67fdf8ce90e851cfa0c41ce4dbc",
+    "results/crafter_wood3_turn_ready_do_intervention_cuda_20261012_v1/seed0_matched_mixed_coverage_turn_ready_do_episodes.jsonl": "c418e648440f08cb2632c11733236c4dd03ac7befb403da9b06699ae21e470a5",
+    "results/crafter_wood3_turn_ready_do_intervention_cuda_20261012_v1/seed1_matched_baseline_only_ready_do_episodes.jsonl": "ff81572f445f2f4cc20b4f8b731d088e8db2b712aa9507dc8c5109e7b39f82c6",
+    "results/crafter_wood3_turn_ready_do_intervention_cuda_20261012_v1/seed1_matched_baseline_only_turn_ready_do_episodes.jsonl": "2bda104175dc1e5789e17b67524cc3f082d084138ffc3281cbc698ac252cf1db",
+    "results/crafter_wood3_turn_ready_do_intervention_cuda_20261012_v1/seed1_matched_mixed_coverage_ready_do_episodes.jsonl": "6c9b3bb05f7ccb3977dd8614242a8ef088a17dad927c67d75a37ff4615fb60c3",
+    "results/crafter_wood3_turn_ready_do_intervention_cuda_20261012_v1/seed1_matched_mixed_coverage_turn_ready_do_episodes.jsonl": "4700c3e05d408080f9b3776b343a8a6d8c0236facefa02b2006d73b07858ceb6",
+    "results/crafter_wood3_turn_ready_do_intervention_cuda_20261012_v1/seed2_matched_baseline_only_ready_do_episodes.jsonl": "2c943659604912a62d1edcd280a29a68f4bc3a8b2c8d5b74fb7f39fd3ab6bcde",
+    "results/crafter_wood3_turn_ready_do_intervention_cuda_20261012_v1/seed2_matched_baseline_only_turn_ready_do_episodes.jsonl": "b3110364ae7100a33dcecf01488a2eeaab113cb01543b386e24993f21492f6e2",
+    "results/crafter_wood3_turn_ready_do_intervention_cuda_20261012_v1/seed2_matched_mixed_coverage_ready_do_episodes.jsonl": "8cfc35d93319f27150b9cfadf47e71e44ab04301c9eece54cb083816f930a722",
+    "results/crafter_wood3_turn_ready_do_intervention_cuda_20261012_v1/seed2_matched_mixed_coverage_turn_ready_do_episodes.jsonl": "273d29df9184ce9b7205a62062f383e34d9258aba1613dd01e43ace2716789f7"
+  },
+  "output_sha256": {
+    "outcomes.csv": "bb56628efcb305473315c14e617703b9f21e759ea5e6330e57fe221e8ee77fc4",
+    "paired_episodes.csv": "949a2ae36102b670ce4e36eeef77b1177df8ab1bc9653294c27930be167c2507",
+    "pooled_outcomes.csv": "74a25de18b1ed0137eb52629144071e7200a89763ef308d3cd176f77e693314e",
+    "stage_funnel.csv": "5aba13d667a1b33a856a9b4f14afe26dc031dd032b041ad70993c20a0413d2fe",
+    "turn_outcomes.csv": "708528287c1b9ac5cf651ec46c4b7863809ac239eaa842b466845e28b7d8beaf"
+  }
+}
