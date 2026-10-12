@@ -59,20 +59,19 @@ episode 隔离 train/validation/heldout，并每个类别最多选 6 个、间�
 
 mixed coverage 在前两阶段并没有形成稳定优势，进入 wood=2 后完成率从 `29/37`
 降为 `26/42`。主要失败类别仍是死亡、没有观察到可用相邻树、没有进入可采集朝向，
-以及已经 ready 但没有完成 collection；这说明单纯增加自然 RGB 状态覆盖没有解决
-动作后的生存、导航和下一阶段可达性。
+以及已经 ready 但没有完成 collection；这说明本次等预算的自然 RGB 覆盖混合方式
+没有稳定改善完整任务，尚不能判定各失败原因的因果贡献。
 
 ## 结论与 SPI 关系
 
-“自然状态覆盖不足”不是当前唯一或主要阻塞点，不能继续用扩大 coverage 的线性 head
-作为 wood Module。当前还没有满足候选 `0.8` 资格门槛的真实 executor，也不能把结果推广
-到 stone、coal 或 pickaxe。
+本次覆盖混合方式没有稳定收益，不能将该线性 head 注册为 wood Module。这不能排除
+更充分覆盖、不同采样或更大数据预算的作用。当前还没有满足候选 `0.8` 资格门槛的真实
+executor，也不能把结果推广到 stone、coal 或 pickaxe。
 
-下一项应保持 encoder、wrapper 和 wood 任务不变，直接诊断 action-after-state 约束：
-对 turn/approach/ready 动作同时记录下一状态的生存、下一可达采集机会、wood gain 和
-阶段进展，比较只优化局部几何动作与加入短 horizon consequence/feasibility 目标的冻结
-head。只有该目标在三 seed 的阶段漏斗和完整 Module 契约上稳定改善，才值得把同一 SPI
-接口扩展到挖矿任务。
+下一项先保持 encoder、wrapper 和 wood 任务不变，复用既有 trace 对动作后的存活、
+局部采集机会、wood gain 和短期阶段进展做只读审计，再决定最小可区分的干预。
+2026-10-12 已完成的[动作后果报告](crafter-wood3-action-consequence-diagnostic-2026-10-12.md)
+给出具体结果；consequence/feasibility 目标尚未训练或验证。
 
 ## 产物
 

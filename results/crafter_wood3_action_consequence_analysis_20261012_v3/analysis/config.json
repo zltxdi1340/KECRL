@@ -1,0 +1,23 @@
+{
+  "status": "crafter_wood3_action_consequence_analysis_v1",
+  "formal_result": false,
+  "evaluation_only": true,
+  "new_environment_interactions": 0,
+  "source_result_root": "results/crafter_wood3_natural_coverage_matched_cuda_20261011_v1",
+  "policy_variants": [
+    "matched_baseline_only",
+    "matched_mixed_coverage"
+  ],
+  "categories": [
+    "ready",
+    "turn",
+    "approach"
+  ],
+  "followthrough_horizon_steps": 8,
+  "policy_input": "RGB64x64x3 only",
+  "diagnostic_snapshots_used_after_action_selection": true,
+  "causal_effect_claim": false,
+  "module_registered": false,
+  "knowledge_updated": false,
+  "spt_updated": false
+}
