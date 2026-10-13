@@ -1,0 +1,62 @@
+{
+  "formal_result": false,
+  "diagnostic_only": true,
+  "evaluation_only": true,
+  "new_environment_interactions": 0,
+  "policy_training_steps": 0,
+  "encoder_updated": false,
+  "new_fit_or_selection_performed": false,
+  "module_registered": false,
+  "knowledge_updated": false,
+  "spt_updated": false,
+  "causal_effect_claim": false,
+  "external_truncation_censored": true,
+  "source_independent_verification_reused": true,
+  "source_prior_verification_sha256": "52763e9c9632bc8514f24e0a821cac88477b494f0591dd955f310cc46324cfce",
+  "source_input_files_unchanged": true,
+  "source_trace_count": 12,
+  "source_episode_count": 360,
+  "source_event_count": 44662,
+  "failure_class_counts": {
+    "approach_available_never_selected": 31,
+    "approach_progress_without_local_opportunity": 137,
+    "local_opportunity_reached_then_failed": 26,
+    "no_visible_unblocked_tree_observed": 11,
+    "visible_tree_but_no_safe_approach": 1
+  },
+  "death_before_local_state_counts": {
+    "approach": 92,
+    "no_visible_unblocked_tree": 50,
+    "sleep_override": 7,
+    "turn": 4,
+    "visible_no_safe_approach": 28
+  },
+  "input_hashes": {
+    "results/crafter_wood3_turn_ready_do_intervention_cuda_20261012_v1/config.json": "a6686afdd0e390eb9585dcc6bfc1c33e3b7a6bbbc0fa31e13a0878cb5a14aac5",
+    "results/crafter_wood3_turn_ready_do_intervention_cuda_20261012_v1/summary.json": "6093cda7071134c639999d803b861223a79912e242413e82144062cf4c2dca2c",
+    "results/crafter_wood3_turn_ready_do_intervention_cuda_20261012_v1/provenance.json": "f044042a47a74c364f9aaf3aa67b63adfbd5cb89d773d93f241341528ea58279",
+    "results/crafter_wood3_turn_ready_do_intervention_cuda_20261012_v1/selection_lock.json": "6c176f97714c32ad2903653392ef64731384a0f9f5f0baec1ff6076b40fd127d",
+    "results/crafter_wood3_turn_ready_do_intervention_cuda_20261012_v1/analysis_verified/verification.json": "52763e9c9632bc8514f24e0a821cac88477b494f0591dd955f310cc46324cfce",
+    "results/crafter_wood3_turn_ready_do_intervention_cuda_20261012_v1/seed0_matched_baseline_only_ready_do_episodes.jsonl": "f51c544907b494c634768d5dc4bfdeccf347404ee6a691333e0d1fcdef372be7",
+    "results/crafter_wood3_turn_ready_do_intervention_cuda_20261012_v1/seed0_matched_baseline_only_turn_ready_do_episodes.jsonl": "c0424188707142ad6ba306800668082a9a360d1ba2afafb76fd881199b842667",
+    "results/crafter_wood3_turn_ready_do_intervention_cuda_20261012_v1/seed0_matched_mixed_coverage_ready_do_episodes.jsonl": "bc6ce870c2961f43e9c532b5855fb28f496aa67fdf8ce90e851cfa0c41ce4dbc",
+    "results/crafter_wood3_turn_ready_do_intervention_cuda_20261012_v1/seed0_matched_mixed_coverage_turn_ready_do_episodes.jsonl": "c418e648440f08cb2632c11733236c4dd03ac7befb403da9b06699ae21e470a5",
+    "results/crafter_wood3_turn_ready_do_intervention_cuda_20261012_v1/seed1_matched_baseline_only_ready_do_episodes.jsonl": "ff81572f445f2f4cc20b4f8b731d088e8db2b712aa9507dc8c5109e7b39f82c6",
+    "results/crafter_wood3_turn_ready_do_intervention_cuda_20261012_v1/seed1_matched_baseline_only_turn_ready_do_episodes.jsonl": "2bda104175dc1e5789e17b67524cc3f082d084138ffc3281cbc698ac252cf1db",
+    "results/crafter_wood3_turn_ready_do_intervention_cuda_20261012_v1/seed1_matched_mixed_coverage_ready_do_episodes.jsonl": "6c9b3bb05f7ccb3977dd8614242a8ef088a17dad927c67d75a37ff4615fb60c3",
+    "results/crafter_wood3_turn_ready_do_intervention_cuda_20261012_v1/seed1_matched_mixed_coverage_turn_ready_do_episodes.jsonl": "4700c3e05d408080f9b3776b343a8a6d8c0236facefa02b2006d73b07858ceb6",
+    "results/crafter_wood3_turn_ready_do_intervention_cuda_20261012_v1/seed2_matched_baseline_only_ready_do_episodes.jsonl": "2c943659604912a62d1edcd280a29a68f4bc3a8b2c8d5b74fb7f39fd3ab6bcde",
+    "results/crafter_wood3_turn_ready_do_intervention_cuda_20261012_v1/seed2_matched_baseline_only_turn_ready_do_episodes.jsonl": "b3110364ae7100a33dcecf01488a2eeaab113cb01543b386e24993f21492f6e2",
+    "results/crafter_wood3_turn_ready_do_intervention_cuda_20261012_v1/seed2_matched_mixed_coverage_ready_do_episodes.jsonl": "8cfc35d93319f27150b9cfadf47e71e44ab04301c9eece54cb083816f930a722",
+    "results/crafter_wood3_turn_ready_do_intervention_cuda_20261012_v1/seed2_matched_mixed_coverage_turn_ready_do_episodes.jsonl": "273d29df9184ce9b7205a62062f383e34d9258aba1613dd01e43ace2716789f7"
+  },
+  "analysis_source_sha256": "bb6728ed19f9e51cbc0cdac8434e02b1db9fe73aafa7d19b6b5e0cecf8f75bf2",
+  "output_sha256": {
+    "approach_outcomes.csv": "5853d241a18849bcf81e00434fbd0cfb31a9cba9658b16e7faa4a99e49d7e9e3",
+    "config.json": "86876ef18b8984b1a15dd871735922fe0e8f3fb24afa5a30e9804e4defadedb2",
+    "death_timing.csv": "4674cf836252cf863edc469f7c8f4a4e140159b8cf48ee4bb8876119c67b815e",
+    "diagnosis_summary.csv": "6201b86f9d65c3f513e0ed361214c53cbff9cdcd97087fa4e402a2ed1bd90a3a",
+    "episode_metrics.csv": "b1a51738014dab34ac8e4c492c497df7a528d53164f9fcb20996f67c934580e4",
+    "failure_attribution.csv": "e7da828b2f3678eb24f47150b559da96fc4f8a39406de2c734e6ac2220ebc926"
+  }
+}

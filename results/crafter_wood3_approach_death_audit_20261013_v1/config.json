@@ -1,0 +1,35 @@
+{
+  "status": "crafter_wood3_approach_death_audit_v1",
+  "formal_result": false,
+  "diagnostic_only": true,
+  "evaluation_only": true,
+  "new_environment_interactions": 0,
+  "policy_training_steps": 0,
+  "encoder_updated": false,
+  "new_fit_or_selection_performed": false,
+  "intervention_executor_is_rgb_only": false,
+  "module_registered": false,
+  "knowledge_updated": false,
+  "spt_updated": false,
+  "causal_effect_claim": false,
+  "input_result_root": "results/crafter_wood3_turn_ready_do_intervention_cuda_20261012_v1",
+  "source_run_profile": "main",
+  "heads": [
+    "matched_baseline_only",
+    "matched_mixed_coverage"
+  ],
+  "conditions": [
+    "ready_do",
+    "turn_ready_do"
+  ],
+  "wood_stages": [
+    0,
+    1,
+    2
+  ],
+  "approach_definition": "safe_approach_move_actions_nonempty_while_not_ready_or_adjacent_turn",
+  "approach_distance_metric": "nearest_visible_unblocked_tree_manhattan_distance",
+  "death_definition": "last_event_environment_done_with_terminal_reason_death",
+  "external_truncation_censored": true,
+  "event_statistics_are_correlated_descriptive_observations": true
+}
