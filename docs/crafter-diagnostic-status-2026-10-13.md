@@ -21,9 +21,14 @@ Knowledge/Skill、Module 和 Pipeline 的理论及接口已实现；当前阻塞
    线性 head，oracle 只用于监督采集和标签。全新自然 episode 上关闭动作替换后：
    原 actor 12/30、native-state 3/30、chain-state 4/30。局部保留集部分读出改善没有
    转化为完整任务收益；两个副本都出现 ready/do 与自然动作链退化。
-5. 全量回归 `380 passed`。pilot 在独立进程完整重复，数据、特征、head 和轨迹
+5. 学习 pilot 的全量回归 `380 passed`；追加同状态交叉读出后的全量回归 `384 passed`。
+   pilot 在独立进程完整重复，数据、特征、head 和轨迹
    digest 一致；独立分析器重建监督数据、特征、离线指标及自然执行 RGB/动作回放。
    策略/PPO optimizer、源 checkpoint 与 Crafter 安装包封存哈希保持不变。
+6. 对 pilot 的 90 集自然轨迹做了同状态交叉读出：三种行为策略各自的 RGB 状态
+   都由三个 frozen head 评分。native 轨迹上原 head 的 ready/do 有效概率质量为
+   66.2%，native 拟合 head 只有 2.4%；chain 轨迹的转向状态上三个 head 贪心正确率
+   都低于 9.3%。因此能力遗忘与新状态转向读出困难同时存在，不能只归因于死亡。
 
 ## 当前判断与下一项
 
@@ -31,13 +36,11 @@ Knowledge/Skill、Module 和 Pipeline 的理论及接口已实现；当前阻塞
 采集链覆盖就能解决”；训练到保留、离线到自然执行的落差，也不足以证明 RGB 本身
 信息不足或 head 容量不足。奖励与信用分配尚未在控制其余因素时独立识别。
 
-下一项在本 pilot 三个 executor 自主访问的状态上交叉读出三个固定 head，用同一
-RGB/标签比较 ready、turn、approach，定位首次失误及持续无效 do/阻塞移动。先复用
-trace 做只读诊断，再选择最小学习干预，不重复扩大相同失败方案。
-
-若自主后续状态覆盖是主要缺口，下一轮仅在训练段迭代采集 learner 状态，保护原
-ready/do 能力，并使用新的验证/保留/fresh seed；若同状态下所有 head 均无法读出，
-则做表示诊断。局部自主链改善而剩余失败主要由死亡阻断时，转入跨任务共享生存
+交叉读出已完成。下一项用新 episode seed 做最小的保留能力对照：在相同 RGB
+监督数据上比较普通动作集合拟合与加入原 actor ready/do 输出蒸馏的 head，使用新的
+validation/heldout/fresh seed；fresh 执行只看 RGB，不加动作规则。这检验能否学习
+approach/turn 而不抹掉原有 do 能力。若同状态上的转向仍对所有 head 都困难，再做
+RGB 表示诊断；局部自主链改善而剩余失败主要由死亡阻断时，转入跨任务共享生存
 能力研究，不把总成功率 0.8 当作启动生存研究的硬条件。
 
 当前环境不存在摔落或溺水机制；全部原生失败死亡和外部截断仍计入总成功率。

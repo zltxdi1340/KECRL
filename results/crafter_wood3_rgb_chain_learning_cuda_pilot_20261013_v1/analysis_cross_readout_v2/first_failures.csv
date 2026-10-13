@@ -1,0 +1,91 @@
+trajectory_source,episode,environment_seed,action_seed,success,terminal_reason,final_wood,steps,first_invalid_step,first_invalid_category,first_invalid_action,first_invalid_valid_actions
+original_actor,0,184000000,194000000,False,death,2,160,1,approach,5,"[2, 4]"
+original_actor,1,184000001,194000001,False,death,0,144,1,approach,5,"[1, 3]"
+original_actor,2,184000002,194000002,True,success,3,54,1,approach,5,[2]
+original_actor,3,184000003,194000003,False,death,1,173,1,approach,5,"[1, 3]"
+original_actor,4,184000004,194000004,False,death,0,157,1,approach,5,"[2, 3]"
+original_actor,5,184000005,194000005,False,death,1,196,3,approach,5,"[1, 4]"
+original_actor,6,184000006,194000006,True,success,3,55,1,approach,5,"[2, 4]"
+original_actor,7,184000007,194000007,False,death,0,133,1,approach,5,"[1, 3]"
+original_actor,8,184000008,194000008,False,death,2,195,1,approach,5,"[2, 4]"
+original_actor,9,184000009,194000009,False,death,1,236,1,approach,5,[2]
+original_actor,10,184000010,194000010,False,death,0,151,1,approach,5,"[2, 3, 4]"
+original_actor,11,184000011,194000011,True,success,3,128,2,approach,5,[1]
+original_actor,12,184000012,194000012,False,death,0,220,36,approach,5,"[1, 3]"
+original_actor,13,184000013,194000013,True,success,3,65,1,approach,5,"[2, 3]"
+original_actor,14,184000014,194000014,False,death,2,232,1,approach,5,"[1, 2, 4]"
+original_actor,15,184000015,194000015,False,death,2,192,1,approach,5,"[2, 3, 4]"
+original_actor,16,184000016,194000016,True,success,3,127,2,approach,5,"[1, 4]"
+original_actor,17,184000017,194000017,False,death,2,151,5,approach,5,"[2, 4]"
+original_actor,18,184000018,194000018,True,success,3,47,1,approach,4,"[2, 3]"
+original_actor,19,184000019,194000019,True,success,3,53,1,approach,5,[4]
+original_actor,20,184000020,194000020,True,success,3,158,1,approach,5,"[1, 4]"
+original_actor,21,184000021,194000021,False,death,0,98,1,approach,5,"[2, 4]"
+original_actor,22,184000022,194000022,False,death,0,231,1,approach,5,"[2, 3]"
+original_actor,23,184000023,194000023,False,death,2,156,1,approach,5,"[1, 2, 3]"
+original_actor,24,184000024,194000024,False,death,1,183,1,approach,5,"[1, 3]"
+original_actor,25,184000025,194000025,True,success,3,38,1,approach,5,"[2, 3]"
+original_actor,26,184000026,194000026,False,death,2,221,2,approach,5,"[2, 4]"
+original_actor,27,184000027,194000027,True,success,3,95,2,approach,5,"[2, 4]"
+original_actor,28,184000028,194000028,True,success,3,37,1,approach,5,"[1, 2, 3, 4]"
+original_actor,29,184000029,194000029,True,success,3,46,3,approach,1,[4]
+native_state_fit,0,184000000,194000000,True,success,3,118,3,approach,1,"[2, 4]"
+native_state_fit,1,184000001,194000001,False,death,0,196,1,approach,2,"[1, 3]"
+native_state_fit,2,184000002,194000002,False,death,1,165,3,ready,2,[5]
+native_state_fit,3,184000003,194000003,False,death,1,175,3,approach,2,"[1, 3]"
+native_state_fit,4,184000004,194000004,False,death,0,13,1,approach,1,"[2, 3]"
+native_state_fit,5,184000005,194000005,False,death,0,180,4,approach,1,[4]
+native_state_fit,6,184000006,194000006,False,death,0,93,2,approach,1,"[2, 4]"
+native_state_fit,7,184000007,194000007,False,death,0,149,1,approach,2,"[1, 3]"
+native_state_fit,8,184000008,194000008,False,death,1,163,6,ready,2,[5]
+native_state_fit,9,184000009,194000009,False,death,1,210,2,approach,1,[2]
+native_state_fit,10,184000010,194000010,True,success,3,168,6,turn,5,[4]
+native_state_fit,11,184000011,194000011,False,death,0,95,4,approach,2,[3]
+native_state_fit,12,184000012,194000012,False,death,0,193,7,turn,2,[4]
+native_state_fit,13,184000013,194000013,False,death,0,197,6,approach,2,[3]
+native_state_fit,14,184000014,194000014,False,death,0,198,1,approach,5,"[1, 2, 4]"
+native_state_fit,15,184000015,194000015,False,death,1,248,4,approach,2,[4]
+native_state_fit,16,184000016,194000016,False,death,1,211,2,approach,2,"[1, 4]"
+native_state_fit,17,184000017,194000017,False,death,0,162,10,approach,5,"[1, 4]"
+native_state_fit,18,184000018,194000018,False,death,0,165,1,approach,4,"[2, 3]"
+native_state_fit,19,184000019,194000019,False,death,0,192,1,approach,2,[4]
+native_state_fit,20,184000020,194000020,False,death,1,101,2,approach,2,"[1, 4]"
+native_state_fit,21,184000021,194000021,False,death,0,172,1,approach,1,"[2, 4]"
+native_state_fit,22,184000022,194000022,False,death,0,217,5,ready,2,[5]
+native_state_fit,23,184000023,194000023,False,death,0,216,1,approach,4,"[1, 2, 3]"
+native_state_fit,24,184000024,194000024,False,death,0,210,5,turn,1,[3]
+native_state_fit,25,184000025,194000025,True,success,3,154,1,approach,4,"[2, 3]"
+native_state_fit,26,184000026,194000026,False,death,0,139,6,turn,2,[4]
+native_state_fit,27,184000027,194000027,False,death,0,186,1,approach,1,"[2, 4]"
+native_state_fit,28,184000028,194000028,False,death,1,158,4,approach,2,[4]
+native_state_fit,29,184000029,194000029,False,death,2,158,6,ready,4,[5]
+chain_state_fit,0,184000000,194000000,False,death,0,33,1,approach,1,"[2, 4]"
+chain_state_fit,1,184000001,194000001,True,success,3,102,1,approach,2,"[1, 3]"
+chain_state_fit,2,184000002,194000002,False,death,1,166,1,approach,1,[2]
+chain_state_fit,3,184000003,194000003,False,death,2,92,2,approach,5,"[1, 3]"
+chain_state_fit,4,184000004,194000004,False,death,0,75,1,approach,1,"[2, 3]"
+chain_state_fit,5,184000005,194000005,False,death,0,110,6,approach,5,"[2, 3]"
+chain_state_fit,6,184000006,194000006,False,death,1,163,1,approach,5,"[2, 4]"
+chain_state_fit,7,184000007,194000007,False,death,0,182,1,approach,2,"[1, 3]"
+chain_state_fit,8,184000008,194000008,False,death,0,249,1,approach,1,"[2, 4]"
+chain_state_fit,9,184000009,194000009,False,death,1,159,2,approach,5,[2]
+chain_state_fit,10,184000010,194000010,False,death,1,231,4,approach,5,"[2, 4]"
+chain_state_fit,11,184000011,194000011,False,death,0,164,3,approach,5,"[2, 3]"
+chain_state_fit,12,184000012,194000012,False,death,0,216,2,approach,2,"[1, 4]"
+chain_state_fit,13,184000013,194000013,False,death,0,42,4,approach,5,"[2, 3]"
+chain_state_fit,14,184000014,194000014,False,death,0,160,1,approach,5,"[1, 2, 4]"
+chain_state_fit,15,184000015,194000015,False,death,1,170,1,approach,1,"[2, 3, 4]"
+chain_state_fit,16,184000016,194000016,False,external_truncation,2,256,2,approach,2,"[1, 4]"
+chain_state_fit,17,184000017,194000017,False,death,1,174,6,approach,3,"[2, 4]"
+chain_state_fit,18,184000018,194000018,False,death,0,211,1,approach,1,"[2, 3]"
+chain_state_fit,19,184000019,194000019,False,death,0,51,1,approach,2,[4]
+chain_state_fit,20,184000020,194000020,False,death,1,83,2,approach,2,"[1, 4]"
+chain_state_fit,21,184000021,194000021,False,death,0,194,1,approach,1,"[2, 4]"
+chain_state_fit,22,184000022,194000022,False,external_truncation,0,256,1,approach,1,"[2, 3]"
+chain_state_fit,23,184000023,194000023,True,success,3,194,4,approach,1,[3]
+chain_state_fit,24,184000024,194000024,False,death,0,212,4,approach,5,"[1, 3]"
+chain_state_fit,25,184000025,194000025,True,success,3,82,3,approach,4,"[2, 3]"
+chain_state_fit,26,184000026,194000026,False,death,2,153,1,approach,1,"[2, 4]"
+chain_state_fit,27,184000027,194000027,False,death,0,54,1,approach,1,"[2, 4]"
+chain_state_fit,28,184000028,194000028,True,success,3,126,1,approach,5,"[1, 2, 3, 4]"
+chain_state_fit,29,184000029,194000029,False,external_truncation,1,256,4,approach,5,"[1, 4]"
