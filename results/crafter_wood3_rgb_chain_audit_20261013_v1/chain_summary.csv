@@ -1,0 +1,5 @@
+head_variant,condition,local_segments,completed_recorded_segments,completed_with_approach,external_censored_segments,completed_all_original_samples_valid,approach_completed_all_original_samples_valid,approach_completed_all_greedy_valid,approach_completed_mean_fixed_state_joint_valid_probability,first_invalid_on_completed_ready,first_invalid_on_completed_turn,first_invalid_on_completed_approach
+matched_baseline_only,turn_ready_do,323,186,171,2,8,8,5,0.023226352756421396,14,37,127
+matched_baseline_only,turn_ready_do_approach,262,259,252,0,3,3,1,0.010550576233062556,8,26,222
+matched_mixed_coverage,turn_ready_do,435,213,197,1,6,5,5,0.021526740272397715,31,28,148
+matched_mixed_coverage,turn_ready_do_approach,362,261,252,0,6,6,3,0.02028827983646057,23,27,205

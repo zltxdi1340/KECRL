@@ -1,0 +1,1676 @@
+{
+  "formal_result": false,
+  "diagnostic_only": true,
+  "run_profile": "pilot",
+  "seeds": [
+    {
+      "seed": 0,
+      "category_quotas": {
+        "ready": 90,
+        "turn": 30,
+        "approach": 96
+      },
+      "collection": [
+        {
+          "seed": 0,
+          "split": "train",
+          "source": "native",
+          "trace": "results/crafter_wood3_rgb_chain_learning_cuda_pilot_20261013_v1/seed0_train_native.jsonl",
+          "trace_sha256": "43c7e6f9fec0bf7321b7b2caa6b32261e5e90596871690c13c9f7db3143f9590",
+          "trace_canonical_digest": "42027fcd752a80c0c9921d3120817f1963fa5f2460f40caef6b7d17362f422bf",
+          "summary": {
+            "episodes": 32,
+            "interaction_steps": 3854,
+            "successes": 16,
+            "success_rate": 0.5,
+            "terminal_counts": {
+              "death": 16,
+              "success": 16
+            },
+            "wood_milestone_episode_counts": {
+              "1": 25,
+              "2": 22,
+              "3": 16
+            },
+            "death_stage_counts": {
+              "before_wood1": 7,
+              "after_wood1_before_wood2": 3,
+              "after_wood2_before_wood3": 6
+            },
+            "damage_source_hints_at_death": {
+              "hostile_or_projectile": 13,
+              "mixed_or_unknown": 3
+            },
+            "stages": [
+              {
+                "stage_wood": 0,
+                "episodes_entered": 32,
+                "episodes_completed": 25,
+                "completion_rate": 0.78125,
+                "failed_episode_terminal_counts": {
+                  "death": 7
+                },
+                "failed_episode_classes": {
+                  "never_facing_ready_tree": 2,
+                  "no_unblocked_adjacent_tree_observed": 5
+                },
+                "decision_summary": {
+                  "steps": 2168,
+                  "visible_tree_steps": 1375,
+                  "unblocked_adjacent_tree_steps": 131,
+                  "nearby_hostile_steps": 333,
+                  "sleep_override_steps": 0,
+                  "ready_steps": 36,
+                  "ready_do_actions": 25,
+                  "ready_do_rate": 0.6944444444444444,
+                  "ready_mean_p_do": 0.613789863884449,
+                  "unaligned_steps": 95,
+                  "unaligned_turn_actions": 8,
+                  "unaligned_turn_rate": 0.08421052631578947,
+                  "unaligned_mean_p_turn": 0.05462120629503931,
+                  "safe_approach_steps": 1243,
+                  "safe_approach_selected": 242,
+                  "safe_approach_rate": 0.19469026548672566,
+                  "blocked_move_actions": 71,
+                  "move_actions": 799,
+                  "do_actions": 1365,
+                  "wood_gain_events": 25,
+                  "do_failure_contexts": {
+                    "adjacent_tree_wrong_facing": 58,
+                    "no_adjacent_tree": 1246,
+                    "target_object_blocked": 36
+                  }
+                }
+              },
+              {
+                "stage_wood": 1,
+                "episodes_entered": 25,
+                "episodes_completed": 22,
+                "completion_rate": 0.88,
+                "failed_episode_terminal_counts": {
+                  "death": 3
+                },
+                "failed_episode_classes": {
+                  "never_facing_ready_tree": 1,
+                  "no_unblocked_adjacent_tree_observed": 1,
+                  "ready_but_no_collection": 1
+                },
+                "decision_summary": {
+                  "steps": 775,
+                  "visible_tree_steps": 735,
+                  "unblocked_adjacent_tree_steps": 122,
+                  "nearby_hostile_steps": 104,
+                  "sleep_override_steps": 0,
+                  "ready_steps": 38,
+                  "ready_do_actions": 22,
+                  "ready_do_rate": 0.5789473684210527,
+                  "ready_mean_p_do": 0.6255671781928915,
+                  "unaligned_steps": 84,
+                  "unaligned_turn_actions": 3,
+                  "unaligned_turn_rate": 0.03571428571428571,
+                  "unaligned_mean_p_turn": 0.049396355698783215,
+                  "safe_approach_steps": 606,
+                  "safe_approach_selected": 110,
+                  "safe_approach_rate": 0.18151815181518152,
+                  "blocked_move_actions": 30,
+                  "move_actions": 274,
+                  "do_actions": 501,
+                  "wood_gain_events": 22,
+                  "do_failure_contexts": {
+                    "adjacent_tree_wrong_facing": 49,
+                    "no_adjacent_tree": 414,
+                    "target_object_blocked": 16
+                  }
+                }
+              },
+              {
+                "stage_wood": 2,
+                "episodes_entered": 22,
+                "episodes_completed": 16,
+                "completion_rate": 0.7272727272727273,
+                "failed_episode_terminal_counts": {
+                  "death": 6
+                },
+                "failed_episode_classes": {
+                  "never_facing_ready_tree": 1,
+                  "no_unblocked_adjacent_tree_observed": 2,
+                  "ready_but_no_collection": 3
+                },
+                "decision_summary": {
+                  "steps": 911,
+                  "visible_tree_steps": 743,
+                  "unblocked_adjacent_tree_steps": 86,
+                  "nearby_hostile_steps": 205,
+                  "sleep_override_steps": 0,
+                  "ready_steps": 26,
+                  "ready_do_actions": 16,
+                  "ready_do_rate": 0.6153846153846154,
+                  "ready_mean_p_do": 0.6368923278955313,
+                  "unaligned_steps": 60,
+                  "unaligned_turn_actions": 4,
+                  "unaligned_turn_rate": 0.06666666666666667,
+                  "unaligned_mean_p_turn": 0.07539438185437272,
+                  "safe_approach_steps": 652,
+                  "safe_approach_selected": 104,
+                  "safe_approach_rate": 0.15950920245398773,
+                  "blocked_move_actions": 28,
+                  "move_actions": 328,
+                  "do_actions": 579,
+                  "wood_gain_events": 16,
+                  "do_failure_contexts": {
+                    "adjacent_tree_wrong_facing": 37,
+                    "no_adjacent_tree": 504,
+                    "target_object_blocked": 22
+                  }
+                }
+              }
+            ],
+            "decision_summary": {
+              "steps": 3854,
+              "visible_tree_steps": 2853,
+              "unblocked_adjacent_tree_steps": 339,
+              "nearby_hostile_steps": 642,
+              "sleep_override_steps": 0,
+              "ready_steps": 100,
+              "ready_do_actions": 63,
+              "ready_do_rate": 0.63,
+              "ready_mean_p_do": 0.6242718839645386,
+              "unaligned_steps": 239,
+              "unaligned_turn_actions": 15,
+              "unaligned_turn_rate": 0.06276150627615062,
+              "unaligned_mean_p_turn": 0.05799988028447233,
+              "safe_approach_steps": 2501,
+              "safe_approach_selected": 456,
+              "safe_approach_rate": 0.18232706917233107,
+              "blocked_move_actions": 129,
+              "move_actions": 1401,
+              "do_actions": 2445,
+              "wood_gain_events": 63,
+              "do_failure_contexts": {
+                "adjacent_tree_wrong_facing": 144,
+                "no_adjacent_tree": 2164,
+                "target_object_blocked": 74
+              }
+            }
+          }
+        },
+        {
+          "seed": 0,
+          "split": "train",
+          "source": "oracle_chain",
+          "trace": "results/crafter_wood3_rgb_chain_learning_cuda_pilot_20261013_v1/seed0_train_oracle_chain.jsonl",
+          "trace_sha256": "62609ee7d58d304f0dbbf02df0466fb28d9558b952dd433a4d9eb698304e0dca",
+          "trace_canonical_digest": "f09546c59e0d1f7473a3d5bd1c8918114b71a945a5a29024d762c256c0bb1c7a",
+          "summary": {
+            "episodes": 32,
+            "interaction_steps": 887,
+            "successes": 31,
+            "success_rate": 0.96875,
+            "terminal_counts": {
+              "death": 1,
+              "success": 31
+            },
+            "wood_milestone_episode_counts": {
+              "1": 32,
+              "2": 31,
+              "3": 31
+            },
+            "death_stage_counts": {
+              "before_wood1": 0,
+              "after_wood1_before_wood2": 1,
+              "after_wood2_before_wood3": 0
+            },
+            "damage_source_hints_at_death": {
+              "hostile_or_projectile": 1
+            },
+            "stages": [
+              {
+                "stage_wood": 0,
+                "episodes_entered": 32,
+                "episodes_completed": 32,
+                "completion_rate": 1.0,
+                "failed_episode_terminal_counts": {},
+                "failed_episode_classes": {},
+                "decision_summary": {
+                  "steps": 447,
+                  "visible_tree_steps": 170,
+                  "unblocked_adjacent_tree_steps": 42,
+                  "nearby_hostile_steps": 28,
+                  "sleep_override_steps": 0,
+                  "ready_steps": 32,
+                  "ready_do_actions": 32,
+                  "ready_do_rate": 1.0,
+                  "ready_mean_p_do": 0.6705435169860721,
+                  "unaligned_steps": 10,
+                  "unaligned_turn_actions": 10,
+                  "unaligned_turn_rate": 1.0,
+                  "unaligned_mean_p_turn": 0.03291587637504563,
+                  "safe_approach_steps": 128,
+                  "safe_approach_selected": 128,
+                  "safe_approach_rate": 1.0,
+                  "blocked_move_actions": 13,
+                  "move_actions": 236,
+                  "do_actions": 210,
+                  "wood_gain_events": 32,
+                  "do_failure_contexts": {
+                    "no_adjacent_tree": 169,
+                    "target_object_blocked": 9
+                  }
+                }
+              },
+              {
+                "stage_wood": 1,
+                "episodes_entered": 32,
+                "episodes_completed": 31,
+                "completion_rate": 0.96875,
+                "failed_episode_terminal_counts": {
+                  "death": 1
+                },
+                "failed_episode_classes": {
+                  "no_unblocked_adjacent_tree_observed": 1
+                },
+                "decision_summary": {
+                  "steps": 335,
+                  "visible_tree_steps": 95,
+                  "unblocked_adjacent_tree_steps": 40,
+                  "nearby_hostile_steps": 31,
+                  "sleep_override_steps": 0,
+                  "ready_steps": 31,
+                  "ready_do_actions": 31,
+                  "ready_do_rate": 1.0,
+                  "ready_mean_p_do": 0.65661211648295,
+                  "unaligned_steps": 9,
+                  "unaligned_turn_actions": 9,
+                  "unaligned_turn_rate": 1.0,
+                  "unaligned_mean_p_turn": 0.022915478084339864,
+                  "safe_approach_steps": 53,
+                  "safe_approach_selected": 53,
+                  "safe_approach_rate": 1.0,
+                  "blocked_move_actions": 11,
+                  "move_actions": 149,
+                  "do_actions": 186,
+                  "wood_gain_events": 31,
+                  "do_failure_contexts": {
+                    "no_adjacent_tree": 150,
+                    "target_object_blocked": 5
+                  }
+                }
+              },
+              {
+                "stage_wood": 2,
+                "episodes_entered": 31,
+                "episodes_completed": 31,
+                "completion_rate": 1.0,
+                "failed_episode_terminal_counts": {},
+                "failed_episode_classes": {},
+                "decision_summary": {
+                  "steps": 105,
+                  "visible_tree_steps": 101,
+                  "unblocked_adjacent_tree_steps": 42,
+                  "nearby_hostile_steps": 6,
+                  "sleep_override_steps": 0,
+                  "ready_steps": 31,
+                  "ready_do_actions": 31,
+                  "ready_do_rate": 1.0,
+                  "ready_mean_p_do": 0.6390661808752245,
+                  "unaligned_steps": 11,
+                  "unaligned_turn_actions": 11,
+                  "unaligned_turn_rate": 1.0,
+                  "unaligned_mean_p_turn": 0.042386261873285876,
+                  "safe_approach_steps": 58,
+                  "safe_approach_selected": 58,
+                  "safe_approach_rate": 1.0,
+                  "blocked_move_actions": 11,
+                  "move_actions": 72,
+                  "do_actions": 33,
+                  "wood_gain_events": 31,
+                  "do_failure_contexts": {
+                    "no_adjacent_tree": 2
+                  }
+                }
+              }
+            ],
+            "decision_summary": {
+              "steps": 887,
+              "visible_tree_steps": 366,
+              "unblocked_adjacent_tree_steps": 124,
+              "nearby_hostile_steps": 65,
+              "sleep_override_steps": 0,
+              "ready_steps": 94,
+              "ready_do_actions": 94,
+              "ready_do_rate": 1.0,
+              "ready_mean_p_do": 0.6555682953367842,
+              "unaligned_steps": 30,
+              "unaligned_turn_actions": 30,
+              "unaligned_turn_rate": 1.0,
+              "unaligned_mean_p_turn": 0.03338823157052199,
+              "safe_approach_steps": 239,
+              "safe_approach_selected": 239,
+              "safe_approach_rate": 1.0,
+              "blocked_move_actions": 35,
+              "move_actions": 457,
+              "do_actions": 429,
+              "wood_gain_events": 94,
+              "do_failure_contexts": {
+                "no_adjacent_tree": 321,
+                "target_object_blocked": 14
+              }
+            }
+          }
+        },
+        {
+          "seed": 0,
+          "split": "validation",
+          "source": "native",
+          "trace": "results/crafter_wood3_rgb_chain_learning_cuda_pilot_20261013_v1/seed0_validation_native.jsonl",
+          "trace_sha256": "f2eb63b5822e398652639bea0250bf140e06a5424041f8383c992d44882d557c",
+          "trace_canonical_digest": "6f7cd0c9041a6169df4c9ec6e8a3977faab2fe86c4118fcaacabccdd51aa6004",
+          "summary": {
+            "episodes": 8,
+            "interaction_steps": 1083,
+            "successes": 4,
+            "success_rate": 0.5,
+            "terminal_counts": {
+              "death": 4,
+              "success": 4
+            },
+            "wood_milestone_episode_counts": {
+              "1": 7,
+              "2": 6,
+              "3": 4
+            },
+            "death_stage_counts": {
+              "before_wood1": 1,
+              "after_wood1_before_wood2": 1,
+              "after_wood2_before_wood3": 2
+            },
+            "damage_source_hints_at_death": {
+              "hostile_or_projectile": 3,
+              "mixed_or_unknown": 1
+            },
+            "stages": [
+              {
+                "stage_wood": 0,
+                "episodes_entered": 8,
+                "episodes_completed": 7,
+                "completion_rate": 0.875,
+                "failed_episode_terminal_counts": {
+                  "death": 1
+                },
+                "failed_episode_classes": {
+                  "ready_but_no_collection": 1
+                },
+                "decision_summary": {
+                  "steps": 465,
+                  "visible_tree_steps": 327,
+                  "unblocked_adjacent_tree_steps": 42,
+                  "nearby_hostile_steps": 32,
+                  "sleep_override_steps": 0,
+                  "ready_steps": 9,
+                  "ready_do_actions": 7,
+                  "ready_do_rate": 0.7777777777777778,
+                  "ready_mean_p_do": 0.622310221195221,
+                  "unaligned_steps": 33,
+                  "unaligned_turn_actions": 3,
+                  "unaligned_turn_rate": 0.09090909090909091,
+                  "unaligned_mean_p_turn": 0.04015831688814091,
+                  "safe_approach_steps": 284,
+                  "safe_approach_selected": 57,
+                  "safe_approach_rate": 0.2007042253521127,
+                  "blocked_move_actions": 11,
+                  "move_actions": 168,
+                  "do_actions": 297,
+                  "wood_gain_events": 7,
+                  "do_failure_contexts": {
+                    "adjacent_tree_wrong_facing": 20,
+                    "no_adjacent_tree": 260,
+                    "target_object_blocked": 10
+                  }
+                }
+              },
+              {
+                "stage_wood": 1,
+                "episodes_entered": 7,
+                "episodes_completed": 6,
+                "completion_rate": 0.8571428571428571,
+                "failed_episode_terminal_counts": {
+                  "death": 1
+                },
+                "failed_episode_classes": {
+                  "never_facing_ready_tree": 1
+                },
+                "decision_summary": {
+                  "steps": 295,
+                  "visible_tree_steps": 290,
+                  "unblocked_adjacent_tree_steps": 46,
+                  "nearby_hostile_steps": 49,
+                  "sleep_override_steps": 0,
+                  "ready_steps": 12,
+                  "ready_do_actions": 6,
+                  "ready_do_rate": 0.5,
+                  "ready_mean_p_do": 0.5586856032411257,
+                  "unaligned_steps": 34,
+                  "unaligned_turn_actions": 2,
+                  "unaligned_turn_rate": 0.058823529411764705,
+                  "unaligned_mean_p_turn": 0.07770193034016035,
+                  "safe_approach_steps": 242,
+                  "safe_approach_selected": 50,
+                  "safe_approach_rate": 0.2066115702479339,
+                  "blocked_move_actions": 9,
+                  "move_actions": 114,
+                  "do_actions": 179,
+                  "wood_gain_events": 6,
+                  "do_failure_contexts": {
+                    "adjacent_tree_wrong_facing": 16,
+                    "no_adjacent_tree": 150,
+                    "target_object_blocked": 7
+                  }
+                }
+              },
+              {
+                "stage_wood": 2,
+                "episodes_entered": 6,
+                "episodes_completed": 4,
+                "completion_rate": 0.6666666666666666,
+                "failed_episode_terminal_counts": {
+                  "death": 2
+                },
+                "failed_episode_classes": {
+                  "no_unblocked_adjacent_tree_observed": 1,
+                  "ready_but_no_collection": 1
+                },
+                "decision_summary": {
+                  "steps": 323,
+                  "visible_tree_steps": 298,
+                  "unblocked_adjacent_tree_steps": 42,
+                  "nearby_hostile_steps": 30,
+                  "sleep_override_steps": 0,
+                  "ready_steps": 8,
+                  "ready_do_actions": 4,
+                  "ready_do_rate": 0.5,
+                  "ready_mean_p_do": 0.622860923409462,
+                  "unaligned_steps": 34,
+                  "unaligned_turn_actions": 0,
+                  "unaligned_turn_rate": 0.0,
+                  "unaligned_mean_p_turn": 0.0493532884044244,
+                  "safe_approach_steps": 256,
+                  "safe_approach_selected": 49,
+                  "safe_approach_rate": 0.19140625,
+                  "blocked_move_actions": 6,
+                  "move_actions": 126,
+                  "do_actions": 197,
+                  "wood_gain_events": 4,
+                  "do_failure_contexts": {
+                    "adjacent_tree_wrong_facing": 24,
+                    "no_adjacent_tree": 168,
+                    "target_object_blocked": 1
+                  }
+                }
+              }
+            ],
+            "decision_summary": {
+              "steps": 1083,
+              "visible_tree_steps": 915,
+              "unblocked_adjacent_tree_steps": 130,
+              "nearby_hostile_steps": 111,
+              "sleep_override_steps": 0,
+              "ready_steps": 29,
+              "ready_do_actions": 17,
+              "ready_do_rate": 0.5862068965517241,
+              "ready_mean_p_do": 0.5961347109284895,
+              "unaligned_steps": 101,
+              "unaligned_turn_actions": 5,
+              "unaligned_turn_rate": 0.04950495049504951,
+              "unaligned_mean_p_turn": 0.05589209796657952,
+              "safe_approach_steps": 782,
+              "safe_approach_selected": 156,
+              "safe_approach_rate": 0.19948849104859334,
+              "blocked_move_actions": 26,
+              "move_actions": 408,
+              "do_actions": 673,
+              "wood_gain_events": 17,
+              "do_failure_contexts": {
+                "adjacent_tree_wrong_facing": 60,
+                "no_adjacent_tree": 578,
+                "target_object_blocked": 18
+              }
+            }
+          }
+        },
+        {
+          "seed": 0,
+          "split": "validation",
+          "source": "oracle_chain",
+          "trace": "results/crafter_wood3_rgb_chain_learning_cuda_pilot_20261013_v1/seed0_validation_oracle_chain.jsonl",
+          "trace_sha256": "d71d46d42f0c0b37cc12e3443b1eb0cd95126778bf7fb39d87dce93bcbffc1fb",
+          "trace_canonical_digest": "0ca7b1774035de5663f0b7d28358e4f6d48623f609c3451596e75d8a9b3128de",
+          "summary": {
+            "episodes": 8,
+            "interaction_steps": 349,
+            "successes": 7,
+            "success_rate": 0.875,
+            "terminal_counts": {
+              "death": 1,
+              "success": 7
+            },
+            "wood_milestone_episode_counts": {
+              "1": 8,
+              "2": 8,
+              "3": 7
+            },
+            "death_stage_counts": {
+              "before_wood1": 0,
+              "after_wood1_before_wood2": 0,
+              "after_wood2_before_wood3": 1
+            },
+            "damage_source_hints_at_death": {
+              "hostile_or_projectile": 1
+            },
+            "stages": [
+              {
+                "stage_wood": 0,
+                "episodes_entered": 8,
+                "episodes_completed": 8,
+                "completion_rate": 1.0,
+                "failed_episode_terminal_counts": {},
+                "failed_episode_classes": {},
+                "decision_summary": {
+                  "steps": 122,
+                  "visible_tree_steps": 43,
+                  "unblocked_adjacent_tree_steps": 9,
+                  "nearby_hostile_steps": 4,
+                  "sleep_override_steps": 0,
+                  "ready_steps": 8,
+                  "ready_do_actions": 8,
+                  "ready_do_rate": 1.0,
+                  "ready_mean_p_do": 0.6491736471652985,
+                  "unaligned_steps": 1,
+                  "unaligned_turn_actions": 1,
+                  "unaligned_turn_rate": 1.0,
+                  "unaligned_mean_p_turn": 0.006092582363635302,
+                  "safe_approach_steps": 34,
+                  "safe_approach_selected": 34,
+                  "safe_approach_rate": 1.0,
+                  "blocked_move_actions": 3,
+                  "move_actions": 65,
+                  "do_actions": 57,
+                  "wood_gain_events": 8,
+                  "do_failure_contexts": {
+                    "no_adjacent_tree": 49
+                  }
+                }
+              },
+              {
+                "stage_wood": 1,
+                "episodes_entered": 8,
+                "episodes_completed": 8,
+                "completion_rate": 1.0,
+                "failed_episode_terminal_counts": {},
+                "failed_episode_classes": {},
+                "decision_summary": {
+                  "steps": 28,
+                  "visible_tree_steps": 26,
+                  "unblocked_adjacent_tree_steps": 12,
+                  "nearby_hostile_steps": 0,
+                  "sleep_override_steps": 0,
+                  "ready_steps": 8,
+                  "ready_do_actions": 8,
+                  "ready_do_rate": 1.0,
+                  "ready_mean_p_do": 0.6605088263750076,
+                  "unaligned_steps": 4,
+                  "unaligned_turn_actions": 4,
+                  "unaligned_turn_rate": 1.0,
+                  "unaligned_mean_p_turn": 0.028992039180593565,
+                  "safe_approach_steps": 14,
+                  "safe_approach_selected": 14,
+                  "safe_approach_rate": 1.0,
+                  "blocked_move_actions": 4,
+                  "move_actions": 20,
+                  "do_actions": 8,
+                  "wood_gain_events": 8,
+                  "do_failure_contexts": {}
+                }
+              },
+              {
+                "stage_wood": 2,
+                "episodes_entered": 8,
+                "episodes_completed": 7,
+                "completion_rate": 0.875,
+                "failed_episode_terminal_counts": {
+                  "death": 1
+                },
+                "failed_episode_classes": {
+                  "no_unblocked_adjacent_tree_observed": 1
+                },
+                "decision_summary": {
+                  "steps": 199,
+                  "visible_tree_steps": 22,
+                  "unblocked_adjacent_tree_steps": 10,
+                  "nearby_hostile_steps": 20,
+                  "sleep_override_steps": 0,
+                  "ready_steps": 7,
+                  "ready_do_actions": 7,
+                  "ready_do_rate": 1.0,
+                  "ready_mean_p_do": 0.6762381494045258,
+                  "unaligned_steps": 3,
+                  "unaligned_turn_actions": 3,
+                  "unaligned_turn_rate": 1.0,
+                  "unaligned_mean_p_turn": 0.01388799725100398,
+                  "safe_approach_steps": 12,
+                  "safe_approach_selected": 12,
+                  "safe_approach_rate": 1.0,
+                  "blocked_move_actions": 22,
+                  "move_actions": 80,
+                  "do_actions": 119,
+                  "wood_gain_events": 7,
+                  "do_failure_contexts": {
+                    "no_adjacent_tree": 110,
+                    "target_object_blocked": 2
+                  }
+                }
+              }
+            ],
+            "decision_summary": {
+              "steps": 349,
+              "visible_tree_steps": 91,
+              "unblocked_adjacent_tree_steps": 31,
+              "nearby_hostile_steps": 24,
+              "sleep_override_steps": 0,
+              "ready_steps": 23,
+              "ready_do_actions": 23,
+              "ready_do_rate": 1.0,
+              "ready_mean_p_do": 0.661353340615397,
+              "unaligned_steps": 8,
+              "unaligned_turn_actions": 8,
+              "unaligned_turn_rate": 1.0,
+              "unaligned_mean_p_turn": 0.020465591354877688,
+              "safe_approach_steps": 60,
+              "safe_approach_selected": 60,
+              "safe_approach_rate": 1.0,
+              "blocked_move_actions": 29,
+              "move_actions": 165,
+              "do_actions": 184,
+              "wood_gain_events": 23,
+              "do_failure_contexts": {
+                "no_adjacent_tree": 159,
+                "target_object_blocked": 2
+              }
+            }
+          }
+        },
+        {
+          "seed": 0,
+          "split": "heldout",
+          "source": "native",
+          "trace": "results/crafter_wood3_rgb_chain_learning_cuda_pilot_20261013_v1/seed0_heldout_native.jsonl",
+          "trace_sha256": "9bbd1ac397a72589c49f161571885cc56d548106190a69930f147bec9ab6ddc3",
+          "trace_canonical_digest": "bb3cf470f96c7fd4ee8810944afd2f16e6072d1561f8f555a8d1fbb8759067f5",
+          "summary": {
+            "episodes": 8,
+            "interaction_steps": 1036,
+            "successes": 3,
+            "success_rate": 0.375,
+            "terminal_counts": {
+              "death": 4,
+              "external_truncation": 1,
+              "success": 3
+            },
+            "wood_milestone_episode_counts": {
+              "1": 8,
+              "2": 5,
+              "3": 3
+            },
+            "death_stage_counts": {
+              "before_wood1": 0,
+              "after_wood1_before_wood2": 2,
+              "after_wood2_before_wood3": 2
+            },
+            "damage_source_hints_at_death": {
+              "hostile_or_projectile": 2,
+              "mixed_or_unknown": 2
+            },
+            "stages": [
+              {
+                "stage_wood": 0,
+                "episodes_entered": 8,
+                "episodes_completed": 8,
+                "completion_rate": 1.0,
+                "failed_episode_terminal_counts": {},
+                "failed_episode_classes": {},
+                "decision_summary": {
+                  "steps": 479,
+                  "visible_tree_steps": 426,
+                  "unblocked_adjacent_tree_steps": 28,
+                  "nearby_hostile_steps": 116,
+                  "sleep_override_steps": 0,
+                  "ready_steps": 15,
+                  "ready_do_actions": 8,
+                  "ready_do_rate": 0.5333333333333333,
+                  "ready_mean_p_do": 0.597427233060201,
+                  "unaligned_steps": 13,
+                  "unaligned_turn_actions": 2,
+                  "unaligned_turn_rate": 0.15384615384615385,
+                  "unaligned_mean_p_turn": 0.048629556567623064,
+                  "safe_approach_steps": 396,
+                  "safe_approach_selected": 73,
+                  "safe_approach_rate": 0.18434343434343434,
+                  "blocked_move_actions": 14,
+                  "move_actions": 186,
+                  "do_actions": 292,
+                  "wood_gain_events": 8,
+                  "do_failure_contexts": {
+                    "adjacent_tree_wrong_facing": 5,
+                    "no_adjacent_tree": 278,
+                    "target_object_blocked": 1
+                  }
+                }
+              },
+              {
+                "stage_wood": 1,
+                "episodes_entered": 8,
+                "episodes_completed": 5,
+                "completion_rate": 0.625,
+                "failed_episode_terminal_counts": {
+                  "death": 2,
+                  "external_truncation": 1
+                },
+                "failed_episode_classes": {
+                  "never_facing_ready_tree": 1,
+                  "no_unblocked_adjacent_tree_observed": 2
+                },
+                "decision_summary": {
+                  "steps": 413,
+                  "visible_tree_steps": 397,
+                  "unblocked_adjacent_tree_steps": 26,
+                  "nearby_hostile_steps": 149,
+                  "sleep_override_steps": 0,
+                  "ready_steps": 10,
+                  "ready_do_actions": 5,
+                  "ready_do_rate": 0.5,
+                  "ready_mean_p_do": 0.6245970666408539,
+                  "unaligned_steps": 16,
+                  "unaligned_turn_actions": 2,
+                  "unaligned_turn_rate": 0.125,
+                  "unaligned_mean_p_turn": 0.05481912347022444,
+                  "safe_approach_steps": 181,
+                  "safe_approach_selected": 29,
+                  "safe_approach_rate": 0.16022099447513813,
+                  "blocked_move_actions": 93,
+                  "move_actions": 164,
+                  "do_actions": 248,
+                  "wood_gain_events": 5,
+                  "do_failure_contexts": {
+                    "adjacent_tree_wrong_facing": 4,
+                    "no_adjacent_tree": 229,
+                    "target_object_blocked": 10
+                  }
+                }
+              },
+              {
+                "stage_wood": 2,
+                "episodes_entered": 5,
+                "episodes_completed": 3,
+                "completion_rate": 0.6,
+                "failed_episode_terminal_counts": {
+                  "death": 2
+                },
+                "failed_episode_classes": {
+                  "no_unblocked_adjacent_tree_observed": 2
+                },
+                "decision_summary": {
+                  "steps": 144,
+                  "visible_tree_steps": 141,
+                  "unblocked_adjacent_tree_steps": 8,
+                  "nearby_hostile_steps": 4,
+                  "sleep_override_steps": 0,
+                  "ready_steps": 5,
+                  "ready_do_actions": 3,
+                  "ready_do_rate": 0.6,
+                  "ready_mean_p_do": 0.5699657082557679,
+                  "unaligned_steps": 3,
+                  "unaligned_turn_actions": 0,
+                  "unaligned_turn_rate": 0.0,
+                  "unaligned_mean_p_turn": 0.047057343957324825,
+                  "safe_approach_steps": 133,
+                  "safe_approach_selected": 24,
+                  "safe_approach_rate": 0.18045112781954886,
+                  "blocked_move_actions": 3,
+                  "move_actions": 60,
+                  "do_actions": 84,
+                  "wood_gain_events": 3,
+                  "do_failure_contexts": {
+                    "no_adjacent_tree": 78,
+                    "target_object_blocked": 3
+                  }
+                }
+              }
+            ],
+            "decision_summary": {
+              "steps": 1036,
+              "visible_tree_steps": 964,
+              "unblocked_adjacent_tree_steps": 62,
+              "nearby_hostile_steps": 269,
+              "sleep_override_steps": 0,
+              "ready_steps": 30,
+              "ready_do_actions": 16,
+              "ready_do_rate": 0.5333333333333333,
+              "ready_mean_p_do": 0.6019069234530131,
+              "unaligned_steps": 32,
+              "unaligned_turn_actions": 4,
+              "unaligned_turn_rate": 0.125,
+              "unaligned_mean_p_turn": 0.05157694508670829,
+              "safe_approach_steps": 710,
+              "safe_approach_selected": 126,
+              "safe_approach_rate": 0.17746478873239438,
+              "blocked_move_actions": 110,
+              "move_actions": 410,
+              "do_actions": 624,
+              "wood_gain_events": 16,
+              "do_failure_contexts": {
+                "adjacent_tree_wrong_facing": 9,
+                "no_adjacent_tree": 585,
+                "target_object_blocked": 14
+              }
+            }
+          }
+        },
+        {
+          "seed": 0,
+          "split": "heldout",
+          "source": "oracle_chain",
+          "trace": "results/crafter_wood3_rgb_chain_learning_cuda_pilot_20261013_v1/seed0_heldout_oracle_chain.jsonl",
+          "trace_sha256": "eaef0dab1db73640a6004848de5ef8088b93ffe7f0800a6cc94ab654023e7038",
+          "trace_canonical_digest": "724161bb2dd6ccbe3eb9af9da841e71fdb417f69decbc96230ee9ec153bccb18",
+          "summary": {
+            "episodes": 8,
+            "interaction_steps": 89,
+            "successes": 8,
+            "success_rate": 1.0,
+            "terminal_counts": {
+              "success": 8
+            },
+            "wood_milestone_episode_counts": {
+              "1": 8,
+              "2": 8,
+              "3": 8
+            },
+            "death_stage_counts": {
+              "before_wood1": 0,
+              "after_wood1_before_wood2": 0,
+              "after_wood2_before_wood3": 0
+            },
+            "damage_source_hints_at_death": {},
+            "stages": [
+              {
+                "stage_wood": 0,
+                "episodes_entered": 8,
+                "episodes_completed": 8,
+                "completion_rate": 1.0,
+                "failed_episode_terminal_counts": {},
+                "failed_episode_classes": {},
+                "decision_summary": {
+                  "steps": 39,
+                  "visible_tree_steps": 39,
+                  "unblocked_adjacent_tree_steps": 8,
+                  "nearby_hostile_steps": 0,
+                  "sleep_override_steps": 0,
+                  "ready_steps": 8,
+                  "ready_do_actions": 8,
+                  "ready_do_rate": 1.0,
+                  "ready_mean_p_do": 0.7082482203841209,
+                  "unaligned_steps": 0,
+                  "unaligned_turn_actions": 0,
+                  "unaligned_turn_rate": null,
+                  "unaligned_mean_p_turn": null,
+                  "safe_approach_steps": 31,
+                  "safe_approach_selected": 31,
+                  "safe_approach_rate": 1.0,
+                  "blocked_move_actions": 0,
+                  "move_actions": 31,
+                  "do_actions": 8,
+                  "wood_gain_events": 8,
+                  "do_failure_contexts": {}
+                }
+              },
+              {
+                "stage_wood": 1,
+                "episodes_entered": 8,
+                "episodes_completed": 8,
+                "completion_rate": 1.0,
+                "failed_episode_terminal_counts": {},
+                "failed_episode_classes": {},
+                "decision_summary": {
+                  "steps": 24,
+                  "visible_tree_steps": 24,
+                  "unblocked_adjacent_tree_steps": 9,
+                  "nearby_hostile_steps": 3,
+                  "sleep_override_steps": 0,
+                  "ready_steps": 8,
+                  "ready_do_actions": 8,
+                  "ready_do_rate": 1.0,
+                  "ready_mean_p_do": 0.6856136992573738,
+                  "unaligned_steps": 1,
+                  "unaligned_turn_actions": 1,
+                  "unaligned_turn_rate": 1.0,
+                  "unaligned_mean_p_turn": 0.09199270606040955,
+                  "safe_approach_steps": 15,
+                  "safe_approach_selected": 15,
+                  "safe_approach_rate": 1.0,
+                  "blocked_move_actions": 1,
+                  "move_actions": 16,
+                  "do_actions": 8,
+                  "wood_gain_events": 8,
+                  "do_failure_contexts": {}
+                }
+              },
+              {
+                "stage_wood": 2,
+                "episodes_entered": 8,
+                "episodes_completed": 8,
+                "completion_rate": 1.0,
+                "failed_episode_terminal_counts": {},
+                "failed_episode_classes": {},
+                "decision_summary": {
+                  "steps": 26,
+                  "visible_tree_steps": 26,
+                  "unblocked_adjacent_tree_steps": 12,
+                  "nearby_hostile_steps": 7,
+                  "sleep_override_steps": 0,
+                  "ready_steps": 8,
+                  "ready_do_actions": 8,
+                  "ready_do_rate": 1.0,
+                  "ready_mean_p_do": 0.7029514610767365,
+                  "unaligned_steps": 4,
+                  "unaligned_turn_actions": 4,
+                  "unaligned_turn_rate": 1.0,
+                  "unaligned_mean_p_turn": 0.03515777915890794,
+                  "safe_approach_steps": 14,
+                  "safe_approach_selected": 14,
+                  "safe_approach_rate": 1.0,
+                  "blocked_move_actions": 4,
+                  "move_actions": 18,
+                  "do_actions": 8,
+                  "wood_gain_events": 8,
+                  "do_failure_contexts": {}
+                }
+              }
+            ],
+            "decision_summary": {
+              "steps": 89,
+              "visible_tree_steps": 89,
+              "unblocked_adjacent_tree_steps": 29,
+              "nearby_hostile_steps": 10,
+              "sleep_override_steps": 0,
+              "ready_steps": 24,
+              "ready_do_actions": 24,
+              "ready_do_rate": 1.0,
+              "ready_mean_p_do": 0.6989377935727438,
+              "unaligned_steps": 5,
+              "unaligned_turn_actions": 5,
+              "unaligned_turn_rate": 1.0,
+              "unaligned_mean_p_turn": 0.046524764539208265,
+              "safe_approach_steps": 60,
+              "safe_approach_selected": 60,
+              "safe_approach_rate": 1.0,
+              "blocked_move_actions": 5,
+              "move_actions": 65,
+              "do_actions": 24,
+              "wood_gain_events": 24,
+              "do_failure_contexts": {}
+            }
+          }
+        }
+      ],
+      "runs": [
+        {
+          "seed": 0,
+          "variant": "original_actor",
+          "fresh_action_oracle_used": false,
+          "policy_and_optimizer_unchanged": true,
+          "trace": "results/crafter_wood3_rgb_chain_learning_cuda_pilot_20261013_v1/seed0_original_actor_fresh.jsonl",
+          "trace_sha256": "8e61e72c050e4eb4e7d3fbcc5955ba7b0fdf3062b622b62b7d1bae77ad98e804",
+          "trace_canonical_digest": "de79354132125d262c5afe5b5ca4ecb986022a0639e2247d97c4734b8b1b2890",
+          "summary": {
+            "episodes": 30,
+            "interaction_steps": 4132,
+            "successes": 12,
+            "success_rate": 0.4,
+            "terminal_counts": {
+              "death": 18,
+              "success": 12
+            },
+            "wood_milestone_episode_counts": {
+              "1": 23,
+              "2": 19,
+              "3": 12
+            },
+            "death_stage_counts": {
+              "before_wood1": 7,
+              "after_wood1_before_wood2": 4,
+              "after_wood2_before_wood3": 7
+            },
+            "damage_source_hints_at_death": {
+              "depletion": 2,
+              "hostile_or_projectile": 10,
+              "lava": 1,
+              "mixed_or_unknown": 5
+            },
+            "stages": [
+              {
+                "stage_wood": 0,
+                "episodes_entered": 30,
+                "episodes_completed": 23,
+                "completion_rate": 0.7666666666666667,
+                "failed_episode_terminal_counts": {
+                  "death": 7
+                },
+                "failed_episode_classes": {
+                  "never_facing_ready_tree": 1,
+                  "no_unblocked_adjacent_tree_observed": 5,
+                  "ready_but_no_collection": 1
+                },
+                "decision_summary": {
+                  "steps": 2783,
+                  "visible_tree_steps": 1786,
+                  "unblocked_adjacent_tree_steps": 129,
+                  "nearby_hostile_steps": 366,
+                  "sleep_override_steps": 11,
+                  "ready_steps": 38,
+                  "ready_do_actions": 23,
+                  "ready_do_rate": 0.6052631578947368,
+                  "ready_mean_p_do": 0.589069373513523,
+                  "unaligned_steps": 91,
+                  "unaligned_turn_actions": 6,
+                  "unaligned_turn_rate": 0.06593406593406594,
+                  "unaligned_mean_p_turn": 0.07411521973579631,
+                  "safe_approach_steps": 1639,
+                  "safe_approach_selected": 282,
+                  "safe_approach_rate": 0.1720561317876754,
+                  "blocked_move_actions": 63,
+                  "move_actions": 933,
+                  "do_actions": 1844,
+                  "wood_gain_events": 23,
+                  "do_failure_contexts": {
+                    "adjacent_tree_wrong_facing": 53,
+                    "no_adjacent_tree": 1714,
+                    "sleep_override": 8,
+                    "target_object_blocked": 46
+                  }
+                }
+              },
+              {
+                "stage_wood": 1,
+                "episodes_entered": 23,
+                "episodes_completed": 19,
+                "completion_rate": 0.8260869565217391,
+                "failed_episode_terminal_counts": {
+                  "death": 4
+                },
+                "failed_episode_classes": {
+                  "never_facing_ready_tree": 1,
+                  "no_unblocked_adjacent_tree_observed": 3
+                },
+                "decision_summary": {
+                  "steps": 741,
+                  "visible_tree_steps": 640,
+                  "unblocked_adjacent_tree_steps": 142,
+                  "nearby_hostile_steps": 209,
+                  "sleep_override_steps": 0,
+                  "ready_steps": 26,
+                  "ready_do_actions": 19,
+                  "ready_do_rate": 0.7307692307692307,
+                  "ready_mean_p_do": 0.6265626836281556,
+                  "unaligned_steps": 116,
+                  "unaligned_turn_actions": 11,
+                  "unaligned_turn_rate": 0.09482758620689655,
+                  "unaligned_mean_p_turn": 0.07910231819400436,
+                  "safe_approach_steps": 497,
+                  "safe_approach_selected": 102,
+                  "safe_approach_rate": 0.2052313883299799,
+                  "blocked_move_actions": 26,
+                  "move_actions": 256,
+                  "do_actions": 484,
+                  "wood_gain_events": 19,
+                  "do_failure_contexts": {
+                    "adjacent_tree_wrong_facing": 72,
+                    "no_adjacent_tree": 366,
+                    "target_object_blocked": 27
+                  }
+                }
+              },
+              {
+                "stage_wood": 2,
+                "episodes_entered": 19,
+                "episodes_completed": 12,
+                "completion_rate": 0.631578947368421,
+                "failed_episode_terminal_counts": {
+                  "death": 7
+                },
+                "failed_episode_classes": {
+                  "never_facing_ready_tree": 1,
+                  "no_unblocked_adjacent_tree_observed": 5,
+                  "ready_but_no_collection": 1
+                },
+                "decision_summary": {
+                  "steps": 608,
+                  "visible_tree_steps": 550,
+                  "unblocked_adjacent_tree_steps": 79,
+                  "nearby_hostile_steps": 200,
+                  "sleep_override_steps": 0,
+                  "ready_steps": 18,
+                  "ready_do_actions": 12,
+                  "ready_do_rate": 0.6666666666666666,
+                  "ready_mean_p_do": 0.6354999111758338,
+                  "unaligned_steps": 61,
+                  "unaligned_turn_actions": 4,
+                  "unaligned_turn_rate": 0.06557377049180328,
+                  "unaligned_mean_p_turn": 0.06305966353746223,
+                  "safe_approach_steps": 452,
+                  "safe_approach_selected": 71,
+                  "safe_approach_rate": 0.1570796460176991,
+                  "blocked_move_actions": 42,
+                  "move_actions": 203,
+                  "do_actions": 405,
+                  "wood_gain_events": 12,
+                  "do_failure_contexts": {
+                    "adjacent_tree_wrong_facing": 36,
+                    "no_adjacent_tree": 348,
+                    "target_object_blocked": 9
+                  }
+                }
+              }
+            ],
+            "decision_summary": {
+              "steps": 4132,
+              "visible_tree_steps": 2976,
+              "unblocked_adjacent_tree_steps": 350,
+              "nearby_hostile_steps": 775,
+              "sleep_override_steps": 11,
+              "ready_steps": 82,
+              "ready_do_actions": 54,
+              "ready_do_rate": 0.6585365853658537,
+              "ready_mean_p_do": 0.611149565475743,
+              "unaligned_steps": 268,
+              "unaligned_turn_actions": 21,
+              "unaligned_turn_rate": 0.07835820895522388,
+              "unaligned_mean_p_turn": 0.07375743799345957,
+              "safe_approach_steps": 2588,
+              "safe_approach_selected": 455,
+              "safe_approach_rate": 0.1758114374034003,
+              "blocked_move_actions": 131,
+              "move_actions": 1392,
+              "do_actions": 2733,
+              "wood_gain_events": 54,
+              "do_failure_contexts": {
+                "adjacent_tree_wrong_facing": 161,
+                "no_adjacent_tree": 2428,
+                "sleep_override": 8,
+                "target_object_blocked": 82
+              }
+            }
+          }
+        },
+        {
+          "seed": 0,
+          "variant": "native_state_fit",
+          "fresh_action_oracle_used": false,
+          "policy_and_optimizer_unchanged": true,
+          "trace": "results/crafter_wood3_rgb_chain_learning_cuda_pilot_20261013_v1/seed0_native_state_fit_fresh.jsonl",
+          "trace_sha256": "c81be2cfb2bb79de6f8750708db55a7561e06d3008beb64468f48382111b0945",
+          "trace_canonical_digest": "7183c49e6923842cdea2b949e0641373d6e31c3ae029e06e95bd937017c38713",
+          "summary": {
+            "episodes": 30,
+            "interaction_steps": 5002,
+            "successes": 3,
+            "success_rate": 0.1,
+            "terminal_counts": {
+              "death": 27,
+              "success": 3
+            },
+            "wood_milestone_episode_counts": {
+              "1": 12,
+              "2": 4,
+              "3": 3
+            },
+            "death_stage_counts": {
+              "before_wood1": 18,
+              "after_wood1_before_wood2": 8,
+              "after_wood2_before_wood3": 1
+            },
+            "damage_source_hints_at_death": {
+              "depletion": 2,
+              "hostile_or_projectile": 18,
+              "lava": 1,
+              "mixed_or_unknown": 6
+            },
+            "stages": [
+              {
+                "stage_wood": 0,
+                "episodes_entered": 30,
+                "episodes_completed": 12,
+                "completion_rate": 0.4,
+                "failed_episode_terminal_counts": {
+                  "death": 18
+                },
+                "failed_episode_classes": {
+                  "never_facing_ready_tree": 7,
+                  "no_unblocked_adjacent_tree_observed": 6,
+                  "ready_but_no_collection": 5
+                },
+                "decision_summary": {
+                  "steps": 3952,
+                  "visible_tree_steps": 3093,
+                  "unblocked_adjacent_tree_steps": 1337,
+                  "nearby_hostile_steps": 906,
+                  "sleep_override_steps": 0,
+                  "ready_steps": 704,
+                  "ready_do_actions": 12,
+                  "ready_do_rate": 0.017045454545454544,
+                  "ready_mean_p_do": 0.016757920990658905,
+                  "unaligned_steps": 633,
+                  "unaligned_turn_actions": 8,
+                  "unaligned_turn_rate": 0.01263823064770932,
+                  "unaligned_mean_p_turn": 0.013887509768052001,
+                  "safe_approach_steps": 1605,
+                  "safe_approach_selected": 235,
+                  "safe_approach_rate": 0.14641744548286603,
+                  "blocked_move_actions": 2209,
+                  "move_actions": 2816,
+                  "do_actions": 1136,
+                  "wood_gain_events": 12,
+                  "do_failure_contexts": {
+                    "adjacent_tree_wrong_facing": 250,
+                    "no_adjacent_tree": 852,
+                    "target_object_blocked": 22
+                  }
+                }
+              },
+              {
+                "stage_wood": 1,
+                "episodes_entered": 12,
+                "episodes_completed": 4,
+                "completion_rate": 0.3333333333333333,
+                "failed_episode_terminal_counts": {
+                  "death": 8
+                },
+                "failed_episode_classes": {
+                  "never_facing_ready_tree": 3,
+                  "no_unblocked_adjacent_tree_observed": 4,
+                  "ready_but_no_collection": 1
+                },
+                "decision_summary": {
+                  "steps": 981,
+                  "visible_tree_steps": 866,
+                  "unblocked_adjacent_tree_steps": 347,
+                  "nearby_hostile_steps": 226,
+                  "sleep_override_steps": 0,
+                  "ready_steps": 73,
+                  "ready_do_actions": 4,
+                  "ready_do_rate": 0.0547945205479452,
+                  "ready_mean_p_do": 0.060118760694437806,
+                  "unaligned_steps": 274,
+                  "unaligned_turn_actions": 1,
+                  "unaligned_turn_rate": 0.0036496350364963502,
+                  "unaligned_mean_p_turn": 0.0013175995306234337,
+                  "safe_approach_steps": 513,
+                  "safe_approach_selected": 44,
+                  "safe_approach_rate": 0.08576998050682261,
+                  "blocked_move_actions": 88,
+                  "move_actions": 256,
+                  "do_actions": 725,
+                  "wood_gain_events": 4,
+                  "do_failure_contexts": {
+                    "adjacent_tree_wrong_facing": 260,
+                    "no_adjacent_tree": 437,
+                    "target_object_blocked": 24
+                  }
+                }
+              },
+              {
+                "stage_wood": 2,
+                "episodes_entered": 4,
+                "episodes_completed": 3,
+                "completion_rate": 0.75,
+                "failed_episode_terminal_counts": {
+                  "death": 1
+                },
+                "failed_episode_classes": {
+                  "no_unblocked_adjacent_tree_observed": 1
+                },
+                "decision_summary": {
+                  "steps": 69,
+                  "visible_tree_steps": 69,
+                  "unblocked_adjacent_tree_steps": 13,
+                  "nearby_hostile_steps": 30,
+                  "sleep_override_steps": 0,
+                  "ready_steps": 3,
+                  "ready_do_actions": 3,
+                  "ready_do_rate": 1.0,
+                  "ready_mean_p_do": 0.8768384059270223,
+                  "unaligned_steps": 10,
+                  "unaligned_turn_actions": 1,
+                  "unaligned_turn_rate": 0.1,
+                  "unaligned_mean_p_turn": 0.010904221574810436,
+                  "safe_approach_steps": 56,
+                  "safe_approach_selected": 6,
+                  "safe_approach_rate": 0.10714285714285714,
+                  "blocked_move_actions": 1,
+                  "move_actions": 14,
+                  "do_actions": 55,
+                  "wood_gain_events": 3,
+                  "do_failure_contexts": {
+                    "adjacent_tree_wrong_facing": 3,
+                    "no_adjacent_tree": 49
+                  }
+                }
+              }
+            ],
+            "decision_summary": {
+              "steps": 5002,
+              "visible_tree_steps": 4028,
+              "unblocked_adjacent_tree_steps": 1697,
+              "nearby_hostile_steps": 1162,
+              "sleep_override_steps": 0,
+              "ready_steps": 780,
+              "ready_do_actions": 19,
+              "ready_do_rate": 0.02435897435897436,
+              "ready_mean_p_do": 0.02412405272551141,
+              "unaligned_steps": 917,
+              "unaligned_turn_actions": 10,
+              "unaligned_turn_rate": 0.010905125408942203,
+              "unaligned_mean_p_turn": 0.01009908197417213,
+              "safe_approach_steps": 2174,
+              "safe_approach_selected": 285,
+              "safe_approach_rate": 0.1310947562097516,
+              "blocked_move_actions": 2298,
+              "move_actions": 3086,
+              "do_actions": 1916,
+              "wood_gain_events": 19,
+              "do_failure_contexts": {
+                "adjacent_tree_wrong_facing": 513,
+                "no_adjacent_tree": 1338,
+                "target_object_blocked": 46
+              }
+            }
+          }
+        },
+        {
+          "seed": 0,
+          "variant": "chain_state_fit",
+          "fresh_action_oracle_used": false,
+          "policy_and_optimizer_unchanged": true,
+          "trace": "results/crafter_wood3_rgb_chain_learning_cuda_pilot_20261013_v1/seed0_chain_state_fit_fresh.jsonl",
+          "trace_sha256": "e813f8831602af3c09c9821b0da8f6c28c8d56a14e884adaf768a85bd3b84ddd",
+          "trace_canonical_digest": "c0d93bd1cf102a8a962b5f199e6360bdbb914e6306ba287748796f59c6063576",
+          "summary": {
+            "episodes": 30,
+            "interaction_steps": 4616,
+            "successes": 4,
+            "success_rate": 0.13333333333333333,
+            "terminal_counts": {
+              "death": 23,
+              "external_truncation": 3,
+              "success": 4
+            },
+            "wood_milestone_episode_counts": {
+              "1": 15,
+              "2": 7,
+              "3": 4
+            },
+            "death_stage_counts": {
+              "before_wood1": 14,
+              "after_wood1_before_wood2": 7,
+              "after_wood2_before_wood3": 2
+            },
+            "damage_source_hints_at_death": {
+              "depletion": 2,
+              "hostile_or_projectile": 17,
+              "mixed_or_unknown": 4
+            },
+            "stages": [
+              {
+                "stage_wood": 0,
+                "episodes_entered": 30,
+                "episodes_completed": 15,
+                "completion_rate": 0.5,
+                "failed_episode_terminal_counts": {
+                  "death": 14,
+                  "external_truncation": 1
+                },
+                "failed_episode_classes": {
+                  "never_facing_ready_tree": 4,
+                  "no_unblocked_adjacent_tree_observed": 9,
+                  "ready_but_no_collection": 2
+                },
+                "decision_summary": {
+                  "steps": 2825,
+                  "visible_tree_steps": 2659,
+                  "unblocked_adjacent_tree_steps": 647,
+                  "nearby_hostile_steps": 583,
+                  "sleep_override_steps": 0,
+                  "ready_steps": 43,
+                  "ready_do_actions": 15,
+                  "ready_do_rate": 0.3488372093023256,
+                  "ready_mean_p_do": 0.4035553547315473,
+                  "unaligned_steps": 604,
+                  "unaligned_turn_actions": 7,
+                  "unaligned_turn_rate": 0.011589403973509934,
+                  "unaligned_mean_p_turn": 0.012066223057117315,
+                  "safe_approach_steps": 1977,
+                  "safe_approach_selected": 178,
+                  "safe_approach_rate": 0.0900354071825999,
+                  "blocked_move_actions": 374,
+                  "move_actions": 717,
+                  "do_actions": 2108,
+                  "wood_gain_events": 15,
+                  "do_failure_contexts": {
+                    "adjacent_tree_wrong_facing": 415,
+                    "no_adjacent_tree": 1629,
+                    "target_object_blocked": 49
+                  }
+                }
+              },
+              {
+                "stage_wood": 1,
+                "episodes_entered": 15,
+                "episodes_completed": 7,
+                "completion_rate": 0.4666666666666667,
+                "failed_episode_terminal_counts": {
+                  "death": 7,
+                  "external_truncation": 1
+                },
+                "failed_episode_classes": {
+                  "never_facing_ready_tree": 4,
+                  "no_unblocked_adjacent_tree_observed": 3,
+                  "ready_but_no_collection": 1
+                },
+                "decision_summary": {
+                  "steps": 1436,
+                  "visible_tree_steps": 1420,
+                  "unblocked_adjacent_tree_steps": 344,
+                  "nearby_hostile_steps": 481,
+                  "sleep_override_steps": 0,
+                  "ready_steps": 95,
+                  "ready_do_actions": 7,
+                  "ready_do_rate": 0.07368421052631578,
+                  "ready_mean_p_do": 0.06449969004606829,
+                  "unaligned_steps": 249,
+                  "unaligned_turn_actions": 3,
+                  "unaligned_turn_rate": 0.012048192771084338,
+                  "unaligned_mean_p_turn": 0.020090161119128883,
+                  "safe_approach_steps": 1028,
+                  "safe_approach_selected": 41,
+                  "safe_approach_rate": 0.03988326848249027,
+                  "blocked_move_actions": 366,
+                  "move_actions": 451,
+                  "do_actions": 985,
+                  "wood_gain_events": 7,
+                  "do_failure_contexts": {
+                    "adjacent_tree_wrong_facing": 227,
+                    "no_adjacent_tree": 751
+                  }
+                }
+              },
+              {
+                "stage_wood": 2,
+                "episodes_entered": 7,
+                "episodes_completed": 4,
+                "completion_rate": 0.5714285714285714,
+                "failed_episode_terminal_counts": {
+                  "death": 2,
+                  "external_truncation": 1
+                },
+                "failed_episode_classes": {
+                  "never_facing_ready_tree": 2,
+                  "no_unblocked_adjacent_tree_observed": 1
+                },
+                "decision_summary": {
+                  "steps": 355,
+                  "visible_tree_steps": 355,
+                  "unblocked_adjacent_tree_steps": 189,
+                  "nearby_hostile_steps": 78,
+                  "sleep_override_steps": 0,
+                  "ready_steps": 6,
+                  "ready_do_actions": 4,
+                  "ready_do_rate": 0.6666666666666666,
+                  "ready_mean_p_do": 0.5780693143606186,
+                  "unaligned_steps": 183,
+                  "unaligned_turn_actions": 1,
+                  "unaligned_turn_rate": 0.00546448087431694,
+                  "unaligned_mean_p_turn": 0.0074346814412795245,
+                  "safe_approach_steps": 166,
+                  "safe_approach_selected": 13,
+                  "safe_approach_rate": 0.0783132530120482,
+                  "blocked_move_actions": 95,
+                  "move_actions": 130,
+                  "do_actions": 225,
+                  "wood_gain_events": 4,
+                  "do_failure_contexts": {
+                    "adjacent_tree_wrong_facing": 159,
+                    "no_adjacent_tree": 50,
+                    "target_object_blocked": 12
+                  }
+                }
+              }
+            ],
+            "decision_summary": {
+              "steps": 4616,
+              "visible_tree_steps": 4434,
+              "unblocked_adjacent_tree_steps": 1180,
+              "nearby_hostile_steps": 1142,
+              "sleep_override_steps": 0,
+              "ready_steps": 144,
+              "ready_do_actions": 26,
+              "ready_do_rate": 0.18055555555555555,
+              "ready_mean_p_do": 0.1871442131527551,
+              "unaligned_steps": 1036,
+              "unaligned_turn_actions": 11,
+              "unaligned_turn_rate": 0.010617760617760617,
+              "unaligned_mean_p_turn": 0.01317663663022789,
+              "safe_approach_steps": 3171,
+              "safe_approach_selected": 232,
+              "safe_approach_rate": 0.07316304005045728,
+              "blocked_move_actions": 835,
+              "move_actions": 1298,
+              "do_actions": 3318,
+              "wood_gain_events": 26,
+              "do_failure_contexts": {
+                "adjacent_tree_wrong_facing": 801,
+                "no_adjacent_tree": 2430,
+                "target_object_blocked": 61
+              }
+            }
+          }
+        }
+      ],
+      "observer_audits": [
+        {
+          "variant": "original_actor",
+          "observer_does_not_change_trajectory": true,
+          "control_interaction_steps": 160
+        },
+        {
+          "variant": "native_state_fit",
+          "observer_does_not_change_trajectory": true,
+          "control_interaction_steps": 118
+        },
+        {
+          "variant": "chain_state_fit",
+          "observer_does_not_change_trajectory": true,
+          "control_interaction_steps": 33
+        }
+      ],
+      "head_locks": [
+        {
+          "seed": 0,
+          "variant": "native_state_fit",
+          "path": "results/crafter_wood3_rgb_chain_learning_cuda_pilot_20261013_v1/seed0_native_state_fit.pt",
+          "sha256": "4bf59dbf18f9138763378f5163829c814df01c130897b47b43676e1f450ee23a",
+          "head_digest": "55104770de3afef78f51eef54b67d8840978e7c0e4c868a7f21fe0fa8c4a05cd",
+          "training_rows_digest": "523ddf7ca406044cda7c884a20589ea462ade49ddfdfc965ad7af42aee8de7da",
+          "selected_epoch": 1400,
+          "selected_learning_rate": 0.03
+        },
+        {
+          "seed": 0,
+          "variant": "chain_state_fit",
+          "path": "results/crafter_wood3_rgb_chain_learning_cuda_pilot_20261013_v1/seed0_chain_state_fit.pt",
+          "sha256": "f0d1e4581f96b54a1ee9d4a7b260fed66902bea18bf2c0aaaf42478c85e5d685",
+          "head_digest": "cbddab43ca8208b064ee81615222f85bcdde91d9034e1310ec167827906cb521",
+          "training_rows_digest": "c8eae8097e89281dd06eb00c01eab9af123f7818772ac632c9ee7b3db5053e3b",
+          "selected_epoch": 250,
+          "selected_learning_rate": 0.03
+        }
+      ],
+      "dataset_digest": "e9977f6e9af6aa456d10b1caefb63e3509a834f639df71efe1a8b40ba489b16d",
+      "records_digest": "033b58f23247190e6e832631890eeeeb0999e10144189b6acc5faaef58b3831d",
+      "feature_digest": "6f4b66d0332f52f3b849e2b197fcb9b0bfeeaf112d906b2d3e1445f95ba7ccc3",
+      "source_policy_and_optimizer_unchanged": true
+    }
+  ],
+  "environment_order_version": "balance-object-insertion-order-v1",
+  "encoder_updated": false,
+  "source_policy_training_steps": 0,
+  "supervised_head_optimizer_updates": 6000,
+  "fresh_action_oracle_used": false,
+  "survival_intervention_used": false,
+  "death_episodes_excluded": false,
+  "module_registered": false,
+  "knowledge_updated": false,
+  "spt_updated": false,
+  "cross_process_repetition": {
+    "passed": true
+  },
+  "files_unchanged": {
+    "configs/crafter_wood3_rgb_chain_learning_cuda_pilot_v1.yaml": true,
+    "/home/zl202621/project/KECRL/experiments/run_crafter_wood3_rgb_chain_learning.py": true,
+    "experiments/analyze_crafter_wood3_rgb_chain_learning.py": true,
+    "tests/test_crafter_rgb_chain_learning.py": true,
+    "results/crafter_wood3_spatial_representation_deterministic_v3_cuda_pilot_20261008_v1/config.json": true,
+    "results/crafter_wood3_rgb_chain_audit_20261013_v1/verification.json": true,
+    "results/crafter_wood3_spatial_representation_deterministic_v3_cuda_pilot_20261008_v1/cnn_only/seed_0/checkpoints/interaction_0100000.pt": true,
+    "experiments/crafter_natural_readout.py": true,
+    "experiments/crafter_actor_head_ablation.py": true,
+    "experiments/crafter_spatial_readout_data.py": true,
+    "experiments/crafter_natural_state_window.py": true,
+    "experiments/run_crafter_wood3_actor_head_fresh.py": true,
+    "experiments/run_crafter_wood3_collection_opportunity.py": true,
+    "experiments/run_crafter_wood3_natural_coverage_matched.py": true,
+    "experiments/run_crafter_spatial_training_determinism_audit.py": true,
+    "experiments/run_crafter_wood3_spatial_representation_curve.py": true,
+    "experiments/run_crafter_wood3_actor_natural_migration.py": true,
+    "experiments/run_crafter_wood3_turn_ready_do_approach_intervention.py": true,
+    "experiments/run_crafter_wood3_natural_state_cross_readout.py": true,
+    "experiments/run_crafter_wood3_natural_readout.py": true,
+    "src/algorithms/spatial_crafter_policy.py": true,
+    "src/environments/crafter_adapter.py": true,
+    "src/environments/crafter_collection_diagnostics.py": true,
+    "src/environments/crafter_determinism.py": true,
+    "/home/zl202621/.conda/envs/kecrl/lib/python3.10/site-packages/crafter/env.py": true,
+    "/home/zl202621/.conda/envs/kecrl/lib/python3.10/site-packages/crafter/objects.py": true,
+    "/home/zl202621/.conda/envs/kecrl/lib/python3.10/site-packages/crafter/engine.py": true,
+    "/home/zl202621/.conda/envs/kecrl/lib/python3.10/site-packages/crafter/worldgen.py": true,
+    "/home/zl202621/.conda/envs/kecrl/lib/python3.10/site-packages/crafter/constants.py": true,
+    "/home/zl202621/.conda/envs/kecrl/lib/python3.10/site-packages/crafter/data.yaml": true
+  }
+}

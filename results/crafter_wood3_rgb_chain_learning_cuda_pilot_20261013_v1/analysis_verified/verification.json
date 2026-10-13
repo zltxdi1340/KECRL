@@ -1,0 +1,54 @@
+{
+  "formal_result": false,
+  "diagnostic_only": true,
+  "single_policy_seed_pilot": true,
+  "fresh_action_oracle_used": false,
+  "death_episodes_excluded": false,
+  "survival_intervention_used": false,
+  "module_registered": false,
+  "dataset_features_metrics_and_native_policy_replay_passed": true,
+  "cross_process_repeat_passed": true,
+  "input_files_unchanged": true,
+  "paired_initial_state_and_seeds_passed": true,
+  "matched_budget_scope": "selected_states_per_category_and_optimizer_updates_only",
+  "seed_audits": [
+    {
+      "seed": 0,
+      "collection_episodes": 96,
+      "collection_replayed_steps": 7298,
+      "fresh_episodes": 90,
+      "fresh_replayed_steps": 13750,
+      "max_rgb_probability_abs_error": 0.0,
+      "dataset_features_and_metrics_reconstructed": true,
+      "matched_training_counts": {
+        "ready": 90,
+        "turn": 30,
+        "approach": 96
+      },
+      "source_policy_and_optimizer_unchanged": true
+    }
+  ],
+  "input_hashes": {
+    "results/crafter_wood3_rgb_chain_learning_cuda_pilot_20261013_v1/config.json": "e48b0e9697d0290dfd1f0c5399e8d5d60fc333509e1cb8f2a1da0eb48da5ba80",
+    "results/crafter_wood3_rgb_chain_learning_cuda_pilot_20261013_v1/summary.json": "7cb8ae9e6db64a2025b8baa978fc22929d835d1274d4a7b8f5b2af6368387a1e",
+    "results/crafter_wood3_rgb_chain_learning_cuda_pilot_20261013_v1/provenance.json": "9ab4cd38a81e3a4b8560657f59de4c8058e3064cec07a51e38fa243b229f7084",
+    "results/crafter_wood3_rgb_chain_learning_cuda_pilot_20261013_v1/selection_lock.json": "fd0a169f0dadae042d06c2f7ea98985ea9bc56f05179b4582873a940554b9a13",
+    "results/crafter_wood3_rgb_chain_learning_cuda_pilot_20261013_v1/cross_process_repeat/summary.json": "56adeb6ae90911ab598e49041ad414204ee0d54f7be6210d65aed3bfdd3c3d52",
+    "results/crafter_wood3_rgb_chain_learning_cuda_pilot_20261013_v1/seed0_dataset.npz": "3c354f1d7f5133b0f7d964b7c30076c7252d0d63488f9d8c8bb524297ca833f0",
+    "results/crafter_wood3_rgb_chain_learning_cuda_pilot_20261013_v1/seed0_features.npz": "c0850205b938b091a7a47211ba5435521aac6b63d478f9d79fd7558b86d7d166",
+    "results/crafter_wood3_rgb_chain_learning_cuda_pilot_20261013_v1/seed0_records.json": "912be68139c389fe531ef8779b697d6e1675a6c5b8c98bef02e34cdf4dc73950",
+    "results/crafter_wood3_rgb_chain_learning_cuda_pilot_20261013_v1/seed0_fit_metrics.json": "c08d37865294654365268903f9f20980aa09458cb578165d80b6e417fcb7a6df",
+    "/home/zl202621/project/KECRL/experiments/analyze_crafter_wood3_rgb_chain_learning.py": "8bd40ce1f9406812256d10ee1a1292ef97ce48f3943af0abacb8f0518571b034",
+    "results/crafter_wood3_rgb_chain_learning_cuda_pilot_20261013_v1/seed0_train_native.jsonl": "43c7e6f9fec0bf7321b7b2caa6b32261e5e90596871690c13c9f7db3143f9590",
+    "results/crafter_wood3_rgb_chain_learning_cuda_pilot_20261013_v1/seed0_train_oracle_chain.jsonl": "62609ee7d58d304f0dbbf02df0466fb28d9558b952dd433a4d9eb698304e0dca",
+    "results/crafter_wood3_rgb_chain_learning_cuda_pilot_20261013_v1/seed0_validation_native.jsonl": "f2eb63b5822e398652639bea0250bf140e06a5424041f8383c992d44882d557c",
+    "results/crafter_wood3_rgb_chain_learning_cuda_pilot_20261013_v1/seed0_validation_oracle_chain.jsonl": "d71d46d42f0c0b37cc12e3443b1eb0cd95126778bf7fb39d87dce93bcbffc1fb",
+    "results/crafter_wood3_rgb_chain_learning_cuda_pilot_20261013_v1/seed0_heldout_native.jsonl": "9bbd1ac397a72589c49f161571885cc56d548106190a69930f147bec9ab6ddc3",
+    "results/crafter_wood3_rgb_chain_learning_cuda_pilot_20261013_v1/seed0_heldout_oracle_chain.jsonl": "eaef0dab1db73640a6004848de5ef8088b93ffe7f0800a6cc94ab654023e7038",
+    "results/crafter_wood3_rgb_chain_learning_cuda_pilot_20261013_v1/seed0_original_actor_fresh.jsonl": "8e61e72c050e4eb4e7d3fbcc5955ba7b0fdf3062b622b62b7d1bae77ad98e804",
+    "results/crafter_wood3_rgb_chain_learning_cuda_pilot_20261013_v1/seed0_native_state_fit_fresh.jsonl": "c81be2cfb2bb79de6f8750708db55a7561e06d3008beb64468f48382111b0945",
+    "results/crafter_wood3_rgb_chain_learning_cuda_pilot_20261013_v1/seed0_chain_state_fit_fresh.jsonl": "e813f8831602af3c09c9821b0da8f6c28c8d56a14e884adaf768a85bd3b84ddd",
+    "results/crafter_wood3_rgb_chain_learning_cuda_pilot_20261013_v1/seed0_native_state_fit.pt": "4bf59dbf18f9138763378f5163829c814df01c130897b47b43676e1f450ee23a",
+    "results/crafter_wood3_rgb_chain_learning_cuda_pilot_20261013_v1/seed0_chain_state_fit.pt": "f0d1e4581f96b54a1ee9d4a7b260fed66902bea18bf2c0aaaf42478c85e5d685"
+  }
+}
