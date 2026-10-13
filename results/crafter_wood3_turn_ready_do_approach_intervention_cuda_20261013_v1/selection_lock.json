@@ -1,0 +1,60 @@
+{
+  "heads_locked_before_evaluation": true,
+  "new_fit_or_selection_performed": false,
+  "heads": [
+    {
+      "seed": 0,
+      "head_variant": "matched_baseline_only",
+      "artifact": "results/crafter_wood3_natural_coverage_matched_cuda_20261011_v1/seed0_matched_baseline_only.pt",
+      "artifact_sha256": "4dbf44b05bd328d5651e947000d7fd5eb58d6c2bdc0ac592aec149280780f408",
+      "head_digest": "bbeb33778dcb5060c070d9cc09f17b797400c7cbea9a7e605ca2677deab74f04",
+      "checkpoint": "results/crafter_wood3_spatial_representation_deterministic_v3_cuda_pilot_20261008_v1/cnn_only/seed_0/checkpoints/interaction_0100000.pt",
+      "checkpoint_sha256": "c8fb48c4703bc8c3a125ce6d4780bddbd1a5f19a5706d79bc819fd9e49996260"
+    },
+    {
+      "seed": 0,
+      "head_variant": "matched_mixed_coverage",
+      "artifact": "results/crafter_wood3_natural_coverage_matched_cuda_20261011_v1/seed0_matched_mixed_coverage.pt",
+      "artifact_sha256": "c359e5a874a565ee0c7141106062252216c2aa527ca80c64c5b3f28e7f8b4a09",
+      "head_digest": "5d802a12a492c0d8596c670255f77025ad41798facc51534b55434536c5743af",
+      "checkpoint": "results/crafter_wood3_spatial_representation_deterministic_v3_cuda_pilot_20261008_v1/cnn_only/seed_0/checkpoints/interaction_0100000.pt",
+      "checkpoint_sha256": "c8fb48c4703bc8c3a125ce6d4780bddbd1a5f19a5706d79bc819fd9e49996260"
+    },
+    {
+      "seed": 1,
+      "head_variant": "matched_baseline_only",
+      "artifact": "results/crafter_wood3_natural_coverage_matched_cuda_20261011_v1/seed1_matched_baseline_only.pt",
+      "artifact_sha256": "4ea5240ea808aa3241519f94a94a79e117f9f848eba70c2150f9210d8d128a34",
+      "head_digest": "f374adf4c744c6468bf873c2c5201a56d9d48eeeb7de7b65b153f17675a8ed20",
+      "checkpoint": "results/crafter_wood3_spatial_representation_deterministic_v3_cuda_pilot_20261008_v1/cnn_only/seed_1/checkpoints/interaction_0100000.pt",
+      "checkpoint_sha256": "452222247e66d9d74be1fcd8ed44f070aa514e8157bfc51fd422c483a8aeb7fd"
+    },
+    {
+      "seed": 1,
+      "head_variant": "matched_mixed_coverage",
+      "artifact": "results/crafter_wood3_natural_coverage_matched_cuda_20261011_v1/seed1_matched_mixed_coverage.pt",
+      "artifact_sha256": "4adb38dee4146bcf8aaf90c20b4323ff08b63622e20bd10b02ac4bffe54c8539",
+      "head_digest": "d7b317a76db02801c4d0c42a6cbe332cdf17474b1fc1bffefd915b3c51d481d9",
+      "checkpoint": "results/crafter_wood3_spatial_representation_deterministic_v3_cuda_pilot_20261008_v1/cnn_only/seed_1/checkpoints/interaction_0100000.pt",
+      "checkpoint_sha256": "452222247e66d9d74be1fcd8ed44f070aa514e8157bfc51fd422c483a8aeb7fd"
+    },
+    {
+      "seed": 2,
+      "head_variant": "matched_baseline_only",
+      "artifact": "results/crafter_wood3_natural_coverage_matched_cuda_20261011_v1/seed2_matched_baseline_only.pt",
+      "artifact_sha256": "6e5c5108f12e421c59170b42b27447136ea5ff0e319d6af630cc13c4df118398",
+      "head_digest": "8bd010afea8c0dd7402083a9e9558b5d3bdd36ffc122ccbdfeaaf6c0f4d6f8fe",
+      "checkpoint": "results/crafter_wood3_spatial_representation_deterministic_v3_cuda_pilot_20261008_v1/cnn_only/seed_2/checkpoints/interaction_0100000.pt",
+      "checkpoint_sha256": "338088b2f2796d6df87a708ac4cb6d1363617e7849cfad6472e766f2f16b07ce"
+    },
+    {
+      "seed": 2,
+      "head_variant": "matched_mixed_coverage",
+      "artifact": "results/crafter_wood3_natural_coverage_matched_cuda_20261011_v1/seed2_matched_mixed_coverage.pt",
+      "artifact_sha256": "d9ce061a4864c98d265dc495199ec6ac2ed0060bde68c498fee3af15ff8c6393",
+      "head_digest": "770579cebe6c471c9e50651c2148715af85936f45c815a90d745a39c65b63952",
+      "checkpoint": "results/crafter_wood3_spatial_representation_deterministic_v3_cuda_pilot_20261008_v1/cnn_only/seed_2/checkpoints/interaction_0100000.pt",
+      "checkpoint_sha256": "338088b2f2796d6df87a708ac4cb6d1363617e7849cfad6472e766f2f16b07ce"
+    }
+  ]
+}

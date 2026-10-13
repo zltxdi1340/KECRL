@@ -1,0 +1,11 @@
+seed,head_variant,episode,environment_seed,turn_ready_do_success,turn_ready_do_approach_success,turn_ready_do_final_wood,turn_ready_do_approach_final_wood,turn_ready_do_steps,turn_ready_do_approach_steps,first_incremental_approach_step,prefix_before_incremental_approach_identical,paired_sampling_rng_identical
+0,matched_baseline_only,0,166000000,True,True,3,3,30,10,3,True,True
+0,matched_baseline_only,1,166000001,True,True,3,3,32,13,4,True,True
+0,matched_baseline_only,2,166000002,False,True,2,3,163,12,1,True,True
+0,matched_baseline_only,3,166000003,False,True,1,3,124,17,2,True,True
+0,matched_baseline_only,4,166000004,False,False,0,0,240,240,,True,True
+0,matched_mixed_coverage,0,166000000,True,True,3,3,11,11,4,True,True
+0,matched_mixed_coverage,1,166000001,True,True,3,3,24,17,6,True,True
+0,matched_mixed_coverage,2,166000002,False,True,1,3,179,12,1,True,True
+0,matched_mixed_coverage,3,166000003,False,True,1,3,210,18,5,True,True
+0,matched_mixed_coverage,4,166000004,True,True,3,3,200,188,182,True,True

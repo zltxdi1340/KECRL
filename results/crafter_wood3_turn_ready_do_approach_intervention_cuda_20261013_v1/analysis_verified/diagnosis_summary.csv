@@ -1,0 +1,17 @@
+seed,head_variant,condition,episodes,successes,deaths,external_truncations,episodes_with_visible_unblocked_tree,episodes_with_approach_available,episodes_with_approach_selected,episodes_with_approach_progress,episodes_with_local_opportunity,failed_episodes,failure_no_stage_observation,failure_no_visible_unblocked_tree_observed,failure_visible_tree_but_no_safe_approach,failure_approach_available_never_selected,failure_approach_selected_without_observed_progress,failure_approach_progress_without_local_opportunity,failure_local_opportunity_reached_then_failed
+0,matched_baseline_only,turn_ready_do,30,14,13,3,29,29,27,27,20,16,0,2,0,2,0,12,0
+0,matched_baseline_only,turn_ready_do_approach,30,28,1,1,29,29,29,29,29,2,0,2,0,0,0,0,0
+0,matched_mixed_coverage,turn_ready_do,30,16,14,0,30,30,30,30,27,14,0,0,0,0,0,13,1
+0,matched_mixed_coverage,turn_ready_do_approach,30,29,0,1,30,30,30,30,30,1,0,0,0,0,0,1,0
+1,matched_baseline_only,turn_ready_do,30,29,0,1,30,30,30,30,30,1,0,0,0,0,0,1,0
+1,matched_baseline_only,turn_ready_do_approach,30,30,0,0,30,30,30,30,30,0,0,0,0,0,0,0,0
+1,matched_mixed_coverage,turn_ready_do,30,25,5,0,30,30,30,30,27,5,0,0,0,2,0,3,0
+1,matched_mixed_coverage,turn_ready_do_approach,30,29,1,0,30,30,30,30,30,1,0,1,0,0,0,0,0
+2,matched_baseline_only,turn_ready_do,30,9,21,0,30,30,28,28,24,21,0,2,0,6,0,13,0
+2,matched_baseline_only,turn_ready_do_approach,30,26,3,1,30,30,30,30,30,4,0,4,0,0,0,0,0
+2,matched_mixed_coverage,turn_ready_do,30,22,7,1,30,30,30,30,27,8,0,1,0,0,0,7,0
+2,matched_mixed_coverage,turn_ready_do_approach,30,25,5,0,30,30,30,30,30,5,0,5,0,0,0,0,0
+all,matched_baseline_only,turn_ready_do,90,52,34,4,89,89,85,85,74,38,0,4,0,8,0,26,0
+all,matched_baseline_only,turn_ready_do_approach,90,84,4,2,89,89,89,89,89,6,0,6,0,0,0,0,0
+all,matched_mixed_coverage,turn_ready_do,90,63,26,1,90,90,90,90,81,27,0,1,0,2,0,23,1
+all,matched_mixed_coverage,turn_ready_do_approach,90,83,6,1,90,90,90,90,90,7,0,6,0,0,0,1,0
