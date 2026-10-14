@@ -1,0 +1,91 @@
+variant,episode,environment_seed,action_seed,success,terminal_reason,final_wood,steps,first_invalid_step,first_invalid_category,first_invalid_action,first_invalid_valid_actions
+original_actor,0,187000000,197000000,True,success,3,45,8,approach,5,"[2, 4]"
+original_actor,1,187000001,197000001,True,success,3,65,5,approach,5,[4]
+original_actor,2,187000002,197000002,True,success,3,44,1,approach,5,"[2, 3]"
+original_actor,3,187000003,197000003,False,death,0,108,,,,
+original_actor,4,187000004,197000004,False,death,2,49,2,approach,5,"[2, 4]"
+original_actor,5,187000005,197000005,False,death,2,219,1,approach,4,"[2, 3]"
+original_actor,6,187000006,197000006,True,success,3,46,1,approach,5,"[1, 4]"
+original_actor,7,187000007,197000007,False,death,1,95,1,approach,5,"[1, 4]"
+original_actor,8,187000008,197000008,False,death,2,184,1,approach,5,"[1, 3]"
+original_actor,9,187000009,197000009,True,success,3,55,1,approach,5,"[1, 3]"
+original_actor,10,187000010,197000010,False,death,1,201,1,approach,5,"[1, 2, 3, 4]"
+original_actor,11,187000011,197000011,False,death,1,68,1,approach,5,"[1, 3]"
+original_actor,12,187000012,197000012,True,success,3,35,1,approach,4,"[2, 3]"
+original_actor,13,187000013,197000013,True,success,3,89,1,approach,5,"[2, 3]"
+original_actor,14,187000014,197000014,True,success,3,58,2,approach,5,"[1, 4]"
+original_actor,15,187000015,197000015,True,success,3,80,1,approach,5,"[2, 3]"
+original_actor,16,187000016,197000016,False,death,1,76,1,approach,1,"[2, 4]"
+original_actor,17,187000017,197000017,True,success,3,83,1,approach,4,"[2, 3]"
+original_actor,18,187000018,197000018,True,success,3,41,1,approach,5,"[2, 4]"
+original_actor,19,187000019,197000019,False,death,2,225,2,approach,1,"[2, 4]"
+original_actor,20,187000020,197000020,False,death,2,93,11,ready,4,[5]
+original_actor,21,187000021,197000021,False,death,0,175,1,approach,1,"[2, 3]"
+original_actor,22,187000022,197000022,False,death,1,122,13,approach,5,[4]
+original_actor,23,187000023,197000023,True,success,3,65,8,approach,5,[4]
+original_actor,24,187000024,197000024,True,success,3,209,1,approach,5,"[1, 3, 4]"
+original_actor,25,187000025,197000025,False,death,0,148,1,approach,5,"[2, 4]"
+original_actor,26,187000026,197000026,False,death,1,167,1,approach,5,"[1, 4]"
+original_actor,27,187000027,197000027,False,death,2,167,1,approach,5,"[2, 4]"
+original_actor,28,187000028,197000028,False,death,1,191,6,approach,5,[4]
+original_actor,29,187000029,197000029,False,death,2,209,1,approach,5,"[2, 4]"
+action_set,0,187000000,197000000,False,death,1,158,4,approach,1,"[2, 4]"
+action_set,1,187000001,197000001,False,death,2,168,5,ready,2,[5]
+action_set,2,187000002,197000002,False,death,0,165,1,approach,4,"[2, 3]"
+action_set,3,187000003,197000003,False,death,2,210,6,approach,3,[2]
+action_set,4,187000004,197000004,True,success,3,164,4,approach,1,"[2, 4]"
+action_set,5,187000005,197000005,False,death,0,241,1,approach,4,"[2, 3]"
+action_set,6,187000006,197000006,False,death,2,179,2,approach,2,"[1, 4]"
+action_set,7,187000007,197000007,True,success,3,162,2,approach,3,"[1, 4]"
+action_set,8,187000008,197000008,False,death,0,197,3,approach,2,"[1, 3]"
+action_set,9,187000009,197000009,False,death,1,178,1,approach,2,"[1, 3]"
+action_set,10,187000010,197000010,False,death,1,65,4,approach,2,"[1, 4]"
+action_set,11,187000011,197000011,False,death,1,176,1,approach,5,"[1, 3]"
+action_set,12,187000012,197000012,True,success,3,186,1,approach,4,"[2, 3]"
+action_set,13,187000013,197000013,False,death,0,188,1,approach,4,"[2, 3]"
+action_set,14,187000014,197000014,False,death,1,186,4,approach,3,[4]
+action_set,15,187000015,197000015,False,death,2,169,1,approach,4,"[2, 3]"
+action_set,16,187000016,197000016,True,success,3,24,1,approach,1,"[2, 4]"
+action_set,17,187000017,197000017,False,death,0,155,1,approach,4,"[2, 3]"
+action_set,18,187000018,197000018,False,death,2,167,10,ready,1,[5]
+action_set,19,187000019,197000019,False,death,0,152,3,approach,4,[2]
+action_set,20,187000020,197000020,False,external_truncation,2,256,18,approach,2,"[1, 4]"
+action_set,21,187000021,197000021,True,success,3,113,1,approach,1,"[2, 3]"
+action_set,22,187000022,197000022,False,death,0,91,16,approach,2,"[1, 3]"
+action_set,23,187000023,197000023,False,death,0,32,8,approach,5,"[1, 3]"
+action_set,24,187000024,197000024,False,death,1,202,4,approach,4,[1]
+action_set,25,187000025,197000025,False,death,1,195,5,ready,2,[5]
+action_set,26,187000026,197000026,False,death,0,213,3,approach,3,[4]
+action_set,27,187000027,197000027,False,death,0,106,4,approach,1,[2]
+action_set,28,187000028,197000028,False,external_truncation,0,256,3,approach,3,[4]
+action_set,29,187000029,197000029,False,death,1,113,1,approach,1,"[2, 4]"
+ready_distillation,0,187000000,197000000,False,death,1,180,3,approach,1,"[2, 4]"
+ready_distillation,1,187000001,197000001,True,success,3,19,6,approach,2,[4]
+ready_distillation,2,187000002,197000002,True,success,3,109,1,approach,4,"[2, 3]"
+ready_distillation,3,187000003,197000003,False,death,0,187,5,approach,1,"[2, 3]"
+ready_distillation,4,187000004,197000004,False,death,0,88,4,approach,1,"[2, 4]"
+ready_distillation,5,187000005,197000005,True,success,3,61,6,approach,4,"[2, 3]"
+ready_distillation,6,187000006,197000006,True,success,3,155,2,approach,2,"[1, 4]"
+ready_distillation,7,187000007,197000007,False,death,0,40,2,approach,3,"[1, 4]"
+ready_distillation,8,187000008,197000008,False,death,0,39,3,approach,2,"[1, 3]"
+ready_distillation,9,187000009,197000009,True,success,3,35,1,approach,2,"[1, 3]"
+ready_distillation,10,187000010,197000010,False,death,1,149,4,approach,2,"[1, 4]"
+ready_distillation,11,187000011,197000011,False,death,0,208,1,approach,5,"[1, 3]"
+ready_distillation,12,187000012,197000012,True,success,3,26,1,approach,4,"[2, 3]"
+ready_distillation,13,187000013,197000013,True,success,3,78,1,approach,4,"[2, 3]"
+ready_distillation,14,187000014,197000014,False,death,0,161,4,approach,5,[4]
+ready_distillation,15,187000015,197000015,False,death,1,147,1,approach,4,"[2, 3]"
+ready_distillation,16,187000016,197000016,False,death,2,152,1,approach,1,"[2, 4]"
+ready_distillation,17,187000017,197000017,True,success,3,154,1,approach,4,"[2, 3]"
+ready_distillation,18,187000018,197000018,True,success,3,118,1,approach,3,"[2, 4]"
+ready_distillation,19,187000019,197000019,False,death,0,102,3,approach,5,[2]
+ready_distillation,20,187000020,197000020,False,death,2,178,24,approach,1,[3]
+ready_distillation,21,187000021,197000021,False,death,1,224,1,approach,1,"[2, 3]"
+ready_distillation,22,187000022,197000022,False,death,0,74,8,approach,3,"[2, 4]"
+ready_distillation,23,187000023,197000023,False,death,0,121,,,,
+ready_distillation,24,187000024,197000024,False,death,2,152,4,approach,4,[1]
+ready_distillation,25,187000025,197000025,False,death,0,159,4,approach,4,[2]
+ready_distillation,26,187000026,197000026,False,death,0,168,3,approach,1,[4]
+ready_distillation,27,187000027,197000027,False,death,2,107,5,approach,1,[2]
+ready_distillation,28,187000028,197000028,False,death,0,171,3,approach,5,[4]
+ready_distillation,29,187000029,197000029,True,success,3,64,1,approach,1,"[2, 4]"

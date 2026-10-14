@@ -1,5 +1,8 @@
 # Crafter 可行性诊断状态（2026-10-13）
 
+后续 ready-only 蒸馏对照已完成；最新进度见
+[2026-10-14 诊断状态](crafter-diagnostic-status-2026-10-14.md)。下文保留本日诊断记录。
+
 当前正把 wood 的 SPI executor 从诊断规则转换成自主 RGB 动作链。SPT/SPI、
 Knowledge/Skill、Module 和 Pipeline 的理论及接口已实现；当前阻塞点仍是可执行
 基础 Policy，没有满足完整资格契约的真实 wood Module。

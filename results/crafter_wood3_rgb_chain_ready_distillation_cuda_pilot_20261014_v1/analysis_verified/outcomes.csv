@@ -1,0 +1,4 @@
+variant,episodes,successes,success_rate,steps,deaths,external_truncations,wood1_episodes,wood2_episodes,wood3_episodes
+original_actor,30,13,0.43333333333333335,3412,17,0,27,20,13
+action_set,30,5,0.16666666666666666,4867,23,2,19,11,5
+ready_distillation,30,10,0.3333333333333333,3626,20,0,18,14,10
