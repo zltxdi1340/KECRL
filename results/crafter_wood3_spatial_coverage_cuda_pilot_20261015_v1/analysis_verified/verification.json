@@ -1,0 +1,27 @@
+{
+  "formal_result": false,
+  "source_and_environment_reconstruction_passed": true,
+  "collection_episode_replay_passed": true,
+  "coverage_split_and_dataset_passed": true,
+  "head_artifact_and_feature_reconstruction_passed": true,
+  "heldout_readout_after_selection_lock_passed": true,
+  "independent_fresh_episode_replay_passed": true,
+  "cross_process_repeat_passed": true,
+  "source_policy_and_optimizer_unchanged": true,
+  "source_do_probability_preserved_within_tolerance": true,
+  "collection_action_oracle_used": false,
+  "fresh_action_oracle_used": false,
+  "survival_intervention_used": false,
+  "death_episodes_excluded": false,
+  "heldout_used_for_fit_or_selection": false,
+  "train_validation_heldout_episode_isolation_passed": true,
+  "input_hashes_unchanged": true,
+  "arms": [
+    "source_cnn_only",
+    "old_native_216",
+    "new_native_216",
+    "merged_native_432"
+  ],
+  "heldout_rows": 90,
+  "new_collection_records": 6926
+}

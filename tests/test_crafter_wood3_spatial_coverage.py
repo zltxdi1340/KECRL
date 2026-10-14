@@ -5,6 +5,7 @@ import pytest
 
 from experiments.run_crafter_wood3_collection_opportunity import _read
 from experiments.run_crafter_wood3_spatial_coverage import _select_rows, _validate
+from experiments.summarize_crafter_wood3_spatial_coverage import exact_mcnemar, wilson_interval
 
 
 def test_coverage_protocol_locks_episode_isolation_and_no_oracle(monkeypatch):
@@ -32,3 +33,11 @@ def test_coverage_selection_is_category_balanced_and_deterministic():
                                              {"ready": 2, "turn": 2, "approach": 2})
     assert selected.tolist() == [0, 4, 5, 9, 10, 14]
     assert len(selected_images) == 6
+
+
+def test_paired_success_test_and_small_sample_interval():
+    assert exact_mcnemar(0, 0) == 1.0
+    assert exact_mcnemar(19, 2) == pytest.approx(0.00022125244140625)
+    lower, upper = wilson_interval(16, 40)
+    assert lower == pytest.approx(0.26348, abs=1e-5)
+    assert upper == pytest.approx(0.55404, abs=1e-5)

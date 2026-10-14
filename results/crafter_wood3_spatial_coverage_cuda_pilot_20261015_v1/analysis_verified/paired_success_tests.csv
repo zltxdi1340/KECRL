@@ -1,0 +1,7 @@
+left_arm,right_arm,left_only_success,right_only_success,discordant_pairs,two_sided_exact_mcnemar_p
+source_cnn_only,old_native_216,19,2,21,0.00022125244140625
+source_cnn_only,new_native_216,19,2,21,0.00022125244140625
+source_cnn_only,merged_native_432,14,5,19,0.063568115234375
+old_native_216,new_native_216,0,0,0,1.0
+old_native_216,merged_native_432,4,12,16,0.076812744140625
+new_native_216,merged_native_432,4,12,16,0.076812744140625

@@ -25,3 +25,24 @@
 
 本轮仍只诊断 `wood >= 3`，不能把结论直接推广到 stone、coal 或 pickaxe。
 
+## Pilot 结果（2026-10-15）
+
+80 个新 source episode 共得到 6,926 个唯一 RGB 状态；train/validation/held-out 共 40/20/20 个 episode。四个 fresh arm 各 40 个配对环境/action seed。runner 跨进程重复、采集环境重放、source 概率与动作重采样、head 独立拟合、held-out 重算和 fresh 轨迹重放均通过；无 action oracle、生存干预或死亡样本排除。
+
+| arm | wood≥3 成功 | death | wood1 / wood2 / wood3 | 死于 wood1 前 |
+|---|---:|---:|---:|---:|
+| source CNN-only | 25/40 (0.625) | 15 | 35 / 25 / 25 | 5 |
+| old native 216 | 8/40 (0.200) | 30 | 20 / 13 / 8 | 19 |
+| new native 216 | 8/40 (0.200) | 30 | 20 / 13 / 8 | 19 |
+| merged native 432 | 16/40 (0.400) | 21 | 35 / 27 / 16 | 5 |
+
+配对精确 McNemar 检验中，source 相对 old/new 各为 19 对 2 个不一致成功，`p=0.00022`；source 对 merged 为 14 对 5，`p=0.0636`；merged 对任一 216 臂为 12 对 4，`p=0.0768`。这些是单 seed、每臂 40 集、未做多重比较校正的 pilot 统计。merged 比 216 臂多 8 次成功是方向性信号，尚不足以宣布稳定提升。old/new 的 40 个配对成功/失败标签完全相同；它们的拟合参数不同，但 fresh 成败结果相同。
+
+validation 的 category-macro greedy accuracy 四臂训练后都停在 0.333。old/new 两个 head 都选 epoch 0，继续优化使 validation set-NLL 从约 1.892 恶化到 3.72/3.67；merged 选 epoch 50，validation NLL 降到 1.758，独立 held-out NLL 为 1.627（old/new 约 1.792）。greedy accuracy 仍为 0.333，改进来自转向/接近动作集合概率质量，而不是 top-1 类别率。held-out turn 类的有效动作概率从 source 的 0.072 提升到 merged 的 0.140；approach 从 0.180 到 0.192。
+
+这说明“新分布的 216 行”没有优于既有 216 行，而“旧+新合并至 432 行”让优化能在独立 validation/held-out 上改善动作集合概率，并减少首个 wood 前的死亡。不过 merged 仍只有 16/40 成功，且有 9 次在取得 2 个 wood 后死亡；source 有 25/40 成功且没有这一阶段死亡。死亡提示为 source 的 12 次 hostile/projectile、1 次 depletion、2 次 mixed/unknown；old/new 各 18/2/10；merged 为 10/2/9。因而覆盖量有信号，但动作头仍弱于原策略，且后半链与生存问题仍未解决。
+
+下一步应先做一项**等训练量对照**来拆分“更多样本”与“来源/状态覆盖更广”：固定 432 行和相同 validation/held-out，比较 432 行旧分布子集、432 行新分布子集与 216+216 混合；同时报告 validation 曲线，避免只看最优 checkpoint。fresh 评估应扩大到至少 100 个配对 episode，并保留当前 source control。若旧分布没有足够 episode 隔离的 432 行，则先扩采旧分布，再拟合；不要直接把当前 merged 的收益归因于 coverage diversity。
+
+紧凑结果和独立验证记录在 `results/crafter_wood3_spatial_coverage_cuda_pilot_20261015_v1/analysis_verified/`。这些结果只是 `wood >= 3` 的诊断，未证明 Module 资格，也没有验证其他技能任务。
+

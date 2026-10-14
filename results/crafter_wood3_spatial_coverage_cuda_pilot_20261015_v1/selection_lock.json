@@ -1,0 +1,42 @@
+{
+  "locked_before_fresh_evaluation": true,
+  "heldout_used_for_fit_or_selection": false,
+  "validation_rows_digest": "86c30917d4848de5340f92a501c5035713ff45fbac874b78ff64add485f6ca9e",
+  "arms": [
+    {
+      "arm": "old_native_216",
+      "artifact": "seed0_old_native_216.pt",
+      "sha256": "55030124a7e2e810bab633ad4246d45d4df353cb3b5bbb0625da9d8cd0f61271",
+      "training_rows": 216,
+      "training_rows_digest": "81c93254b3f1b03a84f63eb3f51a0444132eb615935186797a5ebb1e487e6a1b",
+      "validation_rows_digest": "86c30917d4848de5340f92a501c5035713ff45fbac874b78ff64add485f6ca9e",
+      "state_and_normalizer_digest": "a356ea88de9b4405d7a8afb18c38c5050f1be40c1ec309be702e083e798e4f23",
+      "selected_epoch": 0,
+      "selected_learning_rate": 0.003
+    },
+    {
+      "arm": "new_native_216",
+      "artifact": "seed0_new_native_216.pt",
+      "sha256": "93a39e379e1fcb31028d7eaeaf203b4a1665df487128bf762cfb470104be6df9",
+      "training_rows": 216,
+      "training_rows_digest": "a9061ac4fb6536e97a270bc2c2c8ee9133bb10866d1aa7082bce217e7bd7a1a2",
+      "validation_rows_digest": "86c30917d4848de5340f92a501c5035713ff45fbac874b78ff64add485f6ca9e",
+      "state_and_normalizer_digest": "7ab9c5ef0844d3d70102180bdcb2df42e4350e80c81855424393e0e273b164b5",
+      "selected_epoch": 0,
+      "selected_learning_rate": 0.003
+    },
+    {
+      "arm": "merged_native_432",
+      "artifact": "seed0_merged_native_432.pt",
+      "sha256": "8744fdf89187a1813e6e1e0feb8dacd3800831f6c8684bebc94b441ea31c5b6c",
+      "training_rows": 432,
+      "training_rows_digest": "6aae2c9c7817181a4f74e5c26c692387783c9666284c5580539f03c3559039b1",
+      "validation_rows_digest": "86c30917d4848de5340f92a501c5035713ff45fbac874b78ff64add485f6ca9e",
+      "state_and_normalizer_digest": "9061122b66c47d5f06a62ee4517c6cc81f8855cbf54b6c656071cce83d531537",
+      "selected_epoch": 50,
+      "selected_learning_rate": 0.003
+    }
+  ],
+  "new_train_indices_digest": "1057b139def7a6e693806211b266d0d2379c2b9c7e81a27eb0ecd607a3e1f847",
+  "heldout_indices_digest": "8c1a96f3170bddfb3d2be31518378a72df637c11a3172b99432776d1da86f324"
+}

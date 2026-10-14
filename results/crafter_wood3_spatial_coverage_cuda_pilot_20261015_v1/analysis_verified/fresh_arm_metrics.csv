@@ -1,0 +1,5 @@
+arm,episodes,successes,success_rate,deaths,external_truncations,interaction_steps,wood1_episodes,wood2_episodes,wood3_episodes,death_before_wood1,death_after_wood1_before_wood2,death_after_wood2_before_wood3
+source_cnn_only,40,25,0.625,15,0,4854,35,25,25,5,10,0
+old_native_216,40,8,0.2,30,2,6420,20,13,8,19,7,4
+new_native_216,40,8,0.2,30,2,6420,20,13,8,19,7,4
+merged_native_432,40,16,0.4,21,3,5473,35,27,16,5,7,9
