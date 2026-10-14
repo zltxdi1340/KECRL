@@ -11,7 +11,9 @@ import numpy as np
 import torch
 
 from experiments.crafter_natural_readout import action_set_metrics
-from experiments.crafter_spatial_action_head import FrozenDoSpatialPolicy, _combined_training_logits, extract_features
+from experiments.crafter_spatial_action_head import (
+    FrozenDoSpatialPolicy, _combined_training_logits, extract_features, fit_movement_head,
+)
 from experiments.crafter_spatial_readout_data import array_digest
 from experiments.run_crafter_spatial_training_determinism_audit import _json_digest, _state_equal
 from experiments.run_crafter_wood3_actor_natural_migration import _episode as native_episode, _summarize
@@ -30,7 +32,7 @@ def _jsonl(path: Path) -> list[dict]:
         return [json.loads(line) for line in stream]
 
 
-def _validate_collection(root: Path, config: dict, baseline_config: dict,
+def _validate_collection(root: Path, config: dict, baseline_config: dict, source,
                          records: list[dict], images: np.ndarray) -> dict[str, str]:
     if len(records) != len(images):
         raise ValueError("coverage records/images length differs")
@@ -86,6 +88,20 @@ def _validate_collection(root: Path, config: dict, baseline_config: dict,
             observations, labels = _replay_episode(episode, baseline_config)
             if len(observations) != len(labels):
                 raise ValueError("replayed collection observation/label count differs")
+            torch.manual_seed(int(episode["action_seed"]))
+            for observation, event in zip(observations, episode["events"]):
+                image = torch.as_tensor(observation, dtype=torch.float32,
+                                        device=next(source.parameters()).device)
+                image = image.permute(2, 0, 1).unsqueeze(0) / 255.0
+                with torch.no_grad():
+                    distribution, _value, _hidden = source.distribution_value(
+                        image, None, config["action_allowlist"])
+                    probabilities = distribution.probs.reshape(-1).detach().cpu().numpy()
+                    sampled_action = int(distribution.sample().reshape(-1)[0].item())
+                recorded = np.asarray(event["probabilities"], dtype=np.float64)
+                if (not np.allclose(probabilities, recorded, rtol=0, atol=1e-7)
+                        or sampled_action != int(event["action"])):
+                    raise ValueError("source policy action sampling differs in collection trace")
             for label in labels:
                 if label["category"] not in CATEGORIES:
                     continue
@@ -177,15 +193,16 @@ def run(input_path: str, output_path: str) -> dict:
     if array_digest({"images": images}) != summary["new_collection_images_digest"]:
         raise ValueError("coverage image digest differs")
     baseline_config, old, old_records, old_all_arrays, old_train, old_val = _load_baseline(config)
-    collection_trace_digests = _validate_collection(root, config, baseline_config, records, images)
-    if collection_trace_digests != summary["collection_trace_digests"]:
-        raise ValueError("collection trace digests differ from runner summary")
     _configure_torch_determinism(config)
     output.mkdir(parents=True)
     with stable_crafter_object_order() as order:
         source, checkpoint, _ = _load_source(baseline_config, order)
         if str(checkpoint) != summary["source_checkpoint"] or order != summary["source_environment_order_version"]:
             raise ValueError("source checkpoint or environment order differs")
+        collection_trace_digests = _validate_collection(
+            root, config, baseline_config, source, records, images)
+        if collection_trace_digests != summary["collection_trace_digests"]:
+            raise ValueError("collection trace digests differ from runner summary")
         source_before = copy.deepcopy((source.state_dict(), source.optimizer.state_dict()))
         new_train_indices, new_train_images = _select_rows(
             records, images, "train", config["new_training_rows_per_category"])
@@ -225,6 +242,7 @@ def run(input_path: str, output_path: str) -> dict:
         artifacts = {}
         train_digests = {arm: value[3] for arm, value in arms.items()}
         val_digest = _records_digest(records, new_val_indices)
+        fit_config = {**config, "validation_rows_digest": val_digest}
         for lock in locks:
             artifact = torch.load(root / lock["artifact"], map_location="cpu", weights_only=False)
             if _sha256(root / lock["artifact"]) != lock["sha256"]:
@@ -241,6 +259,22 @@ def run(input_path: str, output_path: str) -> dict:
                     or artifact["heldout_used_for_fit_or_selection"] is not False
                     or artifact["source_policy_and_optimizer_unchanged"] is not True):
                 raise ValueError(f"head split boundary differs: {arm}")
+            start, stop = offsets[arm]
+            train_features = features[config["feature_name"]][start:stop]
+            train_embeddings = features["final_embedding"][start:stop]
+            fit_config["training_rows_digest"] = train_digests[arm]
+            rebuilt = fit_movement_head(
+                source, train_features, train_embeddings, arms[arm][1], arms[arm][2],
+                features[config["feature_name"]][val_offset:val_stop],
+                features["final_embedding"][val_offset:val_stop],
+                val_masks, val_categories, fit_config, config["feature_name"], config["fit_seed"],
+            )
+            if (rebuilt["state_and_normalizer_digest"] != artifact["state_and_normalizer_digest"]
+                    or rebuilt["selected_epoch"] != artifact["selected_epoch"]
+                    or rebuilt["selected_learning_rate"] != artifact["selected_learning_rate"]
+                    or not _state_equal(rebuilt["validation_metrics"], artifact["validation_metrics"])
+                    or not _state_equal(rebuilt["movement_head_state"], artifact["movement_head_state"])):
+                raise ValueError(f"independently refitted head differs: {arm}")
             artifacts[arm] = artifact
         heldout_features = features[config["feature_name"]][heldout_offset:heldout_stop]
         heldout_embeddings = features["final_embedding"][heldout_offset:heldout_stop]
