@@ -1,0 +1,10 @@
+split,behavior,episodes,interaction_steps,successes,success_rate,deaths,external_truncations
+train,original_actor,32,3721,17,0.53125,15,0
+train,action_set,32,5278,6,0.1875,24,2
+train,ready_distillation,32,4378,19,0.59375,12,1
+validation,original_actor,12,1799,6,0.5,4,2
+validation,action_set,12,2269,1,0.08333333333333333,11,0
+validation,ready_distillation,12,1752,5,0.4166666666666667,7,0
+heldout,original_actor,16,2325,8,0.5,7,1
+heldout,action_set,16,2705,5,0.3125,9,2
+heldout,ready_distillation,16,2334,6,0.375,10,0

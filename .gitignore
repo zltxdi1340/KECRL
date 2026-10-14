@@ -11,6 +11,8 @@ results/**
 !results/crafter_wood3_rgb_chain_learning_cuda_pilot_20261013_v1/analysis_cross_readout_v2/
 !results/crafter_wood3_rgb_chain_ready_distillation_cuda_pilot_20261014_v1/
 !results/crafter_wood3_rgb_chain_ready_distillation_cuda_pilot_20261014_v1/analysis_verified/
+!results/crafter_wood3_natural_spatial_probe_cuda_pilot_20261014_v1/
+!results/crafter_wood3_natural_spatial_probe_cuda_pilot_20261014_v1/analysis_verified/
 !results/.gitkeep
 !results/smoke/
 !results/smoke/result.json

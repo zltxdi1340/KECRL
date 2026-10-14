@@ -1,0 +1,287 @@
+{
+  "native_rgb_dataset_features_labels_metrics_and_policy_replay_passed": true,
+  "cross_process_repeat_passed": true,
+  "source_policy_seed_count": 1,
+  "readout_seeds_are_not_independent_policy_seeds": true,
+  "native_episodes_replayed": 180,
+  "native_source_trajectory_steps": 26561,
+  "max_native_probability_error": 0.0,
+  "probe_count": 24,
+  "source_policy_and_optimizer_unchanged": true,
+  "heldout_used_for_fit_or_selection": false,
+  "action_oracle_used": false,
+  "death_episodes_excluded": false,
+  "input_hashes": {
+    "results/crafter_wood3_natural_spatial_probe_cuda_pilot_20261014_v1/config.json": "6a005caa7539d377dae3e92d1e71e03e2a7b7261ec1f9d8ba770c5ef4a3c9f63",
+    "results/crafter_wood3_natural_spatial_probe_cuda_pilot_20261014_v1/summary.json": "e2456ff2861a1dd42d5b1af6d311d3bb367d2dc6d1751f3848db107fda47ab31",
+    "results/crafter_wood3_natural_spatial_probe_cuda_pilot_20261014_v1/provenance.json": "aaaf5866bb594be2a0cece1f72809065401b3bc1d13858bd4b5fd9425efef627",
+    "results/crafter_wood3_natural_spatial_probe_cuda_pilot_20261014_v1/selection_lock.json": "43e22aaa562c3ad123d47aca006907360fcb7e2a3c840313dcff50e106d211e2",
+    "results/crafter_wood3_natural_spatial_probe_cuda_pilot_20261014_v1/dataset.npz": "0832d957ac4ae12d2409934c0caeaaa9f93e2be739f5b016cbdbb94eec7d8f8b",
+    "results/crafter_wood3_natural_spatial_probe_cuda_pilot_20261014_v1/records.json": "bf3f70b8362a23c01f40667698dbd338be9bd32d3562948575c20703015d7848",
+    "results/crafter_wood3_natural_spatial_probe_cuda_pilot_20261014_v1/features.npz": "fe2d491ce482d949797c00a4b66ea573c39075c65c16f5af3f1aa2efbada689a",
+    "results/crafter_wood3_natural_spatial_probe_cuda_pilot_20261014_v1/predictions.npz": "a9c4a280c53f73a298413ee8dce085aaca850565e3203917ee41a67574c3a473",
+    "results/crafter_wood3_natural_spatial_probe_cuda_pilot_20261014_v1/metrics.json": "591542565431172743327d1cf9f684dad473fcf2a785b5a43f5037be8cf29a3a",
+    "results/crafter_wood3_natural_spatial_probe_cuda_pilot_20261014_v1/cross_process_repeat/summary.json": "5d199a5431520791cdb383c1654ad607b87011cf7a7e74faebebb59fd34546f7",
+    "results/crafter_wood3_natural_spatial_probe_cuda_pilot_20261014_v1/train_original_actor.jsonl": "1928c0343eadb1c6562d0e4a0146193e0d09c78538d9bd365f40d9576fba8641",
+    "results/crafter_wood3_natural_spatial_probe_cuda_pilot_20261014_v1/train_action_set.jsonl": "23d889ed93987706df1830bb21e23ab8397b55a6291931b5024f3fe67ceffac6",
+    "results/crafter_wood3_natural_spatial_probe_cuda_pilot_20261014_v1/train_ready_distillation.jsonl": "40e9185e69f51bf07f899076e73a0c0cf7c52d128c49aa2002551421d0fc01c1",
+    "results/crafter_wood3_natural_spatial_probe_cuda_pilot_20261014_v1/validation_original_actor.jsonl": "1ffc085f9c7bd5242997ad98ae982b856c51f4a6945b9d4bcc0c91170b11e6f0",
+    "results/crafter_wood3_natural_spatial_probe_cuda_pilot_20261014_v1/validation_action_set.jsonl": "539d73b6bc6438d2b17aa14105b2f95ccd7abb580858d297202fd6c359fd7446",
+    "results/crafter_wood3_natural_spatial_probe_cuda_pilot_20261014_v1/validation_ready_distillation.jsonl": "290ed15637d59ca9669be62517626107a74d3922250144dfecd5575953978382",
+    "results/crafter_wood3_natural_spatial_probe_cuda_pilot_20261014_v1/heldout_original_actor.jsonl": "e511f7167944a4aceeb88c4b6294e46b957be9c0611c6376fcb5e1cc3fa7d068",
+    "results/crafter_wood3_natural_spatial_probe_cuda_pilot_20261014_v1/heldout_action_set.jsonl": "91f79a39a6898f5fd3fc3dae7769dc6ee93c1e4778ceff1fed8f9bb9521cb09f",
+    "results/crafter_wood3_natural_spatial_probe_cuda_pilot_20261014_v1/heldout_ready_distillation.jsonl": "287630552555d81198da9f87c352c24fc755ec817f6496e8029d0300d42e60fc",
+    "results/crafter_wood3_natural_spatial_probe_cuda_pilot_20261014_v1/trained_cnn_linear_seed0.pt": "7fad06849f5aff48cc295d4e8dde66eeef020280f6b9067555a2db86a5f5a6f6",
+    "results/crafter_wood3_natural_spatial_probe_cuda_pilot_20261014_v1/trained_cnn_linear_seed1.pt": "986eb9f120213993d92fa0dfbf1b7e836b4e39c84aa5d1cb40456b3951b58dfc",
+    "results/crafter_wood3_natural_spatial_probe_cuda_pilot_20261014_v1/trained_cnn_linear_seed2.pt": "d6ae38310c44148dd6ea0852c1203180d46873359b33e1b881df1c1c0be87b13",
+    "results/crafter_wood3_natural_spatial_probe_cuda_pilot_20261014_v1/trained_cnn_mlp64_seed0.pt": "f46613612193327b45cf25070f269c744ce1f79ae5d8286847b60999e444829e",
+    "results/crafter_wood3_natural_spatial_probe_cuda_pilot_20261014_v1/trained_cnn_mlp64_seed1.pt": "167d4deef52597a14763e8a5afd6536cb6b636f1f92b760655fac83ebe646a77",
+    "results/crafter_wood3_natural_spatial_probe_cuda_pilot_20261014_v1/trained_cnn_mlp64_seed2.pt": "0f4b9e01a2c05ee51304642d30931fbaa0acfbc67784d5829829e33204413756",
+    "results/crafter_wood3_natural_spatial_probe_cuda_pilot_20261014_v1/random_cnn_linear_seed0.pt": "48f677ef9d8fd12bc2884767e83589d1cc75b1d1d8f71738e792cc06440e4a8f",
+    "results/crafter_wood3_natural_spatial_probe_cuda_pilot_20261014_v1/random_cnn_linear_seed1.pt": "62e54f3c8336cbed420fb38ae99332c3a9cd8f749c5c4aa1c7d32948130fd9c8",
+    "results/crafter_wood3_natural_spatial_probe_cuda_pilot_20261014_v1/random_cnn_linear_seed2.pt": "3d0f159249ee686eec592fcfa254bb710f9697f65732aa6a1105c0e72c52e064",
+    "results/crafter_wood3_natural_spatial_probe_cuda_pilot_20261014_v1/random_cnn_mlp64_seed0.pt": "08b6c46bd5690fd4a91b6374d6e1d10284ee176958f8bf0654acd72432c24828",
+    "results/crafter_wood3_natural_spatial_probe_cuda_pilot_20261014_v1/random_cnn_mlp64_seed1.pt": "717cc198c816ccd671199c045ae8c35e841a4827fd5d78c301baf2291d25f412",
+    "results/crafter_wood3_natural_spatial_probe_cuda_pilot_20261014_v1/random_cnn_mlp64_seed2.pt": "f1c1d86d6affa99763acd3b61663d86f3cd217cb1a026e8fa5c208668f0916fe",
+    "results/crafter_wood3_natural_spatial_probe_cuda_pilot_20261014_v1/local_rgb5_linear_seed0.pt": "26df49e9c5f026d3b411a41085c4c32834c8f3134288e4e2dd827e9773ae8783",
+    "results/crafter_wood3_natural_spatial_probe_cuda_pilot_20261014_v1/local_rgb5_linear_seed1.pt": "d9d2360e972916476360199511633380284f281dd607377029d0b552f4067e74",
+    "results/crafter_wood3_natural_spatial_probe_cuda_pilot_20261014_v1/local_rgb5_linear_seed2.pt": "4b3988ebdb0bc44d41d3a9760d027133a8bc656ac7c6933ae51203c203274ba3",
+    "results/crafter_wood3_natural_spatial_probe_cuda_pilot_20261014_v1/local_rgb5_mlp64_seed0.pt": "689deef954e17a6d972fda0a878b56fb58d3664e340ae2109d52ffd24b71c22a",
+    "results/crafter_wood3_natural_spatial_probe_cuda_pilot_20261014_v1/local_rgb5_mlp64_seed1.pt": "b13806f26ee4ee85cbbfe4da93fde18ec99275a01800d16f7c54c5cad0c6a420",
+    "results/crafter_wood3_natural_spatial_probe_cuda_pilot_20261014_v1/local_rgb5_mlp64_seed2.pt": "dae25ee9e7ec1ee3e9f37f9fdebc4ca25164e774559a8394758f52a42413f04a",
+    "results/crafter_wood3_natural_spatial_probe_cuda_pilot_20261014_v1/trained_cnn_shuffled_linear_seed0.pt": "f19cf930a97413202f35c9a66ad3dcabbc0e675863256176a7eb889949d922dc",
+    "results/crafter_wood3_natural_spatial_probe_cuda_pilot_20261014_v1/trained_cnn_shuffled_linear_seed1.pt": "ea948e08597cfd53c3672e787441c98b955c797a18c2dea68c4a86d28c766949",
+    "results/crafter_wood3_natural_spatial_probe_cuda_pilot_20261014_v1/trained_cnn_shuffled_linear_seed2.pt": "6f692f122ec212d71a0b6da158ba33d9f96c0f7e86876bd7b0838e348678f2e8",
+    "results/crafter_wood3_natural_spatial_probe_cuda_pilot_20261014_v1/trained_cnn_shuffled_mlp64_seed0.pt": "49d1607418e2cf20300bac0f368adc7bd514ce45ce43626355c2cc52f16f4335",
+    "results/crafter_wood3_natural_spatial_probe_cuda_pilot_20261014_v1/trained_cnn_shuffled_mlp64_seed1.pt": "68597c2c74cd91be420567ef650bec53658bbbaabebb6f891cf7e171a9cb7aea",
+    "results/crafter_wood3_natural_spatial_probe_cuda_pilot_20261014_v1/trained_cnn_shuffled_mlp64_seed2.pt": "196cea6a9ac42df7a3fa1d90eb535f6e85c0ec1760d4ee10fe741555c212d718"
+  },
+  "train_validation_heldout_environment_seeds_disjoint": true,
+  "selected_exact_rgb_disjoint_across_splits": true,
+  "within_split_repeated_rgb_is_grouped_by_environment_seed": true,
+  "support": [
+    {
+      "split": "train",
+      "states": 1080,
+      "environment_seeds": 32,
+      "facing_counts": [
+        366,
+        171,
+        148,
+        395
+      ],
+      "tree_direction_support": [
+        {
+          "positive": 182,
+          "negative": 898,
+          "recall": 0.0,
+          "specificity": 1.0,
+          "balanced_accuracy": 0.5
+        },
+        {
+          "positive": 83,
+          "negative": 997,
+          "recall": 0.0,
+          "specificity": 1.0,
+          "balanced_accuracy": 0.5
+        },
+        {
+          "positive": 103,
+          "negative": 977,
+          "recall": 0.0,
+          "specificity": 1.0,
+          "balanced_accuracy": 0.5
+        },
+        {
+          "positive": 134,
+          "negative": 946,
+          "recall": 0.0,
+          "specificity": 1.0,
+          "balanced_accuracy": 0.5
+        }
+      ],
+      "approach_states": 297,
+      "approach_direction_support": [
+        {
+          "positive": 162,
+          "negative": 135,
+          "recall": 0.0,
+          "specificity": 1.0,
+          "balanced_accuracy": 0.5
+        },
+        {
+          "positive": 86,
+          "negative": 211,
+          "recall": 0.0,
+          "specificity": 1.0,
+          "balanced_accuracy": 0.5
+        },
+        {
+          "positive": 117,
+          "negative": 180,
+          "recall": 0.0,
+          "specificity": 1.0,
+          "balanced_accuracy": 0.5
+        },
+        {
+          "positive": 123,
+          "negative": 174,
+          "recall": 0.0,
+          "specificity": 1.0,
+          "balanced_accuracy": 0.5
+        }
+      ]
+    },
+    {
+      "split": "validation",
+      "states": 411,
+      "environment_seeds": 12,
+      "facing_counts": [
+        110,
+        67,
+        73,
+        161
+      ],
+      "tree_direction_support": [
+        {
+          "positive": 59,
+          "negative": 352,
+          "recall": 0.0,
+          "specificity": 1.0,
+          "balanced_accuracy": 0.5
+        },
+        {
+          "positive": 46,
+          "negative": 365,
+          "recall": 0.0,
+          "specificity": 1.0,
+          "balanced_accuracy": 0.5
+        },
+        {
+          "positive": 50,
+          "negative": 361,
+          "recall": 0.0,
+          "specificity": 1.0,
+          "balanced_accuracy": 0.5
+        },
+        {
+          "positive": 39,
+          "negative": 372,
+          "recall": 0.0,
+          "specificity": 1.0,
+          "balanced_accuracy": 0.5
+        }
+      ],
+      "approach_states": 112,
+      "approach_direction_support": [
+        {
+          "positive": 45,
+          "negative": 67,
+          "recall": 0.0,
+          "specificity": 1.0,
+          "balanced_accuracy": 0.5
+        },
+        {
+          "positive": 49,
+          "negative": 63,
+          "recall": 0.0,
+          "specificity": 1.0,
+          "balanced_accuracy": 0.5
+        },
+        {
+          "positive": 46,
+          "negative": 66,
+          "recall": 0.0,
+          "specificity": 1.0,
+          "balanced_accuracy": 0.5
+        },
+        {
+          "positive": 50,
+          "negative": 62,
+          "recall": 0.0,
+          "specificity": 1.0,
+          "balanced_accuracy": 0.5
+        }
+      ]
+    },
+    {
+      "split": "heldout",
+      "states": 535,
+      "environment_seeds": 16,
+      "facing_counts": [
+        199,
+        69,
+        77,
+        190
+      ],
+      "tree_direction_support": [
+        {
+          "positive": 84,
+          "negative": 451,
+          "recall": 0.0,
+          "specificity": 1.0,
+          "balanced_accuracy": 0.5
+        },
+        {
+          "positive": 31,
+          "negative": 504,
+          "recall": 0.0,
+          "specificity": 1.0,
+          "balanced_accuracy": 0.5
+        },
+        {
+          "positive": 51,
+          "negative": 484,
+          "recall": 0.0,
+          "specificity": 1.0,
+          "balanced_accuracy": 0.5
+        },
+        {
+          "positive": 57,
+          "negative": 478,
+          "recall": 0.0,
+          "specificity": 1.0,
+          "balanced_accuracy": 0.5
+        }
+      ],
+      "approach_states": 150,
+      "approach_direction_support": [
+        {
+          "positive": 95,
+          "negative": 55,
+          "recall": 0.0,
+          "specificity": 1.0,
+          "balanced_accuracy": 0.5
+        },
+        {
+          "positive": 40,
+          "negative": 110,
+          "recall": 0.0,
+          "specificity": 1.0,
+          "balanced_accuracy": 0.5
+        },
+        {
+          "positive": 60,
+          "negative": 90,
+          "recall": 0.0,
+          "specificity": 1.0,
+          "balanced_accuracy": 0.5
+        },
+        {
+          "positive": 60,
+          "negative": 90,
+          "recall": 0.0,
+          "specificity": 1.0,
+          "balanced_accuracy": 0.5
+        }
+      ]
+    }
+  ],
+  "limitations": [
+    "single source policy seed pilot",
+    "local RGB has more input dimensions and parameters",
+    "geometry labels are diagnostic-only oracle labels",
+    "sampled frames are not independent episodes",
+    "strata balanced accuracy uses supported classes only; support flags must be read"
+  ]
+}
