@@ -1,0 +1,24 @@
+{
+  "independent_source_and_head_reconstruction_passed": true,
+  "independent_stored_state_pool_replay_passed": true,
+  "independent_prediction_replay_passed": true,
+  "cross_process_repeat_passed": true,
+  "source_do_probability_audit_passed": true,
+  "paired_initial_rgb_equal": true,
+  "fresh_action_oracle_used": false,
+  "stored_actions_replayed_for_state_reconstruction": true,
+  "new_actions_sampled_or_executed": false,
+  "source_policy_and_optimizer_unchanged": true,
+  "input_hashes_unchanged": true,
+  "scored_policy_arms": [
+    "source_cnn_only",
+    "final_embedding_head",
+    "conv2_spatial_head"
+  ],
+  "path_arms": [
+    "source_cnn_only",
+    "final_embedding_head",
+    "conv2_spatial_head"
+  ],
+  "scored_states": 15550
+}

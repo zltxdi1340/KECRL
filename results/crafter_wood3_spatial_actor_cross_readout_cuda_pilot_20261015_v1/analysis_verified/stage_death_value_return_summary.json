@@ -1,0 +1,53 @@
+{
+  "formal_result": false,
+  "diagnostic_only": true,
+  "cross_readout_prediction_digest": "6fd7447eeb8a674db3f00450d86503ab7808521b11c7eae816afb8440fbed0ea",
+  "source_checkpoint_sha256": "c8fb48c4703bc8c3a125ce6d4780bddbd1a5f19a5706d79bc819fd9e49996260",
+  "critic_value_pool_digest": "3c7c5970c0bdd7010f1ed9622e8a001178055d52c2774c98d92d4fd4b5def017",
+  "cross_readout_independent_verification_passed": true,
+  "episode_macro_rows": 102,
+  "episode_macro_rows_digest": "44679e24893b0584ba60d00d64b5f381baa0f00e330f3b2fb7a062ef25384f03",
+  "stage_and_death_counts": {
+    "source_cnn_only": {
+      "episodes": 40,
+      "successes": 24,
+      "deaths": 15,
+      "before_wood1_deaths": 4,
+      "after_wood1_before_wood2_deaths": 6,
+      "after_wood2_before_wood3_deaths": 5
+    },
+    "final_embedding_head": {
+      "episodes": 40,
+      "successes": 13,
+      "deaths": 27,
+      "before_wood1_deaths": 18,
+      "after_wood1_before_wood2_deaths": 8,
+      "after_wood2_before_wood3_deaths": 1
+    },
+    "conv2_spatial_head": {
+      "episodes": 40,
+      "successes": 22,
+      "deaths": 18,
+      "before_wood1_deaths": 8,
+      "after_wood1_before_wood2_deaths": 7,
+      "after_wood2_before_wood3_deaths": 3
+    }
+  },
+  "window_definitions": {
+    "before_wood1": "wood_before == 0",
+    "after_wood1_before_wood2": "wood_before == 1",
+    "after_wood2_before_wood3": "wood_before == 2",
+    "predeath_last10": "death episode and episode.steps - event.step < 10"
+  },
+  "state_pool_scored_states": 15550,
+  "frame_level_significance_testing": false,
+  "critic_values_are_shared_across_scored_heads": true,
+  "discounted_return_gamma": 0.99,
+  "discounted_returns_bootstrapped_at_external_truncation": false,
+  "external_truncation_episodes_by_path": {
+    "source_cnn_only": 1,
+    "final_embedding_head": 0,
+    "conv2_spatial_head": 0
+  },
+  "value_calibration_summary_is_episode_macro": true
+}

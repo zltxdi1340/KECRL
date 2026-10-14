@@ -1,0 +1,56 @@
+{
+  "status": "crafter_wood3_spatial_actor_cross_readout_cuda_pilot_v1",
+  "formal_result": false,
+  "diagnostic_only": true,
+  "evaluation_only": true,
+  "fresh_actor_result_root": "results/crafter_wood3_spatial_actor_fresh_cuda_pilot_v2_20261015_v1",
+  "source_policy_result_root": "results/crafter_wood3_spatial_representation_deterministic_v3_cuda_pilot_20261008_v1",
+  "source_policy_seed": 0,
+  "checkpoint_steps": 100000,
+  "path_arms": [
+    "source_cnn_only",
+    "final_embedding_head",
+    "conv2_spatial_head"
+  ],
+  "scored_policy_arms": [
+    "source_cnn_only",
+    "final_embedding_head",
+    "conv2_spatial_head"
+  ],
+  "episode_count_per_path_arm": 40,
+  "environment_seed_base": 221000000,
+  "action_seed_base": 231000000,
+  "environment_length": 10000,
+  "max_steps": 256,
+  "task": {
+    "item": "wood",
+    "threshold": 3
+  },
+  "initial_wood": 0,
+  "hostile_radius": 3,
+  "action_allowlist": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6
+  ],
+  "readout_batch_size": 256,
+  "do_probability_tolerance": 5e-07,
+  "fresh_action_oracle_used": false,
+  "stored_actions_replayed_for_state_reconstruction": true,
+  "new_actions_sampled_or_executed": false,
+  "policy_updates_allowed": false,
+  "ppo_updates_allowed": false,
+  "encoder_updates_allowed": false,
+  "heldout_used_for_fit_or_selection": false,
+  "module_registered": false,
+  "knowledge_updated": false,
+  "spt_updated": false,
+  "device": "cuda",
+  "python_hash_seed": 0,
+  "torch_deterministic_algorithms": true,
+  "cublas_workspace_config": ":4096:8"
+}

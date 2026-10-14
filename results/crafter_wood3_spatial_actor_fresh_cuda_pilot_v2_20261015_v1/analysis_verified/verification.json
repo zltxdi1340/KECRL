@@ -1,0 +1,20 @@
+{
+  "independent_source_reconstruction_passed": true,
+  "independent_fresh_episode_replay_passed": true,
+  "cross_process_repeat_passed": true,
+  "source_training_source_verification_passed": true,
+  "source_policy_and_optimizer_unchanged": true,
+  "source_do_probability_preserved_within_tolerance": true,
+  "paired_initial_rgb_equal": true,
+  "fresh_action_oracle_used": false,
+  "survival_intervention_used": false,
+  "death_episodes_excluded": false,
+  "heldout_used_for_fit_or_selection": false,
+  "fresh_episode_count_per_arm": 40,
+  "arms": [
+    "source_cnn_only",
+    "final_embedding_head",
+    "conv2_spatial_head"
+  ],
+  "input_hashes_unchanged": true
+}

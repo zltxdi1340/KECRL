@@ -1,0 +1,28 @@
+{
+  "locked_before_fresh_evaluation": true,
+  "heldout_used_for_fit_or_selection": false,
+  "training_rows_digest": "81c93254b3f1b03a84f63eb3f51a0444132eb615935186797a5ebb1e487e6a1b",
+  "validation_rows_digest": "6cdf6bbd84c205e15123e1482313fbdaa4e9f86fb54a6d263a9684b1b7c9419a",
+  "arms": [
+    {
+      "arm": "final_embedding_head",
+      "feature_name": "final_embedding",
+      "artifact": "seed0_final_embedding_head.pt",
+      "sha256": "b5a89f7f3d38ef3076df02b603b5b3d5b84a98e204ceda66953740c9053d5049",
+      "state_and_normalizer_digest": "ff9398c6c067677112d75e3b969dadff93ece122e4b294a1f7c2ba6a6d9c3301",
+      "selected_epoch": 750,
+      "selected_learning_rate": 0.03,
+      "offline_optimizer_updates": 3000
+    },
+    {
+      "arm": "conv2_spatial_head",
+      "feature_name": "conv2_max2x2",
+      "artifact": "seed0_conv2_spatial_head.pt",
+      "sha256": "93944e73cedadeb291041281c4fc7f399c8e0d6b864f96b1b5dad81705253966",
+      "state_and_normalizer_digest": "dee6d3bc0cb7a598e9c3e4604349258f8a27dc914859b3fe91187365a41d96f9",
+      "selected_epoch": 200,
+      "selected_learning_rate": 0.03,
+      "offline_optimizer_updates": 3000
+    }
+  ]
+}

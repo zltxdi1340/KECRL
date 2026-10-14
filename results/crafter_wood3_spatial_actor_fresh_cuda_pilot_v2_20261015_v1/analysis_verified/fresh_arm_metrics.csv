@@ -1,0 +1,4 @@
+arm,episodes,successes,success_rate,deaths,external_truncations,interaction_steps,wood1_episodes,wood2_episodes,wood3_episodes,ready_steps,ready_do_rate,turn_steps,turn_valid_rate,approach_steps,approach_valid_rate,death_before_wood1,death_after_wood1,death_after_wood2,wood0_stage_completion_rate,wood1_stage_completion_rate,wood2_stage_completion_rate
+source_cnn_only,40,24,0.6,15,1,5190,35,29,24,148,0.5945945945945946,499,0.07615230460921844,3646,0.18540866703236422,4,6,5,0.875,0.8285714285714286,0.8275862068965517
+final_embedding_head,40,13,0.325,27,0,6198,22,14,13,71,0.6901408450704225,475,0.035789473684210524,4230,0.1574468085106383,18,8,1,0.55,0.6363636363636364,0.9285714285714286
+conv2_spatial_head,40,22,0.55,18,0,4162,32,25,22,143,0.5524475524475524,337,0.07418397626112759,2390,0.13682008368200838,8,7,3,0.8,0.78125,0.88

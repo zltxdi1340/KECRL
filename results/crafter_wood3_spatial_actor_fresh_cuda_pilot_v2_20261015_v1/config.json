@@ -1,0 +1,80 @@
+{
+  "status": "crafter_wood3_spatial_actor_fresh_cuda_pilot_v2",
+  "formal_result": false,
+  "diagnostic_only": true,
+  "evaluation_only_after_head_fit": true,
+  "source_result_root": "results/crafter_wood3_spatial_representation_deterministic_v3_cuda_pilot_20261008_v1",
+  "source_training_root": "results/crafter_wood3_rgb_chain_learning_cuda_pilot_20261013_v1",
+  "source_policy_seed_set": [
+    0
+  ],
+  "checkpoint_steps": 100000,
+  "training_state_source": "exact_native_state_fit_rows_from_verified_chain_learning_pilot",
+  "training_rows_per_category": {
+    "ready": 90,
+    "turn": 30,
+    "approach": 96
+  },
+  "validation_state_source": "native_behavior_validation_split_only",
+  "arms": [
+    "source_cnn_only",
+    "final_embedding_head",
+    "conv2_spatial_head"
+  ],
+  "learned_features": [
+    "final_embedding",
+    "conv2_max2x2"
+  ],
+  "shared_action5_probability": "frozen_original_policy_probability_under_locked_action_allowlist",
+  "do_probability_tolerance": 5e-07,
+  "head_learning_rates": [
+    0.003,
+    0.03
+  ],
+  "head_fit_epochs": 1500,
+  "validation_interval": 50,
+  "head_weight_decay": 0.0,
+  "feature_std_floor": 0.0001,
+  "feature_batch_size": 64,
+  "fit_seed": 0,
+  "selection_metric": "validation_category_macro_accuracy_then_set_nll",
+  "fresh_episode_count": 40,
+  "fresh_environment_seed_base": 221000000,
+  "fresh_action_seed_base": 231000000,
+  "fresh_seed_pairing": "same_environment_and_action_seed_per_arm_independent_trajectories",
+  "observer_audit_episodes_per_arm": 1,
+  "max_steps": 256,
+  "initial_wood": 0,
+  "task": {
+    "item": "wood",
+    "threshold": 3
+  },
+  "environment_length": 10000,
+  "hostile_radius": 3,
+  "action_allowlist": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6
+  ],
+  "evaluation_mode": "sample",
+  "teacher_used_for_head_fit": true,
+  "teacher_scope": "local_geometry_action_set_supervision_on_train_rows_only",
+  "fresh_action_oracle_allowed": false,
+  "survival_intervention_allowed": false,
+  "death_episodes_excluded": false,
+  "heldout_used_for_fit_or_selection": false,
+  "policy_updates_allowed": false,
+  "ppo_updates_allowed": false,
+  "encoder_updates_allowed": false,
+  "module_registered": false,
+  "knowledge_updated": false,
+  "spt_updated": false,
+  "device": "cuda",
+  "python_hash_seed": 0,
+  "torch_deterministic_algorithms": true,
+  "cublas_workspace_config": ":4096:8"
+}

@@ -1,0 +1,4 @@
+left_arm,right_arm,both_success,left_only_success,right_only_success,neither_success,paired_success_difference_right_minus_left,discordant_pairs,mcnemar_exact_p_two_sided_unadjusted,episode_pairs
+source_cnn_only,final_embedding_head,11,13,2,14,-0.275,15,0.00738525390625,40
+source_cnn_only,conv2_spatial_head,16,8,6,10,-0.05,14,0.79052734375,40
+conv2_spatial_head,final_embedding_head,8,14,5,13,-0.225,19,0.063568115234375,40
