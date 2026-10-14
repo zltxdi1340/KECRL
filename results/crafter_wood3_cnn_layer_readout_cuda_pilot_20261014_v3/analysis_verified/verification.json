@@ -1,0 +1,24 @@
+{
+  "independent_reconstruction_passed": true,
+  "cross_process_repeat_passed": true,
+  "prior_natural_source_verification_passed": true,
+  "new_native_episodes": 0,
+  "source_policy_and_optimizer_unchanged": true,
+  "heldout_reused_from_prior_diagnostic": true,
+  "heldout_used_for_fit_or_selection": false,
+  "action_oracle_used": false,
+  "survival_intervention_used": false,
+  "death_episodes_excluded": false,
+  "feature_layers": [
+    "conv2_spatial_max2x2",
+    "pooled_spatial_max2x2",
+    "pre_projection",
+    "final_embedding"
+  ],
+  "feature_projected_dimension": 128,
+  "probe_count": 24,
+  "all_readout_dimensions_equal": true,
+  "linear_parameter_counts_equal": true,
+  "mlp64_parameter_counts_equal": true,
+  "input_hashes_unchanged": true
+}
