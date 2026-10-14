@@ -31,7 +31,7 @@ def _jsonl(path: Path) -> list[dict]:
 
 
 def _validate_collection(root: Path, config: dict, baseline_config: dict,
-                         records: list[dict], images: np.ndarray) -> None:
+                         records: list[dict], images: np.ndarray) -> dict[str, str]:
     if len(records) != len(images):
         raise ValueError("coverage records/images length differs")
     expected_masks = np.asarray([
@@ -64,13 +64,25 @@ def _validate_collection(root: Path, config: dict, baseline_config: dict,
     replayed_digests = set()
     replayed_rgb_splits = {}
     replayed_rows = {}
+    trace_digests = {}
+    seen_environment_seeds = set()
     for split, expected_count in config["collection_episode_counts"].items():
         episodes = _jsonl(root / f"collection_{split}_episodes.jsonl")
         if len(episodes) != expected_count:
             raise ValueError(f"collection episode count differs for {split}")
-        for episode in episodes:
+        trace_digests[split] = _json_digest(episodes)
+        split_index = list(config["collection_episode_counts"]).index(split)
+        for episode_index, episode in enumerate(episodes):
             if episode.get("environment_seed") is None or episode.get("action_seed") is None:
                 raise ValueError("collection episode seed provenance is missing")
+            seed_offset = split_index * 100000 + episode_index
+            if (episode["environment_seed"] != config["collection_environment_seed_base"] + seed_offset
+                    or episode["action_seed"] != config["collection_action_seed_base"] + seed_offset
+                    or episode["split"] != split):
+                raise ValueError("collection episode seed or split assignment differs")
+            if episode["environment_seed"] in seen_environment_seeds:
+                raise ValueError("environment seed is reused across collection episodes")
+            seen_environment_seeds.add(episode["environment_seed"])
             observations, labels = _replay_episode(episode, baseline_config)
             if len(observations) != len(labels):
                 raise ValueError("replayed collection observation/label count differs")
@@ -91,6 +103,7 @@ def _validate_collection(root: Path, config: dict, baseline_config: dict,
         value = replayed_rows.get(key)
         if value != (row["rgb_sha256"], row["category"], tuple(row["target_actions"])):
             raise ValueError(f"replayed collection label differs at {key}")
+    return trace_digests
 
 
 def _heldout_logits(source, artifacts: dict, feature_name: str, feature: np.ndarray,
@@ -164,7 +177,9 @@ def run(input_path: str, output_path: str) -> dict:
     if array_digest({"images": images}) != summary["new_collection_images_digest"]:
         raise ValueError("coverage image digest differs")
     baseline_config, old, old_records, old_all_arrays, old_train, old_val = _load_baseline(config)
-    _validate_collection(root, config, baseline_config, records, images)
+    collection_trace_digests = _validate_collection(root, config, baseline_config, records, images)
+    if collection_trace_digests != summary["collection_trace_digests"]:
+        raise ValueError("collection trace digests differ from runner summary")
     _configure_torch_determinism(config)
     output.mkdir(parents=True)
     with stable_crafter_object_order() as order:
