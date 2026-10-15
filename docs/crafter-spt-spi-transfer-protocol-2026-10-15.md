@@ -1,6 +1,6 @@
 # Crafter 采集族 SPT/SPI 迁移实验协议草案
 
-日期：2026-10-15。状态：可审阅草案，未冻结、未运行。设计清单见
+日期：2026-10-15。状态：可审阅草案，未冻结；正式 E1/E2 未运行，非正式集成和修错 pilot 已完成。设计清单见
 [JSON 兼容 YAML 配置](../configs/crafter_gather_spt_transfer_protocol_candidate_v1.yaml)。
 该文件是实验设计清单，不是已有 runner 的可执行配置。
 
@@ -36,7 +36,7 @@
 
 ## 3. 环境与信息边界
 
-候选环境是新的受控 Crafter fixture，基于本机 Crafter 1.8.3，版本名预留为 `quiet-material-gather-v1`，目前未实现。
+候选环境是已实现并用于 pilot 的受控 Crafter fixture，基于本机 Crafter 1.8.3，版本名为 `quiet-material-gather-v1`。
 仅 reset、昼夜和实体生成设置受控；移动、朝向、采集、工具检查、资源更新、材质和 RGB 渲染复用原生实现，不修改安装包。
 
 - 每个场景含 tree、stone、coal 各一个，材料位置和初始朝向均变化；目标外的材料作为干扰项。
@@ -121,6 +121,7 @@ B 的每个内循环从生成的全新 Policy 与全新 Adam 状态开始，使�
 query 的 old log-prob、value/return 和梯度必须与实际采样策略一致，不能用未适应策略的轨迹冒充 adapted query。
 
 C 使用同样来源任务槽及场景池，两个 256 步块都可供普通 PPO 学习，持续保留来源 optimizer；不在槽间做 meta reset。
+当前 pilot 的 C 仍使用一个 512 步块，与 B 的两个 256 步块在 reset/场景池及更新频率上有差别。正式实现前须对齐本节设计并记录成本，不能只凭总步数相同就声称这些边界全部匹配。
 不强制 B/C 的动作轨迹一致；只匹配来源目标分配、场景分布及总交互成本。
 二者优化步骤结构不同，须分别报告梯度次数、wall time、峰值显存与实际步数，不宣称计算成本完全相同。
 A 的来源步数为零，不能把 B 对 A 的优势单独当作元算法优势。
@@ -176,6 +177,8 @@ pilot 仅用于查接口、梯度、可学性、成本和方差；不决定方�
 pilot 数据永不合并进正式结果；明确披露使用 coal pilot 来定预算，因此 coal 是来源训练留出绑定，不是研究者从未接触的任务。
 只做这次集成/成本 pilot，不默认接续新的 head/奖励/表示消融。若发现实现错误则修复并记录失效运行；需要改变研究设计时先更新协议版本。
 
+已发现 v1 将 B 声明的外循环学习率 0.001 覆盖为实际 0.0003；旧账本审计未覆盖该项。v2 按原预算修复并记录实际学习率，独立审计通过；旧版保留为配置失配记录。v2 终点为 A 15/80、B 25/80、C 8/80，仅为两个 seed 的校准信号，不冻结方法优势。详见[动作链与修错报告](crafter-gather-execution-chain-2026-10-15.md)。
+
 进入正式组件实验前应具备：
 
 1. 实际 SPT->SPI->生成->适应路径和 CNN 的 FOMAML 更新实现，且 A/B/C 参数、工具、奖励和预算匹配。
@@ -198,4 +201,4 @@ pilot 数据永不合并进正式结果；明确披露使用 coal pilot 来定�
 | 确定性/回放 | `run_crafter_gather_spt_transfer_pilot.py` | CUDA 确定性设置、RNG 恢复、步数账本和 cold-column 审计已在两个独立 pilot 运行中检查 |
 | manifest/计量/分析 | pilot runner 与[集成记录](crafter-gather-spt-transfer-pilot-2026-10-15.md) | E1 小 pilot 已完成；正式 E1/E2 的 manifest、hash 封存、独立进程复核和按 seed 分析仍需冻结 |
 
-当前已完成一次非正式 E1 wood→coal 集成 pilot（seed 11/12），结果见[集成记录](crafter-gather-spt-transfer-pilot-2026-10-15.md)。pilot 证明接口和训练路径可运行，但两 seed 下 B 没有稳定超过 A/C，因此不能作为 SPT 有效性的正式证据。正式 E1/E2 尚未启动，活动 SPT 指针、Module 和 Knowledge 均未改变。
+当前已完成非正式 E1 wood→coal 集成、动作链审计和学习率修错 pilot（seed 11/12），结果见[集成记录](crafter-gather-spt-transfer-pilot-2026-10-15.md)。v2 的 B 有小样本改善信号，但正式比较前仍需处理来源分块/场景池、角色隔离 manifest、独立进程复现和 E2 runner。正式 E1/E2 尚未启动，活动 SPT 指针、Module 和 Knowledge 均未改变。

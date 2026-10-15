@@ -1,7 +1,7 @@
 # Crafter gather 族 SPT→SPI 集成 pilot 记录
 
-日期：2026-10-15。状态：已完成一次非正式集成 pilot，正式实验仍未启动。
-运行配置为 [`crafter_gather_spt_transfer_pilot_v1.yaml`](../configs/crafter_gather_spt_transfer_pilot_v1.yaml)，代码入口为 [`run_crafter_gather_spt_transfer_pilot.py`](../experiments/run_crafter_gather_spt_transfer_pilot.py)。canonical 结果目录为 `results/crafter_gather_spt_transfer_pilot_v1_run7/`，代码 hash 为 `f1f49e4`；原始结果保留在实验主机，未纳入正式结果集。
+日期：2026-10-15。状态：已完成非正式集成 pilot、动作链审计及学习率覆盖错误的修正校准，正式实验仍未启动。
+当前配置为 [`crafter_gather_spt_transfer_pilot_v2.yaml`](../configs/crafter_gather_spt_transfer_pilot_v2.yaml)，代码入口为 [`run_crafter_gather_spt_transfer_pilot.py`](../experiments/run_crafter_gather_spt_transfer_pilot.py)。修复版结果目录为 `results/crafter_gather_spt_transfer_pilot_v2_run1/`，代码 hash 为 `908eb4c`。历史 v1 canonical run7（`f1f49e4`）及保存 checkpoint 的等指标复现 run8（`0746753`）均保留；原始结果在实验主机，未纳入正式结果集。
 
 这次 pilot 的目的，是确认研究问题已经被实例化为真实的 `SPT -> SPI -> 生成 CNN Policy -> 目标适应 -> 独立评价` 链路，并检查成本、梯度、场景规则和失败记录。它不是方法优选实验，也不用于证明 SPT 更新优于普通预训练。
 
@@ -24,15 +24,30 @@
 | B | 12 | 8192/8192 | 4096/4096 | 0/10 | 是/是 | 是 |
 | C | 12 | 8192/8192 | 4096/4096 | 0/10 | 是/是 | 是 |
 
-新增契约测试覆盖了 SPT/SPI 版本绑定、三种 context、树与石/煤的工具边界、配对 RGB reset、生成器冷列、候选与 active 隔离、全新 optimizer、C 臂梯度穿过共享生成器，以及目标材料的 RGB 可见性。该测试组为 `9 passed`。独立审计器 [`analyze_crafter_gather_spt_transfer_pilot.py`](../experiments/analyze_crafter_gather_spt_transfer_pilot.py) 对 canonical run7 返回 `valid=true`。
+契约和诊断测试覆盖 SPT/SPI 版本绑定、工具边界、配对 RGB reset、生成器冷列、候选隔离、全新 optimizer、C 臂生成器梯度、RGB 可见性、原生短动作链、初始朝向、并列最短动作及实际学习率。当前定向测试为 `13 passed`，全量回归为 `431 passed`。独立审计器 [`analyze_crafter_gather_spt_transfer_pilot.py`](../experiments/analyze_crafter_gather_spt_transfer_pilot.py) 对 v2 run1 返回 `valid=true`、`source_optimizer_rates_verified=true`，无警告。旧 v1 的账本审计没有覆盖实际学习率，不能据其 `valid=true` 声称配置完全一致。
 
 ## 可学习性审计
 
-- 32 个布局、3 种材料共 96 个目标均在初始 native RGB 中留下可检测变化，最小变化为 39 个像素；因此当前 pilot 没有把目标材料完全遮挡在观测之外。
+- 32 个审计布局、3 种材料共 96 个目标均在初始 native RGB 中留下可检测变化，最小变化为 39 个像素。这验证了抽查布局的像素可见性，不证明 CNN 已学会读出目标，也不覆盖所有训练布局。
 - source/target 的动作计数都与交互步数一致，首次目标增量步数与 success 计数一致；A/B/C 的 source/target 预算、评价 episode 数、fresh target optimizer 和 coal 冷列均通过独立复核。
-- canonical run7 的评价失败全部是 `external_truncation`，没有死亡。B/C 在部分 seed 上显著提高了 `do` 的采样比例，但这没有稳定转化为采集成功，说明当前瓶颈仍在接近、朝向和动作链执行，而非 RGB 目标完全不可见。
+- v1 的 seed 11 偏向 `do`，seed 12 的 `do` 比例低；两者均未形成稳定采集链。动作边际分布不能独自定位 RGB 表示、head、状态覆盖或奖励/信用分配的责任。
+- 后续[动作链诊断](crafter-gather-execution-chain-2026-10-15.md)中，32 个布局的三种材料均可由原生脚本在最多 6 步完成，8/16/32 步正对照都是 96/96；冻结策略在相同 RGB 状态上的阶段选择仍较弱。这是组件执行审计，不是学习策略成绩或自然 Module 资格。
 
-## Pilot 结果
+## 修复版 v2 结果
+
+v1 runner 在建立 FOMAML optimizer 后，无条件把两个 source optimizer 的学习率改成 `policy_learning_rate=0.0003`，覆盖了声明的 `meta_learning_rate=0.001`。这是配置实现错误。`908eb4c` 修复后，B 使用配置的外循环学习率，C 使用普通 PPO 学习率，并将实际值写入结果供独立审计。内循环和 target PPO 仍为 `0.0003`。
+
+v2 保持原来的两个 seed、来源 8,192 步、目标 4,096 步、奖励、网络和评价预算；新增运行用于修复实现错误，不按方法胜负追加预算。A/C 的全部原有训练与评价记录与 v1 run8 一致，复核文件为 `correction_verification.json`。
+
+| arm | seed 11：0/1024/4096 步 | seed 12：0/1024/4096 步 | 终点合计 |
+|---|---:|---:|---:|
+| A：更新前 SPT | 0.150 / 0.050 / 0.350 | 0.100 / 0.125 / 0.025 | 15/80（0.1875） |
+| B：FOMAML SPT 更新 | 0.150 / 0.125 / 0.275 | 0.100 / 0.200 / 0.350 | 25/80（0.3125） |
+| C：普通 PPO 预训练 | 0.100 / 0.275 / 0.200 | 0.175 / 0.100 / 0.000 | 8/80（0.1000） |
+
+终点 240 集中有 48 次成功、192 次 external truncation，无死亡。B 的 pilot 终点高于 A/C，但两个 seed、当前场景配对和分块边界尚不足以支持正式方法优势。所有臂均未达到候选 0.8；达到该值不是研究 SPT 迁移的前提。
+
+## 历史 v1 结果（实际外循环 lr=0.0003）
 
 下表是每个 seed 的 coal 评价成功率曲线，顺序为 `0/1024/4096` target support 步。每点 40 个 episode。
 
@@ -42,13 +57,13 @@
 | B：FOMAML SPT 更新 | 0.225 / 0.275 / 0.175 | 0.075 / 0.250 / 0.000 | 0.088 |
 | C：普通 PPO 预训练 | 0.100 / 0.275 / 0.200 | 0.175 / 0.100 / 0.000 | 0.100 |
 
-两 seed 的最终评价合计为 A `15/80`、B `7/80`、C `8/80`。全部失败主要是 external truncation；pilot 没有出现死亡，因为该受控场景没有水、熔岩或敌人且初始生存资源充足。这不能说明自然 Crafter 的生存问题已经解决，只说明本组件 pilot 没有把死亡混入当前信号。
+两 seed 的最终评价合计为 A `15/80`、B `7/80`、C `8/80`。终点 240 集有 30 次成功、210 次 external truncation，无死亡。受控场景没有水、熔岩或敌人且初始生存资源充足；这不验证自然 Crafter 的生存能力。
 
-结果显示，8,192 source 步足以让 B/C 的共享模板和生成器实际更新，且完整链路可以运行；但两 seed 方差很大，B 没有稳定超过 A 或 C，所有臂都远低于候选 0.8。当前可得结论是“接口和训练信号已接通，但该预算下 wood→coal 迁移尚未显示稳定收益”，不能把它写成 SPT 有效或无效的正式结论。
+v1 证明了接口和训练信号可运行，但不符合声明的外循环学习率，不能作为该声明配置的校准结果。它保留为实现错误诊断；v1/v2 不合并为更多独立 seed，也不能据单次修复比较确定低成功率的全部原因。
 
 ## 下一步
 
-1. 以 canonical run7 和独立审计结果为基础，完成最终代码版本的全量回归与独立进程回放审计。
-2. 在不改变 SPT 研究问题的前提下，先做一个短的执行器可学习性诊断：固定同一 RGB/CNN，分别测量接近、朝向和 `do` 的单步/短链成功率，确定 32 步上限是否截断了可学习动作链。
-3. 只有执行链信号通过成本检查后，才冻结正式 E1/E2 候选预算；正式运行仍需 10 个独立 seed、E2 三个 leave-one-binding-out fold、100 个评价 episode 和预注册分析，pilot seed 11/12 不合并。
+1. 审计来源分块和场景池：当前 B 每槽使用两个 256 步 support/query 块，C 是一个 512 步普通 PPO 块；总交互相等不代表分块、场景池或更新次数相同。冻结正式实现前对齐协议要求并记录差异。
+2. 建立 source support/query、target support、evaluation 的逐 episode manifest，按材料布局、初始朝向和初始 RGB 核对角色隔离；整数 seed 不同不能代替这项检查。修复版 v2 的独立进程复现仍待完成；v1 的等指标复现不能冒充 v2 复现，也不是完整动作轨迹回放。
+3. 完成可比性审计、E2 runner、成本/学习信号检查后，才冻结正式预算；候选仍为 10 个独立 seed、E2 三个 leave-one-binding-out fold、每点 100 个评价 episode 和预注册分析，pilot seed 11/12 不合并。不会自动接续新的 head/奖励/表示消融。
 4. 正式组件实验完成后，才讨论 Module qualification、自然 Crafter 任务链和 Knowledge/Pipeline 更新；当前没有活动 SPT 切换、Module 注册或 Knowledge 更新。
