@@ -41,12 +41,30 @@ def _check_evaluation(evaluation: dict, expected_episodes: int, label: str, erro
             break
 
 
+def _check_source_optimizer_settings(settings: dict | None, config: dict, arm: str,
+                                     label: str, errors: list[str]) -> bool:
+    if settings is None:
+        return False
+    before = len(errors)
+    rate_key = "meta_learning_rate" if arm == "B_fomaml_spt" else "policy_learning_rate"
+    expected_rate = float(config[rate_key])
+    for key in ("template_learning_rates", "generator_learning_rates"):
+        actual = settings.get(key, [])
+        if not actual or any(float(rate) != expected_rate for rate in actual):
+            errors.append(f"{label}: {key} does not match {rate_key}")
+    if float(settings.get("inner_learning_rate", -1)) != float(config["inner_learning_rate"]):
+        errors.append(f"{label}: source inner learning rate mismatch")
+    return len(errors) == before
+
+
 def analyze(input_path: str | Path) -> dict:
     input_root = Path(input_path)
     aggregate = json.loads((input_root / "aggregate.json").read_text(encoding="utf-8"))
     config_path = Path(aggregate["config"])
     config = json.loads(config_path.read_text(encoding="utf-8"))
     errors: list[str] = []
+    warnings: list[str] = []
+    optimizer_rate_checks = []
     if aggregate.get("formal_result") is not False or aggregate.get("diagnostic_only") is not True:
         errors.append("aggregate is not explicitly diagnostic/non-formal")
     visibility = aggregate.get("rgb_visibility_audit", {})
@@ -65,6 +83,12 @@ def analyze(input_path: str | Path) -> dict:
     pooled = Counter()
     for row in runs:
         label = f"{row['arm']}/seed_{row['seed']}"
+        settings = row.get("source_optimizer_settings")
+        optimizer_rate_checks.append(_check_source_optimizer_settings(
+            settings, config, row["arm"], label, errors,
+        ))
+        if settings is None:
+            warnings.append(f"{label}: legacy artifact has no effective source optimizer rates; these rates were not verified")
         expected_source_budget = 0 if row["arm"] == "A_initial_spt" else (
             int(config["source_rounds"])
             * int(config["source_task_slots_per_round"])
@@ -111,6 +135,8 @@ def analyze(input_path: str | Path) -> dict:
         "aggregate_git_commit": aggregate.get("git_commit"),
         "valid": not errors,
         "errors": errors,
+        "warnings": warnings,
+        "source_optimizer_rates_verified": bool(optimizer_rate_checks) and all(optimizer_rate_checks),
         "rgb_visibility": {
             "all_visible": bool(visibility.get("all_visible")),
             "layout_seed_count": visibility.get("layout_seed_count"),
@@ -131,7 +157,9 @@ def main() -> None:
     output = Path(args.output) if args.output else Path(args.input) / "analysis_verified" / "verification.json"
     output.parent.mkdir(parents=True, exist_ok=True)
     output.write_text(json.dumps(result, indent=2) + "\n", encoding="utf-8")
-    print(json.dumps({"valid": result["valid"], "errors": result["errors"], "output": str(output)}, ensure_ascii=False))
+    print(json.dumps({"valid": result["valid"], "errors": result["errors"],
+                      "source_optimizer_rates_verified": result["source_optimizer_rates_verified"],
+                      "warnings": result["warnings"], "output": str(output)}, ensure_ascii=False))
     if not result["valid"]:
         raise SystemExit(1)
 

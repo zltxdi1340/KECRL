@@ -399,22 +399,22 @@ def evaluate(
     }
 
 
-def _set_optimizer_lr(learner: SpatialGatherFOMAML, learning_rate: float) -> None:
-    for optimizer in (learner.template_optimizer, learner.generator_optimizer):
-        for group in optimizer.param_groups:
-            group["lr"] = float(learning_rate)
+def _build_source_learner(config: dict, candidate: SpatialGatherSPT, arm_name: str) -> SpatialGatherFOMAML:
+    if arm_name not in {"A_initial_spt", "B_fomaml_spt", "C_ordinary_pretraining"}:
+        raise ValueError(f"unsupported pilot arm {arm_name}")
+    rate_key = "meta_learning_rate" if arm_name == "B_fomaml_spt" else "policy_learning_rate"
+    return SpatialGatherFOMAML(
+        candidate,
+        inner_lr=float(config["inner_learning_rate"]),
+        meta_lr=float(config[rate_key]),
+    )
 
 
 def _run_arm(config: dict, arm_name: str, initial: SpatialGatherSPT, spi_target, device: torch.device, seed: int, output: Path) -> dict:
     candidate = copy.deepcopy(initial)
     source_state_before = {name: value.detach().clone() for name, value in candidate.state_dict().items()}
     source_spi = instantiate_gather_spi(candidate.record, "tree")
-    learner = SpatialGatherFOMAML(
-        candidate,
-        inner_lr=float(config["inner_learning_rate"]),
-        meta_lr=float(config["meta_learning_rate"]),
-    )
-    _set_optimizer_lr(learner, float(config["policy_learning_rate"]))
+    learner = _build_source_learner(config, candidate, arm_name)
     source_rows, source_updates = [], []
     source_block_summaries = []
     source_steps = 0
@@ -522,6 +522,12 @@ def _run_arm(config: dict, arm_name: str, initial: SpatialGatherSPT, spi_target,
         "source_budget": source_budget, "source_rows": source_rows,
         "source_signal": _merge_block_summaries(source_block_summaries),
         "source_updates": source_updates, "target_steps": target_steps,
+        "source_optimizer_settings": {
+            "source_updates_applied": bool(source_updates),
+            "inner_learning_rate": learner.inner_lr,
+            "template_learning_rates": [float(group["lr"]) for group in learner.template_optimizer.param_groups],
+            "generator_learning_rates": [float(group["lr"]) for group in learner.generator_optimizer.param_groups],
+        },
         "target_budget": max(checkpoints), "target_rows": target_rows,
         "target_block_summaries": target_block_summaries,
         "target_signal": _merge_block_summaries([
@@ -597,8 +603,8 @@ def run(config_path: str, output_path: str) -> dict:
 
 def main() -> None:
     parser = argparse.ArgumentParser()
-    parser.add_argument("--config", default="configs/crafter_gather_spt_transfer_pilot_v1.yaml")
-    parser.add_argument("--output", default="results/crafter_gather_spt_transfer_pilot_v1")
+    parser.add_argument("--config", default="configs/crafter_gather_spt_transfer_pilot_v2.yaml")
+    parser.add_argument("--output", default="results/crafter_gather_spt_transfer_pilot_v2")
     args = parser.parse_args()
     run(args.config, args.output)
 

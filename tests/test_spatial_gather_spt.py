@@ -243,3 +243,30 @@ def test_gather_execution_chain_respects_initial_facing_and_tied_routes():
     route = build_native_route(diagonal, "coal")
     assert len(route) == 3
     assert route[0]["shortest_actions"] == [2, 4]
+
+
+def test_gather_pilot_respects_distinct_meta_and_ordinary_learning_rates():
+    from experiments.run_crafter_gather_spt_transfer_pilot import _build_source_learner
+
+    spt = build_gather_spt()
+    candidate = SpatialGatherSPT(spt, build_matched_spatial_policy(_policy_config(), "cnn_only"))
+    config = {"inner_learning_rate": 3e-4, "meta_learning_rate": 1e-3,
+              "policy_learning_rate": 3e-4}
+    for arm, expected in (("B_fomaml_spt", 1e-3), ("C_ordinary_pretraining", 3e-4)):
+        learner = _build_source_learner(config, candidate, arm)
+        assert learner.inner_lr == 3e-4
+        assert {group["lr"] for optimizer in (learner.template_optimizer, learner.generator_optimizer)
+                for group in optimizer.param_groups} == {expected}
+
+
+def test_gather_pilot_audit_rejects_overridden_meta_learning_rate():
+    from experiments.analyze_crafter_gather_spt_transfer_pilot import _check_source_optimizer_settings
+
+    errors = []
+    config = {"inner_learning_rate": 3e-4, "meta_learning_rate": 1e-3,
+              "policy_learning_rate": 3e-4}
+    settings = {"inner_learning_rate": 3e-4, "template_learning_rates": [3e-4],
+                "generator_learning_rates": [3e-4]}
+    assert not _check_source_optimizer_settings(settings, config, "B_fomaml_spt", "B", errors)
+    assert len(errors) == 2
+    assert not _check_source_optimizer_settings(None, config, "B_fomaml_spt", "legacy", [])
