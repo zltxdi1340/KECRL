@@ -1,0 +1,476 @@
+"""Non-formal E1 pilot for a real Crafter SPT -> SPI transfer path.
+
+The pilot exercises the protocol plumbing with two replicas and a small
+budget. Its output is deliberately excluded from formal method comparisons.
+"""
+from __future__ import annotations
+
+import argparse
+import copy
+import json
+import os
+import random
+import subprocess
+import time
+from collections import Counter
+from pathlib import Path
+
+import numpy as np
+import torch
+
+from experiments.crafter_material_gather_scene import MaterialGatherEnv, make_material_gather_scene
+from src.algorithms.spatial_crafter_policy import build_matched_spatial_policy
+from src.continual_learning.contracts import ContinualLearningPipeline
+from src.skills.spatial_gather_spt import (
+    SpatialGatherFOMAML,
+    SpatialGatherSPT,
+    SpatialMetaTask,
+    SpatialPPORollout,
+    build_gather_spt,
+    instantiate_gather_spi,
+    validate_spi_against_spt,
+)
+from src.utils.config import load_config, runtime_metadata
+
+
+def _image_tensor(observation: np.ndarray, device: torch.device) -> torch.Tensor:
+    return torch.as_tensor(observation, dtype=torch.float32, device=device).permute(2, 0, 1) / 255.0
+
+
+def _configure_determinism(config: dict) -> dict:
+    required = str(config["cublas_workspace_config"])
+    if os.environ.get("CUBLAS_WORKSPACE_CONFIG") != required:
+        raise ValueError(f"CUBLAS_WORKSPACE_CONFIG must be {required!r}")
+    torch.use_deterministic_algorithms(True)
+    torch.backends.cudnn.deterministic = True
+    torch.backends.cudnn.benchmark = False
+    torch.backends.cuda.matmul.allow_tf32 = False
+    torch.backends.cudnn.allow_tf32 = False
+    return {
+        "torch_deterministic_algorithms": torch.are_deterministic_algorithms_enabled(),
+        "cudnn_deterministic": bool(torch.backends.cudnn.deterministic),
+        "cudnn_benchmark": bool(torch.backends.cudnn.benchmark),
+        "cuda_matmul_allow_tf32": bool(torch.backends.cuda.matmul.allow_tf32),
+        "cudnn_allow_tf32": bool(torch.backends.cudnn.allow_tf32),
+        "cublas_workspace_config": os.environ.get("CUBLAS_WORKSPACE_CONFIG"),
+    }
+
+
+def _target_stats(info: dict, target_item: str) -> tuple[int, dict]:
+    inventory = info.get("inventory") or {}
+    value = inventory.get(target_item)
+    if not isinstance(value, int):
+        raise RuntimeError(f"Crafter fixture did not expose integer inventory[{target_item!r}]")
+    return value, inventory
+
+
+def _finish_rollout(
+    transitions: list[dict],
+    device: torch.device,
+    policy,
+    next_observation: np.ndarray,
+    next_hidden,
+    terminal: str,
+    target_item: str,
+) -> tuple[SpatialPPORollout, dict]:
+    if not transitions:
+        raise ValueError("cannot finish an empty episode")
+    if terminal in {"success", "death"}:
+        next_value = torch.zeros((), device=device)
+    else:
+        with torch.no_grad():
+            _, next_value, _ = policy.distribution_value(
+                _image_tensor(next_observation, device), next_hidden, tuple(range(7))
+            )
+        next_value = next_value.reshape(())
+    gamma = float(policy.config["gamma"])
+    lam = float(policy.config.get("gae_lambda", 0.95))
+    gae = torch.zeros((), device=device)
+    advantages, returns = [], []
+    for index in reversed(range(len(transitions))):
+        next_val = next_value if index == len(transitions) - 1 else transitions[index + 1]["value"]
+        gae = transitions[index]["reward"] + gamma * next_val - transitions[index]["value"] + gamma * lam * gae
+        advantages.append(gae)
+        returns.append(gae + transitions[index]["value"])
+    advantages = torch.stack(list(reversed(advantages))).detach()
+    returns = torch.stack(list(reversed(returns))).detach()
+    if advantages.numel() > 1:
+        advantages = (advantages - advantages.mean()) / (advantages.std(unbiased=False) + 1e-8)
+    return SpatialPPORollout(
+        observations=torch.stack([row["observation"] for row in transitions]),
+        actions=torch.stack([row["action"] for row in transitions]),
+        old_log_probs=torch.stack([row["log_prob"] for row in transitions]).detach(),
+        returns=returns,
+        advantages=advantages,
+    ), {
+        "steps": len(transitions),
+        "terminal_reason": terminal,
+        "target_item": target_item,
+        "success": terminal == "success",
+    }
+
+
+def collect_block(
+    policy,
+    spi,
+    *,
+    steps: int,
+    scene_seed_base: int,
+    action_seed: int,
+    device: torch.device,
+    max_episode_steps: int,
+    training: bool,
+) -> tuple[SpatialPPORollout, dict]:
+    """Collect exactly ``steps`` native interactions, resetting only at episode boundaries."""
+    if steps <= 0:
+        raise ValueError("block steps must be positive")
+    target_item = str(spi.parameter_binding["item"])
+    material = str(spi.parameter_binding["material"])
+    env = MaterialGatherEnv(make_material_gather_scene(int(scene_seed_base)), seed=int(scene_seed_base), length=max_episode_steps)
+    observations, transitions = [], []
+    terminal_counts = Counter()
+    success_count = 0
+    interaction_steps = 0
+    episode_index = 0
+    observation = None
+    hidden = None
+    episode_transitions: list[dict] = []
+    episode_initial_item = 0
+    torch.manual_seed(int(action_seed))
+    try:
+        while interaction_steps < steps:
+            if observation is None:
+                episode_scene_seed = int(scene_seed_base) + episode_index
+                env.configure(make_material_gather_scene(episode_scene_seed), seed=episode_scene_seed)
+                observation = env.reset()
+                hidden = None
+                episode_transitions = []
+                episode_initial_item = int(env._player.inventory[target_item])
+                episode_index += 1
+            image = _image_tensor(observation, device)
+            with torch.no_grad():
+                distribution, value, next_hidden = policy.distribution_value(image, hidden, tuple(range(7)))
+                action_tensor = distribution.sample().reshape(())
+                log_prob = distribution.log_prob(action_tensor).reshape(())
+            action = int(action_tensor.item())
+            next_observation, _native_reward, env_done, info = env.step(action)
+            current_item, _inventory = _target_stats(info, target_item)
+            success = current_item > episode_initial_item
+            if success:
+                reward = torch.tensor(1.0, device=device)
+                terminal = "success"
+            elif env_done and int(env._player.health) <= 0:
+                reward = torch.zeros((), device=device)
+                terminal = "death"
+            elif env_done:
+                reward = torch.zeros((), device=device)
+                terminal = "external_truncation"
+            else:
+                reward = torch.zeros((), device=device)
+                terminal = None
+            episode_transitions.append({
+                "observation": image, "action": action_tensor, "log_prob": log_prob,
+                "value": value.reshape(()), "reward": reward,
+            })
+            interaction_steps += 1
+            observation = next_observation
+            hidden = next_hidden.detach() if next_hidden is not None else None
+            if terminal is not None:
+                rollout, episode_summary = _finish_rollout(
+                    episode_transitions, device, policy, observation, hidden,
+                    terminal, target_item,
+                )
+                observations.append(rollout)
+                terminal_counts[terminal] += 1
+                success_count += int(episode_summary["success"])
+                observation = None
+                hidden = None
+                episode_transitions = []
+        if episode_transitions and observation is not None:
+            rollout, episode_summary = _finish_rollout(
+                episode_transitions, device, policy, observation, hidden,
+                "block_truncation", target_item,
+            )
+            observations.append(rollout)
+            terminal_counts["block_truncation"] += 1
+    finally:
+        close = getattr(env, "close", None)
+        if callable(close):
+            close()
+    merged = SpatialPPORollout(
+        observations=torch.cat([rollout.observations for rollout in observations]),
+        actions=torch.cat([rollout.actions for rollout in observations]),
+        old_log_probs=torch.cat([rollout.old_log_probs for rollout in observations]),
+        returns=torch.cat([rollout.returns for rollout in observations]),
+        advantages=torch.cat([rollout.advantages for rollout in observations]),
+    )
+    if merged.actions.shape[0] != steps:
+        raise RuntimeError(f"block interaction count mismatch: requested {steps}, got {merged.actions.shape[0]}")
+    return merged, {
+        "material": material,
+        "target_item": target_item,
+        "requested_steps": int(steps),
+        "actual_steps": int(merged.actions.shape[0]),
+        "episodes": int(sum(terminal_counts.values())),
+        "successes": int(success_count),
+        "terminal_counts": dict(sorted(terminal_counts.items())),
+        "training": bool(training),
+    }
+
+
+def _ppo_update(policy, rollout: SpatialPPORollout) -> dict:
+    return policy.update(
+        rollout.observations, rollout.actions, rollout.old_log_probs,
+        rollout.returns, rollout.advantages, rollout.legal_actions,
+        return_metrics=True,
+    )
+
+
+def evaluate(
+    policy,
+    spi,
+    *,
+    episodes: int,
+    scene_seed_base: int,
+    action_seed_base: int,
+    device: torch.device,
+    max_episode_steps: int,
+) -> dict:
+    """Evaluation is RNG-transparent to the caller and never updates parameters."""
+    cpu_rng = torch.get_rng_state()
+    cuda_rng = torch.cuda.get_rng_state_all() if torch.cuda.is_available() else None
+    was_training = policy.training
+    policy.eval()
+    rows = []
+    target_item = str(spi.parameter_binding["item"])
+    material = str(spi.parameter_binding["material"])
+    try:
+        for index in range(episodes):
+            scene_seed = int(scene_seed_base) + index
+            env = MaterialGatherEnv(make_material_gather_scene(scene_seed), seed=scene_seed, length=max_episode_steps)
+            observation = env.reset()
+            initial_item = int(env._player.inventory[target_item])
+            done = False
+            success = False
+            terminal = "external_truncation"
+            steps = 0
+            torch.manual_seed(int(action_seed_base) + index)
+            try:
+                while steps < max_episode_steps and not done and not success:
+                    with torch.no_grad():
+                        distribution, _value, _hidden = policy.distribution_value(
+                            _image_tensor(observation, device), None, tuple(range(7))
+                        )
+                        action = int(distribution.sample().reshape(()).item())
+                    observation, _reward, done, info = env.step(action)
+                    steps += 1
+                    current_item, _ = _target_stats(info, target_item)
+                    success = current_item > initial_item
+                    if success:
+                        terminal = "success"
+                    elif done and int(env._player.health) <= 0:
+                        terminal = "death"
+                    elif done:
+                        terminal = "external_truncation"
+            finally:
+                close = getattr(env, "close", None)
+                if callable(close):
+                    close()
+            rows.append({"episode": index, "material": material, "target_item": target_item,
+                         "success": success, "steps": steps, "terminal_reason": terminal})
+    finally:
+        torch.set_rng_state(cpu_rng)
+        if cuda_rng is not None:
+            torch.cuda.set_rng_state_all(cuda_rng)
+        policy.train(was_training)
+    counts = Counter(row["terminal_reason"] for row in rows)
+    return {
+        "episodes": len(rows),
+        "successes": sum(int(row["success"]) for row in rows),
+        "success_rate": sum(int(row["success"]) for row in rows) / max(len(rows), 1),
+        "terminal_counts": dict(sorted(counts.items())),
+        "rows": rows,
+    }
+
+
+def _set_optimizer_lr(learner: SpatialGatherFOMAML, learning_rate: float) -> None:
+    for optimizer in (learner.template_optimizer, learner.generator_optimizer):
+        for group in optimizer.param_groups:
+            group["lr"] = float(learning_rate)
+
+
+def _run_arm(config: dict, arm_name: str, initial: SpatialGatherSPT, spi_target, device: torch.device, seed: int, output: Path) -> dict:
+    candidate = copy.deepcopy(initial)
+    source_state_before = {name: value.detach().clone() for name, value in candidate.state_dict().items()}
+    source_spi = instantiate_gather_spi(candidate.record, "tree")
+    learner = SpatialGatherFOMAML(
+        candidate,
+        inner_lr=float(config["inner_learning_rate"]),
+        meta_lr=float(config["meta_learning_rate"]),
+    )
+    _set_optimizer_lr(learner, float(config["policy_learning_rate"]))
+    source_rows, source_updates = [], []
+    source_steps = 0
+    slots = int(config["source_task_slots_per_round"])
+    rounds = int(config["source_rounds"])
+    support_steps = int(config["source_support_steps_per_slot"])
+    query_steps = int(config["source_query_steps_per_slot"])
+    source_base = int(config["source_scene_seed_base"]) + int(seed) * int(config["replicate_seed_stride"])
+    action_base = int(config["source_action_seed_base"]) + int(seed) * int(config["replicate_seed_stride"])
+    for round_index in range(rounds):
+        if arm_name == "A_initial_spt":
+            break
+        tasks = []
+        if arm_name == "B_fomaml_spt":
+            for slot in range(slots):
+                key = round_index * slots + slot
+                support, support_summary = collect_block(
+                    candidate.instantiate(source_spi).policy, source_spi,
+                    steps=support_steps, scene_seed_base=source_base + key * 100,
+                    action_seed=action_base + key * 100, device=device,
+                    max_episode_steps=int(config["max_episode_steps"]), training=True,
+                )
+                adapted = learner.adapt(source_spi, support)
+                query, query_summary = collect_block(
+                    adapted, source_spi, steps=query_steps,
+                    scene_seed_base=source_base + key * 100 + 50,
+                    action_seed=action_base + key * 100 + 50, device=device,
+                    max_episode_steps=int(config["max_episode_steps"]), training=True,
+                )
+                tasks.append(SpatialMetaTask(source_spi, support, query))
+                source_rows.append({"round": round_index, "slot": slot, "support": support_summary, "query": query_summary})
+                source_steps += support_steps + query_steps
+            query_loss = learner.meta_update(tuple(tasks))
+            source_updates.append({"round": round_index, "method": "fomaml", "query_loss": query_loss})
+        elif arm_name == "C_ordinary_pretraining":
+            for slot in range(slots):
+                key = round_index * slots + slot
+                ordinary_policy = candidate.instantiate(source_spi).policy
+                block, summary = collect_block(
+                    ordinary_policy, source_spi, steps=support_steps + query_steps,
+                    scene_seed_base=source_base + key * 100,
+                    action_seed=action_base + key * 100, device=device,
+                    max_episode_steps=int(config["max_episode_steps"]), training=True,
+                )
+                for _ in range(int(config["update_epochs"])):
+                    loss = learner.ordinary_update((SpatialMetaTask(source_spi, block, block),))
+                source_rows.append({"round": round_index, "slot": slot, "block": summary})
+                source_updates.append({"round": round_index, "slot": slot, "method": "ordinary_ppo", "loss": loss})
+                source_steps += support_steps + query_steps
+        else:
+            raise ValueError(f"unsupported pilot arm {arm_name}")
+    source_budget = 0 if arm_name == "A_initial_spt" else rounds * slots * (support_steps + query_steps)
+    if source_steps != source_budget:
+        raise RuntimeError(f"source step ledger mismatch for {arm_name}: {source_steps} != {source_budget}")
+
+    target_policy_instance = candidate.instantiate(spi_target)
+    target_policy = target_policy_instance.policy
+    target_optimizer_state_before = len(target_policy.optimizer.state)
+    target_rows = []
+    target_updates = []
+    target_steps = 0
+    checkpoints = [int(value) for value in config["target_checkpoints"]]
+    target_base = int(config["target_scene_seed_base"]) + int(seed) * int(config["replicate_seed_stride"])
+    target_action_base = int(config["target_action_seed_base"]) + int(seed) * int(config["replicate_seed_stride"])
+    for checkpoint in checkpoints:
+        while target_steps < checkpoint:
+            block_steps = min(int(config["target_update_steps"]), checkpoint - target_steps)
+            block, summary = collect_block(
+                target_policy, spi_target, steps=block_steps,
+                scene_seed_base=target_base + target_steps * 10,
+                action_seed=target_action_base + target_steps * 10,
+                device=device, max_episode_steps=int(config["max_episode_steps"]), training=True,
+            )
+            metrics = _ppo_update(target_policy, block)
+            target_updates.append({"after_steps": target_steps + block_steps, **metrics})
+            target_steps += block_steps
+        target_rows.append({
+            "support_steps": target_steps,
+            "evaluation": evaluate(
+                target_policy, spi_target,
+                episodes=int(config["evaluation_episodes"]),
+                scene_seed_base=target_base + 1_000_000 + checkpoint * 100,
+                action_seed_base=target_action_base + 1_000_000 + checkpoint * 100,
+                device=device, max_episode_steps=int(config["max_episode_steps"]),
+            ),
+        })
+    output.mkdir(parents=True, exist_ok=True)
+    result = {
+        "arm": arm_name, "seed": int(seed), "source_steps": source_steps,
+        "source_budget": source_budget, "source_rows": source_rows,
+        "source_updates": source_updates, "target_steps": target_steps,
+        "target_budget": max(checkpoints), "target_rows": target_rows,
+        "target_updates": target_updates,
+        "source_template_changed": any(
+            not torch.equal(source_state_before[name], value.detach())
+            for name, value in candidate.state_dict().items()
+            if name.startswith("template.")
+        ),
+        "source_generator_changed": any(
+            not torch.equal(source_state_before[name], value.detach())
+            for name, value in candidate.state_dict().items()
+            if name.startswith("context_to_actor.")
+        ),
+        "target_optimizer_state_before_updates": target_optimizer_state_before,
+        "target_optimizer_state_after_updates": len(target_policy.optimizer.state),
+        "cold_target_column_zero_before_source": bool(torch.equal(
+            initial.cold_context_column("coal"), torch.zeros_like(initial.cold_context_column("coal"))
+        )),
+        "cold_target_column_zero_after_source": bool(torch.equal(
+            candidate.cold_context_column("coal"), torch.zeros_like(candidate.cold_context_column("coal"))
+        )),
+        "spi_target_linkage": validate_spi_against_spt(spi_target, candidate.record),
+        "formal_result": False,
+    }
+    (output / "result.json").write_text(json.dumps(result, indent=2) + "\n", encoding="utf-8")
+    return result
+
+
+def run(config_path: str, output_path: str) -> dict:
+    config = load_config(config_path)
+    if config.get("formal_result") is not False or config.get("diagnostic_only") is not True:
+        raise ValueError("pilot must explicitly remain diagnostic and non-formal")
+    if Path(output_path).exists():
+        raise FileExistsError(f"refusing to overwrite {output_path}")
+    device_name = ContinualLearningPipeline.resolve_device(config["device"])
+    device = torch.device(device_name)
+    deterministic = _configure_determinism(config) if device.type == "cuda" else {}
+    output = Path(output_path)
+    output.mkdir(parents=True)
+    spt = build_gather_spt()
+    target_spi = instantiate_gather_spi(spt, str(config["target_material"]))
+    results = []
+    start = time.perf_counter()
+    for seed in config["replica_seeds"]:
+        random.seed(int(seed))
+        np.random.seed(int(seed))
+        torch.manual_seed(int(seed))
+        base_policy = build_matched_spatial_policy(config["policy"], "cnn_only").to(device)
+        initial = SpatialGatherSPT(spt, base_policy).to(device)
+        for arm in config["arms"]:
+            results.append(_run_arm(config, arm, initial, target_spi, device, int(seed), output / arm / f"seed_{int(seed)}"))
+    result = {
+        "status": config["status"], "formal_result": False, "diagnostic_only": True,
+        "config": config_path, "device": str(device), "determinism": deterministic,
+        "git_commit": subprocess.check_output(["git", "rev-parse", "HEAD"], text=True).strip(),
+        "runtime": runtime_metadata(config, str(device)),
+        "protocol_linkage": {"spt": spt.__dict__, "target_spi": validate_spi_against_spt(target_spi, spt)},
+        "arm_order": config["arms"], "replica_seeds": config["replica_seeds"],
+        "runs": results, "elapsed_seconds": time.perf_counter() - start,
+        "module_registered": False, "knowledge_updated": False, "spt_pointer_switched": False,
+        "note": config["pilot_note"],
+    }
+    (output / "aggregate.json").write_text(json.dumps(result, indent=2, default=str) + "\n", encoding="utf-8")
+    return result
+
+
+def main() -> None:
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--config", default="configs/crafter_gather_spt_transfer_pilot_v1.yaml")
+    parser.add_argument("--output", default="results/crafter_gather_spt_transfer_pilot_v1")
+    args = parser.parse_args()
+    run(args.config, args.output)
+
+
+if __name__ == "__main__":
+    main()

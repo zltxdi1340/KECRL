@@ -2,9 +2,13 @@
 
 ## 当前结论
 
-当前仍在正式训练前的可行性诊断阶段。最新的 seed-0、100k-step source CNN-only 对照中，原始策略 40 集成功 24 集；同状态 native 几何监督的最终 embedding head 成功 13 集；conv2 spatial head 成功 22 集。主运行、完整跨进程重复、独立 checkpoint/特征重建和 fresh episode 复播均通过，全量回归 `411 passed`。
+当前仍在正式实验前。最新完成的是 gather 族 E1 wood→coal 的非正式 SPT→SPI 集成 pilot：两个 replica、A/B/C 三臂，B/C 各 8,192 source 步，三臂各 4,096 target 步；完整结果见[集成记录](crafter-gather-spt-transfer-pilot-2026-10-15.md)。此前 seed-0 的 episode 隔离状态覆盖 pilot 仍保留：原始 CNN-only 成功 25/40，旧/新各 216 行动作头均为 8/40，合并 432 行动作头为 16/40。新增代码的定向测试为 `23 passed`，最终代码版本的全量回归为 `425 passed`。
 
-这个结果不支持直接开始正式训练：final embedding head 退化，conv2 head 虽接近 source，却没有超过 source 的证据。validation 上 head 的 turn/approach 有效动作概率质量提高，但 fresh 自访状态上两种 head 都低于 source。随后完成的同状态 cross-readout 进一步显示，final head 在自己的访问状态上的 turn 有效概率质量只有约 6.0%，而 source/conv2 在同一状态池上约为 13.9%/12.7%；conv2 在 source 状态池的 turn 质量可达约 14.8%，但没有稳定转化为更高 fresh 成功率。当前瓶颈更像状态覆盖与条件泛化的耦合，尚不能归因于单一表示或生存因素。
+gather pilot 的步数账本、SPT/SPI 版本绑定、CNN 生成器、候选隔离、全新 target optimizer 和 coal 冷列审计均通过；B/C 的共享 template 与 generator 确实发生更新。coal 评价终点为 A `15/80`、B `7/80`、C `8/80`，失败主要是 external truncation，未观察到死亡。两 seed 方差大，B 没有稳定超过 A/C，所以该 pilot 只证明链路可运行，不支持 SPT 优势或劣势的正式结论。
+
+合并数据有改善方向，但同时改变样本量与覆盖，仍弱于原策略。旧/新 216 行两臂都选 epoch 0，不能把相同成败标签当作已排除覆盖问题。这些实验仍是 wood Policy 后端诊断，不是跨 SPI 的 SPT 效果验证。
+
+前一轮空间 head 的同批对照为 source 24/40、final embedding 13/40、conv2 22/40；这组结果使用不同 fresh seed，不能与最新结果拼成因果改善曲线。其同状态 cross-readout 显示，final head 在自己的访问状态上的 turn 有效概率质量约 6.0%，而 source/conv2 在同一状态池约 13.9%/12.7%。状态覆盖与条件泛化仍未解决，不能归于单一表示或生存因素。
 
 本轮的两个 head 只学习六个非-do 动作；原 CNN、actor/critic 和优化器冻结，`p(do)` 在每帧复用 source 策略概率，最大实测差 `1.19e-7`。局部几何 action-set 标签用于 216 条 train 状态拟合，也用于 115 条 validation 状态选择；fresh 执行没有 oracle，没有动作替换。死亡和截断全部保留，未执行生存干预或死亡原因分层。配置中的 `teacher_scope` 字段没有明确包含 validation 选择，详细报告已更正此范围说明。
 
@@ -14,10 +18,14 @@
 
 阶段/死亡前窗口的 episode 宏平均显示，final head 的 27 次死亡里 18 次在第一根 wood 前，source/conv2 分别为 4/8 次。冻结 source critic 在 source path 上的 value 随 wood 阶段降低，并在死亡前 approach 状态转负；与 `gamma=0.99` Monte Carlo return 的绝对误差仍约 0.23–0.61，且死亡前 turn 样本少。因此 value 有粗粒度阶段信号，但不足以排除 reward/credit 问题，也不能把 survival 归因为唯一瓶颈。
 
-## 下一项诊断
+## 研究主线调整与下一项
 
-做按 episode 隔离的新状态覆盖对照：从独立 seed 的自然 RGB 轨迹增加 turn/approach 覆盖，比较原 216 条状态训练 head 与加入扩展覆盖后的同容量 head，再用独立 heldout 状态和全新 fresh seed 检验；heldout 不参与训练或 epoch 选择。若 coverage 能稳定改善自主链，继续 wood；若动作链稳定而死亡仍主导，再按既定顺序研究共享生存能力。
+上述按 episode 隔离的覆盖实验已完成。等样本量覆盖扩展只有未完成草案，尚未运行，暂不作为自动下一项。后续优先形成直接检验 Skill Evolution 的实验：学习采集实例后更新 SPT，是否提高新采集 SPI 的学习效率，并与普通预训练比较。
 
-目前没有正式 PPO 训练、Module 注册、Knowledge/SPT 更新，也没有 Module 资格结论。`wood >= 3` 修通前不开始后续生存机制诊断；wood 后还需要逐项验证 stone、coal、pickaxe、工具前置条件和持续任务链。0.8 仍是待验证候选门槛。
+新的[SPT/SPI 迁移协议草案](crafter-spt-spi-transfer-protocol-2026-10-15.md)与设计清单已形成并完成一次 E1 集成 pilot：同一 gather 族含 wood/stone/coal 三个绑定；E1 检验 wood->coal，E2 轮流留出一个绑定；A 为更新前模板，B 为 FOMAML 候选，C 为等容量、等来源交互预算的普通预训练。统一工具、多材料受控场景和 CNN 生成器链路已接通；正式 E1/E2 仍需在冻结 manifest、独立进程复核和成本检查后启动。
+
+关键缺口已从“接口未连接”转为“正式实验前的可比性和学习信号审计”：pilot runner 使用真实 RGB rollout、CNN actor 残差生成器、FOMAML query 和普通 PPO 对照，但当前预算下迁移收益不稳定。协议中的预算与统计设置仍未冻结；正式迁移实验尚未启动。
+
+无需 wood 达到候选 0.8 才能研究 SPT；SPI 学习失败也可提供反馈。受控组件实验不等于自然 Crafter Module 资格或完整 KECRL 验证。当前没有新的活动 SPT 切换、Module 注册或 Knowledge 更新；自然 stone、coal、pickaxe、工具获取、生存及持续任务链仍需独立验证。
 
 详细协议与配对结果见[空间动作头 fresh 诊断](crafter-wood3-spatial-actor-fresh-2026-10-15.md)。
