@@ -1,7 +1,7 @@
 # Crafter gather 族 SPT→SPI 集成 pilot 记录
 
 日期：2026-10-15。状态：已完成一次非正式集成 pilot，正式实验仍未启动。
-运行配置为 [`crafter_gather_spt_transfer_pilot_v1.yaml`](../configs/crafter_gather_spt_transfer_pilot_v1.yaml)，代码入口为 [`run_crafter_gather_spt_transfer_pilot.py`](../experiments/run_crafter_gather_spt_transfer_pilot.py)。结果目录 `results/crafter_gather_spt_transfer_pilot_v1_run5/` 保留在实验主机，未把原始结果纳入正式结果集。
+运行配置为 [`crafter_gather_spt_transfer_pilot_v1.yaml`](../configs/crafter_gather_spt_transfer_pilot_v1.yaml)，代码入口为 [`run_crafter_gather_spt_transfer_pilot.py`](../experiments/run_crafter_gather_spt_transfer_pilot.py)。canonical 结果目录为 `results/crafter_gather_spt_transfer_pilot_v1_run7/`，代码 hash 为 `f1f49e4`；原始结果保留在实验主机，未纳入正式结果集。
 
 这次 pilot 的目的，是确认研究问题已经被实例化为真实的 `SPT -> SPI -> 生成 CNN Policy -> 目标适应 -> 独立评价` 链路，并检查成本、梯度、场景规则和失败记录。它不是方法优选实验，也不用于证明 SPT 更新优于普通预训练。
 
@@ -24,7 +24,13 @@
 | B | 12 | 8192/8192 | 4096/4096 | 0/10 | 是/是 | 是 |
 | C | 12 | 8192/8192 | 4096/4096 | 0/10 | 是/是 | 是 |
 
-新增契约测试覆盖了 SPT/SPI 版本绑定、三种 context、树与石/煤的工具边界、配对 RGB reset、生成器冷列、候选与 active 隔离、全新 optimizer，以及 C 臂梯度穿过共享生成器。该测试组为 `7 passed`；之后全量回归需以最终代码版本重新执行并记录。
+新增契约测试覆盖了 SPT/SPI 版本绑定、三种 context、树与石/煤的工具边界、配对 RGB reset、生成器冷列、候选与 active 隔离、全新 optimizer、C 臂梯度穿过共享生成器，以及目标材料的 RGB 可见性。该测试组为 `9 passed`。独立审计器 [`analyze_crafter_gather_spt_transfer_pilot.py`](../experiments/analyze_crafter_gather_spt_transfer_pilot.py) 对 canonical run7 返回 `valid=true`。
+
+## 可学习性审计
+
+- 32 个布局、3 种材料共 96 个目标均在初始 native RGB 中留下可检测变化，最小变化为 39 个像素；因此当前 pilot 没有把目标材料完全遮挡在观测之外。
+- source/target 的动作计数都与交互步数一致，首次目标增量步数与 success 计数一致；A/B/C 的 source/target 预算、评价 episode 数、fresh target optimizer 和 coal 冷列均通过独立复核。
+- canonical run7 的评价失败全部是 `external_truncation`，没有死亡。B/C 在部分 seed 上显著提高了 `do` 的采样比例，但这没有稳定转化为采集成功，说明当前瓶颈仍在接近、朝向和动作链执行，而非 RGB 目标完全不可见。
 
 ## Pilot 结果
 
@@ -42,7 +48,7 @@
 
 ## 下一步
 
-1. 先把本次 pilot 的配置、代码 hash、seed 角色和结果路径封存，补完最终代码版本的全量回归与独立进程回放审计。
-2. 检查 pilot 的学习信号：按 source/target 分别统计成功、external truncation、首次目标增量步数和 action 分布，确认 32 步上限与 RGB 场景没有制造不可学习的遮挡或朝向偏差。
-3. 只有在一次性成本检查通过后，冻结正式 E1/E2 的候选预算；正式运行仍需 10 个独立 seed、E2 三个 leave-one-binding-out fold、100 个评价 episode 和预注册分析，pilot seed 11/12 不合并。
-4. 正式组件实验完成后，才讨论是否进入 Module qualification、自然 Crafter 任务链和 Knowledge/Pipeline 更新；当前没有活动 SPT 切换、Module 注册或 Knowledge 更新。
+1. 以 canonical run7 和独立审计结果为基础，完成最终代码版本的全量回归与独立进程回放审计。
+2. 在不改变 SPT 研究问题的前提下，先做一个短的执行器可学习性诊断：固定同一 RGB/CNN，分别测量接近、朝向和 `do` 的单步/短链成功率，确定 32 步上限是否截断了可学习动作链。
+3. 只有执行链信号通过成本检查后，才冻结正式 E1/E2 候选预算；正式运行仍需 10 个独立 seed、E2 三个 leave-one-binding-out fold、100 个评价 episode 和预注册分析，pilot seed 11/12 不合并。
+4. 正式组件实验完成后，才讨论 Module qualification、自然 Crafter 任务链和 Knowledge/Pipeline 更新；当前没有活动 SPT 切换、Module 注册或 Knowledge 更新。

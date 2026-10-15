@@ -2,9 +2,9 @@
 
 ## 当前结论
 
-当前仍在正式实验前。最新完成的是 gather 族 E1 wood→coal 的非正式 SPT→SPI 集成 pilot：两个 replica、A/B/C 三臂，B/C 各 8,192 source 步，三臂各 4,096 target 步；完整结果见[集成记录](crafter-gather-spt-transfer-pilot-2026-10-15.md)。此前 seed-0 的 episode 隔离状态覆盖 pilot 仍保留：原始 CNN-only 成功 25/40，旧/新各 216 行动作头均为 8/40，合并 432 行动作头为 16/40。新增代码的定向测试为 `23 passed`，最终代码版本的全量回归为 `425 passed`。
+当前仍在正式实验前。最新完成的是 gather 族 E1 wood→coal 的非正式 SPT→SPI 集成 pilot：两个 replica、A/B/C 三臂，B/C 各 8,192 source 步，三臂各 4,096 target 步；canonical run7 与独立审计结果见[集成记录](crafter-gather-spt-transfer-pilot-2026-10-15.md)。此前 seed-0 的 episode 隔离状态覆盖 pilot 仍保留：原始 CNN-only 成功 25/40，旧/新各 216 行动作头均为 8/40，合并 432 行动作头为 16/40。新增代码的定向测试为 `9 passed`；提交 `f1f49e4` 后需以最终代码版本重新执行全量回归。
 
-gather pilot 的步数账本、SPT/SPI 版本绑定、CNN 生成器、候选隔离、全新 target optimizer 和 coal 冷列审计均通过；B/C 的共享 template 与 generator 确实发生更新。coal 评价终点为 A `15/80`、B `7/80`、C `8/80`，失败主要是 external truncation，未观察到死亡。两 seed 方差大，B 没有稳定超过 A/C，所以该 pilot 只证明链路可运行，不支持 SPT 优势或劣势的正式结论。
+gather pilot 的步数账本、SPT/SPI 版本绑定、CNN 生成器、候选隔离、全新 target optimizer、coal 冷列和 RGB 可见性审计均通过；B/C 的共享 template 与 generator 确实发生更新。canonical run7 的 coal 评价终点为 A `15/80`、B `7/80`、C `8/80`，失败全部是 external truncation，未观察到死亡。两 seed 方差大，B 没有稳定超过 A/C，所以该 pilot 只证明链路可运行，不支持 SPT 优势或劣势的正式结论。独立结果审计返回 `valid=true`。
 
 合并数据有改善方向，但同时改变样本量与覆盖，仍弱于原策略。旧/新 216 行两臂都选 epoch 0，不能把相同成败标签当作已排除覆盖问题。这些实验仍是 wood Policy 后端诊断，不是跨 SPI 的 SPT 效果验证。
 
