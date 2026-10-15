@@ -506,6 +506,17 @@ def _run_arm(config: dict, arm_name: str, initial: SpatialGatherSPT, spi_target,
             ),
         })
     output.mkdir(parents=True, exist_ok=True)
+    target_policy_checkpoint = output / "target_policy.pt"
+    torch.save({
+        "checkpoint_kind": "frozen_target_policy_for_diagnostic_evaluation",
+        "arm": arm_name,
+        "seed": int(seed),
+        "spi_id": spi_target.spi_id,
+        "target_support_steps": target_steps,
+        "policy_config": dict(target_policy.config),
+        "representation": target_policy.representation,
+        "state_dict": {name: value.detach().cpu() for name, value in target_policy.state_dict().items()},
+    }, target_policy_checkpoint)
     result = {
         "arm": arm_name, "seed": int(seed), "source_steps": source_steps,
         "source_budget": source_budget, "source_rows": source_rows,
@@ -518,6 +529,7 @@ def _run_arm(config: dict, arm_name: str, initial: SpatialGatherSPT, spi_target,
             for summary in target_block_summaries
         ]),
         "target_updates": target_updates,
+        "target_policy_checkpoint": str(target_policy_checkpoint),
         "source_template_changed": any(
             not torch.equal(source_state_before[name], value.detach())
             for name, value in candidate.state_dict().items()

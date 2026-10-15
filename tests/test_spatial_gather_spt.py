@@ -194,7 +194,7 @@ def test_material_scene_initial_rgb_exposes_each_target_material():
     assert audit["minimum_changed_pixels"] > 0
 
 
-def test_gather_pilot_audit_rejects_inconsistent_action_counts(tmp_path):
+def test_gather_pilot_audit_rejects_inconsistent_action_counts():
     from experiments.analyze_crafter_gather_spt_transfer_pilot import _check_evaluation
 
     evaluation = {
@@ -209,3 +209,37 @@ def test_gather_pilot_audit_rejects_inconsistent_action_counts(tmp_path):
     errors = []
     _check_evaluation(evaluation, 1, "synthetic", errors)
     assert any("action count mismatch" in error for error in errors)
+
+
+def test_gather_execution_chain_has_native_mechanical_headroom():
+    pytest.importorskip("crafter")
+    from experiments.crafter_material_gather_scene import make_material_gather_scene
+    from experiments.run_crafter_gather_execution_chain_diagnostic import _run_chain
+
+    rows = []
+    for seed in range(4):
+        scene = make_material_gather_scene(seed)
+        rows.extend(_run_chain(scene, material, 8) for material in ("tree", "stone", "coal"))
+    assert all(row["success"] for row in rows)
+    assert max(row["route_length"] for row in rows) <= 8
+    assert all(event["native_step_valid"] for row in rows for event in row["events"])
+    assert all([event["remaining_shortest_steps"] for event in row["events"]]
+               == list(range(row["route_length"], 0, -1)) for row in rows)
+
+
+def test_gather_execution_chain_respects_initial_facing_and_tied_routes():
+    pytest.importorskip("crafter")
+    from experiments.crafter_material_gather_scene import MaterialGatherScene
+    from experiments.run_crafter_gather_execution_chain_diagnostic import build_native_route
+
+    materials = (("tree", (33, 32)), ("stone", (32, 30)), ("coal", (30, 32)))
+    ready = MaterialGatherScene(0, materials, (1, 0))
+    away = MaterialGatherScene(0, materials, (-1, 0))
+    assert [row["action"] for row in build_native_route(ready, "tree")] == [5]
+    assert [row["action"] for row in build_native_route(away, "tree")] == [2, 5]
+
+    diagonal = MaterialGatherScene(0, (("tree", (30, 32)), ("stone", (32, 30)),
+                                     ("coal", (33, 33))), (-1, 0))
+    route = build_native_route(diagonal, "coal")
+    assert len(route) == 3
+    assert route[0]["shortest_actions"] == [2, 4]
