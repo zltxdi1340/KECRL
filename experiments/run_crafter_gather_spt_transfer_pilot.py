@@ -64,6 +64,79 @@ def _target_stats(info: dict, target_item: str) -> tuple[int, dict]:
     return value, inventory
 
 
+def _sorted_action_counts(counts: Counter) -> dict[str, int]:
+    """Serialize native Crafter action counts in a stable order."""
+    return {str(action): int(counts[action]) for action in sorted(counts)}
+
+
+def _merge_block_summaries(summaries: list[dict]) -> dict:
+    """Merge rollout diagnostics while preserving the interaction ledger."""
+    terminal_counts = Counter()
+    action_counts = Counter()
+    first_target_gain_steps = []
+    requested_steps = actual_steps = episodes = successes = 0
+    material = target_item = None
+    for summary in summaries:
+        material = summary.get("material", material)
+        target_item = summary.get("target_item", target_item)
+        requested_steps += int(summary["requested_steps"])
+        actual_steps += int(summary["actual_steps"])
+        episodes += int(summary["episodes"])
+        successes += int(summary["successes"])
+        terminal_counts.update({str(key): int(value) for key, value in summary["terminal_counts"].items()})
+        action_counts.update({int(key): int(value) for key, value in summary["action_counts"].items()})
+        first_target_gain_steps.extend(int(value) for value in summary["first_target_gain_steps"])
+    return {
+        "material": material,
+        "target_item": target_item,
+        "blocks": len(summaries),
+        "requested_steps": requested_steps,
+        "actual_steps": actual_steps,
+        "episodes": episodes,
+        "successes": successes,
+        "terminal_counts": dict(sorted(terminal_counts.items())),
+        "action_counts": _sorted_action_counts(action_counts),
+        "first_target_gain_steps": first_target_gain_steps,
+        "mean_first_target_gain_step": (
+            sum(first_target_gain_steps) / len(first_target_gain_steps)
+            if first_target_gain_steps else None
+        ),
+    }
+
+
+def audit_scene_rgb_visibility(layout_seed_count: int = 32) -> dict:
+    """Check that each placed material changes the native initial RGB."""
+    rows = []
+    for layout_seed in range(int(layout_seed_count)):
+        scene = make_material_gather_scene(layout_seed)
+        env = MaterialGatherEnv(scene, seed=layout_seed, length=1)
+        try:
+            baseline = env.reset()
+            for material, position in scene.materials:
+                env._world[position] = "grass"
+                changed = np.abs(baseline.astype(np.int16) - env._obs().astype(np.int16))
+                env._world[position] = material
+                rows.append({
+                    "layout_seed": int(layout_seed),
+                    "material": material,
+                    "position": list(position),
+                    "changed_pixels": int(np.any(changed != 0, axis=2).sum()),
+                    "absolute_rgb_delta": int(changed.sum()),
+                })
+        finally:
+            close = getattr(env, "close", None)
+            if callable(close):
+                close()
+    changed_pixels = [row["changed_pixels"] for row in rows]
+    return {
+        "layout_seed_count": int(layout_seed_count),
+        "material_count": len(rows),
+        "all_visible": bool(rows) and all(value > 0 for value in changed_pixels),
+        "minimum_changed_pixels": min(changed_pixels) if changed_pixels else 0,
+        "rows": rows,
+    }
+
+
 def _finish_rollout(
     transitions: list[dict],
     device: torch.device,
@@ -136,6 +209,9 @@ def collect_block(
     hidden = None
     episode_transitions: list[dict] = []
     episode_initial_item = 0
+    episode_steps = 0
+    action_counts = Counter()
+    first_target_gain_steps = []
     torch.manual_seed(int(action_seed))
     try:
         while interaction_steps < steps:
@@ -146,6 +222,7 @@ def collect_block(
                 hidden = None
                 episode_transitions = []
                 episode_initial_item = int(env._player.inventory[target_item])
+                episode_steps = 0
                 episode_index += 1
             image = _image_tensor(observation, device)
             with torch.no_grad():
@@ -153,6 +230,7 @@ def collect_block(
                 action_tensor = distribution.sample().reshape(())
                 log_prob = distribution.log_prob(action_tensor).reshape(())
             action = int(action_tensor.item())
+            action_counts[action] += 1
             next_observation, _native_reward, env_done, info = env.step(action)
             current_item, _inventory = _target_stats(info, target_item)
             success = current_item > episode_initial_item
@@ -173,6 +251,7 @@ def collect_block(
                 "value": value.reshape(()), "reward": reward,
             })
             interaction_steps += 1
+            episode_steps += 1
             observation = next_observation
             hidden = next_hidden.detach() if next_hidden is not None else None
             if terminal is not None:
@@ -183,6 +262,8 @@ def collect_block(
                 observations.append(rollout)
                 terminal_counts[terminal] += 1
                 success_count += int(episode_summary["success"])
+                if episode_summary["success"]:
+                    first_target_gain_steps.append(episode_steps)
                 observation = None
                 hidden = None
                 episode_transitions = []
@@ -214,6 +295,12 @@ def collect_block(
         "episodes": int(sum(terminal_counts.values())),
         "successes": int(success_count),
         "terminal_counts": dict(sorted(terminal_counts.items())),
+        "action_counts": _sorted_action_counts(action_counts),
+        "first_target_gain_steps": [int(value) for value in first_target_gain_steps],
+        "mean_first_target_gain_step": (
+            sum(first_target_gain_steps) / len(first_target_gain_steps)
+            if first_target_gain_steps else None
+        ),
         "training": bool(training),
     }
 
@@ -242,6 +329,7 @@ def evaluate(
     was_training = policy.training
     policy.eval()
     rows = []
+    action_counts = Counter()
     target_item = str(spi.parameter_binding["item"])
     material = str(spi.parameter_binding["material"])
     try:
@@ -254,6 +342,8 @@ def evaluate(
             success = False
             terminal = "external_truncation"
             steps = 0
+            first_target_gain_step = None
+            episode_action_counts = Counter()
             torch.manual_seed(int(action_seed_base) + index)
             try:
                 while steps < max_episode_steps and not done and not success:
@@ -262,12 +352,15 @@ def evaluate(
                             _image_tensor(observation, device), None, tuple(range(7))
                         )
                         action = int(distribution.sample().reshape(()).item())
+                    action_counts[action] += 1
+                    episode_action_counts[action] += 1
                     observation, _reward, done, info = env.step(action)
                     steps += 1
                     current_item, _ = _target_stats(info, target_item)
                     success = current_item > initial_item
                     if success:
                         terminal = "success"
+                        first_target_gain_step = steps
                     elif done and int(env._player.health) <= 0:
                         terminal = "death"
                     elif done:
@@ -277,7 +370,9 @@ def evaluate(
                 if callable(close):
                     close()
             rows.append({"episode": index, "material": material, "target_item": target_item,
-                         "success": success, "steps": steps, "terminal_reason": terminal})
+                         "success": success, "steps": steps, "terminal_reason": terminal,
+                         "first_target_gain_step": first_target_gain_step,
+                         "action_counts": _sorted_action_counts(episode_action_counts)})
     finally:
         torch.set_rng_state(cpu_rng)
         if cuda_rng is not None:
@@ -289,6 +384,17 @@ def evaluate(
         "successes": sum(int(row["success"]) for row in rows),
         "success_rate": sum(int(row["success"]) for row in rows) / max(len(rows), 1),
         "terminal_counts": dict(sorted(counts.items())),
+        "action_counts": _sorted_action_counts(action_counts),
+        "first_target_gain_steps": [
+            int(row["first_target_gain_step"]) for row in rows
+            if row["first_target_gain_step"] is not None
+        ],
+        "mean_first_target_gain_step": (
+            sum(row["first_target_gain_step"] for row in rows
+                if row["first_target_gain_step"] is not None)
+            / sum(row["first_target_gain_step"] is not None for row in rows)
+            if any(row["first_target_gain_step"] is not None for row in rows) else None
+        ),
         "rows": rows,
     }
 
@@ -310,6 +416,7 @@ def _run_arm(config: dict, arm_name: str, initial: SpatialGatherSPT, spi_target,
     )
     _set_optimizer_lr(learner, float(config["policy_learning_rate"]))
     source_rows, source_updates = [], []
+    source_block_summaries = []
     source_steps = 0
     slots = int(config["source_task_slots_per_round"])
     rounds = int(config["source_rounds"])
@@ -339,6 +446,7 @@ def _run_arm(config: dict, arm_name: str, initial: SpatialGatherSPT, spi_target,
                 )
                 tasks.append(SpatialMetaTask(source_spi, support, query))
                 source_rows.append({"round": round_index, "slot": slot, "support": support_summary, "query": query_summary})
+                source_block_summaries.extend((support_summary, query_summary))
                 source_steps += support_steps + query_steps
             query_loss = learner.meta_update(tuple(tasks))
             source_updates.append({"round": round_index, "method": "fomaml", "query_loss": query_loss})
@@ -355,6 +463,7 @@ def _run_arm(config: dict, arm_name: str, initial: SpatialGatherSPT, spi_target,
                 for _ in range(int(config["update_epochs"])):
                     loss = learner.ordinary_update((SpatialMetaTask(source_spi, block, block),))
                 source_rows.append({"round": round_index, "slot": slot, "block": summary})
+                source_block_summaries.append(summary)
                 source_updates.append({"round": round_index, "slot": slot, "method": "ordinary_ppo", "loss": loss})
                 source_steps += support_steps + query_steps
         else:
@@ -368,6 +477,7 @@ def _run_arm(config: dict, arm_name: str, initial: SpatialGatherSPT, spi_target,
     target_optimizer_state_before = len(target_policy.optimizer.state)
     target_rows = []
     target_updates = []
+    target_block_summaries = []
     target_steps = 0
     checkpoints = [int(value) for value in config["target_checkpoints"]]
     target_base = int(config["target_scene_seed_base"]) + int(seed) * int(config["replicate_seed_stride"])
@@ -382,6 +492,7 @@ def _run_arm(config: dict, arm_name: str, initial: SpatialGatherSPT, spi_target,
                 device=device, max_episode_steps=int(config["max_episode_steps"]), training=True,
             )
             metrics = _ppo_update(target_policy, block)
+            target_block_summaries.append({"after_steps": target_steps + block_steps, **summary})
             target_updates.append({"after_steps": target_steps + block_steps, **metrics})
             target_steps += block_steps
         target_rows.append({
@@ -398,8 +509,14 @@ def _run_arm(config: dict, arm_name: str, initial: SpatialGatherSPT, spi_target,
     result = {
         "arm": arm_name, "seed": int(seed), "source_steps": source_steps,
         "source_budget": source_budget, "source_rows": source_rows,
+        "source_signal": _merge_block_summaries(source_block_summaries),
         "source_updates": source_updates, "target_steps": target_steps,
         "target_budget": max(checkpoints), "target_rows": target_rows,
+        "target_block_summaries": target_block_summaries,
+        "target_signal": _merge_block_summaries([
+            {key: value for key, value in summary.items() if key != "after_steps"}
+            for summary in target_block_summaries
+        ]),
         "target_updates": target_updates,
         "source_template_changed": any(
             not torch.equal(source_state_before[name], value.detach())
@@ -439,6 +556,7 @@ def run(config_path: str, output_path: str) -> dict:
     output.mkdir(parents=True)
     spt = build_gather_spt()
     target_spi = instantiate_gather_spi(spt, str(config["target_material"]))
+    visibility_audit = audit_scene_rgb_visibility(int(config.get("rgb_visibility_audit_layout_count", 32)))
     results = []
     start = time.perf_counter()
     for seed in config["replica_seeds"]:
@@ -455,6 +573,7 @@ def run(config_path: str, output_path: str) -> dict:
         "git_commit": subprocess.check_output(["git", "rev-parse", "HEAD"], text=True).strip(),
         "runtime": runtime_metadata(config, str(device)),
         "protocol_linkage": {"spt": spt.__dict__, "target_spi": validate_spi_against_spt(target_spi, spt)},
+        "rgb_visibility_audit": visibility_audit,
         "arm_order": config["arms"], "replica_seeds": config["replica_seeds"],
         "runs": results, "elapsed_seconds": time.perf_counter() - start,
         "module_registered": False, "knowledge_updated": False, "spt_pointer_switched": False,

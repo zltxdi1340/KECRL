@@ -182,3 +182,30 @@ def test_material_scene_is_paired_and_uses_native_collection_requirements():
             close = getattr(env, "close", None)
             if callable(close):
                 close()
+
+
+def test_material_scene_initial_rgb_exposes_each_target_material():
+    pytest.importorskip("crafter")
+    from experiments.run_crafter_gather_spt_transfer_pilot import audit_scene_rgb_visibility
+
+    audit = audit_scene_rgb_visibility(4)
+    assert audit["material_count"] == 12
+    assert audit["all_visible"]
+    assert audit["minimum_changed_pixels"] > 0
+
+
+def test_gather_pilot_audit_rejects_inconsistent_action_counts(tmp_path):
+    from experiments.analyze_crafter_gather_spt_transfer_pilot import _check_evaluation
+
+    evaluation = {
+        "episodes": 1,
+        "successes": 0,
+        "terminal_counts": {"external_truncation": 1},
+        "action_counts": {"0": 2},
+        "first_target_gain_steps": [],
+        "rows": [{"episode": 0, "success": False, "steps": 1,
+                  "first_target_gain_step": None, "action_counts": {"0": 1}}],
+    }
+    errors = []
+    _check_evaluation(evaluation, 1, "synthetic", errors)
+    assert any("action count mismatch" in error for error in errors)

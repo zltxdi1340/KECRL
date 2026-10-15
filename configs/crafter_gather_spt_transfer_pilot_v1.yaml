@@ -16,6 +16,7 @@
   "target_update_steps": 256,
   "evaluation_episodes": 40,
   "max_episode_steps": 32,
+  "rgb_visibility_audit_layout_count": 32,
   "source_scene_seed_base": 1100000,
   "source_action_seed_base": 1200000,
   "target_scene_seed_base": 1300000,
