@@ -67,6 +67,9 @@ def _check_block_manifest(summary: dict, role: str, expected_steps: int,
         rgb_hashes.append(str(entry["initial_rgb_sha256"]))
     if len(scene_seeds) != len(set(scene_seeds)):
         errors.append(f"{label}: repeated scene seed within role")
+    declared_pool = {int(value) for value in summary.get("scene_pool_seeds", [])}
+    if declared_pool and not set(scene_seeds).issubset(declared_pool):
+        errors.append(f"{label}: visited scene seed is outside declared scene pool")
     return {
         "role": role,
         "blocks": 1,
@@ -74,6 +77,7 @@ def _check_block_manifest(summary: dict, role: str, expected_steps: int,
         "steps": int(summary.get("actual_steps", 0)),
         "scene_seeds": scene_seeds,
         "rgb_hashes": rgb_hashes,
+        "declared_scene_pool": sorted(declared_pool),
     }
 
 
@@ -127,6 +131,7 @@ def analyze(input_path: str | Path, *, verify_rgb: bool = True) -> dict:
     role_counts = Counter()
     run_summaries = []
     source_arm_scene_sets: dict[tuple[str, int], set[int]] = {}
+    declared_source_scene_sets: dict[tuple[str, int], set[int]] = {}
     target_scene_sets: dict[tuple[str, int], set[int]] = {}
 
     if aggregate.get("formal_result") is not False or aggregate.get("diagnostic_only") is not True:
@@ -145,6 +150,7 @@ def analyze(input_path: str | Path, *, verify_rgb: bool = True) -> dict:
         label = f"{arm}/seed_{seed}"
         source_entries: list[dict] = []
         source_sets_by_role: dict[str, set[int]] = {}
+        declared_source = set()
         if arm == "A_initial_spt":
             if run.get("source_rows") or run.get("source_signal", {}).get("episode_manifest"):
                 errors.append(f"{label}: initial arm contains source manifest")
@@ -163,6 +169,7 @@ def analyze(input_path: str | Path, *, verify_rgb: bool = True) -> dict:
                                                     verify_rgb=verify_rgb)
                     source_entries.append(checked)
                     source_sets_by_role.setdefault(role, set()).update(checked["scene_seeds"])
+                    declared_source.update(checked["declared_scene_pool"])
                     role_counts[role] += 1
             if len(run.get("source_updates", [])) != int(config["source_rounds"]):
                 errors.append(f"{label}: B outer update count mismatch")
@@ -181,6 +188,23 @@ def analyze(input_path: str | Path, *, verify_rgb: bool = True) -> dict:
                                                 verify_rgb=verify_rgb)
                 source_entries.append(checked)
                 source_sets_by_role.setdefault("source_ordinary_block", set()).update(checked["scene_seeds"])
+                declared_source.update(checked["declared_scene_pool"])
+                if int(config.get("source_scene_pool_size", 0)) > 0:
+                    subblocks = summary.get("subblocks")
+                    if not isinstance(subblocks, list) or len(subblocks) != 2:
+                        errors.append(f"{label}/row_{index}: aligned C block lacks two subblocks")
+                    else:
+                        for subrole, subsummary in zip(
+                            ("source_ordinary_support", "source_ordinary_query"), subblocks
+                        ):
+                            subchecked = _check_block_manifest(
+                                subsummary, subrole,
+                                int(config["source_support_steps_per_slot"])
+                                if subrole.endswith("support") else int(config["source_query_steps_per_slot"]),
+                                f"{label}/row_{index}/{subrole}", errors,
+                                verify_rgb=verify_rgb,
+                            )
+                            declared_source.update(subchecked["declared_scene_pool"])
                 role_counts["source_ordinary_block"] += 1
             if len(run.get("source_updates", [])) != expected_source_blocks:
                 errors.append(f"{label}: C ordinary update count mismatch")
@@ -194,6 +218,7 @@ def analyze(input_path: str | Path, *, verify_rgb: bool = True) -> dict:
             if int(run.get("source_steps", -1)) != expected_source_steps:
                 errors.append(f"{label}: total source step count mismatch")
         source_arm_scene_sets[(arm, seed)] = set(source_all)
+        declared_source_scene_sets[(arm, seed)] = declared_source
 
         target_entries = []
         target_all = []
@@ -242,17 +267,29 @@ def analyze(input_path: str | Path, *, verify_rgb: bool = True) -> dict:
                               if arm == "B_fomaml_spt"))
     c_sources = set().union(*(values for (arm, _seed), values in source_arm_scene_sets.items()
                               if arm == "C_ordinary_pretraining"))
+    b_declared = set().union(*(values for (arm, _seed), values in declared_source_scene_sets.items()
+                               if arm == "B_fomaml_spt"))
+    c_declared = set().union(*(values for (arm, _seed), values in declared_source_scene_sets.items()
+                               if arm == "C_ordinary_pretraining"))
+    declared_pool_mode = bool(b_declared or c_declared)
     per_seed_pool = {}
     for seed in [int(value) for value in config["replica_seeds"]]:
-        b_set = source_arm_scene_sets.get(("B_fomaml_spt", seed), set())
-        c_set = source_arm_scene_sets.get(("C_ordinary_pretraining", seed), set())
+        actual_b_set = source_arm_scene_sets.get(("B_fomaml_spt", seed), set())
+        actual_c_set = source_arm_scene_sets.get(("C_ordinary_pretraining", seed), set())
+        b_declared_set = declared_source_scene_sets.get(("B_fomaml_spt", seed), set())
+        c_declared_set = declared_source_scene_sets.get(("C_ordinary_pretraining", seed), set())
+        b_set = b_declared_set if declared_pool_mode else actual_b_set
+        c_set = c_declared_set if declared_pool_mode else actual_c_set
         equal = b_set == c_set
         per_seed_pool[str(seed)] = {
-            "B_scene_count": len(b_set),
-            "C_scene_count": len(c_set),
-            "intersection": len(b_set & c_set),
-            "union": len(b_set | c_set),
+            "B_declared_scene_count": len(b_declared_set),
+            "C_declared_scene_count": len(c_declared_set),
+            "declared_intersection": len(b_set & c_set),
+            "declared_union": len(b_set | c_set),
             "sets_equal": equal,
+            "B_actual_scene_count": len(actual_b_set),
+            "C_actual_scene_count": len(actual_c_set),
+            "actual_intersection": len(actual_b_set & actual_c_set),
         }
         if not equal:
             errors.append(f"paired source scene pool mismatch at replica seed {seed}")
@@ -260,6 +297,9 @@ def analyze(input_path: str | Path, *, verify_rgb: bool = True) -> dict:
         "B_C_source_scene_seed_intersection": len(b_sources & c_sources),
         "B_C_source_scene_seed_union": len(b_sources | c_sources),
         "B_C_source_scene_seed_sets_equal": b_sources == c_sources,
+        "B_C_declared_scene_pool_intersection": len(b_declared & c_declared),
+        "B_C_declared_scene_pool_union": len(b_declared | c_declared),
+        "B_C_declared_scene_pool_sets_equal": b_declared == c_declared,
         "per_replica_seed": per_seed_pool,
         "strict_scene_pool_requirement": "B and C must use the same source scene pool within each replica seed",
         "interpretation": "paired arm scene IDs may overlap; each arm executes independently, so equal seeds do not imply equal trajectories",

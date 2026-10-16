@@ -70,6 +70,38 @@ def _sorted_action_counts(counts: Counter) -> dict[str, int]:
     return {str(action): int(counts[action]) for action in sorted(counts)}
 
 
+def _concat_rollouts(rollouts: list[SpatialPPORollout]) -> SpatialPPORollout:
+    if not rollouts:
+        raise ValueError("at least one rollout is required")
+    return SpatialPPORollout(
+        observations=torch.cat([rollout.observations for rollout in rollouts]),
+        actions=torch.cat([rollout.actions for rollout in rollouts]),
+        old_log_probs=torch.cat([rollout.old_log_probs for rollout in rollouts]),
+        returns=torch.cat([rollout.returns for rollout in rollouts]),
+        advantages=torch.cat([rollout.advantages for rollout in rollouts]),
+    )
+
+
+def _source_scene_pool(config: dict, source_base: int, key: int, role: str) -> tuple[int, ...] | None:
+    """Build a declared, bounded source scene pool for a slot role.
+
+    The v1/v2 pilot used an implicit base-plus-episode-index schedule. Newer
+    configs can declare disjoint support/query pools so B and C consume the
+    same candidate scene IDs while retaining their algorithm-specific episode
+    termination and update behavior.
+    """
+    size = int(config.get("source_scene_pool_size", 0))
+    if size <= 0:
+        return None
+    stride = int(config["source_slot_stride"])
+    query_offset = int(config["source_query_pool_offset"])
+    if stride <= 0 or query_offset < 0 or query_offset + size > stride:
+        raise ValueError("source scene pool stride/offset cannot overlap adjacent slots")
+    offset = query_offset if role in {"source_meta_query", "source_ordinary_query"} else 0
+    start = int(source_base) + int(key) * stride + offset
+    return tuple(start + index for index in range(size))
+
+
 def _merge_block_summaries(summaries: list[dict]) -> dict:
     """Merge rollout diagnostics while preserving the interaction ledger."""
     terminal_counts = Counter()
@@ -79,6 +111,7 @@ def _merge_block_summaries(summaries: list[dict]) -> dict:
     material = target_item = None
     roles = Counter()
     episode_manifest = []
+    scene_pool_seeds = set()
     for summary in summaries:
         material = summary.get("material", material)
         target_item = summary.get("target_item", target_item)
@@ -92,6 +125,7 @@ def _merge_block_summaries(summaries: list[dict]) -> dict:
         if summary.get("role"):
             roles[str(summary["role"])] += 1
         episode_manifest.extend(summary.get("episode_manifest", []))
+        scene_pool_seeds.update(int(value) for value in summary.get("scene_pool_seeds", []))
     return {
         "material": material,
         "target_item": target_item,
@@ -109,6 +143,7 @@ def _merge_block_summaries(summaries: list[dict]) -> dict:
             if first_target_gain_steps else None
         ),
         "episode_manifest": episode_manifest,
+        "scene_pool_seeds": sorted(scene_pool_seeds),
     }
 
 
@@ -202,10 +237,13 @@ def collect_block(
     max_episode_steps: int,
     training: bool,
     role: str = "unspecified",
+    scene_seed_schedule: tuple[int, ...] | None = None,
 ) -> tuple[SpatialPPORollout, dict]:
     """Collect exactly ``steps`` native interactions, resetting only at episode boundaries."""
     if steps <= 0:
         raise ValueError("block steps must be positive")
+    if scene_seed_schedule is not None and not scene_seed_schedule:
+        raise ValueError("scene_seed_schedule must not be empty")
     target_item = str(spi.parameter_binding["item"])
     material = str(spi.parameter_binding["material"])
     env = MaterialGatherEnv(make_material_gather_scene(int(scene_seed_base)), seed=int(scene_seed_base), length=max_episode_steps)
@@ -226,7 +264,12 @@ def collect_block(
     try:
         while interaction_steps < steps:
             if observation is None:
-                episode_scene_seed = int(scene_seed_base) + episode_index
+                if scene_seed_schedule is not None:
+                    if episode_index >= len(scene_seed_schedule):
+                        raise RuntimeError("scene seed schedule exhausted before block completed")
+                    episode_scene_seed = int(scene_seed_schedule[episode_index])
+                else:
+                    episode_scene_seed = int(scene_seed_base) + episode_index
                 env.configure(make_material_gather_scene(episode_scene_seed), seed=episode_scene_seed)
                 observation = env.reset()
                 scene = make_material_gather_scene(episode_scene_seed)
@@ -320,6 +363,8 @@ def collect_block(
         ),
         "training": bool(training),
         "episode_manifest": episode_manifest,
+        "scene_pool_seeds": ([int(value) for value in scene_seed_schedule]
+                             if scene_seed_schedule is not None else []),
     }
 
 
@@ -454,12 +499,15 @@ def _run_arm(config: dict, arm_name: str, initial: SpatialGatherSPT, spi_target,
         if arm_name == "B_fomaml_spt":
             for slot in range(slots):
                 key = round_index * slots + slot
+                support_pool = _source_scene_pool(config, source_base, key, "source_support")
+                query_pool = _source_scene_pool(config, source_base, key, "source_meta_query")
                 support, support_summary = collect_block(
                     candidate.instantiate(source_spi).policy, source_spi,
                     steps=support_steps, scene_seed_base=source_base + key * 100,
                     action_seed=action_base + key * 100, device=device,
                     max_episode_steps=int(config["max_episode_steps"]), training=True,
                     role="source_support",
+                    scene_seed_schedule=support_pool,
                 )
                 adapted = learner.adapt(source_spi, support)
                 query, query_summary = collect_block(
@@ -468,6 +516,7 @@ def _run_arm(config: dict, arm_name: str, initial: SpatialGatherSPT, spi_target,
                     action_seed=action_base + key * 100 + 50, device=device,
                     max_episode_steps=int(config["max_episode_steps"]), training=True,
                     role="source_meta_query",
+                    scene_seed_schedule=query_pool,
                 )
                 tasks.append(SpatialMetaTask(source_spi, support, query))
                 source_rows.append({"round": round_index, "slot": slot, "support": support_summary, "query": query_summary})
@@ -479,13 +528,42 @@ def _run_arm(config: dict, arm_name: str, initial: SpatialGatherSPT, spi_target,
             for slot in range(slots):
                 key = round_index * slots + slot
                 ordinary_policy = candidate.instantiate(source_spi).policy
-                block, summary = collect_block(
-                    ordinary_policy, source_spi, steps=support_steps + query_steps,
-                    scene_seed_base=source_base + key * 100,
-                    action_seed=action_base + key * 100, device=device,
-                    max_episode_steps=int(config["max_episode_steps"]), training=True,
-                    role="source_ordinary_block",
-                )
+                if int(config.get("source_scene_pool_size", 0)) > 0:
+                    support_pool = _source_scene_pool(config, source_base, key, "source_ordinary_support")
+                    query_pool = _source_scene_pool(config, source_base, key, "source_ordinary_query")
+                    ordinary_support, support_summary = collect_block(
+                        ordinary_policy, source_spi, steps=support_steps,
+                        scene_seed_base=source_base + key * 100,
+                        action_seed=action_base + key * 100, device=device,
+                        max_episode_steps=int(config["max_episode_steps"]), training=True,
+                        role="source_ordinary_support",
+                        scene_seed_schedule=support_pool,
+                    )
+                    # The aligned pilot C consumes the same two role-specific
+                    # pools as B, then performs one ordinary PPO update on
+                    # their concatenation while keeping a continuous policy.
+                    ordinary_query, query_summary = collect_block(
+                        ordinary_policy, source_spi, steps=query_steps,
+                        scene_seed_base=source_base + key * 100,
+                        action_seed=action_base + key * 100 + 50, device=device,
+                        max_episode_steps=int(config["max_episode_steps"]), training=True,
+                        role="source_ordinary_query",
+                        scene_seed_schedule=query_pool,
+                    )
+                    block = _concat_rollouts([ordinary_support, ordinary_query])
+                    summary = _merge_block_summaries([support_summary, query_summary])
+                    summary.update({
+                        "role": "source_ordinary_block",
+                        "subblocks": [support_summary, query_summary],
+                    })
+                else:
+                    block, summary = collect_block(
+                        ordinary_policy, source_spi, steps=support_steps + query_steps,
+                        scene_seed_base=source_base + key * 100,
+                        action_seed=action_base + key * 100, device=device,
+                        max_episode_steps=int(config["max_episode_steps"]), training=True,
+                        role="source_ordinary_block",
+                    )
                 for _ in range(int(config["update_epochs"])):
                     loss = learner.ordinary_update((SpatialMetaTask(source_spi, block, block),))
                 source_rows.append({"round": round_index, "slot": slot, "block": summary})

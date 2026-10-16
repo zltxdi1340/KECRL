@@ -307,3 +307,18 @@ def test_gather_comparability_audit_rejects_wrong_scene_record():
     _check_block_manifest(summary, "source_support", 1, "synthetic", errors, verify_rgb=False)
     assert any("scene record does not match scene seed" in error for error in errors)
     assert scene.record() != summary["episode_manifest"][0]["scene"]
+
+
+def test_gather_aligned_source_pools_pair_b_and_c_roles_without_overlap():
+    from experiments.run_crafter_gather_spt_transfer_pilot import _source_scene_pool
+
+    config = {"source_scene_pool_size": 64, "source_slot_stride": 200,
+              "source_query_pool_offset": 100}
+    support = set(_source_scene_pool(config, 2_100_000, 3, "source_support"))
+    meta_query = set(_source_scene_pool(config, 2_100_000, 3, "source_meta_query"))
+    ordinary_support = set(_source_scene_pool(config, 2_100_000, 3, "source_ordinary_support"))
+    ordinary_query = set(_source_scene_pool(config, 2_100_000, 3, "source_ordinary_query"))
+    assert len(support) == len(meta_query) == 64
+    assert support.isdisjoint(meta_query)
+    assert support == ordinary_support
+    assert meta_query == ordinary_query
