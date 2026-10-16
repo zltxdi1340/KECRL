@@ -242,20 +242,42 @@ def analyze(input_path: str | Path, *, verify_rgb: bool = True) -> dict:
                               if arm == "B_fomaml_spt"))
     c_sources = set().union(*(values for (arm, _seed), values in source_arm_scene_sets.items()
                               if arm == "C_ordinary_pretraining"))
+    per_seed_pool = {}
+    for seed in [int(value) for value in config["replica_seeds"]]:
+        b_set = source_arm_scene_sets.get(("B_fomaml_spt", seed), set())
+        c_set = source_arm_scene_sets.get(("C_ordinary_pretraining", seed), set())
+        equal = b_set == c_set
+        per_seed_pool[str(seed)] = {
+            "B_scene_count": len(b_set),
+            "C_scene_count": len(c_set),
+            "intersection": len(b_set & c_set),
+            "union": len(b_set | c_set),
+            "sets_equal": equal,
+        }
+        if not equal:
+            errors.append(f"paired source scene pool mismatch at replica seed {seed}")
     paired_overlap = {
         "B_C_source_scene_seed_intersection": len(b_sources & c_sources),
         "B_C_source_scene_seed_union": len(b_sources | c_sources),
         "B_C_source_scene_seed_sets_equal": b_sources == c_sources,
+        "per_replica_seed": per_seed_pool,
+        "strict_scene_pool_requirement": "B and C must use the same source scene pool within each replica seed",
         "interpretation": "paired arm scene IDs may overlap; each arm executes independently, so equal seeds do not imply equal trajectories",
     }
     if not b_sources or not c_sources:
         warnings.append("B or C source scene manifest is empty")
+    scene_pool_errors = [error for error in errors if "source scene pool mismatch" in error]
+    provenance_errors = [error for error in errors if error not in scene_pool_errors]
     result = {
         "input": str(root),
         "aggregate_git_commit": aggregate.get("git_commit"),
         "config": str(config_path),
         "verification_mode": "reconstruct_scene_and_initial_rgb" if verify_rgb else "metadata_only",
         "valid": not errors,
+        "provenance_valid": not provenance_errors,
+        "strict_source_scene_pool_equal": not scene_pool_errors,
+        "provenance_errors": provenance_errors,
+        "source_scene_pool_errors": scene_pool_errors,
         "errors": errors,
         "warnings": warnings,
         "role_block_counts": dict(sorted(role_counts.items())),
@@ -276,8 +298,11 @@ def main() -> None:
     output = Path(args.output) if args.output else Path(args.input) / "analysis_verified" / "comparability.json"
     output.parent.mkdir(parents=True, exist_ok=True)
     output.write_text(json.dumps(result, indent=2) + "\n", encoding="utf-8")
-    print(json.dumps({"valid": result["valid"], "errors": result["errors"],
-                      "warnings": result["warnings"], "output": str(output)}, ensure_ascii=False))
+    print(json.dumps({"valid": result["valid"],
+                      "provenance_valid": result["provenance_valid"],
+                      "strict_source_scene_pool_equal": result["strict_source_scene_pool_equal"],
+                      "errors": result["errors"], "warnings": result["warnings"],
+                      "output": str(output)}, ensure_ascii=False))
     if not result["valid"]:
         raise SystemExit(1)
 
