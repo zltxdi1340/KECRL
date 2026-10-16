@@ -270,3 +270,40 @@ def test_gather_pilot_audit_rejects_overridden_meta_learning_rate():
     assert not _check_source_optimizer_settings(settings, config, "B_fomaml_spt", "B", errors)
     assert len(errors) == 2
     assert not _check_source_optimizer_settings(None, config, "B_fomaml_spt", "legacy", [])
+
+
+def test_gather_comparability_audit_rejects_missing_episode_manifest():
+    from experiments.analyze_crafter_gather_spt_transfer_comparability import _check_block_manifest
+
+    summary = {
+        "role": "source_support",
+        "requested_steps": 2,
+        "actual_steps": 2,
+        "episodes": 1,
+        "episode_manifest": [],
+    }
+    errors = []
+    _check_block_manifest(summary, "source_support", 2, "synthetic", errors, verify_rgb=False)
+    assert any("episode manifest count mismatch" in error for error in errors)
+
+
+def test_gather_comparability_audit_rejects_wrong_scene_record():
+    from experiments.analyze_crafter_gather_spt_transfer_comparability import _check_block_manifest
+    from experiments.crafter_material_gather_scene import make_material_gather_scene
+
+    scene = make_material_gather_scene(0)
+    summary = {
+        "role": "source_support",
+        "requested_steps": 1,
+        "actual_steps": 1,
+        "episodes": 1,
+        "episode_manifest": [{
+            "scene_seed": 0,
+            "scene": make_material_gather_scene(1).record(),
+            "initial_rgb_sha256": "synthetic",
+        }],
+    }
+    errors = []
+    _check_block_manifest(summary, "source_support", 1, "synthetic", errors, verify_rgb=False)
+    assert any("scene record does not match scene seed" in error for error in errors)
+    assert scene.record() != summary["episode_manifest"][0]["scene"]

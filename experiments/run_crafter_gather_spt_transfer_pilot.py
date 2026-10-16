@@ -7,6 +7,7 @@ from __future__ import annotations
 
 import argparse
 import copy
+import hashlib
 import json
 import os
 import random
@@ -76,6 +77,8 @@ def _merge_block_summaries(summaries: list[dict]) -> dict:
     first_target_gain_steps = []
     requested_steps = actual_steps = episodes = successes = 0
     material = target_item = None
+    roles = Counter()
+    episode_manifest = []
     for summary in summaries:
         material = summary.get("material", material)
         target_item = summary.get("target_item", target_item)
@@ -86,10 +89,14 @@ def _merge_block_summaries(summaries: list[dict]) -> dict:
         terminal_counts.update({str(key): int(value) for key, value in summary["terminal_counts"].items()})
         action_counts.update({int(key): int(value) for key, value in summary["action_counts"].items()})
         first_target_gain_steps.extend(int(value) for value in summary["first_target_gain_steps"])
+        if summary.get("role"):
+            roles[str(summary["role"])] += 1
+        episode_manifest.extend(summary.get("episode_manifest", []))
     return {
         "material": material,
         "target_item": target_item,
         "blocks": len(summaries),
+        "roles": dict(sorted(roles.items())),
         "requested_steps": requested_steps,
         "actual_steps": actual_steps,
         "episodes": episodes,
@@ -101,6 +108,7 @@ def _merge_block_summaries(summaries: list[dict]) -> dict:
             sum(first_target_gain_steps) / len(first_target_gain_steps)
             if first_target_gain_steps else None
         ),
+        "episode_manifest": episode_manifest,
     }
 
 
@@ -193,6 +201,7 @@ def collect_block(
     device: torch.device,
     max_episode_steps: int,
     training: bool,
+    role: str = "unspecified",
 ) -> tuple[SpatialPPORollout, dict]:
     """Collect exactly ``steps`` native interactions, resetting only at episode boundaries."""
     if steps <= 0:
@@ -212,6 +221,7 @@ def collect_block(
     episode_steps = 0
     action_counts = Counter()
     first_target_gain_steps = []
+    episode_manifest = []
     torch.manual_seed(int(action_seed))
     try:
         while interaction_steps < steps:
@@ -219,6 +229,12 @@ def collect_block(
                 episode_scene_seed = int(scene_seed_base) + episode_index
                 env.configure(make_material_gather_scene(episode_scene_seed), seed=episode_scene_seed)
                 observation = env.reset()
+                scene = make_material_gather_scene(episode_scene_seed)
+                episode_manifest.append({
+                    "scene_seed": episode_scene_seed,
+                    "scene": scene.record(),
+                    "initial_rgb_sha256": hashlib.sha256(observation.tobytes()).hexdigest(),
+                })
                 hidden = None
                 episode_transitions = []
                 episode_initial_item = int(env._player.inventory[target_item])
@@ -290,6 +306,7 @@ def collect_block(
     return merged, {
         "material": material,
         "target_item": target_item,
+        "role": str(role),
         "requested_steps": int(steps),
         "actual_steps": int(merged.actions.shape[0]),
         "episodes": int(sum(terminal_counts.values())),
@@ -302,6 +319,7 @@ def collect_block(
             if first_target_gain_steps else None
         ),
         "training": bool(training),
+        "episode_manifest": episode_manifest,
     }
 
 
@@ -335,8 +353,10 @@ def evaluate(
     try:
         for index in range(episodes):
             scene_seed = int(scene_seed_base) + index
-            env = MaterialGatherEnv(make_material_gather_scene(scene_seed), seed=scene_seed, length=max_episode_steps)
+            scene = make_material_gather_scene(scene_seed)
+            env = MaterialGatherEnv(scene, seed=scene_seed, length=max_episode_steps)
             observation = env.reset()
+            initial_rgb_sha256 = hashlib.sha256(observation.tobytes()).hexdigest()
             initial_item = int(env._player.inventory[target_item])
             done = False
             success = False
@@ -370,6 +390,9 @@ def evaluate(
                 if callable(close):
                     close()
             rows.append({"episode": index, "material": material, "target_item": target_item,
+                         "scene_seed": scene_seed, "scene": scene.record(),
+                         "initial_rgb_sha256": initial_rgb_sha256,
+                         "action_seed": int(action_seed_base) + index,
                          "success": success, "steps": steps, "terminal_reason": terminal,
                          "first_target_gain_step": first_target_gain_step,
                          "action_counts": _sorted_action_counts(episode_action_counts)})
@@ -436,6 +459,7 @@ def _run_arm(config: dict, arm_name: str, initial: SpatialGatherSPT, spi_target,
                     steps=support_steps, scene_seed_base=source_base + key * 100,
                     action_seed=action_base + key * 100, device=device,
                     max_episode_steps=int(config["max_episode_steps"]), training=True,
+                    role="source_support",
                 )
                 adapted = learner.adapt(source_spi, support)
                 query, query_summary = collect_block(
@@ -443,6 +467,7 @@ def _run_arm(config: dict, arm_name: str, initial: SpatialGatherSPT, spi_target,
                     scene_seed_base=source_base + key * 100 + 50,
                     action_seed=action_base + key * 100 + 50, device=device,
                     max_episode_steps=int(config["max_episode_steps"]), training=True,
+                    role="source_meta_query",
                 )
                 tasks.append(SpatialMetaTask(source_spi, support, query))
                 source_rows.append({"round": round_index, "slot": slot, "support": support_summary, "query": query_summary})
@@ -459,6 +484,7 @@ def _run_arm(config: dict, arm_name: str, initial: SpatialGatherSPT, spi_target,
                     scene_seed_base=source_base + key * 100,
                     action_seed=action_base + key * 100, device=device,
                     max_episode_steps=int(config["max_episode_steps"]), training=True,
+                    role="source_ordinary_block",
                 )
                 for _ in range(int(config["update_epochs"])):
                     loss = learner.ordinary_update((SpatialMetaTask(source_spi, block, block),))
@@ -490,6 +516,7 @@ def _run_arm(config: dict, arm_name: str, initial: SpatialGatherSPT, spi_target,
                 scene_seed_base=target_base + target_steps * 10,
                 action_seed=target_action_base + target_steps * 10,
                 device=device, max_episode_steps=int(config["max_episode_steps"]), training=True,
+                role="target_support",
             )
             metrics = _ppo_update(target_policy, block)
             target_block_summaries.append({"after_steps": target_steps + block_steps, **summary})
