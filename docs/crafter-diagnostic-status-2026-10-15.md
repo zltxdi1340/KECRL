@@ -2,7 +2,7 @@
 
 ## 当前结论
 
-当前仍在正式实验前。最新完成 gather 族 E1 wood→coal 的动作链审计、学习率修正、来源场景池对齐 pilot 及独立进程复现：两个 replica、A/B/C 三臂，B/C 各 8,192 source 步，三臂各 4,096 target 步。主结果为 `results/crafter_gather_spt_transfer_pilot_v3_run1/`（代码 `e43d678`），复现为 `results/crafter_gather_spt_transfer_pilot_v3_run2/`（代码 `155b204`），详见[集成记录](crafter-gather-spt-transfer-pilot-2026-10-15.md)与[动作链报告](crafter-gather-execution-chain-2026-10-15.md)。本轮定向测试 `16 passed`，全量回归 `434 passed`。
+当前仍在正式实验前。最新完成 gather 族 E1 wood→coal 的动作链审计、学习率修正、来源场景池对齐 pilot、独立进程复现和 E2 三 fold runner smoke：E1 使用两个 replica、A/B/C 三臂，B/C 各 8,192 source 步，三臂各 4,096 target 步；E2 smoke 使用 holdout_coal/stone/wood、每 fold 一个 seed。主结果为 `results/crafter_gather_spt_transfer_pilot_v3_run1/`（代码 `e43d678`），复现为 `results/crafter_gather_spt_transfer_pilot_v3_run2/`（代码 `155b204`），E2 smoke 为 `results/crafter_gather_spt_transfer_e2_smoke_v1/`。本轮定向测试 `19 passed`，全量回归 `437 passed`。
 
 v1 曾将 B 的配置外循环 lr=0.001 覆盖为实际 0.0003，已修复并记录 optimizer 实际值。v2 独立进程复现的数值记录一致，但严格 source scene pool 审计失败：C 只使用了 B support 池的实际前缀并增加其他场景，B query 池未进入 C。v3 声明并配对 support/query 候选池，provenance 和严格场景池审计均通过。v3 终点为 A `15/80`、B `7/80`、C `19/80`，共 41 次成功、199 次 external truncation、0 死亡。v2 的 B `25/80` 未复现，当前没有 SPT 优势证据。
 
@@ -28,7 +28,7 @@ v1 曾将 B 的配置外循环 lr=0.001 覆盖为实际 0.0003，已修复并记
 
 新的[SPT/SPI 迁移协议草案](crafter-spt-spi-transfer-protocol-2026-10-15.md)与设计清单已形成并完成一次 E1 集成 pilot：同一 gather 族含 wood/stone/coal 三个绑定；E1 检验 wood->coal，E2 轮流留出一个绑定；A 为更新前模板，B 为 FOMAML 候选，C 为等容量、等来源交互预算的普通预训练。统一工具、多材料受控场景和 CNN 生成器链路已接通；正式 E1/E2 仍需在冻结 manifest、独立进程复核和成本检查后启动。
 
-下一项是 E2 runner：v3 已补齐 B/C source candidate pool、逐 episode scene/RGB manifest、角色隔离审计和独立进程复现，但正式多绑定实验的 pool 分配、成本及统计仍未冻结。pilot 已接通真实 RGB rollout、CNN actor 残差生成器和 FOMAML query，不能因 v2 的小样本终点较高就跳过这些边界。正式迁移实验尚未启动。
+E2 runner 已实现并完成 bounded smoke：三个 leave-one-binding-out fold 的 resolved config、source material 绑定、target holdout、B/C paired candidate pool 和 RGB provenance 审计均通过；candidate manifest 为 `configs/crafter_gather_spt_transfer_e2_candidate_v1.yaml`，但正式多绑定实验的 pool 分配、成本及统计仍未冻结。下一步是对 candidate manifest 做成本/依赖/hash 封存和正式分析预检，不启动正式预算。正式迁移实验尚未启动。
 
 无需 wood 达到候选 0.8 才能研究 SPT；SPI 学习失败也可提供反馈。受控组件实验不等于自然 Crafter Module 资格或完整 KECRL 验证。当前没有新的活动 SPT 切换、Module 注册或 Knowledge 更新；自然 stone、coal、pickaxe、工具获取、生存及持续任务链仍需独立验证。
 

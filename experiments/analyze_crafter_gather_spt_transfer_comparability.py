@@ -23,7 +23,8 @@ def _manifest_scene_seeds(summary: dict) -> list[int]:
 
 
 def _check_block_manifest(summary: dict, role: str, expected_steps: int,
-                          label: str, errors: list[str], *, verify_rgb: bool = True) -> dict:
+                          label: str, errors: list[str], *, verify_rgb: bool = True,
+                          expected_material: str | None = None) -> dict:
     """Check one recorded interaction block and return its provenance summary."""
     if summary.get("role") != role:
         errors.append(f"{label}: role is {summary.get('role')!r}, expected {role!r}")
@@ -31,6 +32,8 @@ def _check_block_manifest(summary: dict, role: str, expected_steps: int,
         errors.append(f"{label}: requested step count mismatch")
     if int(summary.get("actual_steps", -1)) != expected_steps:
         errors.append(f"{label}: actual step count mismatch")
+    if expected_material is not None and summary.get("material") != expected_material:
+        errors.append(f"{label}: material is {summary.get('material')!r}, expected {expected_material!r}")
     manifest = summary.get("episode_manifest")
     if not isinstance(manifest, list) or len(manifest) != int(summary.get("episodes", -1)):
         errors.append(f"{label}: episode manifest count mismatch")
@@ -82,7 +85,8 @@ def _check_block_manifest(summary: dict, role: str, expected_steps: int,
 
 
 def _check_evaluation_manifest(evaluation: dict, expected_episodes: int,
-                              label: str, errors: list[str], *, verify_rgb: bool = True) -> dict:
+                              label: str, errors: list[str], *, verify_rgb: bool = True,
+                              expected_material: str | None = None) -> dict:
     rows = evaluation.get("rows", [])
     if len(rows) != expected_episodes:
         errors.append(f"{label}: evaluation row count mismatch")
@@ -93,6 +97,8 @@ def _check_evaluation_manifest(evaluation: dict, expected_episodes: int,
         if not {"scene_seed", "scene", "initial_rgb_sha256", "action_seed"}.issubset(row):
             errors.append(f"{row_label}: evaluation provenance fields missing")
             continue
+        if expected_material is not None and row.get("material") != expected_material:
+            errors.append(f"{row_label}: material is {row.get('material')!r}, expected {expected_material!r}")
         seed = int(row["scene_seed"])
         scene = make_material_gather_scene(seed)
         if row["scene"] != scene.record():
@@ -133,6 +139,15 @@ def analyze(input_path: str | Path, *, verify_rgb: bool = True) -> dict:
     source_arm_scene_sets: dict[tuple[str, int], set[int]] = {}
     declared_source_scene_sets: dict[tuple[str, int], set[int]] = {}
     target_scene_sets: dict[tuple[str, int], set[int]] = {}
+    source_materials = tuple(str(value) for value in config.get(
+        "source_materials", ["tree"] * int(config["source_task_slots_per_round"])
+    ))
+    target_material = str(config.get("target_material", "coal"))
+    if not source_materials:
+        errors.append("source_materials must not be empty")
+        source_materials = ("__invalid__",)
+    if len(source_materials) != int(config["source_task_slots_per_round"]):
+        errors.append("source_materials count does not match source task slots")
 
     if aggregate.get("formal_result") is not False or aggregate.get("diagnostic_only") is not True:
         errors.append("aggregate is not explicitly diagnostic/non-formal")
@@ -166,7 +181,8 @@ def analyze(input_path: str | Path, *, verify_rgb: bool = True) -> dict:
                         errors.append(f"{label}/row_{index}: missing {key} summary")
                         continue
                     checked = _check_block_manifest(summary, role, steps, f"{label}/row_{index}/{role}", errors,
-                                                    verify_rgb=verify_rgb)
+                                                    verify_rgb=verify_rgb,
+                                                    expected_material=source_materials[index % len(source_materials)])
                     source_entries.append(checked)
                     source_sets_by_role.setdefault(role, set()).update(checked["scene_seeds"])
                     declared_source.update(checked["declared_scene_pool"])
@@ -185,7 +201,8 @@ def analyze(input_path: str | Path, *, verify_rgb: bool = True) -> dict:
                     continue
                 checked = _check_block_manifest(summary, "source_ordinary_block", expected_block_steps,
                                                 f"{label}/row_{index}/source_ordinary_block", errors,
-                                                verify_rgb=verify_rgb)
+                                                verify_rgb=verify_rgb,
+                                                expected_material=source_materials[index % len(source_materials)])
                 source_entries.append(checked)
                 source_sets_by_role.setdefault("source_ordinary_block", set()).update(checked["scene_seeds"])
                 declared_source.update(checked["declared_scene_pool"])
@@ -203,6 +220,7 @@ def analyze(input_path: str | Path, *, verify_rgb: bool = True) -> dict:
                                 if subrole.endswith("support") else int(config["source_query_steps_per_slot"]),
                                 f"{label}/row_{index}/{subrole}", errors,
                                 verify_rgb=verify_rgb,
+                                expected_material=source_materials[index % len(source_materials)],
                             )
                             declared_source.update(subchecked["declared_scene_pool"])
                 role_counts["source_ordinary_block"] += 1
@@ -225,7 +243,8 @@ def analyze(input_path: str | Path, *, verify_rgb: bool = True) -> dict:
         for block_index, summary in enumerate(run.get("target_block_summaries", [])):
             checked = _check_block_manifest(summary, "target_support", int(config["target_update_steps"]),
                                             f"{label}/target_block_{block_index}", errors,
-                                            verify_rgb=verify_rgb)
+                                            verify_rgb=verify_rgb,
+                                            expected_material=target_material)
             target_entries.append(checked)
             target_all.extend(checked["scene_seeds"])
             role_counts["target_support"] += 1
@@ -242,7 +261,8 @@ def analyze(input_path: str | Path, *, verify_rgb: bool = True) -> dict:
         for checkpoint in run.get("target_rows", []):
             checked = _check_evaluation_manifest(checkpoint["evaluation"], expected_eval_episodes,
                                                  f"{label}/eval_{checkpoint['support_steps']}", errors,
-                                                 verify_rgb=verify_rgb)
+                                                 verify_rgb=verify_rgb,
+                                                 expected_material=target_material)
             evaluation_entries.append(checked)
             evaluation_all.extend(checked["scene_seeds"])
             role_counts["final_evaluation"] += 1

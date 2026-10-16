@@ -6,6 +6,8 @@
   "formal_result": false,
   "ready_for_formal_training": false,
   "runner": "experiments/run_crafter_gather_spt_transfer_pilot.py",
+  "e2_runner": "experiments/run_crafter_gather_spt_transfer_e2.py",
+  "e2_comparability_analyzer": "experiments/analyze_crafter_gather_spt_transfer_e2.py",
   "scope": "controlled_crafter_skill_evolution_component",
   "skill_family": "gather",
   "device": "cuda",
@@ -191,6 +193,19 @@
     "method_win_required_for_formal_entry": false,
     "included_in_formal_results": false,
     "target_binding_used_for_protocol_development": true
+  },
+  "e2_runner_smoke": {
+    "status": "completed_nonformal_three_fold_smoke",
+    "config": "configs/crafter_gather_spt_transfer_e2_smoke_v1.yaml",
+    "candidate_manifest": "configs/crafter_gather_spt_transfer_e2_candidate_v1.yaml",
+    "result_root": "results/crafter_gather_spt_transfer_e2_smoke_v1",
+    "folds": ["holdout_coal", "holdout_stone", "holdout_wood"],
+    "replica_seeds": [11],
+    "comparability_valid_all_folds": true,
+    "provenance_valid_all_folds": true,
+    "strict_source_scene_pool_equal_all_folds": true,
+    "formal_result": false,
+    "purpose": "runner_and_role_boundary_smoke_only"
   },
   "execution_chain_diagnostic": {
     "status": "completed_nonformal_read_only_probe",

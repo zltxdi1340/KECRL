@@ -102,6 +102,17 @@ def _source_scene_pool(config: dict, source_base: int, key: int, role: str) -> t
     return tuple(start + index for index in range(size))
 
 
+def _source_material_bindings(config: dict, slots: int) -> tuple[str, ...]:
+    """Resolve source bindings while retaining the historical E1 default."""
+    legacy_default = "source_materials" not in config
+    materials = tuple(str(value) for value in config.get("source_materials", ["tree"] * slots))
+    if len(materials) != slots:
+        raise ValueError("source_materials must contain one binding per source task slot")
+    if not legacy_default and len(set(materials)) != len(materials):
+        raise ValueError("source_materials must not repeat a binding within a round")
+    return materials
+
+
 def _merge_block_summaries(summaries: list[dict]) -> dict:
     """Merge rollout diagnostics while preserving the interaction ledger."""
     terminal_counts = Counter()
@@ -481,12 +492,13 @@ def _build_source_learner(config: dict, candidate: SpatialGatherSPT, arm_name: s
 def _run_arm(config: dict, arm_name: str, initial: SpatialGatherSPT, spi_target, device: torch.device, seed: int, output: Path) -> dict:
     candidate = copy.deepcopy(initial)
     source_state_before = {name: value.detach().clone() for name, value in candidate.state_dict().items()}
-    source_spi = instantiate_gather_spi(candidate.record, "tree")
     learner = _build_source_learner(config, candidate, arm_name)
     source_rows, source_updates = [], []
     source_block_summaries = []
     source_steps = 0
     slots = int(config["source_task_slots_per_round"])
+    source_materials = _source_material_bindings(config, slots)
+    target_material = str(spi_target.parameter_binding["material"])
     rounds = int(config["source_rounds"])
     support_steps = int(config["source_support_steps_per_slot"])
     query_steps = int(config["source_query_steps_per_slot"])
@@ -499,6 +511,7 @@ def _run_arm(config: dict, arm_name: str, initial: SpatialGatherSPT, spi_target,
         if arm_name == "B_fomaml_spt":
             for slot in range(slots):
                 key = round_index * slots + slot
+                source_spi = instantiate_gather_spi(candidate.record, source_materials[slot])
                 support_pool = _source_scene_pool(config, source_base, key, "source_support")
                 query_pool = _source_scene_pool(config, source_base, key, "source_meta_query")
                 support, support_summary = collect_block(
@@ -527,6 +540,7 @@ def _run_arm(config: dict, arm_name: str, initial: SpatialGatherSPT, spi_target,
         elif arm_name == "C_ordinary_pretraining":
             for slot in range(slots):
                 key = round_index * slots + slot
+                source_spi = instantiate_gather_spi(candidate.record, source_materials[slot])
                 ordinary_policy = candidate.instantiate(source_spi).policy
                 if int(config.get("source_scene_pool_size", 0)) > 0:
                     support_pool = _source_scene_pool(config, source_base, key, "source_ordinary_support")
@@ -623,7 +637,8 @@ def _run_arm(config: dict, arm_name: str, initial: SpatialGatherSPT, spi_target,
         "state_dict": {name: value.detach().cpu() for name, value in target_policy.state_dict().items()},
     }, target_policy_checkpoint)
     result = {
-        "arm": arm_name, "seed": int(seed), "source_steps": source_steps,
+        "arm": arm_name, "seed": int(seed), "source_materials": list(source_materials),
+        "target_material": target_material, "source_steps": source_steps,
         "source_budget": source_budget, "source_rows": source_rows,
         "source_signal": _merge_block_summaries(source_block_summaries),
         "source_updates": source_updates, "target_steps": target_steps,
@@ -654,10 +669,10 @@ def _run_arm(config: dict, arm_name: str, initial: SpatialGatherSPT, spi_target,
         "target_optimizer_state_before_updates": target_optimizer_state_before,
         "target_optimizer_state_after_updates": len(target_policy.optimizer.state),
         "cold_target_column_zero_before_source": bool(torch.equal(
-            initial.cold_context_column("coal"), torch.zeros_like(initial.cold_context_column("coal"))
+            initial.cold_context_column(target_material), torch.zeros_like(initial.cold_context_column(target_material))
         )),
         "cold_target_column_zero_after_source": bool(torch.equal(
-            candidate.cold_context_column("coal"), torch.zeros_like(candidate.cold_context_column("coal"))
+            candidate.cold_context_column(target_material), torch.zeros_like(candidate.cold_context_column(target_material))
         )),
         "spi_target_linkage": validate_spi_against_spt(spi_target, candidate.record),
         "formal_result": False,

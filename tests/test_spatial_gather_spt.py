@@ -135,6 +135,20 @@ def test_protocol_scene_manifest_declares_real_spatial_generator():
     assert config["initialization"]["generated_parameter_names"] == ["actor.weight", "actor.bias"]
 
 
+def test_e2_smoke_config_resolves_three_disjoint_holdout_folds():
+    from experiments.run_crafter_gather_spt_transfer_e2 import resolve_fold_config
+
+    config = json.loads(open("configs/crafter_gather_spt_transfer_e2_smoke_v1.yaml").read())
+    resolved = [resolve_fold_config(config, fold) for fold in config["folds"]]
+    assert [(item["fold_id"], tuple(item["source_materials"]), item["target_material"])
+            for item in resolved] == [
+        ("holdout_coal", ("tree", "stone"), "coal"),
+        ("holdout_stone", ("tree", "coal"), "stone"),
+        ("holdout_wood", ("stone", "coal"), "tree"),
+    ]
+    assert all(item["formal_result"] is False for item in resolved)
+
+
 def test_material_scene_is_paired_and_uses_native_collection_requirements():
     pytest.importorskip("crafter")
     import numpy as np
@@ -259,6 +273,14 @@ def test_gather_pilot_respects_distinct_meta_and_ordinary_learning_rates():
                 for group in optimizer.param_groups} == {expected}
 
 
+def test_gather_pilot_preserves_legacy_e1_tree_source_default():
+    from experiments.run_crafter_gather_spt_transfer_pilot import _source_material_bindings
+
+    assert _source_material_bindings({"source_task_slots_per_round": 2}, 2) == ("tree", "tree")
+    with pytest.raises(ValueError, match="must not repeat"):
+        _source_material_bindings({"source_materials": ["tree", "tree"]}, 2)
+
+
 def test_gather_pilot_audit_rejects_overridden_meta_learning_rate():
     from experiments.analyze_crafter_gather_spt_transfer_pilot import _check_source_optimizer_settings
 
@@ -307,6 +329,23 @@ def test_gather_comparability_audit_rejects_wrong_scene_record():
     _check_block_manifest(summary, "source_support", 1, "synthetic", errors, verify_rgb=False)
     assert any("scene record does not match scene seed" in error for error in errors)
     assert scene.record() != summary["episode_manifest"][0]["scene"]
+
+
+def test_gather_comparability_audit_rejects_wrong_material_binding():
+    from experiments.analyze_crafter_gather_spt_transfer_comparability import _check_block_manifest
+
+    summary = {
+        "role": "source_support",
+        "material": "tree",
+        "requested_steps": 1,
+        "actual_steps": 1,
+        "episodes": 0,
+        "episode_manifest": [],
+    }
+    errors = []
+    _check_block_manifest(summary, "source_support", 1, "synthetic", errors,
+                          verify_rgb=False, expected_material="stone")
+    assert any("material" in error for error in errors)
 
 
 def test_gather_aligned_source_pools_pair_b_and_c_roles_without_overlap():

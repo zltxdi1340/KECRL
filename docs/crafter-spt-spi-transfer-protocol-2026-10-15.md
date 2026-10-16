@@ -199,6 +199,6 @@ pilot 数据永不合并进正式结果；明确披露使用 coal pilot 来定�
 | episode batch | `SpatialPPORollout` | 已明确 `[N,3,64,64]` RGB 形状、向量对齐和固定 action allowlist；更大规模的 scene manifest 仍需冻结 |
 | 受控场景 | `experiments/crafter_material_gather_scene.py` | 三材料、原生工具规则、配对 reset 和 RGB 场景已通过 pilot；不把旧相邻树结果冒充新训练环境 |
 | 确定性/回放 | `run_crafter_gather_spt_transfer_pilot.py` | CUDA 确定性设置、RNG 恢复、步数账本和 cold-column 审计已在两个独立 pilot 运行中检查 |
-| manifest/计量/分析 | pilot runner 与[集成记录](crafter-gather-spt-transfer-pilot-2026-10-15.md) | v3 E1 小 pilot 已有逐 episode manifest、paired candidate pool 审计和独立进程复核；正式 E1/E2 的 hash 封存和按 seed 分析仍需冻结 |
+| manifest/计量/分析 | pilot runner、E2 runner 与[集成记录](crafter-gather-spt-transfer-pilot-2026-10-15.md) | v3 E1 小 pilot 和 E2 三 fold smoke 已有逐 episode manifest、paired candidate pool 审计和独立进程复核；正式 E1/E2 的 hash 封存、成本和按 seed 分析仍需冻结 |
 
-当前已完成非正式 E1 wood→coal 集成、动作链审计、学习率修错、paired scene-pool 校准 pilot 和独立进程复现（seed 11/12），结果见[集成记录](crafter-gather-spt-transfer-pilot-2026-10-15.md)。v3 解决了当前 pilot 的 source pool 可比性缺口并通过了复现，但 E2 runner、正式预算和统计仍未冻结。正式 E1/E2 尚未启动，活动 SPT 指针、Module 和 Knowledge 均未改变。
+当前已完成非正式 E1 wood→coal 集成、动作链审计、学习率修错、paired scene-pool 校准 pilot、独立进程复现和 E2 三 fold runner smoke（seed 11/12 的 E1 pilot；seed 11 的 E2 smoke），结果见[集成记录](crafter-gather-spt-transfer-pilot-2026-10-15.md)。v3 解决了当前 pilot 的 source pool 可比性缺口并通过了复现，E2 runner 已接通但 candidate manifest 的正式 hash、成本和统计仍未冻结。正式 E1/E2 尚未启动，活动 SPT 指针、Module 和 Knowledge 均未改变。

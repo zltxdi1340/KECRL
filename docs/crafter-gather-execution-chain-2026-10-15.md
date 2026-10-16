@@ -76,7 +76,7 @@ v1 在创建 FOMAML optimizer 后，无条件用普通 PPO 的 `policy_learning_
 
 ## 验证和封存
 
-- 定向测试 `16 passed`，全量回归 `434 passed`。
+- 定向测试 `19 passed`，全量回归 `437 passed`。
 - v1 run8 相对 run7，六臂/seed 的全部原有训练与评价记录完全一致；这是已记录指标的独立进程复现，不是完整动作轨迹回放。
 - v2 独立 analyzer：`valid=true`、`source_optimizer_rates_verified=true`、warnings 为空；v2 run2 数值复现与 run1 一致，但严格 source pool 审计失败。
 - v3 run1/run2 独立 analyzer 均为 `valid=true`、`source_optimizer_rates_verified=true`；两次场景池审计均为 `valid=true`、`strict_source_scene_pool_equal=true`。数值训练记录、episode/scene/RGB manifest 和优化器设置逐项一致。
@@ -87,6 +87,6 @@ v1 在创建 FOMAML optimizer 后，无条件用普通 PPO 的 `policy_learning_
 
 ## 下一项
 
-将已通过复现的 v3 pool 分配扩展到 E2 三个 leave-one-binding-out fold，并重新核对成本、manifest hash 和角色隔离。
+E2 runner 已将 v3 pool 分配扩展到三个 leave-one-binding-out fold，并在一个 seed 的 bounded smoke 中通过 resolved binding、RGB provenance、paired pool 和角色隔离审计。下一步核对 candidate manifest 的成本、依赖/hash 和正式统计边界。
 
 这些边界明确后，再判断预定预算是否提供足够学习信号并冻结正式 E1/E2。不会因本次 B 终点较高就直接启动正式训练，也不自动转入新 head、奖励或表示消融。
