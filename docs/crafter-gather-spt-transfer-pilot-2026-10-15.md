@@ -1,7 +1,7 @@
 # Crafter gather 族 SPT→SPI 集成 pilot 记录
 
 日期：2026-10-16。状态：已完成非正式集成 pilot、动作链审计、学习率修正和来源场景池校准，正式实验仍未启动。
-当前校准配置为 [`crafter_gather_spt_transfer_pilot_v3.yaml`](../configs/crafter_gather_spt_transfer_pilot_v3.yaml)，代码入口为 [`run_crafter_gather_spt_transfer_pilot.py`](../experiments/run_crafter_gather_spt_transfer_pilot.py)。结果目录为 `results/crafter_gather_spt_transfer_pilot_v3_run1/`，代码 hash 为 `e43d678`。历史 v1/v2 结果和 v2 独立复现均保留，不合并为正式结果。
+当前校准配置为 [`crafter_gather_spt_transfer_pilot_v3.yaml`](../configs/crafter_gather_spt_transfer_pilot_v3.yaml)，代码入口为 [`run_crafter_gather_spt_transfer_pilot.py`](../experiments/run_crafter_gather_spt_transfer_pilot.py)。主结果目录为 `results/crafter_gather_spt_transfer_pilot_v3_run1/`，代码 hash 为 `e43d678`；独立进程复现为 `results/crafter_gather_spt_transfer_pilot_v3_run2/`，代码 hash 为 `155b204`。历史 v1/v2 结果和 v2 独立复现均保留，不合并为正式结果。
 
 这次 pilot 的目的，是确认研究问题已经被实例化为真实的 `SPT -> SPI -> 生成 CNN Policy -> 目标适应 -> 独立评价` 链路，并检查成本、梯度、场景规则和失败记录。它不是方法优选实验，也不用于证明 SPT 更新优于普通预训练。
 
@@ -24,7 +24,7 @@
 | B | 12 | 8192/8192 | 4096/4096 | 0/10 | 是/是 | 是 |
 | C | 12 | 8192/8192 | 4096/4096 | 0/10 | 是/是 | 是 |
 
-契约和诊断测试覆盖 SPT/SPI 版本绑定、工具边界、配对 RGB reset、生成器冷列、候选隔离、全新 optimizer、C 臂生成器梯度、RGB 可见性、原生短动作链、初始朝向、并列最短动作、实际学习率和来源场景池。当前定向测试为 `16 passed`，全量回归为 `434 passed`。v3 的预算/优化器审计返回 `valid=true`、`source_optimizer_rates_verified=true`；独立 provenance/场景池审计返回 `valid=true`、`provenance_valid=true`、`strict_source_scene_pool_equal=true`。旧 v2 的 provenance 完整性通过，但严格场景池检查失败，原因已保留在审计结果中。
+契约和诊断测试覆盖 SPT/SPI 版本绑定、工具边界、配对 RGB reset、生成器冷列、候选隔离、全新 optimizer、C 臂生成器梯度、RGB 可见性、原生短动作链、初始朝向、并列最短动作、实际学习率和来源场景池。当前定向测试为 `16 passed`，全量回归为 `434 passed`。v3 两次运行的预算/优化器审计均返回 `valid=true`、`source_optimizer_rates_verified=true`；两次独立 provenance/场景池审计均返回 `valid=true`、`provenance_valid=true`、`strict_source_scene_pool_equal=true`。run1/run2 的数值训练记录、episode/scene/RGB manifest 和优化器设置一致，复现报告保存在 run2 的 `reproduction_verification.json`。旧 v2 的 provenance 完整性通过，但严格场景池检查失败，原因已保留在审计结果中。
 
 ## 可学习性审计
 
@@ -75,7 +75,6 @@ v1 证明了接口和训练信号可运行，但不符合声明的外循环学�
 
 ## 下一步
 
-1. 对 v3 做一次独立进程复现，核对声明候选池、实际 optimizer、数值指标和 manifest hash；v3 当前仍是 calibration pilot。
-2. 将 v3 的 paired scene-pool 规则整理进 E2 runner，并核对多来源 SPI 的 pool 分配、目标 support 与 final evaluation 的角色隔离。
-3. 完成 E2 runner、成本/学习信号检查和预注册分析后，才冻结正式预算；候选仍为 10 个独立 seed、E2 三个 leave-one-binding-out fold、每点 100 个评价 episode，pilot seed 11/12 不合并。
-4. 正式组件实验完成后，才讨论 Module qualification、自然 Crafter 任务链和 Knowledge/Pipeline 更新；当前没有活动 SPT 切换、Module 注册或 Knowledge 更新。
+1. 将已通过校准的 paired scene-pool 规则整理进 E2 runner，并核对多来源 SPI 的 pool 分配、目标 support 与 final evaluation 的角色隔离。
+2. 完成 E2 runner、成本/学习信号检查和预注册分析后，才冻结正式预算；候选仍为 10 个独立 seed、E2 三个 leave-one-binding-out fold、每点 100 个评价 episode，pilot seed 11/12 不合并。
+3. 正式组件实验完成后，才讨论 Module qualification、自然 Crafter 任务链和 Knowledge/Pipeline 更新；当前没有活动 SPT 切换、Module 注册或 Knowledge 更新。

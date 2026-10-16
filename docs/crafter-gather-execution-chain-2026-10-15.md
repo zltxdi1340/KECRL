@@ -8,7 +8,7 @@
 
 沿用 `quiet-material-gather-v1`：三种材料距离中心 1--3，统一木镐、充足初始生存资源、无敌人/水/熔岩，原生 64×64 RGB、移动、转向和采集规则。此范围不验证自然 Crafter 生存、工具制作或 Module 资格。
 
-代码为 [`run_crafter_gather_execution_chain_diagnostic.py`](../experiments/run_crafter_gather_execution_chain_diagnostic.py)。先在 `0746753` 的 v1 run8、`908eb4c` 的 v2 run1、再在 `e43d678` 的 v3 run1 上保存六个固定预算末端 coal Policy 并做只读检查。三个版本独立保留，不合并为新增训练 seed。
+代码为 [`run_crafter_gather_execution_chain_diagnostic.py`](../experiments/run_crafter_gather_execution_chain_diagnostic.py)。先在 `0746753` 的 v1 run8、`908eb4c` 的 v2 run1、再在 `e43d678` 的 v3 run1 和 `155b204` 的 v3 run2 上保存六个固定预算末端 coal Policy 并做只读检查。四个版本独立保留，不合并为新增训练 seed。
 
 ## 原生动作链机械正对照
 
@@ -79,14 +79,14 @@ v1 在创建 FOMAML optimizer 后，无条件用普通 PPO 的 `policy_learning_
 - 定向测试 `16 passed`，全量回归 `434 passed`。
 - v1 run8 相对 run7，六臂/seed 的全部原有训练与评价记录完全一致；这是已记录指标的独立进程复现，不是完整动作轨迹回放。
 - v2 独立 analyzer：`valid=true`、`source_optimizer_rates_verified=true`、warnings 为空；v2 run2 数值复现与 run1 一致，但严格 source pool 审计失败。
-- v3 独立 analyzer：`valid=true`、`source_optimizer_rates_verified=true`；场景池审计 `valid=true`、`strict_source_scene_pool_equal=true`。v3 独立进程复现仍待完成。
+- v3 run1/run2 独立 analyzer 均为 `valid=true`、`source_optimizer_rates_verified=true`；两次场景池审计均为 `valid=true`、`strict_source_scene_pool_equal=true`。数值训练记录、episode/scene/RGB manifest 和优化器设置逐项一致。
 - 两版动作链结果均在另一个进程核对机械案例数、概率和动作集合账本、checkpoint 文件/参数哈希、4,096 步标签和共享 RGB 状态。各策略 probe 前后参数不变，六策略读取同一状态集合，核对结果 `valid=true`。
-- 结果位于 `results/crafter_gather_spt_transfer_pilot_v1_run8/` 与 `results/crafter_gather_spt_transfer_pilot_v2_run1/`；各有 `execution_chain/diagnostic.json` 和 `execution_chain/verification.json`，保存于实验主机。
+- 结果位于 `results/crafter_gather_spt_transfer_pilot_v1_run8/`、`results/crafter_gather_spt_transfer_pilot_v2_run1/` 和 v3 的 `run1`/`run2` 目录；v3 run2 另有 `reproduction_verification.json`，各动作链目录包含 `diagnostic.json` 和 `verification.json`，保存于实验主机。
 
 几何 oracle 的使用范围仅为机械正对照动作和诊断标签；A/B/C 训练、目标适应和自主评价仍使用固定动作 allowlist，不接收几何标签，也不替换动作。本轮没有生存干预、活动 SPT 切换、Module 注册或 Knowledge 更新。
 
 ## 下一项
 
-先对 v3 做独立进程复现，核对 paired candidate pool、实际 optimizer、数值指标和 manifest hash；随后将 v3 的 pool 分配扩展到 E2 三个 leave-one-binding-out fold，并重新核对成本和角色隔离。
+将已通过复现的 v3 pool 分配扩展到 E2 三个 leave-one-binding-out fold，并重新核对成本、manifest hash 和角色隔离。
 
 这些边界明确后，再判断预定预算是否提供足够学习信号并冻结正式 E1/E2。不会因本次 B 终点较高就直接启动正式训练，也不自动转入新 head、奖励或表示消融。
