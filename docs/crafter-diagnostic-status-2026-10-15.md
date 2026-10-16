@@ -2,9 +2,9 @@
 
 ## 当前结论
 
-当前仍在正式实验前。最新完成 gather 族 E1 wood→coal 的动作链审计与学习率配置修正 pilot：两个 replica、A/B/C 三臂，B/C 各 8,192 source 步，三臂各 4,096 target 步。当前结果为 `results/crafter_gather_spt_transfer_pilot_v2_run1/`（代码 `908eb4c`），详见[集成记录](crafter-gather-spt-transfer-pilot-2026-10-15.md)与[动作链报告](crafter-gather-execution-chain-2026-10-15.md)。定向测试 `13 passed`，全量回归 `431 passed`。
+当前仍在正式实验前。最新完成 gather 族 E1 wood→coal 的动作链审计、学习率修正和来源场景池对齐 pilot：两个 replica、A/B/C 三臂，B/C 各 8,192 source 步，三臂各 4,096 target 步。当前结果为 `results/crafter_gather_spt_transfer_pilot_v3_run1/`（代码 `e43d678`），详见[集成记录](crafter-gather-spt-transfer-pilot-2026-10-15.md)与[动作链报告](crafter-gather-execution-chain-2026-10-15.md)。本轮定向测试 `16 passed`，全量回归 `434 passed`。
 
-v1 曾将 B 的配置外循环 lr=0.001 覆盖为实际 0.0003，旧账本审计未检查实际学习率。已修复并记录 optimizer 实际值，v2 独立审计返回 `valid=true`、`source_optimizer_rates_verified=true`。v2 终点为 A `15/80`、B `25/80`、C `8/80`，共 48 次成功、192 次 external truncation、0 死亡。A/C 原有指标与 v1 完全一致。B 有改善信号，但两个 seed 及尚未冻结的分块/场景边界不支持正式优势结论；历史 v1 的 B `7/80` 单独保留，不合并。
+v1 曾将 B 的配置外循环 lr=0.001 覆盖为实际 0.0003，已修复并记录 optimizer 实际值。v2 独立进程复现的数值记录一致，但严格 source scene pool 审计失败：C 只使用了 B support 池的实际前缀并增加其他场景，B query 池未进入 C。v3 声明并配对 support/query 候选池，provenance 和严格场景池审计均通过。v3 终点为 A `15/80`、B `7/80`、C `19/80`，共 41 次成功、199 次 external truncation、0 死亡。v2 的 B `25/80` 未复现，当前没有 SPT 优势证据。
 
 动作链机械正对照覆盖 32 个布局、三种材料：最短原生路线为 1--6 步，8/16/32 步均 96/96 成功。六个冻结 coal Policy 在相同 83 个 RGB 状态上读取 498 次动作分布，各策略 probe 前后参数哈希不变。修复后的 B 在 approach/turn/do 状态都偏向 do，阶段区分仍弱。这定位了执行表现，尚不能区分表示、head、状态覆盖、优化和奖励/信用分配的责任；脚本正对照不是学习策略成功率，stone 也未进行学习策略评价。
 
@@ -28,7 +28,7 @@ v1 曾将 B 的配置外循环 lr=0.001 覆盖为实际 0.0003，旧账本审计
 
 新的[SPT/SPI 迁移协议草案](crafter-spt-spi-transfer-protocol-2026-10-15.md)与设计清单已形成并完成一次 E1 集成 pilot：同一 gather 族含 wood/stone/coal 三个绑定；E1 检验 wood->coal，E2 轮流留出一个绑定；A 为更新前模板，B 为 FOMAML 候选，C 为等容量、等来源交互预算的普通预训练。统一工具、多材料受控场景和 CNN 生成器链路已接通；正式 E1/E2 仍需在冻结 manifest、独立进程复核和成本检查后启动。
 
-下一项是正式实验前的可比性审计：B 的两个 256 步块与 C 的一个 512 步块、来源场景池、数据角色布局/RGB 隔离、v2 独立进程复现以及 E2 runner 仍需补齐。pilot 已接通真实 RGB rollout、CNN actor 残差生成器和 FOMAML query，不能只因 B 的小样本终点较高就跳过这些边界。预算与统计设置仍未冻结；正式迁移实验尚未启动。
+下一项是 v3 独立进程复现和 E2 runner：v3 已补齐 B/C source candidate pool、逐 episode scene/RGB manifest 和角色隔离审计，但正式多绑定实验的 pool 分配、成本及统计仍未冻结。pilot 已接通真实 RGB rollout、CNN actor 残差生成器和 FOMAML query，不能因 v2 的小样本终点较高就跳过这些边界。正式迁移实验尚未启动。
 
 无需 wood 达到候选 0.8 才能研究 SPT；SPI 学习失败也可提供反馈。受控组件实验不等于自然 Crafter Module 资格或完整 KECRL 验证。当前没有新的活动 SPT 切换、Module 注册或 Knowledge 更新；自然 stone、coal、pickaxe、工具获取、生存及持续任务链仍需独立验证。
 

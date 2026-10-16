@@ -1,6 +1,6 @@
 # Crafter gather 动作链审计与学习率修正
 
-日期：2026-10-15。状态：非正式诊断已完成，正式 E1/E2 未启动。
+日期：2026-10-16。状态：非正式诊断已完成，正式 E1/E2 未启动。
 
 ## 本轮问题与范围
 
@@ -8,7 +8,7 @@
 
 沿用 `quiet-material-gather-v1`：三种材料距离中心 1--3，统一木镐、充足初始生存资源、无敌人/水/熔岩，原生 64×64 RGB、移动、转向和采集规则。此范围不验证自然 Crafter 生存、工具制作或 Module 资格。
 
-代码为 [`run_crafter_gather_execution_chain_diagnostic.py`](../experiments/run_crafter_gather_execution_chain_diagnostic.py)。先在 `0746753` 的 v1 run8 保存六个固定预算末端 coal Policy，后在 `908eb4c` 的修复版 v2 run1 上重复只读检查。两个版本独立保留，不合并为新增训练 seed。
+代码为 [`run_crafter_gather_execution_chain_diagnostic.py`](../experiments/run_crafter_gather_execution_chain_diagnostic.py)。先在 `0746753` 的 v1 run8、`908eb4c` 的 v2 run1、再在 `e43d678` 的 v3 run1 上保存六个固定预算末端 coal Policy 并做只读检查。三个版本独立保留，不合并为新增训练 seed。
 
 ## 原生动作链机械正对照
 
@@ -51,13 +51,21 @@ B/seed 11 在 approach、turn、do 状态的平均 `p(do)` 分别为 54.58%、54
 
 当前能定位的是动作阶段条件化不足的表现；RGB 表示读出、动作头、状态覆盖、优化和奖励/信用分配的责任仍未分开。检查只读取 coal Policy；stone 只参加机械正对照，未验证其学习成功率。
 
+## 来源 scene pool 可比性审计
+
+带 manifest 的 v2 run2 显示，source 角色本身没有与 target/evaluation 交叉污染，但 B/C 的实际 scene seed 集合不相同：seed 11 的 B/C 实际 scene 数为 289/283，seed 12 为 288/289；B 的 query scene 没有进入 C。新的严格审计将此判定为失败，而不是只报告总步数相等。
+
+v3 为每个 source slot 声明 64 个 support 和 64 个 query 候选 scene seed，support/query 池彼此不重叠，B 与 C 每个 replica 的声明池均为 2,048 个 scene seed，交集和并集相等。B/C 仍独立采样和提前结束，所以实际访问子集不同（seed 11 为 299/312，seed 12 为 275/276）；这属于策略轨迹差异，不是 candidate pool 不一致。v3 的场景池审计为 `valid=true`、`provenance_valid=true`、`strict_source_scene_pool_equal=true`。
+
+v2 的 B `25/80` 终点优势在 v3 对齐池后变为 B `7/80`、C `19/80`；这说明 v2 信号对 source pool 边界敏感，不能作为方法优势证据。
+
 ## 发现并修复的学习率错误
 
 v1 在创建 FOMAML optimizer 后，无条件用普通 PPO 的 `policy_learning_rate=0.0003` 覆盖两个来源 optimizer，导致声明的 `meta_learning_rate=0.001` 未实际生效。v1 的预算/接口审计没有检查实际学习率，因此旧 `valid=true` 不能证明这一配置边界。
 
 `908eb4c` 按 arm 构建来源 optimizer：B 外循环为 0.001，C 普通更新为 0.0003，内循环和 target PPO 仍为 0.0003。结果新增实际学习率账本，独立 analyzer 会拒绝记录值与配置不符的运行；旧记录缺少该字段时明确标注未验证。回归测试覆盖了这次错误。
 
-修正配置为 [`crafter_gather_spt_transfer_pilot_v2.yaml`](../configs/crafter_gather_spt_transfer_pilot_v2.yaml)。其数值设置、任务、两个 seed、来源 8,192 步和目标 4,096 步与 v1 相同；只修复 B 的配置执行。A/C 的全部原有训练及评价指标保持一致，详见 `correction_verification.json`。
+修正配置为 [`crafter_gather_spt_transfer_pilot_v2.yaml`](../configs/crafter_gather_spt_transfer_pilot_v2.yaml)，场景池校准配置为 [`crafter_gather_spt_transfer_pilot_v3.yaml`](../configs/crafter_gather_spt_transfer_pilot_v3.yaml)。v3 的数值设置、任务、两个 seed、来源 8,192 步和目标 4,096 步保持不变，只增加 paired candidate pool 并让 C 合并两个 256 步块后更新。
 
 | 版本 | A 终点 | B 终点 | C 终点 |
 |---|---:|---:|---:|
@@ -68,9 +76,10 @@ v1 在创建 FOMAML optimizer 后，无条件用普通 PPO 的 `policy_learning_
 
 ## 验证和封存
 
-- 定向测试 `13 passed`，全量回归 `431 passed`。
+- 定向测试 `16 passed`，全量回归 `434 passed`。
 - v1 run8 相对 run7，六臂/seed 的全部原有训练与评价记录完全一致；这是已记录指标的独立进程复现，不是完整动作轨迹回放。
-- v2 独立 analyzer：`valid=true`、`source_optimizer_rates_verified=true`、warnings 为空。v2 独立进程训练复现仍待完成。
+- v2 独立 analyzer：`valid=true`、`source_optimizer_rates_verified=true`、warnings 为空；v2 run2 数值复现与 run1 一致，但严格 source pool 审计失败。
+- v3 独立 analyzer：`valid=true`、`source_optimizer_rates_verified=true`；场景池审计 `valid=true`、`strict_source_scene_pool_equal=true`。v3 独立进程复现仍待完成。
 - 两版动作链结果均在另一个进程核对机械案例数、概率和动作集合账本、checkpoint 文件/参数哈希、4,096 步标签和共享 RGB 状态。各策略 probe 前后参数不变，六策略读取同一状态集合，核对结果 `valid=true`。
 - 结果位于 `results/crafter_gather_spt_transfer_pilot_v1_run8/` 与 `results/crafter_gather_spt_transfer_pilot_v2_run1/`；各有 `execution_chain/diagnostic.json` 和 `execution_chain/verification.json`，保存于实验主机。
 
@@ -78,6 +87,6 @@ v1 在创建 FOMAML optimizer 后，无条件用普通 PPO 的 `policy_learning_
 
 ## 下一项
 
-先做正式比较前的可比性审计：核对 B 的 256+256 support/query 与 C 的 512 步块、来源场景池、更新次数及实际成本；建立 source support/query、target support、evaluation 的逐 episode manifest，按布局、初始朝向和 RGB 检查角色隔离，随后完成 v2 独立进程复现和 E2 runner。
+先对 v3 做独立进程复现，核对 paired candidate pool、实际 optimizer、数值指标和 manifest hash；随后将 v3 的 pool 分配扩展到 E2 三个 leave-one-binding-out fold，并重新核对成本和角色隔离。
 
 这些边界明确后，再判断预定预算是否提供足够学习信号并冻结正式 E1/E2。不会因本次 B 终点较高就直接启动正式训练，也不自动转入新 head、奖励或表示消融。

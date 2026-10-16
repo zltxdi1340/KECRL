@@ -133,8 +133,8 @@
     "specified_statistical_power_established": false
   },
   "integration_pilot_candidate": {
-    "run_status": "completed_corrective_nonformal_pilot",
-    "config": "configs/crafter_gather_spt_transfer_pilot_v2.yaml",
+    "run_status": "completed_scene_pool_alignment_nonformal_pilot",
+    "config": "configs/crafter_gather_spt_transfer_pilot_v3.yaml",
     "experiment": "E1_direct_wood_to_coal",
     "replica_seeds": [11, 12],
     "source_rounds": 8,
@@ -142,8 +142,25 @@
     "target_support_steps": 4096,
     "evaluation_support_checkpoints": [0, 1024, 4096],
     "evaluation_episodes_per_checkpoint": 40,
-    "result_root": "results/crafter_gather_spt_transfer_pilot_v2_run1",
-    "code_commit": "908eb4c",
+    "result_root": "results/crafter_gather_spt_transfer_pilot_v3_run1",
+    "code_commit": "e43d678",
+    "source_scene_pool": {
+      "size_per_role_per_slot": 64,
+      "slot_stride": 200,
+      "query_offset": 100,
+      "B_C_declared_pool_sets_equal": true,
+      "provenance_valid": true,
+      "strict_source_scene_pool_equal": true
+    },
+    "historical_v2": {
+      "result_root": "results/crafter_gather_spt_transfer_pilot_v2_run1",
+      "independent_reproduction_root": "results/crafter_gather_spt_transfer_pilot_v2_run2",
+      "code_commit": "908eb4c",
+      "independent_reproduction_code_commit": "ad65c4f",
+      "numeric_records_identical": true,
+      "strict_source_scene_pool_equal": false,
+      "reason": "B/C actual source scene sets differed; C did not include B meta-query pool"
+    },
     "historical_v1": {
       "result_root": "results/crafter_gather_spt_transfer_pilot_v1_run7",
       "code_commit": "f1f49e4",
@@ -155,8 +172,9 @@
       "effective_rates_in_original_artifact": false
     },
     "effective_source_optimizer_rates_verified": true,
-    "source_block_and_scene_pool_alignment": "pending_B_256_plus_256_vs_C_512",
-    "independent_process_v2_reproduction": "pending",
+    "source_block_and_scene_pool_alignment": "v3_paired_candidate_pools_passed",
+    "independent_process_v2_reproduction": "completed_numeric_match_strict_pool_failed",
+    "independent_process_v3_reproduction": "pending",
     "result_summary": "docs/crafter-gather-spt-transfer-pilot-2026-10-15.md",
     "purpose": "integration_learnability_cost_variance_not_method_selection",
     "method_win_required_for_formal_entry": false,
@@ -166,7 +184,7 @@
   "execution_chain_diagnostic": {
     "status": "completed_nonformal_read_only_probe",
     "report": "docs/crafter-gather-execution-chain-2026-10-15.md",
-    "result": "results/crafter_gather_spt_transfer_pilot_v2_run1/execution_chain/diagnostic.json",
+    "result": "results/crafter_gather_spt_transfer_pilot_v3_run1/execution_chain/diagnostic.json",
     "mechanical_layouts": 32,
     "mechanical_materials": ["tree", "stone", "coal"],
     "native_shortest_route_step_range": [1, 6],

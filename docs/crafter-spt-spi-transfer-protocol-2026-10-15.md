@@ -121,7 +121,7 @@ B 的每个内循环从生成的全新 Policy 与全新 Adam 状态开始，使�
 query 的 old log-prob、value/return 和梯度必须与实际采样策略一致，不能用未适应策略的轨迹冒充 adapted query。
 
 C 使用同样来源任务槽及场景池，两个 256 步块都可供普通 PPO 学习，持续保留来源 optimizer；不在槽间做 meta reset。
-当前 pilot 的 C 仍使用一个 512 步块，与 B 的两个 256 步块在 reset/场景池及更新频率上有差别。正式实现前须对齐本节设计并记录成本，不能只凭总步数相同就声称这些边界全部匹配。
+v2 pilot 的 C 使用一个 512 步块，曾与 B 的两个 256 步块在 scene pool 上不一致。v3 校准为 B/C 每个 slot 共享 disjoint support/query candidate pools；C 分别收集两个 256 步块后合并做一次普通 PPO 更新。实际 episode 仍可因成功/截断而不同，manifest 必须区分声明 pool 与实际访问子集。
 不强制 B/C 的动作轨迹一致；只匹配来源目标分配、场景分布及总交互成本。
 二者优化步骤结构不同，须分别报告梯度次数、wall time、峰值显存与实际步数，不宣称计算成本完全相同。
 A 的来源步数为零，不能把 B 对 A 的优势单独当作元算法优势。
@@ -177,7 +177,7 @@ pilot 仅用于查接口、梯度、可学性、成本和方差；不决定方�
 pilot 数据永不合并进正式结果；明确披露使用 coal pilot 来定预算，因此 coal 是来源训练留出绑定，不是研究者从未接触的任务。
 只做这次集成/成本 pilot，不默认接续新的 head/奖励/表示消融。若发现实现错误则修复并记录失效运行；需要改变研究设计时先更新协议版本。
 
-已发现 v1 将 B 声明的外循环学习率 0.001 覆盖为实际 0.0003；旧账本审计未覆盖该项。v2 按原预算修复并记录实际学习率，独立审计通过；旧版保留为配置失配记录。v2 终点为 A 15/80、B 25/80、C 8/80，仅为两个 seed 的校准信号，不冻结方法优势。详见[动作链与修错报告](crafter-gather-execution-chain-2026-10-15.md)。
+已发现 v1 将 B 声明的外循环学习率 0.001 覆盖为实际 0.0003；旧账本审计未覆盖该项。v2 按原预算修复并记录实际学习率，v2 run2 数值复现一致但严格 scene pool 审计失败。v3 增加 paired support/query candidate pools，场景池审计通过；终点为 A 15/80、B 7/80、C 19/80，仅为两个 seed 的校准信号，不冻结方法优势。详见[动作链与修错报告](crafter-gather-execution-chain-2026-10-15.md)。
 
 进入正式组件实验前应具备：
 
@@ -199,6 +199,6 @@ pilot 数据永不合并进正式结果；明确披露使用 coal pilot 来定�
 | episode batch | `SpatialPPORollout` | 已明确 `[N,3,64,64]` RGB 形状、向量对齐和固定 action allowlist；更大规模的 scene manifest 仍需冻结 |
 | 受控场景 | `experiments/crafter_material_gather_scene.py` | 三材料、原生工具规则、配对 reset 和 RGB 场景已通过 pilot；不把旧相邻树结果冒充新训练环境 |
 | 确定性/回放 | `run_crafter_gather_spt_transfer_pilot.py` | CUDA 确定性设置、RNG 恢复、步数账本和 cold-column 审计已在两个独立 pilot 运行中检查 |
-| manifest/计量/分析 | pilot runner 与[集成记录](crafter-gather-spt-transfer-pilot-2026-10-15.md) | E1 小 pilot 已完成；正式 E1/E2 的 manifest、hash 封存、独立进程复核和按 seed 分析仍需冻结 |
+| manifest/计量/分析 | pilot runner 与[集成记录](crafter-gather-spt-transfer-pilot-2026-10-15.md) | v3 E1 小 pilot 已有逐 episode manifest 和 paired candidate pool 审计；正式 E1/E2 的 hash 封存、独立进程复核和按 seed 分析仍需冻结 |
 
-当前已完成非正式 E1 wood→coal 集成、动作链审计和学习率修错 pilot（seed 11/12），结果见[集成记录](crafter-gather-spt-transfer-pilot-2026-10-15.md)。v2 的 B 有小样本改善信号，但正式比较前仍需处理来源分块/场景池、角色隔离 manifest、独立进程复现和 E2 runner。正式 E1/E2 尚未启动，活动 SPT 指针、Module 和 Knowledge 均未改变。
+当前已完成非正式 E1 wood→coal 集成、动作链审计、学习率修错和 paired scene-pool 校准 pilot（seed 11/12），结果见[集成记录](crafter-gather-spt-transfer-pilot-2026-10-15.md)。v3 解决了当前 pilot 的 source pool 可比性缺口，但独立复现、E2 runner、正式预算和统计仍未冻结。正式 E1/E2 尚未启动，活动 SPT 指针、Module 和 Knowledge 均未改变。

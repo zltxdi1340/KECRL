@@ -1,7 +1,7 @@
 # Crafter gather 族 SPT→SPI 集成 pilot 记录
 
-日期：2026-10-15。状态：已完成非正式集成 pilot、动作链审计及学习率覆盖错误的修正校准，正式实验仍未启动。
-当前配置为 [`crafter_gather_spt_transfer_pilot_v2.yaml`](../configs/crafter_gather_spt_transfer_pilot_v2.yaml)，代码入口为 [`run_crafter_gather_spt_transfer_pilot.py`](../experiments/run_crafter_gather_spt_transfer_pilot.py)。修复版结果目录为 `results/crafter_gather_spt_transfer_pilot_v2_run1/`，代码 hash 为 `908eb4c`。历史 v1 canonical run7（`f1f49e4`）及保存 checkpoint 的等指标复现 run8（`0746753`）均保留；原始结果在实验主机，未纳入正式结果集。
+日期：2026-10-16。状态：已完成非正式集成 pilot、动作链审计、学习率修正和来源场景池校准，正式实验仍未启动。
+当前校准配置为 [`crafter_gather_spt_transfer_pilot_v3.yaml`](../configs/crafter_gather_spt_transfer_pilot_v3.yaml)，代码入口为 [`run_crafter_gather_spt_transfer_pilot.py`](../experiments/run_crafter_gather_spt_transfer_pilot.py)。结果目录为 `results/crafter_gather_spt_transfer_pilot_v3_run1/`，代码 hash 为 `e43d678`。历史 v1/v2 结果和 v2 独立复现均保留，不合并为正式结果。
 
 这次 pilot 的目的，是确认研究问题已经被实例化为真实的 `SPT -> SPI -> 生成 CNN Policy -> 目标适应 -> 独立评价` 链路，并检查成本、梯度、场景规则和失败记录。它不是方法优选实验，也不用于证明 SPT 更新优于普通预训练。
 
@@ -10,7 +10,7 @@
 - 新建 `quiet-material-gather-v1` 场景。每个场景同时放置一棵树、一块石头和一块煤，材料位置距玩家 Manhattan 距离为 1--3；场景构造器检查相邻可采集格可达。移动、朝向、`do`、木镐要求、库存变化和 RGB 渲染继续走安装包中的原生 Crafter 逻辑。
 - 建立 `spt:crafter:gather@1.0.0`，绑定 `tree/wood`、`stone/stone`、`coal/coal` 三个 SPI。树不要求木镐；石头和煤要求初始库存有一把木镐。策略输入仍是 64×64×3 RGB，目标绑定只通过公开 SPI context 进入生成器。
 - 建立共享 CNN-only SPT：encoder/critic 共享，`context_to_actor` 为对 `actor.weight` 和 `actor.bias` 的完整线性残差生成器，初始权重为零。A、B、C 三臂使用相同容量。
-- B 臂用 source support、adapted-policy query 和一阶 FOMAML 更新 SPT 的模板与生成器；C 臂用相同 source 任务和步数，直接对生成策略的 PPO 损失更新同一个模板与生成器；A 臂不做 source 更新。
+- B 臂用 source support、adapted-policy query 和一阶 FOMAML 更新 SPT 的模板与生成器；C 臂在 v3 中使用与 B 相同的 support/query 候选场景池，分别收集两个 256 步块后合并做普通 PPO 更新；A 臂不做 source 更新。
 - 三臂在 coal SPI 上分别从 support=0、1024、4096 步评价，每点 40 个 episode。目标适应使用新建的 Adam，不复用 source optimizer；评价保存并恢复 Torch/CUDA RNG。
 
 ## 账本和接口核对
@@ -24,7 +24,7 @@
 | B | 12 | 8192/8192 | 4096/4096 | 0/10 | 是/是 | 是 |
 | C | 12 | 8192/8192 | 4096/4096 | 0/10 | 是/是 | 是 |
 
-契约和诊断测试覆盖 SPT/SPI 版本绑定、工具边界、配对 RGB reset、生成器冷列、候选隔离、全新 optimizer、C 臂生成器梯度、RGB 可见性、原生短动作链、初始朝向、并列最短动作及实际学习率。当前定向测试为 `13 passed`，全量回归为 `431 passed`。独立审计器 [`analyze_crafter_gather_spt_transfer_pilot.py`](../experiments/analyze_crafter_gather_spt_transfer_pilot.py) 对 v2 run1 返回 `valid=true`、`source_optimizer_rates_verified=true`，无警告。旧 v1 的账本审计没有覆盖实际学习率，不能据其 `valid=true` 声称配置完全一致。
+契约和诊断测试覆盖 SPT/SPI 版本绑定、工具边界、配对 RGB reset、生成器冷列、候选隔离、全新 optimizer、C 臂生成器梯度、RGB 可见性、原生短动作链、初始朝向、并列最短动作、实际学习率和来源场景池。当前定向测试为 `16 passed`，全量回归为 `434 passed`。v3 的预算/优化器审计返回 `valid=true`、`source_optimizer_rates_verified=true`；独立 provenance/场景池审计返回 `valid=true`、`provenance_valid=true`、`strict_source_scene_pool_equal=true`。旧 v2 的 provenance 完整性通过，但严格场景池检查失败，原因已保留在审计结果中。
 
 ## 可学习性审计
 
@@ -33,11 +33,23 @@
 - v1 的 seed 11 偏向 `do`，seed 12 的 `do` 比例低；两者均未形成稳定采集链。动作边际分布不能独自定位 RGB 表示、head、状态覆盖或奖励/信用分配的责任。
 - 后续[动作链诊断](crafter-gather-execution-chain-2026-10-15.md)中，32 个布局的三种材料均可由原生脚本在最多 6 步完成，8/16/32 步正对照都是 96/96；冻结策略在相同 RGB 状态上的阶段选择仍较弱。这是组件执行审计，不是学习策略成绩或自然 Module 资格。
 
-## 修复版 v2 结果
+## 场景池校准版 v3 结果
+
+v2 的独立进程复现表明，旧实现的 B/C 实际 source scene 集合不相同：每个 seed 中 C 覆盖了 B 的 support 场景并额外使用其他场景，B 的 meta-query 场景没有进入 C。v3 为每个 slot 声明 64 个 support 和 64 个 query 候选 scene seed，B 和 C 使用相同的两个候选池；C 仍保持普通 PPO，只将两段 256 步 rollout 合并后更新。v3 每个 arm 的 source/target 步数没有增加。
+
+| arm | seed 11：0/1024/4096 步 | seed 12：0/1024/4096 步 | 终点合计 |
+|---|---:|---:|---:|
+| A：更新前 SPT | 0.150 / 0.050 / 0.350 | 0.100 / 0.125 / 0.025 | 15/80（0.1875） |
+| B：FOMAML SPT 更新 | 0.150 / 0.225 / 0.150 | 0.100 / 0.150 / 0.025 | 7/80（0.0875） |
+| C：普通 PPO 预训练 | 0.050 / 0.150 / 0.200 | 0.025 / 0.325 / 0.275 | 19/80（0.2375） |
+
+v3 的声明候选池在两个 replica 中均为 B/C 各 2,048 个 scene seed，交集和并集都为 2,048；不同策略因 episode 提前结束而实际访问的 seed 子集不同，这是允许的轨迹差异，不再把它误称为同一条轨迹。v3 终点 240 集有 41 次成功、199 次 external truncation、0 死亡。v2 的 B `25/80` 优势没有在场景池对齐后复现，因此不能作为 SPT 优势证据。
+
+## 修复版 v2 结果（历史校准）
 
 v1 runner 在建立 FOMAML optimizer 后，无条件把两个 source optimizer 的学习率改成 `policy_learning_rate=0.0003`，覆盖了声明的 `meta_learning_rate=0.001`。这是配置实现错误。`908eb4c` 修复后，B 使用配置的外循环学习率，C 使用普通 PPO 学习率，并将实际值写入结果供独立审计。内循环和 target PPO 仍为 `0.0003`。
 
-v2 保持原来的两个 seed、来源 8,192 步、目标 4,096 步、奖励、网络和评价预算；新增运行用于修复实现错误，不按方法胜负追加预算。A/C 的全部原有训练与评价记录与 v1 run8 一致，复核文件为 `correction_verification.json`。
+v2 保持原来的两个 seed、来源 8,192 步、目标 4,096 步、奖励、网络和评价预算；新增运行用于修复实现错误，不按方法胜负追加预算。A/C 的全部原有训练与评价记录与 v1 run8 一致，复核文件为 `correction_verification.json`。v2 run2 是带完整 episode manifest 的独立进程复现，数值记录与 run1 一致；但严格 source scene pool 审计失败，不能作为场景池已对齐的结果。
 
 | arm | seed 11：0/1024/4096 步 | seed 12：0/1024/4096 步 | 终点合计 |
 |---|---:|---:|---:|
@@ -45,7 +57,7 @@ v2 保持原来的两个 seed、来源 8,192 步、目标 4,096 步、奖励、�
 | B：FOMAML SPT 更新 | 0.150 / 0.125 / 0.275 | 0.100 / 0.200 / 0.350 | 25/80（0.3125） |
 | C：普通 PPO 预训练 | 0.100 / 0.275 / 0.200 | 0.175 / 0.100 / 0.000 | 8/80（0.1000） |
 
-终点 240 集中有 48 次成功、192 次 external truncation，无死亡。B 的 pilot 终点高于 A/C，但两个 seed、当前场景配对和分块边界尚不足以支持正式方法优势。所有臂均未达到候选 0.8；达到该值不是研究 SPT 迁移的前提。
+终点 240 集中有 48 次成功、192 次 external truncation，无死亡。B 的 pilot 终点高于 A/C，但场景池边界随后被发现不一致；该结果仅作为修错校准，不支持正式方法优势。
 
 ## 历史 v1 结果（实际外循环 lr=0.0003）
 
@@ -63,7 +75,7 @@ v1 证明了接口和训练信号可运行，但不符合声明的外循环学�
 
 ## 下一步
 
-1. 审计来源分块和场景池：当前 B 每槽使用两个 256 步 support/query 块，C 是一个 512 步普通 PPO 块；总交互相等不代表分块、场景池或更新次数相同。冻结正式实现前对齐协议要求并记录差异。
-2. 建立 source support/query、target support、evaluation 的逐 episode manifest，按材料布局、初始朝向和初始 RGB 核对角色隔离；整数 seed 不同不能代替这项检查。修复版 v2 的独立进程复现仍待完成；v1 的等指标复现不能冒充 v2 复现，也不是完整动作轨迹回放。
-3. 完成可比性审计、E2 runner、成本/学习信号检查后，才冻结正式预算；候选仍为 10 个独立 seed、E2 三个 leave-one-binding-out fold、每点 100 个评价 episode 和预注册分析，pilot seed 11/12 不合并。不会自动接续新的 head/奖励/表示消融。
+1. 对 v3 做一次独立进程复现，核对声明候选池、实际 optimizer、数值指标和 manifest hash；v3 当前仍是 calibration pilot。
+2. 将 v3 的 paired scene-pool 规则整理进 E2 runner，并核对多来源 SPI 的 pool 分配、目标 support 与 final evaluation 的角色隔离。
+3. 完成 E2 runner、成本/学习信号检查和预注册分析后，才冻结正式预算；候选仍为 10 个独立 seed、E2 三个 leave-one-binding-out fold、每点 100 个评价 episode，pilot seed 11/12 不合并。
 4. 正式组件实验完成后，才讨论 Module qualification、自然 Crafter 任务链和 Knowledge/Pipeline 更新；当前没有活动 SPT 切换、Module 注册或 Knowledge 更新。
