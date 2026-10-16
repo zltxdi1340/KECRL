@@ -149,6 +149,19 @@ def test_e2_smoke_config_resolves_three_disjoint_holdout_folds():
     assert all(item["formal_result"] is False for item in resolved)
 
 
+def test_e2_candidate_preflight_matches_protocol_cost_and_replica_ranges():
+    from experiments.analyze_crafter_gather_spt_transfer_e2_candidate import preflight
+
+    result = preflight(
+        "configs/crafter_gather_spt_transfer_e2_candidate_v1.yaml",
+        "configs/crafter_gather_spt_transfer_protocol_candidate_v1.yaml",
+    )
+    assert result["valid"]
+    assert result["formal_freeze_ready"] is False
+    assert result["costs"]["e2_total_interaction_step_upper_bound"] == 6_846_720
+    assert result["scene_pool_checks"]["cross_replica_role_ranges_disjoint"]
+
+
 def test_material_scene_is_paired_and_uses_native_collection_requirements():
     pytest.importorskip("crafter")
     import numpy as np

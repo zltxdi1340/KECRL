@@ -207,6 +207,22 @@
     "formal_result": false,
     "purpose": "runner_and_role_boundary_smoke_only"
   },
+  "e2_candidate_preflight": {
+    "status": "completed_nonformal_cost_provenance_preflight",
+    "config": "configs/crafter_gather_spt_transfer_e2_candidate_v1.yaml",
+    "result": "results/crafter_gather_spt_transfer_e2_candidate_v1/preflight.json",
+    "valid": true,
+    "formal_freeze_ready": false,
+    "cost_upper_bounds": {
+      "e2": 6846720,
+      "e1": 2282240,
+      "combined_e1_e2": 9128960
+    },
+    "cross_replica_role_seed_ranges_disjoint": true,
+    "source_hashes_recorded": true,
+    "dependencies_recorded": true,
+    "purpose": "candidate_consistency_cost_and_provenance_preflight_only"
+  },
   "execution_chain_diagnostic": {
     "status": "completed_nonformal_read_only_probe",
     "report": "docs/crafter-gather-execution-chain-2026-10-15.md",

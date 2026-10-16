@@ -24,7 +24,7 @@
 | B | 12 | 8192/8192 | 4096/4096 | 0/10 | 是/是 | 是 |
 | C | 12 | 8192/8192 | 4096/4096 | 0/10 | 是/是 | 是 |
 
-契约和诊断测试覆盖 SPT/SPI 版本绑定、工具边界、配对 RGB reset、生成器冷列、候选隔离、全新 optimizer、C 臂生成器梯度、RGB 可见性、原生短动作链、初始朝向、并列最短动作、实际学习率、source material 绑定和来源场景池。当前定向测试为 `19 passed`，全量回归为 `437 passed`。v3 两次运行的预算/优化器审计均返回 `valid=true`、`source_optimizer_rates_verified=true`；两次独立 provenance/场景池审计均返回 `valid=true`、`provenance_valid=true`、`strict_source_scene_pool_equal=true`。run1/run2 的数值训练记录、episode/scene/RGB manifest 和优化器设置一致，复现报告保存在 run2 的 `reproduction_verification.json`。E2 三 fold bounded smoke 的聚合审计也返回 `valid=true`，但不产生正式统计。旧 v2 的 provenance 完整性通过，但严格场景池检查失败，原因已保留在审计结果中。
+契约和诊断测试覆盖 SPT/SPI 版本绑定、工具边界、配对 RGB reset、生成器冷列、候选隔离、全新 optimizer、C 臂生成器梯度、RGB 可见性、原生短动作链、初始朝向、并列最短动作、实际学习率、source material 绑定和来源场景池。当前定向测试为 `20 passed`，全量回归为 `438 passed`。v3 两次运行的预算/优化器审计均返回 `valid=true`、`source_optimizer_rates_verified=true`；两次独立 provenance/场景池审计均返回 `valid=true`、`provenance_valid=true`、`strict_source_scene_pool_equal=true`。run1/run2 的数值训练记录、episode/scene/RGB manifest 和优化器设置一致，复现报告保存在 run2 的 `reproduction_verification.json`。E2 三 fold bounded smoke 的聚合审计和 candidate 成本/provenance 预检均返回 `valid=true`，但不产生正式统计。旧 v2 的 provenance 完整性通过，但严格场景池检查失败，原因已保留在审计结果中。
 
 ## 可学习性审计
 
@@ -75,6 +75,6 @@ v1 证明了接口和训练信号可运行，但不符合声明的外循环学�
 
 ## 下一步
 
-1. 对 `crafter_gather_spt_transfer_e2_candidate_v1.yaml` 做成本、依赖版本、代码 hash、manifest 和统计预检；candidate 仍保持 `ready_for_formal_training=false`。
-2. 预检通过后再由用户决定是否冻结正式预算；候选仍为 10 个独立 seed、E2 三个 leave-one-binding-out fold、每点 100 个评价 episode，pilot seed 11/12 不合并。
+1. 预检已通过；candidate 仍保持 `ready_for_formal_training=false`，下一步是确认正式 hash 封存、统计版本和启动边界。
+2. 边界冻结后再由用户决定是否启动正式预算；候选仍为 10 个独立 seed、E2 三个 leave-one-binding-out fold、每点 100 个评价 episode，pilot seed 11/12 不合并。
 3. 正式组件实验完成后，才讨论 Module qualification、自然 Crafter 任务链和 Knowledge/Pipeline 更新；当前没有活动 SPT 切换、Module 注册或 Knowledge 更新。

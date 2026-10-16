@@ -87,6 +87,6 @@ v1 在创建 FOMAML optimizer 后，无条件用普通 PPO 的 `policy_learning_
 
 ## 下一项
 
-E2 runner 已将 v3 pool 分配扩展到三个 leave-one-binding-out fold，并在一个 seed 的 bounded smoke 中通过 resolved binding、RGB provenance、paired pool 和角色隔离审计。下一步核对 candidate manifest 的成本、依赖/hash 和正式统计边界。
+E2 runner 已将 v3 pool 分配扩展到三个 leave-one-binding-out fold，并在一个 seed 的 bounded smoke 中通过 resolved binding、RGB provenance、paired pool 和角色隔离审计。candidate manifest 的成本/provenance 预检也通过，跨 replica 角色 seed 区间无碰撞；下一步确认正式 hash 封存和统计边界。
 
 这些边界明确后，再判断预定预算是否提供足够学习信号并冻结正式 E1/E2。不会因本次 B 终点较高就直接启动正式训练，也不自动转入新 head、奖励或表示消融。

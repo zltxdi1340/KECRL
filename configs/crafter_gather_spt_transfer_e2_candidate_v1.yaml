@@ -12,7 +12,7 @@
     {"fold_id": "holdout_wood", "source_materials": ["stone", "coal"], "target_material": "tree"}
   ],
   "replica_seeds": [101, 102, 103, 104, 105, 106, 107, 108, 109, 110],
-  "replicate_seed_stride": 100000,
+  "replicate_seed_stride": 10000000,
   "source_rounds": 64,
   "source_task_slots_per_round": 2,
   "source_support_steps_per_slot": 256,
