@@ -12,8 +12,10 @@ from collections import Counter
 from pathlib import Path
 
 from experiments.crafter_material_gather_scene import (
+    INJECTIVE_SCENE_VERSION,
     MaterialGatherEnv,
     SCENE_VERSION,
+    injective_scene_seed,
     make_material_gather_scene,
 )
 
@@ -29,7 +31,9 @@ def _manifest_scene_seeds(summary: dict) -> list[int]:
 def _check_block_manifest(summary: dict, role: str, expected_steps: int,
                           label: str, errors: list[str], *, verify_rgb: bool = True,
                           expected_material: str | None = None,
-                          expected_action_rng_scheme: str | None = None) -> dict:
+                          expected_action_rng_scheme: str | None = None,
+                          replica_seed: int | None = None,
+                          expected_scene_counter_start: int | None = None) -> dict:
     """Check one recorded interaction block and return its provenance summary."""
     if summary.get("role") != role:
         errors.append(f"{label}: role is {summary.get('role')!r}, expected {role!r}")
@@ -59,6 +63,15 @@ def _check_block_manifest(summary: dict, role: str, expected_steps: int,
             continue
         seed = int(entry["scene_seed"])
         scene_scheme = str(entry["scene"].get("scene_version", SCENE_VERSION))
+        if scene_scheme == INJECTIVE_SCENE_VERSION:
+            if replica_seed is None or expected_scene_counter_start is None:
+                errors.append(f"{entry_label}: frozen v2 role schedule was not supplied to auditor")
+            else:
+                expected_seed = injective_scene_seed(
+                    replica_seed, role, expected_scene_counter_start + index
+                )
+                if seed != expected_seed:
+                    errors.append(f"{entry_label}: scene seed differs from frozen role schedule")
         scene = make_material_gather_scene(seed, scheme=scene_scheme)
         expected_record = scene.record()
         if entry["scene"] != expected_record:
@@ -111,7 +124,9 @@ def _check_block_manifest(summary: dict, role: str, expected_steps: int,
 def _check_evaluation_manifest(evaluation: dict, expected_episodes: int,
                               label: str, errors: list[str], *, verify_rgb: bool = True,
                               expected_material: str | None = None,
-                              expected_action_rng_scheme: str | None = None) -> dict:
+                              expected_action_rng_scheme: str | None = None,
+                              replica_seed: int | None = None,
+                              expected_scene_counter_start: int | None = None) -> dict:
     rows = evaluation.get("rows", [])
     if len(rows) != expected_episodes:
         errors.append(f"{label}: evaluation row count mismatch")
@@ -129,6 +144,15 @@ def _check_evaluation_manifest(evaluation: dict, expected_episodes: int,
             errors.append(f"{row_label}: evaluation action RNG scheme mismatch")
         seed = int(row["scene_seed"])
         scene_scheme = str(row["scene"].get("scene_version", SCENE_VERSION))
+        if scene_scheme == INJECTIVE_SCENE_VERSION:
+            if replica_seed is None or expected_scene_counter_start is None:
+                errors.append(f"{row_label}: frozen v2 evaluation schedule was not supplied to auditor")
+            else:
+                expected_seed = injective_scene_seed(
+                    replica_seed, "final_evaluation", expected_scene_counter_start + index
+                )
+                if seed != expected_seed:
+                    errors.append(f"{row_label}: scene seed differs from frozen evaluation schedule")
         scene = make_material_gather_scene(seed, scheme=scene_scheme)
         if row["scene"] != scene.record():
             errors.append(f"{row_label}: scene record does not match scene seed")
@@ -196,6 +220,7 @@ def analyze(input_path: str | Path, *, verify_rgb: bool = True) -> dict:
     expected_target_blocks = expected_target_steps // int(config["target_update_steps"])
     expected_eval_episodes = int(config["evaluation_episodes"])
     expected_action_rng_scheme = config.get("action_rng_scheme")
+    expected_scene_scheme = str(config.get("scene_layout_scheme", SCENE_VERSION))
 
     for run in aggregate.get("runs", []):
         arm = str(run["arm"])
@@ -223,7 +248,12 @@ def analyze(input_path: str | Path, *, verify_rgb: bool = True) -> dict:
                     checked = _check_block_manifest(summary, role, steps, f"{label}/row_{index}/{role}", errors,
                                                     verify_rgb=verify_rgb,
                                                     expected_material=source_materials[index % len(source_materials)],
-                                                    expected_action_rng_scheme=expected_action_rng_scheme)
+                                                    expected_action_rng_scheme=expected_action_rng_scheme,
+                                                    replica_seed=seed if expected_scene_scheme == INJECTIVE_SCENE_VERSION else None,
+                                                    expected_scene_counter_start=(
+                                                        index * steps
+                                                        if expected_scene_scheme == INJECTIVE_SCENE_VERSION else None
+                                                    ))
                     source_entries.append(checked)
                     source_sets_by_role.setdefault(role, set()).update(checked["scene_seeds"])
                     source_scene_keys_by_role.setdefault(role, set()).update(checked["scene_keys"])
@@ -266,6 +296,12 @@ def analyze(input_path: str | Path, *, verify_rgb: bool = True) -> dict:
                                 verify_rgb=verify_rgb,
                                 expected_material=source_materials[index % len(source_materials)],
                                 expected_action_rng_scheme=expected_action_rng_scheme,
+                                replica_seed=seed if expected_scene_scheme == INJECTIVE_SCENE_VERSION else None,
+                                expected_scene_counter_start=(
+                                    index * int(config["source_support_steps_per_slot"])
+                                    if subrole.endswith("support")
+                                    else index * int(config["source_query_steps_per_slot"])
+                                ) if expected_scene_scheme == INJECTIVE_SCENE_VERSION else None,
                             )
                             source_scene_keys_by_role.setdefault(subrole, set()).update(subchecked["scene_keys"])
                             source_rgb_hashes_by_role.setdefault(subrole, set()).update(subchecked["rgb_hashes"])
@@ -292,7 +328,11 @@ def analyze(input_path: str | Path, *, verify_rgb: bool = True) -> dict:
                                             f"{label}/target_block_{block_index}", errors,
                                             verify_rgb=verify_rgb,
                                             expected_material=target_material,
-                                            expected_action_rng_scheme=expected_action_rng_scheme)
+                                            expected_action_rng_scheme=expected_action_rng_scheme,
+                                            replica_seed=seed if expected_scene_scheme == INJECTIVE_SCENE_VERSION else None,
+                                            expected_scene_counter_start=(
+                                                int(summary.get("after_steps", 0)) - int(summary.get("actual_steps", 0))
+                                            ) if expected_scene_scheme == INJECTIVE_SCENE_VERSION else None)
             target_entries.append(checked)
             target_all.extend(checked["scene_seeds"])
             role_counts["target_support"] += 1
@@ -311,7 +351,13 @@ def analyze(input_path: str | Path, *, verify_rgb: bool = True) -> dict:
                                                  f"{label}/eval_{checkpoint['support_steps']}", errors,
                                                  verify_rgb=verify_rgb,
                                                  expected_material=target_material,
-                                                 expected_action_rng_scheme=expected_action_rng_scheme)
+                                                 expected_action_rng_scheme=expected_action_rng_scheme,
+                                                 replica_seed=seed if expected_scene_scheme == INJECTIVE_SCENE_VERSION else None,
+                                                 expected_scene_counter_start=(
+                                                     config["target_checkpoints"].index(
+                                                         int(checkpoint["support_steps"])
+                                                     ) * expected_eval_episodes
+                                                 ) if expected_scene_scheme == INJECTIVE_SCENE_VERSION else None)
             evaluation_entries.append(checked)
             evaluation_all.extend(checked["scene_seeds"])
             role_counts["final_evaluation"] += 1

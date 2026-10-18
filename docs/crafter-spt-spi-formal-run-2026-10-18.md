@@ -1,8 +1,8 @@
 # Crafter SPT→SPI 正式运行状态
 
-日期：2026-10-18。状态：E1 与 E2 正式预算已启动，尚无完整 seed/fold 结果；不得提前解释方法效果。
+日期：2026-10-18。v1 已完成但未通过 RGB 角色隔离审计；formal v2 已完成修复、全量场景预检和代码回归，等待 manifest 封存后重跑。
 
-## 冻结方案
+## v1 冻结方案与失败记录
 
 - 协议：[formal v1 配置](../configs/crafter_gather_spt_transfer_protocol_formal_v1.json)，30 个独立 seed（101--130）。
 - E1：wood→coal 直接迁移，最大交互预算 6,846,720 步。
@@ -26,3 +26,12 @@ E2 的逐 fold provenance/RGB 审计和 seed-cluster 主分析现已结束，但
 因此，本轮 E1 和 E2 的训练账本均已完成，但两项都未通过冻结的角色隔离门槛；本轮不能回答 FOMAML 更新后的 SPT 是否改善新 SPI 学习效率。下一步应修复场景池生成/去重规则，加入“canonical scene + initial RGB”双重跨角色去重，在新协议版本中重新冻结后再重跑；当前原始结果只保留作失败诊断，不用于方法效果结论。
 
 正式结果只回答受控 gather 族中 FOMAML 更新后的 SPT 是否改善新 SPI 学习效率；不代表自然 Crafter Module 资格、完整 KECRL、Knowledge Evolution 或持续任务链已验证。
+
+## v2 修复与重跑
+
+- GitHub 已先推送 v1 失败记录，提交 `1b82804`；修复版本提交 `56c1796` 已推送至 `origin/main`。
+- 根因是不同 layout seed 会生成重复材料坐标，导致规范化记录不同但初始 RGB 完全相同；不是 GPU 训练异常。
+- v2 保留 v1 生成器供历史结果复现，新增可逆唯一布局索引；材料距离改为 Manhattan 1--5 格，仍落在 Crafter 原生 9×9 RGB 观察视野内，因此这是单独版本化的任务分布更新。
+- v2 使用四个互斥布局分区：source-support 32,768、source-query 32,768、target-support 16,384、evaluation 2,500。完整穷举了所有 84,420 个计划使用布局，canonical scene 与 native initial RGB 均为 84,420 个唯一值，碰撞为 0。
+- Runner 启动前校验预检报告与 scene-generator SHA、角色分区容量及 formal manifest；独立 analyzer 还会逐 episode 验证 seed 与角色 schedule 一致，并复建 RGB。任一检查失败即拒绝运行/报告。
+- E1/E2 seeds、优化设置、训练交互上限与 primary analysis 保持 v1 冻结值不变；场景分布更改由 `formal_v2` 配置和 manifest 单独封存。训练启动后在本节追加 GPU、PID 与日志信息。

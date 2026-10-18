@@ -67,6 +67,7 @@ E1_V2_FILES = [
     "configs/crafter_gather_spt_transfer_e1_formal_v2.json",
     "configs/crafter_gather_spt_transfer_protocol_formal_v2.json",
     "configs/crafter_gather_spt_transfer_scene_rgb_preflight_v2.json",
+    "docs/crafter-spt-spi-power-cost-audit-2026-10-18.md",
     "experiments/crafter_formal_manifest.py",
     "experiments/freeze_crafter_gather_spt_transfer_formal.py",
     "experiments/audit_crafter_material_gather_scene_v2.py",
@@ -82,6 +83,7 @@ E2_V2_FILES = [
     "configs/crafter_gather_spt_transfer_e2_formal_v2.json",
     "configs/crafter_gather_spt_transfer_protocol_formal_v2.json",
     "configs/crafter_gather_spt_transfer_scene_rgb_preflight_v2.json",
+    "docs/crafter-spt-spi-power-cost-audit-2026-10-18.md",
     "configs/crafter_gather_spt_transfer_e2_formal_v1.json",
     "experiments/crafter_formal_manifest.py",
     "experiments/freeze_crafter_gather_spt_transfer_formal.py",
@@ -327,6 +329,14 @@ def seal_manifest(root: Path, config_path: Path, file_list: list[str], output: P
             root / "experiments/crafter_material_gather_scene.py"
         ):
             raise ValueError("formal v2 scene RGB preflight is stale")
+        protocol.update({
+            "status": "frozen_formal_v2_sealed_2026-10-18",
+            "formal_manifest_sealed": True,
+            "manifest_status": "sealed_formal_manifest_v2",
+            "config_kind": "frozen_formal_protocol_manifest_v2",
+            "ready_for_formal_training": True,
+        })
+        _write_json(protocol_path, protocol)
     missing = [path for path in file_list if not (root / path).is_file()]
     if missing:
         raise FileNotFoundError(f"formal source files are missing: {missing}")

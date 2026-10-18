@@ -645,3 +645,40 @@ def test_injective_scene_seed_schedule_fails_when_role_capacity_is_exceeded():
     seed = injective_scene_seed(101, "final_evaluation", role_capacity)
     with pytest.raises(ValueError, match="role counter exceeds"):
         make_material_gather_scene(seed, scheme=INJECTIVE_SCENE_VERSION)
+
+
+def test_gather_comparability_audit_rejects_scene_outside_frozen_v2_role_schedule():
+    import hashlib
+    import pytest
+
+    from experiments.analyze_crafter_gather_spt_transfer_comparability import _check_block_manifest
+    from experiments.crafter_material_gather_scene import (
+        INJECTIVE_SCENE_VERSION,
+        MaterialGatherEnv,
+        injective_scene_seed,
+        make_material_gather_scene,
+    )
+
+    valid_seed = injective_scene_seed(101, "target_support", 0)
+    wrong_seed = injective_scene_seed(101, "final_evaluation", 0)
+    scene = make_material_gather_scene(wrong_seed, scheme=INJECTIVE_SCENE_VERSION)
+    env = MaterialGatherEnv(scene, seed=wrong_seed, length=1)
+    rgb_hash = hashlib.sha256(env.reset().tobytes()).hexdigest()
+    summary = {
+        "role": "target_support",
+        "material": "coal",
+        "requested_steps": 1,
+        "actual_steps": 1,
+        "episodes": 1,
+        "episode_manifest": [{
+            "scene_seed": wrong_seed,
+            "scene": scene.record(),
+            "initial_rgb_sha256": rgb_hash,
+        }],
+    }
+    errors = []
+    _check_block_manifest(summary, "target_support", 1, "synthetic", errors,
+                          verify_rgb=False, replica_seed=101,
+                          expected_scene_counter_start=0)
+    assert wrong_seed != valid_seed
+    assert any("differs from frozen role schedule" in error for error in errors)
