@@ -27,7 +27,9 @@ def package_versions() -> dict[str, str | None]:
     return versions
 
 
-def verify_formal_manifest(config: dict, config_path: str | Path) -> dict:
+def verify_formal_manifest(
+    config: dict, config_path: str | Path, *, require_current_commit: bool = True,
+) -> dict:
     if config.get("formal_result") is not True or config.get("diagnostic_only") is not False:
         raise ValueError("formal manifest verification requires explicit formal configuration")
     if config.get("ready_for_formal_training") is not True:
@@ -39,7 +41,15 @@ def verify_formal_manifest(config: dict, config_path: str | Path) -> dict:
         raise ValueError("formal manifest file is missing")
     manifest_bytes = manifest_path.read_bytes()
     manifest = json.loads(manifest_bytes.decode("utf-8"))
-    if manifest.get("status") != "sealed_formal_manifest_v1":
+    manifest_version = str(config.get("formal_manifest_version", "crafter_gather_spt_transfer_formal_manifest_v1"))
+    expected_status = f"sealed_formal_manifest_v{manifest_version.rsplit('_v', 1)[-1]}"
+    legacy_v1_manifest = (
+        manifest_version == "crafter_gather_spt_transfer_formal_manifest_v1"
+        and "manifest_version" not in manifest
+    )
+    if manifest.get("status") != expected_status or (
+        manifest.get("manifest_version") != manifest_version and not legacy_v1_manifest
+    ):
         raise ValueError("formal manifest is not sealed")
     if manifest.get("formal_result") is not True:
         raise ValueError("formal manifest is not marked for a formal run")
@@ -53,9 +63,8 @@ def verify_formal_manifest(config: dict, config_path: str | Path) -> dict:
         raise ValueError("formal manifest digest or detached checksum is missing/invalid")
     if digest_file.read_text(encoding="ascii").strip() != hashlib.sha256(manifest_bytes).hexdigest():
         raise ValueError("formal manifest detached checksum does not match its contents")
-    if manifest.get("git_commit") != subprocess.check_output(
-        ["git", "rev-parse", "HEAD"], text=True
-    ).strip():
+    current_commit = subprocess.check_output(["git", "rev-parse", "HEAD"], text=True).strip()
+    if require_current_commit and manifest.get("git_commit") != current_commit:
         raise ValueError("formal manifest git commit does not match the current checkout")
     current_versions = package_versions()
     if manifest.get("runtime", {}).get("packages") != current_versions:
@@ -90,6 +99,7 @@ def verify_formal_manifest(config: dict, config_path: str | Path) -> dict:
         "config_sha256": config_hash,
         "protocol_sha256": protocol_hash,
         "git_commit": manifest["git_commit"],
+        "current_git_commit": current_commit,
         "source_sha256": manifest["source_sha256"],
         "runtime_packages": current_versions,
     }

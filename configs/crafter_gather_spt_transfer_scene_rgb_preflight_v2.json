@@ -1,0 +1,33 @@
+{
+  "status": "passed",
+  "layout_scheme": "quiet-material-gather-injective-v2",
+  "layout_count": 84420,
+  "layout_universe_count": 470400,
+  "role_partitions": {
+    "source_support": {
+      "start": 0,
+      "count": 32768
+    },
+    "source_meta_query": {
+      "start": 32768,
+      "count": 32768
+    },
+    "target_support": {
+      "start": 65536,
+      "count": 16384
+    },
+    "final_evaluation": {
+      "start": 81920,
+      "count": 2500
+    }
+  },
+  "audited_layout_count": 84420,
+  "unique_canonical_layout_count": 84420,
+  "unique_initial_rgb_count": 84420,
+  "initial_rgb_collision_count": 0,
+  "initial_rgb_collision_examples": [],
+  "canonical_layout_sequence_sha256": "7c5ab65640e2f61dfaaa20b3d0325288e982c0dcb30e81e03b1cbbc047df2dde",
+  "initial_rgb_sequence_sha256": "e85aad85f69116dfad63fc93f8b53dff1e9b335aaec3a1fcaf36dd37a4927ae9",
+  "scene_generator_sha256": "391d044eb08f8aa8de15817394bc173d75767ec0243d6de32d3c14a8de094728",
+  "environment": "native Crafter RGB reset; one reused environment; reset seed equals layout index"
+}

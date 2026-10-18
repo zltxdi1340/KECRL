@@ -15,6 +15,13 @@ from experiments.analyze_crafter_gather_spt_transfer_e2_candidate import (
     _cost_summary,
 )
 from experiments.crafter_formal_manifest import verify_formal_manifest
+from experiments.crafter_material_gather_scene import (
+    INJECTIVE_REPLICA_SEED_STRIDE,
+    INJECTIVE_ROLE_SEED_STRIDE,
+    INJECTIVE_SCENE_LAYOUT_COUNT,
+    INJECTIVE_SCENE_VERSION,
+    SCENE_LAYOUT_ROLE_PARTITIONS,
+)
 
 
 SEEDS = list(range(101, 131))
@@ -50,6 +57,39 @@ E1_FILES = [
     "experiments/analyze_crafter_gather_spt_transfer_e2_candidate.py",
     "experiments/run_crafter_gather_spt_transfer_pilot.py",
     "experiments/analyze_crafter_gather_spt_transfer_comparability.py",
+    "experiments/crafter_material_gather_scene.py",
+    "src/skills/spatial_gather_spt.py",
+    "src/algorithms/spatial_crafter_policy.py",
+    "src/utils/config.py",
+    "pyproject.toml",
+]
+E1_V2_FILES = [
+    "configs/crafter_gather_spt_transfer_e1_formal_v2.json",
+    "configs/crafter_gather_spt_transfer_protocol_formal_v2.json",
+    "configs/crafter_gather_spt_transfer_scene_rgb_preflight_v2.json",
+    "experiments/crafter_formal_manifest.py",
+    "experiments/freeze_crafter_gather_spt_transfer_formal.py",
+    "experiments/audit_crafter_material_gather_scene_v2.py",
+    "experiments/analyze_crafter_gather_spt_transfer_comparability.py",
+    "experiments/run_crafter_gather_spt_transfer_pilot.py",
+    "experiments/crafter_material_gather_scene.py",
+    "src/skills/spatial_gather_spt.py",
+    "src/algorithms/spatial_crafter_policy.py",
+    "src/utils/config.py",
+    "pyproject.toml",
+]
+E2_V2_FILES = [
+    "configs/crafter_gather_spt_transfer_e2_formal_v2.json",
+    "configs/crafter_gather_spt_transfer_protocol_formal_v2.json",
+    "configs/crafter_gather_spt_transfer_scene_rgb_preflight_v2.json",
+    "configs/crafter_gather_spt_transfer_e2_formal_v1.json",
+    "experiments/crafter_formal_manifest.py",
+    "experiments/freeze_crafter_gather_spt_transfer_formal.py",
+    "experiments/audit_crafter_material_gather_scene_v2.py",
+    "experiments/analyze_crafter_gather_spt_transfer_comparability.py",
+    "experiments/analyze_crafter_gather_spt_transfer_e2.py",
+    "experiments/run_crafter_gather_spt_transfer_e2.py",
+    "experiments/run_crafter_gather_spt_transfer_pilot.py",
     "experiments/crafter_material_gather_scene.py",
     "src/skills/spatial_gather_spt.py",
     "src/algorithms/spatial_crafter_policy.py",
@@ -173,6 +213,103 @@ def generate_configs(root: Path) -> None:
     _write_json(e1_path, pilot)
 
 
+def generate_configs_v2(root: Path) -> None:
+    protocol = json.loads((root / "configs/crafter_gather_spt_transfer_protocol_formal_v1.json").read_text())
+    protocol.update({
+        "protocol_version": "crafter_gather_spt_transfer_protocol_formal_v2",
+        "status": "frozen_formal_v2_2026-10-18",
+        "scene_distribution": {
+            "scene_generator_version": INJECTIVE_SCENE_VERSION,
+            "material_manhattan_distance": [1, 5],
+            "visible_in_native_9x9_rgb": True,
+            "layout_universe_count_including_facing": INJECTIVE_SCENE_LAYOUT_COUNT,
+            "role_partitions": {
+                name: {"start": start, "count": capacity}
+                for name, (start, capacity) in SCENE_LAYOUT_ROLE_PARTITIONS.items()
+            },
+            "replica_seed_stride": INJECTIVE_REPLICA_SEED_STRIDE,
+            "role_seed_stride": INJECTIVE_ROLE_SEED_STRIDE,
+            "rgb_preflight_report": "configs/crafter_gather_spt_transfer_scene_rgb_preflight_v2.json",
+            "all_scheduled_layouts_exhaustively_checked_for_rgb_collisions": True,
+        },
+        "evaluation": {
+            **protocol["evaluation"],
+            "scene_layout_scheme": INJECTIVE_SCENE_VERSION,
+            "canonical_and_initial_rgb_role_isolation": True,
+        },
+        "formal_freeze": {
+            **protocol["formal_freeze"],
+            "freeze_date": "2026-10-18",
+            "protocol_revision": "v2 after v1 RGB collision audit failure",
+            "training_start_authorized": True,
+            "scene_distribution_change": "visible materials are placed at Manhattan distance 1..5 within the native 9x7 local view",
+        },
+        "formal_manifest_sealed": False,
+        "formal_manifest_version": "crafter_gather_spt_transfer_formal_manifest_v2",
+        "manifest_status": "pending_v2_rgb_preflight_and_hash_seal",
+        "config_kind": "formal_protocol_v2_pending_seal",
+        "formal_result": False,
+        "ready_for_formal_training": True,
+    })
+    protocol["manifest"].update({
+        "scene_generator_version": INJECTIVE_SCENE_VERSION,
+        "scene_layout_role_partitions": {
+            name: {"start": start, "count": capacity}
+            for name, (start, capacity) in SCENE_LAYOUT_ROLE_PARTITIONS.items()
+        },
+        "scene_role_seed_stride": INJECTIVE_ROLE_SEED_STRIDE,
+        "replicate_seed_stride": INJECTIVE_REPLICA_SEED_STRIDE,
+        "source_pool_capacity_rule": "role-partition capacity covers every source block candidate without replacement",
+        "scene_rgb_preflight_required": True,
+    })
+    protocol_path = root / "configs/crafter_gather_spt_transfer_protocol_formal_v2.json"
+    _write_json(protocol_path, protocol)
+
+    preflight_path = "configs/crafter_gather_spt_transfer_scene_rgb_preflight_v2.json"
+    e1 = json.loads((root / "configs/crafter_gather_spt_transfer_e1_formal_v1.json").read_text())
+    e1.update(_v2_config_fields(protocol_path, preflight_path, "e1"))
+    e1["status"] = "crafter_gather_spt_transfer_e1_formal_v2"
+    e1["formal_note"] = (
+        "Frozen formal v2 direct wood-to-coal transfer. The visible scene distribution uses unique native RGB layouts; "
+        "this does not qualify a natural Crafter Module or validate full KECRL."
+    )
+    _write_json(root / "configs/crafter_gather_spt_transfer_e1_formal_v2.json", e1)
+
+    e2 = json.loads((root / "configs/crafter_gather_spt_transfer_e2_formal_v1.json").read_text())
+    e2.update(_v2_config_fields(protocol_path, preflight_path, "e2"))
+    e2["status"] = "crafter_gather_spt_transfer_e2_formal_v2"
+    e2["formal_note"] = (
+        "Frozen formal v2 leave-one-binding-out experiment. Primary contrast is paired seed-level B-C AUC on "
+        "RGB-unique visible layouts; this does not qualify a natural Crafter Module or validate full KECRL."
+    )
+    _write_json(root / "configs/crafter_gather_spt_transfer_e2_formal_v2.json", e2)
+
+
+def _v2_config_fields(protocol_path: Path, preflight_path: str, experiment: str) -> dict:
+    return {
+        "status": f"crafter_gather_spt_transfer_{experiment}_formal_v2",
+        "formal_result": True,
+        "diagnostic_only": False,
+        "ready_for_formal_training": True,
+        "formal_manifest_sealed": True,
+        "formal_manifest_version": "crafter_gather_spt_transfer_formal_manifest_v2",
+        "formal_manifest": f"configs/crafter_gather_spt_transfer_{experiment}_formal_manifest_v2.json",
+        "formal_protocol": str(protocol_path.relative_to(protocol_path.parents[1])),
+        "scene_rgb_preflight": preflight_path,
+        "scene_layout_scheme": INJECTIVE_SCENE_VERSION,
+        "scene_layout_role_partitions": {
+            name: [start, capacity]
+            for name, (start, capacity) in SCENE_LAYOUT_ROLE_PARTITIONS.items()
+        },
+        "scene_role_seed_stride": INJECTIVE_ROLE_SEED_STRIDE,
+        "replicate_seed_stride": INJECTIVE_REPLICA_SEED_STRIDE,
+        "source_scene_seed_base": 0,
+        "target_scene_seed_base": 0,
+        "source_scene_pool_size": 256,
+        "formal_note": "formal v2 visible RGB-unique scene schedule",
+    }
+
+
 def seal_manifest(root: Path, config_path: Path, file_list: list[str], output: Path) -> dict:
     config = json.loads(config_path.read_text(encoding="utf-8"))
     protocol_path = root / str(config["formal_protocol"])
@@ -181,13 +318,23 @@ def seal_manifest(root: Path, config_path: Path, file_list: list[str], output: P
         raise ValueError("formal seed sets differ from the approved 30-replica plan")
     if config.get("formal_result") is not True or config.get("ready_for_formal_training") is not True:
         raise ValueError("formal config is not authorized and ready")
+    if config.get("formal_manifest_version", "").endswith("_v2"):
+        preflight_path = root / str(config["scene_rgb_preflight"])
+        preflight = json.loads(preflight_path.read_text(encoding="utf-8"))
+        if preflight.get("status") != "passed":
+            raise ValueError("formal v2 scene RGB preflight has not passed")
+        if preflight.get("scene_generator_sha256") != sha256_file(
+            root / "experiments/crafter_material_gather_scene.py"
+        ):
+            raise ValueError("formal v2 scene RGB preflight is stale")
     missing = [path for path in file_list if not (root / path).is_file()]
     if missing:
         raise FileNotFoundError(f"formal source files are missing: {missing}")
     source_hashes = {path: sha256_file(root / path) for path in file_list}
+    version = str(config.get("formal_manifest_version", "crafter_gather_spt_transfer_formal_manifest_v1"))
     manifest = {
-        "manifest_version": "crafter_gather_spt_transfer_formal_manifest_v1",
-        "status": "sealed_formal_manifest_v1",
+        "manifest_version": version,
+        "status": f"sealed_formal_manifest_v{version.rsplit('_v', 1)[-1]}",
         "formal_result": True,
         "training_started": False,
         "git_commit": subprocess.check_output(["git", "rev-parse", "HEAD"], cwd=root, text=True).strip(),
@@ -242,8 +389,20 @@ def preflight_formal(root: Path, config_path: Path, expected_total_key: str) -> 
     if expected_total_key.startswith("E1"):
         costs["e2_total_interaction_step_upper_bound"] = 0
         costs["combined_e1_e2_interaction_step_upper_bound"] = actual
-    pool = _candidate_scene_pool_summary(config) if "folds" in config and len(config["folds"]) == 3 else None
-    if pool is not None:
+    if config.get("formal_manifest_version", "").endswith("_v2"):
+        from experiments.run_crafter_gather_spt_transfer_pilot import _validate_injective_scene_config
+
+        scene_report = _validate_injective_scene_config(config)
+        pool = {
+            "layout_scheme": config["scene_layout_scheme"],
+            "role_partitions": config["scene_layout_role_partitions"],
+            "scene_rgb_preflight": scene_report,
+            "candidate_pool_capacity_sufficient": True,
+            "cross_role_layout_partitions_disjoint": True,
+        }
+    else:
+        pool = _candidate_scene_pool_summary(config) if "folds" in config and len(config["folds"]) == 3 else None
+    if pool is not None and "replicas" in pool:
         if not pool["candidate_pool_capacity_sufficient"] or not pool["support_query_candidate_pools_disjoint_by_stride"]:
             raise ValueError("formal source scene pool capacity or separation check failed")
         if not pool["cross_replica_role_ranges_disjoint"] or not pool["action_seed_ranges"]["cross_role_and_replica_ranges_disjoint"]:
@@ -259,14 +418,21 @@ def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("--root", default=".")
     parser.add_argument("--generate-configs", action="store_true")
+    parser.add_argument("--generate-v2-configs", action="store_true")
     parser.add_argument("--seal-e1", action="store_true")
     parser.add_argument("--seal-e2", action="store_true")
     parser.add_argument("--preflight-e1", action="store_true")
     parser.add_argument("--preflight-e2", action="store_true")
+    parser.add_argument("--seal-v2-e1", action="store_true")
+    parser.add_argument("--seal-v2-e2", action="store_true")
+    parser.add_argument("--preflight-v2-e1", action="store_true")
+    parser.add_argument("--preflight-v2-e2", action="store_true")
     args = parser.parse_args()
     root = Path(args.root).resolve()
     if args.generate_configs:
         generate_configs(root)
+    if args.generate_v2_configs:
+        generate_configs_v2(root)
     if args.seal_e1:
         seal_manifest(root, root / "configs/crafter_gather_spt_transfer_e1_formal_v1.json", E1_FILES,
                       root / "configs/crafter_gather_spt_transfer_e1_formal_manifest_v1.json")
@@ -281,6 +447,22 @@ def main() -> None:
     if args.preflight_e2:
         print(json.dumps(preflight_formal(
             root, root / "configs/crafter_gather_spt_transfer_e2_formal_v1.json",
+            "E2_interaction_step_upper_bound",
+        ), indent=2))
+    if args.seal_v2_e1:
+        seal_manifest(root, root / "configs/crafter_gather_spt_transfer_e1_formal_v2.json", E1_V2_FILES,
+                      root / "configs/crafter_gather_spt_transfer_e1_formal_manifest_v2.json")
+    if args.seal_v2_e2:
+        seal_manifest(root, root / "configs/crafter_gather_spt_transfer_e2_formal_v2.json", E2_V2_FILES,
+                      root / "configs/crafter_gather_spt_transfer_e2_formal_manifest_v2.json")
+    if args.preflight_v2_e1:
+        print(json.dumps(preflight_formal(
+            root, root / "configs/crafter_gather_spt_transfer_e1_formal_v2.json",
+            "E1_interaction_step_upper_bound",
+        ), indent=2))
+    if args.preflight_v2_e2:
+        print(json.dumps(preflight_formal(
+            root, root / "configs/crafter_gather_spt_transfer_e2_formal_v2.json",
             "E2_interaction_step_upper_bound",
         ), indent=2))
 

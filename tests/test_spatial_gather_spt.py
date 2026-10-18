@@ -599,3 +599,49 @@ def test_gather_aligned_source_pools_pair_b_and_c_roles_without_overlap():
     assert support.isdisjoint(meta_query)
     assert support == ordinary_support
     assert meta_query == ordinary_query
+
+
+def test_injective_scene_seed_schedule_separates_roles_and_preserves_rgb_identity():
+    import hashlib
+
+    from experiments.crafter_material_gather_scene import (
+        INJECTIVE_SCENE_VERSION,
+        MaterialGatherEnv,
+        injective_scene_seed,
+        make_material_gather_scene,
+    )
+
+    seeds = {
+        role: [injective_scene_seed(101, role, index) for index in range(8)]
+        for role in ("source_support", "source_meta_query", "target_support", "final_evaluation")
+    }
+    assert all(set(left).isdisjoint(right)
+               for index, left in enumerate(seeds.values())
+               for right in list(seeds.values())[index + 1:])
+    env = None
+    digests = []
+    for seed in (seeds["source_support"][0], seeds["source_meta_query"][0],
+                 seeds["target_support"][0], seeds["final_evaluation"][0]):
+        scene = make_material_gather_scene(seed, scheme=INJECTIVE_SCENE_VERSION)
+        if env is None:
+            env = MaterialGatherEnv(scene, seed=seed, length=1)
+        else:
+            env.configure(scene, seed=seed)
+        digests.append(hashlib.sha256(env.reset().tobytes()).hexdigest())
+    assert len(set(digests)) == len(digests)
+
+
+def test_injective_scene_seed_schedule_fails_when_role_capacity_is_exceeded():
+    import pytest
+
+    from experiments.crafter_material_gather_scene import (
+        INJECTIVE_SCENE_VERSION,
+        SCENE_LAYOUT_ROLE_PARTITIONS,
+        injective_scene_seed,
+        make_material_gather_scene,
+    )
+
+    role_capacity = SCENE_LAYOUT_ROLE_PARTITIONS["final_evaluation"][1]
+    seed = injective_scene_seed(101, "final_evaluation", role_capacity)
+    with pytest.raises(ValueError, match="role counter exceeds"):
+        make_material_gather_scene(seed, scheme=INJECTIVE_SCENE_VERSION)

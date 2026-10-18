@@ -18,7 +18,17 @@ from pathlib import Path
 import numpy as np
 import torch
 
-from experiments.crafter_material_gather_scene import MaterialGatherEnv, make_material_gather_scene
+from experiments.crafter_material_gather_scene import (
+    INJECTIVE_REPLICA_SEED_STRIDE,
+    INJECTIVE_ROLE_SEED_STRIDE,
+    INJECTIVE_SCENE_LAYOUT_COUNT,
+    INJECTIVE_SCENE_VERSION,
+    SCENE_LAYOUT_ROLE_PARTITIONS,
+    SCENE_VERSION,
+    MaterialGatherEnv,
+    injective_scene_seed,
+    make_material_gather_scene,
+)
 from src.algorithms.spatial_crafter_policy import build_matched_spatial_policy
 from src.continual_learning.contracts import ContinualLearningPipeline
 from src.skills.spatial_gather_spt import (
@@ -31,11 +41,60 @@ from src.skills.spatial_gather_spt import (
     validate_spi_against_spt,
 )
 from src.utils.config import load_config, runtime_metadata
-from experiments.crafter_formal_manifest import verify_formal_manifest
+from experiments.crafter_formal_manifest import sha256_file, verify_formal_manifest
 
 
 def _is_formal_config(config: dict) -> bool:
     return config.get("formal_result") is True and config.get("diagnostic_only") is False
+
+
+def _validate_injective_scene_config(config: dict) -> dict | None:
+    if config.get("scene_layout_scheme") != INJECTIVE_SCENE_VERSION:
+        return None
+    declared = {
+        str(name): (int(values[0]), int(values[1]))
+        for name, values in config.get("scene_layout_role_partitions", {}).items()
+    }
+    if declared != SCENE_LAYOUT_ROLE_PARTITIONS:
+        raise ValueError("formal scene role partitions do not match the injective layout scheme")
+    if int(config.get("replicate_seed_stride", -1)) != INJECTIVE_REPLICA_SEED_STRIDE:
+        raise ValueError("formal injective scene replica stride is unsupported")
+    if int(config.get("scene_role_seed_stride", -1)) != INJECTIVE_ROLE_SEED_STRIDE:
+        raise ValueError("formal injective scene role stride is unsupported")
+    if int(config.get("source_scene_seed_base", -1)) != 0 or int(config.get("target_scene_seed_base", -1)) != 0:
+        raise ValueError("injective scene seed bases must be zero; replica/role schedules supply the namespace")
+    source_capacity = SCENE_LAYOUT_ROLE_PARTITIONS["source_support"][1]
+    query_capacity = SCENE_LAYOUT_ROLE_PARTITIONS["source_meta_query"][1]
+    target_capacity = SCENE_LAYOUT_ROLE_PARTITIONS["target_support"][1]
+    evaluation_capacity = SCENE_LAYOUT_ROLE_PARTITIONS["final_evaluation"][1]
+    if int(config.get("source_scene_pool_size", 0)) > min(source_capacity, query_capacity):
+        raise ValueError("source block scene pool exceeds the role-specific visible layout capacity")
+    if max(int(value) for value in config["target_checkpoints"]) > target_capacity:
+        raise ValueError("target support budget exceeds its unique visible layout capacity")
+    evaluation_required = len(config["target_checkpoints"]) * int(config["evaluation_episodes"])
+    if evaluation_required > evaluation_capacity:
+        raise ValueError("evaluation scene schedule exceeds its unique visible layout capacity")
+    preflight_path = Path(str(config.get("scene_rgb_preflight", "")))
+    if not preflight_path.is_file():
+        raise ValueError("injective scene RGB preflight report is missing")
+    preflight = json.loads(preflight_path.read_text(encoding="utf-8"))
+    source_path = Path(__file__).resolve().parents[1] / "experiments" / "crafter_material_gather_scene.py"
+    if preflight.get("status") != "passed":
+        raise ValueError("injective scene RGB preflight did not pass")
+    if preflight.get("scene_generator_sha256") != sha256_file(source_path):
+        raise ValueError("injective scene RGB preflight is stale for the active scene generator")
+    if preflight.get("layout_scheme") != INJECTIVE_SCENE_VERSION:
+        raise ValueError("injective scene RGB preflight uses a different layout scheme")
+    expected_schedule_count = sum(capacity for _start, capacity in SCENE_LAYOUT_ROLE_PARTITIONS.values())
+    if int(preflight.get("layout_count", -1)) != expected_schedule_count:
+        raise ValueError("injective scene RGB preflight does not cover all scheduled role layouts")
+    if int(preflight.get("layout_universe_count", -1)) != INJECTIVE_SCENE_LAYOUT_COUNT:
+        raise ValueError("injective scene RGB preflight uses a different layout universe")
+    if int(preflight.get("unique_canonical_layout_count", -1)) != expected_schedule_count:
+        raise ValueError("injective scene preflight found canonical layout collisions")
+    if int(preflight.get("unique_initial_rgb_count", -1)) != expected_schedule_count:
+        raise ValueError("injective scene preflight found initial RGB collisions")
+    return preflight
 
 
 def _image_tensor(observation: np.ndarray, device: torch.device) -> torch.Tensor:
@@ -97,6 +156,23 @@ def _source_scene_pool(config: dict, source_base: int, key: int, role: str) -> t
     size = int(config.get("source_scene_pool_size", 0))
     if size <= 0:
         return None
+    if config.get("scene_layout_scheme") == INJECTIVE_SCENE_VERSION:
+        role_name = (
+            "source_meta_query" if role in {"source_meta_query", "source_ordinary_query"}
+            else "source_support"
+        )
+        replica_seed, remainder = divmod(int(source_base), INJECTIVE_REPLICA_SEED_STRIDE)
+        if remainder:
+            raise ValueError("injective source scene base is not replica-aligned")
+        block_steps = max(
+            int(config["source_support_steps_per_slot"]),
+            int(config["source_query_steps_per_slot"]),
+        )
+        counter_start = int(key) * block_steps
+        return tuple(
+            injective_scene_seed(replica_seed, role_name, counter_start + index)
+            for index in range(size)
+        )
     stride = int(config["source_slot_stride"])
     query_offset = int(config["source_query_pool_offset"])
     if stride <= 0 or query_offset < 0 or query_offset + size > stride:
@@ -171,11 +247,11 @@ def _merge_block_summaries(summaries: list[dict]) -> dict:
     }
 
 
-def audit_scene_rgb_visibility(layout_seed_count: int = 32) -> dict:
+def audit_scene_rgb_visibility(layout_seed_count: int = 32, *, scheme: str = SCENE_VERSION) -> dict:
     """Check that each placed material changes the native initial RGB."""
     rows = []
     for layout_seed in range(int(layout_seed_count)):
-        scene = make_material_gather_scene(layout_seed)
+        scene = make_material_gather_scene(layout_seed, scheme=scheme)
         env = MaterialGatherEnv(scene, seed=layout_seed, length=1)
         try:
             baseline = env.reset()
@@ -263,6 +339,7 @@ def collect_block(
     role: str = "unspecified",
     scene_seed_schedule: tuple[int, ...] | None = None,
     action_rng_scheme: str = "block_stream_v1",
+    scene_scheme: str = SCENE_VERSION,
 ) -> tuple[SpatialPPORollout, dict]:
     """Collect exactly ``steps`` native interactions, resetting only at episode boundaries."""
     if steps <= 0:
@@ -276,7 +353,10 @@ def collect_block(
         raise ValueError("scene seed schedule must cover the maximum one-step-per-episode case")
     target_item = str(spi.parameter_binding["item"])
     material = str(spi.parameter_binding["material"])
-    env = MaterialGatherEnv(make_material_gather_scene(int(scene_seed_base)), seed=int(scene_seed_base), length=max_episode_steps)
+    env = MaterialGatherEnv(
+        make_material_gather_scene(int(scene_seed_base), scheme=scene_scheme),
+        seed=int(scene_seed_base), length=max_episode_steps,
+    )
     observations, transitions = [], []
     terminal_counts = Counter()
     success_count = 0
@@ -306,9 +386,9 @@ def collect_block(
                 if action_rng_scheme == "per_episode_seed_v1":
                     episode_action_seed = int(action_seed) + current_episode_index
                     torch.manual_seed(episode_action_seed)
-                env.configure(make_material_gather_scene(episode_scene_seed), seed=episode_scene_seed)
+                scene = make_material_gather_scene(episode_scene_seed, scheme=scene_scheme)
+                env.configure(scene, seed=episode_scene_seed)
                 observation = env.reset()
-                scene = make_material_gather_scene(episode_scene_seed)
                 manifest_entry = {
                     "scene_seed": episode_scene_seed,
                     "scene": scene.record(),
@@ -429,6 +509,8 @@ def evaluate(
     action_seed_base: int,
     device: torch.device,
     max_episode_steps: int,
+    scene_seed_schedule: tuple[int, ...] | None = None,
+    scene_scheme: str = SCENE_VERSION,
 ) -> dict:
     """Evaluation is RNG-transparent to the caller and never updates parameters."""
     cpu_rng = torch.get_rng_state()
@@ -439,10 +521,15 @@ def evaluate(
     action_counts = Counter()
     target_item = str(spi.parameter_binding["item"])
     material = str(spi.parameter_binding["material"])
+    if scene_seed_schedule is not None and len(scene_seed_schedule) != episodes:
+        raise ValueError("evaluation scene schedule must contain exactly one seed per episode")
     try:
         for index in range(episodes):
-            scene_seed = int(scene_seed_base) + index
-            scene = make_material_gather_scene(scene_seed)
+            scene_seed = (
+                int(scene_seed_schedule[index]) if scene_seed_schedule is not None
+                else int(scene_seed_base) + index
+            )
+            scene = make_material_gather_scene(scene_seed, scheme=scene_scheme)
             env = MaterialGatherEnv(scene, seed=scene_seed, length=max_episode_steps)
             observation = env.reset()
             initial_rgb_sha256 = hashlib.sha256(observation.tobytes()).hexdigest()
@@ -537,6 +624,7 @@ def _run_arm(config: dict, arm_name: str, initial: SpatialGatherSPT, spi_target,
     support_steps = int(config["source_support_steps_per_slot"])
     query_steps = int(config["source_query_steps_per_slot"])
     action_rng_scheme = str(config.get("action_rng_scheme", "block_stream_v1"))
+    scene_scheme = str(config.get("scene_layout_scheme", SCENE_VERSION))
     action_slot_stride = int(config.get("source_action_slot_stride", 100))
     query_action_offset = int(config.get("source_query_action_offset", 50))
     source_base = int(config["source_scene_seed_base"]) + int(seed) * int(config["replicate_seed_stride"])
@@ -559,6 +647,7 @@ def _run_arm(config: dict, arm_name: str, initial: SpatialGatherSPT, spi_target,
                     role="source_support",
                     scene_seed_schedule=support_pool,
                     action_rng_scheme=action_rng_scheme,
+                    scene_scheme=scene_scheme,
                 )
                 adapted = learner.adapt(source_spi, support)
                 query, query_summary = collect_block(
@@ -569,6 +658,7 @@ def _run_arm(config: dict, arm_name: str, initial: SpatialGatherSPT, spi_target,
                     role="source_meta_query",
                     scene_seed_schedule=query_pool,
                     action_rng_scheme=action_rng_scheme,
+                    scene_scheme=scene_scheme,
                 )
                 tasks.append(SpatialMetaTask(source_spi, support, query))
                 source_rows.append({"round": round_index, "slot": slot, "support": support_summary, "query": query_summary})
@@ -592,6 +682,7 @@ def _run_arm(config: dict, arm_name: str, initial: SpatialGatherSPT, spi_target,
                         role="source_ordinary_support",
                         scene_seed_schedule=support_pool,
                         action_rng_scheme=action_rng_scheme,
+                        scene_scheme=scene_scheme,
                     )
                     # The aligned pilot C consumes the same two role-specific
                     # pools as B, then performs one ordinary PPO update on
@@ -604,6 +695,7 @@ def _run_arm(config: dict, arm_name: str, initial: SpatialGatherSPT, spi_target,
                         role="source_ordinary_query",
                         scene_seed_schedule=query_pool,
                         action_rng_scheme=action_rng_scheme,
+                        scene_scheme=scene_scheme,
                     )
                     block = _concat_rollouts([ordinary_support, ordinary_query])
                     summary = _merge_block_summaries([support_summary, query_summary])
@@ -619,6 +711,7 @@ def _run_arm(config: dict, arm_name: str, initial: SpatialGatherSPT, spi_target,
                         max_episode_steps=int(config["max_episode_steps"]), training=True,
                         role="source_ordinary_block",
                         action_rng_scheme=action_rng_scheme,
+                        scene_scheme=scene_scheme,
                     )
                 for _ in range(int(config["update_epochs"])):
                     loss = learner.ordinary_update((SpatialMetaTask(source_spi, block, block),))
@@ -642,21 +735,44 @@ def _run_arm(config: dict, arm_name: str, initial: SpatialGatherSPT, spi_target,
     checkpoints = [int(value) for value in config["target_checkpoints"]]
     target_base = int(config["target_scene_seed_base"]) + int(seed) * int(config["replicate_seed_stride"])
     target_action_base = int(config["target_action_seed_base"]) + int(seed) * int(config["replicate_seed_stride"])
-    for checkpoint in checkpoints:
+    for checkpoint_index, checkpoint in enumerate(checkpoints):
         while target_steps < checkpoint:
             block_steps = min(int(config["target_update_steps"]), checkpoint - target_steps)
+            target_schedule = None
+            if scene_scheme == INJECTIVE_SCENE_VERSION:
+                replica_seed, remainder = divmod(target_base, INJECTIVE_REPLICA_SEED_STRIDE)
+                if remainder:
+                    raise ValueError("injective target scene base is not replica-aligned")
+                target_schedule = tuple(
+                    injective_scene_seed(replica_seed, "target_support", target_steps + index)
+                    for index in range(block_steps)
+                )
             block, summary = collect_block(
                 target_policy, spi_target, steps=block_steps,
                 scene_seed_base=target_base + target_steps * 10,
                 action_seed=target_action_base + target_steps * 10,
                 device=device, max_episode_steps=int(config["max_episode_steps"]), training=True,
                 role="target_support",
+                scene_seed_schedule=target_schedule,
                 action_rng_scheme=action_rng_scheme,
+                scene_scheme=scene_scheme,
             )
             metrics = _ppo_update(target_policy, block)
             target_block_summaries.append({"after_steps": target_steps + block_steps, **summary})
             target_updates.append({"after_steps": target_steps + block_steps, **metrics})
             target_steps += block_steps
+        evaluation_schedule = None
+        if scene_scheme == INJECTIVE_SCENE_VERSION:
+            replica_seed, remainder = divmod(target_base, INJECTIVE_REPLICA_SEED_STRIDE)
+            if remainder:
+                raise ValueError("injective evaluation scene base is not replica-aligned")
+            evaluation_schedule = tuple(
+                injective_scene_seed(
+                    replica_seed, "final_evaluation",
+                    checkpoint_index * int(config["evaluation_episodes"]) + index,
+                )
+                for index in range(int(config["evaluation_episodes"]))
+            )
         target_rows.append({
             "support_steps": target_steps,
             "evaluation": evaluate(
@@ -665,6 +781,8 @@ def _run_arm(config: dict, arm_name: str, initial: SpatialGatherSPT, spi_target,
                 scene_seed_base=target_base + 1_000_000 + checkpoint * 100,
                 action_seed_base=target_action_base + 1_000_000 + checkpoint * 100,
                 device=device, max_episode_steps=int(config["max_episode_steps"]),
+                scene_seed_schedule=evaluation_schedule,
+                scene_scheme=scene_scheme,
             ),
         })
     output.mkdir(parents=True, exist_ok=True)
@@ -732,6 +850,7 @@ def run(config_path: str, output_path: str) -> dict:
     config = load_config(config_path)
     formal_mode = _is_formal_config(config)
     formal_snapshot = verify_formal_manifest(config, config_path) if formal_mode else None
+    scene_preflight = _validate_injective_scene_config(config)
     if not formal_mode and (config.get("formal_result") is not False or config.get("diagnostic_only") is not True):
         raise ValueError("diagnostic runner requires explicit non-formal configuration")
     if formal_mode:
@@ -748,7 +867,10 @@ def run(config_path: str, output_path: str) -> dict:
     output.mkdir(parents=True)
     spt = build_gather_spt()
     target_spi = instantiate_gather_spi(spt, str(config["target_material"]))
-    visibility_audit = audit_scene_rgb_visibility(int(config.get("rgb_visibility_audit_layout_count", 32)))
+    visibility_audit = audit_scene_rgb_visibility(
+        int(config.get("rgb_visibility_audit_layout_count", 32)),
+        scheme=str(config.get("scene_layout_scheme", SCENE_VERSION)),
+    )
     results = []
     start = time.perf_counter()
     for seed in config["replica_seeds"]:
@@ -763,6 +885,8 @@ def run(config_path: str, output_path: str) -> dict:
         "status": config["status"], "formal_result": formal_mode, "diagnostic_only": not formal_mode,
         "config": config_path, "device": str(device), "determinism": deterministic,
         "formal_manifest": formal_snapshot,
+        "scene_layout_scheme": str(config.get("scene_layout_scheme", SCENE_VERSION)),
+        "scene_rgb_preflight": scene_preflight,
         "git_commit": subprocess.check_output(["git", "rev-parse", "HEAD"], text=True).strip(),
         "runtime": runtime_metadata(config, str(device)),
         "protocol_linkage": {"spt": spt.__dict__, "target_spi": validate_spi_against_spt(target_spi, spt)},

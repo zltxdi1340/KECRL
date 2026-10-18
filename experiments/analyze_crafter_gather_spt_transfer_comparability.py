@@ -11,7 +11,11 @@ import json
 from collections import Counter
 from pathlib import Path
 
-from experiments.crafter_material_gather_scene import MaterialGatherEnv, make_material_gather_scene
+from experiments.crafter_material_gather_scene import (
+    MaterialGatherEnv,
+    SCENE_VERSION,
+    make_material_gather_scene,
+)
 
 
 def _sum_counts(counts: dict) -> int:
@@ -54,7 +58,8 @@ def _check_block_manifest(summary: dict, role: str, expected_steps: int,
             errors.append(f"{entry_label}: manifest fields missing")
             continue
         seed = int(entry["scene_seed"])
-        scene = make_material_gather_scene(seed)
+        scene_scheme = str(entry["scene"].get("scene_version", SCENE_VERSION))
+        scene = make_material_gather_scene(seed, scheme=scene_scheme)
         expected_record = scene.record()
         if entry["scene"] != expected_record:
             errors.append(f"{entry_label}: scene record does not match scene seed")
@@ -123,7 +128,8 @@ def _check_evaluation_manifest(evaluation: dict, expected_episodes: int,
         if expected_action_rng_scheme and row.get("action_rng_scheme") != expected_action_rng_scheme:
             errors.append(f"{row_label}: evaluation action RNG scheme mismatch")
         seed = int(row["scene_seed"])
-        scene = make_material_gather_scene(seed)
+        scene_scheme = str(row["scene"].get("scene_version", SCENE_VERSION))
+        scene = make_material_gather_scene(seed, scheme=scene_scheme)
         if row["scene"] != scene.record():
             errors.append(f"{row_label}: scene record does not match scene seed")
         canonical_scene = json.dumps(row["scene"], sort_keys=True, separators=(",", ":"))

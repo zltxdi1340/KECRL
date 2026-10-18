@@ -20,6 +20,7 @@ import torch
 from experiments.run_crafter_gather_spt_transfer_pilot import (
     _configure_determinism,
     _run_arm,
+    _validate_injective_scene_config,
     audit_scene_rgb_visibility,
 )
 from src.algorithms.spatial_crafter_policy import build_matched_spatial_policy
@@ -97,7 +98,10 @@ def _run_fold(config: dict, config_path: Path, output: Path, formal_snapshot: di
     deterministic = _configure_determinism(config) if device.type == "cuda" else {}
     spt = build_gather_spt()
     target_spi = instantiate_gather_spi(spt, str(config["target_material"]))
-    visibility_audit = audit_scene_rgb_visibility(int(config.get("rgb_visibility_audit_layout_count", 32)))
+    visibility_audit = audit_scene_rgb_visibility(
+        int(config.get("rgb_visibility_audit_layout_count", 32)),
+        scheme=str(config.get("scene_layout_scheme", "quiet-material-gather-v1")),
+    )
     results = []
     start = time.perf_counter()
     for seed in config["replica_seeds"]:
@@ -116,6 +120,7 @@ def _run_fold(config: dict, config_path: Path, output: Path, formal_snapshot: di
         "formal_result": _is_formal_config(config),
         "diagnostic_only": not _is_formal_config(config),
         "formal_manifest": formal_snapshot,
+        "scene_layout_scheme": str(config.get("scene_layout_scheme", "quiet-material-gather-v1")),
         "config": str(config_path),
         "fold_id": config["fold_id"],
         "source_materials": config["source_materials"],
@@ -146,6 +151,7 @@ def run(config_path: str, output_path: str) -> dict:
     base_config = load_config(config_path)
     formal_mode = _is_formal_config(base_config)
     formal_snapshot = verify_formal_manifest(base_config, config_path) if formal_mode else None
+    scene_preflight = _validate_injective_scene_config(base_config)
     if not formal_mode and (base_config.get("formal_result") is not False or base_config.get("diagnostic_only") is not True):
         raise ValueError("E2 runner requires explicit diagnostic or frozen formal configuration")
     if formal_mode:
@@ -181,6 +187,7 @@ def run(config_path: str, output_path: str) -> dict:
         "formal_result": formal_mode,
         "diagnostic_only": not formal_mode,
         "formal_manifest": formal_snapshot,
+        "scene_rgb_preflight": scene_preflight,
         "config": str(config_path),
         "fold_count": len(fold_results),
         "folds": fold_results,

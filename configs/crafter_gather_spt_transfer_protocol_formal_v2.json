@@ -1,0 +1,570 @@
+{
+  "protocol_version": "crafter_gather_spt_transfer_protocol_formal_v2",
+  "document": "docs/crafter-spt-spi-transfer-protocol-2026-10-15.md",
+  "status": "frozen_formal_v2_2026-10-18",
+  "config_kind": "formal_protocol_v2_pending_seal",
+  "formal_result": false,
+  "ready_for_formal_training": true,
+  "runner": "experiments/run_crafter_gather_spt_transfer_pilot.py",
+  "e2_runner": "experiments/run_crafter_gather_spt_transfer_e2.py",
+  "e2_comparability_analyzer": "experiments/analyze_crafter_gather_spt_transfer_e2.py",
+  "scope": "controlled_crafter_skill_evolution_component",
+  "skill_family": "gather",
+  "device": "cuda",
+  "tasks": [
+    {
+      "spi_id": "gather_wood_delta1",
+      "material": "tree",
+      "item": "wood",
+      "delta": 1,
+      "context": [
+        1,
+        0,
+        0
+      ],
+      "native_required_inventory": {}
+    },
+    {
+      "spi_id": "gather_stone_delta1",
+      "material": "stone",
+      "item": "stone",
+      "delta": 1,
+      "context": [
+        0,
+        1,
+        0
+      ],
+      "native_required_inventory": {
+        "wood_pickaxe": 1
+      }
+    },
+    {
+      "spi_id": "gather_coal_delta1",
+      "material": "coal",
+      "item": "coal",
+      "delta": 1,
+      "context": [
+        0,
+        0,
+        1
+      ],
+      "native_required_inventory": {
+        "wood_pickaxe": 1
+      }
+    }
+  ],
+  "environment": {
+    "crafter_version": "1.8.3",
+    "fixture_version": "quiet-material-gather-v1",
+    "implementation_status": "implemented_diagnostic_fixture",
+    "observation": "native_rgb_64x64x3",
+    "target_metadata_source": "public_spi_binding",
+    "materials_per_scene": {
+      "tree": 1,
+      "stone": 1,
+      "coal": 1
+    },
+    "initial_inventory": {
+      "wood": 0,
+      "stone": 0,
+      "coal": 0,
+      "wood_pickaxe": 1,
+      "health": 9,
+      "food": 9,
+      "drink": 9,
+      "energy": 9
+    },
+    "target_manhattan_distance_range": [
+      1,
+      3
+    ],
+    "all_targets_reachable": true,
+    "initial_rgb_visibility_audit": {
+      "layout_count": 32,
+      "materials_checked": 96,
+      "all_visible": true,
+      "minimum_changed_pixels": 39,
+      "exhaustive_over_training_layouts": false
+    },
+    "daylight": 1.0,
+    "hostile_spawning": false,
+    "water_or_lava": false,
+    "life_statistics": "native_updates_no_runtime_reset",
+    "max_episode_steps": 32,
+    "action_allowlist": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6
+    ],
+    "reward": {
+      "first_target_inventory_delta": 1.0,
+      "other_steps": 0.0,
+      "native_reward_used_for_loss": false
+    },
+    "goal_terminates_episode": true,
+    "action_oracle_used": false,
+    "privileged_policy_inputs": false,
+    "supervised_action_labels_used": false,
+    "deaths_excluded": false,
+    "native_crafter_qualification": false
+  },
+  "experiments": {
+    "E1_direct_wood_to_coal": {
+      "source_spi_ids": [
+        "gather_wood_delta1"
+      ],
+      "target_spi_id": "gather_coal_delta1",
+      "analysis_role": "prespecified_secondary_direct_transfer"
+    },
+    "E2_leave_one_binding_out": {
+      "analysis_role": "primary_family_transfer",
+      "folds": [
+        {
+          "fold_id": "holdout_coal",
+          "source_spi_ids": [
+            "gather_wood_delta1",
+            "gather_stone_delta1"
+          ],
+          "target_spi_id": "gather_coal_delta1"
+        },
+        {
+          "fold_id": "holdout_stone",
+          "source_spi_ids": [
+            "gather_wood_delta1",
+            "gather_coal_delta1"
+          ],
+          "target_spi_id": "gather_stone_delta1"
+        },
+        {
+          "fold_id": "holdout_wood",
+          "source_spi_ids": [
+            "gather_stone_delta1",
+            "gather_coal_delta1"
+          ],
+          "target_spi_id": "gather_wood_delta1"
+        }
+      ]
+    }
+  },
+  "arms": {
+    "A_initial_spt": {
+      "source_update": "none",
+      "source_interaction_steps": 0
+    },
+    "B_fomaml_spt": {
+      "source_update": "context_conditioned_fomaml",
+      "source_interaction_steps": 65536
+    },
+    "C_ordinary_pretraining": {
+      "source_update": "goal_conditioned_ppo_without_meta_reset",
+      "source_interaction_steps": 65536
+    }
+  },
+  "initialization": {
+    "common_random_state_per_replica": true,
+    "historical_checkpoints_used": false,
+    "historical_datasets_used": false,
+    "policy_backbone": "matched_spatial_cnn_only",
+    "cnn_channels": [
+      16,
+      32
+    ],
+    "embedding_dim": 128,
+    "action_count": 17,
+    "generator": "linear_context_to_full_actor_parameter_residual",
+    "generated_parameter_names": [
+      "actor.weight",
+      "actor.bias"
+    ],
+    "context_dim": 3,
+    "generator_initialization": "zeros",
+    "same_parameter_capacity_all_arms": true,
+    "heldout_context_column_unchanged_during_source_training": true,
+    "target_optimizer_state": "fresh_same_adam_all_arms"
+  },
+  "optimizer_candidate": {
+    "algorithm": "ppo",
+    "learning_rate": 0.0003,
+    "gamma": 0.99,
+    "gae_lambda": 0.95,
+    "clip_epsilon": 0.2,
+    "value_coef": 0.5,
+    "entropy_coef": 0.01,
+    "update_epochs": 4,
+    "interaction_steps_per_update": 256,
+    "bootstrap_on_time_or_batch_truncation": true,
+    "bootstrap_on_goal_or_death": false,
+    "gae_crosses_episode_reset": false,
+    "source_inner_optimizer_state": "fresh_adam_per_task_slot",
+    "source_outer_optimizer": "adam",
+    "source_outer_learning_rate": 0.001,
+    "source_outer_steps_per_round": 1,
+    "query_collected_under_adapted_policy": true,
+    "first_order_generator_jacobian_preserved": true,
+    "status": "frozen"
+  },
+  "data_roles": [
+    "calibration",
+    "source_support",
+    "source_meta_query",
+    "target_support",
+    "final_evaluation"
+  ],
+  "evaluation": {
+    "mode": "categorical_sample",
+    "paired_scene_and_action_seed_all_arms": true,
+    "independent_arm_trajectories": true,
+    "scene_episode_role_isolation": true,
+    "initial_layout_and_rgb_collision_audit": true,
+    "manifest_status": "sealed_formal_manifest_v1",
+    "evaluation_changes_training_rng": false,
+    "evaluation_used_for_parameter_update_or_selection": false,
+    "fixed_final_source_checkpoint": true,
+    "adaptive_early_stop": false,
+    "scene_layout_scheme": "quiet-material-gather-injective-v2",
+    "canonical_and_initial_rgb_role_isolation": true
+  },
+  "integration_pilot_candidate": {
+    "run_status": "completed_scene_pool_alignment_nonformal_pilot",
+    "config": "configs/crafter_gather_spt_transfer_pilot_v3.yaml",
+    "experiment": "E1_direct_wood_to_coal",
+    "replica_seeds": [
+      11,
+      12
+    ],
+    "source_rounds": 8,
+    "source_steps_per_trained_arm": 8192,
+    "target_support_steps": 4096,
+    "evaluation_support_checkpoints": [
+      0,
+      1024,
+      4096
+    ],
+    "evaluation_episodes_per_checkpoint": 40,
+    "result_root": "results/crafter_gather_spt_transfer_pilot_v3_run1",
+    "code_commit": "e43d678",
+    "source_scene_pool": {
+      "size_per_role_per_slot": 64,
+      "slot_stride": 200,
+      "query_offset": 100,
+      "B_C_declared_pool_sets_equal": true,
+      "provenance_valid": true,
+      "strict_source_scene_pool_equal": true
+    },
+    "historical_v2": {
+      "result_root": "results/crafter_gather_spt_transfer_pilot_v2_run1",
+      "independent_reproduction_root": "results/crafter_gather_spt_transfer_pilot_v2_run2",
+      "code_commit": "908eb4c",
+      "independent_reproduction_code_commit": "ad65c4f",
+      "numeric_records_identical": true,
+      "strict_source_scene_pool_equal": false,
+      "reason": "B/C actual source scene sets differed; C did not include B meta-query pool"
+    },
+    "historical_v1": {
+      "result_root": "results/crafter_gather_spt_transfer_pilot_v1_run7",
+      "code_commit": "f1f49e4",
+      "checkpoint_reproduction_root": "results/crafter_gather_spt_transfer_pilot_v1_run8",
+      "checkpoint_reproduction_code_commit": "0746753",
+      "configured_meta_learning_rate": 0.001,
+      "effective_meta_learning_rate": 0.0003,
+      "configuration_mismatch": true,
+      "effective_rates_in_original_artifact": false
+    },
+    "effective_source_optimizer_rates_verified": true,
+    "source_block_and_scene_pool_alignment": "v3_paired_candidate_pools_passed",
+    "independent_process_v2_reproduction": "completed_numeric_match_strict_pool_failed",
+    "independent_process_v3_reproduction": {
+      "status": "completed_numeric_manifest_and_strict_pool_match",
+      "result_root": "results/crafter_gather_spt_transfer_pilot_v3_run2",
+      "code_commit": "155b204",
+      "numeric_training_records_identical": true,
+      "episode_scene_rgb_manifest_identical": true,
+      "optimizer_settings_identical": true,
+      "strict_source_scene_pool_equal": true,
+      "execution_chain_verification": "results/crafter_gather_spt_transfer_pilot_v3_run2/execution_chain/verification.json",
+      "verification": "results/crafter_gather_spt_transfer_pilot_v3_run2/reproduction_verification.json",
+      "formal_result": false
+    },
+    "result_summary": "docs/crafter-gather-spt-transfer-pilot-2026-10-15.md",
+    "purpose": "integration_learnability_cost_variance_not_method_selection",
+    "method_win_required_for_formal_entry": false,
+    "included_in_formal_results": false,
+    "target_binding_used_for_protocol_development": true
+  },
+  "e2_runner_smoke": {
+    "status": "completed_nonformal_three_fold_smoke",
+    "config": "configs/crafter_gather_spt_transfer_e2_smoke_v1.yaml",
+    "candidate_manifest": "configs/crafter_gather_spt_transfer_e2_candidate_v1.yaml",
+    "result_root": "results/crafter_gather_spt_transfer_e2_smoke_v1",
+    "folds": [
+      "holdout_coal",
+      "holdout_stone",
+      "holdout_wood"
+    ],
+    "replica_seeds": [
+      11
+    ],
+    "comparability_valid_all_folds": true,
+    "provenance_valid_all_folds": true,
+    "strict_source_scene_pool_equal_all_folds": true,
+    "formal_result": false,
+    "purpose": "runner_and_role_boundary_smoke_only"
+  },
+  "execution_chain_diagnostic": {
+    "status": "completed_nonformal_read_only_probe",
+    "report": "docs/crafter-gather-execution-chain-2026-10-15.md",
+    "result": "results/crafter_gather_spt_transfer_pilot_v3_run1/execution_chain/diagnostic.json",
+    "independent_reproduction_result": "results/crafter_gather_spt_transfer_pilot_v3_run2/execution_chain/diagnostic.json",
+    "mechanical_layouts": 32,
+    "mechanical_materials": [
+      "tree",
+      "stone",
+      "coal"
+    ],
+    "native_shortest_route_step_range": [
+      1,
+      6
+    ],
+    "mechanical_horizon_8_successes": 96,
+    "mechanical_horizon_8_cases": 96,
+    "frozen_target_material": "coal",
+    "frozen_policy_count": 6,
+    "common_rgb_state_count": 83,
+    "probability_readout_count": 498,
+    "geometry_oracle_scope": "mechanical_control_and_diagnostic_labels_only",
+    "labels_used_for_policy_training": false,
+    "autonomous_policy_success_implied": false
+  },
+  "system_state_changes": {
+    "active_spt_pointer_switch": false,
+    "module_registration": false,
+    "knowledge_update": false
+  },
+  "formal_entry_requirements": [
+    "actual_spt_spi_cnn_generation_adaptation_connection",
+    "multi_material_fixture_and_native_rule_controls",
+    "matched_arms_and_exact_cost_accounting",
+    "candidate_isolation_generator_gradient_and_cold_column_audit",
+    "optimizer_reset_bootstrap_and_evaluation_rng_audit",
+    "effective_optimizer_learning_rates_match_config",
+    "independent_repetition_and_manifest_hash_seal",
+    "budget_sample_count_and_analysis_freeze",
+    "discriminative_learnability_signal_without_requiring_B_to_win"
+  ],
+  "formal_budget": {
+    "values_frozen": true,
+    "replica_seeds": [
+      101,
+      102,
+      103,
+      104,
+      105,
+      106,
+      107,
+      108,
+      109,
+      110,
+      111,
+      112,
+      113,
+      114,
+      115,
+      116,
+      117,
+      118,
+      119,
+      120,
+      121,
+      122,
+      123,
+      124,
+      125,
+      126,
+      127,
+      128,
+      129,
+      130
+    ],
+    "source_rounds": 64,
+    "source_task_slots_per_round": 2,
+    "source_support_steps_per_slot": 256,
+    "source_meta_query_steps_per_slot": 256,
+    "source_total_steps_per_trained_arm": 65536,
+    "target_support_steps": 16384,
+    "evaluation_support_checkpoints": [
+      0,
+      1024,
+      4096,
+      8192,
+      16384
+    ],
+    "evaluation_episodes_per_checkpoint": 100,
+    "E2_interaction_step_upper_bound": 20540160,
+    "E1_interaction_step_upper_bound": 6846720,
+    "combined_interaction_step_upper_bound": 27386880,
+    "replay_and_pilot_cost_included_in_upper_bounds": false,
+    "replica_count": 30
+  },
+  "power_planning": {
+    "minimum_meaningful_primary_effect": 0.1,
+    "assumed_seed_level_standard_deviation": 0.2,
+    "planning_target_power": 0.8,
+    "bootstrap_sensitivity_power_at_frozen_n": 0.789,
+    "monte_carlo_replicates": 3000,
+    "bootstrap_resamples_per_replicate": 2000,
+    "simulation_seed": 20261019,
+    "replica_count": 30,
+    "basis": "normal sensitivity simulation; variance is an explicit planning assumption, not estimated from the two-seed pilot",
+    "power_analysis_report": "docs/crafter-spt-spi-power-cost-audit-2026-10-18.md"
+  },
+  "manifest": {
+    "scene_generator_version": "quiet-material-gather-injective-v2",
+    "training_action_rng_scheme": "per_episode_seed_v1",
+    "training_action_seed_derivation": "block_action_seed_plus_zero_based_episode_index",
+    "source_scene_pool_size_per_block": 256,
+    "source_scene_slot_stride": 600,
+    "source_query_scene_offset": 300,
+    "source_action_slot_stride": 1000,
+    "source_query_action_offset": 500,
+    "source_pool_capacity_rule": "role-partition capacity covers every source block candidate without replacement",
+    "scene_layout_role_partitions": {
+      "source_support": {
+        "start": 0,
+        "count": 32768
+      },
+      "source_meta_query": {
+        "start": 32768,
+        "count": 32768
+      },
+      "target_support": {
+        "start": 65536,
+        "count": 16384
+      },
+      "final_evaluation": {
+        "start": 81920,
+        "count": 2500
+      }
+    },
+    "scene_role_seed_stride": 1000000,
+    "replicate_seed_stride": 10000000,
+    "scene_rgb_preflight_required": true
+  },
+  "analysis_plan": {
+    "primary_metric": "normalized_trapezoidal_query_success_auc_over_support_steps",
+    "primary_experiment": "E2_leave_one_binding_out",
+    "primary_contrast": [
+      "B_fomaml_spt",
+      "C_ordinary_pretraining"
+    ],
+    "fold_aggregation": "equal_weight_within_replica",
+    "independent_unit": "replica_seed",
+    "confidence_interval": {
+      "method": "paired_seed_cluster_percentile_bootstrap",
+      "resamples": 10000,
+      "level": 0.95,
+      "analysis_seed": 20261015,
+      "percentile_method": "linear"
+    },
+    "secondary_query_success_threshold": 0.8,
+    "unreached_threshold_handling": "right_censored_not_zero_or_observed_budget",
+    "candidate_module_qualification_implied": false,
+    "specified_statistical_power_established": false,
+    "power_sensitivity_analysis_completed": true
+  },
+  "candidate_preflight_history": {
+    "status": "completed_nonformal_cost_provenance_preflight",
+    "config": "configs/crafter_gather_spt_transfer_e2_candidate_v1.yaml",
+    "result": "results/crafter_gather_spt_transfer_e2_candidate_v1/preflight.json",
+    "valid": true,
+    "formal_freeze_ready": false,
+    "cost_upper_bounds": {
+      "e2": 6846720,
+      "e1": 2282240,
+      "combined_e1_e2": 9128960
+    },
+    "cross_replica_role_seed_ranges_disjoint": true,
+    "source_hashes_recorded": true,
+    "dependencies_recorded": true,
+    "purpose": "candidate_consistency_cost_and_provenance_preflight_only"
+  },
+  "formal_manifest_sealed": false,
+  "formal_freeze": {
+    "freeze_date": "2026-10-18",
+    "formal_manifest_sealed": true,
+    "minimum_meaningful_B_minus_C_auc": 0.1,
+    "assumed_seed_sd_for_planning": 0.2,
+    "replica_seeds": [
+      101,
+      102,
+      103,
+      104,
+      105,
+      106,
+      107,
+      108,
+      109,
+      110,
+      111,
+      112,
+      113,
+      114,
+      115,
+      116,
+      117,
+      118,
+      119,
+      120,
+      121,
+      122,
+      123,
+      124,
+      125,
+      126,
+      127,
+      128,
+      129,
+      130
+    ],
+    "training_start_authorized": true,
+    "module_qualification_implied": false,
+    "protocol_revision": "v2 after v1 RGB collision audit failure",
+    "scene_distribution_change": "visible materials are placed at Manhattan distance 1..5 within the native 9x7 local view"
+  },
+  "scene_distribution": {
+    "scene_generator_version": "quiet-material-gather-injective-v2",
+    "material_manhattan_distance": [
+      1,
+      5
+    ],
+    "visible_in_native_9x9_rgb": true,
+    "layout_universe_count_including_facing": 470400,
+    "role_partitions": {
+      "source_support": {
+        "start": 0,
+        "count": 32768
+      },
+      "source_meta_query": {
+        "start": 32768,
+        "count": 32768
+      },
+      "target_support": {
+        "start": 65536,
+        "count": 16384
+      },
+      "final_evaluation": {
+        "start": 81920,
+        "count": 2500
+      }
+    },
+    "replica_seed_stride": 10000000,
+    "role_seed_stride": 1000000,
+    "rgb_preflight_report": "configs/crafter_gather_spt_transfer_scene_rgb_preflight_v2.json",
+    "all_scheduled_layouts_exhaustively_checked_for_rgb_collisions": true
+  },
+  "formal_manifest_version": "crafter_gather_spt_transfer_formal_manifest_v2",
+  "manifest_status": "pending_v2_rgb_preflight_and_hash_seal"
+}
