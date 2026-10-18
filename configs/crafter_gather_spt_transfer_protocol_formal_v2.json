@@ -1,8 +1,8 @@
 {
   "protocol_version": "crafter_gather_spt_transfer_protocol_formal_v2",
   "document": "docs/crafter-spt-spi-transfer-protocol-2026-10-15.md",
-  "status": "frozen_formal_v2_2026-10-18",
-  "config_kind": "formal_protocol_v2_pending_seal",
+  "status": "frozen_formal_v2_sealed_2026-10-18",
+  "config_kind": "frozen_formal_protocol_manifest_v2",
   "formal_result": false,
   "ready_for_formal_training": true,
   "runner": "experiments/run_crafter_gather_spt_transfer_pilot.py",
@@ -491,7 +491,7 @@
     "dependencies_recorded": true,
     "purpose": "candidate_consistency_cost_and_provenance_preflight_only"
   },
-  "formal_manifest_sealed": false,
+  "formal_manifest_sealed": true,
   "formal_freeze": {
     "freeze_date": "2026-10-18",
     "formal_manifest_sealed": true,
@@ -566,5 +566,5 @@
     "all_scheduled_layouts_exhaustively_checked_for_rgb_collisions": true
   },
   "formal_manifest_version": "crafter_gather_spt_transfer_formal_manifest_v2",
-  "manifest_status": "pending_v2_rgb_preflight_and_hash_seal"
+  "manifest_status": "sealed_formal_manifest_v2"
 }
