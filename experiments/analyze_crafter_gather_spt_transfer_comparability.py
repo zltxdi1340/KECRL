@@ -24,7 +24,8 @@ def _manifest_scene_seeds(summary: dict) -> list[int]:
 
 def _check_block_manifest(summary: dict, role: str, expected_steps: int,
                           label: str, errors: list[str], *, verify_rgb: bool = True,
-                          expected_material: str | None = None) -> dict:
+                          expected_material: str | None = None,
+                          expected_action_rng_scheme: str | None = None) -> dict:
     """Check one recorded interaction block and return its provenance summary."""
     if summary.get("role") != role:
         errors.append(f"{label}: role is {summary.get('role')!r}, expected {role!r}")
@@ -34,12 +35,15 @@ def _check_block_manifest(summary: dict, role: str, expected_steps: int,
         errors.append(f"{label}: actual step count mismatch")
     if expected_material is not None and summary.get("material") != expected_material:
         errors.append(f"{label}: material is {summary.get('material')!r}, expected {expected_material!r}")
+    if expected_action_rng_scheme and summary.get("action_rng_scheme") != expected_action_rng_scheme:
+        errors.append(f"{label}: action RNG scheme mismatch")
     manifest = summary.get("episode_manifest")
     if not isinstance(manifest, list) or len(manifest) != int(summary.get("episodes", -1)):
         errors.append(f"{label}: episode manifest count mismatch")
         manifest = manifest if isinstance(manifest, list) else []
     scene_seeds = []
     rgb_hashes = []
+    scene_keys = []
     for index, entry in enumerate(manifest):
         entry_label = f"{label}/episode_{index}"
         if not isinstance(entry, dict):
@@ -54,6 +58,20 @@ def _check_block_manifest(summary: dict, role: str, expected_steps: int,
         expected_record = scene.record()
         if entry["scene"] != expected_record:
             errors.append(f"{entry_label}: scene record does not match scene seed")
+        canonical_scene = json.dumps(entry["scene"], sort_keys=True, separators=(",", ":"))
+        scene_keys.append(hashlib.sha256(canonical_scene.encode("utf-8")).hexdigest())
+        if expected_action_rng_scheme:
+            try:
+                action_seed = int(entry["action_seed"])
+                block_seed = int(entry["action_rng_block_seed"])
+                episode_index = int(entry["episode_index"])
+            except (KeyError, TypeError, ValueError):
+                errors.append(f"{entry_label}: per-episode action RNG provenance is missing")
+            else:
+                if entry.get("action_rng_scheme") != expected_action_rng_scheme:
+                    errors.append(f"{entry_label}: action RNG scheme mismatch")
+                if action_seed != block_seed + episode_index:
+                    errors.append(f"{entry_label}: episode action seed does not match block seed/index")
         expected_rgb = None
         if verify_rgb:
             env = MaterialGatherEnv(scene, seed=seed, length=1)
@@ -79,6 +97,7 @@ def _check_block_manifest(summary: dict, role: str, expected_steps: int,
         "episodes": len(scene_seeds),
         "steps": int(summary.get("actual_steps", 0)),
         "scene_seeds": scene_seeds,
+        "scene_keys": scene_keys,
         "rgb_hashes": rgb_hashes,
         "declared_scene_pool": sorted(declared_pool),
     }
@@ -86,12 +105,14 @@ def _check_block_manifest(summary: dict, role: str, expected_steps: int,
 
 def _check_evaluation_manifest(evaluation: dict, expected_episodes: int,
                               label: str, errors: list[str], *, verify_rgb: bool = True,
-                              expected_material: str | None = None) -> dict:
+                              expected_material: str | None = None,
+                              expected_action_rng_scheme: str | None = None) -> dict:
     rows = evaluation.get("rows", [])
     if len(rows) != expected_episodes:
         errors.append(f"{label}: evaluation row count mismatch")
     scene_seeds = []
     rgb_hashes = []
+    scene_keys = []
     for index, row in enumerate(rows):
         row_label = f"{label}/episode_{index}"
         if not {"scene_seed", "scene", "initial_rgb_sha256", "action_seed"}.issubset(row):
@@ -99,10 +120,14 @@ def _check_evaluation_manifest(evaluation: dict, expected_episodes: int,
             continue
         if expected_material is not None and row.get("material") != expected_material:
             errors.append(f"{row_label}: material is {row.get('material')!r}, expected {expected_material!r}")
+        if expected_action_rng_scheme and row.get("action_rng_scheme") != expected_action_rng_scheme:
+            errors.append(f"{row_label}: evaluation action RNG scheme mismatch")
         seed = int(row["scene_seed"])
         scene = make_material_gather_scene(seed)
         if row["scene"] != scene.record():
             errors.append(f"{row_label}: scene record does not match scene seed")
+        canonical_scene = json.dumps(row["scene"], sort_keys=True, separators=(",", ":"))
+        scene_keys.append(hashlib.sha256(canonical_scene.encode("utf-8")).hexdigest())
         if verify_rgb:
             env = MaterialGatherEnv(scene, seed=seed, length=1)
             try:
@@ -118,7 +143,12 @@ def _check_evaluation_manifest(evaluation: dict, expected_episodes: int,
         rgb_hashes.append(str(row["initial_rgb_sha256"]))
     if len(scene_seeds) != len(set(scene_seeds)):
         errors.append(f"{label}: repeated scene seed within evaluation checkpoint")
-    return {"episodes": len(scene_seeds), "scene_seeds": scene_seeds, "rgb_hashes": rgb_hashes}
+    return {
+        "episodes": len(scene_seeds),
+        "scene_seeds": scene_seeds,
+        "scene_keys": scene_keys,
+        "rgb_hashes": rgb_hashes,
+    }
 
 
 def _unique_or_error(values: list[int], label: str, errors: list[str]) -> set[int]:
@@ -149,8 +179,9 @@ def analyze(input_path: str | Path, *, verify_rgb: bool = True) -> dict:
     if len(source_materials) != int(config["source_task_slots_per_round"]):
         errors.append("source_materials count does not match source task slots")
 
-    if aggregate.get("formal_result") is not False or aggregate.get("diagnostic_only") is not True:
-        errors.append("aggregate is not explicitly diagnostic/non-formal")
+    formal_flags = (aggregate.get("formal_result"), aggregate.get("diagnostic_only"))
+    if formal_flags not in {(False, True), (True, False)}:
+        errors.append("aggregate does not declare a valid diagnostic or formal mode")
     expected_source_steps = int(config["source_rounds"]) * int(config["source_task_slots_per_round"]) * (
         int(config["source_support_steps_per_slot"]) + int(config["source_query_steps_per_slot"])
     )
@@ -158,6 +189,7 @@ def analyze(input_path: str | Path, *, verify_rgb: bool = True) -> dict:
     expected_target_steps = max(int(value) for value in config["target_checkpoints"])
     expected_target_blocks = expected_target_steps // int(config["target_update_steps"])
     expected_eval_episodes = int(config["evaluation_episodes"])
+    expected_action_rng_scheme = config.get("action_rng_scheme")
 
     for run in aggregate.get("runs", []):
         arm = str(run["arm"])
@@ -165,6 +197,8 @@ def analyze(input_path: str | Path, *, verify_rgb: bool = True) -> dict:
         label = f"{arm}/seed_{seed}"
         source_entries: list[dict] = []
         source_sets_by_role: dict[str, set[int]] = {}
+        source_scene_keys_by_role: dict[str, set[str]] = {}
+        source_rgb_hashes_by_role: dict[str, set[str]] = {}
         declared_source = set()
         if arm == "A_initial_spt":
             if run.get("source_rows") or run.get("source_signal", {}).get("episode_manifest"):
@@ -182,9 +216,12 @@ def analyze(input_path: str | Path, *, verify_rgb: bool = True) -> dict:
                         continue
                     checked = _check_block_manifest(summary, role, steps, f"{label}/row_{index}/{role}", errors,
                                                     verify_rgb=verify_rgb,
-                                                    expected_material=source_materials[index % len(source_materials)])
+                                                    expected_material=source_materials[index % len(source_materials)],
+                                                    expected_action_rng_scheme=expected_action_rng_scheme)
                     source_entries.append(checked)
                     source_sets_by_role.setdefault(role, set()).update(checked["scene_seeds"])
+                    source_scene_keys_by_role.setdefault(role, set()).update(checked["scene_keys"])
+                    source_rgb_hashes_by_role.setdefault(role, set()).update(checked["rgb_hashes"])
                     declared_source.update(checked["declared_scene_pool"])
                     role_counts[role] += 1
             if len(run.get("source_updates", [])) != int(config["source_rounds"]):
@@ -202,7 +239,8 @@ def analyze(input_path: str | Path, *, verify_rgb: bool = True) -> dict:
                 checked = _check_block_manifest(summary, "source_ordinary_block", expected_block_steps,
                                                 f"{label}/row_{index}/source_ordinary_block", errors,
                                                 verify_rgb=verify_rgb,
-                                                expected_material=source_materials[index % len(source_materials)])
+                                                expected_material=source_materials[index % len(source_materials)],
+                                                expected_action_rng_scheme=expected_action_rng_scheme)
                 source_entries.append(checked)
                 source_sets_by_role.setdefault("source_ordinary_block", set()).update(checked["scene_seeds"])
                 declared_source.update(checked["declared_scene_pool"])
@@ -221,7 +259,10 @@ def analyze(input_path: str | Path, *, verify_rgb: bool = True) -> dict:
                                 f"{label}/row_{index}/{subrole}", errors,
                                 verify_rgb=verify_rgb,
                                 expected_material=source_materials[index % len(source_materials)],
+                                expected_action_rng_scheme=expected_action_rng_scheme,
                             )
+                            source_scene_keys_by_role.setdefault(subrole, set()).update(subchecked["scene_keys"])
+                            source_rgb_hashes_by_role.setdefault(subrole, set()).update(subchecked["rgb_hashes"])
                             declared_source.update(subchecked["declared_scene_pool"])
                 role_counts["source_ordinary_block"] += 1
             if len(run.get("source_updates", [])) != expected_source_blocks:
@@ -244,7 +285,8 @@ def analyze(input_path: str | Path, *, verify_rgb: bool = True) -> dict:
             checked = _check_block_manifest(summary, "target_support", int(config["target_update_steps"]),
                                             f"{label}/target_block_{block_index}", errors,
                                             verify_rgb=verify_rgb,
-                                            expected_material=target_material)
+                                            expected_material=target_material,
+                                            expected_action_rng_scheme=expected_action_rng_scheme)
             target_entries.append(checked)
             target_all.extend(checked["scene_seeds"])
             role_counts["target_support"] += 1
@@ -262,7 +304,8 @@ def analyze(input_path: str | Path, *, verify_rgb: bool = True) -> dict:
             checked = _check_evaluation_manifest(checkpoint["evaluation"], expected_eval_episodes,
                                                  f"{label}/eval_{checkpoint['support_steps']}", errors,
                                                  verify_rgb=verify_rgb,
-                                                 expected_material=target_material)
+                                                 expected_material=target_material,
+                                                 expected_action_rng_scheme=expected_action_rng_scheme)
             evaluation_entries.append(checked)
             evaluation_all.extend(checked["scene_seeds"])
             role_counts["final_evaluation"] += 1
@@ -272,6 +315,38 @@ def analyze(input_path: str | Path, *, verify_rgb: bool = True) -> dict:
             errors.append(f"{label}: target support overlaps final evaluation")
         if set(source_all) & set(target_all + evaluation_all):
             errors.append(f"{label}: source roles overlap target/evaluation roles")
+        source_scene_keys = set().union(*source_scene_keys_by_role.values()) if source_scene_keys_by_role else set()
+        source_rgb_hashes = set().union(*source_rgb_hashes_by_role.values()) if source_rgb_hashes_by_role else set()
+        target_scene_keys = set().union(*(set(entry["scene_keys"]) for entry in target_entries)) if target_entries else set()
+        target_rgb_hashes = set().union(*(set(entry["rgb_hashes"]) for entry in target_entries)) if target_entries else set()
+        evaluation_scene_keys = set().union(*(set(entry["scene_keys"]) for entry in evaluation_entries)) if evaluation_entries else set()
+        evaluation_rgb_hashes = set().union(*(set(entry["rgb_hashes"]) for entry in evaluation_entries)) if evaluation_entries else set()
+        source_role_overlaps = []
+        source_role_names = sorted(source_scene_keys_by_role)
+        for left_index, left_role in enumerate(source_role_names):
+            for right_role in source_role_names[left_index + 1:]:
+                scene_overlap = source_scene_keys_by_role[left_role] & source_scene_keys_by_role[right_role]
+                rgb_overlap = source_rgb_hashes_by_role[left_role] & source_rgb_hashes_by_role[right_role]
+                if scene_overlap or rgb_overlap:
+                    errors.append(f"{label}: source roles {left_role} and {right_role} share canonical scenes or RGB")
+                source_role_overlaps.append({
+                    "left_role": left_role,
+                    "right_role": right_role,
+                    "canonical_scene_key_intersection": len(scene_overlap),
+                    "initial_rgb_digest_intersection": len(rgb_overlap),
+                })
+        source_target_scene_overlap = source_scene_keys & target_scene_keys
+        source_target_rgb_overlap = source_rgb_hashes & target_rgb_hashes
+        source_evaluation_scene_overlap = source_scene_keys & evaluation_scene_keys
+        source_evaluation_rgb_overlap = source_rgb_hashes & evaluation_rgb_hashes
+        target_evaluation_scene_overlap = target_scene_keys & evaluation_scene_keys
+        target_evaluation_rgb_overlap = target_rgb_hashes & evaluation_rgb_hashes
+        if source_target_scene_overlap or source_target_rgb_overlap:
+            errors.append(f"{label}: source and target-support roles share canonical scenes or RGB")
+        if source_evaluation_scene_overlap or source_evaluation_rgb_overlap:
+            errors.append(f"{label}: source and final-evaluation roles share canonical scenes or RGB")
+        if target_evaluation_scene_overlap or target_evaluation_rgb_overlap:
+            errors.append(f"{label}: target-support and final-evaluation roles share canonical scenes or RGB")
         run_summaries.append({
             "arm": arm, "seed": seed,
             "source_steps": int(run.get("source_steps", -1)),
@@ -280,7 +355,24 @@ def analyze(input_path: str | Path, *, verify_rgb: bool = True) -> dict:
             "target_scene_count": len(target_all),
             "evaluation_scene_count": len(evaluation_all),
             "source_roles": {role: len(values) for role, values in sorted(source_sets_by_role.items())},
-            "source_scene_evaluation_disjoint": not bool(set(source_all) & set(target_all + evaluation_all)),
+            "source_scene_evaluation_disjoint": not bool(
+                source_evaluation_scene_overlap or source_evaluation_rgb_overlap
+            ),
+            "scene_role_collision_audit": {
+                "source_role_pairs": source_role_overlaps,
+                "source_target_support": {
+                    "canonical_scene_key_intersection": len(source_target_scene_overlap),
+                    "initial_rgb_digest_intersection": len(source_target_rgb_overlap),
+                },
+                "source_final_evaluation": {
+                    "canonical_scene_key_intersection": len(source_evaluation_scene_overlap),
+                    "initial_rgb_digest_intersection": len(source_evaluation_rgb_overlap),
+                },
+                "target_support_final_evaluation": {
+                    "canonical_scene_key_intersection": len(target_evaluation_scene_overlap),
+                    "initial_rgb_digest_intersection": len(target_evaluation_rgb_overlap),
+                },
+            },
         })
 
     b_sources = set().union(*(values for (arm, _seed), values in source_arm_scene_sets.items()

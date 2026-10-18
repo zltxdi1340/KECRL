@@ -33,3 +33,37 @@ E2 runner 已实现并完成 bounded smoke：三个 leave-one-binding-out fold �
 无需 wood 达到候选 0.8 才能研究 SPT；SPI 学习失败也可提供反馈。受控组件实验不等于自然 Crafter Module 资格或完整 KECRL 验证。当前没有新的活动 SPT 切换、Module 注册或 Knowledge 更新；自然 stone、coal、pickaxe、工具获取、生存及持续任务链仍需独立验证。
 
 详细协议与配对结果见[空间动作头 fresh 诊断](crafter-wood3-spatial-actor-fresh-2026-10-15.md)。
+
+## 2026-10-16 E2 主分析实现验证
+
+E2 分析器现除逐折 RGB/provenance 与来源场景池审计外，也按候选协议实现主分析：从每个 checkpoint 的逐 episode 成功标签重算成功率和归一化梯形 AUC；每个 replica 内先等权平均三个 holdout fold，再计算唯一主对比 B−C；95% percentile 区间按 replica seed 成组重采样 10,000 次，随机种子 `20261015`，bootstrap 分位数采用 linear 插值。输出保留完整 seed/fold 曲线、逐 fold 均值与样本标准差、配对差，并将未达到 `0.8` 的检查点标为右删失。分析同时核验各臂在相同 fold、seed、checkpoint 使用相同 scene/action seed，记录摘要与 episode 标签一致，并在 source/target/evaluation 角色之间检查 canonical scene record 与初始 RGB digest 碰撞。
+
+三折 E2 smoke 的 provenance、RGB 重建、B/C 场景池和材料留出审计均通过；它使用一个 seed、`0/8` 支持步和每点两个 episode，因此分析器明确返回 `not_estimable`，没有计算主效应。缩小预算的合成三折测试验证了 seed 内折平均和成组 bootstrap。当前定向测试 `24 passed`，全量回归 `442 passed`，使用 `kecrl` Conda 环境（Python 3.10.22、PyTorch 2.14.1+cu130）。
+
+这只封住了候选分析实现和 smoke 边界，不代表统计协议、输入 manifest 或正式实验已经冻结；当前协议仍标记为 candidate，正式训练未启动。正式启动前仍需完成一次提交后的全源文件/依赖哈希封存、最终 manifest 核对与独立复核，并明确启动决定。
+
+## 来源 seed 池与动作 RNG 核验补充
+
+检查 runner 后发现，64-scene 来源候选池小于单块 256 个交互步的最坏 episode 数；每集至少消耗 1 步，因此最坏可达 256 集，旧池存在耗尽风险。正式候选现扩大为每 role 256 个 scene seed，并采用 query offset 300、slot stride 600；preflight 和 runner 都验证容量和不重叠。
+
+旧训练收集器以 block 为单位设置 action RNG，却没有把该 block seed 写进每集 manifest。正式候选改用 `block_action_seed + episode_index` 的逐集 action seed，并在结果审计中校验，旧 pilot 仍按其原 block-stream 规则作为校准数据，不与正式结果合并。更新后的三折 bounded smoke 已在独立进程重复两次：逐 episode seed、材料绑定、RGB 重建、B/C 来源池相等审计全部通过；去掉路径和 elapsed time 后 aggregates 完全一致，9 个 Policy checkpoint SHA-256 一致。由于只有一个 seed 和 0/8 支持步，不计算主效应。全量回归 `442 passed`，正式运行仍未启动。
+
+候选 preflight 现在附带哈希绑定的 seed-schedule manifest 草案，明确列出 3 个 fold、30 个 replica-fold、3,840 个 source slot、1,920 个 target-support block 和 15,000 个配对 evaluation episode。候选 scene/action seed 角色区间、256 scene pool 容量和预算均通过；manifest 仍标记为未封存，当前工作区有 tracked 修改和未跟踪路径，不能当作正式冻结快照。
+
+## 2026-10-18 动作 RNG 与 E2 候选回归核验
+
+本轮核验当前 E2 候选改动，不启动正式预算训练。运行环境为 `kecrl` Conda 环境（Python 3.10.22、PyTorch 2.14.1+cu130、2 张 RTX 4090）；定向测试 `41 passed`，全量回归 `442 passed`，`git diff --check` 通过。
+
+逐集 action seed 改动通过两个全新进程的三折 bounded smoke。两次 smoke 都使用 seed 11、source support/query 各 4 步、target checkpoint `0/8` 和每个 checkpoint 2 个评估 episode；输出位于 `/tmp/crafter_gather_spt_transfer_e2_smoke_20261018_codex/` 与 `/tmp/crafter_gather_spt_transfer_e2_smoke_20261018_codex_run2/`。独立分析器对两次运行的全部 fold 均确认 comparability、provenance 和严格来源场景池相等有效；逐折训练记录一致，9 个 target Policy checkpoint 的 SHA-256 一致。
+
+分析器按预期返回 `not_estimable`：smoke 的 seed、checkpoint 和 episode 数不满足正式候选预算，因此没有计算主效应。候选 preflight 输出位于 `/tmp/crafter_gather_spt_transfer_e2_candidate_preflight_20261018.json`，结构、成本和 seed-schedule 检查通过；候选统计配置仍为 `ready_for_formal_training=false`。此外，分析器目前将 `formal_freeze_ready` 固定输出为 `false`，所以它是 candidate 一致性/成本预检，而不是能自动放行正式实验的门控。当前 tracked 文件有修改且存在未跟踪路径，hash 快照也未封存。正式前还需落实并冻结统计/样本方案、核对最终 manifest 与依赖版本、形成可复现提交快照，并单独明确是否启动正式训练。
+
+## 2026-10-18 候选功效与成本审查
+
+按 E2 seed 级三折平均 B−C AUC 做正态敏感性模拟：候选 10 seed 在 `Δ/σ=0.67` 时 95% percentile-bootstrap 区间排除 0 的比例约 0.61；若 `Δ=0.10, σ=0.15`，约 18 seed 才接近 0.8，若 `σ=0.20` 则约 30 seed。两个 E1 pilot seed 不足以估计 E2 方差，因此没有更改候选 seed 数。按两次 pilot 每秒约 677–680 个实际环境步线性外推，当前 E1+E2 最大预算约需 3.7–3.8 小时单卡串行；不是保证上限。计算假设、敏感性表与限制见[功效和成本审查](crafter-spt-spi-power-cost-audit-2026-10-18.md)。
+
+为辅助选样，E1+E2 全预算的线性换算为 10/18/30 个 seed 对应约 3.7/6.7/11.2 小时单卡串行；该换算按候选每 seed 固定成本缩放，未增加新的训练数据或正式实验结果。
+
+用户确认启动后，已冻结 formal v1 配置并启动 30-seed E1/E2 正式运行：E1 在 GPU 0，E2 在 GPU 1。冻结哈希、输出位置和运行状态见[正式运行记录](crafter-spt-spi-formal-run-2026-10-18.md)。当前无完整结果，正式效果必须等待训练完成和独立审计后再解释。
+
+首分钟状态检查已看到 E1 seed 101 的 A 臂及 E2 `holdout_coal` seed 101 的 A 臂写出结果账本与 checkpoint；两进程继续运行。该部分臂记录未作效果分析，剩余 B/C 臂、其他 seed/fold 与独立完整结果审计仍待完成。

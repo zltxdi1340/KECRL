@@ -109,6 +109,17 @@
     "query_collected_under_adapted_policy": true,
     "first_order_generator_jacobian_preserved": true
   },
+  "manifest_candidate": {
+    "scene_generator_version": "quiet-material-gather-v1",
+    "training_action_rng_scheme": "per_episode_seed_v1",
+    "training_action_seed_derivation": "block_action_seed_plus_zero_based_episode_index",
+    "source_scene_pool_size_per_block": 256,
+    "source_scene_slot_stride": 600,
+    "source_query_scene_offset": 300,
+    "source_action_slot_stride": 1000,
+    "source_query_action_offset": 500,
+    "source_pool_capacity_rule": "candidate_scene_pool_size_at_least_block_interaction_steps"
+  },
   "data_roles": ["calibration", "source_support", "source_meta_query", "target_support", "final_evaluation"],
   "evaluation": {
     "mode": "categorical_sample",
@@ -128,7 +139,7 @@
     "primary_contrast": ["B_fomaml_spt", "C_ordinary_pretraining"],
     "fold_aggregation": "equal_weight_within_replica",
     "independent_unit": "replica_seed",
-    "confidence_interval": {"method": "paired_seed_cluster_percentile_bootstrap", "resamples": 10000, "level": 0.95, "analysis_seed": 20261015},
+    "confidence_interval": {"method": "paired_seed_cluster_percentile_bootstrap", "resamples": 10000, "level": 0.95, "analysis_seed": 20261015, "percentile_method": "linear"},
     "secondary_query_success_threshold": 0.8,
     "unreached_threshold_handling": "right_censored_not_zero_or_observed_budget",
     "candidate_module_qualification_implied": false,

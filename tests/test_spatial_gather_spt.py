@@ -147,6 +147,11 @@ def test_e2_smoke_config_resolves_three_disjoint_holdout_folds():
         ("holdout_wood", ("stone", "coal"), "tree"),
     ]
     assert all(item["formal_result"] is False for item in resolved)
+    assert all(item["action_rng_scheme"] == "per_episode_seed_v1" for item in resolved)
+    undersized = dict(config)
+    undersized["source_scene_pool_size"] = 3
+    with pytest.raises(ValueError, match="one-step-per-episode"):
+        resolve_fold_config(undersized, config["folds"][0])
 
 
 def test_e2_candidate_preflight_matches_protocol_cost_and_replica_ranges():
@@ -160,6 +165,226 @@ def test_e2_candidate_preflight_matches_protocol_cost_and_replica_ranges():
     assert result["formal_freeze_ready"] is False
     assert result["costs"]["e2_total_interaction_step_upper_bound"] == 6_846_720
     assert result["scene_pool_checks"]["cross_replica_role_ranges_disjoint"]
+    assert result["scene_pool_checks"]["candidate_pool_capacity_sufficient"]
+    assert result["scene_pool_checks"]["pool_size_per_role_per_slot"] == 256
+    assert result["scene_pool_checks"]["action_seed_ranges"]["cross_role_and_replica_ranges_disjoint"]
+
+
+def test_formal_manifest_requires_exact_hash_bound_snapshot(tmp_path):
+    import hashlib
+    import subprocess
+
+    from experiments.crafter_formal_manifest import package_versions, verify_formal_manifest
+
+    root = tmp_path
+    config_path = root / "config.json"
+    protocol_path = root / "protocol.json"
+    source_path = root / "runner.py"
+    manifest_path = root / "manifest.json"
+    source_path.write_text("frozen runner\n", encoding="utf-8")
+    protocol_path.write_text("{}\n", encoding="utf-8")
+    config = {
+        "formal_result": True,
+        "diagnostic_only": False,
+        "ready_for_formal_training": True,
+        "formal_manifest_sealed": True,
+        "formal_manifest": str(manifest_path),
+        "formal_protocol": str(protocol_path),
+        "replica_seeds": [101, 102],
+    }
+    config_path.write_text(json.dumps(config) + "\n", encoding="utf-8")
+    sha = lambda path: hashlib.sha256(path.read_bytes()).hexdigest()
+    manifest = {
+        "status": "sealed_formal_manifest_v1",
+        "formal_result": True,
+        "git_commit": subprocess.check_output(["git", "rev-parse", "HEAD"], text=True).strip(),
+        "runtime": {"packages": package_versions()},
+        "source_sha256": {str(source_path): sha(source_path)},
+        "replica_seeds": [101, 102],
+        "config_sha256": sha(config_path),
+        "protocol_sha256": sha(protocol_path),
+    }
+    canonical = json.dumps(manifest, sort_keys=True, separators=(",", ":"), ensure_ascii=True)
+    manifest["manifest_sha256"] = hashlib.sha256(canonical.encode("utf-8")).hexdigest()
+    manifest_path.write_text(json.dumps(manifest), encoding="utf-8")
+    manifest_path.with_suffix(".json.sha256").write_text(sha(manifest_path) + "\n", encoding="ascii")
+
+    verified = verify_formal_manifest(config, config_path)
+    assert verified["manifest_sha256"] == sha(manifest_path)
+    source_path.write_text("changed runner\n", encoding="utf-8")
+    with pytest.raises(ValueError, match="source hash check failed"):
+        verify_formal_manifest(config, config_path)
+
+
+def test_formal_config_generation_freezes_thirty_replica_plan(tmp_path):
+    from experiments.freeze_crafter_gather_spt_transfer_formal import generate_configs
+
+    import shutil
+
+    shutil.copytree("configs", tmp_path / "configs")
+    generate_configs(tmp_path)
+    e1 = json.loads((tmp_path / "configs/crafter_gather_spt_transfer_e1_formal_v1.json").read_text())
+    e2 = json.loads((tmp_path / "configs/crafter_gather_spt_transfer_e2_formal_v1.json").read_text())
+    protocol = json.loads((tmp_path / "configs/crafter_gather_spt_transfer_protocol_formal_v1.json").read_text())
+    assert e1["formal_result"] is True and e1["diagnostic_only"] is False
+    assert e2["replica_seeds"] == list(range(101, 131))
+    assert e1["replica_seeds"] == e2["replica_seeds"]
+    assert e1["action_rng_scheme"] == "per_episode_seed_v1"
+    assert e1["source_scene_pool_size"] == 256
+    assert protocol["formal_budget"]["values_frozen"] is True
+    assert protocol["power_planning"]["minimum_meaningful_primary_effect"] == 0.10
+
+
+def test_e2_candidate_manifest_plan_materializes_fold_slot_and_evaluation_seeds():
+    from experiments.analyze_crafter_gather_spt_transfer_e2_candidate import build_candidate_manifest_plan
+
+    config = json.loads(open("configs/crafter_gather_spt_transfer_e2_candidate_v1.yaml").read())
+    protocol = json.loads(open("configs/crafter_gather_spt_transfer_protocol_candidate_v1.yaml").read())
+    plan = build_candidate_manifest_plan(
+        config,
+        protocol,
+        config_path="candidate-config",
+        config_sha256="config-hash",
+        protocol_sha256="protocol-hash",
+        source_sha256={"runner": "runner-hash"},
+        runtime={"python": "test"},
+        git_commit="test-commit",
+    )
+    wood_fold = next(fold for fold in plan["folds"] if fold["fold_id"] == "holdout_wood")
+    replica = next(row for row in wood_fold["replicas"] if row["replica_seed"] == 101)
+    first_slot = replica["source_slots"][0]
+    source_scene_base = 1_100_000 + 101 * 10_000_000
+    source_action_base = 1_200_000 + 101 * 10_000_000
+    assert first_slot["source_material"] == "stone"
+    assert first_slot["support"]["scene_seed_start"] == source_scene_base
+    assert first_slot["support"]["scene_seed_count"] == 256
+    assert first_slot["meta_query"]["scene_seed_start"] == source_scene_base + 300
+    assert first_slot["support"]["block_action_seed"] == source_action_base
+    assert first_slot["meta_query"]["block_action_seed"] == source_action_base + 500
+    assert replica["target_support_blocks"][0]["after_steps"] == 256
+    assert replica["target_support_blocks"][0]["action_seed_count_upper_bound"] == 256
+    assert replica["final_evaluations"][0]["episodes"][0] == {
+        "episode": 0,
+        "scene_seed": 1_300_000 + 101 * 10_000_000 + 1_000_000,
+        "action_seed": 1_400_000 + 101 * 10_000_000 + 1_000_000,
+    }
+    assert plan["status"] == "candidate_schedule_not_sealed"
+    assert len(plan["manifest_plan_sha256"]) == 64
+
+
+def test_e2_primary_auc_and_seed_cluster_bootstrap_are_deterministic():
+    from experiments.analyze_crafter_gather_spt_transfer_e2 import (
+        _normalized_auc,
+        _paired_seed_cluster_bootstrap,
+    )
+
+    auc = _normalized_auc([0, 1, 3], [0.0, 0.5, 1.0], budget=3)
+    assert auc == pytest.approx(7 / 12)
+    first = _paired_seed_cluster_bootstrap(
+        [0.1, 0.2, 0.3], resamples=1000, level=0.95, random_seed=42
+    )
+    second = _paired_seed_cluster_bootstrap(
+        [0.1, 0.2, 0.3], resamples=1000, level=0.95, random_seed=42
+    )
+    assert first == second
+    assert first["method"] == "paired_seed_cluster_percentile_bootstrap"
+    assert first["lower"] <= 0.2 <= first["upper"]
+    with pytest.raises(ValueError, match="at least two"):
+        _paired_seed_cluster_bootstrap(
+            [0.2], resamples=1000, level=0.95, random_seed=42
+        )
+
+
+def test_e2_smoke_budget_is_not_misreported_as_primary_candidate_estimate():
+    from experiments.analyze_crafter_gather_spt_transfer_e2 import _candidate_statistics
+
+    config = json.loads(open("configs/crafter_gather_spt_transfer_e2_smoke_v1.yaml").read())
+    protocol = json.loads(open("configs/crafter_gather_spt_transfer_protocol_candidate_v1.yaml").read())
+    errors = []
+    result = _candidate_statistics(config, {}, {}, protocol, errors)
+    assert errors == []
+    assert result["status"] == "not_estimable"
+    assert result["formal_result"] is False
+    assert any("checkpoints" in reason for reason in result["reasons"])
+    assert any("episode count" in reason for reason in result["reasons"])
+    assert any("replica seeds" in reason for reason in result["reasons"])
+
+
+def test_e2_primary_analysis_averages_folds_inside_paired_seed_clusters(tmp_path):
+    from experiments.analyze_crafter_gather_spt_transfer_e2 import _candidate_statistics
+
+    protocol = json.loads(open("configs/crafter_gather_spt_transfer_protocol_candidate_v1.yaml").read())
+    protocol["formal_budget_candidate"].update({
+        "replica_seeds": [1, 2],
+        "target_support_steps": 2,
+        "evaluation_support_checkpoints": [0, 2],
+        "evaluation_episodes_per_checkpoint": 2,
+    })
+    protocol["analysis_candidate"]["confidence_interval"].update({"resamples": 250, "analysis_seed": 17})
+    protocol["_path"] = "synthetic-test-protocol"
+    protocol["_sha256"] = "synthetic-test-hash"
+    config = {
+        "arms": list(protocol["arms"]),
+        "replica_seeds": [1, 2],
+        "target_checkpoints": [0, 2],
+        "evaluation_episodes": 2,
+    }
+    success_counts = {
+        ("A_initial_spt", 1): [0, 0],
+        ("A_initial_spt", 2): [0, 0],
+        ("B_fomaml_spt", 1): [1, 2],
+        ("B_fomaml_spt", 2): [0, 1],
+        ("C_ordinary_pretraining", 1): [0, 1],
+        ("C_ordinary_pretraining", 2): [0, 0],
+    }
+    task_by_id = {task["spi_id"]: task for task in protocol["tasks"]}
+    fold_aggregates = {}
+    for fold in protocol["experiments"]["E2_leave_one_binding_out"]["folds"]:
+        fold_id = fold["fold_id"]
+        fold_config_path = tmp_path / f"{fold_id}.json"
+        fold_config_path.write_text(json.dumps({"target_checkpoints": [0, 2]}), encoding="utf-8")
+        runs = []
+        for (arm, seed), counts in success_counts.items():
+            target_rows = []
+            for checkpoint_index, checkpoint in enumerate([0, 2]):
+                rows = [
+                    {
+                        "scene_seed": 5000 + episode,
+                        "action_seed": 6000 + episode,
+                        "success": episode < counts[checkpoint_index],
+                    }
+                    for episode in range(2)
+                ]
+                successes = sum(row["success"] for row in rows)
+                target_rows.append({
+                    "support_steps": checkpoint,
+                    "evaluation": {
+                        "episodes": 2,
+                        "successes": successes,
+                        "success_rate": successes / 2,
+                        "rows": rows,
+                    },
+                })
+            runs.append({"arm": arm, "seed": seed, "target_rows": target_rows})
+        fold_aggregates[fold_id] = {
+            "config": str(fold_config_path),
+                "source_materials": [task_by_id[spi_id]["material"] for spi_id in fold["source_spi_ids"]],
+                "target_material": task_by_id[fold["target_spi_id"]]["material"],
+            "runs": runs,
+        }
+
+    errors = []
+    result = _candidate_statistics(config, {"git_commit": "synthetic"}, fold_aggregates, protocol, errors)
+    assert errors == []
+    assert result["status"] == "candidate_estimate_diagnostic_only"
+    assert result["primary_effect"]["mean_B_minus_C_auc"] == pytest.approx(0.375)
+    assert [row["B_minus_C"] for row in result["per_seed_primary_contrast"]] == pytest.approx([0.5, 0.25])
+    assert all(row["paired_B_minus_C_auc"]["mean"] == pytest.approx(0.375)
+               for row in result["per_fold_summary"])
+    assert [point["support_steps"] for point in result["per_fold_summary"][0]["success_curve"]] == [0, 2]
+    assert result["per_fold_summary"][0]["success_curve"][1]["success_rate_by_arm"]["B_fomaml_spt"]["mean"] == pytest.approx(0.75)
+    assert result["primary_effect"]["confidence_interval"]["lower"] <= 0.375
+    assert result["primary_effect"]["confidence_interval"]["upper"] >= 0.375
 
 
 def test_material_scene_is_paired_and_uses_native_collection_requirements():

@@ -145,6 +145,8 @@ evaluation 在 Policy 和 optimizer 冻结、训练 RNG 保存并恢复的副本
 不同臂的配对场景重复是设计要求；不同 replica 共享哪些固定评价场景须写入 manifest，episode 不能充当独立模板训练重复。
 已查看的历史 wood 数据只作设计背景，不进入新训练或最终测试。最终评价一旦查看，就不能继续据它选配置或选择模板。
 
+来源块最多 256 个交互步，episode 最短可为 1 步，因此固定候选 scene 池至少需要 256 个 seed 才能保证块不会因提前成功而耗尽。当前候选排布为每来源 slot 的 support scene 池 256 个、query scene 池 256 个，query 偏移 300、slot stride 600。正式候选训练动作采用逐 episode seed：`action_seed = block_action_seed + zero_based_episode_index`；source slot action stride 为 1,000，query action offset 为 500。这样每条来源 episode manifest 可记录自己的 scene/action seed，target support 也可从 block seed 和 episode index 重建。以上均是待冻结候选，正式启动前仍需预检和封存。
+
 每个来源阶段结束后直接封存固定预算末端候选，不按最终测试挑选版本。
 本组件比较不自动切换活动 SPT 指针、不注册 Module、不更新 Knowledge；系统级 SPT 接受和 Module 资格使用各自独立协议。
 

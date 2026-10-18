@@ -1,0 +1,118 @@
+{
+  "status": "crafter_gather_spt_transfer_e1_formal_v1",
+  "formal_result": true,
+  "diagnostic_only": false,
+  "device": "cuda",
+  "cublas_workspace_config": ":4096:8",
+  "target_material": "coal",
+  "arms": [
+    "A_initial_spt",
+    "B_fomaml_spt",
+    "C_ordinary_pretraining"
+  ],
+  "replica_seeds": [
+    101,
+    102,
+    103,
+    104,
+    105,
+    106,
+    107,
+    108,
+    109,
+    110,
+    111,
+    112,
+    113,
+    114,
+    115,
+    116,
+    117,
+    118,
+    119,
+    120,
+    121,
+    122,
+    123,
+    124,
+    125,
+    126,
+    127,
+    128,
+    129,
+    130
+  ],
+  "replicate_seed_stride": 10000000,
+  "source_rounds": 64,
+  "source_task_slots_per_round": 2,
+  "source_support_steps_per_slot": 256,
+  "source_query_steps_per_slot": 256,
+  "source_scene_pool_size": 256,
+  "source_slot_stride": 600,
+  "source_query_pool_offset": 300,
+  "target_checkpoints": [
+    0,
+    1024,
+    4096,
+    8192,
+    16384
+  ],
+  "target_update_steps": 256,
+  "evaluation_episodes": 100,
+  "max_episode_steps": 32,
+  "rgb_visibility_audit_layout_count": 32,
+  "source_scene_seed_base": 1100000,
+  "source_action_seed_base": 1200000,
+  "target_scene_seed_base": 1300000,
+  "target_action_seed_base": 1400000,
+  "inner_learning_rate": 0.0003,
+  "meta_learning_rate": 0.001,
+  "policy_learning_rate": 0.0003,
+  "update_epochs": 4,
+  "policy": {
+    "cnn_channels": [
+      16,
+      32
+    ],
+    "embedding_dim": 128,
+    "action_count": 17,
+    "learning_rate": 0.0003,
+    "gamma": 0.99,
+    "gae_lambda": 0.95,
+    "clip_epsilon": 0.2,
+    "value_coef": 0.5,
+    "entropy_coef": 0.01,
+    "update_epochs": 4
+  },
+  "ready_for_formal_training": true,
+  "formal_manifest_sealed": true,
+  "formal_manifest": "configs/crafter_gather_spt_transfer_e1_formal_manifest_v1.json",
+  "formal_protocol": "configs/crafter_gather_spt_transfer_protocol_formal_v1.json",
+  "source_action_slot_stride": 1000,
+  "source_query_action_offset": 500,
+  "action_rng_scheme": "per_episode_seed_v1",
+  "formal_budget_reference": {
+    "source_steps_per_trained_arm": 65536,
+    "target_support_steps": 16384,
+    "evaluation_checkpoints": [
+      0,
+      1024,
+      4096,
+      8192,
+      16384
+    ],
+    "evaluation_episodes_per_checkpoint": 100,
+    "replica_count": 30,
+    "maximum_interaction_steps": 6846720
+  },
+  "folds": [
+    {
+      "fold_id": "direct_wood_to_coal",
+      "source_materials": [
+        "tree"
+      ],
+      "target_material": "coal"
+    }
+  ],
+  "formal_note": "Frozen formal E1 direct wood-to-coal experiment; secondary to E2 family transfer. This does not qualify a natural Crafter Module or validate full KECRL."
+}

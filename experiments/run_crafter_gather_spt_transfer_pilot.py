@@ -1,7 +1,6 @@
-"""Non-formal E1 pilot for a real Crafter SPT -> SPI transfer path.
+"""Crafter SPT -> SPI transfer runner for diagnostic and frozen formal paths.
 
-The pilot exercises the protocol plumbing with two replicas and a small
-budget. Its output is deliberately excluded from formal method comparisons.
+Diagnostic configurations remain excluded from formal method comparisons.
 """
 from __future__ import annotations
 
@@ -32,6 +31,11 @@ from src.skills.spatial_gather_spt import (
     validate_spi_against_spt,
 )
 from src.utils.config import load_config, runtime_metadata
+from experiments.crafter_formal_manifest import verify_formal_manifest
+
+
+def _is_formal_config(config: dict) -> bool:
+    return config.get("formal_result") is True and config.get("diagnostic_only") is False
 
 
 def _image_tensor(observation: np.ndarray, device: torch.device) -> torch.Tensor:
@@ -155,6 +159,15 @@ def _merge_block_summaries(summaries: list[dict]) -> dict:
         ),
         "episode_manifest": episode_manifest,
         "scene_pool_seeds": sorted(scene_pool_seeds),
+        "action_rng_scheme": (
+            summaries[0].get("action_rng_scheme")
+            if len({summary.get("action_rng_scheme") for summary in summaries}) == 1
+            else "mixed"
+        ),
+        "action_rng_block_seeds": [
+            int(summary["action_rng_block_seed"])
+            for summary in summaries if "action_rng_block_seed" in summary
+        ],
     }
 
 
@@ -249,12 +262,18 @@ def collect_block(
     training: bool,
     role: str = "unspecified",
     scene_seed_schedule: tuple[int, ...] | None = None,
+    action_rng_scheme: str = "block_stream_v1",
 ) -> tuple[SpatialPPORollout, dict]:
     """Collect exactly ``steps`` native interactions, resetting only at episode boundaries."""
     if steps <= 0:
         raise ValueError("block steps must be positive")
     if scene_seed_schedule is not None and not scene_seed_schedule:
         raise ValueError("scene_seed_schedule must not be empty")
+    if action_rng_scheme not in {"block_stream_v1", "per_episode_seed_v1"}:
+        raise ValueError(f"unsupported action RNG scheme: {action_rng_scheme}")
+    if (action_rng_scheme == "per_episode_seed_v1" and scene_seed_schedule is not None
+            and len(scene_seed_schedule) < steps):
+        raise ValueError("scene seed schedule must cover the maximum one-step-per-episode case")
     target_item = str(spi.parameter_binding["item"])
     material = str(spi.parameter_binding["material"])
     env = MaterialGatherEnv(make_material_gather_scene(int(scene_seed_base)), seed=int(scene_seed_base), length=max_episode_steps)
@@ -271,24 +290,36 @@ def collect_block(
     action_counts = Counter()
     first_target_gain_steps = []
     episode_manifest = []
-    torch.manual_seed(int(action_seed))
+    if action_rng_scheme == "block_stream_v1":
+        torch.manual_seed(int(action_seed))
     try:
         while interaction_steps < steps:
             if observation is None:
+                current_episode_index = episode_index
                 if scene_seed_schedule is not None:
                     if episode_index >= len(scene_seed_schedule):
                         raise RuntimeError("scene seed schedule exhausted before block completed")
                     episode_scene_seed = int(scene_seed_schedule[episode_index])
                 else:
                     episode_scene_seed = int(scene_seed_base) + episode_index
+                episode_action_seed = None
+                if action_rng_scheme == "per_episode_seed_v1":
+                    episode_action_seed = int(action_seed) + current_episode_index
+                    torch.manual_seed(episode_action_seed)
                 env.configure(make_material_gather_scene(episode_scene_seed), seed=episode_scene_seed)
                 observation = env.reset()
                 scene = make_material_gather_scene(episode_scene_seed)
-                episode_manifest.append({
+                manifest_entry = {
                     "scene_seed": episode_scene_seed,
                     "scene": scene.record(),
                     "initial_rgb_sha256": hashlib.sha256(observation.tobytes()).hexdigest(),
-                })
+                    "episode_index": current_episode_index,
+                    "action_rng_scheme": action_rng_scheme,
+                    "action_rng_block_seed": int(action_seed),
+                }
+                if episode_action_seed is not None:
+                    manifest_entry["action_seed"] = episode_action_seed
+                episode_manifest.append(manifest_entry)
                 hidden = None
                 episode_transitions = []
                 episode_initial_item = int(env._player.inventory[target_item])
@@ -376,6 +407,8 @@ def collect_block(
         "episode_manifest": episode_manifest,
         "scene_pool_seeds": ([int(value) for value in scene_seed_schedule]
                              if scene_seed_schedule is not None else []),
+        "action_rng_scheme": action_rng_scheme,
+        "action_rng_block_seed": int(action_seed),
     }
 
 
@@ -449,6 +482,7 @@ def evaluate(
                          "scene_seed": scene_seed, "scene": scene.record(),
                          "initial_rgb_sha256": initial_rgb_sha256,
                          "action_seed": int(action_seed_base) + index,
+                         "action_rng_scheme": "per_episode_seed_v1",
                          "success": success, "steps": steps, "terminal_reason": terminal,
                          "first_target_gain_step": first_target_gain_step,
                          "action_counts": _sorted_action_counts(episode_action_counts)})
@@ -502,6 +536,9 @@ def _run_arm(config: dict, arm_name: str, initial: SpatialGatherSPT, spi_target,
     rounds = int(config["source_rounds"])
     support_steps = int(config["source_support_steps_per_slot"])
     query_steps = int(config["source_query_steps_per_slot"])
+    action_rng_scheme = str(config.get("action_rng_scheme", "block_stream_v1"))
+    action_slot_stride = int(config.get("source_action_slot_stride", 100))
+    query_action_offset = int(config.get("source_query_action_offset", 50))
     source_base = int(config["source_scene_seed_base"]) + int(seed) * int(config["replicate_seed_stride"])
     action_base = int(config["source_action_seed_base"]) + int(seed) * int(config["replicate_seed_stride"])
     for round_index in range(rounds):
@@ -517,19 +554,21 @@ def _run_arm(config: dict, arm_name: str, initial: SpatialGatherSPT, spi_target,
                 support, support_summary = collect_block(
                     candidate.instantiate(source_spi).policy, source_spi,
                     steps=support_steps, scene_seed_base=source_base + key * 100,
-                    action_seed=action_base + key * 100, device=device,
+                    action_seed=action_base + key * action_slot_stride, device=device,
                     max_episode_steps=int(config["max_episode_steps"]), training=True,
                     role="source_support",
                     scene_seed_schedule=support_pool,
+                    action_rng_scheme=action_rng_scheme,
                 )
                 adapted = learner.adapt(source_spi, support)
                 query, query_summary = collect_block(
                     adapted, source_spi, steps=query_steps,
                     scene_seed_base=source_base + key * 100 + 50,
-                    action_seed=action_base + key * 100 + 50, device=device,
+                    action_seed=action_base + key * action_slot_stride + query_action_offset, device=device,
                     max_episode_steps=int(config["max_episode_steps"]), training=True,
                     role="source_meta_query",
                     scene_seed_schedule=query_pool,
+                    action_rng_scheme=action_rng_scheme,
                 )
                 tasks.append(SpatialMetaTask(source_spi, support, query))
                 source_rows.append({"round": round_index, "slot": slot, "support": support_summary, "query": query_summary})
@@ -548,10 +587,11 @@ def _run_arm(config: dict, arm_name: str, initial: SpatialGatherSPT, spi_target,
                     ordinary_support, support_summary = collect_block(
                         ordinary_policy, source_spi, steps=support_steps,
                         scene_seed_base=source_base + key * 100,
-                        action_seed=action_base + key * 100, device=device,
+                        action_seed=action_base + key * action_slot_stride, device=device,
                         max_episode_steps=int(config["max_episode_steps"]), training=True,
                         role="source_ordinary_support",
                         scene_seed_schedule=support_pool,
+                        action_rng_scheme=action_rng_scheme,
                     )
                     # The aligned pilot C consumes the same two role-specific
                     # pools as B, then performs one ordinary PPO update on
@@ -559,10 +599,11 @@ def _run_arm(config: dict, arm_name: str, initial: SpatialGatherSPT, spi_target,
                     ordinary_query, query_summary = collect_block(
                         ordinary_policy, source_spi, steps=query_steps,
                         scene_seed_base=source_base + key * 100,
-                        action_seed=action_base + key * 100 + 50, device=device,
+                        action_seed=action_base + key * action_slot_stride + query_action_offset, device=device,
                         max_episode_steps=int(config["max_episode_steps"]), training=True,
                         role="source_ordinary_query",
                         scene_seed_schedule=query_pool,
+                        action_rng_scheme=action_rng_scheme,
                     )
                     block = _concat_rollouts([ordinary_support, ordinary_query])
                     summary = _merge_block_summaries([support_summary, query_summary])
@@ -574,9 +615,10 @@ def _run_arm(config: dict, arm_name: str, initial: SpatialGatherSPT, spi_target,
                     block, summary = collect_block(
                         ordinary_policy, source_spi, steps=support_steps + query_steps,
                         scene_seed_base=source_base + key * 100,
-                        action_seed=action_base + key * 100, device=device,
+                        action_seed=action_base + key * action_slot_stride, device=device,
                         max_episode_steps=int(config["max_episode_steps"]), training=True,
                         role="source_ordinary_block",
+                        action_rng_scheme=action_rng_scheme,
                     )
                 for _ in range(int(config["update_epochs"])):
                     loss = learner.ordinary_update((SpatialMetaTask(source_spi, block, block),))
@@ -609,6 +651,7 @@ def _run_arm(config: dict, arm_name: str, initial: SpatialGatherSPT, spi_target,
                 action_seed=target_action_base + target_steps * 10,
                 device=device, max_episode_steps=int(config["max_episode_steps"]), training=True,
                 role="target_support",
+                action_rng_scheme=action_rng_scheme,
             )
             metrics = _ppo_update(target_policy, block)
             target_block_summaries.append({"after_steps": target_steps + block_steps, **summary})
@@ -627,7 +670,11 @@ def _run_arm(config: dict, arm_name: str, initial: SpatialGatherSPT, spi_target,
     output.mkdir(parents=True, exist_ok=True)
     target_policy_checkpoint = output / "target_policy.pt"
     torch.save({
-        "checkpoint_kind": "frozen_target_policy_for_diagnostic_evaluation",
+        "checkpoint_kind": (
+            "frozen_target_policy_for_formal_evaluation"
+            if _is_formal_config(config)
+            else "frozen_target_policy_for_diagnostic_evaluation"
+        ),
         "arm": arm_name,
         "seed": int(seed),
         "spi_id": spi_target.spi_id,
@@ -675,7 +722,7 @@ def _run_arm(config: dict, arm_name: str, initial: SpatialGatherSPT, spi_target,
             candidate.cold_context_column(target_material), torch.zeros_like(candidate.cold_context_column(target_material))
         )),
         "spi_target_linkage": validate_spi_against_spt(spi_target, candidate.record),
-        "formal_result": False,
+        "formal_result": _is_formal_config(config),
     }
     (output / "result.json").write_text(json.dumps(result, indent=2) + "\n", encoding="utf-8")
     return result
@@ -683,8 +730,15 @@ def _run_arm(config: dict, arm_name: str, initial: SpatialGatherSPT, spi_target,
 
 def run(config_path: str, output_path: str) -> dict:
     config = load_config(config_path)
-    if config.get("formal_result") is not False or config.get("diagnostic_only") is not True:
-        raise ValueError("pilot must explicitly remain diagnostic and non-formal")
+    formal_mode = _is_formal_config(config)
+    formal_snapshot = verify_formal_manifest(config, config_path) if formal_mode else None
+    if not formal_mode and (config.get("formal_result") is not False or config.get("diagnostic_only") is not True):
+        raise ValueError("diagnostic runner requires explicit non-formal configuration")
+    if formal_mode:
+        if config.get("ready_for_formal_training") is not True:
+            raise ValueError("formal runner requires ready_for_formal_training=true")
+        if config.get("formal_manifest_sealed") is not True:
+            raise ValueError("formal runner requires formal_manifest_sealed=true")
     if Path(output_path).exists():
         raise FileExistsError(f"refusing to overwrite {output_path}")
     device_name = ContinualLearningPipeline.resolve_device(config["device"])
@@ -706,8 +760,9 @@ def run(config_path: str, output_path: str) -> dict:
         for arm in config["arms"]:
             results.append(_run_arm(config, arm, initial, target_spi, device, int(seed), output / arm / f"seed_{int(seed)}"))
     result = {
-        "status": config["status"], "formal_result": False, "diagnostic_only": True,
+        "status": config["status"], "formal_result": formal_mode, "diagnostic_only": not formal_mode,
         "config": config_path, "device": str(device), "determinism": deterministic,
+        "formal_manifest": formal_snapshot,
         "git_commit": subprocess.check_output(["git", "rev-parse", "HEAD"], text=True).strip(),
         "runtime": runtime_metadata(config, str(device)),
         "protocol_linkage": {"spt": spt.__dict__, "target_spi": validate_spi_against_spt(target_spi, spt)},
@@ -715,7 +770,7 @@ def run(config_path: str, output_path: str) -> dict:
         "arm_order": config["arms"], "replica_seeds": config["replica_seeds"],
         "runs": results, "elapsed_seconds": time.perf_counter() - start,
         "module_registered": False, "knowledge_updated": False, "spt_pointer_switched": False,
-        "note": config["pilot_note"],
+        "note": config.get("formal_note", config.get("pilot_note", "Crafter gather transfer run.")),
     }
     (output / "aggregate.json").write_text(json.dumps(result, indent=2, default=str) + "\n", encoding="utf-8")
     return result
