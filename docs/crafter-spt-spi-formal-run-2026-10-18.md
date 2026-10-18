@@ -36,3 +36,4 @@ E2 的逐 fold provenance/RGB 审计和 seed-cluster 主分析现已结束，但
 - Runner 启动前校验预检报告与 scene-generator SHA、角色分区容量及 formal manifest；独立 analyzer 还会逐 episode 验证 seed 与角色 schedule 一致，并复建 RGB。任一检查失败即拒绝运行/报告。
 - E1/E2 seeds、优化设置、训练交互上限与 primary analysis 保持 v1 冻结值不变；场景分布更改由 `formal_v2` 配置和 manifest 单独封存。训练启动后在本节追加 GPU、PID 与日志信息。
 - v2 的第一次进程启动触发了 target block 初始化 seed 被误解析为角色 seed 的保护错误；两边在写出任何 result 前退出，未产生可分析的正式运行。修复已加入回归测试并通过全量回归；失败尝试输出目录和日志保留，retry 使用新的输出目录。
+- 修复后的 manifest 已封存并提交：E1 SHA-256 `47a136f6aa537cff06528c99ede01d82264990d5a3de3246697b201817b967e7`，E2 SHA-256 `f15b2c0ab59f23a6920c25e81625eda26d7ac933b14c493965b473d748ed8541`；二者绑定代码提交 `5f3d8ac93526c472b3b8e006fde0f71b7352ba22`。retry 计划分别使用 GPU 0/1 和 `results/crafter_gather_spt_transfer_e1_formal_v2_retry1/`、`results/crafter_gather_spt_transfer_e2_formal_v2_retry1/`。
