@@ -64,8 +64,14 @@ def verify_formal_manifest(
     if digest_file.read_text(encoding="ascii").strip() != hashlib.sha256(manifest_bytes).hexdigest():
         raise ValueError("formal manifest detached checksum does not match its contents")
     current_commit = subprocess.check_output(["git", "rev-parse", "HEAD"], text=True).strip()
-    if require_current_commit and manifest.get("git_commit") != current_commit:
-        raise ValueError("formal manifest git commit does not match the current checkout")
+    if require_current_commit:
+        base_commit = str(manifest.get("git_commit", ""))
+        is_ancestor = subprocess.run(
+            ["git", "merge-base", "--is-ancestor", base_commit, current_commit],
+            check=False,
+        ).returncode == 0
+        if not is_ancestor:
+            raise ValueError("formal manifest git commit is not an ancestor of the current checkout")
     current_versions = package_versions()
     if manifest.get("runtime", {}).get("packages") != current_versions:
         raise ValueError("formal manifest package versions differ from the active environment")

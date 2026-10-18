@@ -446,6 +446,44 @@ def test_material_scene_initial_rgb_exposes_each_target_material():
     assert audit["minimum_changed_pixels"] > 0
 
 
+def test_collect_block_initializes_from_first_injective_schedule_seed():
+    import hashlib
+
+    from experiments.crafter_material_gather_scene import (
+        INJECTIVE_SCENE_VERSION,
+        MaterialGatherEnv,
+        injective_scene_seed,
+        make_material_gather_scene,
+    )
+    from experiments.run_crafter_gather_spt_transfer_pilot import collect_block
+
+    class Policy:
+        config = {"gamma": 0.99, "gae_lambda": 0.95}
+
+        def distribution_value(self, *_args):
+            logits = torch.zeros((1, 17))
+            distribution = torch.distributions.Categorical(logits=logits)
+            return distribution, torch.zeros(1), None
+
+    class SPI:
+        parameter_binding = {"item": "wood", "material": "tree"}
+
+    seed = injective_scene_seed(101, "target_support", 0)
+    expected_scene = make_material_gather_scene(seed, scheme=INJECTIVE_SCENE_VERSION)
+    expected_hash = hashlib.sha256(
+        MaterialGatherEnv(expected_scene, seed=seed, length=1).reset().tobytes()
+    ).hexdigest()
+    _rollout, summary = collect_block(
+        Policy(), SPI(), steps=1, scene_seed_base=101 * 10_000_000 + 65_535,
+        action_seed=7, device=torch.device("cpu"),
+        max_episode_steps=1, training=False, role="target_support",
+        scene_seed_schedule=(seed,), action_rng_scheme="per_episode_seed_v1",
+        scene_scheme=INJECTIVE_SCENE_VERSION,
+    )
+    assert summary["episode_manifest"][0]["scene_seed"] == seed
+    assert summary["episode_manifest"][0]["initial_rgb_sha256"] == expected_hash
+
+
 def test_gather_pilot_audit_rejects_inconsistent_action_counts():
     from experiments.analyze_crafter_gather_spt_transfer_pilot import _check_evaluation
 

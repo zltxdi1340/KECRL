@@ -35,3 +35,4 @@ E2 的逐 fold provenance/RGB 审计和 seed-cluster 主分析现已结束，但
 - v2 使用四个互斥布局分区：source-support 32,768、source-query 32,768、target-support 16,384、evaluation 2,500。完整穷举了所有 84,420 个计划使用布局，canonical scene 与 native initial RGB 均为 84,420 个唯一值，碰撞为 0。
 - Runner 启动前校验预检报告与 scene-generator SHA、角色分区容量及 formal manifest；独立 analyzer 还会逐 episode 验证 seed 与角色 schedule 一致，并复建 RGB。任一检查失败即拒绝运行/报告。
 - E1/E2 seeds、优化设置、训练交互上限与 primary analysis 保持 v1 冻结值不变；场景分布更改由 `formal_v2` 配置和 manifest 单独封存。训练启动后在本节追加 GPU、PID 与日志信息。
+- v2 的第一次进程启动触发了 target block 初始化 seed 被误解析为角色 seed 的保护错误；两边在写出任何 result 前退出，未产生可分析的正式运行。修复已加入回归测试并通过全量回归；失败尝试输出目录和日志保留，retry 使用新的输出目录。

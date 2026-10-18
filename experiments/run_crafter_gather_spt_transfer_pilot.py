@@ -353,9 +353,13 @@ def collect_block(
         raise ValueError("scene seed schedule must cover the maximum one-step-per-episode case")
     target_item = str(spi.parameter_binding["item"])
     material = str(spi.parameter_binding["material"])
+    initial_scene_seed = (
+        int(scene_seed_schedule[0]) if scene_seed_schedule is not None
+        else int(scene_seed_base)
+    )
     env = MaterialGatherEnv(
-        make_material_gather_scene(int(scene_seed_base), scheme=scene_scheme),
-        seed=int(scene_seed_base), length=max_episode_steps,
+        make_material_gather_scene(initial_scene_seed, scheme=scene_scheme),
+        seed=initial_scene_seed, length=max_episode_steps,
     )
     observations, transitions = [], []
     terminal_counts = Counter()
