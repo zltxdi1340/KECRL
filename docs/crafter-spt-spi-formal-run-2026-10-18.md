@@ -37,3 +37,10 @@ E2 的逐 fold provenance/RGB 审计和 seed-cluster 主分析现已结束，但
 - E1/E2 seeds、优化设置、训练交互上限与 primary analysis 保持 v1 冻结值不变；场景分布更改由 `formal_v2` 配置和 manifest 单独封存。训练启动后在本节追加 GPU、PID 与日志信息。
 - v2 的第一次进程启动触发了 target block 初始化 seed 被误解析为角色 seed 的保护错误；两边在写出任何 result 前退出，未产生可分析的正式运行。修复已加入回归测试并通过全量回归；失败尝试输出目录和日志保留，retry 使用新的输出目录。
 - 修复后的 manifest 已封存并提交：E1 SHA-256 `47a136f6aa537cff06528c99ede01d82264990d5a3de3246697b201817b967e7`，E2 SHA-256 `f15b2c0ab59f23a6920c25e81625eda26d7ac933b14c493965b473d748ed8541`；二者绑定代码提交 `5f3d8ac93526c472b3b8e006fde0f71b7352ba22`。retry 计划分别使用 GPU 0/1 和 `results/crafter_gather_spt_transfer_e1_formal_v2_retry1/`、`results/crafter_gather_spt_transfer_e2_formal_v2_retry1/`。
+
+### 修复后的重跑状态（2026-10-18）
+
+- 修复后 E1/E2 已分别在 GPU 0/1 启动，使用上述 retry 输出目录；当前进程 PID 为 E1 `392561`、E2 `392792`。`nvidia-smi` 已确认两个训练进程分别占用约 0.9 GiB 和 0.8 GiB 显存，GPU 利用率采样约 11% 和 17%。CUDA 确实用于策略计算/优化；Crafter 环境步进主要受 CPU 限制，因此 GPU 利用率不会持续接近满载。
+- 首个完成的 A 臂、seed 101 是 coal 目标，E1 与 E2 的逐检查点结果一致：support steps `0/1,024/4,096/8,192/16,384` 对应独立 100-episode 成功数 `7/7/14/18/15`，成功率 `0.07/0.07/0.14/0.18/0.15`。该结果显示这个 seed 在 8,192 步检查点暂时达到最高值，末点略有回落；它只是同一配置的单 seed 早期观测，不是三臂比较或正式效应结论。
+- 状态采样时 E1 已写出 2 份 `result.json`、E2 已写出 1 份，两个训练进程仍在运行；目标训练实际完成 `16,384` 个 support interaction steps。过程文件记录的 `formal_result=true` 只表示单个配置运行结果符合结果格式，不能替代全 seed 的 provenance/comparability 审计和主分析。
+- 输出与启动日志保留在本机：`/tmp/crafter_gather_spt_transfer_e1_formal_v2_retry1.log`、`/tmp/crafter_gather_spt_transfer_e2_formal_v2_retry1.log`。本节的进程号和文件计数是运行中快照，后续状态以最新进程与结果目录为准；正式结论须待全部计划 seed/arms/folds 完成后再运行独立审计及冻结分析。
