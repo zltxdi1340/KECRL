@@ -14,6 +14,7 @@ from pathlib import Path
 from experiments.crafter_material_gather_scene import (
     INJECTIVE_SCENE_VERSION,
     MaterialGatherEnv,
+    MaterialGatherScene,
     SCENE_VERSION,
     injective_scene_seed,
     make_material_gather_scene,
@@ -28,13 +29,30 @@ def _manifest_scene_seeds(summary: dict) -> list[int]:
     return [int(entry["scene_seed"]) for entry in summary.get("episode_manifest", [])]
 
 
+class _InitialRGBVerifier:
+    """Reconstruct every observation while reusing native rendering resources."""
+
+    def __init__(self) -> None:
+        self.env: MaterialGatherEnv | None = None
+
+    def digest(self, scene: MaterialGatherScene, seed: int) -> str:
+        if self.env is None:
+            self.env = MaterialGatherEnv(scene, seed=seed, length=1)
+        else:
+            self.env.configure(scene, seed=seed)
+        return hashlib.sha256(self.env.reset().tobytes()).hexdigest()
+
+
 def _check_block_manifest(summary: dict, role: str, expected_steps: int,
                           label: str, errors: list[str], *, verify_rgb: bool = True,
                           expected_material: str | None = None,
                           expected_action_rng_scheme: str | None = None,
                           replica_seed: int | None = None,
-                          expected_scene_counter_start: int | None = None) -> dict:
+                          expected_scene_counter_start: int | None = None,
+                          rgb_verifier: _InitialRGBVerifier | None = None) -> dict:
     """Check one recorded interaction block and return its provenance summary."""
+    if verify_rgb and rgb_verifier is None:
+        rgb_verifier = _InitialRGBVerifier()
     if summary.get("role") != role:
         errors.append(f"{label}: role is {summary.get('role')!r}, expected {role!r}")
     if int(summary.get("requested_steps", -1)) != expected_steps:
@@ -90,16 +108,8 @@ def _check_block_manifest(summary: dict, role: str, expected_steps: int,
                     errors.append(f"{entry_label}: action RNG scheme mismatch")
                 if action_seed != block_seed + episode_index:
                     errors.append(f"{entry_label}: episode action seed does not match block seed/index")
-        expected_rgb = None
         if verify_rgb:
-            env = MaterialGatherEnv(scene, seed=seed, length=1)
-            try:
-                observation = env.reset()
-                expected_rgb = hashlib.sha256(observation.tobytes()).hexdigest()
-            finally:
-                close = getattr(env, "close", None)
-                if callable(close):
-                    close()
+            expected_rgb = rgb_verifier.digest(scene, seed)
             if entry["initial_rgb_sha256"] != expected_rgb:
                 errors.append(f"{entry_label}: initial RGB hash mismatch")
         scene_seeds.append(seed)
@@ -126,7 +136,10 @@ def _check_evaluation_manifest(evaluation: dict, expected_episodes: int,
                               expected_material: str | None = None,
                               expected_action_rng_scheme: str | None = None,
                               replica_seed: int | None = None,
-                              expected_scene_counter_start: int | None = None) -> dict:
+                              expected_scene_counter_start: int | None = None,
+                              rgb_verifier: _InitialRGBVerifier | None = None) -> dict:
+    if verify_rgb and rgb_verifier is None:
+        rgb_verifier = _InitialRGBVerifier()
     rows = evaluation.get("rows", [])
     if len(rows) != expected_episodes:
         errors.append(f"{label}: evaluation row count mismatch")
@@ -159,14 +172,7 @@ def _check_evaluation_manifest(evaluation: dict, expected_episodes: int,
         canonical_scene = json.dumps(row["scene"], sort_keys=True, separators=(",", ":"))
         scene_keys.append(hashlib.sha256(canonical_scene.encode("utf-8")).hexdigest())
         if verify_rgb:
-            env = MaterialGatherEnv(scene, seed=seed, length=1)
-            try:
-                observation = env.reset()
-                expected_rgb = hashlib.sha256(observation.tobytes()).hexdigest()
-            finally:
-                close = getattr(env, "close", None)
-                if callable(close):
-                    close()
+            expected_rgb = rgb_verifier.digest(scene, seed)
             if row["initial_rgb_sha256"] != expected_rgb:
                 errors.append(f"{row_label}: initial RGB hash mismatch")
         scene_seeds.append(seed)
@@ -194,6 +200,7 @@ def _check_aligned_ordinary_block(
     replica_seed: int | None,
     support_counter_start: int | None,
     query_counter_start: int | None,
+    rgb_verifier: _InitialRGBVerifier | None = None,
 ) -> dict:
     """Audit C's merged summary through its separately scheduled subblocks.
 
@@ -221,6 +228,7 @@ def _check_aligned_ordinary_block(
             expected_action_rng_scheme=expected_action_rng_scheme,
             replica_seed=replica_seed,
             expected_scene_counter_start=counter_start,
+            rgb_verifier=rgb_verifier,
         ))
 
     expected_manifest = [
@@ -289,6 +297,7 @@ def analyze(input_path: str | Path, *, verify_rgb: bool = True) -> dict:
     config = json.loads(config_path.read_text(encoding="utf-8"))
     errors: list[str] = []
     warnings: list[str] = []
+    rgb_verifier = _InitialRGBVerifier() if verify_rgb else None
     role_counts = Counter()
     run_summaries = []
     source_arm_scene_sets: dict[tuple[str, int], set[int]] = {}
@@ -348,7 +357,7 @@ def analyze(input_path: str | Path, *, verify_rgb: bool = True) -> dict:
                                                     expected_scene_counter_start=(
                                                         index * steps
                                                         if expected_scene_scheme == INJECTIVE_SCENE_VERSION else None
-                                                    ))
+                                                    ), rgb_verifier=rgb_verifier)
                     source_entries.append(checked)
                     source_sets_by_role.setdefault(role, set()).update(checked["scene_seeds"])
                     source_scene_keys_by_role.setdefault(role, set()).update(checked["scene_keys"])
@@ -384,6 +393,7 @@ def analyze(input_path: str | Path, *, verify_rgb: bool = True) -> dict:
                         query_counter_start=(
                             index * int(config["source_query_steps_per_slot"])
                         ) if expected_scene_scheme == INJECTIVE_SCENE_VERSION else None,
+                        rgb_verifier=rgb_verifier,
                     )
                 else:
                     checked = _check_block_manifest(
@@ -392,6 +402,7 @@ def analyze(input_path: str | Path, *, verify_rgb: bool = True) -> dict:
                         verify_rgb=verify_rgb,
                         expected_material=source_materials[index % len(source_materials)],
                         expected_action_rng_scheme=expected_action_rng_scheme,
+                        rgb_verifier=rgb_verifier,
                     )
                 source_entries.append(checked)
                 source_sets_by_role.setdefault("source_ordinary_block", set()).update(checked["scene_seeds"])
@@ -425,7 +436,8 @@ def analyze(input_path: str | Path, *, verify_rgb: bool = True) -> dict:
                                             replica_seed=seed if expected_scene_scheme == INJECTIVE_SCENE_VERSION else None,
                                             expected_scene_counter_start=(
                                                 int(summary.get("after_steps", 0)) - int(summary.get("actual_steps", 0))
-                                            ) if expected_scene_scheme == INJECTIVE_SCENE_VERSION else None)
+                                            ) if expected_scene_scheme == INJECTIVE_SCENE_VERSION else None,
+                                            rgb_verifier=rgb_verifier)
             target_entries.append(checked)
             target_all.extend(checked["scene_seeds"])
             role_counts["target_support"] += 1
@@ -450,7 +462,8 @@ def analyze(input_path: str | Path, *, verify_rgb: bool = True) -> dict:
                                                      config["target_checkpoints"].index(
                                                          int(checkpoint["support_steps"])
                                                      ) * expected_eval_episodes
-                                                 ) if expected_scene_scheme == INJECTIVE_SCENE_VERSION else None)
+                                                 ) if expected_scene_scheme == INJECTIVE_SCENE_VERSION else None,
+                                                 rgb_verifier=rgb_verifier)
             evaluation_entries.append(checked)
             evaluation_all.extend(checked["scene_seeds"])
             role_counts["final_evaluation"] += 1

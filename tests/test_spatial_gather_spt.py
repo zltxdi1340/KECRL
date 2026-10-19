@@ -624,6 +624,68 @@ def test_gather_comparability_audit_rejects_wrong_material_binding():
     assert any("material" in error for error in errors)
 
 
+@pytest.mark.parametrize("injective", [False, True])
+def test_gather_rgb_audit_reuses_environment_and_still_rejects_wrong_hash(monkeypatch, injective):
+    import hashlib
+
+    from experiments import analyze_crafter_gather_spt_transfer_comparability as audit
+    from experiments.crafter_material_gather_scene import (
+        INJECTIVE_SCENE_VERSION,
+        SCENE_VERSION,
+        MaterialGatherEnv,
+        injective_scene_seed,
+        make_material_gather_scene,
+    )
+
+    entries = []
+    for index in range(3):
+        role = "source_support" if index < 2 else "final_evaluation"
+        counter = index if index < 2 else 0
+        seed = injective_scene_seed(101, role, counter) if injective else index
+        scheme = INJECTIVE_SCENE_VERSION if injective else SCENE_VERSION
+        scene = make_material_gather_scene(seed, scheme=scheme)
+        fresh_env = MaterialGatherEnv(scene, seed=seed, length=1)
+        entries.append({
+            "scene_seed": seed,
+            "scene": scene.record(),
+            "initial_rgb_sha256": hashlib.sha256(fresh_env.reset().tobytes()).hexdigest(),
+            "action_seed": seed,
+        })
+
+    created = []
+
+    def create_env(*args, **kwargs):
+        env = MaterialGatherEnv(*args, **kwargs)
+        created.append(env)
+        return env
+
+    monkeypatch.setattr(audit, "MaterialGatherEnv", create_env)
+    verifier = audit._InitialRGBVerifier()
+    errors = []
+    audit._check_block_manifest({
+        "role": "source_support", "requested_steps": 2, "actual_steps": 2,
+        "episodes": 2, "episode_manifest": entries[:2],
+    }, "source_support", 2, "block", errors, rgb_verifier=verifier,
+        replica_seed=101 if injective else None,
+        expected_scene_counter_start=0 if injective else None)
+    audit._check_evaluation_manifest(
+        {"rows": entries[2:]}, 1, "evaluation", errors, rgb_verifier=verifier,
+        replica_seed=101 if injective else None,
+        expected_scene_counter_start=0 if injective else None,
+    )
+    assert errors == []
+    assert len(created) == 1
+
+    audit._check_evaluation_manifest(
+        {"rows": [{**entries[2], "initial_rgb_sha256": "incorrect"}]},
+        1, "corrupted", errors, rgb_verifier=verifier,
+        replica_seed=101 if injective else None,
+        expected_scene_counter_start=0 if injective else None,
+    )
+    assert errors == ["corrupted/episode_0: initial RGB hash mismatch"]
+    assert len(created) == 1
+
+
 def test_gather_aligned_source_pools_pair_b_and_c_roles_without_overlap():
     from experiments.run_crafter_gather_spt_transfer_pilot import _source_scene_pool
 
@@ -689,7 +751,11 @@ def test_gather_comparability_audits_c_merged_block_through_subblocks_only():
     from experiments.analyze_crafter_gather_spt_transfer_comparability import (
         _check_aligned_ordinary_block,
     )
-    from experiments.crafter_material_gather_scene import make_material_gather_scene
+    from experiments.crafter_material_gather_scene import (
+        INJECTIVE_SCENE_VERSION,
+        injective_scene_seed,
+        make_material_gather_scene,
+    )
 
     def block(role, seed):
         return {
@@ -701,13 +767,15 @@ def test_gather_comparability_audits_c_merged_block_through_subblocks_only():
             "scene_pool_seeds": [seed],
             "episode_manifest": [{
                 "scene_seed": seed,
-                "scene": make_material_gather_scene(seed).record(),
+                "scene": make_material_gather_scene(seed, scheme=INJECTIVE_SCENE_VERSION).record(),
                 "initial_rgb_sha256": "synthetic",
             }],
         }
 
-    support = block("source_ordinary_support", 0)
-    query = block("source_ordinary_query", 1)
+    support_seed = injective_scene_seed(101, "source_ordinary_support", 0)
+    query_seed = injective_scene_seed(101, "source_ordinary_query", 0)
+    support = block("source_ordinary_support", support_seed)
+    query = block("source_ordinary_query", query_seed)
     merged = {
         "role": "source_ordinary_block",
         "requested_steps": 2,
@@ -730,12 +798,12 @@ def test_gather_comparability_audits_c_merged_block_through_subblocks_only():
         verify_rgb=False,
         expected_material="tree",
         expected_action_rng_scheme=None,
-        replica_seed=None,
-        support_counter_start=None,
-        query_counter_start=None,
+        replica_seed=101,
+        support_counter_start=0,
+        query_counter_start=0,
     )
     assert errors == []
-    assert checked["scene_seeds"] == [0, 1]
+    assert checked["scene_seeds"] == [support_seed, query_seed]
     assert set(checked["subblock_checks"]) == {
         "source_ordinary_support", "source_ordinary_query",
     }
