@@ -181,6 +181,101 @@ def _check_evaluation_manifest(evaluation: dict, expected_episodes: int,
     }
 
 
+def _check_aligned_ordinary_block(
+    summary: dict,
+    *,
+    support_steps: int,
+    query_steps: int,
+    label: str,
+    errors: list[str],
+    verify_rgb: bool,
+    expected_material: str,
+    expected_action_rng_scheme: str | None,
+    replica_seed: int | None,
+    support_counter_start: int | None,
+    query_counter_start: int | None,
+) -> dict:
+    """Audit C's merged summary through its separately scheduled subblocks.
+
+    The source_ordinary_block summary is produced by merging the support and
+    query rollouts. It has no independent role schedule. The subblocks carry
+    the schedules and therefore are the only records that need scene/RGB
+    reconstruction.
+    """
+    subblocks = summary.get("subblocks")
+    if not isinstance(subblocks, list) or len(subblocks) != 2:
+        errors.append(f"{label}: aligned C block lacks two subblocks")
+        return {"scene_seeds": [], "scene_keys": [], "rgb_hashes": [], "declared_scene_pool": set()}
+    if summary.get("role") != "source_ordinary_block":
+        errors.append(f"{label}: merged block role mismatch")
+
+    checked_subblocks = []
+    for subrole, subsummary, steps, counter_start in (
+        ("source_ordinary_support", subblocks[0], support_steps, support_counter_start),
+        ("source_ordinary_query", subblocks[1], query_steps, query_counter_start),
+    ):
+        checked_subblocks.append(_check_block_manifest(
+            subsummary, subrole, steps, f"{label}/{subrole}", errors,
+            verify_rgb=verify_rgb,
+            expected_material=expected_material,
+            expected_action_rng_scheme=expected_action_rng_scheme,
+            replica_seed=replica_seed,
+            expected_scene_counter_start=counter_start,
+        ))
+
+    expected_manifest = [
+        entry
+        for subsummary in subblocks
+        for entry in subsummary.get("episode_manifest", [])
+    ]
+    if summary.get("episode_manifest") != expected_manifest:
+        errors.append(f"{label}: merged episode manifest differs from subblock manifests")
+    if int(summary.get("requested_steps", -1)) != support_steps + query_steps:
+        errors.append(f"{label}: merged requested step count mismatch")
+    if int(summary.get("actual_steps", -1)) != sum(
+        int(subsummary.get("actual_steps", -1)) for subsummary in subblocks
+    ):
+        errors.append(f"{label}: merged actual step count mismatch")
+    if int(summary.get("episodes", -1)) != sum(
+        int(subsummary.get("episodes", -1)) for subsummary in subblocks
+    ):
+        errors.append(f"{label}: merged episode count mismatch")
+    if summary.get("roles") != {
+        "source_ordinary_query": 1,
+        "source_ordinary_support": 1,
+    }:
+        errors.append(f"{label}: merged subblock roles mismatch")
+
+    return {
+        "scene_seeds": [
+            seed
+            for checked in checked_subblocks
+            for seed in checked["scene_seeds"]
+        ],
+        "scene_keys": [
+            key
+            for checked in checked_subblocks
+            for key in checked["scene_keys"]
+        ],
+        "rgb_hashes": [
+            digest
+            for checked in checked_subblocks
+            for digest in checked["rgb_hashes"]
+        ],
+        "declared_scene_pool": {
+            seed
+            for checked in checked_subblocks
+            for seed in checked["declared_scene_pool"]
+        },
+        "subblock_checks": {
+            role: checked
+            for role, checked in zip(
+                ("source_ordinary_support", "source_ordinary_query"), checked_subblocks
+            )
+        },
+    }
+
+
 def _unique_or_error(values: list[int], label: str, errors: list[str]) -> set[int]:
     if len(values) != len(set(values)):
         errors.append(f"{label}: repeated scene seed across roles")
@@ -272,40 +367,38 @@ def analyze(input_path: str | Path, *, verify_rgb: bool = True) -> dict:
                 if not isinstance(summary, dict):
                     errors.append(f"{label}/row_{index}: missing ordinary block summary")
                     continue
-                checked = _check_block_manifest(summary, "source_ordinary_block", expected_block_steps,
-                                                f"{label}/row_{index}/source_ordinary_block", errors,
-                                                verify_rgb=verify_rgb,
-                                                expected_material=source_materials[index % len(source_materials)],
-                                                expected_action_rng_scheme=expected_action_rng_scheme)
+                if int(config.get("source_scene_pool_size", 0)) > 0:
+                    checked = _check_aligned_ordinary_block(
+                        summary,
+                        support_steps=int(config["source_support_steps_per_slot"]),
+                        query_steps=int(config["source_query_steps_per_slot"]),
+                        label=f"{label}/row_{index}/source_ordinary_block",
+                        errors=errors,
+                        verify_rgb=verify_rgb,
+                        expected_material=source_materials[index % len(source_materials)],
+                        expected_action_rng_scheme=expected_action_rng_scheme,
+                        replica_seed=seed if expected_scene_scheme == INJECTIVE_SCENE_VERSION else None,
+                        support_counter_start=(
+                            index * int(config["source_support_steps_per_slot"])
+                        ) if expected_scene_scheme == INJECTIVE_SCENE_VERSION else None,
+                        query_counter_start=(
+                            index * int(config["source_query_steps_per_slot"])
+                        ) if expected_scene_scheme == INJECTIVE_SCENE_VERSION else None,
+                    )
+                else:
+                    checked = _check_block_manifest(
+                        summary, "source_ordinary_block", expected_block_steps,
+                        f"{label}/row_{index}/source_ordinary_block", errors,
+                        verify_rgb=verify_rgb,
+                        expected_material=source_materials[index % len(source_materials)],
+                        expected_action_rng_scheme=expected_action_rng_scheme,
+                    )
                 source_entries.append(checked)
                 source_sets_by_role.setdefault("source_ordinary_block", set()).update(checked["scene_seeds"])
                 declared_source.update(checked["declared_scene_pool"])
-                if int(config.get("source_scene_pool_size", 0)) > 0:
-                    subblocks = summary.get("subblocks")
-                    if not isinstance(subblocks, list) or len(subblocks) != 2:
-                        errors.append(f"{label}/row_{index}: aligned C block lacks two subblocks")
-                    else:
-                        for subrole, subsummary in zip(
-                            ("source_ordinary_support", "source_ordinary_query"), subblocks
-                        ):
-                            subchecked = _check_block_manifest(
-                                subsummary, subrole,
-                                int(config["source_support_steps_per_slot"])
-                                if subrole.endswith("support") else int(config["source_query_steps_per_slot"]),
-                                f"{label}/row_{index}/{subrole}", errors,
-                                verify_rgb=verify_rgb,
-                                expected_material=source_materials[index % len(source_materials)],
-                                expected_action_rng_scheme=expected_action_rng_scheme,
-                                replica_seed=seed if expected_scene_scheme == INJECTIVE_SCENE_VERSION else None,
-                                expected_scene_counter_start=(
-                                    index * int(config["source_support_steps_per_slot"])
-                                    if subrole.endswith("support")
-                                    else index * int(config["source_query_steps_per_slot"])
-                                ) if expected_scene_scheme == INJECTIVE_SCENE_VERSION else None,
-                            )
-                            source_scene_keys_by_role.setdefault(subrole, set()).update(subchecked["scene_keys"])
-                            source_rgb_hashes_by_role.setdefault(subrole, set()).update(subchecked["rgb_hashes"])
-                            declared_source.update(subchecked["declared_scene_pool"])
+                for subrole, subchecked in checked.get("subblock_checks", {}).items():
+                    source_scene_keys_by_role.setdefault(subrole, set()).update(subchecked["scene_keys"])
+                    source_rgb_hashes_by_role.setdefault(subrole, set()).update(subchecked["rgb_hashes"])
                 role_counts["source_ordinary_block"] += 1
             if len(run.get("source_updates", [])) != expected_source_blocks:
                 errors.append(f"{label}: C ordinary update count mismatch")

@@ -685,6 +685,62 @@ def test_injective_scene_seed_schedule_fails_when_role_capacity_is_exceeded():
         make_material_gather_scene(seed, scheme=INJECTIVE_SCENE_VERSION)
 
 
+def test_gather_comparability_audits_c_merged_block_through_subblocks_only():
+    from experiments.analyze_crafter_gather_spt_transfer_comparability import (
+        _check_aligned_ordinary_block,
+    )
+    from experiments.crafter_material_gather_scene import make_material_gather_scene
+
+    def block(role, seed):
+        return {
+            "role": role,
+            "material": "tree",
+            "requested_steps": 1,
+            "actual_steps": 1,
+            "episodes": 1,
+            "scene_pool_seeds": [seed],
+            "episode_manifest": [{
+                "scene_seed": seed,
+                "scene": make_material_gather_scene(seed).record(),
+                "initial_rgb_sha256": "synthetic",
+            }],
+        }
+
+    support = block("source_ordinary_support", 0)
+    query = block("source_ordinary_query", 1)
+    merged = {
+        "role": "source_ordinary_block",
+        "requested_steps": 2,
+        "actual_steps": 2,
+        "episodes": 2,
+        "roles": {
+            "source_ordinary_support": 1,
+            "source_ordinary_query": 1,
+        },
+        "episode_manifest": support["episode_manifest"] + query["episode_manifest"],
+        "subblocks": [support, query],
+    }
+    errors = []
+    checked = _check_aligned_ordinary_block(
+        merged,
+        support_steps=1,
+        query_steps=1,
+        label="synthetic",
+        errors=errors,
+        verify_rgb=False,
+        expected_material="tree",
+        expected_action_rng_scheme=None,
+        replica_seed=None,
+        support_counter_start=None,
+        query_counter_start=None,
+    )
+    assert errors == []
+    assert checked["scene_seeds"] == [0, 1]
+    assert set(checked["subblock_checks"]) == {
+        "source_ordinary_support", "source_ordinary_query",
+    }
+
+
 def test_gather_comparability_audit_rejects_scene_outside_frozen_v2_role_schedule():
     import hashlib
     import pytest
