@@ -1,6 +1,6 @@
 # Crafter SPT→SPI 正式运行状态
 
-建立日期：2026-10-18；更新至 2026-10-19。v1 因跨角色 RGB 碰撞未通过审计；v2 的 E1/E2 CUDA 训练均已完成，当前正在完成审计器勘误后的独立审计与分析。训练完成不等于通过原封存分析器的正式验收。
+建立日期：2026-10-18；更新至 2026-10-19。v2 的 E1/E2 CUDA 训练、勘误后的完整 RGB 审计及 E2 主分析均已完成。当前实现的 B−C AUC 差为 −0.0774，95% 配对 bootstrap 区间为 [−0.1108, −0.0463]，不支持预期迁移收益；另发现 v2 角色池存在明显几何分布偏差。分析明确标注事后审计勘误，不能冒充原封存分析器直接验收的正式结果，也不代表 SPT/SPI 理论被否定。
 
 ## v1 冻结方案与失败记录
 
@@ -69,3 +69,56 @@ E2 的逐 fold provenance/RGB 审计和 seed-cluster 主分析现已结束，但
 四项均为 `reconstruct_scene_and_initial_rgb`，`valid`、`provenance_valid`、`strict_source_scene_pool_equal` 全部为 true，共复建 `956,314` 条记录。此处验证的是逐条 RGB 重建、角色隔离、预算及来源配对，尚未解释方法效果。
 
 修正代码已在 `13a0cd9` 推送。独立[分析勘误记录](../configs/crafter_gather_spt_transfer_analysis_erratum_v1.json)和 detached SHA-256 在查看 B−C 主效应前另行封存；记录文件 SHA-256 为 `0177f0af24b49ea71bd882ef38c8c2a99f0c263103c0804efbef7e0ca57d2706`。它绑定两份原 manifest、全部输入 aggregate、四项完整审计及分析源码。原训练 manifest 未改写，统计实现仍为原冻结文件。
+
+### 勘误后的效应结果
+
+勘误记录在 `4356645` 提交并推送后，才首次计算主效应。以下为原冻结统计方案的重算结果，输出标记为 `post_training_audit_correction`、`formal_result=false`；不是将事后修改伪装成训练前冻结的分析器。E1 是预设次要直接迁移，三个 E2 fold 的单独数值用于描述；唯一主比较仍为 30 个 seed 内先等权平均三个 E2 fold，再计算 B−C。
+
+| 实验 / 目标 | A：初始 SPT 平均 AUC | B：FOMAML SPT 平均 AUC | C：普通预训练平均 AUC | B−C |
+| --- | ---: | ---: | ---: | ---: |
+| E1 wood→coal | 0.0847 | 0.0658 | 0.0681 | −0.0023 |
+| E2 holdout coal | 0.0847 | 0.0581 | 0.1455 | −0.0875 |
+| E2 holdout stone | 0.0619 | 0.0223 | 0.1260 | −0.1038 |
+| E2 holdout wood | 0.0272 | 0.0132 | 0.0543 | −0.0411 |
+| **E2：seed 内三折等权平均** | **0.0579** | **0.0312** | **0.1086** | **−0.0774** |
+
+- 主效应精确值为 `−0.0774479167`；seed 级样本标准差 `0.0926415019`；95% 配对 seed-cluster percentile bootstrap 区间为 `[−0.1108442708, −0.0462565972]`（10,000 resamples，analysis seed 20261015，linear percentile）。30 个 seed 中 21 个 B−C 为负，9 个为正。
+- 三折的平均 B−C 均为负。此结果只支持“在当前 v2 场景构造、CNN/context-conditioned FOMAML 实现和冻结预算下，B 的学习曲线差于 C”，不支持预期的 SPT 更新收益；不能据此推广到其他 SPT/SPI 实现、自然 Crafter、Knowledge Evolution 或完整 KECRL。
+- 差距在目标适应前已出现。E2 目标 0-step 成功率，A/B/C 在 coal 为 `0.0930/0.0510/0.1393`，stone 为 `0.0840/0.0083/0.0820`，wood 为 `0.0433/0.0037/0.0507`。这将下一步诊断指向来源训练后的初始化和场景分布，同时尚不能断言元梯度、表示、head 或奖励中的哪一项是因果根源。
+- E1 各臂 30 个 seed，以及 E2 各臂 90 个 fold/seed 组合，均没有在计划检查点达到候选 query-success 0.8。该检查点阈值本身也不是完整 Module 契约。
+- 另用既有优化器检查函数核对全部 360 份运行记录：B 的 template/generator 实际学习率均为 `0.001`，C 为 `0.0003`，inner 为 `0.0003`，均与各自冻结配置一致，没有发现再次被默认值覆盖。该检查不意味着这些超参数已经合适。
+- 实际独立评估交互为 E1 `1,367,775` 步、E2 `4,158,608` 步；连同训练，实际总交互为 `27,153,263` 步，低于冻结上限 `27,386,880`。
+
+完整主分析输出：`results/crafter_gather_spt_transfer_e2_formal_v2_retry1/analysis_verified/erratum_analysis_v1.json`，SHA-256 `fa8fae990036d79d59693ee5663a84bc470342680c240a66119144665a6f972e`。复算命令如下；入口拒绝覆盖已有输出，复算时须指定新输出路径。
+
+```bash
+python -m experiments.analyze_crafter_gather_spt_transfer_erratum \
+  --erratum configs/crafter_gather_spt_transfer_analysis_erratum_v1.json \
+  --output results/crafter_gather_spt_transfer_e2_formal_v2_retry1/analysis_verified/erratum_analysis_recheck.json
+```
+
+### 新发现的角色几何偏差
+
+在主分析之后进行的只读结构诊断发现：v2 使用材料坐标排列的字典序表，再按连续索引区间划分角色。seed 的置换只发生在各自区间内部，不能消除区间之间的材料位置偏差。因此“完整场景 / 初始 RGB 不重叠”和“几何分布相匹配”是两个不同条件；本次原 comparability gate 只验证了前者。
+
+| 角色池 | 布局数 | 树的唯一位置数 | 树距玩家平均 Manhattan 距离 |
+| --- | ---: | ---: | ---: |
+| source support | 32,768 | 4 | 4.7129 |
+| source query | 32,768 | 4 | 3.8613 |
+| target support | 16,384 | 3 | 4.9805 |
+| final evaluation | 2,500 | **1** | **5.0000** |
+
+最终评估池的树全部在 `(30,29)`；source-support 与 target-support 的树位置集合交集为 0，位置分布 total variation 为 1。石头也不均衡：前三个池覆盖 50 个位置，最终评估仅覆盖 14 个。朝向计数和各材料位置 / 距离分布已完整记录。
+
+这是已确认的环境分布构造限制，尚未通过干预实验证明它导致 B 的劣势；B/C 仍共享同一冻结任务分布与配对来源池，因此上述数值仍是对该具体设置的有效条件性比较。不能将它解释成已消除分布因素后的通用元学习结论，也不能把这个安静受控 fixture 的失败归因于自然世界中的大量死亡。
+
+诊断脚本：[`audit_crafter_material_gather_role_geometry.py`](../experiments/audit_crafter_material_gather_role_geometry.py)。输出：`results/crafter_gather_spt_transfer_e2_formal_v2_retry1/analysis_verified/role_geometry_diagnostic_v1.json`，SHA-256 `57fb000d83fef2247414671de85340c9a0efcf8087a1074791b3783add239795`。该脚本解码全部冻结角色布局，不读取策略表现、不改写场景、不重训策略。
+
+### 下一步诊断顺序
+
+1. 单独设计 v3 **候选**场景划分：先全局打散布局，再分配互斥角色池；同时检查材料位置、距离、朝向和目标可达步数分布。保留 canonical scene / RGB 跨角色隔离，不能继续按排列字典序连续切分。v2 保留，不能就地修改后合并结果。
+2. 在新的训练 / 验证 scenes 和 seeds 上，以小预算重新验证同一 CNN + PPO 的可学性，确认独立验证曲线确有改善。v2 final evaluation 不作调参或 checkpoint 选择集；新分布上的可学性尚未验证，暂不追加正式预算。
+3. 在可学性通过后，固定场景和来源交互预算，诊断 B 的 support/query 梯度范数、方向一致性、actor 熵、template/generator 更新量及目标 0-step 初始化；逐项判断是分布偏差、元更新幅度 / 方向还是上下文生成导致收益丢失。这些目前仍是待检验解释。
+4. 上述边界稳定后，再冻结新的独立确认方案，复验 SPT 更新是否帮助新 SPI 对应的 Policy 初始化和适应。自然 Crafter 生存、完整 Module 资格和持续任务链仍是后续独立问题。
+
+新增几何诊断的聚焦测试为 `2 passed`；包括全部新代码的最终全量回归为 `463 passed`。本轮所有训练 / 分析进程均已结束；原始结果、旧失败审计、修正审计和 checkpoint 均保留在本机，未纳入 Git。
