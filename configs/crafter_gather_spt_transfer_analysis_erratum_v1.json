@@ -1,0 +1,91 @@
+{
+  "version": "crafter_gather_post_training_audit_erratum_v1",
+  "date": "2026-10-19",
+  "status": "sealed_before_primary_effect_estimation",
+  "formal_result": false,
+  "primary_effect_examined_before_seal": false,
+  "analysis_code_commit": "13a0cd9329c28ae9ed3572edcdec7ac1b37a4fc7",
+  "original_checkout": "f19ca9b20ecb7edc80c8aa0e6853d312c704f92a",
+  "reason_zh": "C臂合并摘要没有独立角色schedule；改为审计两个subblocks的冻结schedule，并检查合并一致性。RGB复核复用渲染资源，仍逐条重新配置、重置环境和重算哈希。",
+  "scope_zh": "训练、任务分布、原封存manifest、配置、检查点、样本数及E2主统计实现保持原样；结果明确标注事后审计勘误，不提升原formal_result标志，不授予Module资格。",
+  "source_changes": {
+    "experiments/analyze_crafter_gather_spt_transfer_comparability.py": {
+      "original_sha256": "dedcaf76addf2f1c35320d698b90bd7bb7c0c844b0a44b89fcb417285ff715ba",
+      "corrected_sha256": "ae309c00d06d0e5e2c4e6d5aa1e5b42a1edd3b0b1a2dd0f05f268222ea908986"
+    }
+  },
+  "analysis_source_sha256": {
+    "experiments/analyze_crafter_gather_spt_transfer_comparability.py": "ae309c00d06d0e5e2c4e6d5aa1e5b42a1edd3b0b1a2dd0f05f268222ea908986",
+    "experiments/analyze_crafter_gather_spt_transfer_erratum.py": "4eebb69a96008129a02a92e81854f034323288d951a2a01d2d8069e63dddfc27",
+    "experiments/analyze_crafter_gather_spt_transfer_e2.py": "4482b7ff4f5d39ba3eec678ead54976b79306e01b0a4e8fec068922b1f5ea5a2",
+    "experiments/crafter_formal_manifest.py": "d769b2c9ffa89da83f1083d0fd70bf1369ef1aaa6412feed26dee1164a0396d7"
+  },
+  "experiments": [
+    {
+      "id": "E1",
+      "manifest": "configs/crafter_gather_spt_transfer_e1_formal_manifest_v2.json",
+      "manifest_sha256": "47a136f6aa537cff06528c99ede01d82264990d5a3de3246697b201817b967e7",
+      "aggregate": "results/crafter_gather_spt_transfer_e1_formal_v2_retry1/aggregate.json",
+      "aggregate_sha256": "8ca6074e92d41971d42fb9552f0e761d9482bf7ab049d59bf6a2a4ebe135d19e"
+    },
+    {
+      "id": "E2",
+      "manifest": "configs/crafter_gather_spt_transfer_e2_formal_manifest_v2.json",
+      "manifest_sha256": "f15b2c0ab59f23a6920c25e81625eda26d7ac933b14c493965b473d748ed8541",
+      "aggregate": "results/crafter_gather_spt_transfer_e2_formal_v2_retry1/aggregate.json",
+      "aggregate_sha256": "f294ea8e499089eb73128989fea4393d1340def788925d13d6070f914820d4c4"
+    }
+  ],
+  "audits": [
+    {
+      "experiment": "E1",
+      "fold_id": "direct_wood_to_coal",
+      "path": "results/crafter_gather_spt_transfer_e1_formal_v2_retry1/analysis_verified/comparability_corrected_v2.json",
+      "sha256": "4b75cff41c8c7b1e97a996d13e992e2f16609e4503d5b6a1cf0df5d6dd710880",
+      "aggregate": "results/crafter_gather_spt_transfer_e1_formal_v2_retry1/aggregate.json",
+      "aggregate_sha256": "8ca6074e92d41971d42fb9552f0e761d9482bf7ab049d59bf6a2a4ebe135d19e",
+      "audited_runs": 90,
+      "initial_rgb_reconstructions": 254944
+    },
+    {
+      "experiment": "E2",
+      "fold_id": "holdout_coal",
+      "path": "results/crafter_gather_spt_transfer_e2_formal_v2_retry1/holdout_coal/analysis_verified/comparability_corrected_v2.json",
+      "sha256": "957f5a14b87b45d745083ea502688ab422d09b64d84e677041209cb3cdd0a13c",
+      "aggregate": "results/crafter_gather_spt_transfer_e2_formal_v2_retry1/holdout_coal/aggregate.json",
+      "aggregate_sha256": "531132a1e16527c59465db43fd85bc73d6f3b43d86c0c99b834df2c933c07920",
+      "audited_runs": 90,
+      "initial_rgb_reconstructions": 232189
+    },
+    {
+      "experiment": "E2",
+      "fold_id": "holdout_stone",
+      "path": "results/crafter_gather_spt_transfer_e2_formal_v2_retry1/holdout_stone/analysis_verified/comparability_corrected_v2.json",
+      "sha256": "85d8ec3081b92ad137c670c9527e000db3109b4c517cb5ac92aa19ed19c2ac89",
+      "aggregate": "results/crafter_gather_spt_transfer_e2_formal_v2_retry1/holdout_stone/aggregate.json",
+      "aggregate_sha256": "718c3b7c064cb26e6ef20d9e375fd881870cd2c727b51540aa5ee074975290d8",
+      "audited_runs": 90,
+      "initial_rgb_reconstructions": 234557
+    },
+    {
+      "experiment": "E2",
+      "fold_id": "holdout_wood",
+      "path": "results/crafter_gather_spt_transfer_e2_formal_v2_retry1/holdout_wood/analysis_verified/comparability_corrected_v2.json",
+      "sha256": "92630a245c96468bebda74f3869147e0547a1aa9e98279f52501a92d525fe7e6",
+      "aggregate": "results/crafter_gather_spt_transfer_e2_formal_v2_retry1/holdout_wood/aggregate.json",
+      "aggregate_sha256": "99d6621aa80f7eb89c384760ee757929d179069e39f90e65ff992dd3cd5eac4d",
+      "audited_runs": 90,
+      "initial_rgb_reconstructions": 234624
+    }
+  ],
+  "preserved_primary_analysis": {
+    "contrast": "B_fomaml_spt - C_ordinary_pretraining",
+    "metric": "normalized_trapezoidal_query_success_auc_over_support_steps",
+    "fold_aggregation": "equal_weight_within_replica",
+    "independent_seed_count": 30,
+    "resamples": 10000,
+    "confidence_level": 0.95,
+    "analysis_seed": 20261015,
+    "percentile_method": "linear"
+  }
+}

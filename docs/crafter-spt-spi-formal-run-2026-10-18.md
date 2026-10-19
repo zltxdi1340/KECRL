@@ -56,3 +56,16 @@ E2 的逐 fold provenance/RGB 审计和 seed-cluster 主分析现已结束，但
 - 勘误后的分析另行绑定原 manifest、输入 aggregate、完整 RGB 审计及修正代码的 SHA-256，并在临时历史 checkout 中调用原验证器复核原始封存版本。仅允许 comparability 审计器的指定哈希变化，任何训练源码、协议、配置、主统计实现变化均拒绝。入口为 [`analyze_crafter_gather_spt_transfer_erratum.py`](../experiments/analyze_crafter_gather_spt_transfer_erratum.py)。该入口始终输出 `formal_result=false` 和 `post_training_audit_correction`，明确标注事后审计勘误。
 - 勘误记录须在查看 B−C 主效应前封存并提交；随后继续使用原冻结的 E2 三折 seed 内等权 AUC、30 个配对 seed 和原 bootstrap 设置。此时不调参、不挑选检查点、不新增训练，也不把结果用于 Module 注册或 Knowledge 更新。
 - 本次验证：相关聚焦测试 `43 passed`；全量回归 `461 passed`。原封存版本在独立历史 checkout 中通过 E1/E2 两份 manifest 校验；当前工作区的原验证器仅拒绝已修正的 comparability 文件哈希，没有其他封存文件差异。`scripts/check_environment.py` 确认两张 CUDA 设备可用。
+
+### 勘误后的完整审计与分析封存
+
+| 审计对象 | arm/seed 运行数 | 初始 RGB 复建数 | 完整审计 | 错误 / 警告 |
+| --- | ---: | ---: | --- | ---: |
+| E1 wood→coal | 90 | 254,944 | 通过 | 0 / 0 |
+| E2 holdout coal | 90 | 232,189 | 通过 | 0 / 0 |
+| E2 holdout stone | 90 | 234,557 | 通过 | 0 / 0 |
+| E2 holdout wood | 90 | 234,624 | 通过 | 0 / 0 |
+
+四项均为 `reconstruct_scene_and_initial_rgb`，`valid`、`provenance_valid`、`strict_source_scene_pool_equal` 全部为 true，共复建 `956,314` 条记录。此处验证的是逐条 RGB 重建、角色隔离、预算及来源配对，尚未解释方法效果。
+
+修正代码已在 `13a0cd9` 推送。独立[分析勘误记录](../configs/crafter_gather_spt_transfer_analysis_erratum_v1.json)和 detached SHA-256 在查看 B−C 主效应前另行封存；记录文件 SHA-256 为 `0177f0af24b49ea71bd882ef38c8c2a99f0c263103c0804efbef7e0ca57d2706`。它绑定两份原 manifest、全部输入 aggregate、四项完整审计及分析源码。原训练 manifest 未改写，统计实现仍为原冻结文件。
