@@ -11,8 +11,19 @@ python scripts/check_environment.py
 
 On a GPU server, install the environment-specific framework separately, run `python scripts/check_environment.py`, then use `configs/server_gpu.yaml`. `device: cuda` fails explicitly when CUDA is unavailable; `device: auto` selects CUDA only when available. Results contain configuration, seed, runtime metadata, JSON and CSV summaries. Formal environment, baseline, metrics and training budgets remain experiment decisions and must be recorded before formal runs.
 
-## Crafter feasibility status
+## Current research direction (2026-10-20)
 
-The current Crafter work is still diagnostic; no wood Module has passed its complete qualification contract. Read the [current Chinese status report](docs/crafter-diagnostic-status-2026-10-15.md) and [episode-isolated coverage results](docs/crafter-wood3-spatial-coverage-2026-10-15.md) before interpreting the archived summaries. The raw RGB traces, features, and checkpoints remain on the experiment host.
+The repository now follows a staged validation route:
 
-The current research question follows the [SPT/SPI transfer protocol](docs/crafter-spt-spi-transfer-protocol-2026-10-15.md): compare template updates with ordinary pretraining on held-out gather bindings. The non-formal [E1 integration pilot](docs/crafter-gather-spt-transfer-pilot-2026-10-15.md) is historical calibration. E1/E2 v2 CUDA training and corrected full RGB audits have completed. The disclosed post-training audit correction found lower E2 AUC for FOMAML than ordinary pretraining; a subsequent geometry audit identified uneven material positions across role pools. Read the [current run report](docs/crafter-spt-spi-formal-run-2026-10-18.md) for results, limitations, and the next diagnostic plan. This does not qualify a natural Crafter Module or validate full KECRL.
+1. **LIBERO** for same-family SPT/SPI instance transfer and meta-learning efficiency;
+2. **Continual World** for sequential task streams, forward transfer and forgetting;
+3. **Crafter** for long-term memory, exploration and Knowledge Evolution;
+4. **RoboCasa365** for the final controlled Knowledge--Skill joint evaluation.
+
+The detailed Chinese route is recorded in [the research roadmap](docs/research-roadmap-2026-10-20.md). Historical controlled-environment and Crafter materials are preserved in the [archive](docs/archive/README.md). The robotics benchmark survey is in [robotic manipulation and continual task streams](docs/literature/robotic-manipulation-continual-task-streams-2026-10-20.md).
+
+## Crafter historical status
+
+The Crafter work remains a diagnostic and Knowledge Evolution line; no wood Module has passed its complete qualification contract. Read the [archive index](docs/archive/README.md) before interpreting historical reports. Raw RGB traces, features, checkpoints and repeated run directories remain on the experiment host rather than in the source archive.
+
+The previous Crafter SPT/SPI transfer pilots, PPO calibration, RGB audits and failure-attribution reports are historical calibration and remain available under `docs/archive/crafter/`. They do not qualify a natural Crafter Module or validate full KECRL.
