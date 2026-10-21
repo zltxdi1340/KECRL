@@ -1,0 +1,51 @@
+{
+  "schema_version": 1,
+  "status": "single_source_spi_closed_loop_attribution_diagnostic",
+  "formal_result": false,
+  "purpose": "Separate simulator/action compatibility, demonstration versus official initial-state shift, and recurrent hidden-state drift after the fixed 500-update single-SPI BC diagnostic",
+  "base_diagnostic_config": "configs/libero_spatial_single_spi_bc_diagnostic_v1.json",
+  "task_id": 0,
+  "seed": 20261021,
+  "demonstration_initial_states": [
+    {
+      "name": "meta_support",
+      "demonstration_role": "meta_support",
+      "demonstration_indices": [0, 1, 2]
+    },
+    {
+      "name": "meta_query",
+      "demonstration_role": "meta_query",
+      "demonstration_indices": [30, 31, 32]
+    }
+  ],
+  "official_initial_states": {
+    "name": "candidate_nonregression",
+    "initial_state_role": "candidate_nonregression",
+    "initial_state_indices": [0, 1, 2]
+  },
+  "rollout": {
+    "max_episode_steps": 300,
+    "demonstration_stabilization_steps": 0,
+    "official_stabilization_steps": 5,
+    "policy_hidden_modes": [
+      "continuous",
+      "reset_at_training_horizon",
+      "stateless"
+    ],
+    "expert_action_replay_required": true,
+    "deterministic_action": true
+  },
+  "training": {
+    "reuse_base_budget_exactly": true,
+    "checkpoint_selection": false,
+    "optimizer_updates": 500
+  },
+  "forbidden_uses": [
+    "checkpoint selection",
+    "SPT candidate acceptance",
+    "Module qualification",
+    "held-out effect estimation",
+    "formal architecture comparison",
+    "Knowledge update"
+  ]
+}
