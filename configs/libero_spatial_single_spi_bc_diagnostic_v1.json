@@ -1,0 +1,40 @@
+{
+  "schema_version": 1,
+  "status": "single_source_spi_learning_diagnostic",
+  "formal_result": false,
+  "purpose": "Determine whether the candidate RGB-proprioception GRU Policy can fit and execute one source SPI before any multitask, FOMAML, or held-out experiment",
+  "policy_config": "configs/libero_spatial_bc_policy_candidate_v1.json",
+  "task_id": 0,
+  "seed": 20261021,
+  "data": {
+    "training_role": "meta_support",
+    "offline_query_role": "meta_query",
+    "access_phase": "development"
+  },
+  "training": {
+    "optimizer": "Adam",
+    "learning_rate": 0.0003,
+    "batch_size": 8,
+    "optimizer_updates": 500,
+    "gradient_clip_norm": 1.0,
+    "log_checkpoints": [0, 50, 150, 300, 500],
+    "checkpoint_selection": false,
+    "num_workers": 0
+  },
+  "online_diagnostic": {
+    "log_checkpoints": [0, 500],
+    "initial_state_role": "candidate_nonregression",
+    "initial_state_indices": [0, 1, 2],
+    "max_episode_steps": 300,
+    "stabilization_steps": 5,
+    "deterministic_action": true,
+    "success_used_for_selection": false
+  },
+  "forbidden_uses": [
+    "SPT candidate acceptance",
+    "Module qualification",
+    "held-out effect estimation",
+    "formal architecture comparison",
+    "Knowledge update"
+  ]
+}
