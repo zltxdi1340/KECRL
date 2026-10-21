@@ -17,11 +17,13 @@
 - 固定源对象：`akita_black_bowl_1`；
 - 固定目标对象：`plate_1`；
 - 固定状态转移：源对象从某个初始支撑/容器关系转为 `On(akita_black_bowl_1, plate_1)`；
-- 固定程序结构：接近源对象、抓取、搬运到目标、释放；
+- 候选四阶段程序抽象：接近源对象、抓取、搬运到目标、释放；
 - 固定 Policy 接口：两路 RGB、7 维关节状态、2 维夹爪状态和 7 维连续动作；
 - SPI 参数变化：源对象的初始谓词、初始锚点和接近几何类型。
 
-这一定义很窄。它适合检验同族实例经验能否改善后续 SPI 的有限预算适应，不支持“跨对象类别”“跨目标语义”“复合任务规划”或 Knowledge Evolution 的结论。
+这一定义很窄。四阶段程序是本候选 SPT 的人工抽象，BDDL 只规定初态关系和最终谓词，并未标注演示中的动作阶段。后续必须审计示教轨迹及策略接口能否支持该程序规格，再决定是否进入 Policy 学习。当前结果只说明十个任务在任务语义和接口层面可以组成候选同族，不证明它们具有相同的低层控制策略。
+
+它适合检验同族实例经验能否改善后续 SPI 的有限预算适应，但不支持“跨对象类别”“跨目标语义”“复合任务规划”或 Knowledge Evolution 的结论。
 
 ## 十任务结构结果
 
@@ -70,16 +72,16 @@ task 4 容易被任务文字误读成“先开抽屉再取碗”。实际 BDDL �
 
 ## 已验证结论
 
-1. 十个任务可以作为一个窄的 `PickPlace(Bowl, Plate)` 候选 Skill Family；它们共享对象语义、目标谓词、观测/动作接口和四阶段程序结构。
+1. 十个任务可以作为一个窄的 `PickPlace(Bowl, Plate)` 候选 Skill Family；它们共享对象语义、目标谓词和观测/动作接口。四阶段程序结构仍是待轨迹验证的候选规格。
 2. 未发现需要额外学习的开关、开抽屉或多物体操作目标。task 4 的抽屉开放条件由环境初态提供。
 3. 十个 SPI 的关键变化是源位置和接近几何。SPT 的上下文至少需要编码 `source_predicate`、`source_anchor` 和 `source_geometry`，不能只用 task id 的无语义 one-hot 代替完整实例绑定。
 4. 当前证据只证明任务族定义自洽，没有证明 FOMAML 有效、SPT 已更新、Policy 可学习或任一 SPI 能形成合格 Module。
 
 ## 下一步门槛
 
-下一步单独冻结候选角色与数据隔离协议：
+候选角色与数据隔离协议现已单独记录在 [`libero-spatial-transfer-split-2026-10-21.md`](libero-spatial-transfer-split-2026-10-21.md)。该协议完成了以下设计：
 
 1. 先按四类源几何分层，再指定 source SPI、SPT candidate validation SPI 和 held-out query SPI；不得根据后续模型结果改角色。
 2. 在每个 SPI 内把 50 条 demonstration 和固定初态索引划分为互斥的 meta-support、meta-query、checkpoint validation、qualification 和 final evaluation 集。
 3. 明确 A（原始 SPT）、B（来源 SPI 更新后的 SPT）和 C（等来源数据、等更新次数、等模型容量的普通预训练）只在允许的数据角色上训练和选 checkpoint。
-4. 完成泄漏审计后，再安装 CUDA PyTorch 并进行有界的反向传播与吞吐 smoke；此时仍不启动正式预算训练。
+4. 泄漏审计通过后，再安装 CUDA PyTorch 并进行有界的反向传播与吞吐 smoke；此时仍不启动正式预算训练。
