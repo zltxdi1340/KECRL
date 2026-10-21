@@ -84,6 +84,7 @@ RoboCasa365 是联合验证环境，不是早期调参环境。先冻结一个�
 截至本路线冻结日：
 
 - Crafter 仍是诊断/Knowledge Evolution 候选环境；没有自然 wood Module 通过完整资格检查。
-- LIBERO 和 Continual World 尚未在本仓库中启动正式实验。
+- LIBERO 已完成 Python 3.10 联合环境、完整 `libero_spatial` 数据审计、10 个任务的 KECRL adapter smoke 和演示状态回放检查；尚未启动学习 pilot 或正式实验。详细结果见 [`docs/libero-environment-feasibility-2026-10-21.md`](libero-environment-feasibility-2026-10-21.md)。
+- Continual World 尚未在本仓库中启动正式实验。
 - RoboCasa365 尚未进入正式训练，需先完成环境安装、接口适配和小规模协议预检。
 - 本路线是研究设计冻结候选，不是正式实验结果。
