@@ -1,0 +1,83 @@
+{
+  "schema_version": 1,
+  "status": "candidate_pre_pilot",
+  "formal_result": false,
+  "purpose": "Define the role-restricted data and Policy interfaces for a bounded LIBERO behavior-cloning pipeline check; no learning result or experiment budget is frozen",
+  "transfer_protocol": "configs/libero_spatial_transfer_split_candidate_v1.json",
+  "family_manifest": "configs/libero_spatial_skill_family_candidate_v1.json",
+  "context_encoder": {
+    "type": "structured_categorical_v1",
+    "predicate_order": ["on", "in"],
+    "geometry_order": [
+      "table_region",
+      "movable_object_surface",
+      "open_container",
+      "fixture_surface"
+    ],
+    "relation_order": [
+      "between",
+      "next_to",
+      "center",
+      "on_support",
+      "inside_container"
+    ],
+    "dimension": 11,
+    "task_relation_bindings": {
+      "0": "between",
+      "1": "next_to",
+      "2": "center",
+      "3": "on_support",
+      "4": "inside_container",
+      "5": "on_support",
+      "6": "next_to",
+      "7": "on_support",
+      "8": "next_to",
+      "9": "on_support"
+    },
+    "exact_source_anchor_handling": "retained_in_spi_binding_but_not_encoded_as_task_id_or_anchor_one_hot",
+    "interpretation": "The Policy must visually resolve the exact source anchor. Context only identifies predicate, audited geometry, and transferable spatial relation."
+  },
+  "policy": {
+    "policy_family": "dual_view_shared_cnn_gru_bc_v1",
+    "observation_keys": [
+      "agentview_rgb",
+      "eye_in_hand_rgb",
+      "joint_states",
+      "gripper_states"
+    ],
+    "image_size": 128,
+    "cnn_channels": [32, 64, 128],
+    "spatial_pool_size": 4,
+    "visual_embedding_dim": 128,
+    "fusion_dim": 256,
+    "recurrent_hidden_dim": 256,
+    "action_dimension": 7,
+    "action_minimum": -1.0,
+    "action_maximum": 1.0,
+    "action_activation": "tanh",
+    "sequence_length": 10,
+    "window_stride": 10,
+    "loss": "valid_step_masked_mse",
+    "image_normalization": "uint8_div_255",
+    "spt_initialization": "linear_structured_context_to_full_action_head_residual_v1"
+  },
+  "integration_smoke": {
+    "task_id": 0,
+    "demonstration_role": "meta_support",
+    "batch_size": 2,
+    "optimizer_steps": 2,
+    "learning_rate": 0.0003,
+    "seed": 20261021,
+    "online_initial_state_index": 0,
+    "online_steps": 1
+  },
+  "unfrozen_after_pipeline_check": [
+    "source multitask sampler",
+    "BC learning-rate and optimizer schedule",
+    "adaptation support budget curve",
+    "FOMAML inner and outer update counts",
+    "checkpoint selection rule",
+    "candidate acceptance threshold",
+    "Module qualification threshold"
+  ]
+}

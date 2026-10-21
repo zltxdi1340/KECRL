@@ -76,9 +76,11 @@ PYTHONPATH=. conda run -n libero-kecrl \
 
 审计器会拒绝：task role 重叠或遗漏、索引重叠或遗漏、几何覆盖漂移、revision/task map 不一致、初态文件大小或 SHA-256 改变、状态维度错误、同一命名空间内重复状态，以及 demonstration 与在线评价集合中的完全相同 raw state。LIBERO 的 `.pruned_init` 是固定 revision 提供的 NumPy legacy pickle；审计器只在哈希校验通过后读取它，并显式使用 `weights_only=false` 兼容该官方格式，不接受用户提供的 checkpoint 或可执行对象。
 
+demonstration 访问边界现由 [`src/environments/libero_dataset.py`](../src/environments/libero_dataset.py) 执行：开发阶段默认拒绝 `locked_access.before_method_freeze` 中的所有 held-out partition，并为每次数据集构造生成任务、角色、索引、哈希和窗口数量记录。`post_method_freeze` 必须由后续冻结 runner 显式请求；在线评价初态的 runner 级访问日志仍待实现。
+
 ## 仍未冻结
 
-- Policy 架构和 SPI context encoder；
+- 候选 Policy 架构和 SPI structured context 已实现并通过 pipeline 检查，但尚未由学习 pilot 接受或冻结；
 - BC/FOMAML 的 loss、batch、学习率和更新次数；
 - adaptation support 预算曲线与停止规则；
 - SPT candidate acceptance 和 Module qualification 阈值；

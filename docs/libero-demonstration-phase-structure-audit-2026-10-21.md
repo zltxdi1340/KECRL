@@ -51,7 +51,7 @@
 
 当前结论是：LIBERO Spatial 的 10 个任务具备一致的高层夹爪时序骨架，足以继续做候选 SPT/SPI 的受限学习；四阶段低层程序仍是待学习和待资格验证的假设。该结果不构成正式实验结果，也不产生合格 Module。
 
-下一项工作是把已冻结的数据/角色边界装入同一个 `libero-kecrl` 环境，先替换为兼容 CUDA 的 PyTorch 并运行有界反向传播、adapter、数据加载和吞吐 smoke。该 smoke 只验证 GPU 训练路径与运行时边界，不启动正式预算训练；通过后再实现行为克隆基线和固定预算的 A/B/C 迁移诊断。
+后续已完成 CUDA 运行时和候选行为克隆 Policy 的有界 pipeline 检查，结果见 [`libero-cuda-training-path-smoke-2026-10-21.md`](libero-cuda-training-path-smoke-2026-10-21.md) 与 [`libero-bc-policy-pipeline-check-2026-10-21.md`](libero-bc-policy-pipeline-check-2026-10-21.md)。下一项是在 source/validation 边界内检查该视觉时序 Policy 是否真正可学习和闭环执行，再决定固定预算的 A/B/C 迁移诊断。
 
 ## 复现命令
 

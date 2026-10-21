@@ -145,4 +145,4 @@ LIBERO 作为第一阶段环境在“安装—完整 spatial 数据—固定初�
 1. 已将 `libero_spatial` 建模为“在不同空间初态下抓取黑碗并放到盘子”的候选 Skill Family，并完成十任务 BDDL 前提审计，结果见 [`libero-spatial-skill-family-audit-2026-10-21.md`](libero-spatial-skill-family-audit-2026-10-21.md)；
 2. 已冻结来源 SPI、validation SPI、held-out query SPI，以及每个 SPI 内互斥的 demonstration/固定初态索引；
 3. 已定义 A（更新前 SPT）、B（来源 SPI 反馈更新后的 SPT）和 C（等数据等预算普通预训练）的数据边界；模型、适应预算和 checkpoint 规则仍待落实；
-4. 已完成联合环境 CUDA 训练路径 smoke。下一步实现候选 BC Policy、role-restricted loader 和预算核算，先做 source/validation 学习 pilot；pilot 通过后再冻结正式训练协议。
+4. 已完成联合环境 CUDA 训练路径 smoke，并实现候选 BC Policy、structured SPI context 与 role-restricted loader，详见 [`libero-bc-policy-pipeline-check-2026-10-21.md`](libero-bc-policy-pipeline-check-2026-10-21.md)。下一步先做 source/validation 学习 pilot 和预算核算；pilot 通过后再冻结正式训练协议。

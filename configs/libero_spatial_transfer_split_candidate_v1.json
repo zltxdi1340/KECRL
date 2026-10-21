@@ -84,7 +84,7 @@
     "qualification_rule": "Policies and adaptation schedules are frozen before qualification. Qualification outcomes cannot select checkpoints, budgets, or hyperparameters.",
     "final_evaluation_rule": "Final evaluation is read once after A/B/C code, source updates, adaptation budgets, and checkpoint selection are frozen.",
     "provenance_audit_exception": "Checksums, BDDL, dataset schema, trajectory lengths, and initial-state identity may be inspected for all tasks before freezing. These checks must not fit a policy, compute outcome-based method scores, or select roles using model performance.",
-    "enforcement_status": "Declarative candidate boundary only; role-restricted loaders and runner access logs remain to be implemented."
+    "enforcement_status": "Demonstration partitions are enforced by RoleRestrictedLiberoSequenceDataset with explicit access records; evaluation-state runner access logs remain to be implemented."
   },
   "comparison_arms": {
     "A": "Original SPT generates each SPI initialization; no source-SPI update.",
@@ -164,11 +164,10 @@
     }
   ],
   "pending_before_learning_pilot": [
-    "Policy architecture and context encoder",
-    "Behavior-cloning and FOMAML optimizer settings",
+    "Candidate Policy offline and closed-loop learning check",
+    "Behavior-cloning and FOMAML optimizer schedules",
     "Adaptation budget curve and stopping rule",
     "Candidate SPT acceptance and Module qualification thresholds",
-    "A/B/C matched update accounting",
-    "CUDA runtime and throughput smoke"
+    "A/B/C matched update accounting"
   ]
 }

@@ -75,4 +75,4 @@ MUJOCO_GL=egl LIBERO_CONFIG_PATH=$HOME/.libero PYTHONPATH=. \
 
 CUDA wheel、真实 HDF5、两路 RGB、本体状态、反向传播、优化器和在线 adapter 已连通，GPU 运行时不再阻塞 LIBERO 学习开发。当前仍没有 Policy、SPI 或 Module 的性能证据。
 
-下一步实现候选行为克隆 Policy 与 role-restricted loader，明确 context 表示、序列窗口、训练/适应更新量和 checkpoint 选择规则。先在 source 与 SPT validation 数据上做固定上限的学习 pilot，确认视觉策略确实能学习和在线执行；通过后再实现匹配预算的 A/B/C SPT 迁移比较。
+候选行为克隆 Policy、structured context 和 role-restricted loader 的连通检查现已完成，见 [`libero-bc-policy-pipeline-check-2026-10-21.md`](libero-bc-policy-pipeline-check-2026-10-21.md)。下一步仍需在 source 与 SPT validation 数据上做固定上限的学习 pilot，确认视觉策略确实能学习和在线执行；通过后再实现匹配预算的 A/B/C SPT 迁移比较。
