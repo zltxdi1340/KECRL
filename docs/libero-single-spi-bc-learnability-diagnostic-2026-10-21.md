@@ -1,8 +1,10 @@
 # LIBERO 单 Source SPI 行为克隆可学习性诊断（2026-10-21）
 
-本诊断回答候选 RGB+proprioception+GRU Policy 在进入多任务 SPT 更新前的两个问题：它能否从一个 source SPI 的示教中学到独立 expert-state 动作映射，以及这种离线改善是否已经转化为闭环任务执行。答案是：**离线映射明显改善，闭环仍未成功**。
+本诊断原本检查候选 RGB+proprioception+GRU Policy 在进入多任务 SPT 更新前，能否拟合一个 source SPI 的独立示教配对，以及这种离线改善是否转化为闭环任务执行。观察结果是：**保存配对上的离线误差明显下降，官方初态闭环仍未成功**；后续时序勘误进一步限制了该离线指标的含义。
 
 本次不是学习 pilot、架构对照、SPT 更新、Module qualification 或正式结果。
+
+> **后续勘误（2026-10-21）：** 闭环归因发现 LIBERO HDF5 的 `obs[t]` 是执行 `action[t]` 后记录的 observation，当前 loader 却把二者按同索引监督。因此本页的 MSE 下降只能说明模型拟合了独立轨迹上的“post-action observation 到同一 action”映射，不能解释为已经学会因果 expert-state 控制映射。专家动作重放 6/6 成功，而 Policy 在 demo 初态和官方初态均不稳定。完整证据见 [`libero-bc-closed-loop-attribution-2026-10-21.md`](libero-bc-closed-loop-attribution-2026-10-21.md)。
 
 ## 固定边界与 provenance
 
@@ -45,19 +47,18 @@ query MSE 下降 64.5%，最终 support/query 差值约 0.0087。该曲线说明
 
 ## 已得到的诊断结论
 
-1. **训练链路和基础表示不是完全失效。** 两路 RGB、proprioception、GRU 和连续动作头能够在独立 expert states 上学习，不能再把当前失败概括成“RGB 完全读不出动作”或“优化器没有工作”。
+1. **训练链路和基础表示不是完全失效，但原指标不是因果控制证据。** 两路 RGB、proprioception、GRU 和连续动作头能拟合独立轨迹上的已保存配对，说明优化器在工作；后续时序审计表明 observation 位于同索引 action 之后，因此不能再把该结果称为因果 expert-state 动作学习。
 2. **离线 MSE 仍不能代表闭环控制。** 训练和 query 都来自专家访问过的状态；Policy 自己执行后会进入不同状态，误差会累积。当前 0/3 与下降的 query loss 同时出现，正是需要单独检查 covariate shift 和动作执行动态的证据。
 3. **不能立刻归因为预算不足。** 曲线到 500 更新仍在改善，更大预算可能继续降低误差；但在不知道闭环动作幅值、移动范围和夹爪时序前直接扩大预算，无法区分“尚未拟合够”与“监督目标/时序接口不适合闭环”。
 4. **当前只涉及一个 source SPI。** 结果不能推广到其余 source、validation 或 held-out，也没有说明 structured context 或 SPT generator 有效。
 
 ## 下一步
 
-先做同 task、同数据、同 500 更新的闭环失败归因，不新增训练预算：
+以下闭环失败归因已经完成：专家重放 6/6，三种隐藏态模式在 demo 初态仅有两个单例成功，官方初态全部失败，并发现 HDF5 同索引 observation/action 的因果错位。下一步保持同 task、seed、模型和 500-update 预算：
 
-1. 从 HDF5 demo 初态回放专家动作，确认保存动作能在当前 LIBERO revision 中闭环成功；
-2. 分别从训练 demo 初态、query demo 初态和官方 `.pruned_init` 初态运行同一 Policy，区分 demo/evaluation 初态分布差异与一般闭环误差；
-3. 记录每维动作幅值、动作范数、夹爪符号切换、关节位移和成功阶段，和专家轨迹对照；
-4. 若专家回放成功但 Policy 在 demo 初态也失败，优先检查 MSE 平均化、短窗口/隐藏状态训练方式和 covariate shift；
-5. 若 Policy 只在 `.pruned_init` 失败，再审计两套初态的视觉/几何分布差异；只有完成该归因后才决定扩大预算、修改 Policy 或进入多 source pilot。
+1. 从每条 `init_state` 重建首个 pre-action observation；
+2. 将其与后续 stored observation 组成等长的 causal `pre_action_obs[t] -> action[t]` 数据视图；
+3. 与现有 same-index 数据视图做固定预算诊断，先检验 causal query loss 和 demo-start 闭环，再检查官方初态；
+4. 因果对齐后若仍失败，再分别检查 MSE 动作平均化、长度 10 窗口/隐藏状态训练和 covariate shift。
 
 当前不进入 FOMAML 或 A/B/C，因为基础 SPI 尚不能闭环执行；此时比较 SPT 更新只会把 Policy 执行失败混入迁移结论。

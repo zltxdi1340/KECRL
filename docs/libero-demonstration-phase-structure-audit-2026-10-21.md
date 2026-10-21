@@ -46,12 +46,13 @@
 3. 额外开合和末端闭合终止在不同任务均存在。后续 Policy 训练应允许动作时序有弹性；评价应使用环境成功谓词和完整 Module contract，而不是精确匹配一条演示动作序列。
 4. 不同初始几何仍造成显著运动差异：例如高位 fixture 与开放抽屉任务的闭合段位移更长。SPT 上下文至少要保留 `source_predicate`、`source_anchor` 和 `source_geometry`，不能只学习一个不带实例绑定的固定动作模板。
 5. 本审计没有验证 RGB 是否足以读出源/目标，也没有验证 head、记忆、奖励或元学习是否是当前瓶颈；这些必须在 CUDA 学习 smoke 和后续 A/B/C 诊断中单独测量。
+6. 后续闭环归因确认，数据生成脚本把执行 `action[t]` 后返回的 observation 与 `action[t]` 存在相同索引。因此本页的夹爪动作骨架统计仍成立，但 Policy 监督不能直接使用 HDF5 same-index `obs[t] -> action[t]`；必须重建 causal pre-action 数据视图。证据见 [`libero-bc-closed-loop-attribution-2026-10-21.md`](libero-bc-closed-loop-attribution-2026-10-21.md)。
 
 ## 当前结论与下一步
 
 当前结论是：LIBERO Spatial 的 10 个任务具备一致的高层夹爪时序骨架，足以继续做候选 SPT/SPI 的受限学习；四阶段低层程序仍是待学习和待资格验证的假设。该结果不构成正式实验结果，也不产生合格 Module。
 
-后续已完成 CUDA 运行时和候选行为克隆 Policy 的有界 pipeline 检查，结果见 [`libero-cuda-training-path-smoke-2026-10-21.md`](libero-cuda-training-path-smoke-2026-10-21.md) 与 [`libero-bc-policy-pipeline-check-2026-10-21.md`](libero-bc-policy-pipeline-check-2026-10-21.md)。下一项是在 source/validation 边界内检查该视觉时序 Policy 是否真正可学习和闭环执行，再决定固定预算的 A/B/C 迁移诊断。
+后续已完成 CUDA 运行时、候选行为克隆 Policy 的有界 pipeline 检查和单 SPI 闭环归因，结果见 [`libero-cuda-training-path-smoke-2026-10-21.md`](libero-cuda-training-path-smoke-2026-10-21.md)、[`libero-bc-policy-pipeline-check-2026-10-21.md`](libero-bc-policy-pipeline-check-2026-10-21.md) 与 [`libero-bc-closed-loop-attribution-2026-10-21.md`](libero-bc-closed-loop-attribution-2026-10-21.md)。下一项是在 source 边界内验证因果对齐数据视图，再决定多 source learning pilot 和固定预算 A/B/C 迁移诊断。
 
 ## 复现命令
 

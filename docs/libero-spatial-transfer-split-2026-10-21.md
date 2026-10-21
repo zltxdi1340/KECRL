@@ -80,7 +80,7 @@ demonstration 访问边界现由 [`src/environments/libero_dataset.py`](../src/e
 
 ## 仍未冻结
 
-- 候选 Policy 架构和 SPI structured context 已实现；单 source SPI 诊断证明独立 query 动作误差可下降，但 3 个 source 闭环初态仍全部失败，因此架构尚未由多任务学习 pilot 接受或冻结；
+- 候选 Policy 架构和 SPI structured context 已实现；单 source SPI 闭环归因确认专家动作可重放，但现有 HDF5 same-index observation/action 位于错误的因果顺序，原离线 query 动作误差不能作为闭环可学习性证据；必须先验证 causal pre-action 数据视图，架构仍未由多任务 learning pilot 接受或冻结；
 - BC/FOMAML 的 loss、batch、学习率和更新次数；
 - adaptation support 预算曲线与停止规则；
 - SPT candidate acceptance 和 Module qualification 阈值；
