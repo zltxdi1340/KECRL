@@ -20,7 +20,7 @@ The repository now follows a staged validation route:
 3. **Crafter** for long-term memory, exploration and Knowledge Evolution;
 4. **RoboCasa365** for the final controlled Knowledge--Skill joint evaluation.
 
-The detailed Chinese route is recorded in [the research roadmap](docs/research-roadmap-2026-10-20.md). The LIBERO installation, pinned dataset audit, and KECRL adapter smoke are recorded in [the environment feasibility note](docs/libero-environment-feasibility-2026-10-21.md). Historical controlled-environment and Crafter materials are preserved in the [archive](docs/archive/README.md). The robotics benchmark survey is in [robotic manipulation and continual task streams](docs/literature/robotic-manipulation-continual-task-streams-2026-10-20.md).
+The detailed Chinese route is recorded in [the research roadmap](docs/research-roadmap-2026-10-20.md). The LIBERO installation, pinned dataset audit, and KECRL adapter smoke are recorded in [the environment feasibility note](docs/libero-environment-feasibility-2026-10-21.md); the ten-task candidate Skill Family audit is recorded in [the spatial family audit](docs/libero-spatial-skill-family-audit-2026-10-21.md). Historical controlled-environment and Crafter materials are preserved in the [archive](docs/archive/README.md). The robotics benchmark survey is in [robotic manipulation and continual task streams](docs/literature/robotic-manipulation-continual-task-streams-2026-10-20.md).
 
 ## Crafter historical status
 

@@ -1,0 +1,134 @@
+{
+  "schema_version": 1,
+  "status": "candidate_skill_family_audit",
+  "formal_result": false,
+  "purpose": "Audit one narrow LIBERO spatial Skill Family; no train, validation, qualification, or final-evaluation split is defined",
+  "suite": "libero_spatial",
+  "task_order_index": 0,
+  "libero_revision": "8f1084e3132a39270c3a13ebe37270a43ece2a01",
+  "dataset_revision": "f13aa24a3da8c43c7225569f28c562979fa0e35a",
+  "dataset_manifest": "configs/libero_spatial_dataset_manifest_v1.json",
+  "skill_family": {
+    "family_id": "libero_pick_place_bowl_to_plate",
+    "spt_id": "spt:libero:pick_place_bowl_to_plate",
+    "fixed_transition": {
+      "source_object": "akita_black_bowl_1",
+      "target_object": "plate_1",
+      "goal_predicate": "on"
+    },
+    "parameter_binding_fields": [
+      "source_predicate",
+      "source_anchor",
+      "source_geometry"
+    ],
+    "policy_observation": [
+      "agentview_rgb",
+      "eye_in_hand_rgb",
+      "joint_states",
+      "gripper_states"
+    ],
+    "action_interface": {
+      "type": "continuous",
+      "dimension": 7,
+      "minimum": -1.0,
+      "maximum": 1.0
+    },
+    "program_structure": [
+      "approach_source",
+      "grasp_source",
+      "transport_to_target",
+      "release_on_target"
+    ],
+    "candidate_scope_note": "Tasks may vary the initial source relation and approach geometry, but must not add a manipulation goal beyond placing the same bowl on the same plate."
+  },
+  "scene_schema": {
+    "problem_name": "libero_tabletop_manipulation",
+    "fixtures": {
+      "table": ["main_table"],
+      "wooden_cabinet": ["wooden_cabinet_1"],
+      "flat_stove": ["flat_stove_1"]
+    },
+    "objects": {
+      "akita_black_bowl": ["akita_black_bowl_1", "akita_black_bowl_2"],
+      "cookies": ["cookies_1"],
+      "glazed_rim_porcelain_ramekin": ["glazed_rim_porcelain_ramekin_1"],
+      "plate": ["plate_1"]
+    },
+    "objects_of_interest": ["akita_black_bowl_1", "plate_1"],
+    "target_initial_predicate": ["on", "plate_1", "main_table_plate_region"]
+  },
+  "tasks": [
+    {
+      "task_id": 0,
+      "task_name": "pick_up_the_black_bowl_between_the_plate_and_the_ramekin_and_place_it_on_the_plate",
+      "source_initial_predicate": ["on", "akita_black_bowl_1", "main_table_between_plate_ramekin_region"],
+      "source_geometry": "table_region",
+      "required_initial_predicates": []
+    },
+    {
+      "task_id": 1,
+      "task_name": "pick_up_the_black_bowl_next_to_the_ramekin_and_place_it_on_the_plate",
+      "source_initial_predicate": ["on", "akita_black_bowl_1", "main_table_next_to_ramekin_region"],
+      "source_geometry": "table_region",
+      "required_initial_predicates": []
+    },
+    {
+      "task_id": 2,
+      "task_name": "pick_up_the_black_bowl_from_table_center_and_place_it_on_the_plate",
+      "source_initial_predicate": ["on", "akita_black_bowl_1", "main_table_table_center"],
+      "source_geometry": "table_region",
+      "required_initial_predicates": []
+    },
+    {
+      "task_id": 3,
+      "task_name": "pick_up_the_black_bowl_on_the_cookie_box_and_place_it_on_the_plate",
+      "source_initial_predicate": ["on", "akita_black_bowl_1", "cookies_1"],
+      "source_geometry": "movable_object_surface",
+      "required_initial_predicates": []
+    },
+    {
+      "task_id": 4,
+      "task_name": "pick_up_the_black_bowl_in_the_top_drawer_of_the_wooden_cabinet_and_place_it_on_the_plate",
+      "source_initial_predicate": ["in", "akita_black_bowl_1", "wooden_cabinet_1_top_region"],
+      "source_geometry": "open_container",
+      "required_initial_predicates": [
+        ["open", "wooden_cabinet_1_top_region"]
+      ]
+    },
+    {
+      "task_id": 5,
+      "task_name": "pick_up_the_black_bowl_on_the_ramekin_and_place_it_on_the_plate",
+      "source_initial_predicate": ["on", "akita_black_bowl_1", "glazed_rim_porcelain_ramekin_1"],
+      "source_geometry": "movable_object_surface",
+      "required_initial_predicates": []
+    },
+    {
+      "task_id": 6,
+      "task_name": "pick_up_the_black_bowl_next_to_the_cookie_box_and_place_it_on_the_plate",
+      "source_initial_predicate": ["on", "akita_black_bowl_1", "main_table_next_to_box_region"],
+      "source_geometry": "table_region",
+      "required_initial_predicates": []
+    },
+    {
+      "task_id": 7,
+      "task_name": "pick_up_the_black_bowl_on_the_stove_and_place_it_on_the_plate",
+      "source_initial_predicate": ["on", "akita_black_bowl_1", "flat_stove_1_cook_region"],
+      "source_geometry": "fixture_surface",
+      "required_initial_predicates": []
+    },
+    {
+      "task_id": 8,
+      "task_name": "pick_up_the_black_bowl_next_to_the_plate_and_place_it_on_the_plate",
+      "source_initial_predicate": ["on", "akita_black_bowl_1", "main_table_next_to_plate_region"],
+      "source_geometry": "table_region",
+      "required_initial_predicates": []
+    },
+    {
+      "task_id": 9,
+      "task_name": "pick_up_the_black_bowl_on_the_wooden_cabinet_and_place_it_on_the_plate",
+      "source_initial_predicate": ["on", "akita_black_bowl_1", "wooden_cabinet_1_top_side"],
+      "source_geometry": "fixture_surface",
+      "required_initial_predicates": []
+    }
+  ]
+}

@@ -136,7 +136,7 @@ LIBERO 作为第一阶段环境在“安装—完整 spatial 数据—固定初�
 
 下一步按以下顺序进行：
 
-1. 将 `libero_spatial` 明确建模为“在不同空间初态下抓取黑碗并放到盘子”的候选 Skill Family，审计各任务是否需要额外前置技能；
-2. 冻结来源 SPI、validation SPI、held-out query SPI，以及每个 SPI 内不重叠的 demonstration/固定初态划分；
+1. 已将 `libero_spatial` 建模为“在不同空间初态下抓取黑碗并放到盘子”的候选 Skill Family，并完成十任务 BDDL 前提审计，结果见 [`libero-spatial-skill-family-audit-2026-10-21.md`](libero-spatial-skill-family-audit-2026-10-21.md)；
+2. 下一步冻结来源 SPI、validation SPI、held-out query SPI，以及每个 SPI 内不重叠的 demonstration/固定初态划分；
 3. 定义 A（更新前 SPT）、B（来源 SPI 反馈更新后的 SPT）和 C（等数据等预算普通预训练）的相同初始化、适应预算和 checkpoint 选择边界；
 4. 为联合环境安装 CUDA PyTorch 并做有界吞吐 smoke，然后才启动小规模学习 pilot；pilot 通过后再冻结正式训练协议。
