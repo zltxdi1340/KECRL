@@ -78,7 +78,7 @@ Policy 有 821,703 个参数。它是 pre-pilot 候选，不是已接受的最�
 CPU 环境中的定向测试为 `15 passed, 1 skipped`，其中跳过的是缺少 h5py 的真实 HDF5 fixture；联合 `libero-kecrl` 环境为 `16 passed`。更新访问状态后重新执行完整 transfer audit，10/10 任务通过，两个状态命名空间仍为零个完全相同 raw state。下一步应按以下顺序进行：
 
 1. 实现确定性的 source 多任务 sampler、训练步数核算、validation query 评估和 checkpoint 选择日志；
-2. 先做单 source SPI 的离线过拟合与小规模闭环诊断，确认 RGB+GRU Policy 能实际执行，而不是只降低一个 batch 的 loss；
+2. 单 source SPI 的固定预算诊断已经完成：独立 query 动作误差下降，但闭环仍为 0/3，详见 [`libero-single-spi-bc-learnability-diagnostic-2026-10-21.md`](libero-single-spi-bc-learnability-diagnostic-2026-10-21.md)；下一步先归因闭环失败；
 3. 再做全部 source SPI 的 BC pretraining 与两个 validation SPI 的有限 support 适应曲线，校准学习率、窗口和预算；
 4. 只有 BC 学习边界稳定后，才实现 candidate SPT 的 FOMAML 外循环和等数据、等更新预算的 A/B/C；
 5. held-out query 在方法、预算和 checkpoint 规则冻结前继续保持锁定。

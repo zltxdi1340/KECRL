@@ -80,7 +80,7 @@ demonstration 访问边界现由 [`src/environments/libero_dataset.py`](../src/e
 
 ## 仍未冻结
 
-- 候选 Policy 架构和 SPI structured context 已实现并通过 pipeline 检查，但尚未由学习 pilot 接受或冻结；
+- 候选 Policy 架构和 SPI structured context 已实现；单 source SPI 诊断证明独立 query 动作误差可下降，但 3 个 source 闭环初态仍全部失败，因此架构尚未由多任务学习 pilot 接受或冻结；
 - BC/FOMAML 的 loss、batch、学习率和更新次数；
 - adaptation support 预算曲线与停止规则；
 - SPT candidate acceptance 和 Module qualification 阈值；

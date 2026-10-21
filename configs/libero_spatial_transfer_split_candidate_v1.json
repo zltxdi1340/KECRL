@@ -164,7 +164,7 @@
     }
   ],
   "pending_before_learning_pilot": [
-    "Candidate Policy offline and closed-loop learning check",
+    "Multisource and validation Policy learning pilot",
     "Behavior-cloning and FOMAML optimizer schedules",
     "Adaptation budget curve and stopping rule",
     "Candidate SPT acceptance and Module qualification thresholds",
