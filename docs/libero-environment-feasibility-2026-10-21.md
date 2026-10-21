@@ -8,12 +8,12 @@
 - 已固定 checkout：`8f1084e3132a39270c3a13ebe37270a43ece2a01`。
 - checkout 位置：`/home/zl202621/third_party/LIBERO`（仓库外，不上传到 KECRL）。
 - 唯一保留的联合接口环境：`libero-kecrl`，Python `3.10.22`，用于同时导入 KECRL 与 LIBERO 并执行 adapter/data smoke。早期 Python 3.8 `libero` 临时环境在联合环境验证通过后已删除。
-- 主要版本：`robosuite 1.4.0`、`mujoco 3.2.3`、`bddl 1.0.1`、`gym 0.25.2`、`numpy 1.22.4`、`torch 2.4.1+cpu`、`torchvision 0.19.1+cpu`、`robomimic 0.2.0`、`h5py 3.11.0`。
+- 主要版本：`robosuite 1.4.0`、`mujoco 3.2.3`、`bddl 1.0.1`、`gym 0.25.2`、`numpy 1.22.4`、`torch 2.4.1+cu124`、`torchvision 0.19.1+cu124`、`robomimic 0.2.0`、`h5py 3.11.0`。
 - Python 包通过清华 PyPI 镜像安装；演示数据通过 `hf-mirror.com` 的 Python `requests` 下载。
 - `LIBERO_CONFIG_PATH` 指向外部配置目录，例如 `$HOME/.libero`；配置中的 BDDL、初始状态和资产都指向外部 checkout。
 - `MUJOCO_GL=egl` 用于无窗口 offscreen 渲染。
 
-官方 `requirements.txt` 会通过 `robomimic` 拉取 PyTorch。为了避免改变现有 `kecrl` 环境，也避免在接口检查阶段提前安装大型 CUDA runtime，当前 `libero-kecrl` 采用 CPU PyTorch wheel，并使用仓库内的 [`configs/libero_runtime_constraints_v1.txt`](../configs/libero_runtime_constraints_v1.txt) 固定已通过仿真的依赖组合。这个选择只适用于本次接口 smoke，不代表后续训练使用 CPU。
+官方 `requirements.txt` 会通过 `robomimic` 拉取 PyTorch。最初的接口检查先使用 CPU wheel，以隔离模拟器和 adapter 问题；接口通过后，已在同一个 `libero-kecrl` 环境中替换为同版本 CUDA 12.4 wheel。仓库内的 [`configs/libero_runtime_constraints_v1.txt`](../configs/libero_runtime_constraints_v1.txt) 固定其余已通过仿真的依赖组合，PyTorch 单独安装，避免依赖解析器静默改回 CPU wheel。
 
 重建本次环境的命令如下；LIBERO checkout 和演示数据放在仓库外：
 
@@ -24,8 +24,8 @@ conda create -y -n libero-kecrl python=3.10.22 \
 conda activate libero-kecrl
 git clone https://github.com/Lifelong-Robot-Learning/LIBERO.git /path/to/LIBERO
 git -C /path/to/LIBERO checkout 8f1084e3132a39270c3a13ebe37270a43ece2a01
-python -m pip install torch==2.4.1+cpu torchvision==0.19.1+cpu \
-  --index-url https://download.pytorch.org/whl/cpu \
+python -m pip install torch==2.4.1 torchvision==0.19.1 \
+  --index-url https://download.pytorch.org/whl/cu124 \
   --trusted-host download.pytorch.org
 python -m pip install -r /path/to/LIBERO/requirements.txt \
   -c /path/to/KECRL/configs/libero_runtime_constraints_v1.txt \
@@ -122,21 +122,27 @@ MUJOCO_GL=egl LIBERO_CONFIG_PATH=$HOME/.libero \
   --stabilization-steps 5 --max-episode-steps 10
 ```
 
+### CUDA 训练路径
+
+同一 `libero-kecrl` 环境现已验证 `torch 2.4.1+cu124`、CUDA 12.4 和 cuDNN 9.1，可识别两张 RTX 4090；`pip check` 未发现损坏依赖。使用 source SPI task 0 的 `meta_support` demonstration 0、1 和 `candidate_nonregression` 初态 0，完成了 16 样本、3 个 Adam 更新及 1 个在线 adapter 动作的有界 smoke。GPU 前向、反向、优化器更新、动作边界和真实环境 step 均通过，更换 wheel 后 10/10 adapter smoke 也再次通过。完整参数和结果见 [`libero-cuda-training-path-smoke-2026-10-21.md`](libero-cuda-training-path-smoke-2026-10-21.md)。
+
+这只证明训练运行时连通。smoke 中的小型 CNN 不是候选实验 Policy，三步 loss 变化也不是学习效果或 SPT/SPI 迁移结果。
+
 ## 已知限制
 
 - LIBERO 官方依赖仍使用旧版 Gym；启动时会提示 Gym 已停止维护，这是上游兼容性提示，不是本次 smoke 失败。
 - robosuite 会提示没有 private macro 文件；本次 offscreen 任务可正常运行，暂未执行上游宏配置脚本。
-- 当前 `libero-kecrl` 使用 CPU PyTorch，因此只验证模拟器、数据和 adapter 接口，没有验证 GPU 训练吞吐。主机的两张 RTX 4090 和 CUDA 驱动已由既有 `kecrl` 环境验证可用；学习 pilot 前将在同一个 `libero-kecrl` 环境中把 CPU wheel 替换为兼容的 CUDA PyTorch wheel，再复跑依赖、adapter、反向传播和吞吐 smoke，不再创建第二个 LIBERO 训练环境。
+- 当前 CUDA smoke 只使用 16 个样本和 3 次更新，其吞吐受启动成本和机器上其他 GPU 进程影响，不能外推正式模型的训练速度或显存需求。
 - adapter 只完成环境接口转换，没有改变 SPT、SPI、Module 或 Knowledge 契约。
 - 没有开始训练、checkpoint 选择、任务族划分或正式 A/B/C 迁移比较。
 
 ## 结论与下一步
 
-LIBERO 作为第一阶段环境在“安装—完整 spatial 数据—固定初始状态—受限策略观测—RGB 交互—成功判定—演示状态回放”层面可行。数据准备和基础 adapter 已不再是当前阻塞点；尚未验证的是学习算法、GPU 吞吐和 SPT/SPI 迁移主张。
+LIBERO 作为第一阶段环境在“安装—完整 spatial 数据—固定初始状态—受限策略观测—RGB 交互—成功判定—演示状态回放—CUDA 反向传播”层面可行。数据准备、基础 adapter 和 GPU 运行时已不再是当前阻塞点；尚未验证的是候选 Policy 的学习能力、正式模型吞吐和 SPT/SPI 迁移主张。
 
 下一步按以下顺序进行：
 
 1. 已将 `libero_spatial` 建模为“在不同空间初态下抓取黑碗并放到盘子”的候选 Skill Family，并完成十任务 BDDL 前提审计，结果见 [`libero-spatial-skill-family-audit-2026-10-21.md`](libero-spatial-skill-family-audit-2026-10-21.md)；
-2. 下一步冻结来源 SPI、validation SPI、held-out query SPI，以及每个 SPI 内不重叠的 demonstration/固定初态划分；
-3. 定义 A（更新前 SPT）、B（来源 SPI 反馈更新后的 SPT）和 C（等数据等预算普通预训练）的相同初始化、适应预算和 checkpoint 选择边界；
-4. 为联合环境安装 CUDA PyTorch 并做有界吞吐 smoke，然后才启动小规模学习 pilot；pilot 通过后再冻结正式训练协议。
+2. 已冻结来源 SPI、validation SPI、held-out query SPI，以及每个 SPI 内互斥的 demonstration/固定初态索引；
+3. 已定义 A（更新前 SPT）、B（来源 SPI 反馈更新后的 SPT）和 C（等数据等预算普通预训练）的数据边界；模型、适应预算和 checkpoint 规则仍待落实；
+4. 已完成联合环境 CUDA 训练路径 smoke。下一步实现候选 BC Policy、role-restricted loader 和预算核算，先做 source/validation 学习 pilot；pilot 通过后再冻结正式训练协议。

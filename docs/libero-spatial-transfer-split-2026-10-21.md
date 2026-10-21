@@ -1,6 +1,6 @@
 # LIBERO Spatial 迁移划分与泄漏审计（2026-10-21）
 
-本记录冻结学习 pilot 前使用的候选任务角色和数据索引。它的作用是让 A/B/C 后续比较可复现，并确保 source 更新、SPT validation、Module qualification 和最终 held-out 评价不会读取同一批样本。本记录仍为候选协议：没有冻结模型、优化器、预算或统计门槛，也没有启动训练。任务族检查只验证 BDDL 语义、对象和接口一致；演示是否支持共同的四阶段策略规格仍待单独检查。
+本记录冻结学习 pilot 前使用的候选任务角色和数据索引。它的作用是让 A/B/C 后续比较可复现，并确保 source 更新、SPT validation、Module qualification 和最终 held-out 评价不会读取同一批样本。本记录仍为候选协议：没有冻结模型、优化器、预算或统计门槛，也没有启动训练。任务族检查只验证 BDDL 语义、对象和接口一致；演示的粗粒度夹爪时序已在 [`libero-demonstration-phase-structure-audit-2026-10-21.md`](libero-demonstration-phase-structure-audit-2026-10-21.md) 中单独审计，仍不构成低层四阶段标签。
 
 ## 关键发现：两套初态不能按编号配对
 
@@ -83,6 +83,6 @@ PYTHONPATH=. conda run -n libero-kecrl \
 - adaptation support 预算曲线与停止规则；
 - SPT candidate acceptance 和 Module qualification 阈值；
 - A/B/C 的严格等更新量核算；
-- CUDA runtime、显存和吞吐。
+- 候选正式模型的显存和吞吐；CUDA 运行时连通性已通过有界 smoke。
 
 这些项目只能使用 source 与 SPT validation 角色做 pilot。若候选划分在 pilot 前需要修改，应创建 `v2` 并保留本版本；一旦读取 held-out query 或 final evaluation，本版本不得原地修改。

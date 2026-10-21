@@ -1,5 +1,5 @@
 # Tested with Python 3.10.22 and the upstream LIBERO requirements at 8f1084e.
-# Torch is installed separately so interface smoke can use a CPU-only wheel.
+# Torch is installed separately so CPU/CUDA wheels can be selected explicitly.
 numpy==1.22.4
 numba==0.58.1
 llvmlite==0.41.1
