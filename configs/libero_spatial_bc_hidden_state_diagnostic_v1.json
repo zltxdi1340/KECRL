@@ -1,0 +1,57 @@
+{
+  "schema_version": 1,
+  "status": "single_source_spi_hidden_state_diagnostic",
+  "formal_result": false,
+  "purpose": "Diagnose train/deployment recurrent-state mismatch using the same matched models as the causal alignment diagnostic",
+  "base_diagnostic_config": "configs/libero_spatial_single_spi_bc_diagnostic_v1.json",
+  "task_id": 0,
+  "seed": 20261021,
+  "training_arms": [
+    {
+      "name": "stored_same_index",
+      "observation_action_alignment": "stored_same_index"
+    },
+    {
+      "name": "causal_pre_action",
+      "observation_action_alignment": "causal_pre_action"
+    }
+  ],
+  "training": {
+    "reuse_base_budget_exactly": true,
+    "optimizer_updates": 500,
+    "checkpoint_selection": false,
+    "require_identical_initial_model": true,
+    "require_identical_batch_order": true
+  },
+  "expected_final_model_sha256_by_arm": {
+    "stored_same_index": "d46e1e24c341b8f98f12291c50af436a22a6640071679a93cb2cffc1d5e67b20",
+    "causal_pre_action": "6f647466576f1e763ddbc06f8885e4c2f900e0d2635036161bdff991ec5aa3ae"
+  },
+  "evaluation": {
+    "support_demonstration_role": "meta_support",
+    "support_demonstration_indices_for_rollout": [0, 1, 2],
+    "query_demonstration_role": "meta_query",
+    "query_demonstration_indices_for_rollout": [30, 31, 32],
+    "official_initial_state_role": "candidate_nonregression",
+    "official_initial_state_indices": [0, 1, 2],
+    "max_episode_steps": 300,
+    "demonstration_stabilization_steps": 0,
+    "official_stabilization_steps": 5,
+    "policy_hidden_mode": "continuous",
+    "policy_hidden_modes": [
+      "continuous",
+      "reset_at_training_horizon",
+      "stateless"
+    ],
+    "continuous_hidden_teacher_forced": true,
+    "expert_replay_required": true
+  },
+  "forbidden_uses": [
+    "checkpoint selection",
+    "SPT candidate acceptance",
+    "Module qualification",
+    "held-out effect estimation",
+    "formal architecture comparison",
+    "Knowledge update"
+  ]
+}

@@ -25,12 +25,15 @@ from experiments.run_libero_bc_closed_loop_attribution import (
     _build_injected_adapter,
     _load_trajectories,
     _success_summary,
+    HIDDEN_MODES,
     replay_expert_group,
     rollout_policy_group,
     validate_demonstration_state_scope,
 )
 from experiments.run_libero_single_spi_bc_diagnostic import (
     _load_protocols,
+    _finish_metrics,
+    _metric_sums,
     _to_device,
     evaluate_offline,
     validate_online_state_scope,
@@ -85,8 +88,21 @@ def load_comparison_config(path: Path) -> tuple[dict[str, Any], ...]:
     evaluation = comparison["evaluation"]
     if evaluation.get("policy_hidden_mode") != "continuous":
         raise ValueError("causal alignment uses the fixed continuous-GRU deployment mode")
+    modes = tuple(evaluation.get("policy_hidden_modes", (evaluation["policy_hidden_mode"],)))
+    if not modes or len(modes) != len(set(modes)) or any(mode not in HIDDEN_MODES for mode in modes):
+        raise ValueError("causal alignment hidden-state modes are invalid")
+    teacher_forced_enabled = evaluation.get("continuous_hidden_teacher_forced", False)
+    if teacher_forced_enabled is not True and teacher_forced_enabled is not False:
+        raise ValueError("continuous hidden-state teacher-forcing flag must be boolean")
     if evaluation.get("expert_replay_required") is not True:
         raise ValueError("causal alignment requires expert replay")
+    expected_final_hashes = comparison.get("expected_final_model_sha256_by_arm")
+    if expected_final_hashes is not None:
+        if set(expected_final_hashes) != set(ALIGNMENTS) or any(
+            len(value) != 64 or any(char not in "0123456789abcdef" for char in value)
+            for value in expected_final_hashes.values()
+        ):
+            raise ValueError("expected final Policy hashes must cover both frozen comparison arms")
     return comparison, base, policy, transfer, family, dataset
 
 
@@ -302,6 +318,65 @@ def _evaluate_arm(
     }
 
 
+@torch.no_grad()
+def _evaluate_continuous_hidden_teacher_forced(
+    *,
+    model: LiberoBCPolicy,
+    dataset: RoleRestrictedLiberoSequenceDataset,
+    device: torch.device,
+) -> dict[str, Any]:
+    was_training = model.training
+    model.eval()
+    overall: dict[str, float] = {}
+    by_window: dict[int, dict[str, float]] = {}
+    current_demonstration = None
+    hidden = None
+    try:
+        for index, window in enumerate(dataset.windows):
+            if window.demonstration_index != current_demonstration:
+                current_demonstration = window.demonstration_index
+                hidden = None
+            sample = dataset[index]
+            batch = {
+                key: sample[key].unsqueeze(0).to(device)
+                for key in (
+                    "agentview_rgb",
+                    "eye_in_hand_rgb",
+                    "joint_states",
+                    "gripper_states",
+                    "actions",
+                    "valid_mask",
+                )
+            }
+            predictions, hidden = model.forward_sequence(
+                batch["agentview_rgb"],
+                batch["eye_in_hand_rgb"],
+                batch["joint_states"],
+                batch["gripper_states"],
+                hidden=hidden,
+            )
+            window_metrics = _metric_sums(
+                predictions, batch["actions"], batch["valid_mask"]
+            )
+            hidden = hidden.detach()
+            window_number = window.start // dataset.stride
+            bucket = by_window.setdefault(window_number, {})
+            for key, value in window_metrics.items():
+                overall[key] = overall.get(key, 0.0) + value
+                bucket[key] = bucket.get(key, 0.0) + value
+    finally:
+        model.train(was_training)
+    return {
+        "evaluation": "teacher_forced_full_demonstration_continuous_hidden",
+        "demonstration_count": len(set(window.demonstration_index for window in dataset.windows)),
+        "overall": _finish_metrics(overall),
+        "by_window_number": {
+            str(window_number): _finish_metrics(values)
+            for window_number, values in sorted(by_window.items())
+        },
+    }
+
+
 def _new_adapter(
     *,
     suite: str,
@@ -340,6 +415,9 @@ def run_diagnostic(config_path: Path, dataset_root: Path, device_name: str) -> d
     seed = int(comparison["seed"])
     policy_spec = policy_config["policy"]
     evaluation = comparison["evaluation"]
+    hidden_modes = tuple(
+        evaluation.get("policy_hidden_modes", (evaluation["policy_hidden_mode"],))
+    )
     support_indices = validate_demonstration_state_scope(
         transfer,
         dataset_manifest,
@@ -502,80 +580,104 @@ def run_diagnostic(config_path: Path, dataset_root: Path, device_name: str) -> d
                 train_dataset=train_dataset,
             )
             initial_model_digests[name] = training_result["initial_model_sha256"]
+            expected_final_hash = comparison.get(
+                "expected_final_model_sha256_by_arm", {}
+            ).get(name)
+            if (
+                expected_final_hash is not None
+                and training_result["final_model_sha256"] != expected_final_hash
+            ):
+                raise RuntimeError(f"retrained Policy hash differs from the pinned v1 arm: {name}")
             offline = _evaluate_arm(model=model, datasets=view_datasets, device=device)
 
-            policy_results = {}
-            for group_name, group_role, indices, state_map in (
-                (
-                    "meta_support",
+            teacher_forced_metrics = {}
+            if evaluation.get("continuous_hidden_teacher_forced", False):
+                for role in (
                     evaluation["support_demonstration_role"],
-                    support_rollout_indices,
-                    support_states,
-                ),
-                (
-                    "meta_query",
                     evaluation["query_demonstration_role"],
-                    query_rollout_indices,
-                    query_states,
-                ),
-            ):
-                selected_states = np.stack([state_map[index] for index in indices])
-                adapter = _new_adapter(
+                ):
+                    teacher_forced_metrics[role] = _evaluate_continuous_hidden_teacher_forced(
+                        model=model,
+                        dataset=view_datasets[("causal_pre_action", role)],
+                        device=device,
+                    )
+
+            policy_results = {}
+            for hidden_mode in hidden_modes:
+                mode_results = {}
+                for group_name, group_role, indices, state_map in (
+                    (
+                        "meta_support",
+                        evaluation["support_demonstration_role"],
+                        support_rollout_indices,
+                        support_states,
+                    ),
+                    (
+                        "meta_query",
+                        evaluation["query_demonstration_role"],
+                        query_rollout_indices,
+                        query_states,
+                    ),
+                ):
+                    selected_states = np.stack([state_map[index] for index in indices])
+                    adapter = _new_adapter(
+                        suite=transfer["suite"],
+                        task_id=task_id,
+                        seed=seed,
+                        image_size=int(policy_spec["image_size"]),
+                        max_steps=int(evaluation["max_episode_steps"]),
+                        stabilization_steps=int(evaluation["demonstration_stabilization_steps"]),
+                        states=selected_states,
+                    )
+                    try:
+                        episodes = rollout_policy_group(
+                            model,
+                            adapter,
+                            source_indices=indices,
+                            hidden_mode=hidden_mode,
+                            training_horizon=int(policy_spec["sequence_length"]),
+                            device=device,
+                        )
+                    finally:
+                        adapter.close()
+                    mode_results[group_name] = {
+                        "state_namespace": f"demonstration.{group_role}",
+                        "stabilization_steps": 0,
+                        **_success_summary(episodes),
+                    }
+
+                official_adapter = _new_adapter(
                     suite=transfer["suite"],
                     task_id=task_id,
                     seed=seed,
                     image_size=int(policy_spec["image_size"]),
                     max_steps=int(evaluation["max_episode_steps"]),
-                    stabilization_steps=int(evaluation["demonstration_stabilization_steps"]),
-                    states=selected_states,
+                    stabilization_steps=int(evaluation["official_stabilization_steps"]),
+                    states=official_states,
                 )
                 try:
-                    episodes = rollout_policy_group(
+                    official_episodes = rollout_policy_group(
                         model,
-                        adapter,
-                        source_indices=indices,
-                        hidden_mode="continuous",
+                        official_adapter,
+                        source_indices=official_indices,
+                        hidden_mode=hidden_mode,
                         training_horizon=int(policy_spec["sequence_length"]),
                         device=device,
                     )
                 finally:
-                    adapter.close()
-                policy_results[group_name] = {
-                    "state_namespace": f"demonstration.{group_role}",
-                    "stabilization_steps": 0,
-                    **_success_summary(episodes),
+                    official_adapter.close()
+                mode_results["candidate_nonregression"] = {
+                    "state_namespace": "official.source_spi.candidate_nonregression",
+                    "stabilization_steps": int(evaluation["official_stabilization_steps"]),
+                    **_success_summary(official_episodes),
                 }
-
-            official_adapter = _new_adapter(
-                suite=transfer["suite"],
-                task_id=task_id,
-                seed=seed,
-                image_size=int(policy_spec["image_size"]),
-                max_steps=int(evaluation["max_episode_steps"]),
-                stabilization_steps=int(evaluation["official_stabilization_steps"]),
-                states=official_states,
-            )
-            try:
-                official_episodes = rollout_policy_group(
-                    model,
-                    official_adapter,
-                    source_indices=official_indices,
-                    hidden_mode="continuous",
-                    training_horizon=int(policy_spec["sequence_length"]),
-                    device=device,
-                )
-            finally:
-                official_adapter.close()
-            policy_results["candidate_nonregression"] = {
-                "state_namespace": "official.source_spi.candidate_nonregression",
-                "stabilization_steps": int(evaluation["official_stabilization_steps"]),
-                **_success_summary(official_episodes),
-            }
+                policy_results[hidden_mode] = mode_results
             arm_results[name] = {
                 "observation_action_alignment": alignment,
                 "training_access": train_dataset.access_record,
                 "training": training_result,
                 "offline_metrics_by_evaluation_view": offline,
+                "continuous_hidden_teacher_forced_causal_metrics": teacher_forced_metrics,
                 "policy_rollouts": policy_results,
             }
 
@@ -632,6 +734,10 @@ def run_diagnostic(config_path: Path, dataset_root: Path, device_name: str) -> d
             },
             "scope": {
                 "task_id": task_id,
+                "policy_hidden_modes": list(hidden_modes),
+                "continuous_hidden_teacher_forced": bool(
+                    evaluation.get("continuous_hidden_teacher_forced", False)
+                ),
                 "support_role": evaluation["support_demonstration_role"],
                 "support_demonstrations": len(support_indices),
                 "support_training_indices": list(support_indices),
@@ -652,6 +758,12 @@ def run_diagnostic(config_path: Path, dataset_root: Path, device_name: str) -> d
                 "initial_model_sha256_by_arm": initial_model_digests,
                 "initial_models_identical": True,
                 "batch_order_generator_seed_identical": True,
+                "expected_final_model_sha256_by_arm": comparison.get(
+                    "expected_final_model_sha256_by_arm"
+                ),
+                "retrained_models_match_pinned_final_hashes": (
+                    comparison.get("expected_final_model_sha256_by_arm") is not None
+                ),
                 "valid_step_updates_by_arm": valid_step_updates,
                 "valid_step_counts_identical": True,
                 "optimizer": base["training"]["optimizer"],
