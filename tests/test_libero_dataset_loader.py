@@ -110,6 +110,7 @@ def test_sequence_loader_pads_only_after_valid_steps(tmp_path: Path):
     with h5py.File(path, "w") as handle:
         data = handle.create_group("data")
         demo = data.create_group("demo_0")
+        demo.attrs["init_state"] = np.arange(4, dtype=np.float64)
         demo["actions"] = np.arange(21, dtype=np.float32).reshape(3, 7) / 21
         obs = demo.create_group("obs")
         obs["agentview_rgb"] = np.full((3, 128, 128, 3), 7, dtype=np.uint8)
@@ -138,5 +139,63 @@ def test_sequence_loader_pads_only_after_valid_steps(tmp_path: Path):
         assert int(tail["agentview_rgb"][1].max()) == 0
         assert tail["actions"][1].tolist() == [0.0] * 7
         assert loaded.access_record["dataset_sha256_verified"] is True
+        assert loaded.access_record["observation_action_alignment"] == "stored_same_index"
+        assert loaded.load_initial_states()[0].tolist() == [0.0, 1.0, 2.0, 3.0]
     finally:
         loaded.close()
+
+    causal_initial = {
+        0: {
+            "agentview_rgb": np.full((128, 128, 3), 1, dtype=np.uint8),
+            "eye_in_hand_rgb": np.full((128, 128, 3), 2, dtype=np.uint8),
+            "joint_states": np.full(7, 3, dtype=np.float32),
+            "gripper_states": np.full(2, 4, dtype=np.float32),
+        }
+    }
+    causal = RoleRestrictedLiberoSequenceDataset(
+        protocol,
+        dataset,
+        tmp_path,
+        task_id=0,
+        demonstration_role="meta_support",
+        sequence_length=2,
+        stride=2,
+        observation_action_alignment="causal_pre_action",
+        causal_initial_observations=causal_initial,
+    )
+    try:
+        first = causal[0]
+        assert first["agentview_rgb"][:, 0, 0, 0].tolist() == [1, 7]
+        assert first["eye_in_hand_rgb"][:, 0, 0, 0].tolist() == [2, 9]
+        assert first["joint_states"][:, 0].tolist() == [3.0, 1.0]
+        assert first["gripper_states"][:, 0].tolist() == [4.0, 1.0]
+        assert first["actions"][:, 0].tolist() == pytest.approx([0.0, 7 / 21])
+        tail = causal[1]
+        assert tail["agentview_rgb"][:, 0, 0, 0].tolist() == [7, 0]
+        assert tail["valid_mask"].tolist() == [True, False]
+        assert causal.access_record["observation_action_alignment"] == "causal_pre_action"
+        assert causal.access_record["causal_initial_observation_count"] == 1
+    finally:
+        causal.close()
+
+
+def test_causal_loader_requires_exact_authorized_initial_observations(tmp_path: Path):
+    protocol, dataset = _manifests()
+    missing_path = tmp_path / dataset["files"][0]["path"]
+    missing_path.parent.mkdir(parents=True)
+    missing_path.write_bytes(b"not-opened-before-causal-validation")
+    dataset["files"][0].update(
+        size_bytes=missing_path.stat().st_size,
+        sha256=hashlib.sha256(missing_path.read_bytes()).hexdigest(),
+    )
+    with pytest.raises(ValueError, match="requires reconstructed"):
+        RoleRestrictedLiberoSequenceDataset(
+            protocol,
+            dataset,
+            tmp_path,
+            task_id=0,
+            demonstration_role="meta_support",
+            sequence_length=2,
+            stride=2,
+            observation_action_alignment="causal_pre_action",
+        )
