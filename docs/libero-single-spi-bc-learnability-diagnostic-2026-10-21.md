@@ -61,4 +61,4 @@ query MSE 下降 64.5%，最终 support/query 差值约 0.0087。该曲线说明
 3. 与现有 same-index 数据视图做固定预算诊断，先检验 causal query loss 和 demo-start 闭环，再检查官方初态；
 4. 因果对齐后若仍失败，再分别检查 MSE 动作平均化、长度 10 窗口/隐藏状态训练和 covariate shift。
 
-当前不进入 FOMAML 或 A/B/C，因为基础 SPI 尚不能闭环执行；此时比较 SPT 更新只会把 Policy 执行失败混入迁移结论。
+因果对齐双臂诊断入口、固定配置和回归测试已完成并推送，协议及待运行状态见 [`libero-bc-causal-alignment-diagnostic-2026-10-22.md`](libero-bc-causal-alignment-diagnostic-2026-10-22.md)。该诊断尚未运行，不能据此声称修正时序后 Policy 会改善。当前不进入 FOMAML 或 A/B/C，因为基础 SPI 尚不能闭环执行；此时比较 SPT 更新只会把 Policy 执行失败混入迁移结论。
