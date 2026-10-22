@@ -557,6 +557,7 @@ def evaluate_paired_action_divergence(
             predicted_actions = []
             hidden = None
             expert_reward = 0.0
+            expert_executed_steps = 0
             expert_info: Mapping[str, Any] = {"success": False, "terminal_reason": None}
             for expert_action in trajectory["actions"]:
                 predicted, hidden = model.forward_step(
@@ -566,6 +567,7 @@ def evaluate_paired_action_divergence(
                 expert_observation, reward, terminated, truncated, expert_info = adapter.step(expert_action)
                 expert_observations.append(expert_observation)
                 expert_reward += reward
+                expert_executed_steps += 1
                 if terminated or truncated:
                     break
 
@@ -587,7 +589,7 @@ def evaluate_paired_action_divergence(
                 if terminated or truncated:
                     break
             paired_metrics = _trajectory_error_summary(
-                expert_actions=np.asarray(trajectory["actions"], dtype=np.float32),
+                expert_actions=np.asarray(trajectory["actions"][:expert_executed_steps], dtype=np.float32),
                 policy_actions_on_expert_states=np.asarray(predicted_actions, dtype=np.float32),
                 expert_observations=expert_observations,
                 policy_observations=free_observations,
@@ -599,7 +601,8 @@ def evaluate_paired_action_divergence(
                     "demonstration_index": int(trajectory["demonstration_index"]),
                     "expert_episode": {
                         "success": bool(expert_info.get("success", False)),
-                        "steps": len(trajectory["actions"]),
+                        "steps": expert_executed_steps,
+                        "stored_action_count": len(trajectory["actions"]),
                         "terminal_reason": expert_info.get("terminal_reason"),
                         "reward_sum": float(expert_reward),
                     },
