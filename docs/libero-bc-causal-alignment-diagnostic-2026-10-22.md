@@ -61,13 +61,7 @@ validation、held-out、qualification 初态均不访问；不选 checkpoint、�
 
 ## 下一步诊断
 
-当前优先检验训练窗口与部署隐藏态的差异：训练每个 10 步窗口都从零 hidden state 开始，而 rollout 连续携带 GRU state。下一项有界诊断应在同一因果训练权重上报告：
-
-1. 对完整 support/query 专家轨迹逐步 teacher-force，并在整条 demo 内连续传递 hidden state，观察各动作分量误差是否随时间/阶段恶化；
-2. 比较 continuous、每 10 步 reset、stateless 三种推理模式的固定初态 rollout，判断降低隐藏态时域是否恢复夹爪切换或任务成功；
-3. 同时报告 RGB/proprioception状态的 expert 与 policy rollout 分布差异，作为 covariate shift 证据，不把相关性误写成因果贡献。
-
-若连续 teacher-forced 误差稳定但 free-run 失败，下一重点是 on-policy 状态覆盖与动作误差累积；若误差随隐藏态跨度显著恶化，再设计隐藏态训练/部署匹配的模型诊断。无论哪种结果，都需重新复现跨 seed，随后才考虑多 source learning pilot。当前不进行 SPT/FOMAML、Knowledge 更新或 Module qualification。
+隐藏态诊断已使用锁定的 v1 权重完成，结果和限制见 [`libero-bc-hidden-state-diagnostic-2026-10-22.md`](libero-bc-hidden-state-diagnostic-2026-10-22.md)。连续/窗口重置/stateless rollout 没有显示稳定收益，因此下一步转向逐步动作偏差和状态轨迹偏移的定位；当前不进行 SPT/FOMAML、Knowledge 更新或 Module qualification。
 
 结果可由已提交配置和 runner 重现；输出文件已存在时请使用新的 `--output` 路径：
 
