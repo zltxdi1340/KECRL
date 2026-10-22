@@ -16,6 +16,16 @@
 - 结果文件 `/tmp/libero-bc-hidden-state-20261022-v2.json`，SHA-256 `8402879db7d6ea6b4ac3598f9622d9c6eab5f0efce5ef0c87f08a19fdb1b918f`。
 - 运行耗时 `414.79s`，其中训练及 Policy evaluation `352.48s`，峰值 CUDA allocation `292,003,840 bytes`。
 
+## 后续动作偏差追踪（已实现，待运行）
+
+为避免把“GRU 长记忆”当成直接解释，runner 另加一个可选配对追踪开关。它只在配置明确启用并校验 causal Policy final hash 后，针对开放的 support/query demonstration 0/1/2 与 30/31/32：
+
+- 沿专家执行轨迹逐步向 Policy 提供 pre-action observation，记录 teacher-forced Policy action 与专家 action 的分量误差及首个 gripper sign mismatch；
+- 从完全相同 `init_state` 重新开始，让 Policy 自由执行，再与相同 horizon 的专家 joint/gripper 状态、agentview 和 eye-in-hand RGB 做 10 步分箱比较；
+- 不触及 official candidate、validation、held-out 或 qualification 初态，不训练、不选模型。
+
+这一追踪尚未运行，不能预先断言夹爪误差、视觉表示或控制接口是哪一个先造成偏移。代码定向测试 `17 passed`，全量测试 `529 passed, 2 skipped`。配置/结果完成后应回填本节及研究路线。
+
 ## 隐藏态模式与闭环成功
 
 每格为 support demo/query demo/official candidate 三组各 3 个初态的成功数：

@@ -34,6 +34,7 @@ from experiments.run_libero_single_spi_bc_diagnostic import (
     _load_protocols,
     _finish_metrics,
     _metric_sums,
+    _online_tensors,
     _to_device,
     evaluate_offline,
     validate_online_state_scope,
@@ -103,6 +104,20 @@ def load_comparison_config(path: Path) -> tuple[dict[str, Any], ...]:
             for value in expected_final_hashes.values()
         ):
             raise ValueError("expected final Policy hashes must cover both frozen comparison arms")
+    action_divergence = comparison.get("action_divergence", {})
+    action_divergence_enabled = action_divergence.get("enabled", False)
+    if action_divergence_enabled is not True and action_divergence_enabled is not False:
+        raise ValueError("action divergence enabled flag must be boolean")
+    if action_divergence_enabled:
+        if action_divergence.get("require_pinned_final_hashes") is not True:
+            raise ValueError("action divergence requires exact pinned Policy weights")
+        if action_divergence.get("expert_forced_hidden_mode") != "continuous":
+            raise ValueError("expert-forced Policy actions must use continuous hidden state")
+        if int(action_divergence.get("time_bin_steps", 0)) < 1:
+            raise ValueError("action divergence requires a positive time bin")
+        evaluation_arms = tuple(action_divergence.get("evaluation_arms", ()))
+        if not evaluation_arms or any(name not in ALIGNMENTS for name in evaluation_arms):
+            raise ValueError("action divergence evaluation arms must be a nonempty subset of the two fixed arms")
     return comparison, base, policy, transfer, family, dataset
 
 
@@ -414,6 +429,194 @@ def _new_adapter(
     )
 
 
+def _trajectory_error_summary(
+    *,
+    expert_actions: np.ndarray,
+    policy_actions_on_expert_states: np.ndarray,
+    expert_observations: list[Mapping[str, np.ndarray]],
+    policy_observations: list[Mapping[str, np.ndarray]],
+    time_bin_steps: int,
+) -> dict[str, Any]:
+    expert_actions = np.asarray(expert_actions, dtype=np.float64)
+    teacher_actions = np.asarray(policy_actions_on_expert_states, dtype=np.float64)
+    if (
+        expert_actions.ndim != 2
+        or teacher_actions.ndim != 2
+        or expert_actions.shape[1] != 7
+        or teacher_actions.shape[1] != 7
+    ):
+        raise ValueError("expert and teacher-forced actions must have shape [T, 7]")
+    overlap = min(
+        len(expert_actions),
+        len(teacher_actions),
+        len(policy_observations),
+        len(expert_observations),
+    )
+    if overlap < 1 or time_bin_steps < 1:
+        raise ValueError("trajectory comparison requires an overlapping positive horizon")
+    expert_actions = expert_actions[:overlap]
+    teacher_actions = teacher_actions[:overlap]
+    action_delta = teacher_actions - expert_actions
+    expert_rgb = np.stack(
+        [np.asarray(item["agentview_rgb"], dtype=np.float32) for item in expert_observations[:overlap]]
+    )
+    policy_rgb = np.stack(
+        [np.asarray(item["agentview_rgb"], dtype=np.float32) for item in policy_observations[:overlap]]
+    )
+    expert_hand = np.stack(
+        [np.asarray(item["eye_in_hand_rgb"], dtype=np.float32) for item in expert_observations[:overlap]]
+    )
+    policy_hand = np.stack(
+        [np.asarray(item["eye_in_hand_rgb"], dtype=np.float32) for item in policy_observations[:overlap]]
+    )
+    expert_joints = np.stack([item["joint_states"] for item in expert_observations[:overlap]]).astype(np.float64)
+    policy_joints = np.stack([item["joint_states"] for item in policy_observations[:overlap]]).astype(np.float64)
+    expert_gripper = np.stack([item["gripper_states"] for item in expert_observations[:overlap]]).astype(np.float64)
+    policy_gripper = np.stack([item["gripper_states"] for item in policy_observations[:overlap]]).astype(np.float64)
+
+    def _stats(delta: np.ndarray) -> dict[str, float]:
+        return {
+            "mae": float(np.abs(delta).mean()),
+            "rmse": float(np.sqrt(np.square(delta).mean())),
+            "mean_l2_per_step": float(np.linalg.norm(delta, axis=1).mean()),
+            "maximum_l2_per_step": float(np.linalg.norm(delta, axis=1).max()),
+        }
+
+    bins = []
+    for start in range(0, overlap, time_bin_steps):
+        stop = min(start + time_bin_steps, overlap)
+        action_slice = action_delta[start:stop]
+        bins.append(
+            {
+                "start_step": start,
+                "stop_step_exclusive": stop,
+                "steps": stop - start,
+                "action_mae": float(np.abs(action_slice).mean()),
+                "action_l2_mean": float(np.linalg.norm(action_slice, axis=1).mean()),
+                "gripper_sign_accuracy": float(
+                    np.mean(np.sign(teacher_actions[start:stop, 6]) == np.sign(expert_actions[start:stop, 6]))
+                ),
+                "joint_state_l2_mean": float(
+                    np.linalg.norm(policy_joints[start:stop] - expert_joints[start:stop], axis=1).mean()
+                ),
+                "gripper_state_l2_mean": float(
+                    np.linalg.norm(policy_gripper[start:stop] - expert_gripper[start:stop], axis=1).mean()
+                ),
+                "agentview_rgb_mae": float(np.abs(policy_rgb[start:stop] - expert_rgb[start:stop]).mean()),
+                "eye_in_hand_rgb_mae": float(np.abs(policy_hand[start:stop] - expert_hand[start:stop]).mean()),
+            }
+        )
+    mismatches = np.flatnonzero(np.sign(teacher_actions[:, 6]) != np.sign(expert_actions[:, 6]))
+    return {
+        "overlap_steps": overlap,
+        "teacher_forced_action_error": {
+            "all_dimensions": _stats(action_delta),
+            "per_dimension_mae": {
+                name: float(np.abs(action_delta[:, index]).mean())
+                for index, name in enumerate(("x", "y", "z", "roll", "pitch", "yaw", "gripper"))
+            },
+            "gripper_sign_accuracy": float(
+                np.mean(np.sign(teacher_actions[:, 6]) == np.sign(expert_actions[:, 6]))
+            ),
+            "gripper_sign_mismatch_count": int(len(mismatches)),
+            "first_gripper_sign_mismatch_step": (
+                None if len(mismatches) == 0 else int(mismatches[0])
+            ),
+            "expert_positive_fraction": float(np.mean(expert_actions[:, 6] > 0)),
+            "policy_positive_fraction": float(np.mean(teacher_actions[:, 6] > 0)),
+        },
+        "free_rollout_state_drift_on_expert_horizon": {
+            "joint_state": _stats(policy_joints[:overlap] - expert_joints[:overlap]),
+            "gripper_state": _stats(policy_gripper[:overlap] - expert_gripper[:overlap]),
+            "agentview_rgb_mae": float(np.abs(policy_rgb - expert_rgb).mean()),
+            "eye_in_hand_rgb_mae": float(np.abs(policy_hand - expert_hand).mean()),
+        },
+        "time_bins": bins,
+    }
+
+
+@torch.no_grad()
+def evaluate_paired_action_divergence(
+    *,
+    model: LiberoBCPolicy,
+    adapter: LiberoEnvironmentAdapter,
+    trajectories: list[dict[str, Any]],
+    source_indices: tuple[int, ...],
+    device: torch.device,
+    time_bin_steps: int,
+) -> list[dict[str, Any]]:
+    if len(trajectories) != len(source_indices):
+        raise ValueError("action divergence trajectories and initial states must align")
+    was_training = model.training
+    model.eval()
+    results = []
+    try:
+        for local_index, (source_index, trajectory) in enumerate(zip(source_indices, trajectories)):
+            expert_observation, _ = adapter.reset(initial_state_index=local_index)
+            expert_observations = [expert_observation]
+            predicted_actions = []
+            hidden = None
+            expert_reward = 0.0
+            expert_info: Mapping[str, Any] = {"success": False, "terminal_reason": None}
+            for expert_action in trajectory["actions"]:
+                predicted, hidden = model.forward_step(
+                    *_online_tensors(expert_observation, device), hidden=hidden
+                )
+                predicted_actions.append(predicted[0].cpu().numpy().astype(np.float32))
+                expert_observation, reward, terminated, truncated, expert_info = adapter.step(expert_action)
+                expert_observations.append(expert_observation)
+                expert_reward += reward
+                if terminated or truncated:
+                    break
+
+            free_observation, _ = adapter.reset(initial_state_index=local_index)
+            free_observations = [free_observation]
+            free_actions = []
+            hidden = None
+            free_reward = 0.0
+            free_info: Mapping[str, Any] = {"success": False, "terminal_reason": None}
+            while True:
+                action, hidden = model.forward_step(
+                    *_online_tensors(free_observation, device), hidden=hidden
+                )
+                free_action = action[0].cpu().numpy().astype(np.float32)
+                free_actions.append(free_action)
+                free_observation, reward, terminated, truncated, free_info = adapter.step(free_action)
+                free_observations.append(free_observation)
+                free_reward += reward
+                if terminated or truncated:
+                    break
+            paired_metrics = _trajectory_error_summary(
+                expert_actions=np.asarray(trajectory["actions"], dtype=np.float32),
+                policy_actions_on_expert_states=np.asarray(predicted_actions, dtype=np.float32),
+                expert_observations=expert_observations,
+                policy_observations=free_observations,
+                time_bin_steps=time_bin_steps,
+            )
+            results.append(
+                {
+                    "source_index": source_index,
+                    "demonstration_index": int(trajectory["demonstration_index"]),
+                    "expert_episode": {
+                        "success": bool(expert_info.get("success", False)),
+                        "steps": len(trajectory["actions"]),
+                        "terminal_reason": expert_info.get("terminal_reason"),
+                        "reward_sum": float(expert_reward),
+                    },
+                    "policy_episode": {
+                        "success": bool(free_info.get("success", False)),
+                        "steps": len(free_actions),
+                        "terminal_reason": free_info.get("terminal_reason"),
+                        "reward_sum": float(free_reward),
+                    },
+                    **paired_metrics,
+                }
+            )
+    finally:
+        model.train(was_training)
+    return results
+
+
 def run_diagnostic(config_path: Path, dataset_root: Path, device_name: str) -> dict[str, Any]:
     diagnostic_start_time = time.perf_counter()
     comparison, base, policy_config, transfer, family, dataset_manifest = load_comparison_config(
@@ -688,6 +891,37 @@ def run_diagnostic(config_path: Path, dataset_root: Path, device_name: str) -> d
                     **_success_summary(official_episodes),
                 }
                 policy_results[hidden_mode] = mode_results
+            action_divergence_results = None
+            action_divergence_spec = comparison.get("action_divergence", {})
+            if action_divergence_spec.get("enabled", False) and name in set(
+                action_divergence_spec["evaluation_arms"]
+            ):
+                action_divergence_results = {}
+                for group_name, indices, state_map in (
+                    ("meta_support", support_rollout_indices, support_states),
+                    ("meta_query", query_rollout_indices, query_states),
+                ):
+                    adapter = _new_adapter(
+                        suite=transfer["suite"],
+                        task_id=task_id,
+                        seed=seed,
+                        image_size=int(policy_spec["image_size"]),
+                        max_steps=int(evaluation["max_episode_steps"]),
+                        stabilization_steps=int(evaluation["demonstration_stabilization_steps"]),
+                        states=np.stack([state_map[index] for index in indices]),
+                    )
+                    try:
+                        episodes = evaluate_paired_action_divergence(
+                            model=model,
+                            adapter=adapter,
+                            trajectories=trajectories[group_name],
+                            source_indices=indices,
+                            device=device,
+                            time_bin_steps=int(action_divergence_spec["time_bin_steps"]),
+                        )
+                    finally:
+                        adapter.close()
+                    action_divergence_results[group_name] = episodes
             arm_results[name] = {
                 "observation_action_alignment": alignment,
                 "training_access": train_dataset.access_record,
@@ -695,6 +929,7 @@ def run_diagnostic(config_path: Path, dataset_root: Path, device_name: str) -> d
                 "offline_metrics_by_evaluation_view": offline,
                 "hidden_state_teacher_forced_causal_metrics": teacher_forced_metrics,
                 "policy_rollouts": policy_results,
+                "paired_action_divergence": action_divergence_results,
             }
 
         if len(set(initial_model_digests.values())) != 1:
@@ -753,6 +988,9 @@ def run_diagnostic(config_path: Path, dataset_root: Path, device_name: str) -> d
                 "policy_hidden_modes": list(hidden_modes),
                 "continuous_hidden_teacher_forced": bool(
                     evaluation.get("continuous_hidden_teacher_forced", False)
+                ),
+                "action_divergence_enabled": bool(
+                    comparison.get("action_divergence", {}).get("enabled", False)
                 ),
                 "support_role": evaluation["support_demonstration_role"],
                 "support_demonstrations": len(support_indices),

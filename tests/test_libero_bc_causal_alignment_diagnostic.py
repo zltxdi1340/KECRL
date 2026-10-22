@@ -124,3 +124,42 @@ def test_continuous_teacher_forcing_carries_hidden_within_demo_and_resets_betwee
     assert continuous["1"]["mse"] == pytest.approx(12.5)
     assert reset["0"]["mse"] == pytest.approx(2.5)
     assert reset["1"]["mse"] == pytest.approx(2.5)
+
+
+def test_trajectory_error_summary_tracks_action_and_state_drift_by_time_bin():
+    observations = [
+        {
+            "agentview_rgb": np.full((2, 2, 3), value, dtype=np.uint8),
+            "eye_in_hand_rgb": np.full((2, 2, 3), value + 1, dtype=np.uint8),
+            "joint_states": np.full(7, value, dtype=np.float32),
+            "gripper_states": np.full(2, value / 10, dtype=np.float32),
+        }
+        for value in (0, 10, 20)
+    ]
+    expert_actions = np.zeros((2, 7), dtype=np.float32)
+    expert_actions[:, 6] = np.asarray([-1.0, 1.0])
+    policy_actions = expert_actions.copy()
+    policy_actions[0, 0] = 0.5
+    policy_actions[1, 6] = -1.0
+    policy_observations = [
+        {key: value.copy() for key, value in observations[0].items()},
+        {key: value + 2 for key, value in observations[1].items()},
+        {key: value + 5 for key, value in observations[2].items()},
+    ]
+
+    result = diagnostic._trajectory_error_summary(
+        expert_actions=expert_actions,
+        policy_actions_on_expert_states=policy_actions,
+        expert_observations=observations,
+        policy_observations=policy_observations,
+        time_bin_steps=1,
+    )
+
+    assert result["overlap_steps"] == 2
+    assert result["teacher_forced_action_error"]["first_gripper_sign_mismatch_step"] == 1
+    assert result["teacher_forced_action_error"]["gripper_sign_accuracy"] == pytest.approx(0.5)
+    assert result["time_bins"][0]["agentview_rgb_mae"] == pytest.approx(0.0)
+    assert result["time_bins"][1]["joint_state_l2_mean"] == pytest.approx(
+        2 * np.sqrt(7)
+    )
+    assert result["free_rollout_state_drift_on_expert_horizon"]["agentview_rgb_mae"] == pytest.approx(1.0)

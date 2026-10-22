@@ -27,6 +27,18 @@
     "stored_same_index": "d46e1e24c341b8f98f12291c50af436a22a6640071679a93cb2cffc1d5e67b20",
     "causal_pre_action": "6f647466576f1e763ddbc06f8885e4c2f900e0d2635036161bdff991ec5aa3ae"
   },
+  "action_divergence": {
+    "enabled": true,
+    "require_pinned_final_hashes": true,
+    "evaluation_arms": [
+      "causal_pre_action"
+    ],
+    "expert_forced_hidden_mode": "continuous",
+    "time_bin_steps": 10,
+    "record_rgb_mae": true,
+    "record_joint_and_gripper_state_drift": true,
+    "record_first_gripper_sign_mismatch": true
+  },
   "evaluation": {
     "support_demonstration_role": "meta_support",
     "support_demonstration_indices_for_rollout": [0, 1, 2],
