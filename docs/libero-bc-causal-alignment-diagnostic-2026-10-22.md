@@ -1,6 +1,6 @@
 # LIBERO BC 因果时序对齐诊断（2026-10-22）
 
-**状态：协议已提交，实验未运行。** 本文记录即将执行的单 seed、有界诊断，不是学习结果、正式实验或 Module 资格结论。
+**状态：v1 单 seed 诊断已完成。** 结果用于排查数据时序与闭环失败，不是正式实验、架构结论或 Module 资格结果。
 
 ## 要回答的问题
 
@@ -33,11 +33,43 @@ validation、held-out、qualification 初态均不访问；不选 checkpoint、�
 - 基础单 SPI 配置 SHA-256：`bbc4b28c4d2d606f2595642ee0f2936bb3fbcded3e5cbd9449e78b337f134e53`。
 - 回归：LIBERO 定向 `14 passed`；全量 `526 passed, 2 skipped`。
 - 环境：`libero-kecrl`、Python 3.10.22、PyTorch 2.4.1+cu124、2 张 RTX 4090 可见。
-- 结果文件尚未生成；因此没有结果哈希或策略性能数字。
+- 结果文件：`/tmp/libero-bc-causal-alignment-20261022-v1.json`，SHA-256 `5fbf8e1ed56e8c5f052f75c9a3303aff80eb3fc65337501ca0b5c459c66a34ed`。
+- 运行记录的代码 commit：`2e735b85f8e63bc3c559c9e44fe23b1647dcf461`；两臂初始 Policy 哈希相同，均为 `80c75b88ac2721d62949dfbe2c8bd5adb3be74303aa66ab4007ab54f2bfb78b4`。
+- 每臂处理 `37,534` 个有效动作步；结果记录 valid-step 数相同，SPT 未改变。
 
-## 运行状态和下一步
+## v1 结果
 
-检查时两张 GPU 分别有持续运行的场景服务、梯度实验和路由实验，设备利用率约为 53% 与 75%。本轮没有启动训练，也没有中止其他进程。GPU 空闲后使用：
+专家轨迹从 30 条 support 和 20 条 query demo 中各抽 3 条重放，结果均为 `3/3`。数据和官方初始状态的 pinned SHA-256 校验通过；validation、held-out 和 qualification 均未访问。
+
+| 训练数据视图 | 评估数据视图 | support MSE | query MSE |
+|---|---|---:|---:|
+| stored same-index | stored same-index | 0.07957 | 0.08830 |
+| stored same-index | causal pre-action | 0.08314 | 0.09318 |
+| causal pre-action | stored same-index | 0.08840 | 0.09578 |
+| causal pre-action | causal pre-action | 0.08769 | 0.09682 |
+
+这次单 seed、固定 500-update 对照中，因果视图训练没有降低因果 query MSE；same-index 模型在因果 query view 的 MSE `0.09318`，略低于因果模型的 `0.09682`。这不是“same-index 更好”的统计证据，只表示修正配对时序单独没有修复这次训练的闭环失败。
+
+| 训练数据视图 | support demo rollout | query demo rollout | official candidate rollout |
+|---|---:|---:|---:|
+| stored same-index | 1/3 | 0/3 | 0/3 |
+| causal pre-action | 0/3 | 0/3 | 0/3 |
+
+所有未成功 Policy episode 都运行到 300 步上限。因果臂的 9 个 rollout 中，夹爪动作全程为负且没有符号切换；其 causal query gripper sign accuracy 仍为 `0.886`。同一 task 0 的 support/query 专家标签中，夹爪正负命令约为 `48%/52%`，不是单一负类占绝大多数。该反差说明离线标签拟合不能保证 Policy 离开 expert-state 分布后仍产生正确的开合时序。
+
+运行耗时 `187.85s`，训练与 Policy 评估部分 `125.68s`，峰值 CUDA allocation `292,003,840 bytes`。单 seed 结果不用于否定因果 loader，也不说明具体是视觉、动作头、GRU 还是状态覆盖导致失败。
+
+## 下一步诊断
+
+当前优先检验训练窗口与部署隐藏态的差异：训练每个 10 步窗口都从零 hidden state 开始，而 rollout 连续携带 GRU state。下一项有界诊断应在同一因果训练权重上报告：
+
+1. 对完整 support/query 专家轨迹逐步 teacher-force，并在整条 demo 内连续传递 hidden state，观察各动作分量误差是否随时间/阶段恶化；
+2. 比较 continuous、每 10 步 reset、stateless 三种推理模式的固定初态 rollout，判断降低隐藏态时域是否恢复夹爪切换或任务成功；
+3. 同时报告 RGB/proprioception状态的 expert 与 policy rollout 分布差异，作为 covariate shift 证据，不把相关性误写成因果贡献。
+
+若连续 teacher-forced 误差稳定但 free-run 失败，下一重点是 on-policy 状态覆盖与动作误差累积；若误差随隐藏态跨度显著恶化，再设计隐藏态训练/部署匹配的模型诊断。无论哪种结果，都需重新复现跨 seed，随后才考虑多 source learning pilot。当前不进行 SPT/FOMAML、Knowledge 更新或 Module qualification。
+
+结果可由已提交配置和 runner 重现；输出文件已存在时请使用新的 `--output` 路径：
 
 ```bash
 MUJOCO_GL=egl LIBERO_CONFIG_PATH=/home/zl202621/.libero PYTHONPATH=. \
@@ -45,7 +77,5 @@ MUJOCO_GL=egl LIBERO_CONFIG_PATH=/home/zl202621/.libero PYTHONPATH=. \
   python -u experiments/run_libero_bc_causal_alignment_diagnostic.py \
   --dataset-root /home/zl202621/third_party/LIBERO/datasets \
   --device cuda:1 \
-  --output /tmp/libero-bc-causal-alignment-20261022-v1.json
+  --output /tmp/libero-bc-causal-alignment-20261022-rerun.json
 ```
-
-运行后应记录输出 SHA-256、实际两臂有效动作步数、support/query 离线分项指标、9 个 Policy 闭环结果、专家回放结果和耗时，并更新本报告及研究路线。若因果对齐仍不能形成稳定闭环 SPI，后续再拆解动作头、训练窗口/隐藏态和 on-policy 状态覆盖；如果稳定改善，也只进入多 seed/multi-source 学习 pilot，不直接进入正式 SPT/FOMAML 比较。

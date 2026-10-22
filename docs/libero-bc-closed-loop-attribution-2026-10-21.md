@@ -60,5 +60,5 @@ GRU 状态处理会改变轨迹，但不是充分修复：stateless 在九个初
 2. 官方初态分布可能仍增加难度，但 Policy 在 support/query demo 初态也不稳定，当前证据不支持把它列为首要原因。
 3. GRU 长序列与长度 10 训练窗口之间存在部署差异，但三种隐藏态方式都不稳定；应先修复更基础的监督时序定义。
 4. 当前最先处理的是因果数据视图：为每条示教从 `init_state` 重建首个 pre-action observation，此后用 `stored_obs[t] -> action[t+1]`，从而得到与原轨迹等长的 `pre_action_obs[t] -> action[t]`。
-5. 下一诊断已固定为同模型、seed 和 500-update 预算的 same-index/causal pre-action 双臂对照，报告两种视图下的 support/query loss、demo support/query 初态和官方 candidate 初态闭环结果。入口、配置和测试已在 `96d37f7` 提交；当前运行状态和复现命令见 [`libero-bc-causal-alignment-diagnostic-2026-10-22.md`](libero-bc-causal-alignment-diagnostic-2026-10-22.md)。这项诊断尚未运行，因此不能推断因果对齐会改善结果。只有因果对齐后基础 SPI 稳定执行，才进入多 source pilot 和 SPT/FOMAML。
+5. same-index/causal pre-action 双臂诊断已完成，结果为 same-index continuous-GRU `1/9`、causal `0/9`；causal-aligned query MSE 也没有改善。它表明时序错位不是当前闭环失败的唯一原因，但不能据单 seed 结果否定 causal loader 的语义正确性。完整配置、结果哈希和解释见 [`libero-bc-causal-alignment-diagnostic-2026-10-22.md`](libero-bc-causal-alignment-diagnostic-2026-10-22.md)。下一步检查训练时每 10 步重置隐藏态与部署时连续携带隐藏态的差异，再看是否有足够证据进入多 source pilot；当前仍不做 SPT/FOMAML。
 

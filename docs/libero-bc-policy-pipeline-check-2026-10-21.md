@@ -78,7 +78,7 @@ Policy 有 821,703 个参数。它是 pre-pilot 候选，不是已接受的最�
 CPU 环境中的定向测试为 `15 passed, 1 skipped`，其中跳过的是缺少 h5py 的真实 HDF5 fixture；联合 `libero-kecrl` 环境为 `16 passed`。更新访问状态后重新执行完整 transfer audit，10/10 任务通过，两个状态命名空间仍为零个完全相同 raw state。下一步应按以下顺序进行：
 
 1. 实现确定性的 source 多任务 sampler、训练步数核算、validation query 评估和 checkpoint 选择日志；
-2. 单 source SPI 固定预算和闭环归因已经完成：专家动作重放 6/6，但 Policy 在 demo/官方初态均不稳定；同时确认 HDF5 同索引 observation 位于 action 之后，原 query MSE 不是因果控制指标，详见 [`libero-single-spi-bc-learnability-diagnostic-2026-10-21.md`](libero-single-spi-bc-learnability-diagnostic-2026-10-21.md) 与 [`libero-bc-closed-loop-attribution-2026-10-21.md`](libero-bc-closed-loop-attribution-2026-10-21.md)。causal pre-action 数据视图和匹配双臂 runner 已实现并完成回归；对照实验仍待 CUDA 资源空闲后执行，详见 [`libero-bc-causal-alignment-diagnostic-2026-10-22.md`](libero-bc-causal-alignment-diagnostic-2026-10-22.md)；
+2. 单 source SPI 固定预算、闭环归因和 causal pre-action 对照已完成：专家动作回放 6/6，因果臂闭环 0/9，未能解释闭环失败。当前聚焦 GRU 短窗口训练与连续推理的状态差异，详见 [`libero-bc-causal-alignment-diagnostic-2026-10-22.md`](libero-bc-causal-alignment-diagnostic-2026-10-22.md)；
 3. 再做全部 source SPI 的 BC pretraining 与两个 validation SPI 的有限 support 适应曲线，校准学习率、窗口和预算；
 4. 只有 BC 学习边界稳定后，才实现 candidate SPT 的 FOMAML 外循环和等数据、等更新预算的 A/B/C；
 5. held-out query 在方法、预算和 checkpoint 规则冻结前继续保持锁定。
