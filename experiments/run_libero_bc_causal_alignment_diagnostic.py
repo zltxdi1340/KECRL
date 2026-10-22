@@ -319,7 +319,7 @@ def _evaluate_arm(
 
 
 @torch.no_grad()
-def _evaluate_continuous_hidden_teacher_forced(
+def _evaluate_hidden_state_teacher_forced(
     *,
     model: LiberoBCPolicy,
     dataset: RoleRestrictedLiberoSequenceDataset,
@@ -327,8 +327,8 @@ def _evaluate_continuous_hidden_teacher_forced(
 ) -> dict[str, Any]:
     was_training = model.training
     model.eval()
-    overall: dict[str, float] = {}
-    by_window: dict[int, dict[str, float]] = {}
+    overall = {mode: {} for mode in ("continuous", "reset_each_window")}
+    by_window = {mode: {} for mode in ("continuous", "reset_each_window")}
     current_demonstration = None
     hidden = None
     try:
@@ -348,31 +348,47 @@ def _evaluate_continuous_hidden_teacher_forced(
                     "valid_mask",
                 )
             }
-            predictions, hidden = model.forward_sequence(
+            continuous_predictions, hidden = model.forward_sequence(
                 batch["agentview_rgb"],
                 batch["eye_in_hand_rgb"],
                 batch["joint_states"],
                 batch["gripper_states"],
                 hidden=hidden,
             )
-            window_metrics = _metric_sums(
-                predictions, batch["actions"], batch["valid_mask"]
+            reset_predictions, _reset_hidden = model.forward_sequence(
+                batch["agentview_rgb"],
+                batch["eye_in_hand_rgb"],
+                batch["joint_states"],
+                batch["gripper_states"],
+                hidden=None,
             )
             hidden = hidden.detach()
             window_number = window.start // dataset.stride
-            bucket = by_window.setdefault(window_number, {})
-            for key, value in window_metrics.items():
-                overall[key] = overall.get(key, 0.0) + value
-                bucket[key] = bucket.get(key, 0.0) + value
+            for mode, predictions in (
+                ("continuous", continuous_predictions),
+                ("reset_each_window", reset_predictions),
+            ):
+                window_metrics = _metric_sums(
+                    predictions, batch["actions"], batch["valid_mask"]
+                )
+                bucket = by_window[mode].setdefault(window_number, {})
+                for key, value in window_metrics.items():
+                    overall[mode][key] = overall[mode].get(key, 0.0) + value
+                    bucket[key] = bucket.get(key, 0.0) + value
     finally:
         model.train(was_training)
     return {
-        "evaluation": "teacher_forced_full_demonstration_continuous_hidden",
+        "evaluation": "paired_teacher_forced_continuous_vs_reset_each_training_window",
         "demonstration_count": len(set(window.demonstration_index for window in dataset.windows)),
-        "overall": _finish_metrics(overall),
-        "by_window_number": {
-            str(window_number): _finish_metrics(values)
-            for window_number, values in sorted(by_window.items())
+        "by_hidden_mode": {
+            mode: {
+                "overall": _finish_metrics(overall[mode]),
+                "by_window_number": {
+                    str(window_number): _finish_metrics(values)
+                    for window_number, values in sorted(by_window[mode].items())
+                },
+            }
+            for mode in ("continuous", "reset_each_window")
         },
     }
 
@@ -596,7 +612,7 @@ def run_diagnostic(config_path: Path, dataset_root: Path, device_name: str) -> d
                     evaluation["support_demonstration_role"],
                     evaluation["query_demonstration_role"],
                 ):
-                    teacher_forced_metrics[role] = _evaluate_continuous_hidden_teacher_forced(
+                    teacher_forced_metrics[role] = _evaluate_hidden_state_teacher_forced(
                         model=model,
                         dataset=view_datasets[("causal_pre_action", role)],
                         device=device,
@@ -677,7 +693,7 @@ def run_diagnostic(config_path: Path, dataset_root: Path, device_name: str) -> d
                 "training_access": train_dataset.access_record,
                 "training": training_result,
                 "offline_metrics_by_evaluation_view": offline,
-                "continuous_hidden_teacher_forced_causal_metrics": teacher_forced_metrics,
+                "hidden_state_teacher_forced_causal_metrics": teacher_forced_metrics,
                 "policy_rollouts": policy_results,
             }
 

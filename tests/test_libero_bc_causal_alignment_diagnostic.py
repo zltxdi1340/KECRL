@@ -113,10 +113,14 @@ def test_continuous_teacher_forcing_carries_hidden_within_demo_and_resets_betwee
             actions = values.expand(-1, -1, 7)
             return actions, values[:, -1:, :].transpose(0, 1)
 
-    result = diagnostic._evaluate_continuous_hidden_teacher_forced(
+    result = diagnostic._evaluate_hidden_state_teacher_forced(
         model=AccumulatingPolicy(), dataset=Dataset(), device=torch.device("cpu")
     )
 
     assert result["demonstration_count"] == 2
-    assert result["by_window_number"]["0"]["mse"] == pytest.approx(2.5)
-    assert result["by_window_number"]["1"]["mse"] == pytest.approx(12.5)
+    continuous = result["by_hidden_mode"]["continuous"]["by_window_number"]
+    reset = result["by_hidden_mode"]["reset_each_window"]["by_window_number"]
+    assert continuous["0"]["mse"] == pytest.approx(2.5)
+    assert continuous["1"]["mse"] == pytest.approx(12.5)
+    assert reset["0"]["mse"] == pytest.approx(2.5)
+    assert reset["1"]["mse"] == pytest.approx(2.5)
