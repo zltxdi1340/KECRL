@@ -49,7 +49,33 @@
 
 **诊断判断。** 关节与图像偏差在夹爪首次符号分歧前已经增加；最初 10 步可见非零平移动作误差和小幅状态偏移，20--30 步仍无夹爪符号错误，但关节漂移已增至 `0.165`。这排除了“夹爪首次分歧是所有轨迹偏移的起点”这一简单解释，支持“连续平移动作误差先把自由执行带离示教状态，后续偏移继续累积”的工作假设。它仍是观测相关性：RGB、动作预测、控制响应和状态分布在本诊断中没有被独立干预，不能据此判定视觉网络或动作头就是根因。尤其 eye-in-hand RGB 的误差是像素强度尺度上的 MAE，不能直接解释成空间误差。
 
-下一项是局部单步反事实诊断，协议已实现，尚未运行：固定当前 causal Policy 和六个已开放 demo，在专家轨迹的 `0/10/20/30/40/50` 步及 v2 中观察到的首次夹爪分歧处，从相同专家前缀重放到同一 pre-action 状态，再分别执行专家动作和 Policy 预测动作，比较紧邻的一步 joint/gripper 与 RGB 变化。两条独立重放的 pre-action joint/gripper 必须在 `1e-6` 内相同且 RGB 必须完全相同，否则 fail closed。配置见 [`one-step counterfactual diagnostic`](../configs/libero_spatial_bc_one_step_counterfactual_diagnostic_v1.json)。它将估计“在同一状态下，当前预测动作误差会造成多大即时环境偏差”，但仍不用于训练、选模型或资格评估。若即时偏差集中在平移通道，再检查输出尺度/控制频率；若单步影响小而长程自由轨迹仍快速分离，则下一步查视觉观测和闭环状态覆盖。
+局部单步反事实诊断的协议和结果见下节。它固定当前 causal Policy 和六个已开放 demo，在专家轨迹的 `0/10/20/30/40/50` 步及 v2 中观察到的首次夹爪分歧处，从相同专家前缀重放到同一 pre-action 状态，再分别执行专家动作和 Policy 预测动作。两条独立重放的 pre-action joint、gripper 和 RGB 必须完全一致，否则 fail closed。
+## 局部单步反事实结果（2026-10-23）
+
+该检查已完成。它只重建锁定的 causal Policy，不进行 checkpoint 选择，不访问 official candidate、validation、held-out 或 qualification 状态。
+
+- 配置：[one-step counterfactual diagnostic](../configs/libero_spatial_bc_one_step_counterfactual_diagnostic_v1.json)，SHA-256 `6912496afe6f6e95f2cc60c5ca76096b9032980de40edec5db346fc2e1bd372b`。
+- 结果：`/tmp/libero-bc-one-step-counterfactual-20261023-v1.json`，SHA-256 `949dd2fd9d54d6c53c4a045abcc0fc596f70b4f5fedc9466155a58ac43ba3f75`。
+- 代码提交：`779cf67098d1f6c4e43afaa6a4a2411d795cdc70`；CUDA `cuda:1` / RTX 4090；耗时 `237.17s`。
+- 两个训练 arm 仍各执行 500 updates，均消费 `37,534` 个有效动作步；causal arm 的最终 Policy SHA-256 与锁定值一致。
+- 六个 support/query demonstration 共 41 个目标位置。每个位置分别重放专家动作和 Policy 动作；两次重放的 pre-action joint、gripper、agentview RGB、eye-in-hand RGB 差异全部为 `0`，说明分叉发生在同一可复现观测状态。
+
+所有目标位置的汇总如下：
+
+| 指标 | 平均 | 最大 |
+|---|---:|---:|
+| 七维动作 MAE | 0.1319 | 0.3398 |
+| 动作 L2 | 0.5522 | 1.9194 |
+| 单步后 joint 状态间隙 L2 | 0.00674 | 0.01678 |
+| 单步后 gripper 状态间隙 L2 | 0.000102 | 0.000527 |
+| 下一步 agentview RGB MAE | 0.505 | 1.502 |
+| 下一步 eye-in-hand RGB MAE | 4.092 | 9.570 |
+
+按目标时间段汇总，`0--20` 步的动作 MAE / joint 间隙 / eye-in-hand RGB MAE 为 `0.078 / 0.00439 / 2.32`；`20--30` 步为 `0.117 / 0.00617 / 3.14`；`30--40` 步为 `0.189 / 0.00761 / 5.62`；`40--60` 步为 `0.140 / 0.00859 / 4.94`。因此中段动作偏差和单步视觉变化更大，但并非所有指标随时间单调增加。
+
+六条轨迹的首次夹爪符号分歧处均有可见夹爪即时响应：夹爪状态间隙约 `0.00049--0.00053`。然而这些单步 joint 间隙仍明显小于前一轮自由 rollout 在专家时域上的平均关节漂移 `0.338`，单步 eye-in-hand RGB 间隙也小于自由 rollout 的平均 `27.51`。这说明环境对单个动作差异的即时响应是可测的，但不能单独解释长程失败；长程失败仍需要考虑连续动作误差、视觉观测分布变化和 Policy 离开示教状态后的闭环反馈。
+
+**当前判断。** 已排除“前缀重放不一致”这一诊断污染源，也确认夹爪分歧在其发生位置会改变夹爪状态。当前证据支持“早期平移动作误差与后续闭环状态偏移共同作用”的工作模型，不支持先把根因归结为 GRU 或单独的夹爪 head。下一步应在固定 causal Policy 上比较专家状态输入与自由状态输入的动作差异，直接测量离开专家状态后 Policy 输出是否发生额外偏移；仍不进行 SPT/FOMAML、Knowledge 更新或 Module qualification。
 
 ## 隐藏态模式与闭环成功
 
@@ -84,4 +110,4 @@
 
 ## 后续诊断
 
-这些仍是行为误差传播诊断，不是改 GRU 架构或扩大训练预算。单步反事实完成后再决定是否有必要单独试验离散夹爪 head；当前证据不支持先做夹爪头改造。基础单 SPI 未稳定前仍不开始 FOMAML / A-B/C，也不注册 Module。
+这些仍是行为误差传播诊断，不是改 GRU 架构或扩大训练预算。下一项比较固定 causal Policy 在专家状态输入与受控 free-run 状态输入下的动作差异，判断离开示教状态后是否出现额外输出偏移；在该结果出来前不单独试验离散夹爪 head。基础单 SPI 未稳定前仍不开始 FOMAML / A-B/C，也不注册 Module。

@@ -61,7 +61,7 @@ validation、held-out、qualification 初态均不访问；不选 checkpoint、�
 
 ## 下一步诊断
 
-隐藏态诊断以及冻结 causal Policy 的六初态逐步动作/状态偏差追踪均已完成，结果见 [`libero-bc-hidden-state-diagnostic-2026-10-22.md`](libero-bc-hidden-state-diagnostic-2026-10-22.md)。自由 rollout 的关节漂移在首次夹爪符号分歧前已出现；下一步是匹配专家状态的局部单步反事实追踪，以估计动作预测差异产生的即时环境影响。当前不进行 SPT/FOMAML、Knowledge 更新或 Module qualification。
+隐藏态诊断、冻结 causal Policy 的六初态逐步动作/状态偏差追踪以及局部单步反事实追踪均已完成，结果见 [`libero-bc-hidden-state-diagnostic-2026-10-22.md`](libero-bc-hidden-state-diagnostic-2026-10-22.md)。单步反事实确认两次专家前缀重放完全一致，并测到动作差异产生的即时 joint/gripper/RGB 响应；其量级小于自由 rollout 的长程漂移，因此下一步检查离开专家状态后 Policy 输出是否额外偏移。当前不进行 SPT/FOMAML、Knowledge 更新或 Module qualification。
 
 结果可由已提交配置和 runner 重现；输出文件已存在时请使用新的 `--output` 路径：
 
