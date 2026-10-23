@@ -83,6 +83,29 @@ def test_hidden_state_protocol_pins_v1_models_and_unique_modes(tmp_path, monkeyp
         diagnostic.load_comparison_config(path)
 
 
+def test_one_step_protocol_requires_the_exact_authorized_target_schedule(tmp_path, monkeypatch):
+    monkeypatch.setattr(diagnostic, "_load_protocols", lambda _path: _protocol_stubs())
+    config_path = diagnostic.ROOT / "configs/libero_spatial_bc_one_step_counterfactual_diagnostic_v1.json"
+    config = json.loads(config_path.read_text())
+    path = tmp_path / "one_step.json"
+    path.write_text(json.dumps(config))
+
+    loaded = diagnostic.load_comparison_config(path)
+    assert loaded[0]["diagnostic_mode"] == "one_step_counterfactual_only"
+    assert loaded[0]["one_step_counterfactual"]["evaluation_arm"] == "causal_pre_action"
+
+    config["one_step_counterfactual"]["target_steps_by_demonstration"].pop("32")
+    path.write_text(json.dumps(config))
+    with pytest.raises(ValueError, match="cover exactly the authorized demonstrations"):
+        diagnostic.load_comparison_config(path)
+
+    config = json.loads(config_path.read_text())
+    config["one_step_counterfactual"]["target_steps_by_demonstration"]["0"] = [10, 0]
+    path.write_text(json.dumps(config))
+    with pytest.raises(ValueError, match="sorted unique nonnegative integers"):
+        diagnostic.load_comparison_config(path)
+
+
 def test_continuous_teacher_forcing_carries_hidden_within_demo_and_resets_between_demos():
     class Window:
         def __init__(self, demonstration_index, start):
@@ -163,3 +186,97 @@ def test_trajectory_error_summary_tracks_action_and_state_drift_by_time_bin():
         2 * np.sqrt(7)
     )
     assert result["free_rollout_state_drift_on_expert_horizon"]["agentview_rgb_mae"] == pytest.approx(1.0)
+
+
+def test_one_step_counterfactual_branches_from_reproduced_expert_prefix():
+    class Policy(torch.nn.Module):
+        def forward_step(self, _agent, _hand, _joints, _gripper, hidden=None):
+            action = torch.zeros((1, 7))
+            action[0, 0] = 0.25
+            return action, hidden
+
+    class Adapter:
+        def __init__(self):
+            self.joints = np.zeros(7, dtype=np.float32)
+            self.gripper = np.zeros(2, dtype=np.float32)
+
+        def _observation(self):
+            pixel = np.uint8(np.clip(round(self.joints[0] * 10), 0, 255))
+            return {
+                "agentview_rgb": np.full((2, 2, 3), pixel, dtype=np.uint8),
+                "eye_in_hand_rgb": np.full((2, 2, 3), pixel, dtype=np.uint8),
+                "joint_states": self.joints.copy(),
+                "gripper_states": self.gripper.copy(),
+            }
+
+        def reset(self, *, initial_state_index):
+            assert initial_state_index == 0
+            self.joints.fill(0.0)
+            self.gripper.fill(0.0)
+            return self._observation(), {}
+
+        def step(self, action):
+            self.joints += np.asarray(action, dtype=np.float32)[:7]
+            return self._observation(), 0.0, False, False, {"success": False, "terminal_reason": None}
+
+    expert_actions = np.zeros((2, 7), dtype=np.float32)
+    expert_actions[:, 0] = 0.1
+    trajectory = {"demonstration_index": 0, "actions": expert_actions}
+    result = diagnostic.evaluate_one_step_counterfactual(
+        model=Policy(),
+        adapter=Adapter(),
+        trajectories=[trajectory],
+        source_indices=(0,),
+        target_steps_by_demonstration={"0": [0, 1]},
+        pre_state_tolerances={"joint_linf": 1e-6, "gripper_linf": 1e-6, "rgb_mae": 0.0},
+        device=torch.device("cpu"),
+    )
+
+    assert result[0]["target_count"] == 2
+    assert result[0]["targets"][0]["pre_state_reproduction"]["agentview_rgb_mae"] == 0.0
+    assert result[0]["targets"][0]["policy_action_reproduction_linf"] == 0.0
+    assert result[0]["targets"][0]["one_step_response"]["joint_delta_difference_l2"] == pytest.approx(0.15)
+    assert result[0]["targets"][0]["one_step_response"]["joint_next_state_gap_l2"] == pytest.approx(0.15)
+
+
+def test_one_step_counterfactual_fails_closed_when_prefix_replay_differs():
+    class Policy(torch.nn.Module):
+        def forward_step(self, _agent, _hand, _joints, _gripper, hidden=None):
+            return torch.zeros((1, 7)), hidden
+
+    class NondeterministicAdapter:
+        def __init__(self):
+            self.reset_count = 0
+
+        def reset(self, *, initial_state_index):
+            assert initial_state_index == 0
+            self.reset_count += 1
+            joints = np.full(7, self.reset_count * 0.01, dtype=np.float32)
+            self.gripper = np.zeros(2, dtype=np.float32)
+            self.rgb = np.zeros((2, 2, 3), dtype=np.uint8)
+            return {
+                "agentview_rgb": self.rgb.copy(),
+                "eye_in_hand_rgb": self.rgb.copy(),
+                "joint_states": joints,
+                "gripper_states": self.gripper.copy(),
+            }, {}
+
+        def step(self, _action):
+            observation = {
+                "agentview_rgb": self.rgb.copy(),
+                "eye_in_hand_rgb": self.rgb.copy(),
+                "joint_states": np.full(7, self.reset_count * 0.01, dtype=np.float32),
+                "gripper_states": self.gripper.copy(),
+            }
+            return observation, 0.0, False, False, {"success": False, "terminal_reason": None}
+
+    with pytest.raises(RuntimeError, match="do not reproduce the same pre-action observation"):
+        diagnostic.evaluate_one_step_counterfactual(
+            model=Policy(),
+            adapter=NondeterministicAdapter(),
+            trajectories=[{"demonstration_index": 0, "actions": np.zeros((1, 7), dtype=np.float32)}],
+            source_indices=(0,),
+            target_steps_by_demonstration={"0": [0]},
+            pre_state_tolerances={"joint_linf": 1e-6, "gripper_linf": 1e-6, "rgb_mae": 0.0},
+            device=torch.device("cpu"),
+        )

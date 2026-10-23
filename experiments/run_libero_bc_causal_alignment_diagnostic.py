@@ -118,6 +118,51 @@ def load_comparison_config(path: Path) -> tuple[dict[str, Any], ...]:
         evaluation_arms = tuple(action_divergence.get("evaluation_arms", ()))
         if not evaluation_arms or any(name not in ALIGNMENTS for name in evaluation_arms):
             raise ValueError("action divergence evaluation arms must be a nonempty subset of the two fixed arms")
+    one_step = comparison.get("one_step_counterfactual", {})
+    one_step_enabled = one_step.get("enabled", False)
+    if one_step_enabled is not True and one_step_enabled is not False:
+        raise ValueError("one-step counterfactual enabled flag must be boolean")
+    if one_step_enabled:
+        if one_step.get("require_pinned_final_hashes") is not True:
+            raise ValueError("one-step counterfactual requires pinned Policy weights")
+        if one_step.get("evaluation_arm") not in ALIGNMENTS:
+            raise ValueError("one-step counterfactual arm is invalid")
+        if comparison.get("expected_final_model_sha256_by_arm", {}).get(
+            one_step["evaluation_arm"]
+        ) is None:
+            raise ValueError("one-step counterfactual Policy must have a pinned final hash")
+        if int(one_step.get("replay_repetitions", 0)) != 2:
+            raise ValueError("one-step counterfactual requires two independently replayed branches")
+        targets = one_step.get("target_steps_by_demonstration", {})
+        expected_demos = {
+            str(index)
+            for index in (
+                *evaluation["support_demonstration_indices_for_rollout"],
+                *evaluation["query_demonstration_indices_for_rollout"],
+            )
+        }
+        if set(targets) != expected_demos:
+            raise ValueError("one-step target schedule must cover exactly the authorized demonstrations")
+        for demonstration_index, steps in targets.items():
+            if (
+                not isinstance(steps, list)
+                or not steps
+                or any(isinstance(step, bool) or not isinstance(step, int) or step < 0 for step in steps)
+                or steps != sorted(set(steps))
+            ):
+                raise ValueError(
+                    f"one-step target steps for demo {demonstration_index} must be sorted unique nonnegative integers"
+                )
+        tolerances = one_step.get("pre_state_tolerances", {})
+        if (
+            float(tolerances.get("joint_linf", -1.0)) < 0
+            or float(tolerances.get("gripper_linf", -1.0)) < 0
+            or float(tolerances.get("rgb_mae", -1.0)) < 0
+        ):
+            raise ValueError("one-step pre-state tolerances must be nonnegative")
+        if comparison.get("diagnostic_mode") == "one_step_counterfactual_only":
+            if action_divergence_enabled or evaluation.get("continuous_hidden_teacher_forced") is not False:
+                raise ValueError("one-step-only mode cannot run the previous divergence evaluations")
     return comparison, base, policy, transfer, family, dataset
 
 
@@ -620,6 +665,193 @@ def evaluate_paired_action_divergence(
     return results
 
 
+def _observation_difference(
+    first: Mapping[str, np.ndarray], second: Mapping[str, np.ndarray]
+) -> dict[str, float]:
+    return {
+        "joint_linf": float(np.max(np.abs(first["joint_states"] - second["joint_states"]))),
+        "joint_l2": float(np.linalg.norm(first["joint_states"] - second["joint_states"])),
+        "gripper_linf": float(np.max(np.abs(first["gripper_states"] - second["gripper_states"]))),
+        "gripper_l2": float(np.linalg.norm(first["gripper_states"] - second["gripper_states"])),
+        "agentview_rgb_mae": float(
+            np.abs(first["agentview_rgb"].astype(np.float32) - second["agentview_rgb"].astype(np.float32)).mean()
+        ),
+        "eye_in_hand_rgb_mae": float(
+            np.abs(first["eye_in_hand_rgb"].astype(np.float32) - second["eye_in_hand_rgb"].astype(np.float32)).mean()
+        ),
+    }
+
+
+def _replay_expert_prefix_and_step(
+    *,
+    model: LiberoBCPolicy,
+    adapter: LiberoEnvironmentAdapter,
+    trajectory: Mapping[str, Any],
+    initial_state_index: int,
+    target_step: int,
+    execute_policy_action: bool,
+    device: torch.device,
+) -> dict[str, Any]:
+    observation, _ = adapter.reset(initial_state_index=initial_state_index)
+    hidden = None
+    reward_before = 0.0
+    actions = np.asarray(trajectory["actions"], dtype=np.float32)
+    for step, expert_action in enumerate(actions[: target_step + 1]):
+        policy_action, hidden = model.forward_step(
+            *_online_tensors(observation, device), hidden=hidden
+        )
+        policy_action = policy_action[0].cpu().numpy().astype(np.float32)
+        if step == target_step:
+            selected_action = policy_action if execute_policy_action else expert_action
+            next_observation, reward, terminated, truncated, info = adapter.step(selected_action)
+            return {
+                "pre_observation": observation,
+                "post_observation": next_observation,
+                "policy_action": policy_action,
+                "expert_action": np.asarray(expert_action, dtype=np.float32).copy(),
+                "executed_action": np.asarray(selected_action, dtype=np.float32).copy(),
+                "reward_before": reward_before,
+                "reward_at_target": float(reward),
+                "terminated_at_target": bool(terminated),
+                "truncated_at_target": bool(truncated),
+                "terminal_reason": info.get("terminal_reason"),
+                "success": bool(info.get("success", False)),
+            }
+        observation, reward, terminated, truncated, info = adapter.step(expert_action)
+        reward_before += float(reward)
+        if terminated or truncated:
+            raise RuntimeError(
+                f"expert replay terminated before configured target step {target_step}: {info}"
+            )
+    raise RuntimeError("one-step counterfactual did not reach its target action")
+
+
+@torch.no_grad()
+def evaluate_one_step_counterfactual(
+    *,
+    model: LiberoBCPolicy,
+    adapter: LiberoEnvironmentAdapter,
+    trajectories: list[dict[str, Any]],
+    source_indices: tuple[int, ...],
+    target_steps_by_demonstration: Mapping[str, list[int]],
+    pre_state_tolerances: Mapping[str, float],
+    device: torch.device,
+) -> list[dict[str, Any]]:
+    if len(trajectories) != len(source_indices):
+        raise ValueError("counterfactual trajectories and initial states must align")
+    was_training = model.training
+    model.eval()
+    results = []
+    try:
+        for local_index, (source_index, trajectory) in enumerate(zip(source_indices, trajectories)):
+            demonstration_index = int(trajectory["demonstration_index"])
+            target_steps = target_steps_by_demonstration[str(demonstration_index)]
+            comparisons = []
+            for target_step in target_steps:
+                expert_branch = _replay_expert_prefix_and_step(
+                    model=model,
+                    adapter=adapter,
+                    trajectory=trajectory,
+                    initial_state_index=local_index,
+                    target_step=target_step,
+                    execute_policy_action=False,
+                    device=device,
+                )
+                policy_branch = _replay_expert_prefix_and_step(
+                    model=model,
+                    adapter=adapter,
+                    trajectory=trajectory,
+                    initial_state_index=local_index,
+                    target_step=target_step,
+                    execute_policy_action=True,
+                    device=device,
+                )
+                pre_state_difference = _observation_difference(
+                    expert_branch["pre_observation"], policy_branch["pre_observation"]
+                )
+                if (
+                    pre_state_difference["joint_linf"] > float(pre_state_tolerances["joint_linf"])
+                    or pre_state_difference["gripper_linf"] > float(pre_state_tolerances["gripper_linf"])
+                    or max(
+                        pre_state_difference["agentview_rgb_mae"],
+                        pre_state_difference["eye_in_hand_rgb_mae"],
+                    ) > float(pre_state_tolerances["rgb_mae"])
+                ):
+                    raise RuntimeError(
+                        "expert-prefix replay branches do not reproduce the same pre-action observation "
+                        f"at demo {demonstration_index}, step {target_step}: {pre_state_difference}"
+                    )
+
+                expert_pre = expert_branch["pre_observation"]
+                policy_pre = policy_branch["pre_observation"]
+                expert_post = expert_branch["post_observation"]
+                policy_post = policy_branch["post_observation"]
+                expert_joint_change = expert_post["joint_states"] - expert_pre["joint_states"]
+                policy_joint_change = policy_post["joint_states"] - policy_pre["joint_states"]
+                expert_gripper_change = expert_post["gripper_states"] - expert_pre["gripper_states"]
+                policy_gripper_change = policy_post["gripper_states"] - policy_pre["gripper_states"]
+                comparisons.append(
+                    {
+                        "target_step": int(target_step),
+                        "prefix_steps": int(target_step),
+                        "pre_state_reproduction": pre_state_difference,
+                        "policy_action_reproduction_linf": float(
+                            np.max(np.abs(expert_branch["policy_action"] - policy_branch["policy_action"]))
+                        ),
+                        "expert_action": expert_branch["expert_action"].tolist(),
+                        "policy_action": policy_branch["policy_action"].tolist(),
+                        "action_difference": (
+                            policy_branch["policy_action"] - expert_branch["expert_action"]
+                        ).tolist(),
+                        "one_step_response": {
+                            "expert_joint_delta": expert_joint_change.tolist(),
+                            "policy_joint_delta": policy_joint_change.tolist(),
+                            "joint_delta_difference_l2": float(
+                                np.linalg.norm(policy_joint_change - expert_joint_change)
+                            ),
+                            "joint_next_state_gap_l2": float(
+                                np.linalg.norm(policy_post["joint_states"] - expert_post["joint_states"])
+                            ),
+                            "expert_gripper_delta": expert_gripper_change.tolist(),
+                            "policy_gripper_delta": policy_gripper_change.tolist(),
+                            "gripper_delta_difference_l2": float(
+                                np.linalg.norm(policy_gripper_change - expert_gripper_change)
+                            ),
+                            "gripper_next_state_gap_l2": float(
+                                np.linalg.norm(policy_post["gripper_states"] - expert_post["gripper_states"])
+                            ),
+                            "agentview_next_rgb_mae": float(
+                                np.abs(
+                                    policy_post["agentview_rgb"].astype(np.float32)
+                                    - expert_post["agentview_rgb"].astype(np.float32)
+                                ).mean()
+                            ),
+                            "eye_in_hand_next_rgb_mae": float(
+                                np.abs(
+                                    policy_post["eye_in_hand_rgb"].astype(np.float32)
+                                    - expert_post["eye_in_hand_rgb"].astype(np.float32)
+                                ).mean()
+                            ),
+                            "expert_reward": expert_branch["reward_at_target"],
+                            "policy_reward": policy_branch["reward_at_target"],
+                            "expert_terminal_reason": expert_branch["terminal_reason"],
+                            "policy_terminal_reason": policy_branch["terminal_reason"],
+                        },
+                    }
+                )
+            results.append(
+                {
+                    "source_index": int(source_index),
+                    "demonstration_index": demonstration_index,
+                    "target_count": len(comparisons),
+                    "targets": comparisons,
+                }
+            )
+    finally:
+        model.train(was_training)
+    return results
+
+
 def run_diagnostic(config_path: Path, dataset_root: Path, device_name: str) -> dict[str, Any]:
     diagnostic_start_time = time.perf_counter()
     comparison, base, policy_config, transfer, family, dataset_manifest = load_comparison_config(
@@ -637,6 +869,9 @@ def run_diagnostic(config_path: Path, dataset_root: Path, device_name: str) -> d
     seed = int(comparison["seed"])
     policy_spec = policy_config["policy"]
     evaluation = comparison["evaluation"]
+    one_step_spec = comparison.get("one_step_counterfactual", {})
+    one_step_enabled = bool(one_step_spec.get("enabled", False))
+    one_step_only = comparison.get("diagnostic_mode") == "one_step_counterfactual_only"
     hidden_modes = tuple(
         evaluation.get("policy_hidden_modes", (evaluation["policy_hidden_mode"],))
     )
@@ -685,13 +920,15 @@ def run_diagnostic(config_path: Path, dataset_root: Path, device_name: str) -> d
         int(row["task_id"]): row for row in transfer["initial_state_files"]
     }
     initial_row = initial_rows[task_id]
-    official_path = Path(get_libero_path("init_states")) / initial_row["path"]
-    official_states = _capture_official_initial_states(
-        initial_path=official_path,
-        expected_size=int(initial_row["size_bytes"]),
-        expected_sha256=str(initial_row["sha256"]),
-        indices=official_indices,
-    )
+    official_states = None
+    if not one_step_only:
+        official_path = Path(get_libero_path("init_states")) / initial_row["path"]
+        official_states = _capture_official_initial_states(
+            initial_path=official_path,
+            expected_size=int(initial_row["size_bytes"]),
+            expected_sha256=str(initial_row["sha256"]),
+            indices=official_indices,
+        )
 
     initial_state_datasets = {}
     for role in (evaluation["support_demonstration_role"], evaluation["query_demonstration_role"]):
@@ -810,7 +1047,9 @@ def run_diagnostic(config_path: Path, dataset_root: Path, device_name: str) -> d
                 and training_result["final_model_sha256"] != expected_final_hash
             ):
                 raise RuntimeError(f"retrained Policy hash differs from the pinned v1 arm: {name}")
-            offline = _evaluate_arm(model=model, datasets=view_datasets, device=device)
+            offline = None if one_step_only else _evaluate_arm(
+                model=model, datasets=view_datasets, device=device
+            )
 
             teacher_forced_metrics = {}
             if evaluation.get("continuous_hidden_teacher_forced", False):
@@ -825,7 +1064,7 @@ def run_diagnostic(config_path: Path, dataset_root: Path, device_name: str) -> d
                     )
 
             policy_results = {}
-            for hidden_mode in hidden_modes:
+            for hidden_mode in (() if one_step_only else hidden_modes):
                 mode_results = {}
                 for group_name, group_role, indices, state_map in (
                     (
@@ -925,6 +1164,37 @@ def run_diagnostic(config_path: Path, dataset_root: Path, device_name: str) -> d
                     finally:
                         adapter.close()
                     action_divergence_results[group_name] = episodes
+            one_step_results = None
+            if one_step_enabled and name == one_step_spec["evaluation_arm"]:
+                one_step_results = {}
+                for group_name, indices, state_map in (
+                    ("meta_support", support_rollout_indices, support_states),
+                    ("meta_query", query_rollout_indices, query_states),
+                ):
+                    adapter = _new_adapter(
+                        suite=transfer["suite"],
+                        task_id=task_id,
+                        seed=seed,
+                        image_size=int(policy_spec["image_size"]),
+                        max_steps=int(evaluation["max_episode_steps"]),
+                        stabilization_steps=int(evaluation["demonstration_stabilization_steps"]),
+                        states=np.stack([state_map[index] for index in indices]),
+                    )
+                    try:
+                        episodes = evaluate_one_step_counterfactual(
+                            model=model,
+                            adapter=adapter,
+                            trajectories=trajectories[group_name],
+                            source_indices=indices,
+                            target_steps_by_demonstration=one_step_spec[
+                                "target_steps_by_demonstration"
+                            ],
+                            pre_state_tolerances=one_step_spec["pre_state_tolerances"],
+                            device=device,
+                        )
+                    finally:
+                        adapter.close()
+                    one_step_results[group_name] = episodes
             arm_results[name] = {
                 "observation_action_alignment": alignment,
                 "training_access": train_dataset.access_record,
@@ -933,6 +1203,7 @@ def run_diagnostic(config_path: Path, dataset_root: Path, device_name: str) -> d
                 "hidden_state_teacher_forced_causal_metrics": teacher_forced_metrics,
                 "policy_rollouts": policy_results,
                 "paired_action_divergence": action_divergence_results,
+                "one_step_counterfactual": one_step_results,
             }
 
         if len(set(initial_model_digests.values())) != 1:
@@ -970,7 +1241,7 @@ def run_diagnostic(config_path: Path, dataset_root: Path, device_name: str) -> d
                 "base_config_sha256": sha256_file(
                     (ROOT / comparison["base_diagnostic_config"]).resolve()
                 ),
-                "official_initial_state_sha256_verified": True,
+                "official_initial_state_sha256_verified": not one_step_only,
                 "dataset_sha256_verified": all(
                     view_datasets[key].sha256_verified for key in view_datasets
                 ),
@@ -995,6 +1266,8 @@ def run_diagnostic(config_path: Path, dataset_root: Path, device_name: str) -> d
                 "action_divergence_enabled": bool(
                     comparison.get("action_divergence", {}).get("enabled", False)
                 ),
+                "one_step_counterfactual_enabled": one_step_enabled,
+                "official_initial_states_accessed": not one_step_only,
                 "support_role": evaluation["support_demonstration_role"],
                 "support_demonstrations": len(support_indices),
                 "support_training_indices": list(support_indices),
