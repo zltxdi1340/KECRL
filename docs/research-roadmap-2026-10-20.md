@@ -88,3 +88,7 @@ RoboCasa365 是联合验证环境，不是早期调参环境。先冻结一个�
 - Continual World 尚未在本仓库中启动正式实验。
 - RoboCasa365 尚未进入正式训练，需先完成环境安装、接口适配和小规模协议预检。
 - 本路线是研究设计冻结候选，不是正式实验结果。
+
+### LIBERO 当前诊断项
+
+逐步动作漂移与局部单步反事实诊断已完成，结果汇总见 [`LIBERO 隐藏态与状态偏移诊断记录`](libero-bc-hidden-state-diagnostic-2026-10-22.md)。下一项配置已建立：在六个已开放 support/query demonstration 的固定时点，从同一专家前缀状态分成 expert-action 和 Policy-action 两臂，在共同的 recurrent hidden 下分别跟踪状态；并于后续每一步比较同一 hidden 下的状态条件动作偏移、自由 hidden 下的总动作偏移及 hidden 演化额外项。追踪 horizon 为 1/3/5 步，前缀观测和 hidden 不一致时 fail closed。配置为 [`state-distribution-shift diagnostic`](../configs/libero_spatial_bc_state_distribution_shift_diagnostic_v1.json)，尚未运行；不访问 official candidate、validation、held-out 或 qualification，不训练或选模型。

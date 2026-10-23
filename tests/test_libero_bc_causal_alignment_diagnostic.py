@@ -106,6 +106,29 @@ def test_one_step_protocol_requires_the_exact_authorized_target_schedule(tmp_pat
         diagnostic.load_comparison_config(path)
 
 
+def test_state_shift_protocol_requires_sorted_horizons_and_authorized_targets(tmp_path, monkeypatch):
+    monkeypatch.setattr(diagnostic, "_load_protocols", lambda _path: _protocol_stubs())
+    config_path = diagnostic.ROOT / "configs/libero_spatial_bc_state_distribution_shift_diagnostic_v1.json"
+    config = json.loads(config_path.read_text())
+    path = tmp_path / "state_shift.json"
+    path.write_text(json.dumps(config))
+
+    loaded = diagnostic.load_comparison_config(path)
+    assert loaded[0]["diagnostic_mode"] == "state_distribution_shift_only"
+    assert loaded[0]["state_distribution_shift"]["free_run_horizon_steps"] == [1, 3, 5]
+
+    config["state_distribution_shift"]["free_run_horizon_steps"] = [3, 1]
+    path.write_text(json.dumps(config))
+    with pytest.raises(ValueError, match="sorted unique positive integers"):
+        diagnostic.load_comparison_config(path)
+
+    config = json.loads(config_path.read_text())
+    config["state_distribution_shift"]["target_steps_by_demonstration"].pop("32")
+    path.write_text(json.dumps(config))
+    with pytest.raises(ValueError, match="cover exactly the authorized demonstrations"):
+        diagnostic.load_comparison_config(path)
+
+
 def test_continuous_teacher_forcing_carries_hidden_within_demo_and_resets_between_demos():
     class Window:
         def __init__(self, demonstration_index, start):
@@ -280,3 +303,67 @@ def test_one_step_counterfactual_fails_closed_when_prefix_replay_differs():
             pre_state_tolerances={"joint_linf": 1e-6, "gripper_linf": 1e-6, "rgb_mae": 0.0},
             device=torch.device("cpu"),
         )
+
+
+def test_state_distribution_shift_separates_same_hidden_state_effect_from_free_hidden_effect():
+    class Policy(torch.nn.Module):
+        def forward_step(self, _agent, _hand, joints, _gripper, hidden=None):
+            action = torch.zeros((1, 7), dtype=torch.float32)
+            hidden_value = 0.0 if hidden is None else float(hidden[0, 0, 0])
+            action[0, 0] = joints[0, 0] + 0.2 + 0.5 * hidden_value
+            next_hidden = joints[:, :1].unsqueeze(0)
+            return action, next_hidden
+
+    class Adapter:
+        def __init__(self):
+            self.joints = np.zeros(7, dtype=np.float32)
+            self.gripper = np.zeros(2, dtype=np.float32)
+
+        def _observation(self):
+            pixel = np.uint8(np.clip(round(self.joints[0] * 10), 0, 255))
+            return {
+                "agentview_rgb": np.full((2, 2, 3), pixel, dtype=np.uint8),
+                "eye_in_hand_rgb": np.full((2, 2, 3), pixel, dtype=np.uint8),
+                "joint_states": self.joints.copy(),
+                "gripper_states": self.gripper.copy(),
+            }
+
+        def reset(self, *, initial_state_index):
+            assert initial_state_index == 0
+            self.joints.fill(0.0)
+            self.gripper.fill(0.0)
+            return self._observation(), {}
+
+        def step(self, action):
+            self.joints += np.asarray(action, dtype=np.float32)
+            return self._observation(), 0.0, False, False, {"success": False, "terminal_reason": None}
+
+    result = diagnostic.evaluate_state_distribution_shift(
+        model=Policy(),
+        teacher_adapter=Adapter(),
+        free_adapter=Adapter(),
+        trajectories=[
+            {
+                "demonstration_index": 0,
+                "actions": np.tile(np.asarray([0.1, 0, 0, 0, 0, 0, 0], dtype=np.float32), (3, 1)),
+            }
+        ],
+        source_indices=(0,),
+        target_steps_by_demonstration={"0": [0]},
+        free_run_horizon_steps=(1, 2, 3),
+        pre_state_tolerances={
+            "joint_linf": 1e-6,
+            "gripper_linf": 1e-6,
+            "rgb_mae": 0.0,
+            "hidden_linf": 1e-6,
+        },
+        device=torch.device("cpu"),
+    )
+
+    target = result[0]["targets"][0]
+    assert target["pre_state_reproduction"]["joint_linf"] == 0.0
+    assert target["pre_hidden_reproduction"]["l2"] == 0.0
+    assert target["horizon_results"]["1"][0]["state_conditioned_action_delta"][0] == pytest.approx(0.0)
+    assert target["horizon_results"]["3"][1]["state_conditioned_action_delta"][0] == pytest.approx(0.1)
+    assert target["horizon_results"]["3"][1]["hidden_conditioned_action_delta"][0] == pytest.approx(0.0)
+    assert target["horizon_results"]["3"][2]["hidden_conditioned_action_delta"][0] == pytest.approx(0.05)

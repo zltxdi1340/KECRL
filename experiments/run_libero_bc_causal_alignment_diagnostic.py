@@ -163,6 +163,61 @@ def load_comparison_config(path: Path) -> tuple[dict[str, Any], ...]:
         if comparison.get("diagnostic_mode") == "one_step_counterfactual_only":
             if action_divergence_enabled or evaluation.get("continuous_hidden_teacher_forced") is not False:
                 raise ValueError("one-step-only mode cannot run the previous divergence evaluations")
+    state_shift = comparison.get("state_distribution_shift", {})
+    state_shift_enabled = state_shift.get("enabled", False)
+    if state_shift_enabled is not True and state_shift_enabled is not False:
+        raise ValueError("state-distribution-shift enabled flag must be boolean")
+    if state_shift_enabled:
+        if state_shift.get("require_pinned_final_hashes") is not True:
+            raise ValueError("state-distribution-shift diagnostic requires pinned Policy weights")
+        if state_shift.get("evaluation_arm") not in ALIGNMENTS:
+            raise ValueError("state-distribution-shift diagnostic arm is invalid")
+        if comparison.get("expected_final_model_sha256_by_arm", {}).get(
+            state_shift["evaluation_arm"]
+        ) is None:
+            raise ValueError("state-distribution-shift Policy must have a pinned final hash")
+        horizons = state_shift.get("free_run_horizon_steps", [])
+        if (
+            not isinstance(horizons, list)
+            or not horizons
+            or any(isinstance(step, bool) or not isinstance(step, int) or step < 1 for step in horizons)
+            or horizons != sorted(set(horizons))
+        ):
+            raise ValueError("free-run horizons must be sorted unique positive integers")
+        targets = state_shift.get("target_steps_by_demonstration", {})
+        expected_demos = {
+            str(index)
+            for index in (
+                *evaluation["support_demonstration_indices_for_rollout"],
+                *evaluation["query_demonstration_indices_for_rollout"],
+            )
+        }
+        if set(targets) != expected_demos:
+            raise ValueError("state-shift target schedule must cover exactly the authorized demonstrations")
+        for demonstration_index, steps in targets.items():
+            if (
+                not isinstance(steps, list)
+                or not steps
+                or any(isinstance(step, bool) or not isinstance(step, int) or step < 0 for step in steps)
+                or steps != sorted(set(steps))
+            ):
+                raise ValueError(
+                    f"state-shift target steps for demo {demonstration_index} must be sorted unique nonnegative integers"
+                )
+        tolerances = state_shift.get("pre_state_tolerances", {})
+        if (
+            float(tolerances.get("joint_linf", -1.0)) < 0
+            or float(tolerances.get("gripper_linf", -1.0)) < 0
+            or float(tolerances.get("rgb_mae", -1.0)) < 0
+        ):
+            raise ValueError("state-shift pre-state tolerances must be nonnegative")
+        if comparison.get("diagnostic_mode") == "state_distribution_shift_only":
+            if (
+                action_divergence_enabled
+                or one_step_enabled
+                or evaluation.get("continuous_hidden_teacher_forced") is not False
+            ):
+                raise ValueError("state-shift-only mode cannot run previous divergence evaluations")
     return comparison, base, policy, transfer, family, dataset
 
 
@@ -852,6 +907,212 @@ def evaluate_one_step_counterfactual(
     return results
 
 
+def _hidden_difference(
+    first: torch.Tensor | None, second: torch.Tensor | None
+) -> dict[str, float]:
+    if first is None and second is None:
+        return {"l2": 0.0, "linf": 0.0}
+    if first is None or second is None or first.shape != second.shape:
+        raise RuntimeError("recurrent hidden states have incompatible shapes")
+    delta = (first - second).detach().float()
+    return {
+        "l2": float(torch.linalg.vector_norm(delta).cpu()),
+        "linf": float(delta.abs().max().cpu()),
+    }
+
+
+def _replay_expert_prefix(
+    *,
+    model: LiberoBCPolicy,
+    adapter: LiberoEnvironmentAdapter,
+    trajectory: Mapping[str, Any],
+    initial_state_index: int,
+    target_step: int,
+    device: torch.device,
+) -> tuple[dict[str, np.ndarray], torch.Tensor | None]:
+    if target_step < 0:
+        raise ValueError("state-shift target step must be nonnegative")
+    observation, _ = adapter.reset(initial_state_index=initial_state_index)
+    hidden = None
+    actions = np.asarray(trajectory["actions"], dtype=np.float32)
+    if target_step > len(actions):
+        raise RuntimeError("state-shift target exceeds the stored expert trajectory")
+    for expert_action in actions[:target_step]:
+        _unused_prediction, hidden = model.forward_step(
+            *_online_tensors(observation, device), hidden=hidden
+        )
+        observation, _reward, terminated, truncated, info = adapter.step(expert_action)
+        if terminated or truncated:
+            raise RuntimeError(
+                "expert prefix terminated before the configured state-shift target: "
+                f"{info}"
+            )
+    return observation, hidden
+
+
+@torch.no_grad()
+def evaluate_state_distribution_shift(
+    *,
+    model: LiberoBCPolicy,
+    teacher_adapter: LiberoEnvironmentAdapter,
+    free_adapter: LiberoEnvironmentAdapter,
+    trajectories: list[dict[str, Any]],
+    source_indices: tuple[int, ...],
+    target_steps_by_demonstration: Mapping[str, list[int]],
+    free_run_horizon_steps: tuple[int, ...],
+    pre_state_tolerances: Mapping[str, float],
+    device: torch.device,
+) -> list[dict[str, Any]]:
+    if len(trajectories) != len(source_indices):
+        raise ValueError("state-shift trajectories and initial states must align")
+    if not free_run_horizon_steps or tuple(sorted(set(free_run_horizon_steps))) != tuple(
+        free_run_horizon_steps
+    ):
+        raise ValueError("state-shift horizons must be sorted unique and nonempty")
+    was_training = model.training
+    model.eval()
+    results = []
+    try:
+        for local_index, (source_index, trajectory) in enumerate(zip(source_indices, trajectories)):
+            demonstration_index = int(trajectory["demonstration_index"])
+            target_steps = target_steps_by_demonstration[str(demonstration_index)]
+            target_results = []
+            for target_step in target_steps:
+                teacher_observation, teacher_hidden = _replay_expert_prefix(
+                    model=model,
+                    adapter=teacher_adapter,
+                    trajectory=trajectory,
+                    initial_state_index=local_index,
+                    target_step=target_step,
+                    device=device,
+                )
+                free_observation, free_hidden = _replay_expert_prefix(
+                    model=model,
+                    adapter=free_adapter,
+                    trajectory=trajectory,
+                    initial_state_index=local_index,
+                    target_step=target_step,
+                    device=device,
+                )
+                pre_state_difference = _observation_difference(
+                    teacher_observation, free_observation
+                )
+                pre_hidden_difference = _hidden_difference(teacher_hidden, free_hidden)
+                if (
+                    pre_state_difference["joint_linf"] > float(pre_state_tolerances["joint_linf"])
+                    or pre_state_difference["gripper_linf"] > float(pre_state_tolerances["gripper_linf"])
+                    or max(
+                        pre_state_difference["agentview_rgb_mae"],
+                        pre_state_difference["eye_in_hand_rgb_mae"],
+                    ) > float(pre_state_tolerances["rgb_mae"])
+                    or pre_hidden_difference["linf"] > float(pre_state_tolerances["hidden_linf"])
+                ):
+                    raise RuntimeError(
+                        "expert-prefix branches do not reproduce the same state/hidden input "
+                        f"at demo {demonstration_index}, step {target_step}: "
+                        f"state={pre_state_difference}, hidden={pre_hidden_difference}"
+                    )
+
+                teacher_hidden_now = teacher_hidden
+                free_hidden_now = free_hidden
+                teacher_now = teacher_observation
+                free_now = free_observation
+                step_results = []
+                max_horizon = max(free_run_horizon_steps)
+                for relative_step in range(max_horizon):
+                    absolute_step = target_step + relative_step
+                    if absolute_step >= len(trajectory["actions"]):
+                        raise RuntimeError(
+                            f"state-shift horizon exceeds expert trajectory at demo {demonstration_index}, "
+                            f"step {absolute_step}"
+                        )
+                    teacher_action, next_teacher_hidden = model.forward_step(
+                        *_online_tensors(teacher_now, device), hidden=teacher_hidden_now
+                    )
+                    free_action, next_free_hidden = model.forward_step(
+                        *_online_tensors(free_now, device), hidden=free_hidden_now
+                    )
+                    free_action_with_teacher_hidden, _ = model.forward_step(
+                        *_online_tensors(free_now, device), hidden=teacher_hidden_now
+                    )
+                    teacher_action_np = teacher_action[0].cpu().numpy().astype(np.float32)
+                    free_action_np = free_action[0].cpu().numpy().astype(np.float32)
+                    free_action_with_teacher_hidden_np = (
+                        free_action_with_teacher_hidden[0].cpu().numpy().astype(np.float32)
+                    )
+                    state_conditioned_delta = (
+                        free_action_with_teacher_hidden_np - teacher_action_np
+                    )
+                    combined_delta = free_action_np - teacher_action_np
+                    hidden_conditioned_delta = (
+                        free_action_np - free_action_with_teacher_hidden_np
+                    )
+                    expert_action = np.asarray(
+                        trajectory["actions"][absolute_step], dtype=np.float32
+                    )
+                    teacher_next, teacher_reward, teacher_terminated, teacher_truncated, teacher_info = (
+                        teacher_adapter.step(expert_action)
+                    )
+                    free_next, free_reward, free_terminated, free_truncated, free_info = (
+                        free_adapter.step(free_action_np)
+                    )
+                    step_results.append(
+                        {
+                            "relative_step": int(relative_step),
+                            "absolute_step": int(absolute_step),
+                            "state_gap_before_action": _observation_difference(teacher_now, free_now),
+                            "hidden_gap_before_action": _hidden_difference(
+                                teacher_hidden_now, free_hidden_now
+                            ),
+                            "expert_action": expert_action.tolist(),
+                            "teacher_forced_policy_action": teacher_action_np.tolist(),
+                            "free_policy_action": free_action_np.tolist(),
+                            "free_state_same_hidden_policy_action": free_action_with_teacher_hidden_np.tolist(),
+                            "state_conditioned_action_delta": state_conditioned_delta.tolist(),
+                            "combined_action_delta": combined_delta.tolist(),
+                            "hidden_conditioned_action_delta": hidden_conditioned_delta.tolist(),
+                            "one_step_post_state_gap": _observation_difference(teacher_next, free_next),
+                            "teacher_reward": float(teacher_reward),
+                            "free_reward": float(free_reward),
+                            "teacher_terminal_reason": teacher_info.get("terminal_reason"),
+                            "free_terminal_reason": free_info.get("terminal_reason"),
+                        }
+                    )
+                    teacher_now = teacher_next
+                    free_now = free_next
+                    teacher_hidden_now = next_teacher_hidden
+                    free_hidden_now = next_free_hidden
+                    if teacher_terminated or teacher_truncated or free_terminated or free_truncated:
+                        if relative_step + 1 < max_horizon:
+                            raise RuntimeError(
+                                "state-shift branch terminated before the configured horizon: "
+                                f"demo={demonstration_index}, step={absolute_step}"
+                            )
+                        break
+                selected_steps = {
+                    str(horizon): step_results[:horizon] for horizon in free_run_horizon_steps
+                }
+                target_results.append(
+                    {
+                        "target_step": int(target_step),
+                        "pre_state_reproduction": pre_state_difference,
+                        "pre_hidden_reproduction": pre_hidden_difference,
+                        "horizon_results": selected_steps,
+                    }
+                )
+            results.append(
+                {
+                    "source_index": int(source_index),
+                    "demonstration_index": demonstration_index,
+                    "target_count": len(target_results),
+                    "targets": target_results,
+                }
+            )
+    finally:
+        model.train(was_training)
+    return results
+
+
 def run_diagnostic(config_path: Path, dataset_root: Path, device_name: str) -> dict[str, Any]:
     diagnostic_start_time = time.perf_counter()
     comparison, base, policy_config, transfer, family, dataset_manifest = load_comparison_config(
@@ -872,6 +1133,10 @@ def run_diagnostic(config_path: Path, dataset_root: Path, device_name: str) -> d
     one_step_spec = comparison.get("one_step_counterfactual", {})
     one_step_enabled = bool(one_step_spec.get("enabled", False))
     one_step_only = comparison.get("diagnostic_mode") == "one_step_counterfactual_only"
+    state_shift_spec = comparison.get("state_distribution_shift", {})
+    state_shift_enabled = bool(state_shift_spec.get("enabled", False))
+    state_shift_only = comparison.get("diagnostic_mode") == "state_distribution_shift_only"
+    focused_only = one_step_only or state_shift_only
     hidden_modes = tuple(
         evaluation.get("policy_hidden_modes", (evaluation["policy_hidden_mode"],))
     )
@@ -921,7 +1186,7 @@ def run_diagnostic(config_path: Path, dataset_root: Path, device_name: str) -> d
     }
     initial_row = initial_rows[task_id]
     official_states = None
-    if not one_step_only:
+    if not focused_only:
         official_path = Path(get_libero_path("init_states")) / initial_row["path"]
         official_states = _capture_official_initial_states(
             initial_path=official_path,
@@ -1047,7 +1312,7 @@ def run_diagnostic(config_path: Path, dataset_root: Path, device_name: str) -> d
                 and training_result["final_model_sha256"] != expected_final_hash
             ):
                 raise RuntimeError(f"retrained Policy hash differs from the pinned v1 arm: {name}")
-            offline = None if one_step_only else _evaluate_arm(
+            offline = None if focused_only else _evaluate_arm(
                 model=model, datasets=view_datasets, device=device
             )
 
@@ -1064,7 +1329,7 @@ def run_diagnostic(config_path: Path, dataset_root: Path, device_name: str) -> d
                     )
 
             policy_results = {}
-            for hidden_mode in (() if one_step_only else hidden_modes):
+            for hidden_mode in (() if focused_only else hidden_modes):
                 mode_results = {}
                 for group_name, group_role, indices, state_map in (
                     (
@@ -1195,6 +1460,52 @@ def run_diagnostic(config_path: Path, dataset_root: Path, device_name: str) -> d
                     finally:
                         adapter.close()
                     one_step_results[group_name] = episodes
+            state_shift_results = None
+            if state_shift_enabled and name == state_shift_spec["evaluation_arm"]:
+                state_shift_results = {}
+                for group_name, indices, state_map in (
+                    ("meta_support", support_rollout_indices, support_states),
+                    ("meta_query", query_rollout_indices, query_states),
+                ):
+                    selected_states = np.stack([state_map[index] for index in indices])
+                    teacher_adapter = _new_adapter(
+                        suite=transfer["suite"],
+                        task_id=task_id,
+                        seed=seed,
+                        image_size=int(policy_spec["image_size"]),
+                        max_steps=int(evaluation["max_episode_steps"]),
+                        stabilization_steps=int(evaluation["demonstration_stabilization_steps"]),
+                        states=selected_states,
+                    )
+                    free_adapter = _new_adapter(
+                        suite=transfer["suite"],
+                        task_id=task_id,
+                        seed=seed,
+                        image_size=int(policy_spec["image_size"]),
+                        max_steps=int(evaluation["max_episode_steps"]),
+                        stabilization_steps=int(evaluation["demonstration_stabilization_steps"]),
+                        states=selected_states,
+                    )
+                    try:
+                        episodes = evaluate_state_distribution_shift(
+                            model=model,
+                            teacher_adapter=teacher_adapter,
+                            free_adapter=free_adapter,
+                            trajectories=trajectories[group_name],
+                            source_indices=indices,
+                            target_steps_by_demonstration=state_shift_spec[
+                                "target_steps_by_demonstration"
+                            ],
+                            free_run_horizon_steps=tuple(
+                                int(step) for step in state_shift_spec["free_run_horizon_steps"]
+                            ),
+                            pre_state_tolerances=state_shift_spec["pre_state_tolerances"],
+                            device=device,
+                        )
+                    finally:
+                        teacher_adapter.close()
+                        free_adapter.close()
+                    state_shift_results[group_name] = episodes
             arm_results[name] = {
                 "observation_action_alignment": alignment,
                 "training_access": train_dataset.access_record,
@@ -1204,6 +1515,7 @@ def run_diagnostic(config_path: Path, dataset_root: Path, device_name: str) -> d
                 "policy_rollouts": policy_results,
                 "paired_action_divergence": action_divergence_results,
                 "one_step_counterfactual": one_step_results,
+                "state_distribution_shift": state_shift_results,
             }
 
         if len(set(initial_model_digests.values())) != 1:
@@ -1241,7 +1553,7 @@ def run_diagnostic(config_path: Path, dataset_root: Path, device_name: str) -> d
                 "base_config_sha256": sha256_file(
                     (ROOT / comparison["base_diagnostic_config"]).resolve()
                 ),
-                "official_initial_state_sha256_verified": not one_step_only,
+                "official_initial_state_sha256_verified": not focused_only,
                 "dataset_sha256_verified": all(
                     view_datasets[key].sha256_verified for key in view_datasets
                 ),
@@ -1267,7 +1579,8 @@ def run_diagnostic(config_path: Path, dataset_root: Path, device_name: str) -> d
                     comparison.get("action_divergence", {}).get("enabled", False)
                 ),
                 "one_step_counterfactual_enabled": one_step_enabled,
-                "official_initial_states_accessed": not one_step_only,
+                "state_distribution_shift_enabled": state_shift_enabled,
+                "official_initial_states_accessed": not focused_only,
                 "support_role": evaluation["support_demonstration_role"],
                 "support_demonstrations": len(support_indices),
                 "support_training_indices": list(support_indices),

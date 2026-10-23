@@ -75,7 +75,7 @@
 
 六条轨迹的首次夹爪符号分歧处均有可见夹爪即时响应：夹爪状态间隙约 `0.00049--0.00053`。然而这些单步 joint 间隙仍明显小于前一轮自由 rollout 在专家时域上的平均关节漂移 `0.338`，单步 eye-in-hand RGB 间隙也小于自由 rollout 的平均 `27.51`。这说明环境对单个动作差异的即时响应是可测的，但不能单独解释长程失败；长程失败仍需要考虑连续动作误差、视觉观测分布变化和 Policy 离开示教状态后的闭环反馈。
 
-**当前判断。** 已排除“前缀重放不一致”这一诊断污染源，也确认夹爪分歧在其发生位置会改变夹爪状态。当前证据支持“早期平移动作误差与后续闭环状态偏移共同作用”的工作模型，不支持先把根因归结为 GRU 或单独的夹爪 head。下一步应在固定 causal Policy 上比较专家状态输入与自由状态输入的动作差异，直接测量离开专家状态后 Policy 输出是否发生额外偏移；仍不进行 SPT/FOMAML、Knowledge 更新或 Module qualification。
+**当前判断。** 已排除“前缀重放不一致”这一诊断污染源，也确认夹爪分歧在其发生位置会改变夹爪状态。当前证据支持“早期平移动作误差与后续闭环状态偏移共同作用”的工作模型，不支持先把根因归结为 GRU 或单独的夹爪 head。下一项诊断协议已实现，结果尚未运行：在每个匹配专家前缀处分叉，一条分支继续执行专家动作，另一条执行 Policy 动作；对每个后续自由状态，分别在相同的专家 hidden 和自由分支自己的 hidden 下计算 Policy 输出。第一种比较测量状态变化对动作输出的影响，第二种与第一种之差测量 hidden 演化带来的额外变化。配置见 [`state-distribution-shift diagnostic`](../configs/libero_spatial_bc_state_distribution_shift_diagnostic_v1.json)。它覆盖六条开放 demo 的 `0/10/20/30/40/50` 步目标，并记录 1/3/5 步自由窗口；专家前缀的 joint、gripper、两路 RGB 和 hidden 必须在两套独立环境中复现一致，否则 fail closed。不访问 official candidate、validation、held-out 或 qualification，不改模型、不选 checkpoint；仍不进行 SPT/FOMAML、Knowledge 更新或 Module qualification。
 
 ## 隐藏态模式与闭环成功
 
