@@ -91,4 +91,4 @@ RoboCasa365 是联合验证环境，不是早期调参环境。先冻结一个�
 
 ### LIBERO 当前诊断项
 
-逐步动作漂移与局部单步反事实诊断已完成，结果汇总见 [`LIBERO 隐藏态与状态偏移诊断记录`](libero-bc-hidden-state-diagnostic-2026-10-22.md)。下一项配置已建立：在六个已开放 support/query demonstration 的固定时点，从同一专家前缀状态分成 expert-action 和 Policy-action 两臂，在共同的 recurrent hidden 下分别跟踪状态；并于后续每一步比较同一 hidden 下的状态条件动作偏移、自由 hidden 下的总动作偏移及 hidden 演化额外项。追踪 horizon 为 1/3/5 步，前缀观测和 hidden 不一致时 fail closed。配置为 [`state-distribution-shift diagnostic`](../configs/libero_spatial_bc_state_distribution_shift_diagnostic_v1.json)，尚未运行；不访问 official candidate、validation、held-out 或 qualification，不训练或选模型。
+逐步动作漂移、局部单步反事实和状态分布偏移追踪均已完成，完整结果汇总见 [`LIBERO 隐藏态与状态偏移诊断记录`](libero-bc-hidden-state-diagnostic-2026-10-22.md)。状态分布偏移诊断在六条已开放 support/query demonstration 的 `0/10/20/30/40/50` 步前缀上分叉，1/3/5 步窗口共 324 个比较样本；前缀状态和 hidden 均精确复现。状态条件动作 MAE 在 3/5 步为 `0.002463/0.004928`，hidden 条件动作 MAE 为 `0.000595/0.001997`，说明短窗口内观测状态漂移是较大的可见项，hidden 演化仍有次级贡献。该结果是单 seed 机制诊断，不是根因证明或正式 SPI 结果。结果文件 SHA-256 为 `e36fdfb78add061dcac6c9c3c8deee2dfd0e6efb14a22007e66dbd607ac1c6e6`；不访问 official candidate、validation、held-out 或 qualification，不训练外部模型、不选 checkpoint。下一项为固定 hidden 的 RGB/本体感知模态分解，再决定是否做单变量修复 pilot。

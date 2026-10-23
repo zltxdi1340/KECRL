@@ -75,7 +75,26 @@
 
 六条轨迹的首次夹爪符号分歧处均有可见夹爪即时响应：夹爪状态间隙约 `0.00049--0.00053`。然而这些单步 joint 间隙仍明显小于前一轮自由 rollout 在专家时域上的平均关节漂移 `0.338`，单步 eye-in-hand RGB 间隙也小于自由 rollout 的平均 `27.51`。这说明环境对单个动作差异的即时响应是可测的，但不能单独解释长程失败；长程失败仍需要考虑连续动作误差、视觉观测分布变化和 Policy 离开示教状态后的闭环反馈。
 
-**当前判断。** 已排除“前缀重放不一致”这一诊断污染源，也确认夹爪分歧在其发生位置会改变夹爪状态。当前证据支持“早期平移动作误差与后续闭环状态偏移共同作用”的工作模型，不支持先把根因归结为 GRU 或单独的夹爪 head。下一项诊断协议已实现，结果尚未运行：在每个匹配专家前缀处分叉，一条分支继续执行专家动作，另一条执行 Policy 动作；对每个后续自由状态，分别在相同的专家 hidden 和自由分支自己的 hidden 下计算 Policy 输出。第一种比较测量状态变化对动作输出的影响，第二种与第一种之差测量 hidden 演化带来的额外变化。配置见 [`state-distribution-shift diagnostic`](../configs/libero_spatial_bc_state_distribution_shift_diagnostic_v1.json)。它覆盖六条开放 demo 的 `0/10/20/30/40/50` 步目标，并记录 1/3/5 步自由窗口；专家前缀的 joint、gripper、两路 RGB 和 hidden 必须在两套独立环境中复现一致，否则 fail closed。不访问 official candidate、validation、held-out 或 qualification，不改模型、不选 checkpoint；仍不进行 SPT/FOMAML、Knowledge 更新或 Module qualification。
+**当前判断。** 已排除“前缀重放不一致”这一诊断污染源，也确认夹爪分歧在其发生位置会改变夹爪状态。当前证据支持“早期平移动作误差与后续闭环状态偏移共同作用”的工作模型，不支持先把根因归结为 GRU 或单独的夹爪 head。
+
+## 状态分布偏移追踪结果（2026-10-23）
+
+该诊断已经完成。它重训两臂以复现锁定权重，然后只在 causal pre-action 臂的六条已开放 support/query demonstration 上做受控分叉；不访问 official candidate、validation、held-out 或 qualification，不选择 checkpoint，不更新 SPT/Knowledge，也不注册 Module。
+
+- 配置：[state-distribution-shift diagnostic](../configs/libero_spatial_bc_state_distribution_shift_diagnostic_v1.json)，SHA-256 `53f07caf1043fe170d6679d1f052c5a5e9f6b113d0e5fda9f62247bc7207d489`。
+- 结果文件：`/tmp/libero-bc-state-distribution-shift-20261023-v1.json`，SHA-256 `e36fdfb78add061dcac6c9c3c8deee2dfd0e6efb14a22007e66dbd607ac1c6e6`。
+- 运行代码提交：`7fae662385195a21053fff6541acc532857eb04b`；CUDA `cuda:1` / RTX 4090；总耗时 `255.05s`，峰值 CUDA allocation `292,003,840 bytes`。
+- 两个训练 arm 均执行 500 updates、消费 `37,534` 个有效动作步，最终 Policy SHA-256 与配置中的锁定值一致。六条 demonstration 的 36 个目标前缀在两套独立环境中的 joint、gripper、agentview RGB、eye-in-hand RGB 和 hidden 均完全复现；1/3/5 步窗口没有提前终止。
+
+在每个目标前缀，先比较专家状态上的 Policy 输出与“自由状态、沿用专家 hidden”的输出，再比较自由状态和自由 hidden 的输出。数值为所有目标、所有相对步的均值：
+
+| 自由窗口 | 样本数 | 状态条件动作 MAE | hidden 条件动作 MAE | 合计动作 MAE | 窗口前 joint 间隙 L2 | 窗口前 hidden 间隙 L2 | 窗口后 joint 间隙 L2 | 窗口后 eye-in-hand RGB MAE |
+|---:|---:|---:|---:|---:|---:|---:|---:|---:|
+| 1 | 36 | 0.000000 | 0.000000 | 0.000000 | 0.000000 | 0.000000 | 0.006879 | 3.932 |
+| 3 | 108 | 0.002463 | 0.000595 | 0.002847 | 0.009100 | 0.015564 | 0.021301 | 6.941 |
+| 5 | 180 | 0.004928 | 0.001997 | 0.006489 | 0.023534 | 0.061219 | 0.037723 | 9.193 |
+
+在这个单 seed、短窗口诊断中，状态条件项大于 hidden 条件项：3 步窗口的动作 MAE 约为 `0.002463` 对 `0.000595`，5 步窗口约为 `0.004928` 对 `0.001997`。hidden 项并非零，并且随窗口变长而增加。因此目前更符合“Policy 离开示教状态后，观测状态漂移是早期输出变化的主要可见来源，hidden 演化提供次级贡献”的描述；这不是视觉网络、GRU 或动作 head 的因果归因，也不能外推为正式 SPI 性能结论。1 步窗口的两项均为零是预期现象，因为分叉前两臂的状态和 hidden 被要求完全相同。
 
 ## 隐藏态模式与闭环成功
 
@@ -110,4 +129,4 @@
 
 ## 后续诊断
 
-这些仍是行为误差传播诊断，不是改 GRU 架构或扩大训练预算。下一项比较固定 causal Policy 在专家状态输入与受控 free-run 状态输入下的动作差异，判断离开示教状态后是否出现额外输出偏移；在该结果出来前不单独试验离散夹爪 head。基础单 SPI 未稳定前仍不开始 FOMAML / A-B/C，也不注册 Module。
+这些仍是行为误差传播诊断，不是改 GRU 架构或扩大训练预算。下一项把同一受控 free-run 分叉拆成 RGB 与本体感知输入的模态对照：保持 recurrent hidden 和另一输入模态不变，分别替换为专家观测与自由观测，测量两种输入对动作偏移的相对贡献。它仍不访问正式评估状态，也不进行 SPT/FOMAML、Knowledge 更新或 Module qualification。只有在模态归因完成后，才决定是否进行单变量修复 pilot；基础单 SPI 未稳定前不启动 A/B/C 或注册 Module。

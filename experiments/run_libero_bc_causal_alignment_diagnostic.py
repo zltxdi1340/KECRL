@@ -1589,8 +1589,10 @@ def run_diagnostic(config_path: Path, dataset_root: Path, device_name: str) -> d
                 "query_evaluation_indices": list(query_indices),
                 "support_initial_capture": support_capture,
                 "query_initial_capture": query_capture,
-                "official_initial_state_role": "source_spi.candidate_nonregression",
-                "official_initial_state_indices": list(official_indices),
+                "official_initial_state_role": (
+                    None if focused_only else "source_spi.candidate_nonregression"
+                ),
+                "official_initial_state_indices": [] if focused_only else list(official_indices),
                 "validation_accessed": False,
                 "heldout_accessed": False,
                 "qualification_accessed": False,
