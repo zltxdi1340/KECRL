@@ -96,6 +96,24 @@
 
 在这个单 seed、短窗口诊断中，状态条件项大于 hidden 条件项：3 步窗口的动作 MAE 约为 `0.002463` 对 `0.000595`，5 步窗口约为 `0.004928` 对 `0.001997`。hidden 项并非零，并且随窗口变长而增加。因此目前更符合“Policy 离开示教状态后，观测状态漂移是早期输出变化的主要可见来源，hidden 演化提供次级贡献”的描述；这不是视觉网络、GRU 或动作 head 的因果归因，也不能外推为正式 SPI 性能结论。1 步窗口的两项均为零是预期现象，因为分叉前两臂的状态和 hidden 被要求完全相同。
 
+## RGB 与本体感知模态分解结果（2026-10-23）
+
+在上一节相同的专家/自由分叉上继续做输入替换：固定专家 hidden，分别替换 RGB、本体感知，或同时替换两类输入；再保留自由 hidden 的完整自由输入作为 recurrent 项。该结果仍只使用六条开放 support/query demonstration 的 36 个目标前缀，不访问 official candidate、validation、held-out 或 qualification。
+
+- 配置：[state-modality-shift diagnostic](../configs/libero_spatial_bc_state_modality_shift_diagnostic_v1.json)，SHA-256 `b5b5b90c434558827277ecfc3b7155f5da014af122edc571903e76c0346a078c`。
+- 结果文件：`/tmp/libero-bc-state-modality-shift-20261023-v1.json`，SHA-256 `1f994ce55561019da9215f681241fabe7ccab7dc34949385caf6c5014072127b`。
+- 运行代码提交：`ff7a8f77bfd906c1720768a306ad605cdada7dcc`；CUDA `cuda:1` / RTX 4090；总耗时 `251.86s`，峰值 CUDA allocation `292,003,840 bytes`。两臂仍各 500 updates、各消费 `37,534` 个有效动作步，causal Policy 最终哈希为锁定值 `6f647466576f1e763ddbc06f8885e4c2f900e0d2635036161bdff991ec5aa3ae`。
+
+下面的 MAE 是各目标、各相对步、七维动作的平均绝对偏移；RGB 与本体感知项都保持另一类输入为专家值并保持专家 hidden，hidden 项是完整自由输入与固定专家 hidden 输入的差：
+
+| 自由窗口 | 样本数 | RGB 条件动作 MAE | 本体感知条件动作 MAE | 两类输入联合 MAE | RGB/本体交互 MAE | hidden 条件动作 MAE |
+|---:|---:|---:|---:|---:|---:|---:|
+| 1 | 36 | 0.000000 | 0.000000 | 0.000000 | 0.000000 | 0.000000 |
+| 3 | 108 | 0.002555 | 0.000442 | 0.002463 | 0.000013 | 0.000595 |
+| 5 | 180 | 0.005063 | 0.001098 | 0.004928 | 0.000084 | 0.001997 |
+
+在这组受控输入替换中，RGB 项约为本体感知项的 `5.8` 倍（3 步）和 `4.6` 倍（5 步）；hidden 项小于 RGB、但大于本体感知项；交互项接近零。这支持“短窗口动作输出变化主要由视觉观测漂移驱动，循环 hidden 提供次级贡献，本体感知漂移较小”的局部判断。它仍不能说明视觉编码器本身、相机视角、动作 head 或数据覆盖谁是最终根因，因为输入替换测量的是锁定 Policy 在当前轨迹附近的敏感性，不是修复后的长程成功率。
+
 ## 隐藏态模式与闭环成功
 
 每格为 support demo/query demo/official candidate 三组各 3 个初态的成功数：
@@ -129,4 +147,4 @@
 
 ## 后续诊断
 
-这些仍是行为误差传播诊断，不是改 GRU 架构或扩大训练预算。下一项把同一受控 free-run 分叉拆成 RGB 与本体感知输入的模态对照：保持 recurrent hidden 和另一输入模态不变，分别替换为专家观测与自由观测，测量两种输入对动作偏移的相对贡献。它仍不访问正式评估状态，也不进行 SPT/FOMAML、Knowledge 更新或 Module qualification。只有在模态归因完成后，才决定是否进行单变量修复 pilot；基础单 SPI 未稳定前不启动 A/B/C 或注册 Module。
+这些仍是行为误差传播诊断，不是改 GRU 架构或扩大训练预算。下一项在同一固定 hidden 和本体感知输入下，把 RGB 进一步拆成 agentview 与 eye-in-hand 两个相机的贡献，判断视觉偏移主要来自外部场景视图还是末端视图。它仍不访问正式评估状态，也不进行 SPT/FOMAML、Knowledge 更新或 Module qualification。相机项完成后，再决定是否做单变量视觉修复 pilot；基础单 SPI 未稳定前不启动 A/B/C 或注册 Module。

@@ -1707,6 +1707,7 @@ def run_diagnostic(config_path: Path, dataset_root: Path, device_name: str) -> d
                 "one source SPI and one training seed only",
                 "fixed-budget diagnostic with no checkpoint selection",
                 "same-index and causal pre-action data-view comparison only",
+                "controlled state-distribution shift with optional RGB/proprioceptive modality decomposition",
                 "source meta-support, source meta-query, and source candidate-nonregression only",
                 "no SPT update, A/B/C comparison, or Module qualification",
             ],
