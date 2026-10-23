@@ -167,6 +167,13 @@ def load_comparison_config(path: Path) -> tuple[dict[str, Any], ...]:
     state_shift_enabled = state_shift.get("enabled", False)
     if state_shift_enabled is not True and state_shift_enabled is not False:
         raise ValueError("state-distribution-shift enabled flag must be boolean")
+    modality_enabled = state_shift.get("modality_decomposition_enabled", False)
+    if modality_enabled is not True and modality_enabled is not False:
+        raise ValueError("state-shift modality decomposition flag must be boolean")
+    if modality_enabled and not state_shift_enabled:
+        raise ValueError("state-shift modality decomposition requires state-distribution shift")
+    if comparison.get("diagnostic_mode") == "state_modality_shift_only" and not modality_enabled:
+        raise ValueError("state-modality-shift-only mode requires modality decomposition")
     if state_shift_enabled:
         if state_shift.get("require_pinned_final_hashes") is not True:
             raise ValueError("state-distribution-shift diagnostic requires pinned Policy weights")
@@ -211,7 +218,10 @@ def load_comparison_config(path: Path) -> tuple[dict[str, Any], ...]:
             or float(tolerances.get("rgb_mae", -1.0)) < 0
         ):
             raise ValueError("state-shift pre-state tolerances must be nonnegative")
-        if comparison.get("diagnostic_mode") == "state_distribution_shift_only":
+        if comparison.get("diagnostic_mode") in (
+            "state_distribution_shift_only",
+            "state_modality_shift_only",
+        ):
             if (
                 action_divergence_enabled
                 or one_step_enabled
@@ -720,6 +730,25 @@ def evaluate_paired_action_divergence(
     return results
 
 
+def _online_tensors_with_modalities(
+    rgb_observation: Mapping[str, np.ndarray],
+    proprio_observation: Mapping[str, np.ndarray],
+    device: torch.device,
+) -> tuple[torch.Tensor, ...]:
+    return (
+        torch.from_numpy(rgb_observation["agentview_rgb"])
+        .permute(2, 0, 1)
+        .unsqueeze(0)
+        .to(device),
+        torch.from_numpy(rgb_observation["eye_in_hand_rgb"])
+        .permute(2, 0, 1)
+        .unsqueeze(0)
+        .to(device),
+        torch.from_numpy(proprio_observation["joint_states"]).unsqueeze(0).to(device),
+        torch.from_numpy(proprio_observation["gripper_states"]).unsqueeze(0).to(device),
+    )
+
+
 def _observation_difference(
     first: Mapping[str, np.ndarray], second: Mapping[str, np.ndarray]
 ) -> dict[str, float]:
@@ -961,6 +990,7 @@ def evaluate_state_distribution_shift(
     target_steps_by_demonstration: Mapping[str, list[int]],
     free_run_horizon_steps: tuple[int, ...],
     pre_state_tolerances: Mapping[str, float],
+    modality_decomposition: bool = False,
     device: torch.device,
 ) -> list[dict[str, Any]]:
     if len(trajectories) != len(source_indices):
@@ -1035,6 +1065,22 @@ def evaluate_state_distribution_shift(
                     free_action_with_teacher_hidden, _ = model.forward_step(
                         *_online_tensors(free_now, device), hidden=teacher_hidden_now
                     )
+                    if modality_decomposition:
+                        free_rgb_teacher_proprio_action, _ = model.forward_step(
+                            *_online_tensors_with_modalities(
+                                free_now, teacher_now, device
+                            ),
+                            hidden=teacher_hidden_now,
+                        )
+                        teacher_rgb_free_proprio_action, _ = model.forward_step(
+                            *_online_tensors_with_modalities(
+                                teacher_now, free_now, device
+                            ),
+                            hidden=teacher_hidden_now,
+                        )
+                    else:
+                        free_rgb_teacher_proprio_action = None
+                        teacher_rgb_free_proprio_action = None
                     teacher_action_np = teacher_action[0].cpu().numpy().astype(np.float32)
                     free_action_np = free_action[0].cpu().numpy().astype(np.float32)
                     free_action_with_teacher_hidden_np = (
@@ -1047,6 +1093,31 @@ def evaluate_state_distribution_shift(
                     hidden_conditioned_delta = (
                         free_action_np - free_action_with_teacher_hidden_np
                     )
+                    modality_terms = None
+                    if modality_decomposition:
+                        free_rgb_teacher_proprio_np = (
+                            free_rgb_teacher_proprio_action[0].cpu().numpy().astype(np.float32)
+                        )
+                        teacher_rgb_free_proprio_np = (
+                            teacher_rgb_free_proprio_action[0].cpu().numpy().astype(np.float32)
+                        )
+                        modality_terms = {
+                            "rgb_conditioned_action": free_rgb_teacher_proprio_np.tolist(),
+                            "proprio_conditioned_action": teacher_rgb_free_proprio_np.tolist(),
+                            "rgb_conditioned_action_delta": (
+                                free_rgb_teacher_proprio_np - teacher_action_np
+                            ).tolist(),
+                            "proprio_conditioned_action_delta": (
+                                teacher_rgb_free_proprio_np - teacher_action_np
+                            ).tolist(),
+                            "both_modalities_action_delta": state_conditioned_delta.tolist(),
+                            "rgb_proprio_interaction_delta": (
+                                free_action_with_teacher_hidden_np
+                                - free_rgb_teacher_proprio_np
+                                - teacher_rgb_free_proprio_np
+                                + teacher_action_np
+                            ).tolist(),
+                        }
                     expert_action = np.asarray(
                         trajectory["actions"][absolute_step], dtype=np.float32
                     )
@@ -1056,8 +1127,7 @@ def evaluate_state_distribution_shift(
                     free_next, free_reward, free_terminated, free_truncated, free_info = (
                         free_adapter.step(free_action_np)
                     )
-                    step_results.append(
-                        {
+                    step_result = {
                             "relative_step": int(relative_step),
                             "absolute_step": int(absolute_step),
                             "state_gap_before_action": _observation_difference(teacher_now, free_now),
@@ -1077,7 +1147,9 @@ def evaluate_state_distribution_shift(
                             "teacher_terminal_reason": teacher_info.get("terminal_reason"),
                             "free_terminal_reason": free_info.get("terminal_reason"),
                         }
-                    )
+                    if modality_terms is not None:
+                        step_result["modality_decomposition"] = modality_terms
+                    step_results.append(step_result)
                     teacher_now = teacher_next
                     free_now = free_next
                     teacher_hidden_now = next_teacher_hidden
@@ -1135,7 +1207,10 @@ def run_diagnostic(config_path: Path, dataset_root: Path, device_name: str) -> d
     one_step_only = comparison.get("diagnostic_mode") == "one_step_counterfactual_only"
     state_shift_spec = comparison.get("state_distribution_shift", {})
     state_shift_enabled = bool(state_shift_spec.get("enabled", False))
-    state_shift_only = comparison.get("diagnostic_mode") == "state_distribution_shift_only"
+    state_shift_only = comparison.get("diagnostic_mode") in (
+        "state_distribution_shift_only",
+        "state_modality_shift_only",
+    )
     focused_only = one_step_only or state_shift_only
     hidden_modes = tuple(
         evaluation.get("policy_hidden_modes", (evaluation["policy_hidden_mode"],))
@@ -1500,6 +1575,9 @@ def run_diagnostic(config_path: Path, dataset_root: Path, device_name: str) -> d
                                 int(step) for step in state_shift_spec["free_run_horizon_steps"]
                             ),
                             pre_state_tolerances=state_shift_spec["pre_state_tolerances"],
+                            modality_decomposition=bool(
+                                state_shift_spec.get("modality_decomposition_enabled", False)
+                            ),
                             device=device,
                         )
                     finally:
@@ -1580,6 +1658,9 @@ def run_diagnostic(config_path: Path, dataset_root: Path, device_name: str) -> d
                 ),
                 "one_step_counterfactual_enabled": one_step_enabled,
                 "state_distribution_shift_enabled": state_shift_enabled,
+                "state_modality_decomposition_enabled": bool(
+                    state_shift_spec.get("modality_decomposition_enabled", False)
+                ),
                 "official_initial_states_accessed": not focused_only,
                 "support_role": evaluation["support_demonstration_role"],
                 "support_demonstrations": len(support_indices),
