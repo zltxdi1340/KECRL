@@ -170,6 +170,28 @@
 
 下一项先不扩大到 A/B/C。固定这三组已训练 Policy 和同一批 expert-state，在原始 eye-in-hand 图像上施加可复现的 `±1/±2/±4` 像素平移，直接测量动作变化及 gripper/translation 分量变化；该测试用于判断训练增强是否真正降低相机输入敏感性。若没有稳定降低，再转向 action head/数据覆盖的诊断；若降低且闭环信号可复现，才冻结更大 seed 的视觉修复 pilot。
 
+## 固定 expert-state 的合成相机敏感性结果（2026-10-24）
+
+为把“增强后闭环偶尔成功”与“增强确实改变了相机敏感性”分开，固定三 seed 的 baseline 和 eye-in-hand 平移增强 Policy，在同一批专家重放状态上逐帧计算动作。每个状态只替换 eye-in-hand 图像，agentview、joint、gripper 和 baseline 的连续 hidden 保持不变；分别施加左右/上下方向的 1、2、4 像素反射填充平移。每个 seed 的 support/query 共捕获 `234 + 265 = 499` 个专家 action 前状态。
+
+- 配置：[synthetic eye-hand sensitivity diagnostic](../configs/libero_spatial_eye_hand_synthetic_sensitivity_diagnostic_v1.json)，SHA-256 `735ce9b33d4d97c14fe640875c162d7539d2502afdf5df0ec59c263a2e669ace`。
+- 结果文件：`/tmp/libero-eye-hand-synthetic-sensitivity-20261024-v1.json`，SHA-256 `02234bfb5712172abb9c3847b8d4cbb068b301dacb4e1087fa56a9b1de1a357`。
+- 运行提交：`967d1c00ef3910777778970f4bebfb7a65718706`；CUDA `cuda:1` / RTX 4090；耗时 `329.73s`。
+
+下面是四个方向聚合后、三个 seed 的均值；括号内为增强臂减 baseline，负值表示敏感性下降。
+
+| 平移半径 | action MAE baseline → 增强 | translation MAE baseline → 增强 | gripper MAE baseline → 增强 | gripper sign flip baseline → 增强 |
+|---:|---:|---:|---:|---:|
+| 1 px | 0.009134 → 0.002892 (`-0.006243`) | 0.006640 → 0.002887 (`-0.003753`) | 0.038940 → 0.009883 (`-0.029057`) | 0.014362 → 0.004509 (`-0.009853`) |
+| 2 px | 0.019944 → 0.004796 (`-0.015147`) | 0.013042 → 0.004785 (`-0.008257`) | 0.090068 → 0.016369 (`-0.073699`) | 0.036072 → 0.007849 (`-0.028223`) |
+| 4 px | 0.024397 → 0.008782 (`-0.015616`) | 0.016495 → 0.008573 (`-0.007921`) | 0.108311 → 0.030340 (`-0.077971`) | 0.043754 → 0.016700 (`-0.027054`) |
+
+在四方向聚合、三个 seed 和三个半径上，上述整体指标的差值均为负；上下方向的下降通常大于左右方向，左右方向在半径 1 px 的个别 seed 接近零或略升。这个结果支持“训练增强改变了 eye-in-hand 输入到动作 head 的局部敏感性”，而不是只改变了某一条开放 rollout。它同时显示增强对 gripper 输出的敏感性降低尤其明显。
+
+这仍不能推出长程任务成功。前一 pilot 的增强臂 query 成功为 `3/9`，且全部来自一个 seed；query MSE 三 seed 均值从 `0.08919` 变为 `0.09012`。因此当前解释是：相机局部敏感性已被有效缓解，但专家动作拟合、早期动作误差和离开示教分布后的状态反馈仍未解决。该诊断没有访问 official candidate、validation、held-out 或 qualification 状态，没有选择 checkpoint，没有更新 SPT/Knowledge，也没有注册 Module。
+
+下一项比较两臂在原始 expert-state 上的动作误差时间曲线和动作分量（translation/rotation/gripper）首次偏差位置，并与受控 free-run 的首个状态偏移对齐。若增强只降低扰动敏感性而不降低原始动作误差，问题应转向数据覆盖或 action head；若原始动作误差也下降但 free-run 仍失败，重点转向状态分布和闭环反馈。
+
 ## 隐藏态模式与闭环成功
 
 每格为 support demo/query demo/official candidate 三组各 3 个初态的成功数：
