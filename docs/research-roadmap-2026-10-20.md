@@ -91,4 +91,4 @@ RoboCasa365 是联合验证环境，不是早期调参环境。先冻结一个�
 
 ### LIBERO 当前诊断项
 
-逐步动作漂移、局部单步反事实、状态分布偏移、RGB/本体感知模态分解、两路相机分解、三 seed 相机复核、单变量 eye-in-hand 平移增强 pilot、固定 expert-state 合成平移敏感性和动作误差—状态偏移对齐均已完成。增强臂降低了固定 expert-state 的相机敏感性和前 20 步动作误差，但 joint-state 首次越界仍在第 2–3 步，开放闭环没有稳定修复。下一项比较只训练 action head 与全 Policy 的 expert-state 误差下界，并审计 causal support/query 的条件覆盖；这些仍是机制诊断，不是视觉修复有效性或正式 SPI 结果，不访问 official candidate、validation、held-out 或 qualification，不选 checkpoint。
+逐步动作漂移、局部单步反事实、状态分布偏移、RGB/本体感知模态分解、两路相机分解、三 seed 相机复核、单变量 eye-in-hand 平移增强 pilot、固定 expert-state 合成平移敏感性、动作误差—状态偏移对齐及 action-head 分解均已完成。增强臂降低了固定 expert-state 的相机敏感性和前 20 步动作误差，但 joint-state 首次越界仍在第 2–3 步；只训练 action head 的 query MSE 明显高于 full Policy，说明表示学习是必要条件。下一项按 task relation、末端相对目标几何和动作阶段审计 support/query 条件覆盖；这些仍是机制诊断，不是视觉修复有效性或正式 SPI 结果，不访问 official candidate、validation、held-out 或 qualification，不选 checkpoint。

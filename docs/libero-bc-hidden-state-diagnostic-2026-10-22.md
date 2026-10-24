@@ -223,6 +223,27 @@
 
 因此下一项转向“动作 head/数据覆盖”诊断：在不访问新评估状态的前提下，对同一 causal support/query 数据做按时间与动作分量的条件覆盖审计，并比较冻结视觉/GRU、只训练 action head 与全 Policy 训练的 expert-state 误差下界。若只训练 head 已接近全 Policy，瓶颈主要是 head/监督信号；若 head 下界仍高，需检查观测到动作的多模态、数据覆盖和 task relation 条件。该诊断仍不选择 checkpoint、不更新 SPT/Knowledge、不注册 Module。
 
+## action head 与表示学习分解结果（2026-10-24）
+
+为检验动作误差是否主要来自最后的动作 head，固定 causal pre-action support/query 数据、三组 replicate seed、同一初始 Policy、同一 batch 顺序和 500 次 optimizer update，比较两臂：`full_policy` 全部训练；`action_head_only` 冻结 `visual_encoder`、`fusion` 和 `recurrent`，只训练 1,799 个 action-head 参数。两臂只访问 meta-support 训练和 meta-query 离线评估，没有访问新的 online、official candidate、validation、held-out 或 qualification 状态。
+
+- 配置：[action-head representation diagnostic](../configs/libero_action_head_representation_diagnostic_v1.json)，SHA-256 `a083aa85a1a7d829526f807941af83bf2415033b2510ccf999b402687800af31`。
+- 结果文件：`/tmp/libero-action-head-representation-20261024-v1.json`，SHA-256 `e8e2ded5d7595c870c4b5c3507b2f68b95a435a2e1b60757e19b50d40572526e`。
+- 运行提交：`ab412e397d90acc7d23c3030efe9da97bbbbdbf7`；CUDA `cuda:1` / RTX 4090；耗时 `184.27s`。full-policy 三个最终哈希均与已有 causal baseline 锁定值一致。
+
+| 角色 | Policy | MSE 均值 | translation MSE 均值 | rotation MSE 均值 | gripper MSE 均值 | gripper sign accuracy 均值 |
+|---|---|---:|---:|---:|---:|---:|
+| support | full policy | 0.07597 | 0.09424 | 0.00361 | 0.23827 | 0.9201 |
+| support | action head only | 0.22631 | 0.20847 | 0.00381 | 0.94731 | 0.6057 |
+| query | full policy | 0.08919 | 0.10105 | 0.00376 | 0.30986 | 0.8947 |
+| query | action head only | 0.22818 | 0.21094 | 0.00373 | 0.95328 | 0.5726 |
+
+head-only 与 full-policy 的 query 差值为 MSE `+0.13900`、translation MSE `+0.10989`、gripper MSE `+0.64341`，rotation MSE 接近零。固定随机表示后，head 可以拟合一部分旋转输出，却无法恢复平移和夹爪行为；当前失败不能由最后的线性 head 单独解释，视觉/融合/时序表示学习是必要条件。
+
+同一 causal 数据的动作覆盖审计显示，support/query 前 60 步均有完整有效动作样本，总有效步分别为 `2,925/2,143`；两者前段平移、旋转和 gripper 绝对动作分布同量级，没有发现 query 完全缺失某个早期阶段的简单覆盖断裂。这不等于条件覆盖充分，图像目标位置、task relation 和动作之间的多模态仍未被分离。
+
+下一项按 task relation、末端相对目标几何和动作阶段审计 support/query 条件覆盖，再决定是否需要数据重采样或表示改造。该诊断仍不选择 checkpoint、不更新 SPT/Knowledge、不注册 Module。
+
 ## 隐藏态模式与闭环成功
 
 每格为 support demo/query demo/official candidate 三组各 3 个初态的成功数：
