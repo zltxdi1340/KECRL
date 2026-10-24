@@ -192,6 +192,37 @@
 
 下一项比较两臂在原始 expert-state 上的动作误差时间曲线和动作分量（translation/rotation/gripper）首次偏差位置，并与受控 free-run 的首个状态偏移对齐。若增强只降低扰动敏感性而不降低原始动作误差，问题应转向数据覆盖或 action head；若原始动作误差也下降但 free-run 仍失败，重点转向状态分布和闭环反馈。
 
+## 原始 expert-state 动作误差与 free-run 首次偏移对齐（2026-10-24）
+
+这项诊断重新训练并锁定三 seed 的 baseline 与平移增强 Policy，在相同的六条开放 demonstration 上同时记录：
+
+1. expert-state 输入下的 teacher-forced 动作误差，按每 10 步报告整体、translation、rotation 和 gripper 分量；
+2. free-run 分支相对专家轨迹的 joint、gripper 和 eye-in-hand RGB 状态差异；
+3. 固定状态阈值的首次越界位置，以及 support/query 开放 rollout 成功数。
+
+- 配置：[expert error/free alignment diagnostic](../configs/libero_expert_error_free_alignment_diagnostic_v1.json)，SHA-256 `8845b51f5c7437794648ab06b3e7cdb6beff49540795cf164f82917b3c04e08c`。
+- 结果文件：`/tmp/libero-expert-error-free-alignment-20261024-v1.json`，SHA-256 `4901dc0783cd5d4a91816c97a617f75548d48fff36a4571d797444c1f9f20098`。
+- 运行提交：`434569fcc22ed73143c6007b268ee1c53ac89025`；CUDA `cuda:1` / RTX 4090；耗时 `453.92s`。三 seed 两臂最终 Policy 哈希全部通过配置锁定值校验。
+
+三 seed、四方向 support/query 的平均时间段结果如下：
+
+| 角色 | Policy | 0–10 步 action MAE | 0–10 步 translation MAE | 10–20 步 action MAE | joint-state 首次越界中位数 | gripper-state 首次越界中位数 |
+|---|---|---:|---:|---:|---:|---:|
+| support | baseline | 0.0748 | 0.1306 | 0.0895 | 2 | 38 |
+| support | eye-hand translation | 0.0614 | 0.1056 | 0.0763 | 2 | 38 |
+| query | baseline | 0.0755 | 0.1406 | 0.0692 | 2 | 39 |
+| query | eye-hand translation | 0.0574 | 0.1024 | 0.0496 | 2 | 39 |
+
+增强臂在前 20 步的原始 expert-state 动作误差通常更低，但 joint-state 的首次越界仍在第 2–3 步；因此减小相机输入敏感性没有消除最早的状态偏移。随后 baseline 的 joint drift 在 support 的 30–60 步平均约 `0.61–0.73`，增强臂约 `0.38–0.43`；query 对应 baseline 约 `0.55–0.65`，增强臂约 `0.32–0.46`，说明增强可能减缓部分反馈漂移，但并未保证闭环成功。三 seed 九条 support 和九条 query 的 baseline rollout 均为 `0/9`；增强臂为 support `3/9`、query `3/9`，与前一 pilot 一致，新增成功仍集中在 seed `20261021`。
+
+配置中的 `action_l2=0.05` 阈值在所有 episode 的第 0 步都越界，因此不能用它判定“动作误差何时首次产生”；报告中的时序判断采用原始动作误差曲线和 joint/gripper/RGB 状态阈值。当前证据链为：
+
+- **动作拟合缺口先于状态漂移出现。** 第 0–10 步已经有约 `0.06–0.08` 的 action MAE 和约 `0.10–0.14` 的 translation MAE，尚未经过长程 free-run 反馈；
+- **相机增强能改变映射但不足以修复闭环。** 它降低了前 20 步误差和固定 expert-state 的合成相机敏感性，但首次 joint 越界仍在第 2–3 步；
+- **后段是反馈放大。** joint drift 先扩大，gripper-state 通常在第 34–42 步越界，之后 action/gripper 分量误差明显上升。
+
+因此下一项转向“动作 head/数据覆盖”诊断：在不访问新评估状态的前提下，对同一 causal support/query 数据做按时间与动作分量的条件覆盖审计，并比较冻结视觉/GRU、只训练 action head 与全 Policy 训练的 expert-state 误差下界。若只训练 head 已接近全 Policy，瓶颈主要是 head/监督信号；若 head 下界仍高，需检查观测到动作的多模态、数据覆盖和 task relation 条件。该诊断仍不选择 checkpoint、不更新 SPT/Knowledge、不注册 Module。
+
 ## 隐藏态模式与闭环成功
 
 每格为 support demo/query demo/official candidate 三组各 3 个初态的成功数：
