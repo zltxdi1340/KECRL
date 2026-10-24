@@ -91,4 +91,4 @@ RoboCasa365 是联合验证环境，不是早期调参环境。先冻结一个�
 
 ### LIBERO 当前诊断项
 
-逐步动作漂移、局部单步反事实、状态分布偏移、RGB/本体感知模态分解和两路相机分解均已完成，完整结果汇总见 [`LIBERO 隐藏态与状态偏移诊断记录`](libero-bc-hidden-state-diagnostic-2026-10-22.md)。两路相机分解中，agentview 条件动作 MAE 在 3/5 步为 `0.000208/0.000359`，eye-in-hand 为 `0.002530/0.005061`，相机交互为 `0.000010/0.000028`，hidden 为 `0.000595/0.001997`。单 seed 结果支持短窗口内 eye-in-hand 是 RGB 敏感性的主要来源，但不是根因证明或正式 SPI 结果。结果文件 SHA-256 为 `32a4b8641a0e47faea1e4298b0ea85209808735f9b715cfeab2d0e90c3ae07b3`；不访问 official candidate、validation、held-out 或 qualification，不训练外部模型、不选 checkpoint。下一项为不同训练 seed 的相机贡献复核，再决定是否做单变量视觉修复 pilot。
+逐步动作漂移、局部单步反事实、状态分布偏移、RGB/本体感知模态分解、两路相机分解及三 seed 相机复核均已完成，完整结果汇总见 [`LIBERO 隐藏态与状态偏移诊断记录`](libero-bc-hidden-state-diagnostic-2026-10-22.md)。三 seed 相机复核的 agentview/eye-in-hand 条件动作 MAE 均值在 3 步为 `0.000412/0.003024`，5 步为 `0.000830/0.006559`；eye-in-hand 在每个 seed 都更大。该结果是机制诊断，不是视觉修复有效性或正式 SPI 结果；不访问 official candidate、validation、held-out 或 qualification，不选 checkpoint。下一项为固定预算的单变量 eye-in-hand 鲁棒性 pilot。
