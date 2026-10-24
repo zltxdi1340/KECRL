@@ -1,0 +1,41 @@
+{
+  "schema_version": 1,
+  "status": "single_source_spi_action_head_representation_diagnostic",
+  "formal_result": false,
+  "purpose": "Separate action-head fitting from visual and recurrent representation fitting on the fixed causal single-SPI data",
+  "source_training_config": "configs/libero_spatial_eye_hand_robustness_pilot_v1.json",
+  "task_id": 0,
+  "replicate_seeds": [20261021, 20261022, 20261023],
+  "arms": ["full_policy", "action_head_only"],
+  "data_alignment": "causal_pre_action",
+  "training": {
+    "optimizer": "Adam",
+    "optimizer_updates": 500,
+    "same_initial_model": true,
+    "same_batch_order": true,
+    "checkpoint_selection": false,
+    "head_only_frozen_modules": ["visual_encoder", "fusion", "recurrent"]
+  },
+  "expected_full_policy_model_sha256_by_seed": {
+    "20261021": "6f647466576f1e763ddbc06f8885e4c2f900e0d2635036161bdff991ec5aa3ae",
+    "20261022": "c85c8be49b6e1d1f225c41fee1511900543875109a9d09efc6ada49259f25e07",
+    "20261023": "efe16a0853ca4ab180d9fd3673e1a27876401cc97237af545c32afc711f511da"
+  },
+  "demonstration_groups": {
+    "meta_support": [0, 1, 2],
+    "meta_query": [30, 31, 32]
+  },
+  "action_coverage": {
+    "bin_steps": 10,
+    "report_components": ["x", "y", "z", "roll", "pitch", "yaw", "gripper"],
+    "report_statistics": ["mean", "std", "mean_abs", "p05", "p95", "positive_fraction", "sign_switches"]
+  },
+  "forbidden_uses": [
+    "checkpoint selection",
+    "SPT candidate acceptance",
+    "Module qualification",
+    "held-out effect estimation",
+    "formal architecture comparison",
+    "Knowledge update"
+  ]
+}

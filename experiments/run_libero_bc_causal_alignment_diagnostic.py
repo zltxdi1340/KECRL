@@ -400,6 +400,7 @@ def _train_arm(
     device: torch.device,
     train_dataset: RoleRestrictedLiberoSequenceDataset,
     eye_hand_translation_pixels: int = 0,
+    trainable_scope: str = "full",
 ) -> tuple[LiberoBCPolicy, dict[str, Any]]:
     if (
         isinstance(eye_hand_translation_pixels, bool)
@@ -407,6 +408,8 @@ def _train_arm(
         or eye_hand_translation_pixels < 0
     ):
         raise ValueError("eye-hand translation radius must be a nonnegative integer")
+    if trainable_scope not in {"full", "action_head_only"}:
+        raise ValueError("trainable scope must be full or action_head_only")
     _set_seed(seed)
     policy_spec = policy_config["policy"]
     training = base["training"]
@@ -429,7 +432,15 @@ def _train_arm(
     }
     model = learnable_spt.instantiate(spi).policy
     initial_digest = _digest_tensors(model.state_dict())
-    optimizer = torch.optim.Adam(model.parameters(), lr=float(training["learning_rate"]))
+    for parameter in model.parameters():
+        parameter.requires_grad_(trainable_scope == "full")
+    if trainable_scope == "action_head_only":
+        for parameter in model.action_head.parameters():
+            parameter.requires_grad_(True)
+    trainable_parameters = [parameter for parameter in model.parameters() if parameter.requires_grad]
+    if not trainable_parameters:
+        raise RuntimeError("selected trainable scope has no parameters")
+    optimizer = torch.optim.Adam(trainable_parameters, lr=float(training["learning_rate"]))
     iterator = iter(loader)
     losses = []
     valid_step_updates = 0
@@ -465,7 +476,7 @@ def _train_arm(
             raise RuntimeError("causal alignment training produced non-finite loss")
         loss.backward()
         gradient_norm = torch.nn.utils.clip_grad_norm_(
-            model.parameters(), float(training["gradient_clip_norm"])
+            trainable_parameters, float(training["gradient_clip_norm"])
         )
         if not torch.isfinite(gradient_norm):
             raise RuntimeError("causal alignment training produced non-finite gradients")
@@ -489,6 +500,11 @@ def _train_arm(
         "initial_model_sha256": initial_digest,
         "final_model_sha256": _digest_tensors(model.state_dict()),
         "eye_hand_translation_pixels": eye_hand_translation_pixels,
+        "trainable_scope": trainable_scope,
+        "trainable_parameter_count": int(sum(parameter.numel() for parameter in trainable_parameters)),
+        "frozen_parameter_count": int(
+            sum(parameter.numel() for parameter in model.parameters() if not parameter.requires_grad)
+        ),
     }
 
 
