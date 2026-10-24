@@ -616,6 +616,7 @@ def _trajectory_error_summary(
     expert_observations: list[Mapping[str, np.ndarray]],
     policy_observations: list[Mapping[str, np.ndarray]],
     time_bin_steps: int,
+    state_divergence_thresholds: Mapping[str, float] | None = None,
 ) -> dict[str, Any]:
     expert_actions = np.asarray(expert_actions, dtype=np.float64)
     teacher_actions = np.asarray(policy_actions_on_expert_states, dtype=np.float64)
@@ -673,6 +674,9 @@ def _trajectory_error_summary(
                 "steps": stop - start,
                 "action_mae": float(np.abs(action_slice).mean()),
                 "action_l2_mean": float(np.linalg.norm(action_slice, axis=1).mean()),
+                "translation_mae": float(np.abs(action_slice[:, :3]).mean()),
+                "rotation_mae": float(np.abs(action_slice[:, 3:6]).mean()),
+                "gripper_mae": float(np.abs(action_slice[:, 6]).mean()),
                 "gripper_sign_accuracy": float(
                     np.mean(np.sign(teacher_actions[start:stop, 6]) == np.sign(expert_actions[start:stop, 6]))
                 ),
@@ -687,7 +691,7 @@ def _trajectory_error_summary(
             }
         )
     mismatches = np.flatnonzero(np.sign(teacher_actions[:, 6]) != np.sign(expert_actions[:, 6]))
-    return {
+    result = {
         "overlap_steps": overlap,
         "teacher_forced_action_error": {
             "all_dimensions": _stats(action_delta),
@@ -713,6 +717,45 @@ def _trajectory_error_summary(
         },
         "time_bins": bins,
     }
+    if state_divergence_thresholds is not None:
+        required = {
+            "action_l2",
+            "gripper_action_abs",
+            "joint_state_l2",
+            "gripper_state_l2",
+            "eye_in_hand_rgb_mae",
+        }
+        if set(state_divergence_thresholds) != required or any(
+            float(value) < 0 for value in state_divergence_thresholds.values()
+        ):
+            raise ValueError("state divergence thresholds must cover the fixed nonnegative metrics")
+        action_l2 = np.linalg.norm(action_delta, axis=1)
+        gripper_action_abs = np.abs(action_delta[:, 6])
+        joint_state_l2 = np.linalg.norm(policy_joints[:overlap] - expert_joints[:overlap], axis=1)
+        gripper_state_l2 = np.linalg.norm(policy_gripper[:overlap] - expert_gripper[:overlap], axis=1)
+        eye_hand_rgb_mae = np.abs(policy_hand[:overlap] - expert_hand[:overlap]).reshape(overlap, -1).mean(axis=1)
+
+        def _first(values: np.ndarray, threshold: float) -> int | None:
+            indices = np.flatnonzero(values > threshold)
+            return None if len(indices) == 0 else int(indices[0])
+
+        result["first_threshold_crossings"] = {
+            "thresholds": {key: float(value) for key, value in state_divergence_thresholds.items()},
+            "action_l2": _first(action_l2, float(state_divergence_thresholds["action_l2"])),
+            "gripper_action_abs": _first(
+                gripper_action_abs, float(state_divergence_thresholds["gripper_action_abs"])
+            ),
+            "joint_state_l2": _first(
+                joint_state_l2, float(state_divergence_thresholds["joint_state_l2"])
+            ),
+            "gripper_state_l2": _first(
+                gripper_state_l2, float(state_divergence_thresholds["gripper_state_l2"])
+            ),
+            "eye_in_hand_rgb_mae": _first(
+                eye_hand_rgb_mae, float(state_divergence_thresholds["eye_in_hand_rgb_mae"])
+            ),
+        }
+    return result
 
 
 @torch.no_grad()
@@ -724,6 +767,7 @@ def evaluate_paired_action_divergence(
     source_indices: tuple[int, ...],
     device: torch.device,
     time_bin_steps: int,
+    state_divergence_thresholds: Mapping[str, float] | None = None,
 ) -> list[dict[str, Any]]:
     if len(trajectories) != len(source_indices):
         raise ValueError("action divergence trajectories and initial states must align")
@@ -774,6 +818,7 @@ def evaluate_paired_action_divergence(
                 expert_observations=expert_observations,
                 policy_observations=free_observations,
                 time_bin_steps=time_bin_steps,
+                state_divergence_thresholds=state_divergence_thresholds,
             )
             results.append(
                 {
