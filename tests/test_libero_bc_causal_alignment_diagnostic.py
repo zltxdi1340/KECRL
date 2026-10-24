@@ -140,6 +140,20 @@ def test_state_shift_protocol_requires_sorted_horizons_and_authorized_targets(tm
     with pytest.raises(ValueError, match="requires modality decomposition"):
         diagnostic.load_comparison_config(path)
 
+    config = json.loads(
+        (diagnostic.ROOT / "configs/libero_spatial_bc_state_modality_shift_diagnostic_v1.json").read_text()
+    )
+    config["diagnostic_mode"] = "state_camera_shift_only"
+    config["state_distribution_shift"]["camera_decomposition_enabled"] = True
+    path.write_text(json.dumps(config))
+    loaded = diagnostic.load_comparison_config(path)
+    assert loaded[0]["diagnostic_mode"] == "state_camera_shift_only"
+
+    config["state_distribution_shift"]["modality_decomposition_enabled"] = False
+    path.write_text(json.dumps(config))
+    with pytest.raises(ValueError, match="requires RGB modality decomposition"):
+        diagnostic.load_comparison_config(path)
+
 
 def test_continuous_teacher_forcing_carries_hidden_within_demo_and_resets_between_demos():
     class Window:
@@ -442,3 +456,75 @@ def test_state_distribution_shift_modality_decomposition_separates_rgb_and_propr
     assert terms["proprio_conditioned_action_delta"][0] == pytest.approx(0.1)
     assert terms["both_modalities_action_delta"][0] == pytest.approx(0.1 + 1.0 / 255.0)
     assert terms["rgb_proprio_interaction_delta"][0] == pytest.approx(0.0)
+
+
+def test_state_distribution_shift_camera_decomposition_separates_two_rgb_views():
+    class Policy(torch.nn.Module):
+        def forward_step(self, agent, hand, joints, _gripper, hidden=None):
+            action = torch.zeros((1, 7), dtype=torch.float32)
+            action[0, 0] = (
+                0.2
+                + joints[0, 0]
+                + agent.float().mean() / 255.0
+                + 2.0 * hand.float().mean() / 255.0
+            )
+            next_hidden = torch.zeros((1, 1, 1), dtype=torch.float32)
+            return action, next_hidden
+
+    class Adapter:
+        def __init__(self):
+            self.joints = np.zeros(7, dtype=np.float32)
+            self.gripper = np.zeros(2, dtype=np.float32)
+
+        def _observation(self):
+            return {
+                "agentview_rgb": np.full(
+                    (2, 2, 3), np.uint8(np.clip(round(self.joints[0] * 10), 0, 255)), dtype=np.uint8
+                ),
+                "eye_in_hand_rgb": np.full(
+                    (2, 2, 3), np.uint8(np.clip(round(self.joints[0] * 20), 0, 255)), dtype=np.uint8
+                ),
+                "joint_states": self.joints.copy(),
+                "gripper_states": self.gripper.copy(),
+            }
+
+        def reset(self, *, initial_state_index):
+            assert initial_state_index == 0
+            self.joints.fill(0.0)
+            self.gripper.fill(0.0)
+            return self._observation(), {}
+
+        def step(self, action):
+            self.joints += np.asarray(action, dtype=np.float32)[:7]
+            return self._observation(), 0.0, False, False, {"success": False, "terminal_reason": None}
+
+    result = diagnostic.evaluate_state_distribution_shift(
+        model=Policy(),
+        teacher_adapter=Adapter(),
+        free_adapter=Adapter(),
+        trajectories=[
+            {
+                "demonstration_index": 0,
+                "actions": np.tile(np.asarray([0.1, 0, 0, 0, 0, 0, 0], dtype=np.float32), (3, 1)),
+            }
+        ],
+        source_indices=(0,),
+        target_steps_by_demonstration={"0": [0]},
+        free_run_horizon_steps=(1, 2),
+        pre_state_tolerances={
+            "joint_linf": 1e-6,
+            "gripper_linf": 1e-6,
+            "rgb_mae": 0.0,
+            "hidden_linf": 1e-6,
+        },
+        modality_decomposition=True,
+        camera_decomposition=True,
+        device=torch.device("cpu"),
+    )
+
+    step = result[0]["targets"][0]["horizon_results"]["2"][1]
+    terms = step["camera_decomposition"]
+    assert terms["agentview_action_delta"][0] == pytest.approx(1.0 / 255.0)
+    assert terms["eye_in_hand_action_delta"][0] == pytest.approx(4.0 / 255.0)
+    assert terms["both_camera_action_delta"][0] == pytest.approx(5.0 / 255.0)
+    assert terms["agentview_eye_in_hand_interaction_delta"][0] == pytest.approx(0.0)

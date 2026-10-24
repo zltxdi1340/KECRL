@@ -174,6 +174,13 @@ def load_comparison_config(path: Path) -> tuple[dict[str, Any], ...]:
         raise ValueError("state-shift modality decomposition requires state-distribution shift")
     if comparison.get("diagnostic_mode") == "state_modality_shift_only" and not modality_enabled:
         raise ValueError("state-modality-shift-only mode requires modality decomposition")
+    camera_enabled = state_shift.get("camera_decomposition_enabled", False)
+    if camera_enabled is not True and camera_enabled is not False:
+        raise ValueError("state-shift camera decomposition flag must be boolean")
+    if camera_enabled and not modality_enabled:
+        raise ValueError("state-shift camera decomposition requires RGB modality decomposition")
+    if comparison.get("diagnostic_mode") == "state_camera_shift_only" and not camera_enabled:
+        raise ValueError("state-camera-shift-only mode requires camera decomposition")
     if state_shift_enabled:
         if state_shift.get("require_pinned_final_hashes") is not True:
             raise ValueError("state-distribution-shift diagnostic requires pinned Policy weights")
@@ -221,6 +228,7 @@ def load_comparison_config(path: Path) -> tuple[dict[str, Any], ...]:
         if comparison.get("diagnostic_mode") in (
             "state_distribution_shift_only",
             "state_modality_shift_only",
+            "state_camera_shift_only",
         ):
             if (
                 action_divergence_enabled
@@ -749,6 +757,26 @@ def _online_tensors_with_modalities(
     )
 
 
+def _online_tensors_with_rgb_sources(
+    agentview_observation: Mapping[str, np.ndarray],
+    eye_in_hand_observation: Mapping[str, np.ndarray],
+    proprio_observation: Mapping[str, np.ndarray],
+    device: torch.device,
+) -> tuple[torch.Tensor, ...]:
+    return (
+        torch.from_numpy(agentview_observation["agentview_rgb"])
+        .permute(2, 0, 1)
+        .unsqueeze(0)
+        .to(device),
+        torch.from_numpy(eye_in_hand_observation["eye_in_hand_rgb"])
+        .permute(2, 0, 1)
+        .unsqueeze(0)
+        .to(device),
+        torch.from_numpy(proprio_observation["joint_states"]).unsqueeze(0).to(device),
+        torch.from_numpy(proprio_observation["gripper_states"]).unsqueeze(0).to(device),
+    )
+
+
 def _observation_difference(
     first: Mapping[str, np.ndarray], second: Mapping[str, np.ndarray]
 ) -> dict[str, float]:
@@ -991,10 +1019,13 @@ def evaluate_state_distribution_shift(
     free_run_horizon_steps: tuple[int, ...],
     pre_state_tolerances: Mapping[str, float],
     modality_decomposition: bool = False,
+    camera_decomposition: bool = False,
     device: torch.device,
 ) -> list[dict[str, Any]]:
     if len(trajectories) != len(source_indices):
         raise ValueError("state-shift trajectories and initial states must align")
+    if camera_decomposition and not modality_decomposition:
+        raise ValueError("camera decomposition requires RGB modality decomposition")
     if not free_run_horizon_steps or tuple(sorted(set(free_run_horizon_steps))) != tuple(
         free_run_horizon_steps
     ):
@@ -1081,6 +1112,22 @@ def evaluate_state_distribution_shift(
                     else:
                         free_rgb_teacher_proprio_action = None
                         teacher_rgb_free_proprio_action = None
+                    if camera_decomposition:
+                        free_agent_teacher_hand_action, _ = model.forward_step(
+                            *_online_tensors_with_rgb_sources(
+                                free_now, teacher_now, teacher_now, device
+                            ),
+                            hidden=teacher_hidden_now,
+                        )
+                        teacher_agent_free_hand_action, _ = model.forward_step(
+                            *_online_tensors_with_rgb_sources(
+                                teacher_now, free_now, teacher_now, device
+                            ),
+                            hidden=teacher_hidden_now,
+                        )
+                    else:
+                        free_agent_teacher_hand_action = None
+                        teacher_agent_free_hand_action = None
                     teacher_action_np = teacher_action[0].cpu().numpy().astype(np.float32)
                     free_action_np = free_action[0].cpu().numpy().astype(np.float32)
                     free_action_with_teacher_hidden_np = (
@@ -1118,6 +1165,33 @@ def evaluate_state_distribution_shift(
                                 + teacher_action_np
                             ).tolist(),
                         }
+                    camera_terms = None
+                    if camera_decomposition:
+                        free_agent_teacher_hand_np = (
+                            free_agent_teacher_hand_action[0].cpu().numpy().astype(np.float32)
+                        )
+                        teacher_agent_free_hand_np = (
+                            teacher_agent_free_hand_action[0].cpu().numpy().astype(np.float32)
+                        )
+                        camera_terms = {
+                            "agentview_conditioned_action": free_agent_teacher_hand_np.tolist(),
+                            "eye_in_hand_conditioned_action": teacher_agent_free_hand_np.tolist(),
+                            "agentview_action_delta": (
+                                free_agent_teacher_hand_np - teacher_action_np
+                            ).tolist(),
+                            "eye_in_hand_action_delta": (
+                                teacher_agent_free_hand_np - teacher_action_np
+                            ).tolist(),
+                            "both_camera_action_delta": (
+                                free_rgb_teacher_proprio_np - teacher_action_np
+                            ).tolist(),
+                            "agentview_eye_in_hand_interaction_delta": (
+                                free_rgb_teacher_proprio_np
+                                - free_agent_teacher_hand_np
+                                - teacher_agent_free_hand_np
+                                + teacher_action_np
+                            ).tolist(),
+                        }
                     expert_action = np.asarray(
                         trajectory["actions"][absolute_step], dtype=np.float32
                     )
@@ -1149,6 +1223,8 @@ def evaluate_state_distribution_shift(
                         }
                     if modality_terms is not None:
                         step_result["modality_decomposition"] = modality_terms
+                    if camera_terms is not None:
+                        step_result["camera_decomposition"] = camera_terms
                     step_results.append(step_result)
                     teacher_now = teacher_next
                     free_now = free_next
@@ -1210,6 +1286,7 @@ def run_diagnostic(config_path: Path, dataset_root: Path, device_name: str) -> d
     state_shift_only = comparison.get("diagnostic_mode") in (
         "state_distribution_shift_only",
         "state_modality_shift_only",
+        "state_camera_shift_only",
     )
     focused_only = one_step_only or state_shift_only
     hidden_modes = tuple(
@@ -1578,6 +1655,9 @@ def run_diagnostic(config_path: Path, dataset_root: Path, device_name: str) -> d
                             modality_decomposition=bool(
                                 state_shift_spec.get("modality_decomposition_enabled", False)
                             ),
+                            camera_decomposition=bool(
+                                state_shift_spec.get("camera_decomposition_enabled", False)
+                            ),
                             device=device,
                         )
                     finally:
@@ -1661,6 +1741,9 @@ def run_diagnostic(config_path: Path, dataset_root: Path, device_name: str) -> d
                 "state_modality_decomposition_enabled": bool(
                     state_shift_spec.get("modality_decomposition_enabled", False)
                 ),
+                "state_camera_decomposition_enabled": bool(
+                    state_shift_spec.get("camera_decomposition_enabled", False)
+                ),
                 "official_initial_states_accessed": not focused_only,
                 "support_role": evaluation["support_demonstration_role"],
                 "support_demonstrations": len(support_indices),
@@ -1708,6 +1791,7 @@ def run_diagnostic(config_path: Path, dataset_root: Path, device_name: str) -> d
                 "fixed-budget diagnostic with no checkpoint selection",
                 "same-index and causal pre-action data-view comparison only",
                 "controlled state-distribution shift with optional RGB/proprioceptive modality decomposition",
+                "optional agentview/eye-in-hand camera decomposition under fixed proprioception and hidden state",
                 "source meta-support, source meta-query, and source candidate-nonregression only",
                 "no SPT update, A/B/C comparison, or Module qualification",
             ],
