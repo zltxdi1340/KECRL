@@ -291,6 +291,46 @@ def _build_sequence_dataset(
     )
 
 
+def _random_translate_eye_hand_sequences(
+    images: torch.Tensor,
+    *,
+    max_translation_pixels: int,
+    generator: torch.Generator,
+) -> torch.Tensor:
+    if images.ndim != 5 or images.dtype != torch.uint8:
+        raise ValueError("eye-in-hand augmentation expects uint8 [B, T, C, H, W] images")
+    if max_translation_pixels < 0:
+        raise ValueError("eye-in-hand translation radius must be nonnegative")
+    if max_translation_pixels == 0:
+        return images
+    batch, steps, channels, height, width = images.shape
+    if max_translation_pixels >= min(height, width) // 2:
+        raise ValueError("eye-in-hand translation radius is too large for the image size")
+    offsets = torch.randint(
+        low=-max_translation_pixels,
+        high=max_translation_pixels + 1,
+        size=(batch, 2),
+        generator=generator,
+        device="cpu",
+    ).to(device=images.device, dtype=torch.float32)
+    offsets = offsets.repeat_interleave(steps, dim=0)
+    theta = torch.zeros((batch * steps, 2, 3), dtype=torch.float32, device=images.device)
+    theta[:, 0, 0] = 1.0
+    theta[:, 1, 1] = 1.0
+    theta[:, 0, 2] = offsets[:, 0] * (2.0 / width)
+    theta[:, 1, 2] = offsets[:, 1] * (2.0 / height)
+    flat = images.reshape(batch * steps, channels, height, width).to(torch.float32).div(255.0)
+    grid = torch.nn.functional.affine_grid(theta, flat.shape, align_corners=False)
+    translated = torch.nn.functional.grid_sample(
+        flat,
+        grid,
+        mode="bilinear",
+        padding_mode="reflection",
+        align_corners=False,
+    )
+    return translated.mul(255.0).round().clamp_(0, 255).to(torch.uint8).reshape_as(images)
+
+
 def _capture_initial_observations(
     *,
     suite_name: str,
@@ -359,7 +399,14 @@ def _train_arm(
     dataset_root: Path,
     device: torch.device,
     train_dataset: RoleRestrictedLiberoSequenceDataset,
+    eye_hand_translation_pixels: int = 0,
 ) -> tuple[LiberoBCPolicy, dict[str, Any]]:
+    if (
+        isinstance(eye_hand_translation_pixels, bool)
+        or not isinstance(eye_hand_translation_pixels, int)
+        or eye_hand_translation_pixels < 0
+    ):
+        raise ValueError("eye-hand translation radius must be a nonnegative integer")
     _set_seed(seed)
     policy_spec = policy_config["policy"]
     training = base["training"]
@@ -386,6 +433,7 @@ def _train_arm(
     iterator = iter(loader)
     losses = []
     valid_step_updates = 0
+    augmentation_generator = torch.Generator(device="cpu").manual_seed(seed + 18_731_113)
     updates = int(base["training"]["optimizer_updates"])
     for update in range(updates):
         if update % 100 == 0:
@@ -396,6 +444,12 @@ def _train_arm(
             iterator = iter(loader)
             host_batch = next(iterator)
         batch = _to_device(host_batch, device)
+        if eye_hand_translation_pixels:
+            batch["eye_in_hand_rgb"] = _random_translate_eye_hand_sequences(
+                batch["eye_in_hand_rgb"],
+                max_translation_pixels=eye_hand_translation_pixels,
+                generator=augmentation_generator,
+            )
         model.train()
         optimizer.zero_grad(set_to_none=True)
         predictions, _hidden = model.forward_sequence(
@@ -434,6 +488,7 @@ def _train_arm(
         "spt_unchanged": spt_unchanged,
         "initial_model_sha256": initial_digest,
         "final_model_sha256": _digest_tensors(model.state_dict()),
+        "eye_hand_translation_pixels": eye_hand_translation_pixels,
     }
 
 
