@@ -114,6 +114,22 @@
 
 在这组受控输入替换中，RGB 项约为本体感知项的 `5.8` 倍（3 步）和 `4.6` 倍（5 步）；hidden 项小于 RGB、但大于本体感知项；交互项接近零。这支持“短窗口动作输出变化主要由视觉观测漂移驱动，循环 hidden 提供次级贡献，本体感知漂移较小”的局部判断。它仍不能说明视觉编码器本身、相机视角、动作 head 或数据覆盖谁是最终根因，因为输入替换测量的是锁定 Policy 在当前轨迹附近的敏感性，不是修复后的长程成功率。
 
+## agentview 与 eye-in-hand 相机分解结果（2026-10-24）
+
+在相同的六条 demonstration、相同的专家 hidden 和专家本体感知输入下，进一步只替换一路 RGB，或同时替换两路 RGB。这里的相机项不混入本体感知漂移；hidden 项仍来自完整自由输入与固定专家 hidden 输入的差异。
+
+- 配置：[state-camera-shift diagnostic](../configs/libero_spatial_bc_state_camera_shift_diagnostic_v1.json)，SHA-256 `ad189b22f40f26bbfc72f2d8a15e07e23429790a3e71c4117a49d4b09b965c15`。
+- 结果文件：`/tmp/libero-bc-state-camera-shift-20261024-v1.json`，SHA-256 `32a4b8641a0e47faea1e4298b0ea85209808735f9b715cfeab2d0e90c3ae07b3`。
+- 运行代码提交：`a4459beaba5c3487c26ccb57cf96c231a1456ef4`；CUDA `cuda:1` / RTX 4090；总耗时 `146.67s`，峰值 CUDA allocation `292,003,840 bytes`。两臂各 500 updates、各消费 `37,534` 个有效动作步，causal Policy 最终哈希仍为锁定值 `6f647466576f1e763ddbc06f8885e4c2f900e0d2635036161bdff991ec5aa3ae`。
+
+| 自由窗口 | 样本数 | agentview 条件动作 MAE | eye-in-hand 条件动作 MAE | 两路相机联合 MAE | 相机交互 MAE | hidden 条件动作 MAE |
+|---:|---:|---:|---:|---:|---:|---:|
+| 1 | 36 | 0.000000 | 0.000000 | 0.000000 | 0.000000 | 0.000000 |
+| 3 | 108 | 0.000208 | 0.002530 | 0.002555 | 0.000010 | 0.000595 |
+| 5 | 180 | 0.000359 | 0.005061 | 0.005063 | 0.000028 | 0.001997 |
+
+在这个单 seed、短窗口诊断中，eye-in-hand 项约为 agentview 项的 `12.1` 倍（3 步）和 `14.1` 倍（5 步），两路交互接近零。它支持“当前自由执行附近的 RGB 敏感性主要来自末端相机输入”的局部判断；它仍不能证明 eye-in-hand 编码器或相机本身是长程失败的唯一根因。下一步先在不同训练 seed 上复核这个排序，再决定是否进行单变量视觉修复 pilot。
+
 ## 隐藏态模式与闭环成功
 
 每格为 support demo/query demo/official candidate 三组各 3 个初态的成功数：
@@ -147,4 +163,4 @@
 
 ## 后续诊断
 
-这些仍是行为误差传播诊断，不是改 GRU 架构或扩大训练预算。下一项在同一固定 hidden 和本体感知输入下，把 RGB 进一步拆成 agentview 与 eye-in-hand 两个相机的贡献，判断视觉偏移主要来自外部场景视图还是末端视图。它仍不访问正式评估状态，也不进行 SPT/FOMAML、Knowledge 更新或 Module qualification。相机项完成后，再决定是否做单变量视觉修复 pilot；基础单 SPI 未稳定前不启动 A/B/C 或注册 Module。
+这些仍是行为误差传播诊断，不是改 GRU 架构或扩大训练预算。下一项在不同训练 seed 上复核 agentview/eye-in-hand 的贡献排序，并保持相同 task、数据角色、更新预算和锁定评估边界。复核完成后再决定是否进行单变量视觉修复 pilot；基础单 SPI 未稳定前不启动 A/B/C 或注册 Module。
