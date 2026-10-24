@@ -149,6 +149,17 @@ def test_state_shift_protocol_requires_sorted_horizons_and_authorized_targets(tm
     loaded = diagnostic.load_comparison_config(path)
     assert loaded[0]["diagnostic_mode"] == "state_camera_shift_only"
 
+    config["replicate_seed"] = 20261022
+    path.write_text(json.dumps(config))
+    loaded = diagnostic.load_comparison_config(path)
+    assert loaded[0]["replicate_seed"] == 20261022
+
+    config["replicate_seed"] = True
+    path.write_text(json.dumps(config))
+    with pytest.raises(ValueError, match="replicate_seed must be a nonnegative integer"):
+        diagnostic.load_comparison_config(path)
+
+    config["replicate_seed"] = 20261021
     config["state_distribution_shift"]["modality_decomposition_enabled"] = False
     path.write_text(json.dumps(config))
     with pytest.raises(ValueError, match="requires RGB modality decomposition"):

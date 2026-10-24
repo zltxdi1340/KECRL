@@ -70,6 +70,13 @@ def load_comparison_config(path: Path) -> tuple[dict[str, Any], ...]:
         raise ValueError("causal alignment task must match the base diagnostic")
     if int(comparison["seed"]) != int(base["seed"]):
         raise ValueError("causal alignment seed must match the base diagnostic")
+    replicate_seed = comparison.get("replicate_seed", comparison["seed"])
+    if (
+        isinstance(replicate_seed, bool)
+        or not isinstance(replicate_seed, int)
+        or replicate_seed < 0
+    ):
+        raise ValueError("replicate_seed must be a nonnegative integer")
     training = comparison["training"]
     if training.get("reuse_base_budget_exactly") is not True:
         raise ValueError("causal alignment must reuse the base optimizer budget")
@@ -1275,7 +1282,8 @@ def run_diagnostic(config_path: Path, dataset_root: Path, device_name: str) -> d
     device = torch.device(device_name)
     torch.cuda.set_device(device)
     task_id = int(comparison["task_id"])
-    seed = int(comparison["seed"])
+    protocol_seed = int(comparison["seed"])
+    seed = int(comparison.get("replicate_seed", protocol_seed))
     policy_spec = policy_config["policy"]
     evaluation = comparison["evaluation"]
     one_step_spec = comparison.get("one_step_counterfactual", {})
@@ -1723,12 +1731,15 @@ def run_diagnostic(config_path: Path, dataset_root: Path, device_name: str) -> d
                 "device": str(device),
                 "device_name": torch.cuda.get_device_name(device),
                 "seed": seed,
+                "protocol_seed": protocol_seed,
                 "elapsed_seconds": total_elapsed,
                 "training_and_policy_evaluation_elapsed_seconds": training_evaluation_elapsed,
                 "peak_cuda_memory_bytes": int(torch.cuda.max_memory_allocated(device)),
             },
             "scope": {
                 "task_id": task_id,
+                "protocol_seed": protocol_seed,
+                "replicate_seed": seed,
                 "policy_hidden_modes": list(hidden_modes),
                 "continuous_hidden_teacher_forced": bool(
                     evaluation.get("continuous_hidden_teacher_forced", False)
