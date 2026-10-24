@@ -151,6 +151,25 @@
 
 这使“eye-in-hand 是当前局部 RGB 敏感性的主要来源”从单 seed 工作假设提升为三 seed 机制诊断结论，但仍不是视觉修复有效性、长程成功率或正式 SPI 资格结论。
 
+## eye-in-hand 平移鲁棒性 pilot（2026-10-24）
+
+为检验相机敏感性是否可以通过单变量输入处理缓解，固定 task 0、causal pre-action 数据、meta-support 训练角色、500 次 optimizer update、连续 hidden 部署和 support/query 各 3 条开放 demonstration，只在实验臂的训练阶段对 eye-in-hand RGB 序列施加每个窗口共享的整数平移（反射填充，最大 4 像素）。baseline 不做增强；两臂共享初始 Policy、batch 顺序、有效动作步预算和评估边界。增强只作用于训练，评估使用原始图像。
+
+- 配置：[eye-hand robustness pilot](../configs/libero_spatial_eye_hand_robustness_pilot_v1.json)，SHA-256 `be761489bb8d52e02137fdf9d8559410fd176953e6a66529b94cd17e198b1c36`。
+- 结果文件：`/tmp/libero-eye-hand-robustness-pilot-20261024-v1.json`，SHA-256 `144a61b132b0e7b111c524eb3468816f5bdd7790ea449abb0317989c6e663e00`。
+- 运行提交：`3554a50336a9bc096903fcd439ab17b4c6c4dc88`；CUDA `cuda:1` / RTX 4090；耗时 `1026.27s`。三个 seed 的 baseline 最终 Policy 哈希均与既有锁定值一致；两臂各消费 `37,534`、`37,547`、`37,537` 个有效动作步。
+
+| seed | query MSE baseline → 增强 | support 成功 baseline → 增强 | query 成功 baseline → 增强 | eye-in-hand 敏感性 3 步 baseline → 增强 | 5 步 baseline → 增强 |
+|---:|---:|---:|---:|---:|---:|
+| 20261021 | 0.09682 → 0.09373 | 0/3 → 2/3 | 0/3 → 3/3 | 0.002530 → 0.002862 | 0.005061 → 0.004916 |
+| 20261022 | 0.08242 → 0.09006 | 0/3 → 1/3 | 0/3 → 0/3 | 0.003013 → 0.002404 | 0.006102 → 0.006264 |
+| 20261023 | 0.08832 → 0.08657 | 0/3 → 0/3 | 0/3 → 0/3 | 0.003529 → 0.003342 | 0.008513 → 0.006620 |
+| 均值 | 0.08919 → 0.09012 | 0/9 → 3/9 | 0/9 → 3/9 | 0.003024 → 0.002869 | 0.006559 → 0.005933 |
+
+增强臂的 query MSE 只有两个 seed 下降，闭环新增的 3 个 query 成功全部来自 seed `20261021`；相机敏感性均值下降，但 seed `20261021` 的 3 步和 seed `20261022` 的 5 步反而上升。因而本 pilot 提供了视觉输入处理可能改善局部行为的信号，却没有稳定的跨 seed 修复证据。它仍是非正式 pilot：没有访问 official candidate、validation、held-out 或 qualification 状态，没有选择 checkpoint，没有更新 SPT/Knowledge，也没有注册 Module。
+
+下一项先不扩大到 A/B/C。固定这三组已训练 Policy 和同一批 expert-state，在原始 eye-in-hand 图像上施加可复现的 `±1/±2/±4` 像素平移，直接测量动作变化及 gripper/translation 分量变化；该测试用于判断训练增强是否真正降低相机输入敏感性。若没有稳定降低，再转向 action head/数据覆盖的诊断；若降低且闭环信号可复现，才冻结更大 seed 的视觉修复 pilot。
+
 ## 隐藏态模式与闭环成功
 
 每格为 support demo/query demo/official candidate 三组各 3 个初态的成功数：
@@ -184,4 +203,4 @@
 
 ## 后续诊断
 
-这些仍是行为误差传播诊断，不是改 GRU 架构或扩大训练预算。相机贡献排序已在三个 seed 上复核。下一项进行一个单变量 eye-in-hand 鲁棒性 pilot：固定 task、数据角色、训练预算和评估边界，只改变 eye-in-hand 的训练输入处理，比较其 teacher-forced 误差、受控相机敏感性和开放 demonstration 闭环行为；不选择 checkpoint，不访问正式 candidate，不更新 SPT/Knowledge，也不注册 Module。基础单 SPI 未稳定前不启动 A/B/C 或 Module qualification。
+这些仍是行为误差传播诊断，不是改 GRU 架构或扩大训练预算。相机贡献排序已经在三个 seed 上复核；单变量 eye-in-hand 平移增强 pilot 已完成，但跨 seed 结果不稳定。基础单 SPI 未稳定前不启动 A/B/C 或 Module qualification。
