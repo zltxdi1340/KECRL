@@ -59,3 +59,17 @@ def test_eye_hand_pilot_config_rejects_changed_augmentation(tmp_path):
     path.write_text(json.dumps(config))
     with pytest.raises(ValueError, match="augmentation specification is invalid"):
         pilot.load_pilot_config(path)
+
+
+def test_rollout_summary_accepts_episode_lists():
+    summary = pilot._rollout_summary(
+        {
+            "meta_query": [
+                {"success": True, "steps": 4, "terminal_reason": "success"},
+                {"success": False, "steps": 7, "terminal_reason": "timeout"},
+            ]
+        }
+    )
+    assert summary["meta_query"]["successes"] == 1
+    assert summary["meta_query"]["episode_count"] == 2
+    assert summary["meta_query"]["success_rate"] == 0.5

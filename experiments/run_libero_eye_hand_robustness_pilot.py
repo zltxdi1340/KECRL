@@ -176,11 +176,12 @@ def _camera_summary(episodes_by_group: Mapping[str, Any]) -> dict[str, Any]:
 def _rollout_summary(groups: Mapping[str, Any]) -> dict[str, Any]:
     summary = {}
     for group_name, result in groups.items():
-        episodes = result["episodes"]
+        episodes = result["episodes"] if isinstance(result, Mapping) else result
+        successes = sum(int(episode["success"]) for episode in episodes)
         summary[group_name] = {
-            "successes": int(result["successes"]),
-            "episode_count": int(result["episode_count"]),
-            "success_rate": float(result["success_rate"]),
+            "successes": successes,
+            "episode_count": len(episodes),
+            "success_rate": float(successes / len(episodes)) if episodes else 0.0,
             "mean_steps": float(np.mean([episode["steps"] for episode in episodes])),
             "terminal_reasons": [episode["terminal_reason"] for episode in episodes],
         }
