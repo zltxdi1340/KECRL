@@ -1,0 +1,48 @@
+{
+  "schema_version": 1,
+  "status": "single_source_spi_eye_hand_synthetic_sensitivity_diagnostic",
+  "formal_result": false,
+  "purpose": "Measure the direct action sensitivity of fixed baseline and eye-in-hand-translation Policy weights to controlled eye-in-hand image shifts at expert states",
+  "source_training_config": "configs/libero_spatial_eye_hand_robustness_pilot_v1.json",
+  "task_id": 0,
+  "replicate_seeds": [20261021, 20261022, 20261023],
+  "arms": ["baseline", "eye_hand_translation"],
+  "hidden_mode": "continuous_expert_prefix",
+  "state_source": "expert_replay_from_authorized_demonstrations",
+  "expected_model_sha256_by_seed_and_arm": {
+    "20261021": {
+      "baseline": "6f647466576f1e763ddbc06f8885e4c2f900e0d2635036161bdff991ec5aa3ae",
+      "eye_hand_translation": "9a0659996587f94f532529876481649d214501823b2aee95ea1196bcf2615a3a"
+    },
+    "20261022": {
+      "baseline": "c85c8be49b6e1d1f225c41fee1511900543875109a9d09efc6ada49259f25e07",
+      "eye_hand_translation": "469413983599df6ed7de128a450dc2ebc56409eb1f3b468b424084f7d6571f1e"
+    },
+    "20261023": {
+      "baseline": "efe16a0853ca4ab180d9fd3673e1a27876401cc97237af545c32afc711f511da",
+      "eye_hand_translation": "858899b5b7a893d567c294e3a55c3357aa3b1a63b223703df81e5545b30ee299"
+    }
+  },
+  "demonstration_groups": {
+    "meta_support": [0, 1, 2],
+    "meta_query": [30, 31, 32]
+  },
+  "perturbation": {
+    "view": "eye_in_hand",
+    "mode": "fixed_integer_translation",
+    "padding_mode": "reflection",
+    "radii_pixels": [1, 2, 4],
+    "directions": ["left", "right", "up", "down"],
+    "same_translation_for_all_frames": false,
+    "other_modalities_held_fixed": true,
+    "hidden_state_held_fixed_for_each_action": true
+  },
+  "forbidden_uses": [
+    "checkpoint selection",
+    "SPT candidate acceptance",
+    "Module qualification",
+    "held-out effect estimation",
+    "formal architecture comparison",
+    "Knowledge update"
+  ]
+}
