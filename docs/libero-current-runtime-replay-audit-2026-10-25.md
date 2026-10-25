@@ -39,10 +39,10 @@
 1. 当前 runtime 对历史动作序列的轨迹是确定的，前面 task 3/7 的 replay 结果可以稳定复现。
 2. HDF5 成功标签与当前 runtime 成功判定仍不一致，但这种不一致不能再归因于重复噪声、reset 顺序、controller 配置或 adapter 动作裁剪。
 3. 历史 HDF5 observation/state 与当前 runtime 重新生成的 observation/state 需要被视作两种数据语义。当前 runtime 轨迹可用于诊断当前闭环，但不能直接覆盖官方 HDF5。
-4. 在 HDF5 生成时 runtime provenance 缺失的情况下，继续调 Policy loss 不能解决这条数据—环境边界；需要先决定是否复现历史 simulator，或正式采用“离线历史观测 + 当前 runtime 闭环”双协议并明确报告其限制。
+4. 在 HDF5 生成时 runtime provenance 缺失的情况下，继续调 Policy loss 不能解决这条数据—环境边界。后续 source-support 全量 replay 显示 150 条 meta-support 示教只有 17 条能完整执行到 HDF5 action 序列末端，因此当前 runtime 不能直接替代完整离线训练视图；本仓库冻结为“离线历史观测 + 当前 runtime 闭环”的双协议。
 
 ## 下一步
 
-冻结当前 runtime 的 regenerated trajectory 只作为诊断缓存，先在四条 case 上比较历史 HDF5 causal observation 与当前 regenerated pre-action observation 的 Policy 输入差异；不训练、不选择 checkpoint。该输入对齐审计已完成，见 [历史 HDF5 与当前 runtime 输入对齐审计](libero-replay-input-alignment-audit-2026-10-25.md)。下一项固定已有 Policy 权重做输入替换敏感性，若差异足以改变动作输出，再做明确标记为 diagnostic 的双协议 BC 对照；若差异只影响仿真状态而不影响动作输入，再回到同一空间 CNN-only/CNN+GRU 表示诊断。
+冻结当前 runtime 的 regenerated trajectory 只作为诊断缓存。历史 HDF5 与当前 runtime 输入对齐审计、固定 Policy 输入替换敏感性审计和 source-support 全量 replay 可行性审计均已完成，结果见[输入对齐审计](libero-replay-input-alignment-audit-2026-10-25.md)、[输入替换敏感性审计](libero-policy-input-replacement-sensitivity-audit-2026-10-25.md)和[source-support replay 可行性审计](libero-source-support-replay-feasibility-audit-2026-10-25.md)。当前 runtime 只能作为闭环/对齐诊断，HDF5 causal view 作为完整离线 BC 协议。
 
 phase-balanced、gripper-loss 和 A/B/C 正式候选实验继续暂停。

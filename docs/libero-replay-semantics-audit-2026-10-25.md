@@ -39,6 +39,6 @@
 
 ## 下一步
 
-当前 runtime 的可复现专家轨迹审计和 [历史 HDF5 与当前 runtime 输入对齐审计](libero-replay-input-alignment-audit-2026-10-25.md) 已完成。四条 case 的完整 sim-state/observation digest 在三次重复中都稳定，但成功边界仍与 HDF5 标签不同，且两种 causal 输入在第一个动作后就分叉。下一项固定已有 Policy 权重做输入替换敏感性；原始 HDF5 继续只作为离线 BC 数据，当前 runtime 轨迹只作为诊断数据，不混合两种 observation 语义。
+当前 runtime 的可复现专家轨迹审计、历史 HDF5 与当前 runtime 输入对齐审计、固定 Policy 输入替换敏感性审计和 source-support 全量 replay 可行性审计已经完成。四条 case 的完整 sim-state/observation digest 在三次重复中都稳定，但成功边界仍与 HDF5 标签不同，且两种 causal 输入在第一个动作后就分叉；150 条 meta-support 示教只有 17 条能完整执行到 HDF5 action 序列末端。原始 HDF5 继续只作为离线 BC 数据，当前 runtime 轨迹只作为诊断数据，不混合两种 observation 语义。
 
 在这一步完成前，不启动 phase-balanced、gripper-loss 或 A/B/C 正式候选实验，也不把 replay 成功率写成 SPI/Module 结果。

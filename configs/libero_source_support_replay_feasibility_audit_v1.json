@@ -1,0 +1,40 @@
+{
+  "schema_version": 1,
+  "status": "libero_source_support_replay_feasibility_audit",
+  "formal_result": false,
+  "diagnostic_result": true,
+  "purpose": "Check whether current-runtime regenerated observations can cover the complete source-SPI meta-support action prefixes before freezing an observation protocol",
+  "source_protocol_config": "configs/libero_spatial_eye_hand_robustness_pilot_v1.json",
+  "task_ids": [0, 1, 3, 4, 7],
+  "demonstration_role": "meta_support",
+  "demonstration_indices": [
+    0, 1, 2, 3, 4, 5, 6, 7, 8, 9,
+    10, 11, 12, 13, 14, 15, 16, 17, 18, 19,
+    20, 21, 22, 23, 24, 25, 26, 27, 28, 29
+  ],
+  "seed": 20261021,
+  "stabilization_steps": 0,
+  "max_episode_steps": 300,
+  "scope": {
+    "historical_hdf5_read_only": true,
+    "private_simulator_state_read_for_replay_reset_only": true,
+    "private_state_used_as_policy_input": false,
+    "private_state_used_as_knowledge_evidence": false,
+    "policy_actions_executed_in_environment": false,
+    "validation_accessed": false,
+    "heldout_accessed": false,
+    "qualification_accessed": false,
+    "checkpoint_selection": false,
+    "spt_update": false,
+    "knowledge_update": false,
+    "module_qualification": false
+  },
+  "forbidden_uses": [
+    "Policy selection",
+    "checkpoint selection",
+    "SPT candidate acceptance",
+    "Module qualification",
+    "held-out effect estimation",
+    "Knowledge update"
+  ]
+}
