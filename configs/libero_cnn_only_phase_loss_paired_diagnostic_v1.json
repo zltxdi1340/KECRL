@@ -1,0 +1,59 @@
+{
+  "schema_version": 1,
+  "status": "libero_cnn_only_phase_loss_paired_diagnostic",
+  "formal_result": false,
+  "diagnostic_result": true,
+  "purpose": "Compare uniform and phase-balanced action losses on the same capacity-matched CNN-only Policy across all source tasks and two seeds",
+  "source_phase_replication_config": "configs/libero_cnn_only_phase_replication_diagnostic_v1.json",
+  "source_phase_replication_result_sha256": "0be80d87bb4a9410da8bde635666d631c11a277e2002d061a3dbf9710c693b14",
+  "task_ids": [0, 1, 3, 4, 7],
+  "replicate_seeds": [20261021, 20261022],
+  "data_protocol": {
+    "observation_action_alignment": "causal_pre_action",
+    "observation_source": "HDF5 causal view: current runtime initial observation then HDF5 obs[t-1]",
+    "training_role": "meta_support",
+    "evaluation_role": "meta_query",
+    "phase_label_source": "gripper_action_sign_first_close_then_release"
+  },
+  "training": {
+    "optimizer": "Adam",
+    "optimizer_updates": 500,
+    "checkpoint_selection": false,
+    "same_initial_model_per_task_seed": true,
+    "same_batch_order_per_task_seed": true,
+    "memory_mode": "cnn_only",
+    "memory_parameter_budget": "capacity-matched per-frame MLP within 10 parameters of one-layer GRU",
+    "gripper_action_weight": 6.0
+  },
+  "arms": [
+    {
+      "name": "uniform",
+      "loss_mode": "uniform_action_mse"
+    },
+    {
+      "name": "phase_balanced",
+      "loss_mode": "inverse_phase_frequency_weighted_action_mse"
+    }
+  ],
+  "scope": {
+    "historical_hdf5_read_only": true,
+    "private_state_used_as_policy_input": false,
+    "private_state_used_as_knowledge_evidence": false,
+    "policy_actions_executed_in_environment": false,
+    "validation_accessed": false,
+    "heldout_accessed": false,
+    "qualification_accessed": false,
+    "checkpoint_selection": false,
+    "spt_update": false,
+    "knowledge_update": false,
+    "module_qualification": false
+  },
+  "forbidden_uses": [
+    "checkpoint selection",
+    "SPT candidate acceptance",
+    "Module qualification",
+    "held-out effect estimation",
+    "formal architecture comparison",
+    "Knowledge update"
+  ]
+}
