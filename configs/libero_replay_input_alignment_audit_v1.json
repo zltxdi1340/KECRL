@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "status": "historical_vs_current_runtime_policy_input_audit",
+  "formal_result": false,
+  "diagnostic_result": true,
+  "purpose": "Compare historical HDF5 causal observations with current-runtime pre-action observations",
+  "source_runtime_config": "configs/libero_current_runtime_replay_audit_v1.json",
+  "source_runtime_result_sha256": "13fbb4cec452ac3bf7d88674e24168e757d6ba5c92983619ecbc64c9a86c6f45",
+  "cases": [
+    "task3_failed_support_demo1",
+    "task3_success_control_demo0",
+    "task7_failed_support_demo0",
+    "task7_success_control_demo1"
+  ],
+  "seed": 20261021,
+  "stabilization_steps": 0,
+  "max_episode_steps": 300,
+  "scope": {
+    "historical_hdf5_read_only": true,
+    "private_simulator_state_read_for_forensics_only": true,
+    "private_state_used_as_policy_input": false,
+    "private_state_used_as_knowledge_evidence": false,
+    "checkpoint_selection": false,
+    "spt_update": false,
+    "knowledge_update": false,
+    "module_qualification": false
+  }
+}
