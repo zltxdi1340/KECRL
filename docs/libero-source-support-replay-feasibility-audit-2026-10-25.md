@@ -7,8 +7,8 @@
 本次访问 source-SPI 的 5 个任务（0、1、3、4、7）和每个任务的全部 30 条 `meta_support` 示教，共 150 条。每条只读取 HDF5 action 和 `init_state`，在当前 runtime 中执行固定 action；不训练 Policy、不保存 observation、不访问 validation/held-out/qualification、不选择 checkpoint、不更新 SPT/Knowledge，也不注册 Module。当前 replay 的 `success` 只表示环境边界诊断，不是 Policy 结果或 SPI 资格。
 
 - 配置：[source support replay feasibility audit](../configs/libero_source_support_replay_feasibility_audit_v1.json)，SHA-256 `f0da50bf4109143df1f26153974b8e1d5a4acb47549b3b6451914c8e5ba68778`。
-- 结果：`/tmp/libero-source-support-replay-feasibility-20261025-v1.json`，SHA-256 `0a52e6ac68dec233bc3f73646f2e4b62c9b080e4a4f69f2cdc22c1cc7c7dccf8`。
-- 运行时记录提交：`8185f10b67f34268c3794adca54d646b0955673b`；代码和本报告随后提交到 GitHub。
+- 结果：`/tmp/libero-source-support-replay-feasibility-20261025-v2.json`，SHA-256 `4c975494ef94a5d6235d5b1e396a7aaf6fa6833a5441356329b2163e9c3229a1`。
+- 运行时记录提交：`fd30c6ff054427ab0990bd1573f7744cd9567fc2`。
 - seed `20261021`，`stabilization_steps=0`，`max_episode_steps=300`。
 
 ## 结果
