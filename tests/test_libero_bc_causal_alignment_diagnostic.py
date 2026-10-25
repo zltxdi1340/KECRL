@@ -248,6 +248,32 @@ def test_trajectory_error_summary_tracks_action_and_state_drift_by_time_bin():
     assert result["free_rollout_state_drift_on_expert_horizon"]["agentview_rgb_mae"] == pytest.approx(1.0)
 
 
+def test_trajectory_error_summary_can_emit_step_metrics_for_phase_stratification():
+    observations = [
+        {
+            "agentview_rgb": np.zeros((2, 2, 3), dtype=np.uint8),
+            "eye_in_hand_rgb": np.zeros((2, 2, 3), dtype=np.uint8),
+            "joint_states": np.zeros(7, dtype=np.float32),
+            "gripper_states": np.zeros(2, dtype=np.float32),
+        }
+        for _ in range(2)
+    ]
+    expert_actions = np.zeros((2, 7), dtype=np.float32)
+    policy_actions = expert_actions.copy()
+    policy_actions[0, 0] = 0.5
+    result = diagnostic._trajectory_error_summary(
+        expert_actions=expert_actions,
+        policy_actions_on_expert_states=policy_actions,
+        expert_observations=observations,
+        policy_observations=observations,
+        time_bin_steps=10,
+        include_step_metrics=True,
+    )
+    assert len(result["step_metrics"]) == 2
+    assert result["step_metrics"][0]["action_mae"] == pytest.approx(0.5 / 7.0)
+    assert result["step_metrics"][1]["joint_state_l2"] == 0.0
+
+
 def test_one_step_counterfactual_branches_from_reproduced_expert_prefix():
     class Policy(torch.nn.Module):
         def forward_step(self, _agent, _hand, _joints, _gripper, hidden=None):

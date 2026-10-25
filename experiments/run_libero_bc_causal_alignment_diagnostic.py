@@ -633,6 +633,7 @@ def _trajectory_error_summary(
     policy_observations: list[Mapping[str, np.ndarray]],
     time_bin_steps: int,
     state_divergence_thresholds: Mapping[str, float] | None = None,
+    include_step_metrics: bool = False,
 ) -> dict[str, Any]:
     expert_actions = np.asarray(expert_actions, dtype=np.float64)
     teacher_actions = np.asarray(policy_actions_on_expert_states, dtype=np.float64)
@@ -733,6 +734,33 @@ def _trajectory_error_summary(
         },
         "time_bins": bins,
     }
+    if include_step_metrics:
+        result["step_metrics"] = [
+            {
+                "step": int(step),
+                "action_mae": float(np.abs(action_delta[step]).mean()),
+                "action_l2": float(np.linalg.norm(action_delta[step])),
+                "translation_mae": float(np.abs(action_delta[step, :3]).mean()),
+                "rotation_mae": float(np.abs(action_delta[step, 3:6]).mean()),
+                "gripper_mae": float(np.abs(action_delta[step, 6])),
+                "gripper_sign_correct": bool(
+                    np.sign(teacher_actions[step, 6]) == np.sign(expert_actions[step, 6])
+                ),
+                "joint_state_l2": float(
+                    np.linalg.norm(policy_joints[step] - expert_joints[step])
+                ),
+                "gripper_state_l2": float(
+                    np.linalg.norm(policy_gripper[step] - expert_gripper[step])
+                ),
+                "agentview_rgb_mae": float(
+                    np.abs(policy_rgb[step] - expert_rgb[step]).mean()
+                ),
+                "eye_in_hand_rgb_mae": float(
+                    np.abs(policy_hand[step] - expert_hand[step]).mean()
+                ),
+            }
+            for step in range(overlap)
+        ]
     if state_divergence_thresholds is not None:
         required = {
             "action_l2",
@@ -784,6 +812,7 @@ def evaluate_paired_action_divergence(
     device: torch.device,
     time_bin_steps: int,
     state_divergence_thresholds: Mapping[str, float] | None = None,
+    include_step_metrics: bool = False,
 ) -> list[dict[str, Any]]:
     if len(trajectories) != len(source_indices):
         raise ValueError("action divergence trajectories and initial states must align")
@@ -835,6 +864,7 @@ def evaluate_paired_action_divergence(
                 policy_observations=free_observations,
                 time_bin_steps=time_bin_steps,
                 state_divergence_thresholds=state_divergence_thresholds,
+                include_step_metrics=include_step_metrics,
             )
             results.append(
                 {
