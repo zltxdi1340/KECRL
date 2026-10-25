@@ -1,0 +1,50 @@
+{
+  "schema_version": 1,
+  "status": "libero_cnn_only_uniform_closed_loop_diagnostic",
+  "formal_result": false,
+  "diagnostic_result": true,
+  "purpose": "Evaluate the exact CNN-only phase-uniform Policy from the paired offline run on fixed source candidate-nonregression initial states",
+  "source_paired_config": "configs/libero_cnn_only_phase_loss_paired_diagnostic_v1.json",
+  "source_paired_config_sha256": "0b4af76d6e6dc0d80b7493880b097e7a8700882aa7f61b89c904ba48d9bbb63d",
+  "source_paired_result_sha256": "249fe27c13909dce98a17c5edbc6aa68c5ac3cb7cf527ac86fa1c0435e668c03",
+  "source_paired_result_git_commit": "1830179c0a27a780235faaf8e6f5214430e2c4fd",
+  "task_ids": [0, 1, 3, 4, 7],
+  "seeds": [20261021, 20261022],
+  "training_data": {
+    "role": "meta_support",
+    "observation_action_alignment": "causal_pre_action",
+    "policy_memory_mode": "cnn_only",
+    "loss_mode": "uniform_action_mse",
+    "optimizer_updates": 500,
+    "checkpoint_selection": false
+  },
+  "online_evaluation": {
+    "initial_state_role": "candidate_nonregression",
+    "initial_state_indices": [0, 1, 2],
+    "max_episode_steps": 300,
+    "stabilization_steps": 5,
+    "deterministic_policy_actions": true
+  },
+  "scope": {
+    "source_meta_support_read": true,
+    "candidate_nonregression_states_read": true,
+    "policy_actions_executed_in_environment": true,
+    "private_state_used_as_policy_input": false,
+    "private_state_used_as_knowledge_evidence": false,
+    "meta_query_accessed": false,
+    "validation_accessed": false,
+    "heldout_accessed": false,
+    "qualification_accessed": false,
+    "checkpoint_selection": false,
+    "spt_update": false,
+    "knowledge_update": false,
+    "module_qualification": false
+  },
+  "forbidden_uses": [
+    "checkpoint selection",
+    "qualification or Module registration",
+    "held-out effect estimation",
+    "SPT or Knowledge update",
+    "formal SPI claim"
+  ]
+}
