@@ -1,0 +1,60 @@
+{
+  "schema_version": 1,
+  "status": "source_demo_expert_replay_consistency_audit",
+  "formal_result": false,
+  "diagnostic_result": true,
+  "purpose": "Audit deterministic replay, seed sensitivity, and stabilization sensitivity for failed source-SPI expert demonstrations",
+  "source_training_config": "configs/libero_spatial_eye_hand_robustness_pilot_v1.json",
+  "source_stratified_result_sha256": "7216ec6dbd74a4262e33aee595c019c811f2c63c033cf343eca262b17a9eb444",
+  "cases": [
+    {
+      "name": "task3_failed_support_demo1",
+      "task_id": 3,
+      "demonstration_role": "meta_support",
+      "demonstration_index": 1,
+      "expected_relation": "on_support",
+      "expected_geometry": "movable_object_surface",
+      "prior_replay_status": "failed"
+    },
+    {
+      "name": "task3_success_control_demo0",
+      "task_id": 3,
+      "demonstration_role": "meta_support",
+      "demonstration_index": 0,
+      "expected_relation": "on_support",
+      "expected_geometry": "movable_object_surface",
+      "prior_replay_status": "success"
+    },
+    {
+      "name": "task7_failed_support_demo0",
+      "task_id": 7,
+      "demonstration_role": "meta_support",
+      "demonstration_index": 0,
+      "expected_relation": "on_support",
+      "expected_geometry": "fixture_surface",
+      "prior_replay_status": "failed"
+    },
+    {
+      "name": "task7_success_control_demo1",
+      "task_id": 7,
+      "demonstration_role": "meta_support",
+      "demonstration_index": 1,
+      "expected_relation": "on_support",
+      "expected_geometry": "fixture_surface",
+      "prior_replay_status": "success"
+    }
+  ],
+  "seeds": [20261021, 20261022, 20261023],
+  "stabilization_steps": [0, 5],
+  "repetitions_per_setting": 3,
+  "image_size": 128,
+  "max_episode_steps": 300,
+  "replay_policy": {
+    "new_adapter_per_repetition": true,
+    "full_observation_trace_digest": true,
+    "checkpoint_selection": false,
+    "spt_update": false,
+    "knowledge_update": false,
+    "module_qualification": false
+  }
+}
