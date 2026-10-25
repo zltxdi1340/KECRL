@@ -21,7 +21,7 @@
 | 4 | inside_container / open_container | 3/3 | 3/3 |
 | 7 | on_support / fixture_surface | 2/3 | 3/3 |
 
-task 3 和 task 7 的 support 各有一条示教动作在当前固定环境中未达到 success。它们没有被当作成功专家控制样本进入 phase 误差均值；这说明部分 HDF5 示教轨迹在当前 replay 边界下需要单独复核，不能把所有离线动作都当作同等有效的专家闭环标签。
+task 3 和 task 7 的 support 各有一条示教动作在当前固定环境中未达到 success。HDF5 中两条轨迹的 rewards/dones 仍标记成功，因此这是数据标签与当前 replay 的不一致，而不是已经确认的 Policy 失败。它们没有被当作成功专家控制样本进入 phase 误差均值；详细重复性结果见 [专家重放一致性审计](libero-expert-replay-consistency-audit-2026-10-25.md)。
 
 ## 分层结果
 
@@ -65,4 +65,4 @@ task 3 和 task 7 的 support 各有一条示教动作在当前固定环境中�
 
 ## 下一步
 
-先不启动 A/B/C。下一步对 task 3/task 7 的失败专家 replay 做固定环境、固定初态、固定动作序列的重复性审计，区分数据轨迹本身不成功、状态/动作时序问题和环境 replay 敏感性。随后在专家 replay 资格稳定的任务上，做一个预先声明的单变量阶段平衡或 gripper loss pilot；仍只使用 source support/query，保持 causal 对齐和相同 500-update budget。只有基础 Policy 在 source/query 上形成可重复闭环后，才进入 SPT 更新和 A/B/C。
+先不启动 A/B/C。专家 replay 重复性审计已完成：task 3 demo 1 对 stabilization 敏感，task 7 demo 0 在三 seed、两种 stabilization 下稳定失败，重复 trace 均确定；但 HDF5 标签仍显示两者成功。下一步比较这两条轨迹的 HDF5 `states`/`robot_states` 与当前 replay 状态，定位初始化、动作截断或成功判定差异。只有 replay 语义稳定后，才考虑阶段平衡或 gripper loss pilot，再回到 SPT 更新和 A/B/C。
