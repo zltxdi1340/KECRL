@@ -242,7 +242,7 @@ head-only 与 full-policy 的 query 差值为 MSE `+0.13900`、translation MSE `
 
 同一 causal 数据的动作覆盖审计显示，support/query 前 60 步均有完整有效动作样本，总有效步分别为 `2,925/2,143`；两者前段平移、旋转和 gripper 绝对动作分布同量级，没有发现 query 完全缺失某个早期阶段的简单覆盖断裂。这不等于条件覆盖充分，图像目标位置、task relation 和动作之间的多模态仍未被分离。
 
-条件覆盖审计已完成，结果见 [LIBERO 条件覆盖审计](libero-conditional-coverage-audit-2026-10-24.md)。五个 source-SPI 任务的 support/query 覆盖相同的四种 relation、四种 source geometry 和五个 relation×geometry 组合；三个动作阶段均有样本，但阶段比例仍有任务条件偏移。目标相对几何没有越过 Policy 边界被读取，因此覆盖审计不能解释 RGB 是否遗漏了目标关系。随后完成的 [分层误差诊断](libero-stratified-error-diagnostic-2026-10-25.md) 显示 task 4 的 open-container 条件在 approach/transport 阶段 joint drift 和 eye-in-hand RGB 误差最高，task 1 query transport 的 translation 误差偏高，release 阶段在有样本的任务中夹爪误差放大；同时 task 3/task 7 各有一条 support 专家 replay 未成功。下一项先复核失败专家 replay，再考虑阶段平衡或 gripper loss 的单变量 pilot。该诊断仍不选择 checkpoint、不更新 SPT/Knowledge、不注册 Module。
+条件覆盖审计已完成，结果见 [LIBERO 条件覆盖审计](libero-conditional-coverage-audit-2026-10-24.md)。五个 source-SPI 任务的 support/query 覆盖相同的四种 relation、四种 source geometry 和五个 relation×geometry 组合；三个动作阶段均有样本，但阶段比例仍有任务条件偏移。目标相对几何没有越过 Policy 边界被读取，因此覆盖审计不能解释 RGB 是否遗漏了目标关系。随后完成的 [分层误差诊断](libero-stratified-error-diagnostic-2026-10-25.md) 显示 task 4 的 open-container 条件在 approach/transport 阶段 joint drift 和 eye-in-hand RGB 误差最高，task 1 query transport 的 translation 误差偏高，release 阶段在有样本的任务中夹爪误差放大；同时 task 3/task 7 各有一条 support 专家 replay 未成功。专家 replay 一致性和 [HDF5—当前重放状态对齐审计](libero-replay-state-alignment-audit-2026-10-25.md) 进一步显示，四条示教都在首个动作后偏离 HDF5 状态，包括成功控制示教，因此 replay eligibility 不能直接作为 Policy 失败筛选。下一项先冻结并解释 controller、MuJoCo/robosuite 版本和 gripper/action 执行语义，再考虑阶段平衡或 gripper loss 的单变量 pilot。该诊断仍不选择 checkpoint、不更新 SPT/Knowledge、不注册 Module。
 
 ## 隐藏态模式与闭环成功
 

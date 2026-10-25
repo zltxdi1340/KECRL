@@ -65,4 +65,4 @@ task 3 和 task 7 的 support 各有一条示教动作在当前固定环境中�
 
 ## 下一步
 
-先不启动 A/B/C。专家 replay 重复性审计已完成：task 3 demo 1 对 stabilization 敏感，task 7 demo 0 在三 seed、两种 stabilization 下稳定失败，重复 trace 均确定；但 HDF5 标签仍显示两者成功。下一步比较这两条轨迹的 HDF5 `states`/`robot_states` 与当前 replay 状态，定位初始化、动作截断或成功判定差异。只有 replay 语义稳定后，才考虑阶段平衡或 gripper loss pilot，再回到 SPT 更新和 A/B/C。
+状态对齐审计已完成，详见 [HDF5—当前重放状态对齐审计](libero-replay-state-alignment-audit-2026-10-25.md)。四条示教都在首个动作后出现 HDF5 与当前环境的状态/观测偏差，包括两个当前 replay 成功控制，因此当前 replay eligibility 不能直接作为 Policy 误差筛选。先冻结并解释 controller、MuJoCo/robosuite 版本和 gripper/action 执行语义，再重跑专家资格与分层误差；phase-balanced、gripper-loss 和 A/B/C 暂不启动。

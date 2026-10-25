@@ -44,6 +44,6 @@ HDF5 中 task 3 demo 1 和 task 7 demo 0 的 `rewards` 最后值均为 `1`，`do
 3. task 7 demo 0 的失败在三个 seed 和两种 stabilization 下稳定出现，而同任务 demo 1 稳定成功；问题更可能与该 demonstration 的初态/动作序列语义、数据生成轨迹或 task-specific replay 差异有关。
 4. 在这两条示教的 replay 一致性解决前，不能把 task 3/task 7 的 Policy 误差或成功率用于正式 source-SPI 门槛，也不能开始 A/B/C。
 
-## 下一步
+## 后续审计
 
-对 task 3 demo 1 和 task 7 demo 0 做状态轨迹差异审计：比较 HDF5 `states[t]`、`robot_states/obs` 和当前 replay 在首动作后及末端的 joint/gripper/状态维度，确认是状态索引、动作截断、初始化或成功判定差异。该审计仍不读取 held-out 状态、不训练模型；只有数据—环境 replay 语义稳定后，才回到阶段平衡或 gripper loss pilot。
+状态轨迹差异审计已经完成，见 [HDF5—当前重放状态对齐审计](libero-replay-state-alignment-audit-2026-10-25.md)。结果显示四条轨迹（包括两个当前 replay 成功控制）都在首个动作后偏离 HDF5 状态；因此此前的失败 demo 不能直接作为 Policy 失败样本，必须先冻结控制器/仿真版本与 action 执行语义边界。phase-balanced、gripper-loss 和 A/B/C 仍暂停，直到 replay 兼容性得到可复现解释。
