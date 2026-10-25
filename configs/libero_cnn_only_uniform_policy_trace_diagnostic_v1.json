@@ -1,0 +1,49 @@
+{
+  "schema_version": 1,
+  "status": "libero_cnn_only_uniform_policy_trace_diagnostic",
+  "formal_result": false,
+  "diagnostic_result": true,
+  "purpose": "Inspect action-to-public-proprioception traces for representative successes and failures from the fixed closed-loop diagnostic",
+  "source_closed_loop_config": "configs/libero_cnn_only_uniform_closed_loop_diagnostic_v1.json",
+  "source_closed_loop_config_sha256": "d22e6446924ab0e78675ffda31e5b499ed2c43cc6b0a2b5f75cfe9151ffd4cdf",
+  "source_closed_loop_result_sha256": "b57badce5287aeb9ff161fbad9eda6f6dd5a200664111f327f5895250db537e4",
+  "source_paired_result_sha256": "249fe27c13909dce98a17c5edbc6aa68c5ac3cb7cf527ac86fa1c0435e668c03",
+  "cases": [
+    {"task_id": 0, "seed": 20261021, "initial_state_indices": [0], "expected_success": [false], "expected_steps": [300]},
+    {"task_id": 1, "seed": 20261021, "initial_state_indices": [0], "expected_success": [false], "expected_steps": [300]},
+    {"task_id": 3, "seed": 20261021, "initial_state_indices": [0, 1], "expected_success": [true, false], "expected_steps": [145, 300]},
+    {"task_id": 3, "seed": 20261022, "initial_state_indices": [0], "expected_success": [false], "expected_steps": [300]},
+    {"task_id": 4, "seed": 20261021, "initial_state_indices": [0], "expected_success": [false], "expected_steps": [300]},
+    {"task_id": 7, "seed": 20261021, "initial_state_indices": [0], "expected_success": [false], "expected_steps": [300]}
+  ],
+  "rollout": {
+    "max_episode_steps": 300,
+    "stabilization_steps": 5,
+    "record_per_step_actions": true,
+    "record_public_joint_and_gripper_states": true,
+    "record_reward": true,
+    "record_rgb_or_private_simulator_state": false
+  },
+  "scope": {
+    "source_meta_support_read": true,
+    "candidate_nonregression_states_read": true,
+    "policy_actions_executed_in_environment": true,
+    "meta_query_accessed": false,
+    "validation_accessed": false,
+    "heldout_accessed": false,
+    "qualification_accessed": false,
+    "private_state_used_as_policy_input": false,
+    "private_state_used_as_knowledge_evidence": false,
+    "checkpoint_selection": false,
+    "spt_update": false,
+    "knowledge_update": false,
+    "module_qualification": false
+  },
+  "forbidden_uses": [
+    "checkpoint selection",
+    "qualification or Module registration",
+    "held-out effect estimation",
+    "SPT or Knowledge update",
+    "formal SPI claim"
+  ]
+}
