@@ -45,8 +45,8 @@ LIBERO 的数据生成脚本先把 `states[0]` 设置为仿真初态，再执行
 3. task 3 demo 1 的 stabilization 敏感性和 task 7 demo 0 的稳定失败仍然是真实的当前 replay 行为，但它们不能直接解释为 Policy、视觉表示或 action head 的根因。
 4. 此前分层误差诊断中把当前 replay 成功的专家轨迹作为条件是一个环境侧筛选边界；在 HDF5—当前环境语义没有解决前，不能把失败 demo 排除后得到的 phase 均值升级为正式 Policy 误差结论。
 
-## 下一步
+## 后续审计
 
-先做一个最小、可冻结的 replay 兼容性修复诊断：逐条比较 HDF5 的 `robot_states`、`joint_states`、`gripper_states` 与当前环境在首步后的输出，并显式记录 robosuite/MuJoCo 版本、controller 配置和 action clipping；同时保留当前 canonical replay 作为基线。目标是判断差异主要来自控制器/仿真版本，还是来自 gripper/action 执行语义。
+回放语义冻结审计已经完成，见 [LIBERO 回放语义冻结审计](libero-replay-semantics-audit-2026-10-25.md)。相关 controller 字段、control frequency、动作边界和 adapter 校验均与 HDF5 配置一致；当前运行时仍在首步产生 qvel/qpos/观测偏差，HDF5 没有记录生成时 simulator 版本。下一步冻结当前 runtime 的可复现专家轨迹，并把历史 HDF5 observation 与当前 runtime observation 分成两条协议，再重跑小规模 replay eligibility。
 
-在这个边界有可复现解释前，暂停 phase-balanced、gripper-loss 和 A/B/C 正式候选实验。修复后先重跑小规模专家 replay eligibility 和分层误差诊断，再决定是否进入同一空间 CNN 下的 CNN-only/CNN+GRU 表示对照或 SPT 更新迁移实验。
+在这个边界有可复现解释前，暂停 phase-balanced、gripper-loss 和 A/B/C 正式候选实验。

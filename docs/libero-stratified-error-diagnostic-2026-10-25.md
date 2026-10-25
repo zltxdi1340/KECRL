@@ -65,4 +65,4 @@ task 3 和 task 7 的 support 各有一条示教动作在当前固定环境中�
 
 ## 下一步
 
-状态对齐审计已完成，详见 [HDF5—当前重放状态对齐审计](libero-replay-state-alignment-audit-2026-10-25.md)。四条示教都在首个动作后出现 HDF5 与当前环境的状态/观测偏差，包括两个当前 replay 成功控制，因此当前 replay eligibility 不能直接作为 Policy 误差筛选。先冻结并解释 controller、MuJoCo/robosuite 版本和 gripper/action 执行语义，再重跑专家资格与分层误差；phase-balanced、gripper-loss 和 A/B/C 暂不启动。
+状态对齐和语义冻结审计已完成，详见 [HDF5—当前重放状态对齐审计](libero-replay-state-alignment-audit-2026-10-25.md) 与 [LIBERO 回放语义冻结审计](libero-replay-semantics-audit-2026-10-25.md)。四条示教都在首个动作后出现 HDF5 与当前环境的状态/观测偏差，包括两个当前 replay 成功控制；相关 controller 配置和动作边界已对齐，但 HDF5 没有生成时 simulator 版本。因此当前 replay eligibility 不能直接作为 Policy 误差筛选。下一步先冻结当前 runtime 的可复现专家轨迹，再重跑专家资格与分层误差；phase-balanced、gripper-loss 和 A/B/C 暂不启动。
