@@ -156,8 +156,11 @@ def _environment_metadata(adapter: Any) -> dict[str, Any]:
     env = adapter.environment
     model = env.sim.model
     controller_config = _controller_subset(env.robots[0].controller_config)
+    control_freq = getattr(env, "control_freq", None)
+    if control_freq is None:
+        control_freq = getattr(getattr(env, "env", None), "control_freq", None)
     return {
-        "control_freq": getattr(env, "control_freq", None),
+        "control_freq": control_freq,
         "model_timestep": float(model.opt.timestep),
         "model_nq": int(model.nq),
         "model_nv": int(model.nv),
