@@ -178,7 +178,7 @@ def _versions() -> dict[str, Any]:
 
 
 def run_audit(config_path: Path, dataset_root: Path) -> dict[str, Any]:
-    config, replay_config, base, policy, transfer, family, manifest = load_runtime_config(config_path)
+    config, replay_config, base, policy, transfer, manifest = load_runtime_config(config_path)
     dataset_root = dataset_root.resolve()
     from libero.libero import get_libero_path
 
