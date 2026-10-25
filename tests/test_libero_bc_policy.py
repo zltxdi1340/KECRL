@@ -70,6 +70,10 @@ def test_cnn_only_policy_has_no_cross_step_hidden_state():
     assert actions.shape == repeated.shape == (1, 7)
     assert hidden is None and repeated_hidden is None
     assert torch.equal(actions, repeated)
+    gru = _policy()
+    cnn_parameters = sum(parameter.numel() for parameter in policy.recurrent.parameters())
+    gru_parameters = sum(parameter.numel() for parameter in gru.recurrent.parameters())
+    assert abs(cnn_parameters - gru_parameters) <= 10
 
 
 def test_masked_bc_loss_ignores_padded_targets_and_rejects_empty_mask():

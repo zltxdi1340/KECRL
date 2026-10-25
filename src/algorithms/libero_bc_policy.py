@@ -52,13 +52,23 @@ class LiberoBCPolicyConfig:
 
 
 class _NonRecurrentProjection(nn.Module):
-    """Per-frame projection used by the CNN-only memory ablation."""
+    """Capacity-matched per-frame MLP used by the CNN-only memory ablation."""
 
     def __init__(self, input_dim: int, output_dim: int) -> None:
         super().__init__()
+        # Match the parameter budget of a one-layer GRU with the same input
+        # and hidden widths, while keeping computation independent across time.
+        gru_parameters = 3 * (
+            input_dim * output_dim + output_dim * output_dim + 2 * output_dim
+        )
+        hidden_dim = max(
+            1,
+            int(round((gru_parameters - output_dim) / (input_dim + 1 + output_dim))),
+        )
         self.projection = nn.Sequential(
-            nn.Linear(input_dim, output_dim),
+            nn.Linear(input_dim, hidden_dim),
             nn.ReLU(),
+            nn.Linear(hidden_dim, output_dim),
         )
 
     def flatten_parameters(self) -> None:

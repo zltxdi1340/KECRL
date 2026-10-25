@@ -3,7 +3,7 @@
   "status": "libero_cnn_only_cnn_gru_representation_diagnostic",
   "formal_result": false,
   "diagnostic_result": true,
-  "purpose": "Compare a per-frame CNN-only Policy with the recurrent CNN+GRU Policy under the frozen causal offline protocol and fixed phase-balanced loss",
+  "purpose": "Compare a capacity-matched per-frame CNN-only Policy with the recurrent CNN+GRU Policy under the frozen causal offline protocol and fixed phase-balanced loss",
   "source_phase_diagnostic_config": "configs/libero_phase_gripper_loss_diagnostic_v1.json",
   "source_phase_result_sha256": "1ea46e54ebff0bf7d101ec15e5204ddca44bf9da90f12679320e7a53efb694dd",
   "task_ids": [3, 7],
@@ -23,13 +23,14 @@
     "same_seed": true,
     "same_batch_order": true,
     "same_shared_cnn_fusion_initialization": true,
+    "memory_parameter_budget": "CNN-only per-frame MLP matches one-layer GRU parameter count within 10 parameters",
     "gripper_action_weight": 6.0
   },
   "arms": [
     {
       "name": "cnn_only",
       "memory_mode": "cnn_only",
-      "description": "Per-frame projection after the shared CNN and fusion; no recurrent hidden state"
+      "description": "Capacity-matched per-frame MLP after the shared CNN and fusion; no recurrent hidden state"
     },
     {
       "name": "cnn_gru",

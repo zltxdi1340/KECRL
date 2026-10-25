@@ -70,6 +70,8 @@ def load_diagnostic_config(
         raise ValueError("memory diagnostic requires fixed seed/order and no checkpoint selection")
     if training.get("same_shared_cnn_fusion_initialization") is not True or float(training.get("gripper_action_weight")) != 6.0:
         raise ValueError("memory diagnostic shared backbone or gripper protocol is not fixed")
+    if training.get("memory_parameter_budget") != "CNN-only per-frame MLP matches one-layer GRU parameter count within 10 parameters":
+        raise ValueError("memory parameter budget is not fixed")
     if tuple(arm.get("name") for arm in config.get("arms", ())) != ARMS:
         raise ValueError("memory arms must be cnn_only then cnn_gru")
     if tuple(arm.get("memory_mode") for arm in config["arms"]) != ("cnn_only", "gru"):
