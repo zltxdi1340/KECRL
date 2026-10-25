@@ -6,9 +6,9 @@
 
 本次按既有分层诊断的同一配置和 seed 重建 task 3、task 7 的 causal Policy，并校验最终参数摘要与既有结果一致。没有读取 validation、held-out 或 qualification，没有执行 Policy 动作，没有选择 checkpoint，没有更新 SPT/Knowledge，也没有注册 Module。历史 HDF5 只读，私有 simulator state 不进入 Policy。
 
-- 配置：[policy input replacement sensitivity audit](../configs/libero_policy_input_replacement_sensitivity_audit_v1.json)，SHA-256 `16ad417b19a53185bf99ad24f80982ff84c69ef804979af0a8233823f49f638b`。
-- 结果：`/tmp/libero-policy-input-sensitivity-20261025-v1.json`，SHA-256 `d828b965175043c28b6ffca35143eae6e4fbba09c6c8bb122029687e2c33070d`。
-- 代码提交：`96aeecab5414b74f2b3bfeeb8b87e2f080df2535`（运行时记录的提交）；本审计文档和 runner 的提交见 Git 历史。
+- 配置：[policy input replacement sensitivity audit](../configs/libero_policy_input_replacement_sensitivity_audit_v1.json)，SHA-256 `6d52c3682dad2ec93903c536f3d06556598862275d90afd5e2e0fdee1b6d2915`。
+- 结果：`/tmp/libero-policy-input-sensitivity-20261025-v2.json`，SHA-256 `f6b18b4ebacb111b371d3c1dc29d48c90e84d491d5a1b4436a016066f971915b`。
+- 代码提交：`0c5b8ea18179ddb24e3c26ce8d0d1b81644c499f`（运行时记录的提交）。
 - CUDA：`cuda:1` / RTX 4090；seed `20261021`；causal Policy 训练预算 500 optimizer updates。
 - 两个重建 Policy 的最终摘要：task 3 `75c73689043b7930eb62d86caf866388b43a2d15e5e8262b67fadfad1840c9d5`，task 7 `beb3f8e88cb51f37d54a683001adee1b609a2a11be07b58f879804a917d346dc`。二者均与既有 stratified diagnostic 的固定结果一致。
 
