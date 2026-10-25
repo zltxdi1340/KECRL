@@ -282,6 +282,13 @@ def _train_arm(
     spt_before = {name: value.detach().clone() for name, value in learnable_spt.state_dict().items()}
     model = learnable_spt.instantiate(spi).policy
     initial_digest = causal._digest_tensors(model.state_dict())
+    initial_shared_backbone_digest = causal._digest_tensors(
+        {
+            name: value
+            for name, value in model.state_dict().items()
+            if name.startswith(("visual_encoder.", "fusion."))
+        }
+    )
     optimizer = torch.optim.Adam(model.parameters(), lr=float(training["learning_rate"]))
     phase_weight_values = _phase_weights(phase_counts)
     iterator = iter(loader)
@@ -334,7 +341,10 @@ def _train_arm(
         "context": context.tolist(),
         "spt_unchanged": spt_unchanged,
         "initial_model_sha256": initial_digest,
+        "initial_shared_backbone_sha256": initial_shared_backbone_digest,
         "final_model_sha256": causal._digest_tensors(model.state_dict()),
+        "memory_mode": str(policy_spec.get("memory_mode", "gru")),
+        "parameter_count": int(sum(parameter.numel() for parameter in model.parameters())),
         "phase_counts": {phase: int(phase_counts[phase]) for phase in PHASES},
         "phase_weights": phase_weight_values,
         "gripper_action_weight": float(gripper_weight),

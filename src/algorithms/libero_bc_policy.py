@@ -17,6 +17,7 @@ class LiberoBCPolicyConfig:
     fusion_dim: int = 256
     recurrent_hidden_dim: int = 256
     action_dimension: int = 7
+    memory_mode: str = "gru"
 
     @classmethod
     def from_mapping(cls, value: Mapping[str, Any]) -> "LiberoBCPolicyConfig":
@@ -27,6 +28,7 @@ class LiberoBCPolicyConfig:
             fusion_dim=int(value["fusion_dim"]),
             recurrent_hidden_dim=int(value["recurrent_hidden_dim"]),
             action_dimension=int(value["action_dimension"]),
+            memory_mode=str(value.get("memory_mode", "gru")),
         )
 
     def __post_init__(self) -> None:
@@ -45,6 +47,29 @@ class LiberoBCPolicyConfig:
             raise ValueError("LIBERO BC Policy dimensions must be positive")
         if self.action_dimension != 7:
             raise ValueError("LIBERO BC Policy requires the seven-dimensional action interface")
+        if self.memory_mode not in {"gru", "cnn_only"}:
+            raise ValueError("LIBERO BC Policy memory mode must be gru or cnn_only")
+
+
+class _NonRecurrentProjection(nn.Module):
+    """Per-frame projection used by the CNN-only memory ablation."""
+
+    def __init__(self, input_dim: int, output_dim: int) -> None:
+        super().__init__()
+        self.projection = nn.Sequential(
+            nn.Linear(input_dim, output_dim),
+            nn.ReLU(),
+        )
+
+    def flatten_parameters(self) -> None:
+        """Match the GRU interface used by the SPT instantiation boundary."""
+
+    def forward(
+        self, values: torch.Tensor, hidden: torch.Tensor | None = None
+    ) -> tuple[torch.Tensor, None]:
+        if hidden is not None:
+            raise ValueError("CNN-only Policy cannot receive recurrent hidden state")
+        return self.projection(values), None
 
 
 class SharedLiberoViewEncoder(nn.Module):
@@ -88,11 +113,16 @@ class LiberoBCPolicy(nn.Module):
             nn.Linear(2 * config.visual_embedding_dim + 7 + 2, config.fusion_dim),
             nn.ReLU(),
         )
-        self.recurrent = nn.GRU(
-            config.fusion_dim,
-            config.recurrent_hidden_dim,
-            batch_first=True,
-        )
+        if config.memory_mode == "gru":
+            self.recurrent = nn.GRU(
+                config.fusion_dim,
+                config.recurrent_hidden_dim,
+                batch_first=True,
+            )
+        else:
+            self.recurrent = _NonRecurrentProjection(
+                config.fusion_dim, config.recurrent_hidden_dim
+            )
         self.action_head = nn.Linear(config.recurrent_hidden_dim, config.action_dimension)
 
     def forward_sequence(

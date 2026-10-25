@@ -1,0 +1,74 @@
+{
+  "schema_version": 1,
+  "status": "libero_cnn_only_cnn_gru_representation_diagnostic",
+  "formal_result": false,
+  "diagnostic_result": true,
+  "purpose": "Compare a per-frame CNN-only Policy with the recurrent CNN+GRU Policy under the frozen causal offline protocol and fixed phase-balanced loss",
+  "source_phase_diagnostic_config": "configs/libero_phase_gripper_loss_diagnostic_v1.json",
+  "source_phase_result_sha256": "1ea46e54ebff0bf7d101ec15e5204ddca44bf9da90f12679320e7a53efb694dd",
+  "task_ids": [3, 7],
+  "replicate_seed": 20261021,
+  "data_protocol": {
+    "observation_action_alignment": "causal_pre_action",
+    "observation_source": "HDF5 causal view: current runtime initial observation then HDF5 obs[t-1]",
+    "training_role": "meta_support",
+    "evaluation_role": "meta_query",
+    "phase_loss_mode": "inverse_phase_frequency_weighted_action_mse",
+    "phase_label_source": "gripper_action_sign_first_close_then_release"
+  },
+  "training": {
+    "optimizer": "Adam",
+    "optimizer_updates": 500,
+    "checkpoint_selection": false,
+    "same_seed": true,
+    "same_batch_order": true,
+    "same_shared_cnn_fusion_initialization": true,
+    "gripper_action_weight": 6.0
+  },
+  "arms": [
+    {
+      "name": "cnn_only",
+      "memory_mode": "cnn_only",
+      "description": "Per-frame projection after the shared CNN and fusion; no recurrent hidden state"
+    },
+    {
+      "name": "cnn_gru",
+      "memory_mode": "gru",
+      "description": "Existing shared CNN, fusion, and continuous GRU hidden state"
+    }
+  ],
+  "expected_cnn_gru_final_model_sha256_by_task": {
+    "3": "b05a49506e9a60ccfacd695fabf4e1427e4c8e654973ae5a623319ea7bd32943",
+    "7": "1aa8551c6af6784b19b6b15adc300f248fe3f6d22923284c800454703b99274b"
+  },
+  "metrics": [
+    "overall_action_mae",
+    "translation_mae",
+    "rotation_mae",
+    "gripper_mae",
+    "gripper_sign_accuracy",
+    "phase_action_mae",
+    "phase_gripper_mae"
+  ],
+  "scope": {
+    "historical_hdf5_read_only": true,
+    "private_state_used_as_policy_input": false,
+    "private_state_used_as_knowledge_evidence": false,
+    "policy_actions_executed_in_environment": false,
+    "validation_accessed": false,
+    "heldout_accessed": false,
+    "qualification_accessed": false,
+    "checkpoint_selection": false,
+    "spt_update": false,
+    "knowledge_update": false,
+    "module_qualification": false
+  },
+  "forbidden_uses": [
+    "checkpoint selection",
+    "SPT candidate acceptance",
+    "Module qualification",
+    "held-out effect estimation",
+    "formal architecture comparison",
+    "Knowledge update"
+  ]
+}

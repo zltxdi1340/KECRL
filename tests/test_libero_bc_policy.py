@@ -48,6 +48,30 @@ def test_online_step_carries_recurrent_state():
     assert next_hidden.shape == hidden.shape == (1, 2, 10)
 
 
+def test_cnn_only_policy_has_no_cross_step_hidden_state():
+    policy = LiberoBCPolicy(
+        LiberoBCPolicyConfig(
+            cnn_channels=(4, 8, 8),
+            spatial_pool_size=2,
+            visual_embedding_dim=8,
+            fusion_dim=12,
+            recurrent_hidden_dim=10,
+            memory_mode="cnn_only",
+        )
+    )
+    inputs = (
+        torch.zeros(1, 3, 32, 32, dtype=torch.uint8),
+        torch.zeros(1, 3, 32, 32, dtype=torch.uint8),
+        torch.zeros(1, 7),
+        torch.zeros(1, 2),
+    )
+    actions, hidden = policy.forward_step(*inputs)
+    repeated, repeated_hidden = policy.forward_step(*inputs)
+    assert actions.shape == repeated.shape == (1, 7)
+    assert hidden is None and repeated_hidden is None
+    assert torch.equal(actions, repeated)
+
+
 def test_masked_bc_loss_ignores_padded_targets_and_rejects_empty_mask():
     predictions = torch.zeros(1, 3, 7)
     targets = torch.zeros_like(predictions)
