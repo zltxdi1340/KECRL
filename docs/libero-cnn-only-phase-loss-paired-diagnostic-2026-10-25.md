@@ -7,7 +7,7 @@
 - Policy：容量匹配 CNN-only，逐帧 MLP 参数量与单层 GRU 相差 1 个参数；两臂均采用相同 Policy 架构。
 - 数据：5 个 source-SPI task `0/1/3/4/7`；`meta_support` 训练、`meta_query` 离线评估；HDF5 causal pre-action 视图。
 - 预算：seed `20261021/20261022`，每个 task-seed 500 次 Adam update，共 20 个训练 arm。
-- 控制：每个 task-seed 内两臂初始 Policy SHA 完全匹配；batch 顺序和训练随机数重置一致。唯一实验变量是 loss 是否按 phase 逆频率加权。两臂都固定 gripper action weight 为 `6.0`，因此这里的 uniform 指阶段间不加权，不代表七个动作维度等权。
+- 控制：每个 task-seed 内两臂初始 Policy SHA 完全匹配；batch 顺序和训练随机数重置一致。唯一实验变量是 loss 是否按 phase 逆频率加权。两臂都对七个动作维度等权；配置中的 `gripper_action_weight=6.0` 不会被这两种 loss mode 使用，只在单独的 gripper-weighted arm 生效。
 - 边界：没有执行 Policy 闭环动作，没有访问 validation/held-out/qualification，没有选择 checkpoint，也没有更新 SPT/Knowledge 或注册 Module。
 
 配置：[paired phase-loss diagnostic](../configs/libero_cnn_only_phase_loss_paired_diagnostic_v1.json)，SHA-256 `0b4af76d6e6dc0d80b7493880b097e7a8700882aa7f61b89c904ba48d9bbb63d`。
@@ -46,9 +46,9 @@ Phase-balanced 相对 uniform 的总体 action MAE 增加 `0.00587`，translatio
 
 1. **不保留 phase-balanced 作为通用默认 loss。** 其 release 误差改善是真实、可重复的，但总体和 transport 指标变差，两个 seed 方向一致。
 2. **release/gripper 是局部误差问题，不等于应提高整段 release 的总训练权重。** 当前 phase 标记仅由 gripper action 符号定义，phase-balanced 会连带改变该阶段全部 7 个动作维度的梯度权重。
-3. **后续基线采用 CNN-only + phase-uniform action loss，gripper action weight 固定为 6.0。** 若研究 release，需要另设单变量、受限到 gripper 维度或明确边界动作的 loss 干预，不能继续使用全动作 phase 权重并把效果叫作 memory/SPT 收益。
+3. **后续基线采用 CNN-only + phase-uniform、七维等权的 action MSE。** 若研究 release，需要另设单变量、受限到 gripper 维度或明确边界动作的 loss 干预，不能继续使用全动作 phase 权重并把效果叫作 memory/SPT 收益。
 4. **这仍是离线诊断。** 结果不能推出当前 runtime 闭环成功率、跨任务适应效率、SPT 更新效应或 Module qualification。
 
 ## 下一步
 
-固定 CNN-only + phase-uniform loss（gripper action weight 6.0）为离线基线，先测试该 Policy 在当前 LIBERO runtime 的 candidate-nonregression 初始状态上是否能完成闭环动作链，并按 task 报告成功率和终止步数。该闭环结果与 HDF5 query action MAE 分开呈现；若仍然失败，再基于任务 0 的高误差与 transport/release 分层确定下一个单变量诊断。只有基础策略出现可重复的闭环成功，才进入 SPT 更新前的 A/B/C 迁移准备。
+固定 CNN-only + phase-uniform、七维等权 action MSE 为离线基线，先测试该 Policy 在当前 LIBERO runtime 的 candidate-nonregression 初始状态上是否能完成闭环动作链，并按 task 报告成功率和终止步数。该闭环结果与 HDF5 query action MAE 分开呈现；若仍然失败，再基于任务 0 的高误差与 transport/release 分层确定下一个单变量诊断。只有基础策略出现可重复的闭环成功，才进入 SPT 更新前的 A/B/C 迁移准备。
