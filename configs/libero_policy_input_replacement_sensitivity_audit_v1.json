@@ -1,0 +1,63 @@
+{
+  "schema_version": 1,
+  "status": "libero_policy_input_replacement_sensitivity_audit",
+  "formal_result": false,
+  "diagnostic_result": true,
+  "purpose": "Measure how much a fixed causal Policy changes its action output when historical HDF5 causal observations are replaced by current-runtime regenerated pre-action observations",
+  "source_input_alignment_config": "configs/libero_replay_input_alignment_audit_v1.json",
+  "source_input_alignment_result_sha256": "5c6d93ba8ff91cc80d1bf2b91594ca59d89a8721dbaba227157c50f4416e4730",
+  "source_training_config": "configs/libero_stratified_error_diagnostic_v1.json",
+  "source_training_result_sha256": "7216ec6dbd74a4262e33aee595c019c811f2c63c033cf343eca262b17a9eb444",
+  "task_ids": [3, 7],
+  "replicate_seed": 20261021,
+  "training": {
+    "observation_action_alignment": "causal_pre_action",
+    "optimizer_updates": 500,
+    "checkpoint_selection": false,
+    "same_initial_model": true,
+    "same_batch_order": true,
+    "reconstruct_pinned_policy_weights": true
+  },
+  "expected_final_model_sha256_by_task": {
+    "3": "75c73689043b7930eb62d86caf866388b43a2d15e5e8262b67fadfad1840c9d5",
+    "7": "beb3f8e88cb51f37d54a683001adee1b609a2a11be07b58f879804a917d346dc"
+  },
+  "cases": [
+    "task3_failed_support_demo1",
+    "task3_success_control_demo0",
+    "task7_failed_support_demo0",
+    "task7_success_control_demo1"
+  ],
+  "evaluation": {
+    "hidden_comparison_modes": ["shared_historical_hidden", "independent_branch_hidden"],
+    "first_difference_tolerance": 1.0e-7,
+    "time_bin_steps": 10,
+    "max_episode_steps": 300,
+    "demonstration_stabilization_steps": 0,
+    "target_action_source": "unchanged_hdf5_action_at_same_step",
+    "current_observation_source": "current_runtime_observation_before_historical_action",
+    "historical_observation_source": "current_runtime_initial_observation_then_hdf5_obs_step_minus_one"
+  },
+  "scope": {
+    "historical_hdf5_read_only": true,
+    "private_simulator_state_read_for_forensics_only": true,
+    "private_state_used_as_policy_input": false,
+    "private_state_used_as_knowledge_evidence": false,
+    "policy_actions_executed_in_environment": false,
+    "validation_accessed": false,
+    "heldout_accessed": false,
+    "qualification_accessed": false,
+    "checkpoint_selection": false,
+    "spt_update": false,
+    "knowledge_update": false,
+    "module_qualification": false
+  },
+  "forbidden_uses": [
+    "checkpoint selection",
+    "SPT candidate acceptance",
+    "Module qualification",
+    "held-out effect estimation",
+    "formal architecture comparison",
+    "Knowledge update"
+  ]
+}
