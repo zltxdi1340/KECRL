@@ -1,0 +1,29 @@
+{
+  "schema_version": 1,
+  "status": "current_runtime_source_demo_replay_audit",
+  "formal_result": false,
+  "diagnostic_result": true,
+  "purpose": "Freeze deterministic current-runtime observation/state traces for historical expert action sequences",
+  "source_semantics_config": "configs/libero_replay_semantics_audit_v1.json",
+  "source_semantics_result_sha256": "561ac3c655bfbf5d73d8fbafff306bf9686606bab859251a602fdf3544580886",
+  "cases": [
+    "task3_failed_support_demo1",
+    "task3_success_control_demo0",
+    "task7_failed_support_demo0",
+    "task7_success_control_demo1"
+  ],
+  "seed": 20261021,
+  "stabilization_steps": 0,
+  "repetitions_per_case": 3,
+  "max_episode_steps": 300,
+  "scope": {
+    "private_simulator_state_read_for_forensics_only": true,
+    "private_state_used_as_policy_input": false,
+    "private_state_used_as_knowledge_evidence": false,
+    "official_hdf5_modified": false,
+    "checkpoint_selection": false,
+    "spt_update": false,
+    "knowledge_update": false,
+    "module_qualification": false
+  }
+}
