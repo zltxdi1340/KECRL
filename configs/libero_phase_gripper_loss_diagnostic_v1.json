@@ -1,0 +1,77 @@
+{
+  "schema_version": 1,
+  "status": "libero_phase_and_gripper_loss_diagnostic",
+  "formal_result": false,
+  "diagnostic_result": true,
+  "purpose": "Test phase-balanced weighting and gripper-dimension loss weighting under the frozen HDF5 causal offline BC protocol",
+  "source_training_config": "configs/libero_stratified_error_diagnostic_v1.json",
+  "source_training_result_sha256": "7216ec6dbd74a4262e33aee595c019c811f2c63c033cf343eca262b17a9eb444",
+  "task_ids": [3, 7],
+  "replicate_seed": 20261021,
+  "data_protocol": {
+    "observation_action_alignment": "causal_pre_action",
+    "observation_source": "HDF5 causal view: current runtime initial observation then HDF5 obs[t-1]",
+    "training_role": "meta_support",
+    "evaluation_role": "meta_query",
+    "validation_accessed": false,
+    "heldout_accessed": false,
+    "qualification_accessed": false
+  },
+  "training": {
+    "optimizer": "Adam",
+    "optimizer_updates": 500,
+    "checkpoint_selection": false,
+    "same_initial_model": true,
+    "same_batch_order": true,
+    "gradient_clip_norm": 1.0,
+    "phase_label_source": "gripper_action_sign_first_close_then_release",
+    "phase_balanced_weight_formula": "total_nonzero_phase_steps / (nonzero_phase_count * phase_step_count)",
+    "gripper_action_weight": 6.0
+  },
+  "arms": [
+    {
+      "name": "baseline",
+      "loss_mode": "uniform_action_mse"
+    },
+    {
+      "name": "phase_balanced",
+      "loss_mode": "inverse_phase_frequency_weighted_action_mse"
+    },
+    {
+      "name": "gripper_weighted",
+      "loss_mode": "uniform_phase_gripper_6x_action_mse"
+    }
+  ],
+  "expected_baseline_final_model_sha256_by_task": {
+    "3": "75c73689043b7930eb62d86caf866388b43a2d15e5e8262b67fadfad1840c9d5",
+    "7": "beb3f8e88cb51f37d54a683001adee1b609a2a11be07b58f879804a917d346dc"
+  },
+  "phase_labels": ["approach", "transport", "release", "unknown"],
+  "metrics": [
+    "overall_action_mae",
+    "translation_mae",
+    "rotation_mae",
+    "gripper_mae",
+    "gripper_sign_accuracy",
+    "phase_action_mae",
+    "phase_gripper_mae"
+  ],
+  "scope": {
+    "historical_hdf5_read_only": true,
+    "private_state_used_as_policy_input": false,
+    "private_state_used_as_knowledge_evidence": false,
+    "policy_actions_executed_in_environment": false,
+    "checkpoint_selection": false,
+    "spt_update": false,
+    "knowledge_update": false,
+    "module_qualification": false
+  },
+  "forbidden_uses": [
+    "checkpoint selection",
+    "SPT candidate acceptance",
+    "Module qualification",
+    "held-out effect estimation",
+    "formal architecture comparison",
+    "Knowledge update"
+  ]
+}
