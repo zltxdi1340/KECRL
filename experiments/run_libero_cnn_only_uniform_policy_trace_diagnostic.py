@@ -67,9 +67,19 @@ def load_diagnostic_config(
         or rollout.get("record_per_step_actions") is not True
         or rollout.get("record_public_joint_and_gripper_states") is not True
         or rollout.get("record_reward") is not True
-        or rollout.get("record_rgb_or_private_simulator_state") is not False
     ):
         raise ValueError("trace recording or rollout boundary differs from the pinned protocol")
+    rgb_spec = config.get("policy_rgb_snapshots")
+    if rgb_spec is None:
+        if rollout.get("record_rgb_or_private_simulator_state") is not False:
+            raise ValueError("the base trace may not record RGB or private simulator state")
+    elif (
+        rgb_spec.get("enabled") is not True
+        or tuple(rgb_spec.get("steps", ())) != (0, 25, 50, 75, 100, 125, 145, 150, 225, 300)
+        or rollout.get("record_policy_rgb_snapshots") is not True
+        or rollout.get("record_private_simulator_state") is not False
+    ):
+        raise ValueError("policy RGB snapshots must use the pinned sparse observation schedule")
     expected_scope = {
         "source_meta_support_read": True,
         "candidate_nonregression_states_read": True,
@@ -139,6 +149,34 @@ def _trace_summary(actions: list[list[float]], joints: list[list[float]], grippe
     }
 
 
+def _save_policy_rgb_snapshot(
+    snapshot_dir: Path,
+    *,
+    task_id: int,
+    seed: int,
+    initial_state_index: int,
+    step: int,
+    observation: Mapping[str, np.ndarray],
+) -> list[dict[str, Any]]:
+    from PIL import Image
+
+    rows = []
+    prefix = f"task_{task_id:02d}_seed_{seed}_init_{initial_state_index:02d}_step_{step:03d}"
+    for key, suffix in (("agentview_rgb", "agentview"), ("eye_in_hand_rgb", "eye_in_hand")):
+        image = np.asarray(observation[key])
+        if image.dtype != np.uint8 or image.ndim != 3 or image.shape[-1] != 3:
+            raise ValueError(f"unexpected policy RGB snapshot format for {key}")
+        path = snapshot_dir / f"{prefix}_{suffix}.png"
+        Image.fromarray(image, mode="RGB").save(path)
+        rows.append({
+            "camera": key,
+            "step": step,
+            "path": str(path.resolve()),
+            "sha256": sha256_file(path),
+        })
+    return rows
+
+
 @torch.no_grad()
 def _rollout_trace(
     model: torch.nn.Module,
@@ -150,6 +188,8 @@ def _rollout_trace(
     policy_spec: Mapping[str, Any],
     rollout_spec: Mapping[str, Any],
     device: torch.device,
+    snapshot_dir: Path | None = None,
+    snapshot_steps: tuple[int, ...] = (),
 ) -> dict[str, Any]:
     adapter = LiberoEnvironmentAdapter(
         suite_name=transfer["suite"],
@@ -163,10 +203,20 @@ def _rollout_trace(
     joints = []
     grippers = []
     actions = []
+    snapshots = []
     try:
         observation, _ = adapter.reset(initial_state_index=initial_state_index)
         joints.append(observation["joint_states"].astype(np.float64).tolist())
         grippers.append(observation["gripper_states"].astype(np.float64).tolist())
+        if snapshot_dir is not None and 0 in snapshot_steps:
+            snapshots.extend(_save_policy_rgb_snapshot(
+                snapshot_dir,
+                task_id=task_id,
+                seed=seed,
+                initial_state_index=initial_state_index,
+                step=0,
+                observation=observation,
+            ))
         terminated = truncated = False
         info: Mapping[str, Any] = {"success": False, "terminal_reason": None}
         while not (terminated or truncated):
@@ -186,6 +236,15 @@ def _rollout_trace(
                 "reward": float(reward),
             })
             observation = next_observation
+            if snapshot_dir is not None and len(actions) in snapshot_steps:
+                snapshots.extend(_save_policy_rgb_snapshot(
+                    snapshot_dir,
+                    task_id=task_id,
+                    seed=seed,
+                    initial_state_index=initial_state_index,
+                    step=len(actions),
+                    observation=observation,
+                ))
     finally:
         adapter.close()
     return {
@@ -197,6 +256,7 @@ def _rollout_trace(
         "terminal_reason": info["terminal_reason"],
         "reward_sum": float(sum(step["reward"] for step in steps)),
         "summary": _trace_summary(actions, joints, grippers),
+        "rgb_snapshots": snapshots,
         "trace": steps,
     }
 
@@ -207,6 +267,8 @@ def run_diagnostic(
     paired_result_path: Path,
     dataset_root: Path,
     device_name: str,
+    snapshot_dir: Path | None = None,
+    source_trace_result_path: Path | None = None,
 ) -> dict[str, Any]:
     config, paired_config, base, policy, transfer, family, manifest = load_diagnostic_config(config_path)
     if not device_name.startswith("cuda") or not torch.cuda.is_available():
@@ -215,6 +277,33 @@ def run_diagnostic(
 
     closed_loop_result_path = closed_loop_result_path.resolve()
     paired_result_path = paired_result_path.resolve()
+    source_trace_config_path = None
+    source_trace_result_path = None
+    source_trace_result = None
+    if rgb_spec:
+        if source_trace_result_path is None:
+            raise ValueError("source trace result is required for the RGB snapshot follow-up")
+        source_trace_config_path = (ROOT / config["source_trace_config"]).resolve()
+        if not source_trace_config_path.is_relative_to(ROOT) or not source_trace_config_path.is_file():
+            raise ValueError("source trace config must be a repository file")
+        if sha256_file(source_trace_config_path) != config.get("source_trace_config_sha256"):
+            raise ValueError("source trace config SHA-256 differs from the pinned trace protocol")
+        source_trace_config = _load_json(source_trace_config_path)
+        if source_trace_config.get("cases") != config.get("cases"):
+            raise ValueError("RGB snapshot cases differ from the fixed source trace schedule")
+        source_trace_result_path = source_trace_result_path.resolve()
+        if sha256_file(source_trace_result_path) != config.get("source_trace_result_sha256"):
+            raise ValueError("source trace result SHA-256 differs from the pinned trace output")
+        source_trace_result = _load_json(source_trace_result_path)
+        if (
+            source_trace_result.get("check_type") != "libero_cnn_only_uniform_policy_trace_diagnostic"
+            or source_trace_result.get("formal_result") is not False
+            or source_trace_result.get("provenance", {}).get("config_sha256") != config["source_trace_config_sha256"]
+            or int(source_trace_result.get("trace_count", -1)) != 7
+        ):
+            raise ValueError("source trace result provenance or trace count differs from the pinned run")
+    elif source_trace_result_path is not None:
+        raise ValueError("source trace result supplied without RGB snapshot follow-up protocol")
     if sha256_file(closed_loop_result_path) != config["source_closed_loop_result_sha256"]:
         raise ValueError("source closed-loop result SHA-256 differs from the pinned diagnostic")
     if sha256_file(paired_result_path) != config["source_paired_result_sha256"]:
@@ -251,12 +340,33 @@ def run_diagnostic(
             recorded = source_outcomes.get((task_id, seed, int(index)))
             if recorded != {"success": bool(expected), "steps": int(expected_steps)}:
                 raise ValueError("trace initial-state outcome differs from the pinned closed-loop result")
+    if source_trace_result is not None:
+        recorded_traces = {
+            (int(row["task_id"]), int(row["seed"]), int(row["initial_state_index"])): row
+            for row in source_trace_result["traces"]
+        }
+        for case in config["cases"]:
+            for index, expected, expected_steps in zip(
+                case["initial_state_indices"], case["expected_success"], case["expected_steps"]
+            ):
+                row = recorded_traces.get((int(case["task_id"]), int(case["seed"]), int(index)))
+                if row is None or row["success"] is not bool(expected) or int(row["steps"]) != int(expected_steps):
+                    raise ValueError("source trace output does not match the fixed snapshot cases")
     dataset_root = dataset_root.resolve()
     if dataset_root != Path(get_libero_path("datasets")).resolve():
         raise ValueError("trace dataset root differs from configured LIBERO dataset")
     device = torch.device(device_name)
     torch.cuda.set_device(device)
     policy_variant = replication._policy_variant(policy)
+    rgb_spec = config.get("policy_rgb_snapshots")
+    snapshot_steps = tuple(int(step) for step in rgb_spec["steps"]) if rgb_spec else ()
+    if rgb_spec and snapshot_dir is None:
+        raise ValueError("snapshot directory is required when policy RGB capture is enabled")
+    if not rgb_spec and snapshot_dir is not None:
+        raise ValueError("snapshot directory supplied for a trace config without RGB capture")
+    if snapshot_dir is not None:
+        snapshot_dir = snapshot_dir.resolve()
+        snapshot_dir.mkdir(parents=True, exist_ok=False)
     data_rows = {int(row["task_id"]): row for row in manifest["files"]}
     init_rows = {int(row["task_id"]): row for row in transfer["initial_state_files"]}
     init_root = Path(get_libero_path("init_states"))
@@ -331,6 +441,8 @@ def run_diagnostic(
                     policy_spec=policy_variant["policy"],
                     rollout_spec=config["rollout"],
                     device=device,
+                    snapshot_dir=snapshot_dir,
+                    snapshot_steps=snapshot_steps,
                 )
                 if result["success"] is not bool(expected_success) or result["steps"] != int(expected_steps):
                     raise RuntimeError("rerun outcome or terminal step differs from the pinned source episode")
@@ -365,6 +477,10 @@ def run_diagnostic(
             "source_closed_loop_result_sha256": sha256_file(closed_loop_result_path),
             "source_paired_result_path": str(paired_result_path),
             "source_paired_result_sha256": sha256_file(paired_result_path),
+            "source_trace_config_path": None if source_trace_config_path is None else str(source_trace_config_path),
+            "source_trace_config_sha256": None if source_trace_config_path is None else sha256_file(source_trace_config_path),
+            "source_trace_result_path": None if source_trace_result_path is None else str(source_trace_result_path),
+            "source_trace_result_sha256": None if source_trace_result_path is None else sha256_file(source_trace_result_path),
             "dataset_sha256_verified": True,
             "candidate_initial_state_sha256_verified": True,
         },
@@ -380,6 +496,8 @@ def run_diagnostic(
         "scope": config["scope"],
         "trace_count": len(traces),
         "success_count": sum(int(trace["success"]) for trace in traces),
+        "rgb_snapshot_count": sum(len(trace["rgb_snapshots"]) for trace in traces),
+        "rgb_snapshot_dir": None if snapshot_dir is None else str(snapshot_dir),
         "traces": traces,
     }
 
@@ -392,6 +510,8 @@ def main() -> None:
     parser.add_argument("--dataset-root", type=Path, required=True)
     parser.add_argument("--device", default="cuda:0")
     parser.add_argument("--output", type=Path)
+    parser.add_argument("--snapshot-dir", type=Path)
+    parser.add_argument("--source-trace-result", type=Path)
     args = parser.parse_args()
     if args.output is not None and args.output.exists():
         parser.error("output already exists; choose a new diagnostic path")
@@ -401,6 +521,8 @@ def main() -> None:
         args.paired_result,
         args.dataset_root,
         args.device,
+        args.snapshot_dir,
+        args.source_trace_result,
     )
     if args.output is not None:
         args.output.parent.mkdir(parents=True, exist_ok=True)
@@ -412,6 +534,7 @@ def main() -> None:
         "formal_result": result["formal_result"],
         "trace_count": result["trace_count"],
         "success_count": result["success_count"],
+        "rgb_snapshot_count": result["rgb_snapshot_count"],
         "output": None if args.output is None else str(args.output.resolve()),
     }, indent=2))
 
