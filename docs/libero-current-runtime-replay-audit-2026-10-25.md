@@ -43,6 +43,6 @@
 
 ## 下一步
 
-冻结当前 runtime 的 regenerated trajectory 只作为诊断缓存，先在四条 case 上比较历史 HDF5 causal observation 与当前 regenerated pre-action observation 的 Policy 输入差异；不训练、不选择 checkpoint。若输入差异足以改变动作输出，再做一个明确标记为 diagnostic 的双协议 BC 对照；若差异只影响仿真状态而不影响动作输入，再回到同一空间 CNN-only/CNN+GRU 表示诊断。
+冻结当前 runtime 的 regenerated trajectory 只作为诊断缓存，先在四条 case 上比较历史 HDF5 causal observation 与当前 regenerated pre-action observation 的 Policy 输入差异；不训练、不选择 checkpoint。该输入对齐审计已完成，见 [历史 HDF5 与当前 runtime 输入对齐审计](libero-replay-input-alignment-audit-2026-10-25.md)。下一项固定已有 Policy 权重做输入替换敏感性，若差异足以改变动作输出，再做明确标记为 diagnostic 的双协议 BC 对照；若差异只影响仿真状态而不影响动作输入，再回到同一空间 CNN-only/CNN+GRU 表示诊断。
 
 phase-balanced、gripper-loss 和 A/B/C 正式候选实验继续暂停。

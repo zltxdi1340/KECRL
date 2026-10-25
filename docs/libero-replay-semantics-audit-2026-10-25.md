@@ -39,6 +39,6 @@
 
 ## 下一步
 
-当前 runtime 的可复现专家轨迹审计已经完成，见 [LIBERO 当前运行时专家轨迹审计](libero-current-runtime-replay-audit-2026-10-25.md)。四条 case 的完整 sim-state/observation digest 在三次重复中都稳定，但成功边界仍与 HDF5 标签不同。下一项比较历史 HDF5 causal observation 与当前 regenerated pre-action observation 对 Policy 输入的影响；原始 HDF5 继续只作为离线 BC 数据，当前 runtime 轨迹只作为诊断数据，不混合两种 observation 语义。
+当前 runtime 的可复现专家轨迹审计和 [历史 HDF5 与当前 runtime 输入对齐审计](libero-replay-input-alignment-audit-2026-10-25.md) 已完成。四条 case 的完整 sim-state/observation digest 在三次重复中都稳定，但成功边界仍与 HDF5 标签不同，且两种 causal 输入在第一个动作后就分叉。下一项固定已有 Policy 权重做输入替换敏感性；原始 HDF5 继续只作为离线 BC 数据，当前 runtime 轨迹只作为诊断数据，不混合两种 observation 语义。
 
 在这一步完成前，不启动 phase-balanced、gripper-loss 或 A/B/C 正式候选实验，也不把 replay 成功率写成 SPI/Module 结果。

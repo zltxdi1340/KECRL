@@ -65,4 +65,4 @@ task 3 和 task 7 的 support 各有一条示教动作在当前固定环境中�
 
 ## 下一步
 
-状态对齐、语义冻结和当前 runtime 轨迹审计已完成，详见 [HDF5—当前重放状态对齐审计](libero-replay-state-alignment-audit-2026-10-25.md)、[LIBERO 回放语义冻结审计](libero-replay-semantics-audit-2026-10-25.md) 与 [LIBERO 当前运行时专家轨迹审计](libero-current-runtime-replay-audit-2026-10-25.md)。四条示教都在首个动作后出现 HDF5 与当前环境的状态/观测偏差，包括两个当前 replay 成功控制；相关 controller 配置和动作边界已对齐，当前 runtime 重复轨迹确定。因此当前 replay eligibility 不能直接作为 Policy 误差筛选。下一步先比较历史 HDF5 causal observation 与当前 regenerated observation 对 Policy 输入的影响；phase-balanced、gripper-loss 和 A/B/C 暂不启动。
+状态对齐、语义冻结、当前 runtime 轨迹和输入对齐审计已完成，详见 [HDF5—当前重放状态对齐审计](libero-replay-state-alignment-audit-2026-10-25.md)、[LIBERO 回放语义冻结审计](libero-replay-semantics-audit-2026-10-25.md)、[LIBERO 当前 runtime 轨迹审计](libero-current-runtime-replay-audit-2026-10-25.md) 与 [历史 HDF5 与当前 runtime 输入对齐审计](libero-replay-input-alignment-audit-2026-10-25.md)。四条示教都在首个动作后出现 HDF5 与当前环境的状态/观测偏差，包括两个当前 replay 成功控制；相关 controller 配置和动作边界已对齐，当前 runtime 重复轨迹确定，两种 causal 输入视图从第一个动作后开始分叉。因此当前 replay eligibility 不能直接作为 Policy 误差筛选。下一步固定已有 Policy 权重做输入替换敏感性；phase-balanced、gripper-loss 和 A/B/C 暂不启动。
