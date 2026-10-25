@@ -30,6 +30,7 @@ def test_phase_summary_aggregates_step_metrics():
     episodes = [
         {
             "demonstration_index": 0,
+                "expert_episode": {"success": True},
             "step_metrics": [
                 {"phase": "approach", "action_mae": 1, "action_l2": 1,
                  "translation_mae": 1, "rotation_mae": 0, "gripper_mae": 0,
@@ -45,13 +46,27 @@ def test_phase_summary_aggregates_step_metrics():
         }
     ]
     result = diagnostic._phase_summary(episodes)
-    assert result["approach"]["valid_steps"] == 1
-    assert result["approach"]["action_mae"] == pytest.approx(1.0)
-    assert result["transport"]["gripper_sign_accuracy"] == pytest.approx(0.0)
-    assert result["release"]["valid_steps"] == 0
+    assert result["usable_expert_episodes"] == 1
+    assert result["phases"]["approach"]["valid_steps"] == 1
+    assert result["phases"]["approach"]["action_mae"] == pytest.approx(1.0)
+    assert result["phases"]["transport"]["gripper_sign_accuracy"] == pytest.approx(0.0)
+    assert result["phases"]["release"]["valid_steps"] == 0
 
 
 def test_phase_summary_does_not_invent_metrics_for_empty_phase():
-    result = diagnostic._phase_summary([{"demonstration_index": 0, "step_metrics": []}])
-    assert result["unknown"]["valid_steps"] == 0
-    assert result["unknown"]["action_mae"] is None
+    result = diagnostic._phase_summary([
+        {"demonstration_index": 0, "expert_episode": {"success": True}, "step_metrics": []}
+    ])
+    assert result["phases"]["unknown"]["valid_steps"] == 0
+    assert result["phases"]["unknown"]["action_mae"] is None
+
+
+def test_failed_expert_episode_is_reported_but_excluded_from_phase_means():
+    episode = {
+        "demonstration_index": 1,
+        "expert_episode": {"success": False},
+        "step_metrics": [{"phase": "approach", "action_mae": 99}],
+    }
+    result = diagnostic._phase_summary([episode])
+    assert result["excluded_expert_episodes"] == 1
+    assert result["phases"]["approach"]["valid_steps"] == 0

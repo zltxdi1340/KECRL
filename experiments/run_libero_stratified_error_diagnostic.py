@@ -84,6 +84,12 @@ def load_stratified_config(
     phase = config.get("phase_definition", {})
     if phase.get("labels") != list(PHASES) or phase.get("unknown_phase_expected_count") != 0:
         raise ValueError("stratified phase definition is not fixed")
+    expert_policy = config.get("expert_replay_policy", {})
+    if (
+        expert_policy.get("require_success_for_error_aggregation") is not True
+        or expert_policy.get("failed_expert_episodes_reported_but_excluded") is not True
+    ):
+        raise ValueError("failed expert replay policy must be explicit and fail-closed for aggregation")
     return config, pilot, base, policy, transfer, family, manifest
 
 
@@ -99,17 +105,18 @@ def _phase_summary(episodes: list[Mapping[str, Any]]) -> dict[str, Any]:
         "agentview_rgb_mae",
         "eye_in_hand_rgb_mae",
     )
+    usable_episodes = [episode for episode in episodes if episode["expert_episode"]["success"]]
     result = {}
     for phase in PHASES:
         rows = [
             row
-            for episode in episodes
+            for episode in usable_episodes
             for row in episode.get("step_metrics", [])
             if row["phase"] == phase
         ]
         result[phase] = {
             "valid_steps": len(rows),
-            "episode_count": len({episode["demonstration_index"] for episode in episodes if any(
+            "episode_count": len({episode["demonstration_index"] for episode in usable_episodes if any(
                 row["phase"] == phase for row in episode.get("step_metrics", [])
             )}),
             **{
@@ -122,19 +129,27 @@ def _phase_summary(episodes: list[Mapping[str, Any]]) -> dict[str, Any]:
                 else float(np.mean([row["gripper_sign_correct"] for row in rows]))
             ),
         }
-    return result
+    return {
+        "usable_expert_episodes": len(usable_episodes),
+        "excluded_expert_episodes": len(episodes) - len(usable_episodes),
+        "phases": result,
+    }
 
 
 def _condition_summary(episodes: list[Mapping[str, Any]]) -> dict[str, Any]:
+    usable_episodes = [episode for episode in episodes if episode["expert_episode"]["success"]]
     return {
         "episode_count": len(episodes),
         "expert_successes": sum(int(episode["expert_episode"]["success"]) for episode in episodes),
         "policy_successes": sum(int(episode["policy_episode"]["success"]) for episode in episodes),
+        "policy_successes_on_expert_successes": sum(
+            int(episode["policy_episode"]["success"]) for episode in usable_episodes
+        ),
         "policy_terminal_reasons": [episode["policy_episode"]["terminal_reason"] for episode in episodes],
         "first_threshold_crossings": [
             episode["first_threshold_crossings"] for episode in episodes
         ],
-        "phases": _phase_summary(episodes),
+        **_phase_summary(episodes),
     }
 
 

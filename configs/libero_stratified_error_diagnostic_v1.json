@@ -51,6 +51,10 @@
     "labels": ["approach", "transport", "release", "unknown"],
     "unknown_phase_expected_count": 0
   },
+  "expert_replay_policy": {
+    "require_success_for_error_aggregation": true,
+    "failed_expert_episodes_reported_but_excluded": true
+  },
   "forbidden_uses": [
     "checkpoint selection",
     "SPT candidate acceptance",
