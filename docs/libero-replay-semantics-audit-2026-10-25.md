@@ -39,6 +39,6 @@
 
 ## 下一步
 
-先冻结一条当前 runtime 的可复现专家轨迹协议：从 HDF5 初态执行存储动作，只记录当前环境生成的 observation/state，并与历史 HDF5 并列保存；同时保留原始 HDF5 作为离线 BC 数据，不混合两种 observation 语义。对 task 3/7 的四条 case 先做小规模 replay eligibility 复测，确认当前 runtime 轨迹是否内部一致，再决定是否需要安装/复现数据生成时的旧 simulator，或把闭环诊断和离线行为拟合明确拆成两条协议。
+当前 runtime 的可复现专家轨迹审计已经完成，见 [LIBERO 当前运行时专家轨迹审计](libero-current-runtime-replay-audit-2026-10-25.md)。四条 case 的完整 sim-state/observation digest 在三次重复中都稳定，但成功边界仍与 HDF5 标签不同。下一项比较历史 HDF5 causal observation 与当前 regenerated pre-action observation 对 Policy 输入的影响；原始 HDF5 继续只作为离线 BC 数据，当前 runtime 轨迹只作为诊断数据，不混合两种 observation 语义。
 
 在这一步完成前，不启动 phase-balanced、gripper-loss 或 A/B/C 正式候选实验，也不把 replay 成功率写成 SPI/Module 结果。

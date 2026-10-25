@@ -46,4 +46,4 @@ HDF5 中 task 3 demo 1 和 task 7 demo 0 的 `rewards` 最后值均为 `1`，`do
 
 ## 后续审计
 
-状态轨迹差异审计和回放语义冻结审计已经完成，见 [HDF5—当前重放状态对齐审计](libero-replay-state-alignment-audit-2026-10-25.md) 与 [LIBERO 回放语义冻结审计](libero-replay-semantics-audit-2026-10-25.md)。结果显示四条轨迹（包括两个当前 replay 成功控制）都在首个动作后偏离 HDF5 状态；相关 controller 配置和动作边界没有差异，而 HDF5 没有生成时 simulator 版本。此前的失败 demo 不能直接作为 Policy 失败样本，下一步先冻结当前 runtime 的可复现专家轨迹。phase-balanced、gripper-loss 和 A/B/C 仍暂停，直到 replay 兼容性得到可复现解释。
+状态轨迹差异、回放语义冻结和当前 runtime 专家轨迹审计已经完成，见 [HDF5—当前重放状态对齐审计](libero-replay-state-alignment-audit-2026-10-25.md)、[LIBERO 回放语义冻结审计](libero-replay-semantics-audit-2026-10-25.md) 与 [LIBERO 当前运行时专家轨迹审计](libero-current-runtime-replay-audit-2026-10-25.md)。结果显示四条轨迹（包括两个当前 replay 成功控制）都在首个动作后偏离 HDF5 状态；相关 controller 配置和动作边界没有差异，而当前 sim-state/observation 重复 digest 是确定的。此前的失败 demo 不能直接作为 Policy 失败样本，下一步比较历史 HDF5 causal observation 与当前 regenerated observation 对 Policy 输入的影响。phase-balanced、gripper-loss 和 A/B/C 仍暂停。

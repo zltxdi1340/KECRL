@@ -47,6 +47,6 @@ LIBERO 的数据生成脚本先把 `states[0]` 设置为仿真初态，再执行
 
 ## 后续审计
 
-回放语义冻结审计已经完成，见 [LIBERO 回放语义冻结审计](libero-replay-semantics-audit-2026-10-25.md)。相关 controller 字段、control frequency、动作边界和 adapter 校验均与 HDF5 配置一致；当前运行时仍在首步产生 qvel/qpos/观测偏差，HDF5 没有记录生成时 simulator 版本。下一步冻结当前 runtime 的可复现专家轨迹，并把历史 HDF5 observation 与当前 runtime observation 分成两条协议，再重跑小规模 replay eligibility。
+回放语义冻结审计和当前 runtime 专家轨迹审计已经完成，见 [LIBERO 回放语义冻结审计](libero-replay-semantics-audit-2026-10-25.md) 与 [LIBERO 当前运行时专家轨迹审计](libero-current-runtime-replay-audit-2026-10-25.md)。相关 controller 字段、control frequency、动作边界和 adapter 校验均与 HDF5 配置一致；当前运行时仍在首步产生 qvel/qpos/观测偏差，但重复 sim-state/observation digest 稳定。下一步把历史 HDF5 observation 与当前 runtime observation 分成两条协议，先比较它们对 Policy 输入的影响。
 
 在这个边界有可复现解释前，暂停 phase-balanced、gripper-loss 和 A/B/C 正式候选实验。
