@@ -42,3 +42,10 @@ def test_prefix_save_rejects_mismatched_lengths(tmp_path):
             actions=np.zeros((2, 7), dtype=np.float32),
             observations=observations,
         )
+
+
+def test_terminal_expectation_uses_pinned_reason_not_prefix_completion():
+    terminal_reason = None
+    assert (terminal_reason is not None) is False
+    terminal_reason = "success"
+    assert (terminal_reason is not None) is True

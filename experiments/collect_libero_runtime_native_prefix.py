@@ -204,7 +204,8 @@ def collect(config_path: Path, replay_result_path: Path, output_dir: Path) -> di
                 )
                 if collected["success"] != bool(row["runtime_success"]):
                     raise RuntimeError("runtime success differs from pinned replay result")
-                if collected["terminal_after_prefix"] != (expected == int(row["runtime_executed_action_count"])):
+                expected_terminal = row["runtime_terminal_reason"] is not None
+                if collected["terminal_after_prefix"] != expected_terminal:
                     raise RuntimeError("runtime terminal position differs from pinned replay result")
                 rows.append(collected)
         finally:
