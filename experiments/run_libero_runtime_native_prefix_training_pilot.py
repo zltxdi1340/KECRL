@@ -45,6 +45,17 @@ def _load_json(path: Path) -> dict[str, Any]:
     return value
 
 
+def _training_seeds(config: Mapping[str, Any]) -> tuple[int, ...]:
+    seeds = config.get("training_seeds", [config.get("seed")])
+    if not isinstance(seeds, list) or not seeds:
+        raise ValueError("training_seeds must be a nonempty list")
+    if any(isinstance(seed, bool) or not isinstance(seed, int) or seed <= 0 for seed in seeds):
+        raise ValueError("training_seeds must contain positive integers")
+    if len(set(seeds)) != len(seeds):
+        raise ValueError("training_seeds must be unique")
+    return tuple(seeds)
+
+
 def _load_training_and_source_config(config_path: Path) -> tuple[dict[str, Any], dict[str, Any], Path]:
     """Load a training budget while keeping the collected-prefix protocol immutable."""
     config = _load_json(config_path)
@@ -52,6 +63,7 @@ def _load_training_and_source_config(config_path: Path) -> tuple[dict[str, Any],
     if source_reference is None:
         source_path = config_path.resolve()
         source_config = prefix_protocol.load_protocol_config(source_path)
+        _training_seeds(source_config)
         return source_config, source_config, source_path
 
     if (
@@ -79,6 +91,7 @@ def _load_training_and_source_config(config_path: Path) -> tuple[dict[str, Any],
         or planned.get("status") != "protocol_only_not_run"
     ):
         raise ValueError("training pilot budget must be positive, paired, and checkpoint-free")
+    _training_seeds(config)
     return config, source_config, source_path
 
 
@@ -214,9 +227,9 @@ def _candidate_states(transfer: Mapping[str, Any], manifest: Mapping[str, Any], 
 
 
 @torch.no_grad()
-def _rollout_candidate(model: torch.nn.Module, *, transfer: Mapping[str, Any], task_id: int, states: np.ndarray, policy_spec: Mapping[str, Any], device: torch.device) -> list[dict[str, Any]]:
+def _rollout_candidate(model: torch.nn.Module, *, transfer: Mapping[str, Any], task_id: int, states: np.ndarray, policy_spec: Mapping[str, Any], device: torch.device, seed: int) -> list[dict[str, Any]]:
     adapter = causal._new_adapter(
-        suite=transfer["suite"], task_id=task_id, seed=SEED,
+        suite=transfer["suite"], task_id=task_id, seed=seed,
         image_size=int(policy_spec["image_size"]), max_steps=300,
         stabilization_steps=5, states=states,
     )
@@ -267,6 +280,7 @@ def run_pilot(config_path: Path, prefix_result_path: Path, prefix_dir: Path, dat
     pilot_base = deepcopy(base)
     pilot_base["training"] = dict(base["training"])
     pilot_base["training"]["optimizer_updates"] = int(config["planned_training"]["optimizer_updates"])
+    training_seeds = _training_seeds(config)
     rows = prefix_result["rows"]
     data_rows = {int(row["task_id"]): row for row in manifest["files"]}
     started = time.perf_counter()
@@ -279,38 +293,48 @@ def run_pilot(config_path: Path, prefix_result_path: Path, prefix_dir: Path, dat
         }
         task_base = dict(pilot_base)
         task_base["task_id"] = task_id
-        arm_results = {}
-        initial_digests = []
+        candidates = _candidate_states(transfer, manifest, task_id, dataset_root=dataset_root)
+        seed_results = {}
         try:
-            for arm in ARMS:
-                print(f"training task={task_id} arm={arm}", file=sys.stderr, flush=True)
-                model, training = causal._train_arm(
-                    seed=SEED, base=task_base, policy_config=policy_variant,
-                    transfer=transfer, family=family, dataset_manifest=manifest,
-                    dataset_root=dataset_root, device=device,
-                    train_dataset=datasets[arm],
-                )
-                initial_digests.append(training["initial_model_sha256"])
-                offline = causal.evaluate_offline(model, DataLoader(datasets[arm], batch_size=8, shuffle=False, num_workers=0), device)
-                candidates = _candidate_states(transfer, manifest, task_id, dataset_root=dataset_root)
-                rollout = _rollout_candidate(model, transfer=transfer, task_id=task_id, states=candidates, policy_spec=policy_variant["policy"], device=device)
-                arm_results[arm] = {
-                    "training": training,
-                    "offline_prefix_metrics": offline,
-                    "candidate_nonregression": {
-                        "state_indices": [0, 1, 2],
-                        "episodes": rollout,
-                        "success_count": sum(int(row["success"]) for row in rollout),
-                        "success_rate": sum(int(row["success"]) for row in rollout) / len(rollout),
-                    },
-                    "dataset_access": datasets[arm].access_record,
+            for training_seed in training_seeds:
+                arm_results = {}
+                initial_digests = []
+                for arm in ARMS:
+                    print(f"training task={task_id} seed={training_seed} arm={arm}", file=sys.stderr, flush=True)
+                    model, training = causal._train_arm(
+                        seed=training_seed, base=task_base, policy_config=policy_variant,
+                        transfer=transfer, family=family, dataset_manifest=manifest,
+                        dataset_root=dataset_root, device=device,
+                        train_dataset=datasets[arm],
+                    )
+                    initial_digests.append(training["initial_model_sha256"])
+                    offline = causal.evaluate_offline(model, DataLoader(datasets[arm], batch_size=8, shuffle=False, num_workers=0), device)
+                    rollout = _rollout_candidate(
+                        model, transfer=transfer, task_id=task_id, states=candidates,
+                        policy_spec=policy_variant["policy"], device=device, seed=training_seed,
+                    )
+                    arm_results[arm] = {
+                        "training": training,
+                        "offline_prefix_metrics": offline,
+                        "candidate_nonregression": {
+                            "state_indices": [0, 1, 2],
+                            "episodes": rollout,
+                            "success_count": sum(int(row["success"]) for row in rollout),
+                            "success_rate": sum(int(row["success"]) for row in rollout) / len(rollout),
+                        },
+                        "dataset_access": datasets[arm].access_record,
+                    }
+                if len(set(initial_digests)) != 1:
+                    raise RuntimeError(f"paired arms did not share initial model for task {task_id}, seed {training_seed}")
+                seed_results[str(training_seed)] = {
+                    "training_seed": training_seed,
+                    "initial_model_sha256": initial_digests[0],
+                    "arms": arm_results,
                 }
         finally:
             for dataset in datasets.values():
                 dataset.close()
-        if len(set(initial_digests)) != 1:
-            raise RuntimeError(f"paired arms did not share initial model for task {task_id}")
-        task_results[str(task_id)] = {"task_id": task_id, "arms": arm_results, "initial_model_sha256": initial_digests[0]}
+        task_results[str(task_id)] = {"task_id": task_id, "training_seeds": seed_results}
     torch.cuda.synchronize(device)
     commit = subprocess.check_output(["git", "-C", str(ROOT), "rev-parse", "HEAD"], text=True).strip()
     return {
@@ -342,7 +366,8 @@ def run_pilot(config_path: Path, prefix_result_path: Path, prefix_dir: Path, dat
             "device": str(device),
             "device_name": torch.cuda.get_device_name(device),
             "elapsed_seconds": time.perf_counter() - started,
-            "seed": SEED,
+            "source_prefix_seed": int(source_config["seed"]),
+            "training_seeds": list(training_seeds),
             "optimizer_updates": int(config["planned_training"]["optimizer_updates"]),
         },
         "scope": {
@@ -390,6 +415,7 @@ def main() -> None:
         "formal_result": result["formal_result"],
         "device": result["runtime"]["device"],
         "optimizer_updates": result["runtime"]["optimizer_updates"],
+        "training_seeds": result["runtime"]["training_seeds"],
         "tasks": len(result["task_results"]),
         "output": str(args.output.resolve()),
     }, indent=2))

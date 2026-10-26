@@ -21,6 +21,22 @@ def test_500_update_training_config_keeps_frozen_prefix_protocol():
     assert source["planned_training"]["optimizer_updates"] == 100
     assert source_path == (pilot.ROOT / "configs/libero_runtime_native_prefix_protocol_pilot_v1.json").resolve()
     assert training["source_prefix_result_sha256"] == pilot.EXPECTED_PREFIX_RESULT_SHA256
+    assert pilot._training_seeds(training) == (20261021,)
+
+
+def test_500_update_replication_config_separates_training_and_source_seeds():
+    config_path = pilot.ROOT / "configs/libero_runtime_native_prefix_training_replication_500_v1.json"
+    training, source, source_path = pilot._load_training_and_source_config(config_path)
+    assert training["seed"] == source["seed"] == 20261021
+    assert pilot._training_seeds(training) == (20261022, 20261023)
+    assert source_path.name == "libero_runtime_native_prefix_protocol_pilot_v1.json"
+
+
+def test_training_seed_list_rejects_duplicates_and_booleans():
+    with pytest.raises(ValueError, match="unique"):
+        pilot._training_seeds({"training_seeds": [20261022, 20261022]})
+    with pytest.raises(ValueError, match="positive integers"):
+        pilot._training_seeds({"training_seeds": [True]})
 
 
 def test_prefix_dataset_rejects_unknown_arm(tmp_path):
