@@ -214,7 +214,7 @@ def run_pilot(config_path: Path, prefix_result_path: Path, prefix_dir: Path, dat
     config, prefix_result, paired_config, base, policy, transfer, family, manifest = _load_protocol_and_sources(config_path, prefix_result_path)
     if prefix_result.get("provenance", {}).get("config_sha256") != sha256_file(config_path):
         raise ValueError("prefix collection config provenance differs from the pinned protocol")
-    if Path(prefix_result["provenance"]["source_replay_result_path"]).resolve() != Path("/tmp/libero-source-support-replay-feasibility-20261025-v2.json").resolve():
+    if Path(prefix_result["provenance"]["replay_result_path"]).resolve() != Path("/tmp/libero-source-support-replay-feasibility-20261025-v2.json").resolve():
         raise ValueError("prefix collection source replay path is not the pinned audit")
     if not prefix_dir.is_dir() or len(list(prefix_dir.glob("*.npz"))) != 150:
         raise ValueError("runtime prefix directory must contain exactly 150 NPZ files")
