@@ -271,6 +271,7 @@ def run_diagnostic(
     source_trace_result_path: Path | None = None,
 ) -> dict[str, Any]:
     config, paired_config, base, policy, transfer, family, manifest = load_diagnostic_config(config_path)
+    rgb_spec = config.get("policy_rgb_snapshots")
     if not device_name.startswith("cuda") or not torch.cuda.is_available():
         raise RuntimeError("Policy trace diagnostic requires an available CUDA device")
     from libero.libero import get_libero_path
@@ -358,7 +359,6 @@ def run_diagnostic(
     device = torch.device(device_name)
     torch.cuda.set_device(device)
     policy_variant = replication._policy_variant(policy)
-    rgb_spec = config.get("policy_rgb_snapshots")
     snapshot_steps = tuple(int(step) for step in rgb_spec["steps"]) if rgb_spec else ()
     if rgb_spec and snapshot_dir is None:
         raise ValueError("snapshot directory is required when policy RGB capture is enabled")
