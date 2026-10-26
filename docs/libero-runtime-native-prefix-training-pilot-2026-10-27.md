@@ -32,9 +32,22 @@ runtime-native 前缀采集已经把 150 条 source-support 示教裁成可执�
 2. **也不能据此否定 runtime-native 协议。** 100 updates 是校准 pilot，不是与既有 500-update 闭环结果同预算的正式比较；两臂都可能受训练预算、动作 head 和状态覆盖限制。
 3. **输入语义差异确实进入了拟合结果，但方向混杂。** 两臂初始参数、action target 和前缀窗口相同，offline 误差只在 task/动作分项上局部变化；这与此前 HDF5/runtime observation 替换会改变 Policy 输出的审计一致，但尚未给出闭环因果收益。
 
+## 500-update 预算复核
+
+按独立冻结配置 [500-update training pilot](../configs/libero_runtime_native_prefix_training_pilot_500_v1.json) 完成同一前缀对照。运行结果位于实验主机 `/tmp/libero-runtime-native-prefix-training-pilot-20261027-500-v1.json`，SHA-256 `fe0c28451045ac74c5ef541b85d2264f1a4c75adff5cce0ca0530f450ece903e`。配置 SHA-256 为 `6b397719c737e36c5aaebae97ecc18f3d0ed1e5228c9eb5df7563d4ce7979efa`；运行提交 `e855e03`，Python `3.10.22`、PyTorch `2.4.1+cu124`、`cuda:1` / RTX 4090，耗时 `248.54s`。每个 task 两臂均共享初始模型 SHA；每臂 500 optimizer updates、共消费 16,464 个有效前缀 step。
+
+| 更新预算 | 观测臂 | 加权离线 MSE | translation MSE | rotation MSE | gripper MSE | gripper sign accuracy | candidate 成功 |
+|---:|---|---:|---:|---:|---:|---:|---:|
+| 100 | historical HDF5 causal | 0.09031 | 0.13683 | 0.00254 | 0.21403 | 0.9382 | 0/15 |
+| 100 | runtime-native | 0.09091 | 0.13585 | 0.00252 | 0.22122 | 0.9373 | 0/15 |
+| 500 | historical HDF5 causal | 0.03687 | 0.04639 | 0.00200 | 0.11292 | 0.9646 | 2/15 |
+| 500 | runtime-native | 0.03766 | 0.04622 | 0.00197 | 0.11905 | 0.9628 | 3/15 |
+
+500-update 成功发生在 task 1 和 task 3：task 1 两臂各成功 1/3；task 3 的 HDF5 臂成功 1/3，runtime-native 臂成功 2/3；task 0、4、7 两臂均为 0/3。预算增加后，两臂拟合误差都明显下降，且各有少量闭环成功。runtime-native 相比 HDF5 只多 1/15 次成功，并在加权总 MSE、gripper MSE 上略差；该差距不足以证明 observation source 的优势。
+
+因此，500-update 结果说明 100-update 预算确实偏低，但当前 Policy 仍未稳定完成这些 source-SPI。单 seed、每 task 三个固定初态只能提供 pilot 证据；不能把少量成功解释为 Module 资格或 runtime-native 的可重复收益。
+
 ## 下一步
 
-500-update 诊断已另行冻结配置：[500-update training pilot](../configs/libero_runtime_native_prefix_training_pilot_500_v1.json)，SHA-256 `6b397719c737e36c5aaebae97ecc18f3d0ed1e5228c9eb5df7563d4ce7979efa`。它引用并校验原始前缀协议与 150 条采集结果，不改写 100-update 定义；仍固定相同 seed、任务、动作目标、前缀窗口、候选初态和两臂初始化，不选 checkpoint。运行结果尚未产生。
-
-先不把这两臂注册为 baseline 或 Module，也不启动 A/B/C。下一步运行同一前缀数据上的 500-update 预算比较，并与已完成的 100-update pilot 对照；如果两臂仍都失败，继续检查动作链执行和状态覆盖，而不是把观测语义当作已确认的根因。只有进一步获得可重复的 runtime-native 闭环改善，才评估是否调整后续 SPI 训练输入协议；否则保留 HDF5 causal 离线协议，并把 runtime-native 限于闭环对齐诊断。
+先不把这两臂注册为 baseline 或 Module，也不启动 A/B/C。下一步在同一前缀与候选初态上，用两个新训练 seed 复跑 500-update 双臂比较；判断预算收益是否可复现，并确认 runtime-native 与 HDF5 的 1/15 差距是否只是单 seed 波动。只有跨 seed 出现稳定闭环差异，才评估是否调整后续 SPI 训练输入协议；否则保留 HDF5 causal 离线协议，并把 runtime-native 限于闭环对齐诊断。
 
