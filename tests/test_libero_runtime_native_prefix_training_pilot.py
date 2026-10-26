@@ -32,6 +32,14 @@ def test_500_update_replication_config_separates_training_and_source_seeds():
     assert source_path.name == "libero_runtime_native_prefix_protocol_pilot_v1.json"
 
 
+def test_replication_pins_candidate_environment_seed_independently():
+    config_path = pilot.ROOT / "configs/libero_runtime_native_prefix_training_replication_500_v2.json"
+    training, source, _source_path = pilot._load_training_and_source_config(config_path)
+    assert training["training_seeds"] == [20261022, 20261023]
+    assert training["seed"] == source["seed"] == 20261021
+    assert pilot._evaluation_seed(training) == 20261021
+
+
 def test_training_seed_list_rejects_duplicates_and_booleans():
     with pytest.raises(ValueError, match="unique"):
         pilot._training_seeds({"training_seeds": [20261022, 20261022]})

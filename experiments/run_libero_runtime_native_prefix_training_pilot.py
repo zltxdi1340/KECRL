@@ -56,6 +56,13 @@ def _training_seeds(config: Mapping[str, Any]) -> tuple[int, ...]:
     return tuple(seeds)
 
 
+def _evaluation_seed(config: Mapping[str, Any]) -> int:
+    seed = config.get("evaluation_seed", SEED)
+    if isinstance(seed, bool) or not isinstance(seed, int) or seed <= 0:
+        raise ValueError("evaluation_seed must be a positive integer")
+    return seed
+
+
 def _load_training_and_source_config(config_path: Path) -> tuple[dict[str, Any], dict[str, Any], Path]:
     """Load a training budget while keeping the collected-prefix protocol immutable."""
     config = _load_json(config_path)
@@ -64,6 +71,7 @@ def _load_training_and_source_config(config_path: Path) -> tuple[dict[str, Any],
         source_path = config_path.resolve()
         source_config = prefix_protocol.load_protocol_config(source_path)
         _training_seeds(source_config)
+        _evaluation_seed(source_config)
         return source_config, source_config, source_path
 
     if (
@@ -92,6 +100,7 @@ def _load_training_and_source_config(config_path: Path) -> tuple[dict[str, Any],
     ):
         raise ValueError("training pilot budget must be positive, paired, and checkpoint-free")
     _training_seeds(config)
+    _evaluation_seed(config)
     return config, source_config, source_path
 
 
@@ -281,6 +290,7 @@ def run_pilot(config_path: Path, prefix_result_path: Path, prefix_dir: Path, dat
     pilot_base["training"] = dict(base["training"])
     pilot_base["training"]["optimizer_updates"] = int(config["planned_training"]["optimizer_updates"])
     training_seeds = _training_seeds(config)
+    evaluation_seed = _evaluation_seed(config)
     rows = prefix_result["rows"]
     data_rows = {int(row["task_id"]): row for row in manifest["files"]}
     started = time.perf_counter()
@@ -311,7 +321,7 @@ def run_pilot(config_path: Path, prefix_result_path: Path, prefix_dir: Path, dat
                     offline = causal.evaluate_offline(model, DataLoader(datasets[arm], batch_size=8, shuffle=False, num_workers=0), device)
                     rollout = _rollout_candidate(
                         model, transfer=transfer, task_id=task_id, states=candidates,
-                        policy_spec=policy_variant["policy"], device=device, seed=training_seed,
+                        policy_spec=policy_variant["policy"], device=device, seed=evaluation_seed,
                     )
                     arm_results[arm] = {
                         "training": training,
@@ -368,6 +378,7 @@ def run_pilot(config_path: Path, prefix_result_path: Path, prefix_dir: Path, dat
             "elapsed_seconds": time.perf_counter() - started,
             "source_prefix_seed": int(source_config["seed"]),
             "training_seeds": list(training_seeds),
+            "evaluation_seed": evaluation_seed,
             "optimizer_updates": int(config["planned_training"]["optimizer_updates"]),
         },
         "scope": {
@@ -416,6 +427,7 @@ def main() -> None:
         "device": result["runtime"]["device"],
         "optimizer_updates": result["runtime"]["optimizer_updates"],
         "training_seeds": result["runtime"]["training_seeds"],
+        "evaluation_seed": result["runtime"]["evaluation_seed"],
         "tasks": len(result["task_results"]),
         "output": str(args.output.resolve()),
     }, indent=2))
