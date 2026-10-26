@@ -23,7 +23,6 @@ from experiments import run_libero_cnn_only_phase_replication_diagnostic as repl
 from experiments import run_libero_runtime_native_prefix_training_pilot as prefix_training
 from experiments import run_libero_single_spi_bc_diagnostic as single_spi
 from scripts.audit_libero_dataset import sha256_file
-from src.environments.libero_adapter import LiberoEnvironmentAdapter
 
 
 DEFAULT_CONFIG = ROOT / "configs/libero_runtime_native_prefix_failure_trace_diagnostic_v1.json"
@@ -201,18 +200,20 @@ def _rollout_trace(
     training_seed: int,
     arm: str,
     initial_state_index: int,
+    candidate_states: np.ndarray,
     policy_spec: Mapping[str, Any],
     rollout: Mapping[str, Any],
     device: torch.device,
     snapshot_dir: Path,
 ) -> dict[str, Any]:
-    adapter = LiberoEnvironmentAdapter(
-        suite_name=transfer["suite"],
+    adapter = causal._new_adapter(
+        suite=transfer["suite"],
         task_id=task_id,
         seed=evaluation_seed,
         image_size=int(policy_spec["image_size"]),
-        max_episode_steps=int(rollout["max_episode_steps"]),
+        max_steps=int(rollout["max_episode_steps"]),
         stabilization_steps=int(rollout["stabilization_steps"]),
+        states=candidate_states,
     )
     actions: list[list[float]] = []
     joints: list[list[float]] = []
@@ -341,6 +342,14 @@ def run_diagnostic(
         init_path = init_root / init_row["path"]
         if init_path.stat().st_size != int(init_row["size_bytes"]) or sha256_file(init_path) != init_row["sha256"]:
             raise ValueError(f"candidate initial-state file differs from pinned metadata for task {task_id}")
+        candidate_indices = prefix_training._evaluation_state_indices(source_config)
+        candidate_states = prefix_training._candidate_states(
+            transfer,
+            manifest,
+            task_id,
+            dataset_root=dataset_root,
+            indices=candidate_indices,
+        )
         task_rows = source_rows[task_id]
         datasets = {
             arm: prefix_training.PrefixSequenceDataset(task_rows, arm=arm, dataset_root=dataset_root, manifest=manifest, policy_spec=policy_variant["policy"])
@@ -375,6 +384,7 @@ def run_diagnostic(
                         training_seed=training_seed,
                         arm=arm,
                         initial_state_index=int(index),
+                        candidate_states=candidate_states,
                         policy_spec=policy_variant["policy"],
                         rollout=config["rollout"],
                         device=device,
