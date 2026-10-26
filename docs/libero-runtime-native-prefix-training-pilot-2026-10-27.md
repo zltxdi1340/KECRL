@@ -62,9 +62,35 @@ runtime-native 前缀采集已经把 150 条 source-support 示教裁成可执�
 
 曾运行的 replication v1 使用每个训练 seed 同时作为评估环境 seed。由于两种随机性共变，其输出 `/tmp/libero-runtime-native-prefix-training-replication-20261027-v1.json`（SHA-256 `46db23c5b35ce663a2c56bb21135d43c494c5978f259479f98b25ec77bd9e5f9`）保留作审计，但不并入上述结论；v2 是固定评估 seed 的有效复核。
 
-当前仍只读取每个 task 的 candidate 初态 `0,1,2`。传递划分中 `candidate_nonregression` 有 `0..19` 共 20 个初态，qualification 是独立的 `20..39`，尚未触碰。当前低成功率下，下一步扩展到完整 20 个 candidate 初态，按 task、初态和训练 seed 分层检查成功是否集中于少数状态；不据此选 checkpoint 或做资格判定。
+## 完整 candidate 初态覆盖诊断
 
-## 下一步
+为检查前三个初态是否造成抽样偏差，使用配置 [candidate coverage v1](../configs/libero_runtime_native_prefix_training_candidate_coverage_v1.json) 重新训练并评估传递划分中的全部 `candidate_nonregression` 初态 `0..19`。配置 SHA-256 为 `807e0bc559a60119fea2f46a79f196f5f20ed7ae7eb89f1fa6319cbe31ce5c1d`；运行结果位于实验主机 `/tmp/libero-runtime-native-prefix-training-candidate-coverage-20261027-v1.json`，SHA-256 `e155a74deb2038c5aca1c99d76623f754352626f0dad7c4fee5521dbd551a4e6`。运行提交为 `fd70d1c`，Python `3.10.22`、PyTorch `2.4.1+cu124`、`cuda:1` / RTX 4090，耗时约 `2585.75s`。训练 seed 为 `20261022/20261023`，评估环境 seed 固定为 `20261021`；每个 task、seed、观测臂均重新执行 500 optimizer updates，两臂初始模型和 batch 顺序配对。
 
-先不把这两臂注册为 baseline 或 Module，也不启动 A/B/C。扩大 candidate 初态覆盖后，再依据 task×初态×seed 失败分层决定是否需要 RGB/action-state 轨迹诊断。只有出现可复现、跨初态的闭环差异，才评估是否调整后续 SPI 训练输入协议；否则保留 HDF5 causal 离线协议，并把 runtime-native 限于闭环对齐诊断。
+本轮共覆盖 `5 task × 2 seed × 20 state = 200` 个 candidate episode/臂。只读取 `candidate_nonregression`，没有访问 `qualification` 的 `20..39`、validation 或 held-out；没有选择 checkpoint、更新 SPT/Knowledge 或注册 Module。失败 episode 全部以 `time_limit` 结束，没有把它们解释为某个具体动作阶段的失败。
+
+| task | historical HDF5 causal | runtime-native |
+|---:|---:|---:|
+| 0 | 23/40 (57.5%) | 27/40 (67.5%) |
+| 1 | 0/40 (0%) | 1/40 (2.5%) |
+| 3 | 0/40 (0%) | 1/40 (2.5%) |
+| 4 | 2/40 (5.0%) | 4/40 (10.0%) |
+| 7 | 1/40 (2.5%) | 4/40 (10.0%) |
+| **合计** | **26/200 (13.0%)** | **37/200 (18.5%)** |
+
+按训练 seed 汇总，seed `20261022` 为 HDF5 `7/100`、runtime-native `17/100`，seed `20261023` 为 HDF5 `19/100`、runtime-native `20/100`。200 对相同 task/seed/初态 episode 的配对结果为：共同成功 `21`、仅 runtime-native 成功 `16`、仅 HDF5 成功 `5`、共同失败 `158`。因此 runtime-native 的净差为 `+11/200`，但绝大多数配对仍共同失败，且成功高度集中在 task 0；task 1 和 task 3 在完整覆盖下仍几乎没有成功。
+
+两臂各使用 `32,928` 个有效前缀 step。按有效 step 加权的离线指标为：
+
+| 观测臂 | action MSE | translation MSE | rotation MSE | gripper MSE | gripper sign accuracy |
+|---|---:|---:|---:|---:|---:|
+| historical HDF5 causal | 0.03436 | 0.04281 | 0.002075 | 0.10585 | 0.9659 |
+| runtime-native | 0.03550 | 0.04294 | 0.002075 | 0.11344 | 0.9646 |
+
+完整覆盖重新训练得到的 20 个 task-seed-arm 最终模型 SHA 与此前只评估初态 `0,1,2` 的三 seed 复核中对应的 seed `20261022/20261023` 模型逐一相同。这确认本轮的差异来自评估初态覆盖，而不是训练路径改变。成功率从前三个初态的稀疏结果扩展后仍保持低位，且 runtime-native 的离线误差和夹爪误差略高；因此本轮只能说明“前三个初态没有单独造成总体假象”，不能证明 runtime-native 观测来源带来稳定收益。
+
+## 诊断结论与下一步
+
+先不把任一臂注册为 baseline 或 Module，也不启动 A/B/C。当前证据支持的判断是：基础 CNN-only Policy 的闭环瓶颈仍是任务/状态条件相关的执行失败，尤其 task 1、3、4、7；改变观测重建协议没有消除共同失败。runtime-native 的成功数有弱的描述性增加，但与更高的 gripper 拟合误差并存，不能归因于观测来源优势，也不能据此调整 SPI 输入协议。
+
+下一项应固定这次两臂训练权重，做少量按 task×初态分层的 RGB、action、proprioception 失败轨迹取证，并优先覆盖 task 1/3/4/7 的共同失败与少数成功状态。该取证只用于区分接近、接触/夹爪、输运和状态漂移模式，不读取 qualification，不做 checkpoint 选择。若轨迹显示共同的早期动作漂移，再做单变量动作头/控制频率或观测边界诊断；若失败集中在任务条件或目标状态，再回到 source-SPI 的条件覆盖与任务族定义。只有在跨初态、跨 seed 的闭环成功达到可重复水平后，才进入 SPT 更新前的 A/B/C 迁移实验。
 
