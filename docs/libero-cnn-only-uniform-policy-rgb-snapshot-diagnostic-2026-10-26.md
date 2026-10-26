@@ -48,7 +48,13 @@
 
 这组帧不能判定根因属于 CNN 表示、action head、训练状态覆盖、动作时序还是历史 HDF5 与当前 runtime 的输入语义差异。快照稀疏、分辨率低，未与同初态 expert RGB 逐步配对，也没有目标/末端私有坐标或干预，因此不能用于 checkpoint 选择、成功率估计或 Module 资格。
 
+## 与已有阶段诊断的关系
+
+本仓库已经有一项独立的 [分层 expert-state / free-run 误差诊断](libero-stratified-error-diagnostic-2026-10-25.md)：在同一 5 个 source task、500-update causal Policy 和 seed `20261021` 上，它使用 meta-support/meta-query 示教，按 approach、transport、release 统计 action、joint-state 和 RGB 漂移。该诊断发现 approach 已有非零动作误差，transport 的状态漂移通常放大，task 4 open-container 的 query transport drift 和 eye-in-hand RGB MAE 最大；release 样本较少，不能单独作为全局夹爪根因。
+
+这两项证据不能合并成一个成功率或误差估计：分层诊断使用的是 source 示教前缀，RGB 快照诊断使用的是 candidate-nonregression 初态的 Policy free-run。它们在机制上相互补充，支持“动作误差在闭环中累积为空间偏离”的工作假设，但仍未区分表示、action head、状态覆盖和输入协议的因果贡献。
+
 ## 下一项诊断
 
-保持同一 7 条初态和同一 CNN-only uniform Policy，构造“expert 观测—Policy 观测—动作”阶段对齐诊断：只比较预先固定的 approach、transport、release 窗口，报告相机帧变化、公开 joint/gripper 变化和动作误差；不把当前 runtime 生成的短前缀当作完整 HDF5 示教，也不访问 qualification。该对照用于区分：Policy 是否在已经看到目标后仍输出错误空间动作，还是在输入分布漂移后失去目标相对位置。只有这一步形成可重复的单变量证据后，才决定改 action head、扩大状态覆盖或重新处理输入语义。
+阶段误差、输入替换敏感性和 source-support replay 可行性审计已经完成。下一项不再重复这些检查，而是在同一批**实际可执行的 runtime 前缀**上配对比较历史 HDF5 观测训练与 runtime-native 观测训练：两臂使用相同动作目标、前缀长度、Policy、预算和 candidate 评估边界，只改变 observation 来源。该 pilot 用来判断输入语义差异是否值得建立独立 runtime-native 训练协议；它不能把 17/150 条完整前缀外推为全量示教，也不进入 qualification、held-out、SPT 更新或 Module 注册。
 
