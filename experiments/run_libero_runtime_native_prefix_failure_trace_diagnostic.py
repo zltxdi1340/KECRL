@@ -22,10 +22,11 @@ from experiments import run_libero_bc_causal_alignment_diagnostic as causal
 from experiments import run_libero_cnn_only_phase_replication_diagnostic as replication
 from experiments import run_libero_runtime_native_prefix_training_pilot as prefix_training
 from experiments import run_libero_single_spi_bc_diagnostic as single_spi
+from src.environments.libero_adapter import LiberoEnvironmentAdapter
 from scripts.audit_libero_dataset import sha256_file
 
 
-DEFAULT_CONFIG = ROOT / "configs/libero_runtime_native_prefix_failure_trace_diagnostic_v1.json"
+DEFAULT_CONFIG = ROOT / "configs/libero_runtime_native_prefix_failure_trace_diagnostic_v2.json"
 DEFAULT_SOURCE_RESULT = Path("/tmp/libero-runtime-native-prefix-training-candidate-coverage-20261027-v1.json")
 DEFAULT_PREFIX_RESULT = Path("/tmp/libero-runtime-native-prefix-20261027-v2.json")
 DEFAULT_PREFIX_DIR = Path("/tmp/libero-runtime-native-prefix-20261027-v2")
@@ -72,8 +73,8 @@ def load_diagnostic_config(
     source_result_path: Path,
 ) -> tuple[dict[str, Any], dict[str, Any], dict[str, Any], dict[str, Any], dict[str, Any], dict[str, Any], dict[str, Any], dict[str, Any]]:
     config = _load_json(path)
-    if config.get("schema_version") != 1 or config.get("formal_result") is not False or config.get("diagnostic_result") is not True:
-        raise ValueError("failure trace requires a version-1 non-formal diagnostic config")
+    if config.get("schema_version") != 2 or config.get("formal_result") is not False or config.get("diagnostic_result") is not True:
+        raise ValueError("failure trace requires a version-2 non-formal diagnostic config")
     source_config_path = (ROOT / config["source_training_config"]).resolve()
     if not source_config_path.is_relative_to(ROOT) or not source_config_path.is_file():
         raise ValueError("source training config must be a repository file")
@@ -105,6 +106,7 @@ def load_diagnostic_config(
         or rollout.get("record_private_simulator_state") is not False
         or tuple(rollout.get("rgb_snapshot_steps", ())) != (0, 50, 100, 150, 200, 250, 300)
         or rollout.get("record_terminal_rgb_snapshot") is not True
+        or rollout.get("replay_order") != "all_candidate_nonregression_states_0_to_19_same_adapter_per_model"
     ):
         raise ValueError("failure trace rollout boundary differs from the pinned protocol")
     _paired_config, _source_config, base, policy, transfer, family, manifest = (
@@ -194,72 +196,59 @@ def _save_rgb(snapshot_dir: Path, *, task_id: int, training_seed: int, arm: str,
 def _rollout_trace(
     model: torch.nn.Module,
     *,
-    transfer: Mapping[str, Any],
     task_id: int,
     evaluation_seed: int,
     training_seed: int,
     arm: str,
     initial_state_index: int,
-    candidate_states: np.ndarray,
+    adapter: LiberoEnvironmentAdapter,
     policy_spec: Mapping[str, Any],
     rollout: Mapping[str, Any],
     device: torch.device,
     snapshot_dir: Path,
 ) -> dict[str, Any]:
-    adapter = causal._new_adapter(
-        suite=transfer["suite"],
-        task_id=task_id,
-        seed=evaluation_seed,
-        image_size=int(policy_spec["image_size"]),
-        max_steps=int(rollout["max_episode_steps"]),
-        stabilization_steps=int(rollout["stabilization_steps"]),
-        states=candidate_states,
-    )
     actions: list[list[float]] = []
     joints: list[list[float]] = []
     grippers: list[list[float]] = []
     steps: list[dict[str, Any]] = []
     snapshots: list[dict[str, Any]] = []
     snapshot_steps = set(int(step) for step in rollout["rgb_snapshot_steps"])
-    try:
-        observation, _ = adapter.reset(initial_state_index=initial_state_index)
-        joints.append(observation["joint_states"].astype(np.float64).tolist())
-        grippers.append(observation["gripper_states"].astype(np.float64).tolist())
-        snapshots.extend(_save_rgb(snapshot_dir, task_id=task_id, training_seed=training_seed, arm=arm, initial_state_index=initial_state_index, step=0, observation=observation))
-        hidden = None
-        terminated = truncated = False
-        info: Mapping[str, Any] = {"success": False, "terminal_reason": None, "step_count": 0}
-        while not (terminated or truncated):
-            before_joint = np.asarray(observation["joint_states"], dtype=np.float64)
-            before_gripper = np.asarray(observation["gripper_states"], dtype=np.float64)
-            action_tensor, hidden = model.forward_step(*causal._online_tensors(observation, device), hidden=hidden)
-            action = action_tensor[0].cpu().numpy().astype(np.float32)
-            next_observation, reward, terminated, truncated, info = adapter.step(action)
-            after_joint = next_observation["joint_states"].astype(np.float64)
-            after_gripper = next_observation["gripper_states"].astype(np.float64)
-            actions.append(action.astype(np.float64).tolist())
-            joints.append(after_joint.tolist())
-            grippers.append(after_gripper.tolist())
-            step = len(actions)
-            steps.append({
-                "step": step,
-                "action": actions[-1],
-                "joint_states_before_action": before_joint.tolist(),
-                "joint_states_after_action": after_joint.tolist(),
-                "gripper_states_before_action": before_gripper.tolist(),
-                "gripper_states_after_action": after_gripper.tolist(),
-                "joint_delta_l2": float(np.linalg.norm(after_joint - before_joint)),
-                "gripper_delta_l2": float(np.linalg.norm(after_gripper - before_gripper)),
-                "reward": float(reward),
-            })
-            observation = next_observation
-            if step in snapshot_steps and step != 0:
-                snapshots.extend(_save_rgb(snapshot_dir, task_id=task_id, training_seed=training_seed, arm=arm, initial_state_index=initial_state_index, step=step, observation=observation))
-        terminal_step = len(actions)
-        if bool(rollout["record_terminal_rgb_snapshot"]) and terminal_step not in snapshot_steps:
-            snapshots.extend(_save_rgb(snapshot_dir, task_id=task_id, training_seed=training_seed, arm=arm, initial_state_index=initial_state_index, step=terminal_step, observation=observation))
-    finally:
-        adapter.close()
+    observation, _ = adapter.reset(initial_state_index=initial_state_index)
+    joints.append(observation["joint_states"].astype(np.float64).tolist())
+    grippers.append(observation["gripper_states"].astype(np.float64).tolist())
+    snapshots.extend(_save_rgb(snapshot_dir, task_id=task_id, training_seed=training_seed, arm=arm, initial_state_index=initial_state_index, step=0, observation=observation))
+    hidden = None
+    terminated = truncated = False
+    info: Mapping[str, Any] = {"success": False, "terminal_reason": None, "step_count": 0}
+    while not (terminated or truncated):
+        before_joint = np.asarray(observation["joint_states"], dtype=np.float64)
+        before_gripper = np.asarray(observation["gripper_states"], dtype=np.float64)
+        action_tensor, hidden = model.forward_step(*causal._online_tensors(observation, device), hidden=hidden)
+        action = action_tensor[0].cpu().numpy().astype(np.float32)
+        next_observation, reward, terminated, truncated, info = adapter.step(action)
+        after_joint = next_observation["joint_states"].astype(np.float64)
+        after_gripper = next_observation["gripper_states"].astype(np.float64)
+        actions.append(action.astype(np.float64).tolist())
+        joints.append(after_joint.tolist())
+        grippers.append(after_gripper.tolist())
+        step = len(actions)
+        steps.append({
+            "step": step,
+            "action": actions[-1],
+            "joint_states_before_action": before_joint.tolist(),
+            "joint_states_after_action": after_joint.tolist(),
+            "gripper_states_before_action": before_gripper.tolist(),
+            "gripper_states_after_action": after_gripper.tolist(),
+            "joint_delta_l2": float(np.linalg.norm(after_joint - before_joint)),
+            "gripper_delta_l2": float(np.linalg.norm(after_gripper - before_gripper)),
+            "reward": float(reward),
+        })
+        observation = next_observation
+        if step in snapshot_steps and step != 0:
+            snapshots.extend(_save_rgb(snapshot_dir, task_id=task_id, training_seed=training_seed, arm=arm, initial_state_index=initial_state_index, step=step, observation=observation))
+    terminal_step = len(actions)
+    if bool(rollout["record_terminal_rgb_snapshot"]) and terminal_step not in snapshot_steps:
+        snapshots.extend(_save_rgb(snapshot_dir, task_id=task_id, training_seed=training_seed, arm=arm, initial_state_index=initial_state_index, step=terminal_step, observation=observation))
     return {
         "task_id": task_id,
         "training_seed": training_seed,
@@ -274,6 +263,31 @@ def _rollout_trace(
         "summary": _trace_summary(actions, joints, grippers),
         "rgb_snapshots": snapshots,
         "trace": steps,
+    }
+
+
+@torch.no_grad()
+def _rollout_silent(
+    model: torch.nn.Module,
+    *,
+    adapter: LiberoEnvironmentAdapter,
+    initial_state_index: int,
+    device: torch.device,
+) -> dict[str, Any]:
+    observation, _ = adapter.reset(initial_state_index=initial_state_index)
+    hidden = None
+    terminated = truncated = False
+    info: Mapping[str, Any] = {"success": False, "terminal_reason": None, "step_count": 0}
+    reward_sum = 0.0
+    while not (terminated or truncated):
+        action_tensor, hidden = model.forward_step(*causal._online_tensors(observation, device), hidden=hidden)
+        observation, reward, terminated, truncated, info = adapter.step(action_tensor[0].cpu().numpy().astype(np.float32))
+        reward_sum += float(reward)
+    return {
+        "success": bool(info["success"]),
+        "steps": int(info["step_count"]),
+        "terminal_reason": info["terminal_reason"],
+        "reward_sum": reward_sum,
     }
 
 
@@ -375,31 +389,53 @@ def run_diagnostic(
                 expected_hash = expected_task["arms"][arm]["training"]["final_model_sha256"]
                 if training["final_model_sha256"] != expected_hash:
                     raise RuntimeError(f"reconstructed Policy SHA differs for task={task_id}, seed={training_seed}, arm={arm}")
-                for index, expected, expected_steps in zip(case["initial_state_indices"], case["expected"][arm], case["expected_steps"][arm]):
-                    result = _rollout_trace(
-                        model,
-                        transfer=transfer,
-                        task_id=task_id,
-                        evaluation_seed=evaluation_seed,
-                        training_seed=training_seed,
-                        arm=arm,
-                        initial_state_index=int(index),
-                        candidate_states=candidate_states,
-                        policy_spec=policy_variant["policy"],
-                        rollout=config["rollout"],
-                        device=device,
-                        snapshot_dir=snapshot_dir,
+                adapter = causal._new_adapter(
+                    suite=transfer["suite"],
+                    task_id=task_id,
+                    seed=evaluation_seed,
+                    image_size=int(policy_variant["policy"]["image_size"]),
+                    max_steps=int(config["rollout"]["max_episode_steps"]),
+                    stabilization_steps=int(config["rollout"]["stabilization_steps"]),
+                    states=candidate_states,
+                )
+                selected = {
+                    int(index): (bool(expected), int(expected_steps))
+                    for index, expected, expected_steps in zip(
+                        case["initial_state_indices"], case["expected"][arm], case["expected_steps"][arm]
                     )
-                    if result["success"] is not bool(expected) or result["steps"] != int(expected_steps):
-                        raise RuntimeError(f"rerun outcome differs for task={task_id}, seed={training_seed}, arm={arm}, state={index}")
-                    result.update({
-                        "model_sha256": training["final_model_sha256"],
-                        "initial_model_sha256": training["initial_model_sha256"],
-                        "source_coverage_result_sha256": sha256_file(source_result_path),
-                        "training_optimizer_updates": int(training["optimizer_updates"]),
-                        "training_access": datasets[arm].access_record,
-                    })
-                    traces.append(result)
+                }
+                try:
+                    model.eval()
+                    for index in range(len(candidate_states)):
+                        if index in selected:
+                            expected, expected_steps = selected[index]
+                            result = _rollout_trace(
+                                model,
+                                task_id=task_id,
+                                evaluation_seed=evaluation_seed,
+                                training_seed=training_seed,
+                                arm=arm,
+                                initial_state_index=index,
+                                adapter=adapter,
+                                policy_spec=policy_variant["policy"],
+                                rollout=config["rollout"],
+                                device=device,
+                                snapshot_dir=snapshot_dir,
+                            )
+                            if result["success"] is not expected or result["steps"] != expected_steps:
+                                raise RuntimeError(f"rerun outcome differs for task={task_id}, seed={training_seed}, arm={arm}, state={index}")
+                            result.update({
+                                "model_sha256": training["final_model_sha256"],
+                                "initial_model_sha256": training["initial_model_sha256"],
+                                "source_coverage_result_sha256": sha256_file(source_result_path),
+                                "training_optimizer_updates": int(training["optimizer_updates"]),
+                                "training_access": datasets[arm].access_record,
+                            })
+                            traces.append(result)
+                        else:
+                            _rollout_silent(model, adapter=adapter, initial_state_index=index, device=device)
+                finally:
+                    adapter.close()
                 del model
         finally:
             for dataset in datasets.values():

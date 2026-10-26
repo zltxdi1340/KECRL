@@ -1,0 +1,174 @@
+{
+  "schema_version": 2,
+  "status": "libero_runtime_native_prefix_failure_trace_diagnostic_v2",
+  "formal_result": false,
+  "diagnostic_result": true,
+  "purpose": "Inspect representative common failures and observation-arm disagreements after full candidate-state coverage with the same sequential adapter replay as the coverage runner",
+  "source_training_config": "configs/libero_runtime_native_prefix_training_candidate_coverage_v1.json",
+  "source_training_config_sha256": "807e0bc559a60119fea2f46a79f196f5f20ed7ae7eb89f1fa6319cbe31ce5c1d",
+  "source_training_result_sha256": "e155a74deb2038c5aca1c99d76623f754352626f0dad7c4fee5521dbd551a4e6",
+  "selection_rule": "Fixed diagnostic strata chosen after the coverage run: one common-failure state per task and observed arm-disagreement states where available; no qualification state or checkpoint selection.",
+  "cases": [
+    {
+      "task_id": 1,
+      "training_seed": 20261023,
+      "evaluation_seed": 20261021,
+      "initial_state_indices": [
+        0,
+        17
+      ],
+      "expected": {
+        "historical_hdf5": [
+          false,
+          false
+        ],
+        "runtime_native": [
+          false,
+          true
+        ]
+      },
+      "expected_steps": {
+        "historical_hdf5": [
+          300,
+          300
+        ],
+        "runtime_native": [
+          300,
+          131
+        ]
+      }
+    },
+    {
+      "task_id": 3,
+      "training_seed": 20261023,
+      "evaluation_seed": 20261021,
+      "initial_state_indices": [
+        0,
+        1
+      ],
+      "expected": {
+        "historical_hdf5": [
+          false,
+          false
+        ],
+        "runtime_native": [
+          true,
+          false
+        ]
+      },
+      "expected_steps": {
+        "historical_hdf5": [
+          300,
+          300
+        ],
+        "runtime_native": [
+          90,
+          300
+        ]
+      }
+    },
+    {
+      "task_id": 4,
+      "training_seed": 20261022,
+      "evaluation_seed": 20261021,
+      "initial_state_indices": [
+        0,
+        2,
+        7
+      ],
+      "expected": {
+        "historical_hdf5": [
+          false,
+          false,
+          true
+        ],
+        "runtime_native": [
+          false,
+          true,
+          false
+        ]
+      },
+      "expected_steps": {
+        "historical_hdf5": [
+          300,
+          300,
+          156
+        ],
+        "runtime_native": [
+          300,
+          159,
+          300
+        ]
+      }
+    },
+    {
+      "task_id": 7,
+      "training_seed": 20261022,
+      "evaluation_seed": 20261021,
+      "initial_state_indices": [
+        0,
+        8
+      ],
+      "expected": {
+        "historical_hdf5": [
+          false,
+          false
+        ],
+        "runtime_native": [
+          false,
+          true
+        ]
+      },
+      "expected_steps": {
+        "historical_hdf5": [
+          300,
+          300
+        ],
+        "runtime_native": [
+          300,
+          137
+        ]
+      }
+    }
+  ],
+  "rollout": {
+    "max_episode_steps": 300,
+    "stabilization_steps": 5,
+    "record_per_step_actions": true,
+    "record_public_joint_and_gripper_states": true,
+    "record_private_simulator_state": false,
+    "rgb_snapshot_steps": [
+      0,
+      50,
+      100,
+      150,
+      200,
+      250,
+      300
+    ],
+    "record_terminal_rgb_snapshot": true,
+    "replay_order": "all_candidate_nonregression_states_0_to_19_same_adapter_per_model"
+  },
+  "scope": {
+    "source_meta_support_read": true,
+    "candidate_nonregression_states_read": true,
+    "policy_actions_executed_in_environment": true,
+    "private_state_used_only_for_reset": true,
+    "private_state_used_as_policy_input": false,
+    "private_state_used_as_knowledge_evidence": false,
+    "validation_accessed": false,
+    "heldout_accessed": false,
+    "qualification_accessed": false,
+    "checkpoint_selection": false,
+    "spt_update": false,
+    "knowledge_update": false,
+    "module_qualification": false
+  },
+  "forbidden_uses": [
+    "treating traces as SPI qualification",
+    "using RGB or public traces to select a checkpoint",
+    "reading qualification or held-out states",
+    "updating SPT or Knowledge",
+    "claiming an observation-source effect from selected strata"
+  ]
+}
