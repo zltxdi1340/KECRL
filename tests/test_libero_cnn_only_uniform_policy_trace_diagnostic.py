@@ -59,3 +59,39 @@ def test_rgb_snapshot_saves_only_two_policy_camera_frames(tmp_path):
     for row in rows:
         assert Path(row["path"]).is_file()
         assert len(row["sha256"]) == 64
+
+
+def test_rgb_snapshot_source_trace_provenance_uses_supplied_result_path(tmp_path, monkeypatch):
+    config = json.loads(
+        (diagnostic.ROOT / "configs/libero_cnn_only_uniform_policy_rgb_snapshot_diagnostic_v1.json").read_text()
+    )
+    source_path = tmp_path / "trace-result.json"
+    source_path.write_text(json.dumps({
+        "check_type": "libero_cnn_only_uniform_policy_trace_diagnostic",
+        "formal_result": False,
+        "provenance": {"config_sha256": config["source_trace_config_sha256"]},
+        "trace_count": 7,
+    }))
+    source_config_path = diagnostic.ROOT / config["source_trace_config"]
+    expected_hashes = {
+        source_config_path.resolve(): config["source_trace_config_sha256"],
+        source_path.resolve(): config["source_trace_result_sha256"],
+    }
+    actual_sha256_file = diagnostic.sha256_file
+
+    def pinned_sha256_file(path):
+        return expected_hashes.get(Path(path).resolve(), actual_sha256_file(path))
+
+    monkeypatch.setattr(diagnostic, "sha256_file", pinned_sha256_file)
+    resolved_config_path, result_path, result = diagnostic._load_source_trace_provenance(config, source_path)
+    assert resolved_config_path == source_config_path.resolve()
+    assert result_path == source_path.resolve()
+    assert result["trace_count"] == 7
+
+
+def test_rgb_snapshot_source_trace_provenance_requires_result_file():
+    config = json.loads(
+        (diagnostic.ROOT / "configs/libero_cnn_only_uniform_policy_rgb_snapshot_diagnostic_v1.json").read_text()
+    )
+    with pytest.raises(ValueError, match="source trace result is required"):
+        diagnostic._load_source_trace_provenance(config, None)

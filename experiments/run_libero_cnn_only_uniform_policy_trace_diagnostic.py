@@ -177,6 +177,39 @@ def _save_policy_rgb_snapshot(
     return rows
 
 
+def _load_source_trace_provenance(
+    config: Mapping[str, Any],
+    source_trace_result_path: Path | None,
+) -> tuple[Path | None, Path | None, dict[str, Any] | None]:
+    source_trace_config_path = None
+    source_trace_result = None
+    if config.get("policy_rgb_snapshots"):
+        if source_trace_result_path is None:
+            raise ValueError("source trace result is required for the RGB snapshot follow-up")
+        source_trace_config_path = (ROOT / config["source_trace_config"]).resolve()
+        if not source_trace_config_path.is_relative_to(ROOT) or not source_trace_config_path.is_file():
+            raise ValueError("source trace config must be a repository file")
+        if sha256_file(source_trace_config_path) != config.get("source_trace_config_sha256"):
+            raise ValueError("source trace config SHA-256 differs from the pinned trace protocol")
+        source_trace_config = _load_json(source_trace_config_path)
+        if source_trace_config.get("cases") != config.get("cases"):
+            raise ValueError("RGB snapshot cases differ from the fixed source trace schedule")
+        source_trace_result_path = source_trace_result_path.resolve()
+        if sha256_file(source_trace_result_path) != config.get("source_trace_result_sha256"):
+            raise ValueError("source trace result SHA-256 differs from the pinned trace output")
+        source_trace_result = _load_json(source_trace_result_path)
+        if (
+            source_trace_result.get("check_type") != "libero_cnn_only_uniform_policy_trace_diagnostic"
+            or source_trace_result.get("formal_result") is not False
+            or source_trace_result.get("provenance", {}).get("config_sha256") != config["source_trace_config_sha256"]
+            or int(source_trace_result.get("trace_count", -1)) != 7
+        ):
+            raise ValueError("source trace result provenance or trace count differs from the pinned run")
+    elif source_trace_result_path is not None:
+        raise ValueError("source trace result supplied without RGB snapshot follow-up protocol")
+    return source_trace_config_path, source_trace_result_path, source_trace_result
+
+
 @torch.no_grad()
 def _rollout_trace(
     model: torch.nn.Module,
@@ -278,33 +311,10 @@ def run_diagnostic(
 
     closed_loop_result_path = closed_loop_result_path.resolve()
     paired_result_path = paired_result_path.resolve()
-    source_trace_config_path = None
-    source_trace_result_path = None
-    source_trace_result = None
-    if rgb_spec:
-        if source_trace_result_path is None:
-            raise ValueError("source trace result is required for the RGB snapshot follow-up")
-        source_trace_config_path = (ROOT / config["source_trace_config"]).resolve()
-        if not source_trace_config_path.is_relative_to(ROOT) or not source_trace_config_path.is_file():
-            raise ValueError("source trace config must be a repository file")
-        if sha256_file(source_trace_config_path) != config.get("source_trace_config_sha256"):
-            raise ValueError("source trace config SHA-256 differs from the pinned trace protocol")
-        source_trace_config = _load_json(source_trace_config_path)
-        if source_trace_config.get("cases") != config.get("cases"):
-            raise ValueError("RGB snapshot cases differ from the fixed source trace schedule")
-        source_trace_result_path = source_trace_result_path.resolve()
-        if sha256_file(source_trace_result_path) != config.get("source_trace_result_sha256"):
-            raise ValueError("source trace result SHA-256 differs from the pinned trace output")
-        source_trace_result = _load_json(source_trace_result_path)
-        if (
-            source_trace_result.get("check_type") != "libero_cnn_only_uniform_policy_trace_diagnostic"
-            or source_trace_result.get("formal_result") is not False
-            or source_trace_result.get("provenance", {}).get("config_sha256") != config["source_trace_config_sha256"]
-            or int(source_trace_result.get("trace_count", -1)) != 7
-        ):
-            raise ValueError("source trace result provenance or trace count differs from the pinned run")
-    elif source_trace_result_path is not None:
-        raise ValueError("source trace result supplied without RGB snapshot follow-up protocol")
+    source_trace_config_path, source_trace_result_path, source_trace_result = _load_source_trace_provenance(
+        config,
+        source_trace_result_path,
+    )
     if sha256_file(closed_loop_result_path) != config["source_closed_loop_result_sha256"]:
         raise ValueError("source closed-loop result SHA-256 differs from the pinned diagnostic")
     if sha256_file(paired_result_path) != config["source_paired_result_sha256"]:
