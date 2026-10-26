@@ -63,6 +63,20 @@ def _evaluation_seed(config: Mapping[str, Any]) -> int:
     return seed
 
 
+def _evaluation_state_indices(config: Mapping[str, Any]) -> tuple[int, ...]:
+    planned = config.get("planned_evaluation", {})
+    if planned.get("role") != "candidate_nonregression":
+        raise ValueError("prefix pilot may read candidate_nonregression states only")
+    indices = planned.get("initial_state_indices")
+    if not isinstance(indices, list) or not indices:
+        raise ValueError("planned evaluation must specify nonempty initial_state_indices")
+    if any(isinstance(index, bool) or not isinstance(index, int) or index < 0 for index in indices):
+        raise ValueError("initial_state_indices must contain nonnegative integers")
+    if len(set(indices)) != len(indices):
+        raise ValueError("initial_state_indices must be unique")
+    return tuple(indices)
+
+
 def _load_training_and_source_config(config_path: Path) -> tuple[dict[str, Any], dict[str, Any], Path]:
     """Load a training budget while keeping the collected-prefix protocol immutable."""
     config = _load_json(config_path)
@@ -72,6 +86,7 @@ def _load_training_and_source_config(config_path: Path) -> tuple[dict[str, Any],
         source_config = prefix_protocol.load_protocol_config(source_path)
         _training_seeds(source_config)
         _evaluation_seed(source_config)
+        _evaluation_state_indices(source_config)
         return source_config, source_config, source_path
 
     if (
@@ -88,9 +103,15 @@ def _load_training_and_source_config(config_path: Path) -> tuple[dict[str, Any],
     source_config = prefix_protocol.load_protocol_config(source_path)
     if config.get("source_prefix_result_sha256") != EXPECTED_PREFIX_RESULT_SHA256:
         raise ValueError("training config must pin the collected runtime-native prefix result")
-    for key in ("task_ids", "seed", "demonstration_role", "demonstration_indices", "paired_prefix_rule", "arms", "planned_evaluation"):
+    for key in ("task_ids", "seed", "demonstration_role", "demonstration_indices", "paired_prefix_rule", "arms"):
         if config.get(key) != source_config.get(key):
             raise ValueError(f"training config changes frozen prefix protocol field: {key}")
+    planned_evaluation = config.get("planned_evaluation", {})
+    source_evaluation = source_config.get("planned_evaluation", {})
+    if {key: value for key, value in planned_evaluation.items() if key != "initial_state_indices"} != {
+        key: value for key, value in source_evaluation.items() if key != "initial_state_indices"
+    }:
+        raise ValueError("training config changes frozen candidate evaluation boundary")
     planned = config.get("planned_training", {})
     if (
         int(planned.get("optimizer_updates", 0)) <= 0
@@ -101,6 +122,7 @@ def _load_training_and_source_config(config_path: Path) -> tuple[dict[str, Any],
         raise ValueError("training pilot budget must be positive, paired, and checkpoint-free")
     _training_seeds(config)
     _evaluation_seed(config)
+    _evaluation_state_indices(config)
     return config, source_config, source_path
 
 
@@ -224,7 +246,7 @@ def _load_protocol_and_sources(config_path: Path, prefix_result_path: Path) -> t
     return config, source_config, source_config_path, prefix_result, paired_config, base, policy, transfer, family, manifest
 
 
-def _candidate_states(transfer: Mapping[str, Any], manifest: Mapping[str, Any], task_id: int, *, dataset_root: Path) -> np.ndarray:
+def _candidate_states(transfer: Mapping[str, Any], manifest: Mapping[str, Any], task_id: int, *, dataset_root: Path, indices: tuple[int, ...]) -> np.ndarray:
     from libero.libero import get_libero_path
 
     row = next(row for row in transfer["initial_state_files"] if int(row["task_id"]) == task_id)
@@ -232,7 +254,9 @@ def _candidate_states(transfer: Mapping[str, Any], manifest: Mapping[str, Any], 
     if path.stat().st_size != int(row["size_bytes"]) or sha256_file(path) != row["sha256"]:
         raise ValueError(f"official initial states differ for task {task_id}")
     states = np.asarray(torch.load(path, map_location="cpu", weights_only=False))
-    return np.asarray(states[[0, 1, 2]]).copy()
+    if states.ndim != 2 or states.shape[1] != 92 or any(index >= len(states) for index in indices):
+        raise ValueError(f"official candidate state indices are out of range for task {task_id}")
+    return np.asarray(states[list(indices)]).copy()
 
 
 @torch.no_grad()
@@ -286,6 +310,12 @@ def run_pilot(config_path: Path, prefix_result_path: Path, prefix_dir: Path, dat
     device = torch.device(device_name)
     torch.cuda.set_device(device)
     policy_variant = replication._policy_variant(policy)
+    evaluation_state_indices = _evaluation_state_indices(config)
+    allowed_candidate_indices = set(
+        transfer["evaluation_initial_state_indices_by_task_role"]["source_spi"]["candidate_nonregression"]
+    )
+    if not set(evaluation_state_indices).issubset(allowed_candidate_indices):
+        raise ValueError("evaluation indices include a state outside the source-SPI candidate_nonregression role")
     pilot_base = deepcopy(base)
     pilot_base["training"] = dict(base["training"])
     pilot_base["training"]["optimizer_updates"] = int(config["planned_training"]["optimizer_updates"])
@@ -303,7 +333,9 @@ def run_pilot(config_path: Path, prefix_result_path: Path, prefix_dir: Path, dat
         }
         task_base = dict(pilot_base)
         task_base["task_id"] = task_id
-        candidates = _candidate_states(transfer, manifest, task_id, dataset_root=dataset_root)
+        candidates = _candidate_states(
+            transfer, manifest, task_id, dataset_root=dataset_root, indices=evaluation_state_indices
+        )
         seed_results = {}
         try:
             for training_seed in training_seeds:
@@ -327,7 +359,7 @@ def run_pilot(config_path: Path, prefix_result_path: Path, prefix_dir: Path, dat
                         "training": training,
                         "offline_prefix_metrics": offline,
                         "candidate_nonregression": {
-                            "state_indices": [0, 1, 2],
+                            "state_indices": list(evaluation_state_indices),
                             "episodes": rollout,
                             "success_count": sum(int(row["success"]) for row in rollout),
                             "success_rate": sum(int(row["success"]) for row in rollout) / len(rollout),
@@ -379,6 +411,7 @@ def run_pilot(config_path: Path, prefix_result_path: Path, prefix_dir: Path, dat
             "source_prefix_seed": int(source_config["seed"]),
             "training_seeds": list(training_seeds),
             "evaluation_seed": evaluation_seed,
+            "candidate_state_indices": list(evaluation_state_indices),
             "optimizer_updates": int(config["planned_training"]["optimizer_updates"]),
         },
         "scope": {
@@ -428,6 +461,7 @@ def main() -> None:
         "optimizer_updates": result["runtime"]["optimizer_updates"],
         "training_seeds": result["runtime"]["training_seeds"],
         "evaluation_seed": result["runtime"]["evaluation_seed"],
+        "candidate_state_count": len(result["runtime"]["candidate_state_indices"]),
         "tasks": len(result["task_results"]),
         "output": str(args.output.resolve()),
     }, indent=2))

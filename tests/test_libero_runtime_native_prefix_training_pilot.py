@@ -40,6 +40,20 @@ def test_replication_pins_candidate_environment_seed_independently():
     assert pilot._evaluation_seed(training) == 20261021
 
 
+def test_candidate_state_coverage_config_uses_only_candidate_role():
+    config_path = pilot.ROOT / "configs/libero_runtime_native_prefix_training_candidate_coverage_v1.json"
+    training, source, _source_path = pilot._load_training_and_source_config(config_path)
+    assert pilot._evaluation_state_indices(training) == tuple(range(20))
+    assert pilot._evaluation_state_indices(source) == (0, 1, 2)
+
+
+def test_evaluation_indices_reject_duplicates_and_wrong_role():
+    with pytest.raises(ValueError, match="unique"):
+        pilot._evaluation_state_indices({"planned_evaluation": {"role": "candidate_nonregression", "initial_state_indices": [0, 0]}})
+    with pytest.raises(ValueError, match="candidate_nonregression"):
+        pilot._evaluation_state_indices({"planned_evaluation": {"role": "qualification", "initial_state_indices": [0]}})
+
+
 def test_training_seed_list_rejects_duplicates_and_booleans():
     with pytest.raises(ValueError, match="unique"):
         pilot._training_seeds({"training_seeds": [20261022, 20261022]})
