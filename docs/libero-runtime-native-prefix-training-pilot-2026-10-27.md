@@ -47,7 +47,24 @@ runtime-native 前缀采集已经把 150 条 source-support 示教裁成可执�
 
 因此，500-update 结果说明 100-update 预算确实偏低，但当前 Policy 仍未稳定完成这些 source-SPI。单 seed、每 task 三个固定初态只能提供 pilot 证据；不能把少量成功解释为 Module 资格或 runtime-native 的可重复收益。
 
+## 固定评估环境的多 seed 复核
+
+为分离训练随机性和模拟器评估随机性，配置 [500-update replication v2](../configs/libero_runtime_native_prefix_training_replication_500_v2.json) 将训练 seed 设为 `20261022/20261023`，并把 candidate 环境 seed 固定为 `20261021`。配置 SHA-256 为 `4f9218239d3cd45b9d819c6bff902bb5cc94a1ed96b5c87a33e35744d7918793`；结果 JSON 位于实验主机 `/tmp/libero-runtime-native-prefix-training-replication-20261027-v2.json`，SHA-256 `61b332a5b533f4aa56342eb59456ce4aab7f43a5db9182f45271198821c01f33`。运行提交 `d0caa68`，使用 `cuda:1` / RTX 4090，耗时 `535.30s`。每个训练 seed、task 内两臂初始模型 SHA 均相同，没有配对哈希不匹配。
+
+| 训练 seed | 评估环境 seed | HDF5 加权 MSE | HDF5 成功 | runtime-native 加权 MSE | runtime-native 成功 |
+|---:|---:|---:|---:|---:|---:|
+| 20261021 | 20261021 | 0.03687 | 2/15 | 0.03766 | 3/15 |
+| 20261022 | 20261021 | 0.03412 | 0/15 | 0.03538 | 2/15 |
+| 20261023 | 20261021 | 0.03460 | 3/15 | 0.03562 | 3/15 |
+| 合计 | 固定 | 0.03520 | 5/45 | 0.03622 | 8/45 |
+
+45 对相同 task/初态 episode 中，两臂共同成功 4 对、仅 runtime-native 成功 4 对、仅 HDF5 成功 1 对、共同失败 36 对。runtime-native 的成功数在三个 seed 中没有反向劣势，但只净增 3/45；其加权 action MSE 均略高于 HDF5，主要差异在 gripper 拟合。故只能说出现弱的闭环候选信号，尚不能判断观测来源带来稳定收益。
+
+曾运行的 replication v1 使用每个训练 seed 同时作为评估环境 seed。由于两种随机性共变，其输出 `/tmp/libero-runtime-native-prefix-training-replication-20261027-v1.json`（SHA-256 `46db23c5b35ce663a2c56bb21135d43c494c5978f259479f98b25ec77bd9e5f9`）保留作审计，但不并入上述结论；v2 是固定评估 seed 的有效复核。
+
+当前仍只读取每个 task 的 candidate 初态 `0,1,2`。传递划分中 `candidate_nonregression` 有 `0..19` 共 20 个初态，qualification 是独立的 `20..39`，尚未触碰。当前低成功率下，下一步扩展到完整 20 个 candidate 初态，按 task、初态和训练 seed 分层检查成功是否集中于少数状态；不据此选 checkpoint 或做资格判定。
+
 ## 下一步
 
-先不把这两臂注册为 baseline 或 Module，也不启动 A/B/C。下一步在同一前缀与候选初态上，用两个新训练 seed 复跑 500-update 双臂比较；判断预算收益是否可复现，并确认 runtime-native 与 HDF5 的 1/15 差距是否只是单 seed 波动。只有跨 seed 出现稳定闭环差异，才评估是否调整后续 SPI 训练输入协议；否则保留 HDF5 causal 离线协议，并把 runtime-native 限于闭环对齐诊断。
+先不把这两臂注册为 baseline 或 Module，也不启动 A/B/C。扩大 candidate 初态覆盖后，再依据 task×初态×seed 失败分层决定是否需要 RGB/action-state 轨迹诊断。只有出现可复现、跨初态的闭环差异，才评估是否调整后续 SPI 训练输入协议；否则保留 HDF5 causal 离线协议，并把 runtime-native 限于闭环对齐诊断。
 
