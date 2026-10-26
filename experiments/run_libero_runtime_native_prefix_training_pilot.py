@@ -45,6 +45,43 @@ def _load_json(path: Path) -> dict[str, Any]:
     return value
 
 
+def _load_training_and_source_config(config_path: Path) -> tuple[dict[str, Any], dict[str, Any], Path]:
+    """Load a training budget while keeping the collected-prefix protocol immutable."""
+    config = _load_json(config_path)
+    source_reference = config.get("source_prefix_protocol")
+    if source_reference is None:
+        source_path = config_path.resolve()
+        source_config = prefix_protocol.load_protocol_config(source_path)
+        return source_config, source_config, source_path
+
+    if (
+        config.get("schema_version") != 1
+        or config.get("formal_result") is not False
+        or config.get("diagnostic_result") is not True
+    ):
+        raise ValueError("training pilot config requires a non-formal version-1 diagnostic config")
+    source_path = (ROOT / source_reference).resolve()
+    if not source_path.is_relative_to(ROOT) or not source_path.is_file():
+        raise ValueError("source prefix protocol must be a repository file")
+    if sha256_file(source_path) != config.get("source_prefix_protocol_sha256"):
+        raise ValueError("source prefix protocol SHA-256 differs from the pinned training config")
+    source_config = prefix_protocol.load_protocol_config(source_path)
+    if config.get("source_prefix_result_sha256") != EXPECTED_PREFIX_RESULT_SHA256:
+        raise ValueError("training config must pin the collected runtime-native prefix result")
+    for key in ("task_ids", "seed", "demonstration_role", "demonstration_indices", "paired_prefix_rule", "arms", "planned_evaluation"):
+        if config.get(key) != source_config.get(key):
+            raise ValueError(f"training config changes frozen prefix protocol field: {key}")
+    planned = config.get("planned_training", {})
+    if (
+        int(planned.get("optimizer_updates", 0)) <= 0
+        or planned.get("checkpoint_selection") is not False
+        or planned.get("same_initial_model_and_batch_order") is not True
+        or planned.get("status") != "protocol_only_not_run"
+    ):
+        raise ValueError("training pilot budget must be positive, paired, and checkpoint-free")
+    return config, source_config, source_path
+
+
 def _digest_tensors(tensors: Mapping[str, torch.Tensor]) -> str:
     digest = hashlib.sha256()
     for name, value in sorted(tensors.items()):
@@ -150,8 +187,8 @@ class PrefixSequenceDataset(Dataset):
         self.windows.clear()
 
 
-def _load_protocol_and_sources(config_path: Path, prefix_result_path: Path) -> tuple[dict[str, Any], dict[str, Any], dict[str, Any], dict[str, Any], dict[str, Any], dict[str, Any], dict[str, Any], dict[str, Any]]:
-    config = prefix_protocol.load_protocol_config(config_path)
+def _load_protocol_and_sources(config_path: Path, prefix_result_path: Path) -> tuple[dict[str, Any], dict[str, Any], Path, dict[str, Any], dict[str, Any], dict[str, Any], dict[str, Any], dict[str, Any], dict[str, Any]]:
+    config, source_config, source_config_path = _load_training_and_source_config(config_path)
     if sha256_file(prefix_result_path) != EXPECTED_PREFIX_RESULT_SHA256:
         raise ValueError("prefix collection result SHA-256 differs from the pinned collection")
     prefix_result = _load_json(prefix_result_path)
@@ -159,10 +196,10 @@ def _load_protocol_and_sources(config_path: Path, prefix_result_path: Path) -> t
         raise ValueError("prefix collection result is not the pinned completed diagnostic")
     if prefix_result.get("summary", {}).get("demonstration_count") != 150:
         raise ValueError("prefix collection result does not cover all 150 source-support demonstrations")
-    if prefix_result.get("provenance", {}).get("config_sha256") != sha256_file(config_path):
+    if prefix_result.get("provenance", {}).get("config_sha256") != sha256_file(source_config_path):
         raise ValueError("prefix collection result was produced from a different prefix protocol config")
     paired_config, _source_config, base, policy, transfer, family, manifest = paired.load_diagnostic_config(DEFAULT_PAIRED_CONFIG)
-    return config, prefix_result, paired_config, base, policy, transfer, family, manifest
+    return config, source_config, source_config_path, prefix_result, paired_config, base, policy, transfer, family, manifest
 
 
 def _candidate_states(transfer: Mapping[str, Any], manifest: Mapping[str, Any], task_id: int, *, dataset_root: Path) -> np.ndarray:
@@ -211,8 +248,8 @@ def _rollout_candidate(model: torch.nn.Module, *, transfer: Mapping[str, Any], t
 
 
 def run_pilot(config_path: Path, prefix_result_path: Path, prefix_dir: Path, dataset_root: Path, device_name: str) -> dict[str, Any]:
-    config, prefix_result, paired_config, base, policy, transfer, family, manifest = _load_protocol_and_sources(config_path, prefix_result_path)
-    if prefix_result.get("provenance", {}).get("config_sha256") != sha256_file(config_path):
+    config, source_config, source_config_path, prefix_result, paired_config, base, policy, transfer, family, manifest = _load_protocol_and_sources(config_path, prefix_result_path)
+    if prefix_result.get("provenance", {}).get("config_sha256") != sha256_file(source_config_path):
         raise ValueError("prefix collection config provenance differs from the pinned protocol")
     if Path(prefix_result["provenance"]["replay_result_path"]).resolve() != Path("/tmp/libero-source-support-replay-feasibility-20261025-v2.json").resolve():
         raise ValueError("prefix collection source replay path is not the pinned audit")
@@ -290,6 +327,8 @@ def run_pilot(config_path: Path, prefix_result_path: Path, prefix_dir: Path, dat
             "git_commit": commit,
             "config_path": str(config_path.resolve()),
             "config_sha256": sha256_file(config_path),
+            "source_prefix_protocol_path": str(source_config_path.resolve()),
+            "source_prefix_protocol_sha256": sha256_file(source_config_path),
             "prefix_result_path": str(prefix_result_path.resolve()),
             "prefix_result_sha256": sha256_file(prefix_result_path),
             "paired_config_path": str(DEFAULT_PAIRED_CONFIG.resolve()),
@@ -322,6 +361,7 @@ def run_pilot(config_path: Path, prefix_result_path: Path, prefix_dir: Path, dat
             "module_qualification": False,
         },
         "protocol": config,
+        "source_prefix_protocol": source_config,
         "arms": list(ARMS),
         "task_results": task_results,
     }

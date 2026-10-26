@@ -14,6 +14,15 @@ def test_prefix_dataset_access_record_distinguishes_observation_arms(tmp_path):
     assert pilot.SEED == 20261021
 
 
+def test_500_update_training_config_keeps_frozen_prefix_protocol():
+    config_path = pilot.ROOT / "configs/libero_runtime_native_prefix_training_pilot_500_v1.json"
+    training, source, source_path = pilot._load_training_and_source_config(config_path)
+    assert training["planned_training"]["optimizer_updates"] == 500
+    assert source["planned_training"]["optimizer_updates"] == 100
+    assert source_path == (pilot.ROOT / "configs/libero_runtime_native_prefix_protocol_pilot_v1.json").resolve()
+    assert training["source_prefix_result_sha256"] == pilot.EXPECTED_PREFIX_RESULT_SHA256
+
+
 def test_prefix_dataset_rejects_unknown_arm(tmp_path):
     with pytest.raises(ValueError, match="unknown prefix arm"):
         pilot.PrefixSequenceDataset([], arm="bad", dataset_root=tmp_path, manifest={"files": []}, policy_spec={})

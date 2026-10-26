@@ -34,5 +34,7 @@ runtime-native 前缀采集已经把 150 条 source-support 示教裁成可执�
 
 ## 下一步
 
-先不把这两臂注册为 baseline 或 Module，也不启动 A/B/C。下一项保持同一前缀协议，增加一个明确的预算轴：在同一 seed、同一 task 和同一 candidate 状态上，把 100 update 扩到 500 update，只比较 historical/runtime-native 两臂的闭环曲线和 action/state drift；如果两臂仍都失败，主瓶颈继续指向动作链执行/状态覆盖，而不是观测语义。只有出现可重复的 runtime-native 闭环改善，才冻结 runtime-native observation 作为后续 SPI 训练协议；否则保留 HDF5 causal 离线协议，并把 runtime-native 只用于闭环对齐诊断。
+500-update 诊断已另行冻结配置：[500-update training pilot](../configs/libero_runtime_native_prefix_training_pilot_500_v1.json)，SHA-256 `6b397719c737e36c5aaebae97ecc18f3d0ed1e5228c9eb5df7563d4ce7979efa`。它引用并校验原始前缀协议与 150 条采集结果，不改写 100-update 定义；仍固定相同 seed、任务、动作目标、前缀窗口、候选初态和两臂初始化，不选 checkpoint。运行结果尚未产生。
+
+先不把这两臂注册为 baseline 或 Module，也不启动 A/B/C。下一步运行同一前缀数据上的 500-update 预算比较，并与已完成的 100-update pilot 对照；如果两臂仍都失败，继续检查动作链执行和状态覆盖，而不是把观测语义当作已确认的根因。只有进一步获得可重复的 runtime-native 闭环改善，才评估是否调整后续 SPI 训练输入协议；否则保留 HDF5 causal 离线协议，并把 runtime-native 限于闭环对齐诊断。
 
