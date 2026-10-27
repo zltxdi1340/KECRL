@@ -66,21 +66,65 @@ def _phase_stats(values: list[float], targets: list[float], boundaries: tuple[in
     return result
 
 
-def _sequence_summary(predicted: list[float], target: list[float]) -> dict[str, Any]:
-    first_pred = next((index for index, value in enumerate(predicted) if value > 0), None)
-    first_target = next((index for index, value in enumerate(target) if value > 0), None)
+def _action_metrics(predicted: list[float], target: list[float]) -> dict[str, Any]:
     prediction = np.asarray(predicted, dtype=np.float64)
     target_values = np.asarray(target, dtype=np.float64)
     return {
         "steps": len(predicted),
-        "first_predicted_close_step_zero_based": first_pred,
-        "first_target_close_step_zero_based": first_target,
         "predicted_close_rate": float(np.mean(prediction > 0)),
         "target_close_rate": float(np.mean(target_values > 0)),
         "sign_accuracy": float(np.mean((prediction > 0) == (target_values > 0))),
         "predicted_mean": float(prediction.mean()),
         "target_mean": float(target_values.mean()),
+    }
+
+
+def _sequence_summary(predicted: list[float], target: list[float]) -> dict[str, Any]:
+    first_pred = next((index for index, value in enumerate(predicted) if value > 0), None)
+    first_target = next((index for index, value in enumerate(target) if value > 0), None)
+    return {
+        **_action_metrics(predicted, target),
+        "first_predicted_close_step_zero_based": first_pred,
+        "first_target_close_step_zero_based": first_target,
         "phase_stats": _phase_stats(predicted, target),
+    }
+
+
+def _aggregate_support_sequences(sequences: list[tuple[list[float], list[float]]]) -> dict[str, Any]:
+    if not sequences:
+        raise ValueError("support prediction aggregate requires at least one demonstration")
+    predicted = [value for sequence, _target in sequences for value in sequence]
+    target = [value for _sequence, values in sequences for value in values]
+    phase_values: dict[str, tuple[list[float], list[float]]] = {
+        name: ([], []) for name in ("steps_0_20", "steps_20_40", "steps_40_80", "steps_80_end")
+    }
+    for sequence, values in sequences:
+        for name, start, stop in (
+            ("steps_0_20", 0, 20),
+            ("steps_20_40", 20, 40),
+            ("steps_40_80", 40, 80),
+            ("steps_80_end", 80, None),
+        ):
+            end = len(sequence) if stop is None else min(stop, len(sequence))
+            if start < end:
+                phase_values[name][0].extend(sequence[start:end])
+                phase_values[name][1].extend(values[start:end])
+    predicted_first = [
+        index for sequence, _values in sequences
+        if (index := next((i for i, value in enumerate(sequence) if value > 0), None)) is not None
+    ]
+    target_first = [
+        index for _sequence, values in sequences
+        if (index := next((i for i, value in enumerate(values) if value > 0), None)) is not None
+    ]
+    return {
+        **_action_metrics(predicted, target),
+        "demonstrations": len(sequences),
+        "first_predicted_close_step_zero_based_median": float(np.median(predicted_first)) if predicted_first else None,
+        "first_target_close_step_zero_based_median": float(np.median(target_first)) if target_first else None,
+        "phase_stats": {
+            name: _action_metrics(*values) for name, values in phase_values.items() if values[0]
+        },
     }
 
 
@@ -126,8 +170,7 @@ def load_diagnostic_config(path: Path, source_result_path: Path, trace_result_pa
 def _predict_support(model: torch.nn.Module, dataset: prefix_training.PrefixSequenceDataset, device: torch.device) -> dict[str, Any]:
     model.eval()
     per_demo = []
-    all_pred: list[float] = []
-    all_target: list[float] = []
+    sequences: list[tuple[list[float], list[float]]] = []
     for demo_index in sorted(dataset.arrays):
         arrays = dataset.arrays[demo_index]
         predicted: list[float] = []
@@ -139,9 +182,8 @@ def _predict_support(model: torch.nn.Module, dataset: prefix_training.PrefixSequ
             target.append(float(arrays["actions"][step, 6]))
         row = {"demonstration_index": int(demo_index), **_sequence_summary(predicted, target)}
         per_demo.append(row)
-        all_pred.extend(predicted)
-        all_target.extend(target)
-    return {"aggregate": _sequence_summary(all_pred, all_target), "per_demo": per_demo}
+        sequences.append((predicted, target))
+    return {"aggregate": _aggregate_support_sequences(sequences), "per_demo": per_demo}
 
 
 def _candidate_summary(trace_result: dict[str, Any]) -> dict[str, Any]:
@@ -225,6 +267,11 @@ def run_diagnostic(config_path: Path, source_result_path: Path, trace_result_pat
         finally:
             dataset.close()
     torch.cuda.synchronize(device)
+    candidate_trace = _candidate_summary(trace_result)
+    for row in candidate_trace["rows"]:
+        expected_hash = expected[row["arm"]]["training"]["final_model_sha256"]
+        if row["candidate_trace_model_sha256"] != expected_hash:
+            raise ValueError("candidate trace model hash differs from reconstructed support Policy")
     return {
         "check_type": "libero_runtime_native_prefix_task7_gripper_output_diagnostic",
         "formal_result": False,
@@ -259,7 +306,7 @@ def run_diagnostic(config_path: Path, source_result_path: Path, trace_result_pat
         },
         "scope": config["scope"],
         "support": {"task_id": 7, "training_seed": 20261022, "arms": arms},
-        "candidate_trace": _candidate_summary(trace_result),
+        "candidate_trace": candidate_trace,
     }
 
 
