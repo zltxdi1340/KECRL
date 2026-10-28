@@ -1,0 +1,65 @@
+{
+  "schema_version": 1,
+  "status": "libero_runtime_native_prefix_cross_task_eye_hand_translation_sensitivity_diagnostic",
+  "formal_result": false,
+  "diagnostic_result": true,
+  "purpose": "Measure fixed-policy action sensitivity to controlled eye-in-hand image translations across the pinned task-1/3/4/7 strata",
+  "source_cross_task_camera_config": "configs/libero-runtime-native-prefix-cross-task-camera-diagnostic_v1.json",
+  "source_cross_task_camera_config_sha256": "de06227e81799561725c2ed5cffcb9c71540c0a439fb32dc25f41cef23e6f99e",
+  "source_cross_task_camera_result_sha256": "d6f9359981115998f42695644ad609f8767e53955c27a629dae904e2fda47a72",
+  "source_observation_archive_sha256": "226c85c406e0d2f237e37afc3171a1421de2755fff9bb2ba83396860aa0dd9b3",
+  "source_prefix_result_sha256": "b447373621906af25b60acf718652f714c1f1a08fac8e4380d4959999b1d302f",
+  "task_ids": [1, 3, 4, 7],
+  "training_seed_by_task": {
+    "1": 20261023,
+    "3": 20261023,
+    "4": 20261022,
+    "7": 20261022
+  },
+  "candidate_states": {
+    "1": [0, 17],
+    "3": [0, 1],
+    "4": [0, 2, 7],
+    "7": [0, 8]
+  },
+  "observation_arms": ["historical_hdf5", "runtime_native"],
+  "observation_policy": "each fixed Policy receives its own pinned observation arm",
+  "horizons": [1, 3, 5, 10, 20],
+  "perturbation": {
+    "view": "eye_in_hand",
+    "mode": "fixed_integer_translation_reflection",
+    "radii_pixels": [1, 2, 4],
+    "directions": ["left", "right", "up", "down"],
+    "padding_mode": "reflection",
+    "evaluation_augmentation_enabled": false
+  },
+  "training": {
+    "policy_reconstruction_updates": 500,
+    "checkpoint_selection": false,
+    "same_initial_model_and_batch_order": true,
+    "model": "CNN-only uniform seven-dimensional action MSE",
+    "policy_actions_executed_in_environment": false
+  },
+  "scope": {
+    "source_meta_support_read": true,
+    "candidate_nonregression_states_read": true,
+    "private_state_used_as_policy_input": false,
+    "private_state_used_as_knowledge_evidence": false,
+    "policy_actions_executed_in_environment": false,
+    "cross_policy_actions_executed_in_environment": false,
+    "validation_accessed": false,
+    "heldout_accessed": false,
+    "qualification_accessed": false,
+    "checkpoint_selection": false,
+    "spt_update": false,
+    "knowledge_update": false,
+    "module_qualification": false
+  },
+  "forbidden_uses": [
+    "interpreting translation sensitivity as a causal camera intervention",
+    "claiming that augmentation improves closed-loop success",
+    "using candidate states to select a checkpoint",
+    "updating SPT or Knowledge",
+    "treating the result as SPI qualification"
+  ]
+}
