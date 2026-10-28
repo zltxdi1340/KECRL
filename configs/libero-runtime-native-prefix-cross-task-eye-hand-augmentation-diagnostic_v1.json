@@ -1,0 +1,73 @@
+{
+  "schema_version": 1,
+  "status": "libero_runtime_native_prefix_cross_task_eye_hand_augmentation_diagnostic",
+  "formal_result": false,
+  "diagnostic_result": true,
+  "purpose": "Compare a paired eye-in-hand translation augmentation arm with the fixed CNN-only uniform-loss baseline",
+  "source_translation_sensitivity_config": "configs/libero-runtime-native-prefix-cross-task-eye-hand-translation-sensitivity-diagnostic_v1.json",
+  "source_translation_sensitivity_config_sha256": "20547f586ab93d9ceea4537f5540d6ab738e5453419127a9bf3a77f1cc6bb08f",
+  "source_translation_sensitivity_result_sha256": "dab39a916d43f2eb2d8dbfad6690504367131983efbdb4afc88f9e71bb892ec7",
+  "source_observation_archive_sha256": "226c85c406e0d2f237e37afc3171a1421de2755fff9bb2ba83396860aa0dd9b3",
+  "source_prefix_result_sha256": "b447373621906af25b60acf718652f714c1f1a08fac8e4380d4959999b1d302f",
+  "task_ids": [1, 3, 4, 7],
+  "training_seed_by_task": {
+    "1": 20261023,
+    "3": 20261023,
+    "4": 20261022,
+    "7": 20261022
+  },
+  "candidate_states": {
+    "1": [0, 17],
+    "3": [0, 1],
+    "4": [0, 2, 7],
+    "7": [0, 8]
+  },
+  "observation_arms": ["historical_hdf5", "runtime_native"],
+  "augmentation_arms": ["baseline", "eye_hand_translation"],
+  "augmentation": {
+    "view": "eye_in_hand",
+    "mode": "integer_translation_reflection",
+    "max_translation_pixels": 4,
+    "same_translation_for_all_frames_in_window": true,
+    "train_only": true,
+    "evaluation_augmentation_enabled": false
+  },
+  "training": {
+    "optimizer_updates": 500,
+    "same_initial_model_and_batch_order": true,
+    "checkpoint_selection": false,
+    "model": "CNN-only uniform seven-dimensional action MSE"
+  },
+  "evaluation": {
+    "candidate_seed": 20261021,
+    "max_episode_steps": 300,
+    "stabilization_steps": 5,
+    "candidate_role": "candidate_nonregression",
+    "offline_images_unaugmented": true,
+    "sensitivity_radii_pixels": [1, 2, 4],
+    "sensitivity_directions": ["left", "right", "up", "down"],
+    "sensitivity_horizons": [1, 3, 5, 10, 20]
+  },
+  "scope": {
+    "source_meta_support_read": true,
+    "candidate_nonregression_states_read": true,
+    "private_state_used_as_policy_input": false,
+    "private_state_used_as_knowledge_evidence": false,
+    "policy_actions_executed_in_environment": true,
+    "cross_policy_actions_executed_in_environment": false,
+    "validation_accessed": false,
+    "heldout_accessed": false,
+    "qualification_accessed": false,
+    "checkpoint_selection": false,
+    "spt_update": false,
+    "knowledge_update": false,
+    "module_qualification": false
+  },
+  "forbidden_uses": [
+    "calling candidate nonregression results SPI qualification",
+    "using candidate success to select a checkpoint",
+    "claiming augmentation causality from fixed-state sensitivity alone",
+    "updating SPT or Knowledge",
+    "registering a Module"
+  ]
+}
