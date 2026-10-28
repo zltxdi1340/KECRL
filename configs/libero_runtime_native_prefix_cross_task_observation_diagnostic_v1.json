@@ -1,0 +1,82 @@
+{
+  "schema_version": 1,
+  "status": "libero_runtime_native_prefix_cross_task_observation_diagnostic",
+  "formal_result": false,
+  "diagnostic_result": true,
+  "purpose": "Capture aligned early policy observations and cross-evaluate the pinned historical/runtime-native Policies on selected task 1/3/4/7 candidate traces",
+  "source_training_config": "configs/libero_runtime_native_prefix_training_candidate_coverage_v1.json",
+  "source_training_config_sha256": "807e0bc559a60119fea2f46a79f196f5f20ed7ae7eb89f1fa6319cbe31ce5c1d",
+  "source_training_result_sha256": "e155a74deb2038c5aca1c99d76623f754352626f0dad7c4fee5521dbd551a4e6",
+  "source_trace_config": "configs/libero_runtime_native_prefix_failure_trace_diagnostic_v2.json",
+  "source_trace_config_sha256": "b80f59d70c25a4cf7ba815a39b303d6110ceedc4d4b1f4c8851dccd6e1aca220",
+  "source_trace_result_sha256": "4b453f994df9a5a59889b0cf3d94fd6ecc4a5d65756ccc235c7f485381631085",
+  "source_prefix_result_sha256": "b447373621906af25b60acf718652f714c1f1a08fac8e4380d4959999b1d302f",
+  "task_ids": [1, 3, 4, 7],
+  "training_seed_by_task": {
+    "1": 20261023,
+    "3": 20261023,
+    "4": 20261022,
+    "7": 20261022
+  },
+  "evaluation_seed": 20261021,
+  "observation_arms": ["historical_hdf5", "runtime_native"],
+  "candidate_replay_order": "all_candidate_nonregression_states_0_to_19_same_adapter_per_model",
+  "observation_capture": {
+    "steps_per_selected_episode": 20,
+    "timing": "policy_observation_before_each_action",
+    "keys": ["agentview_rgb", "eye_in_hand_rgb", "joint_states", "gripper_states"],
+    "archive_format": "compressed_npz"
+  },
+  "cross_input": {
+    "horizons": [1, 3, 5, 10, 20],
+    "combinations": [
+      "historical_hdf5_policy_on_historical_hdf5_observations",
+      "runtime_native_policy_on_historical_hdf5_observations",
+      "historical_hdf5_policy_on_runtime_native_observations",
+      "runtime_native_policy_on_runtime_native_observations"
+    ],
+    "cross_policy_actions_executed_in_environment": false
+  },
+  "training": {
+    "optimizer_updates": 500,
+    "checkpoint_selection": false,
+    "same_initial_model_and_batch_order": true,
+    "model": "CNN-only uniform seven-dimensional action MSE"
+  },
+  "rollout": {
+    "max_episode_steps": 300,
+    "stabilization_steps": 5,
+    "all_candidate_states_replayed": true,
+    "selected_states_from_pinned_failure_trace_only": true,
+    "selected_states": {
+      "1": [0, 17],
+      "3": [0, 1],
+      "4": [0, 2, 7],
+      "7": [0, 8]
+    },
+    "verify_all_candidate_outcomes_against_coverage_result": true,
+    "verify_selected_outcomes_and_actions_against_failure_trace": true
+  },
+  "scope": {
+    "source_meta_support_read": true,
+    "candidate_nonregression_states_read": true,
+    "policy_actions_executed_in_environment": true,
+    "private_state_used_only_for_reset": true,
+    "private_state_used_as_policy_input": false,
+    "private_state_used_as_knowledge_evidence": false,
+    "validation_accessed": false,
+    "heldout_accessed": false,
+    "qualification_accessed": false,
+    "checkpoint_selection": false,
+    "spt_update": false,
+    "knowledge_update": false,
+    "module_qualification": false
+  },
+  "forbidden_uses": [
+    "interpreting cross-input differences as causal effects",
+    "using candidate trajectories to select a checkpoint",
+    "reading qualification or held-out states",
+    "updating SPT or Knowledge",
+    "claiming a general observation-source advantage from selected strata"
+  ]
+}
