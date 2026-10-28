@@ -31,6 +31,8 @@ Cross-task follow-up is now complete for the fixed task 1/3/4/7 success/failure 
 
 Task-3 modality decomposition is now complete on the same two fixed states and two pinned Policies. At 20 steps, RGB replacement action MAE averaged `0.04095`, joint/gripper replacement `0.01621`, both modalities `0.04084`, and the signed interaction term's absolute MAE `0.00330`; this local result makes RGB sensitivity the larger measured component for task 3 but does not identify the CNN or camera as the root cause. See the [task-3 modality report](docs/libero-runtime-native-prefix-task3-modality-diagnostic-2026-10-28.md). The next diagnostic splits agentview from eye-in-hand.
 
+Task-3 camera decomposition is complete on the same fixed archive. At 20 steps, agentview replacement action MAE averaged `0.00351`, eye-in-hand replacement `0.04006`, both cameras `0.04095`, and interaction `0.00141`; eye-in-hand was about `11.4x` the agentview effect across both Policies and both states. This is local sensitivity evidence, not a camera-causal or SPI result. See the [task-3 camera report](docs/libero-runtime-native-prefix-task3-camera-diagnostic-2026-10-28.md). The next diagnostic repeats the camera split across the fixed task 1/3/4/7 strata.
+
 ## Crafter historical status
 
 The Crafter work remains a diagnostic and Knowledge Evolution line; no wood Module has passed its complete qualification contract. Read the [archive index](docs/archive/README.md) before interpreting historical reports. Raw RGB traces, features, checkpoints and repeated run directories remain on the experiment host rather than in the source archive.
