@@ -1,0 +1,70 @@
+{
+  "schema_version": 1,
+  "status": "libero_runtime_native_prefix_task4_task7_action_head_readout_diagnostic",
+  "formal_result": false,
+  "diagnostic_result": true,
+  "purpose": "Compare full CNN-only Policy learning with fixed-initialization-representation action-head-only fitting on task 4 and task 7",
+  "source_cross_task_config": "configs/libero_runtime_native_prefix_cross_task_observation_diagnostic_v1.json",
+  "source_cross_task_config_sha256": "afab0ca6c1b63b9a2f7cfa5d6587113e1106ccbcc3be2aa4e732678bef26a926",
+  "source_cross_task_result_sha256": "c734966c4d84eb615e2b408df67303bc01ec9b06273410dbb70f69b06ac37c9e",
+  "source_failure_trace_result_sha256": "4b453f994df9a5a59889b0cf3d94fd6ecc4a5d65756ccc235c7f485381631085",
+  "source_coverage_result_sha256": "e155a74deb2038c5aca1c99d76623f754352626f0dad7c4fee5521dbd551a4e6",
+  "source_observation_archive_sha256": "226c85c406e0d2f237e37afc3171a1421de2755fff9bb2ba83396860aa0dd9b3",
+  "source_prefix_result_sha256": "b447373621906af25b60acf718652f714c1f1a08fac8e4380d4959999b1d302f",
+  "task_ids": [4, 7],
+  "training_seed_by_task": {
+    "4": 20261022,
+    "7": 20261022
+  },
+  "candidate_states": {
+    "4": [0, 2, 7],
+    "7": [0, 8]
+  },
+  "observation_arms": ["historical_hdf5", "runtime_native"],
+  "readout_arms": ["full_policy", "action_head_only"],
+  "source_training_role": "meta_support prefixes only",
+  "candidate_input_role": "candidate_nonregression archived observations",
+  "training": {
+    "optimizer": "Adam",
+    "optimizer_updates": 500,
+    "same_initial_model": true,
+    "same_batch_order": true,
+    "checkpoint_selection": false,
+    "action_head_only_frozen_modules": ["visual_encoder", "fusion", "recurrent"],
+    "model": "CNN-only uniform seven-dimensional action MSE"
+  },
+  "candidate_evaluation": {
+    "steps": 20,
+    "source_full_policy_trace_action_tolerance": 0.000001,
+    "candidate_expert_action_error_available": false,
+    "report_predicted_action_difference_and_gripper_schedule": true
+  },
+  "scope": {
+    "source_meta_support_read": true,
+    "candidate_nonregression_states_read": true,
+    "private_state_used_as_policy_input": false,
+    "private_state_used_as_knowledge_evidence": false,
+    "policy_actions_executed_in_environment": false,
+    "cross_policy_actions_executed_in_environment": false,
+    "validation_accessed": false,
+    "heldout_accessed": false,
+    "qualification_accessed": false,
+    "checkpoint_selection": false,
+    "spt_update": false,
+    "knowledge_update": false,
+    "module_qualification": false
+  },
+  "interpretation_boundary": {
+    "candidate_expert_action_error_available": false,
+    "action_head_only_representation_is_learned": false,
+    "candidate_phase_is_predicted_gripper_schedule": true,
+    "causal_claim": false
+  },
+  "forbidden_uses": [
+    "calling candidate output difference supervised action error",
+    "treating action-head-only output as a learned visual representation",
+    "using candidate states to select a checkpoint",
+    "updating SPT or Knowledge",
+    "treating the result as SPI qualification"
+  ]
+}
