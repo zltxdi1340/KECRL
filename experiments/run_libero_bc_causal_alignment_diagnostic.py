@@ -254,6 +254,36 @@ def _digest_tensors(tensors: Mapping[str, torch.Tensor]) -> str:
     return digest.hexdigest()
 
 
+def _configure_trainable_scope(model: torch.nn.Module, trainable_scope: str) -> tuple[str, ...]:
+    """Freeze the requested Policy modules and return trainable parameter names."""
+    valid_scopes = {
+        "full",
+        "freeze_visual",
+        "freeze_visual_fusion",
+        "action_head_only",
+    }
+    if trainable_scope not in valid_scopes:
+        raise ValueError(f"unknown trainable scope: {trainable_scope}")
+    trainable_names: list[str] = []
+    for name, parameter in model.named_parameters():
+        if trainable_scope == "full":
+            trainable = True
+        elif trainable_scope == "freeze_visual":
+            trainable = not name.startswith("visual_encoder.")
+        elif trainable_scope == "freeze_visual_fusion":
+            trainable = not (
+                name.startswith("visual_encoder.") or name.startswith("fusion.")
+            )
+        else:
+            trainable = name.startswith("action_head.")
+        parameter.requires_grad_(trainable)
+        if trainable:
+            trainable_names.append(name)
+    if not trainable_names:
+        raise RuntimeError(f"trainable scope has no parameters: {trainable_scope}")
+    return tuple(trainable_names)
+
+
 def _set_seed(seed: int) -> None:
     random.seed(seed)
     np.random.seed(seed)
@@ -408,8 +438,15 @@ def _train_arm(
         or eye_hand_translation_pixels < 0
     ):
         raise ValueError("eye-hand translation radius must be a nonnegative integer")
-    if trainable_scope not in {"full", "action_head_only"}:
-        raise ValueError("trainable scope must be full or action_head_only")
+    if trainable_scope not in {
+        "full",
+        "freeze_visual",
+        "freeze_visual_fusion",
+        "action_head_only",
+    }:
+        raise ValueError(
+            "trainable scope must be full, freeze_visual, freeze_visual_fusion, or action_head_only"
+        )
     _set_seed(seed)
     policy_spec = policy_config["policy"]
     training = base["training"]
@@ -432,11 +469,7 @@ def _train_arm(
     }
     model = learnable_spt.instantiate(spi).policy
     initial_digest = _digest_tensors(model.state_dict())
-    for parameter in model.parameters():
-        parameter.requires_grad_(trainable_scope == "full")
-    if trainable_scope == "action_head_only":
-        for parameter in model.action_head.parameters():
-            parameter.requires_grad_(True)
+    _configure_trainable_scope(model, trainable_scope)
     trainable_parameters = [parameter for parameter in model.parameters() if parameter.requires_grad]
     if not trainable_parameters:
         raise RuntimeError("selected trainable scope has no parameters")
