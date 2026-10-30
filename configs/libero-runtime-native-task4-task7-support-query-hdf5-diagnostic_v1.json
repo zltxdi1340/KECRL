@@ -1,0 +1,69 @@
+{
+  "schema_version": 1,
+  "status": "libero_task4_task7_support_query_hdf5_diagnostic",
+  "formal_result": false,
+  "diagnostic_result": true,
+  "purpose": "Measure same-source-task offline generalization from meta_support demonstrations to disjoint meta_query demonstrations across the frozen Policy trainable scopes",
+  "source_training_config": "configs/libero_spatial_single_spi_bc_diagnostic_v1.json",
+  "source_training_config_sha256": "bbc4b28c4d2d606f2595642ee0f2936bb3fbcded3e5cbd9449e78b337f134e53",
+  "source_policy_config_sha256": "f5e57c895e9249ef7a3361ebee2119bf06c6cbb48da01c31980b1eb0af8feb1b",
+  "source_transfer_split_sha256": "6cdc8c3eeaa90886ad0e15f0f4ebbe260aa972b6e69b1f122e95f65ab63dd7d6",
+  "source_seed_replication_config": "configs/libero-runtime-native-prefix-task4-task7-module-freeze-seed-replication-diagnostic_v1.json",
+  "source_seed_replication_config_sha256": "9d72043363d8da6cd40e26f4cda445d9b4c1da99f01879a92f5dee387b46ddb9",
+  "source_seed_replication_result_sha256": "18aa6a45cbc49b1773bdea34fe3ce64661bd445bdded6cf3ca4ca2e60cb5dbc7",
+  "task_ids": [4, 7],
+  "training_seeds": [20261022, 20261023, 20261024],
+  "observation_capture_seed": 20261022,
+  "data": {
+    "access_phase": "development",
+    "training_role": "meta_support",
+    "training_demonstration_indices": [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29],
+    "evaluation_role": "meta_query",
+    "evaluation_demonstration_indices": [30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49],
+    "observation_action_alignment": "causal_pre_action",
+    "policy_memory_mode": "cnn_only",
+    "hdf5_sha256_verified_before_role_access": true
+  },
+  "readout_arms": [
+    "full_policy",
+    "freeze_visual",
+    "freeze_visual_fusion",
+    "action_head_only"
+  ],
+  "trainable_scope_by_arm": {
+    "full_policy": "full",
+    "freeze_visual": "freeze_visual",
+    "freeze_visual_fusion": "freeze_visual_fusion",
+    "action_head_only": "action_head_only"
+  },
+  "training": {
+    "optimizer": "Adam",
+    "learning_rate": 0.0003,
+    "batch_size": 8,
+    "optimizer_updates": 500,
+    "gradient_clip_norm": 1.0,
+    "num_workers": 0,
+    "same_initial_model_and_batch_order_within_task_seed": true,
+    "checkpoint_selection": false,
+    "model": "CNN-only uniform seven-dimensional action MSE"
+  },
+  "evaluation": {
+    "support_fit_metrics": "offline action MSE on source meta_support",
+    "query_metrics": "offline action MSE on disjoint source meta_query",
+    "query_dataset_created_after_all_support_fits_per_task": true,
+    "policy_actions_executed_in_environment": false,
+    "candidate_observations_read": false,
+    "validation_accessed": false,
+    "heldout_accessed": false,
+    "qualification_accessed": false,
+    "official_evaluation_states_accessed": false
+  },
+  "interpretation_boundary": {
+    "query_is_same_source_task_demo_generalization_not_task_instance_transfer": true,
+    "query_metrics_are_not_online_policy_success": true,
+    "frozen_scope_marginal_is_causal": false,
+    "formal_spi_result": false,
+    "module_qualification": false,
+    "causal_claim": false
+  }
+}
