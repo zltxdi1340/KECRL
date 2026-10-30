@@ -1,0 +1,42 @@
+{
+  "schema_version": 1,
+  "status": "libero_runtime_native_prefix_task4_task7_module_freeze_seed_replication_diagnostic",
+  "formal_result": false,
+  "diagnostic_result": true,
+  "purpose": "Replicate task 4/7 source-support frozen-scope readout across additional initialization seeds",
+  "source_module_freeze_config": "configs/libero-runtime-native-prefix-task4-task7-module-freeze-readout-diagnostic_v1.json",
+  "source_module_freeze_config_sha256": "be13ce1211050edbfbdbd157033bbae6384f25573ea4df81a3f3c14d64c2f3b3",
+  "source_module_freeze_result_sha256": "870b7a25d5538c4b269bb16e582b9631bff9d1d62aa1df4a399716e8925fe7db",
+  "task_ids": [4, 7],
+  "replicate_seeds": [20261023, 20261024],
+  "observation_arms": ["historical_hdf5", "runtime_native"],
+  "readout_arms": ["full_policy", "freeze_visual", "freeze_visual_fusion", "action_head_only"],
+  "trainable_scope_by_arm": {
+    "full_policy": "full",
+    "freeze_visual": "freeze_visual",
+    "freeze_visual_fusion": "freeze_visual_fusion",
+    "action_head_only": "action_head_only"
+  },
+  "source_training_role": "meta_support prefixes only",
+  "training": {
+    "optimizer": "Adam",
+    "optimizer_updates": 500,
+    "same_initial_model_and_batch_order_within_seed": true,
+    "checkpoint_selection": false,
+    "model": "CNN-only uniform seven-dimensional action MSE"
+  },
+  "evaluation": {
+    "role": "source_support_prefix_fit_only",
+    "candidate_observations_read": false,
+    "policy_actions_executed_in_environment": false,
+    "validation_accessed": false,
+    "heldout_accessed": false,
+    "qualification_accessed": false
+  },
+  "interpretation_boundary": {
+    "seed_replication_estimates_training_initialization_sensitivity_only": true,
+    "source_support_fit_is_query_generalization": false,
+    "frozen_scope_marginal_is_causal": false,
+    "causal_claim": false
+  }
+}
