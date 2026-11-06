@@ -1,0 +1,197 @@
+{
+  "schema_version": 1,
+  "status": "libero_task4_task7_full_policy_observation_state_replacement_diagnostic_protocol",
+  "protocol_status": "frozen_protocol_authorized",
+  "formal_result": false,
+  "diagnostic_result": true,
+  "purpose": "Freeze a future short-window sensitivity diagnostic that separates fixed Full Policy mapping from public joint/gripper observation drift without changing training",
+  "source_closed_loop_config": "configs/libero-task4-task7-full-policy-closed-loop-diagnostic_v1.json",
+  "source_closed_loop_config_sha256": "8a485866319a386610f141d81169c073cfc332463d273899ba4762e76c0d2969",
+  "source_closed_loop_result_path": "/tmp/libero-task4-task7-full-policy-closed-loop-20261030-v1.json",
+  "source_closed_loop_result_sha256": "03439cc0172f3ba29ee4527d3c64d1da16edd93d2eaf63134344e4c8b15f49ce",
+  "source_closed_loop_git_commit": "fc79cd65009460c40db889b339eb77317bf80806",
+  "task_ids": [
+    4,
+    7
+  ],
+  "training_seeds": [
+    20261022,
+    20261023,
+    20261024
+  ],
+  "evaluation": {
+    "initial_state_role": "candidate_nonregression",
+    "initial_state_indices": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      15,
+      16,
+      17,
+      18,
+      19
+    ],
+    "initial_state_set_complete": true,
+    "state_set_previously_used_in_diagnostics": true,
+    "environment_seed": 20261022,
+    "stabilization_steps": 5,
+    "adapter_lifecycle": "one_adapter_per_policy_reused_across_initial_states_in_ascending_order",
+    "episode_order": "task_ascending_then_training_seed_ascending_then_initial_state_ascending",
+    "candidate_episode_budget_if_authorized": 120,
+    "current_phase_new_episode_budget": 120,
+    "current_phase_rollout_authorized": true,
+    "max_captured_policy_steps_per_episode_if_authorized": 20,
+    "full_300_step_rollout": false,
+    "deterministic_policy_action_mode": "deterministic_policy_mean",
+    "qualification_accessed": false,
+    "validation_accessed": false,
+    "heldout_accessed": false,
+    "final_evaluation_accessed": false
+  },
+  "fixed_policy": {
+    "model": "CNN-only Full Policy",
+    "optimizer_updates": 500,
+    "checkpoint_selection": false,
+    "checkpoint_source": "exact checkpoint files recorded by source closed-loop result",
+    "checkpoint_files": [
+      {
+        "task_id": 4,
+        "training_seed": 20261022,
+        "path": "/tmp/libero-task4-task7-full-policy-checkpoints-20261030-v1/task4-seed20261022-full-policy.pt",
+        "file_sha256": "55b4ac0dc39a230ae3a4f1a4e6d82bdcedea313cd67b57259e86a75a1677f6c2",
+        "weight_sha256": "631f0eaca6fdfc77ff2ca15746e4ad2548160e7e6c1c4190dc3714c149da0915"
+      },
+      {
+        "task_id": 4,
+        "training_seed": 20261023,
+        "path": "/tmp/libero-task4-task7-full-policy-checkpoints-20261030-v1/task4-seed20261023-full-policy.pt",
+        "file_sha256": "26e892418ddf4e9a489513326f87ac8e3994ffc5bf7477938e6b53a6d18032dd",
+        "weight_sha256": "a8f77335c1b5e5ebabb958d37dc01b178e5ce527fb7f66eacb76264484573eeb"
+      },
+      {
+        "task_id": 4,
+        "training_seed": 20261024,
+        "path": "/tmp/libero-task4-task7-full-policy-checkpoints-20261030-v1/task4-seed20261024-full-policy.pt",
+        "file_sha256": "79dabdff3fe625d4a5a2e2a820f3e4bddcb0f958b2f71adf70177c2fe7d32f91",
+        "weight_sha256": "ee59970109f9a60d1e28dcbb5fccc95d859cee4ad059637f707a0635035da59a"
+      },
+      {
+        "task_id": 7,
+        "training_seed": 20261022,
+        "path": "/tmp/libero-task4-task7-full-policy-checkpoints-20261030-v1/task7-seed20261022-full-policy.pt",
+        "file_sha256": "e23b01bcc09ff67d90396f6375d5ed2f1a01dd3308a8bf960375b69409a37fc7",
+        "weight_sha256": "a315bba8251f8a26a00b92b6e86fd29f56e227afeefcf22022b7086341774144"
+      },
+      {
+        "task_id": 7,
+        "training_seed": 20261023,
+        "path": "/tmp/libero-task4-task7-full-policy-checkpoints-20261030-v1/task7-seed20261023-full-policy.pt",
+        "file_sha256": "277dee7f65a1404bd3ba232d84fd5f4c59daf84452c78f72bf72f4667bc3065d",
+        "weight_sha256": "6df6e8163274992c16161cf2772909f73379165b2190f139f20ccebfb308bc50"
+      },
+      {
+        "task_id": 7,
+        "training_seed": 20261024,
+        "path": "/tmp/libero-task4-task7-full-policy-checkpoints-20261030-v1/task7-seed20261024-full-policy.pt",
+        "file_sha256": "038a71283ee75059ae5ca96d0d1cf6a8bce05d314ab57b37933ecb7bf0359402",
+        "weight_sha256": "a63de0d79f83b810343541fd09e9541db53d2d9e89e6c37810ca7d5c02a30d95"
+      }
+    ]
+  },
+  "observation_capture": {
+    "timing": "policy_observation_before_each_action",
+    "steps_per_episode": 20,
+    "keys": [
+      "agentview_rgb",
+      "eye_in_hand_rgb",
+      "joint_states",
+      "gripper_states"
+    ],
+    "archive_format": "compressed_npz",
+    "capture_private_simulator_state": false,
+    "private_state_used_as_policy_input": false,
+    "private_state_used_as_knowledge_evidence": false
+  },
+  "offline_replacement": {
+    "natural_variant": "recorded_free_run_observation_at_each_pre_action_step",
+    "public_state_reset_variant": {
+      "replace_keys": [
+        "joint_states",
+        "gripper_states"
+      ],
+      "replacement_value": "the episode's post_stabilization_reset public joint/gripper observation at step 0",
+      "preserve_keys": [
+        "agentview_rgb",
+        "eye_in_hand_rgb"
+      ],
+      "environment_actions_executed": false
+    },
+    "hidden_state_modes": [
+      "shared_natural_hidden",
+      "independent_replacement_hidden"
+    ],
+    "action_outputs_replayed_into_environment": false,
+    "summary_horizons": [
+      1,
+      3,
+      5,
+      10,
+      20
+    ],
+    "close_condition": "action[6] > 0",
+    "metrics": [
+      "action_l2",
+      "translation_l2",
+      "rotation_l2",
+      "gripper_abs",
+      "first_close_step",
+      "gripper_sign_switches"
+    ]
+  },
+  "current_phase_boundary": {
+    "protocol_only": false,
+    "new_rollout_executed": false,
+    "new_training_executed": false,
+    "checkpoint_selected": false,
+    "new_episode_budget_is_zero": false,
+    "qualification_accessed": false,
+    "validation_accessed": false,
+    "heldout_accessed": false,
+    "final_evaluation_accessed": false,
+    "spt_updated": false,
+    "knowledge_updated": false,
+    "module_qualification": false
+  },
+  "interpretation_boundary": {
+    "formal_spi_result": false,
+    "module_qualification": false,
+    "causal_claim": false,
+    "candidate_nonregression_states_are_not_unseen": true,
+    "public_state_replacement_is_input_sensitivity_not_dynamics_identification": true,
+    "query_mse_and_closed_loop_success_are_distinct_outcomes": true,
+    "runtime_native_policy_artifacts_must_not_be_mixed": true,
+    "execution_requires_a_later_explicit_budget_change": false
+  },
+  "authorization": {
+    "authorized_by_user_instruction": "显式增加预算并重新记录运行 provenance",
+    "authorized_at_utc": "2026-10-31 08:59:18 UTC",
+    "budget_change_from_v1": {
+      "previous_current_phase_new_episode_budget": 0,
+      "new_current_phase_new_episode_budget": 120
+    },
+    "training_budget_change": false,
+    "checkpoint_selection_change": false
+  }
+}

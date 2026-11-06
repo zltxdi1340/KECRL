@@ -1,0 +1,123 @@
+{
+  "schema_version": 1,
+  "check_type": "libero_task4_task7_repaired_evidence_decomposition_diagnostic",
+  "formal_result": false,
+  "diagnostic_result": true,
+  "protocol_status": "frozen_offline_analysis",
+  "purpose": "Complete fixed-policy and per-camera decomposition using repaired task4 and verified task7 archives; no pooled task summary",
+  "inputs": {
+    "capture": {
+      "path": "/tmp/libero-task4-task7-public-state-jitter-500-transition-rgb-action-20261101-v3.json",
+      "sha256": "f647ce8642b03f93f92c72c68241038c952c6f07684df266c4b7f2423291e2a3"
+    },
+    "capture_config": {
+      "path": "configs/libero-task4-task7-public-state-jitter-500-transition-rgb-action-diagnostic_v1.json",
+      "sha256": "0de778e7073990b01d0e2e1bc0add193521c70142d4023c37e528d68b3a5a451"
+    },
+    "baseline": {
+      "path": "/tmp/libero-task4-task7-full-policy-closed-loop-20261030-v1.json",
+      "sha256": "03439cc0172f3ba29ee4527d3c64d1da16edd93d2eaf63134344e4c8b15f49ce"
+    },
+    "jitter": {
+      "path": "/tmp/libero-task4-task7-public-state-jitter-500-closed-loop-20261031-v1.json",
+      "sha256": "8c9c6167f316072efeba909eb5a2dbf8987369698eddbf5d496bdf8320897ed2"
+    },
+    "budget_sweep": {
+      "path": "/tmp/libero-task4-task7-public-state-jitter-budget-sweep-20261031-v3.json",
+      "sha256": "3a2c13feffc9c9d4824138101ae0c48916938d08cf70d236da93f675000a7110"
+    },
+    "policy_config": {
+      "path": "configs/libero_spatial_bc_policy_candidate_v1.json",
+      "sha256": "f5e57c895e9249ef7a3361ebee2119bf06c6cbb48da01c31980b1eb0af8feb1b"
+    },
+    "policy_code": {
+      "path": "src/algorithms/libero_bc_policy.py",
+      "sha256": "a3098a68b5ceab21495207856c9d94fd4a6d26c1668737625ecb7b5d46977735"
+    },
+    "repair": {
+      "path": "/tmp/libero-task4-ordered-prefix-reproduction-20261101-v1.json",
+      "sha256": "d147a29896dcfd5cde0539add84fed8f3e880eb289fde1f7f0adfe71ec730d65"
+    },
+    "repair_config": {
+      "path": "configs/libero-task4-ordered-prefix-reproduction-diagnostic_v1.json",
+      "sha256": "0d25b289ea4828fbfe033aa8abd47a99caf432da60fd21907a7818d9a0685c33"
+    },
+    "repair_runner": {
+      "path": "experiments/run_libero_task4_ordered_prefix_reproduction_diagnostic.py",
+      "sha256": "972f4c5dba9522b23bc1a7d70d71bd4b036e1d5ad54470c9b52fb373100671e6"
+    },
+    "repair_audit": {
+      "path": "/tmp/libero-task4-ordered-prefix-reproduction-independent-audit-20261101-v1.json",
+      "sha256": "f401b24b8e1b37a1bc4563214d451f02fd59e338454ba7f2c6fa8e17876b677a"
+    },
+    "previous_decomposition": {
+      "path": "/tmp/libero-task4-task7-500-update-evidence-decomposition-20261101-v1.json",
+      "sha256": "31231b2d71653eae5320773987636b481f0b1f316b76dc7deb57133883eab415"
+    },
+    "analysis_core": {
+      "path": "experiments/analyze_libero_task4_task7_evidence_decomposition.py",
+      "sha256": "9bf4ff6b3d18345be1b7d9e3b50d887a7ca78c1f34e9c039c10ced283472a4a4"
+    }
+  },
+  "scope": {
+    "policy_optimizer_updates": 500,
+    "window_steps": 20,
+    "new_optimizer_updates": 0,
+    "new_episodes": 0,
+    "read_only_inputs": true,
+    "device": "cpu",
+    "torch_num_threads": 1,
+    "qualification_accessed": false,
+    "validation_accessed": false,
+    "heldout_accessed": false,
+    "final_evaluation_accessed": false,
+    "private_simulator_state_read": false,
+    "checkpoint_selected": false,
+    "spt_updated": false,
+    "knowledge_updated": false,
+    "module_qualified": false,
+    "raw_demonstrations_read": false,
+    "environment_initial_state_files_read": false,
+    "cross_task_pooled_summary": false,
+    "analysis_rng_seed": 20261022
+  },
+  "analysis": {
+    "selection": "fixed_7_pairs_task4_repaired_task7_original",
+    "task4_archive_origin": "repair",
+    "task7_archive_origin": "capture",
+    "source_prefix_gate": "exact_reset_action_and_pre_action_public_state",
+    "post_step20_state_gate": "required_for_repaired_task4",
+    "numerical_methods": "pinned_original_analysis_core",
+    "grouping": [
+      "task",
+      "task_seed",
+      "task_transition"
+    ],
+    "horizons": [
+      1,
+      5,
+      10,
+      20
+    ],
+    "replacement_masks": {
+      "agentview_only": 1,
+      "eye_in_hand_only": 2,
+      "both_cameras": 3,
+      "public_proprioception_only": 4,
+      "full_observation": 7
+    },
+    "references": [
+      "baseline_observation",
+      "jitter_observation"
+    ],
+    "previous_task7_cpu_parity": "exact_four_cells_and_decomposition_metrics",
+    "cpu_cuda_replay": "report_error_without_relaxing_source_gate",
+    "l2_norms_are_additive_contributions": false
+  },
+  "authorization": {
+    "instruction": "继续下一步",
+    "context": "只读分解修复后的 task 4 两对窗口，并与 task 7 分开核验和汇报；训练保持 500 updates。",
+    "recorded_at_utc": "2026-11-01T07:52:19+00:00",
+    "new_training_or_rollout": false
+  }
+}

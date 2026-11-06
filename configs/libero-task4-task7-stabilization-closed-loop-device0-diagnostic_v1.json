@@ -1,0 +1,122 @@
+{
+  "schema_version": 1,
+  "check_type": "libero_task4_task7_stabilization_device0_continuation",
+  "formal_result": false,
+  "protocol_status": "frozen_original_device0_with_exact_baseline_group_reuse",
+  "recorded_at_utc": "2026-11-02T03:17:45.727094+00:00",
+  "runner_sha256": "117eb35775c13fd653fda3b1310a14b72812a87513c8ddc1aeb60c5e219b571e",
+  "scope": {
+    "task_ids": [
+      4,
+      7
+    ],
+    "training_seeds": [
+      20261022,
+      20261023,
+      20261024
+    ],
+    "checkpoint_updates": 500,
+    "initial_state_role": "candidate_nonregression",
+    "initial_state_indices": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      15,
+      16,
+      17,
+      18,
+      19
+    ],
+    "native_horizon_both_arms": 305,
+    "policy_action_limit": 300,
+    "environment_seed": 20261022,
+    "reused_five_task4_episodes": 60,
+    "new_five_task7_episodes": 60,
+    "new_zero_episodes": 120,
+    "new_episode_budget": 180,
+    "final_paired_episode_matrix": 240,
+    "new_adapter_budget": 9,
+    "new_candidate_initial_rows_decoded": 40,
+    "max_new_policy_action_steps": 54000,
+    "new_fixed_zero_steps": 300,
+    "previous_policy_action_steps": 19761,
+    "previous_fixed_zero_steps": 335,
+    "max_cumulative_policy_action_steps": 73761,
+    "cumulative_fixed_zero_steps": 635,
+    "cumulative_episode_attempts": 247,
+    "cumulative_candidate_rows_decoded": 80,
+    "inference_device": "cuda:0",
+    "cuda_visible_devices": "0",
+    "egl_device_id": "0",
+    "new_optimizer_updates": 0,
+    "new_backward_calls": 0,
+    "new_hdf5_payload_reads": 0,
+    "qualification_accessed": false,
+    "reserved_accessed": false,
+    "validation_accessed": false,
+    "heldout_accessed": false,
+    "final_evaluation_accessed": false,
+    "checkpoint_selected": false,
+    "private_live_simulator_state_read": false,
+    "spt_updated": false,
+    "knowledge_updated": false,
+    "module_registered": false
+  },
+  "analysis": {
+    "five_arm_reset_action_public_state_and_terminal_exact_to_original": true,
+    "no_tolerance_or_checkpoint_search_on_reproduction_failure": true,
+    "primary": "success_count_and_rate_per_task_seed_arm_and_paired_outcome_table",
+    "paired_keys": [
+      "task_id",
+      "training_seed",
+      "initial_state_index"
+    ],
+    "consistent_zero_improvement": "strictly_more_successes_in_all_three_seeds_per_task",
+    "paired_counts": [
+      "both_success",
+      "zero_only_success",
+      "five_only_success",
+      "both_failure"
+    ],
+    "statistical_significance_test": false,
+    "automatic_default_or_training_change": false,
+    "same_weights_and_native_horizon_and_policy_action_limit": true,
+    "initial_public_state_offsets_are_not_expert_errors": true,
+    "stabilization_changes_physics_and_fixed_zero_actions_not_just_model_input": true,
+    "diagnostic_success_is_not_qualification_or_unseen_generalization": true
+  },
+  "inputs": {
+    "parent": {
+      "path": "/tmp/libero-task4-task7-stabilization-closed-loop-20261102-v2.json",
+      "sha256": "077e546e63164f39a23ea7771190e1062a084cdf55e3c7469f67cfda46d94f84"
+    },
+    "parent_config": {
+      "path": "/home/zl202621/project/KECRL/configs/libero-task4-task7-stabilization-closed-loop-diagnostic_v2.json",
+      "sha256": "72fbc906fd6f6aaea2bfed8643d7db39c5f989db1757693816d670565065b34f"
+    },
+    "base_code": {
+      "path": "/home/zl202621/project/KECRL/experiments/run_libero_task4_task7_stabilization_closed_loop.py",
+      "sha256": "fed40bd93ef152b00915b56d4317a332f0981fbef2a6f1b1b38f721de5255912"
+    }
+  },
+  "purpose": "Investigate device-specific reproduction premise on original CUDA/EGL0 without relaxing exact gates; complete the same paired success-rate matrix.",
+  "resource_gate_before_launch": {
+    "physical_gpu_index": 0,
+    "max_gpu_utilization_percent": 50,
+    "max_memory_used_mib": 4096
+  },
+  "reuse_rules": "Only complete task4 five-step groups, all60exacttooriginal; exclude all7 task7 parent attempts, including six exact prefixes, and rerun whole task7 groups on original device.",
+  "budget_revision": "Keep original240 comparison rows; at most7 additional episode attempts for technical reproduction. Cumulative max73761 Policy actions plus635 stabilization calls; zero training updates."
+}

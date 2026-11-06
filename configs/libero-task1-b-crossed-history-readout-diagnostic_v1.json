@@ -1,0 +1,206 @@
+{
+  "schema_version": 1,
+  "formal_result": false,
+  "scope": {
+    "task_id": 1,
+    "feature_arm": "B_fomaml",
+    "training_seeds": [
+      20261022,
+      20261023,
+      20261024
+    ],
+    "original_policy_updates": 500,
+    "readout_updates": 500,
+    "closed_loop_default_stabilization_steps": 5,
+    "demonstration_role": "meta_query",
+    "demonstration_indices": [
+      30,
+      31,
+      32,
+      33,
+      34,
+      35,
+      36,
+      37,
+      38,
+      39,
+      40,
+      41,
+      42,
+      43,
+      44,
+      45,
+      46,
+      47,
+      48,
+      49
+    ],
+    "history_steps": 5,
+    "common_first_action_step": 5,
+    "target_rows": 2598,
+    "common_rows_per_seed": 2518,
+    "new_readout_batches": 3,
+    "new_readout_rows": 7554,
+    "arithmetic_replay_batches": 6,
+    "arithmetic_replay_rows": 15108,
+    "model_event_pairs": 69,
+    "full_post_pairs": 696,
+    "original_encoder_calls": 0,
+    "new_optimizer_updates": 0,
+    "new_backward_calls": 0,
+    "new_HDF5_RGB_initial_private_reads": 0,
+    "new_environment_calls": 0,
+    "sealed_roles_accessed": false,
+    "checkpoint_selected": false,
+    "spt_updated": false,
+    "knowledge_updated": false,
+    "module_registered": false
+  },
+  "analysis": {
+    "three_cells": [
+      "current_head_current",
+      "history_head_current",
+      "history_head_history"
+    ],
+    "target_mse_components": [
+      "translation",
+      "rotation",
+      "gripper",
+      "seven_dimensional"
+    ],
+    "action_decomposition": "saved_H(H)-saved_C(C) = [H(C)-saved_C(C)] + [saved_H(H)-H(C)]",
+    "arithmetic_dtype": "float64",
+    "existing_prediction_atol": 1e-05,
+    "algebra_atol": 1e-12,
+    "near_zero_threshold": null,
+    "masks": [
+      "all",
+      "known_open_event",
+      "known_open_segment",
+      "initial_open_prefix",
+      "expert_close"
+    ],
+    "no_automatic_training_or_rollout": true,
+    "reference_caveat": "Repeated current inputs are an algebraic reference, not necessarily a natural history or independent physical intervention."
+  },
+  "execution": {
+    "python": "3.10.22",
+    "numpy": "1.22.4",
+    "device": "cpu",
+    "threads": 1
+  },
+  "inputs": {
+    "parent_result": {
+      "path": "/tmp/libero-task1-b-support-query-history-readout-20261104-v1.json",
+      "sha256": "49b6b7484d626d204ef7ba27c0377392ed571b9af2b3bb29980299d97c8db241"
+    },
+    "parent_binding": {
+      "path": "configs/libero-task1-b-support-query-history-readout-binding_v1.json",
+      "sha256": "84364b78b36a1c775a61e9c33af5596de65b0f8f0953252b09277091a613504d"
+    },
+    "parent_audit": {
+      "path": "/tmp/libero-task1-b-support-query-history-readout-independent-audit-20261104-v1.json",
+      "sha256": "98affa088ad00e52a58a01e888333c34eb975613be2008e1f706d4952bafaccd"
+    },
+    "event_result": {
+      "path": "/tmp/libero-task1-b-query-event-margin-timing-20261104-v1.json",
+      "sha256": "bb791a8c0f3f5d151438ec9225e2c71beaa76c65993d0cd31e7b1a4080f1c852"
+    },
+    "event_binding": {
+      "path": "configs/libero-task1-b-query-event-margin-timing-binding_v1.json",
+      "sha256": "afdd89f696df8880378a477cdc2fdad7c9d739af64284614f1a74e0de5fcc487"
+    },
+    "event_audit": {
+      "path": "/tmp/libero-task1-b-query-event-margin-timing-independent-audit-20261104-v1.json",
+      "sha256": "8a92f44e0b6c7aaf2641cfc80c5f0a56740c9638ff549521a3d27da303cc7d13"
+    },
+    "input_helpers": {
+      "path": "experiments/run_libero_task1_b_support_query_history_readout.py",
+      "sha256": "740daed435910ebdefc7ec546a3b937ce4f7f561d03d724f95bdbe779be1d12b"
+    },
+    "readout_helpers": {
+      "path": "experiments/run_libero_learned_phase_history_readout.py",
+      "sha256": "d26fd19277ebc75215a8b62195f62713558a550dec7630a438fc66a5d01c6289"
+    },
+    "history_helpers": {
+      "path": "experiments/libero_phase_history_neighbors.py",
+      "sha256": "6b2766eb86a1ab95e88b21188b1405e124644d308a9dd21123b8f38132ed56eb"
+    },
+    "segment_helpers": {
+      "path": "experiments/analyze_libero_source_internal_full_open_segments.py",
+      "sha256": "2fdb090ec81b45b3267471b50b9eaa4c90af56af237136c4345ec2f95e3c0e55"
+    },
+    "pure_helpers": {
+      "path": "experiments/analyze_libero_source_internal_gripper_sign_margin_temporal.py",
+      "sha256": "d688c0d217fd578626897b75b0a14c777c94b77f8fda80bab989fb07248d618c"
+    },
+    "event_helpers": {
+      "path": "experiments/analyze_libero_task1_b_query_event_margin_timing.py",
+      "sha256": "938ac2608898a9085d36c4505cb28746bf66103f1c0dcb5a86db49acd0f0e393"
+    },
+    "query_targets": {
+      "path": "/tmp/libero-task1-b-support-query-history-readout-artifacts-20261104-v1/query-targets-and-frame-ids.npz",
+      "sha256": "3e649f88a86032aa714d9e5fdfa50f38b2853ae11141996fc8bb033f485a2ca8"
+    },
+    "20261022_current_repeat5_weights": {
+      "path": "/tmp/libero-task1-b-support-query-history-readout-artifacts-20261104-v1/seed20261022-current_repeat5-support-readout.npz",
+      "sha256": "140861ca0d96d2dda263448703bae9677a47ba4a3f68400b01a04c6822c34ba3"
+    },
+    "20261022_current_repeat5_predictions": {
+      "path": "/tmp/libero-task1-b-support-query-history-readout-artifacts-20261104-v1/seed20261022-current_repeat5-query-predictions.npz",
+      "sha256": "854fba1c58b5a57d81d91b22ef7b93008b89426f86d781cf955ef2777e79cefc"
+    },
+    "20261022_causal_history5_weights": {
+      "path": "/tmp/libero-task1-b-support-query-history-readout-artifacts-20261104-v1/seed20261022-causal_history5-support-readout.npz",
+      "sha256": "5133e91b95f0b34b8180d8e1f1bc0dc732948157529e303d67841806eee4a47d"
+    },
+    "20261022_causal_history5_predictions": {
+      "path": "/tmp/libero-task1-b-support-query-history-readout-artifacts-20261104-v1/seed20261022-causal_history5-query-predictions.npz",
+      "sha256": "a24be8b581398f50785a016de39e15c11b20733ee2444ff7fa686cced8e7f120"
+    },
+    "20261023_current_repeat5_weights": {
+      "path": "/tmp/libero-task1-b-support-query-history-readout-artifacts-20261104-v1/seed20261023-current_repeat5-support-readout.npz",
+      "sha256": "49723808be1ccc71c2bb080ce98238ac05a2d507fcb94142cd550f81ec5a4dd4"
+    },
+    "20261023_current_repeat5_predictions": {
+      "path": "/tmp/libero-task1-b-support-query-history-readout-artifacts-20261104-v1/seed20261023-current_repeat5-query-predictions.npz",
+      "sha256": "06d55e27cbc147a05adda1640203779e4f555bdd3c354567c4c560c04f7ed4d1"
+    },
+    "20261023_causal_history5_weights": {
+      "path": "/tmp/libero-task1-b-support-query-history-readout-artifacts-20261104-v1/seed20261023-causal_history5-support-readout.npz",
+      "sha256": "97fa2c7ab0845179ec810ef3834975bd682b67bdfe8718f5a64da96dc877121d"
+    },
+    "20261023_causal_history5_predictions": {
+      "path": "/tmp/libero-task1-b-support-query-history-readout-artifacts-20261104-v1/seed20261023-causal_history5-query-predictions.npz",
+      "sha256": "3dffad84cd9a3635b9649336f50ddeaf4a01ef0a02327b3562e1768bc36b3ff2"
+    },
+    "20261024_current_repeat5_weights": {
+      "path": "/tmp/libero-task1-b-support-query-history-readout-artifacts-20261104-v1/seed20261024-current_repeat5-support-readout.npz",
+      "sha256": "5bc1dbf1e4b36a5c344a52a9da117532b21132287d41a8895a37dd7b3d97a52c"
+    },
+    "20261024_current_repeat5_predictions": {
+      "path": "/tmp/libero-task1-b-support-query-history-readout-artifacts-20261104-v1/seed20261024-current_repeat5-query-predictions.npz",
+      "sha256": "19409a1f6b644394eeac9b275d6d9d91e63514669363890a89555238344cfaa4"
+    },
+    "20261024_causal_history5_weights": {
+      "path": "/tmp/libero-task1-b-support-query-history-readout-artifacts-20261104-v1/seed20261024-causal_history5-support-readout.npz",
+      "sha256": "a950f86d645e560ab2110f6e8c36d2906f7b7e8549835e8e5373e695acf0ab0b"
+    },
+    "20261024_causal_history5_predictions": {
+      "path": "/tmp/libero-task1-b-support-query-history-readout-artifacts-20261104-v1/seed20261024-causal_history5-query-predictions.npz",
+      "sha256": "0eb0a53c257ae419d336ff6fd871043b4e2ecabe90cb037305de9adcef8cd250"
+    },
+    "20261022_features": {
+      "path": "/tmp/libero-task1-b-support-query-history-readout-artifacts-20261104-v1/seed20261022-query-features.npz",
+      "sha256": "9afe7eaf2550af0246a48abef78c72314c213d5a5127860222873efa00a3b52c"
+    },
+    "20261023_features": {
+      "path": "/tmp/libero-task1-b-support-query-history-readout-artifacts-20261104-v1/seed20261023-query-features.npz",
+      "sha256": "0d9d6220d33d65311a6cc66d997d7ba5f91ca38a3f6ef3c64dfe519896bf5080"
+    },
+    "20261024_features": {
+      "path": "/tmp/libero-task1-b-support-query-history-readout-artifacts-20261104-v1/seed20261024-query-features.npz",
+      "sha256": "6e95ac12fc2fe615927e50469f83291f93cfbd0a8b7075fdba107cb3466219e7"
+    }
+  }
+}

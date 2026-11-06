@@ -1,0 +1,84 @@
+{
+  "schema_version": 1,
+  "check_type": "libero_task4_task7_500_update_evidence_decomposition_diagnostic",
+  "formal_result": false,
+  "diagnostic_result": true,
+  "protocol_status": "frozen_offline_analysis",
+  "inputs": {
+    "capture": {
+      "path": "/tmp/libero-task4-task7-public-state-jitter-500-transition-rgb-action-20261101-v3.json",
+      "sha256": "f647ce8642b03f93f92c72c68241038c952c6f07684df266c4b7f2423291e2a3"
+    },
+    "capture_config": {
+      "path": "configs/libero-task4-task7-public-state-jitter-500-transition-rgb-action-diagnostic_v1.json",
+      "sha256": "0de778e7073990b01d0e2e1bc0add193521c70142d4023c37e528d68b3a5a451"
+    },
+    "baseline": {
+      "path": "/tmp/libero-task4-task7-full-policy-closed-loop-20261030-v1.json",
+      "sha256": "03439cc0172f3ba29ee4527d3c64d1da16edd93d2eaf63134344e4c8b15f49ce"
+    },
+    "jitter": {
+      "path": "/tmp/libero-task4-task7-public-state-jitter-500-closed-loop-20261031-v1.json",
+      "sha256": "8c9c6167f316072efeba909eb5a2dbf8987369698eddbf5d496bdf8320897ed2"
+    },
+    "budget_sweep": {
+      "path": "/tmp/libero-task4-task7-public-state-jitter-budget-sweep-20261031-v3.json",
+      "sha256": "3a2c13feffc9c9d4824138101ae0c48916938d08cf70d236da93f675000a7110"
+    },
+    "policy_config": {
+      "path": "configs/libero_spatial_bc_policy_candidate_v1.json",
+      "sha256": "f5e57c895e9249ef7a3361ebee2119bf06c6cbb48da01c31980b1eb0af8feb1b"
+    },
+    "policy_code": {
+      "path": "src/algorithms/libero_bc_policy.py",
+      "sha256": "a3098a68b5ceab21495207856c9d94fd4a6d26c1668737625ecb7b5d46977735"
+    }
+  },
+  "scope": {
+    "policy_optimizer_updates": 500,
+    "window_steps": 20,
+    "new_optimizer_updates": 0,
+    "new_episodes": 0,
+    "read_only_inputs": true,
+    "device": "cpu",
+    "torch_num_threads": 1,
+    "qualification_accessed": false,
+    "validation_accessed": false,
+    "heldout_accessed": false,
+    "final_evaluation_accessed": false,
+    "private_simulator_state_read": false,
+    "checkpoint_selected": false,
+    "spt_updated": false,
+    "knowledge_updated": false,
+    "module_qualified": false
+  },
+  "analysis": {
+    "prefix_comparison": "exact_source_reset_digest_action_and_pre_action_public_state",
+    "source_actions_steps": [
+      1,
+      20
+    ],
+    "source_pre_action_state_steps": [
+      0,
+      19
+    ],
+    "source_mismatch_handling": "quarantine_separately_not_tolerance_relaxation",
+    "modalities": [
+      "agentview_rgb",
+      "eye_in_hand_rgb",
+      "public_proprioception"
+    ],
+    "direction": "both_baseline_and_jitter_reference_observations",
+    "same_observation_policy_comparison": "both_baseline_and_jitter_observations",
+    "horizons": [
+      1,
+      5,
+      10,
+      20
+    ],
+    "report_signed_interactions": true,
+    "norms_are_additive_contributions": false,
+    "cross_backend_natural_replay": "report_numeric_error_without_using_it_to_relax_source_parity",
+    "selection": "fixed_7_outcome_stratified_pairs_no_additional_state_selection"
+  }
+}

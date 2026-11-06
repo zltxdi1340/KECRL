@@ -1,0 +1,120 @@
+{
+  "schema_version": 1,
+  "status": "execution_frozen_before_geometry_extension_training",
+  "formal_result": false,
+  "authorization": "用户要求：下一步继续做实验，这周要把LIBERO做完。按已说明的四任务补齐范围，训练保持500 updates及封存角色。",
+  "frozen_at_utc": "2026-11-05T03:47:54.359449+00:00",
+  "config_path": "configs/libero-source-internal-geometry-extension-diagnostic_v1.json",
+  "config_sha256": "9cd4fbdf7a9ea2110c1716c3db134f6b0da340e7659983cba12e54fa72405fa8",
+  "files": {
+    "runner": {
+      "path": "experiments/run_libero_source_internal_geometry_extension_diagnostic.py",
+      "sha256": "31f7140457587bb0fdded791db0175445dd56700a14989cbb45a44abc1280851"
+    },
+    "fomaml": {
+      "path": "src/algorithms/libero_bc_fomaml.py",
+      "sha256": "d428efc93e56caec7f917daeb3f9374cfbb60329949dad7300c3c46364341ac8"
+    },
+    "causal_dataset": {
+      "path": "src/environments/libero_causal_t1_dataset.py",
+      "sha256": "e0d3a5c38cbaad96015b427e40584fffc524f465ede88325b0ce91139bfa6dff"
+    },
+    "base_dataset": {
+      "path": "src/environments/libero_dataset.py",
+      "sha256": "a35ce74905655a1e1f3f0ffb597329eb486e000a5f9dee925d8231885a7f7599"
+    },
+    "policy": {
+      "path": "src/algorithms/libero_bc_policy.py",
+      "sha256": "a3098a68b5ceab21495207856c9d94fd4a6d26c1668737625ecb7b5d46977735"
+    },
+    "spt": {
+      "path": "src/skills/libero_pick_place_spt.py",
+      "sha256": "23f6a46ece0fccfb55337d107ac1566e2192a4e05858b68514eb566316376200"
+    },
+    "models": {
+      "path": "src/skills/models.py",
+      "sha256": "c2c294292722f62fe8818a261e1541f74d401a266ccb50434c3db9af308c6a62"
+    },
+    "contracts": {
+      "path": "src/skills/contracts.py",
+      "sha256": "5ff8665d91bf82b1319da95eb81ac8f5235a5ab8da9a77f93e7dcf82601d0af1"
+    },
+    "environments_init": {
+      "path": "src/environments/__init__.py",
+      "sha256": "53c64b55e6503ee519dbdccd5157d8d760c157704e0aaf996c9f6b52a5e9a2ab"
+    },
+    "skills_init": {
+      "path": "src/skills/__init__.py",
+      "sha256": "b3ed4df6d02e38910b9a45569046c3afae23b55c417238e754f1dabc5015c315"
+    },
+    "skills_evolution": {
+      "path": "src/skills/evolution.py",
+      "sha256": "34e1f76aff41948792369758de7445876cbf9e502f55c7b611e94f06c19b2b3e"
+    },
+    "test_fomaml": {
+      "path": "tests/test_libero_bc_fomaml.py",
+      "sha256": "8eea90a8be1547d63362c4fb1c680afd14eacef72be504de681ee494eaaa39be"
+    },
+    "test_dataset": {
+      "path": "tests/test_libero_causal_t1_dataset.py",
+      "sha256": "ed9cf370054eb52b48ae5c204e289151e959a9627e96b8185280291cc388ceca"
+    },
+    "test_entry": {
+      "path": "tests/test_libero_source_internal_spt_spi_diagnostic.py",
+      "sha256": "43b8ab3be4f50c3e371da72f0c80e6acc2928670823e895934ea6fec129ea953"
+    },
+    "test_mapping": {
+      "path": "tests/test_libero_gripper_action_mapping_audit.py",
+      "sha256": "e090ba8c91110848846f15d1374647c443f14e2003e51a80cd0fa1860dae79e1"
+    },
+    "protocol": {
+      "path": "docs/libero-source-internal-geometry-extension-protocol-2026-11-05.md",
+      "sha256": "d0a3441b0602bcb4ca6f3658b8a1f1febc9008b1af570339b31f3ae7eab2d932"
+    },
+    "deterministic_pool": {
+      "path": "src/algorithms/libero_deterministic_pool.py",
+      "sha256": "ce0b21fde45ac780116b6e0fa084839cea00ad3910bd2bf93bf750173557545d"
+    },
+    "test_deterministic_pool": {
+      "path": "tests/test_libero_deterministic_pool.py",
+      "sha256": "101283b9ef2703e999b6b8b8ae7de5b914e4dcd58fd190c67b82d9333511f63f"
+    },
+    "test_v2": {
+      "path": "tests/test_libero_source_internal_spt_spi_v2.py",
+      "sha256": "c92ed5fbc6d84b6369f068936458bcd9c12951b6f31d69e5dd8f4a96c070a346"
+    },
+    "execution_revision_protocol": {
+      "path": "docs/libero-source-internal-spt-spi-execution-revision-2026-11-03.md",
+      "sha256": "6a64a4d1b5fc65241f835264bfc062f654e879579306956bedf485738c480523"
+    },
+    "independent_auditor": {
+      "path": "experiments/audit_libero_source_internal_geometry_extension_diagnostic.py",
+      "sha256": "17015959747f5c5423a0014e9b0c687d2e7a919b574271fbdd49cb7786d1897e"
+    },
+    "test_geometry_extension": {
+      "path": "tests/test_libero_source_internal_geometry_extension.py",
+      "sha256": "9f29296cebf011e3601fc3210f7b649fea1f85642fe3b2e9f188bfbd073198ab"
+    }
+  },
+  "launch_environment": {
+    "CUDA_VISIBLE_DEVICES": "1",
+    "CUBLAS_WORKSPACE_CONFIG": ":4096:8",
+    "OMP_NUM_THREADS": "1",
+    "OPENBLAS_NUM_THREADS": "1",
+    "MKL_NUM_THREADS": "1"
+  },
+  "runtime_versions": {
+    "python": "3.10.22",
+    "torch": "2.4.1+cu124",
+    "numpy": "1.22.4",
+    "h5py": "3.11.0"
+  },
+  "prelaunch_validation": {
+    "focused_tests_passed": 48,
+    "focused_seconds": 1.4,
+    "metadata_only_preflight": true,
+    "old_bound_code_preserved": true
+  },
+  "execution_revision": "task4_task7_geometry_extension_v1",
+  "preserved_v1_failure": "First CUDA backward rejected; no optimizer updates, no restart from partial weights."
+}

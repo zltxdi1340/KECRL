@@ -1,0 +1,70 @@
+{
+  "schema_version": 1,
+  "check_type": "libero_gripper_feedback_serialization_recovery",
+  "formal_result": false,
+  "scope": {
+    "task_ids": [
+      4,
+      7
+    ],
+    "training_seeds": [
+      20261022,
+      20261023,
+      20261024
+    ],
+    "role": "meta_support",
+    "new_partial_policy_readouts": 0,
+    "new_cnn_forwards": 0,
+    "new_optimizer_updates": 0,
+    "new_environment_interactions": 0,
+    "old_files_overwritten": false
+  },
+  "runner_sha256": "e2182e2cb5e7a5fb1ba7fae8d67147e1dbfdf9a8b5fcc64295ec97f5eb8c5d22",
+  "inputs": {
+    "partial_result": {
+      "path": "/tmp/libero-task4-task7-gripper-feedback-20261102-v1.json",
+      "sha256": "2ea4a77cd9f66c41ffaacc64ee93ee6c60db07b0218ed0c6eabd232c2d639c22"
+    },
+    "original_log": {
+      "path": "/tmp/libero-task4-task7-gripper-feedback-20261102-v1.log",
+      "sha256": "0ca2a2b1a54a4e8727f42110b4d48e0a4ab15184c9eec95fdd6e776f6bc55d41"
+    },
+    "original_config": {
+      "path": "/home/zl202621/project/KECRL/configs/libero-task4-task7-gripper-feedback-diagnostic_v1.json",
+      "sha256": "9f2a33a16d905e533f09cbfaf2d5902363639ec59550b811122f7bf93eec8cdf"
+    },
+    "original_runner_snapshot": {
+      "path": "/tmp/libero-gripper-feedback-frozen-runner-20261102-v1.py",
+      "sha256": "a21cbabcc2f5a445ab94b8b72edfd287a633e0d0306f52477dc7378b3f0a4c3d"
+    },
+    "corrected_runner": {
+      "path": "/home/zl202621/project/KECRL/experiments/analyze_libero_task4_task7_gripper_feedback.py",
+      "sha256": "06e3792cfb77ddf2168b4d6b23919911cb105f2e55f4b3bd02068e4797700325"
+    },
+    "parent_result": {
+      "path": "/tmp/libero-task4-task7-condition-separability-20261102-v1.json",
+      "sha256": "66682c55850acde665ca09c84ffcffe9ba5f0a0e9ae6c743b2390394ddb2a51e"
+    },
+    "support4": {
+      "path": "/tmp/libero-task4-task7-condition-separability-artifacts-20261102-v1/task4-support-features-and-neighbors.npz",
+      "sha256": "1d0e9cce3c8d087a2cfd57ccc3f2f430ecf8375ea2ef65ebbff486ad1791c2c5"
+    },
+    "support7": {
+      "path": "/tmp/libero-task4-task7-condition-separability-artifacts-20261102-v1/task7-support-features-and-neighbors.npz",
+      "sha256": "7c297fb04833c7588c098a0d5fb8d3bf71ca632593ec581788878c1565df8efb"
+    },
+    "readouts4": {
+      "path": "/tmp/libero-task4-task7-gripper-feedback-artifacts-20261102-v1/task4-gripper-feedback-readouts.npz",
+      "sha256": "7c8be60356acd1cea9c5d4d098501f3fe19bd15525ba9e73cffe762eda67746e"
+    },
+    "readouts7": {
+      "path": "/tmp/libero-task4-task7-gripper-feedback-artifacts-20261102-v1/task7-gripper-feedback-readouts.npz",
+      "sha256": "aed9ce1b6921beaa8721164fd47c1b45fc35f22eb22cffd89249564237197d1a"
+    },
+    "overnight_plan": {
+      "path": "/home/zl202621/project/KECRL/configs/libero-task4-task7-overnight-diagnostic-plan_20261102_v3.json",
+      "sha256": "ddc59793d4c5487a8acedc1017502e4163fc2dfe0907539926706a6cb9251fa8"
+    }
+  },
+  "reason": "v1 finished all 2706 readouts and cached both NPZ files; export stopped only on numpy.bool_; reconstruct numeric metrics without any new readout or changing scientific rules"
+}

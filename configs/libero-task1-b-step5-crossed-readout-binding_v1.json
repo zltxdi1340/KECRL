@@ -1,0 +1,19 @@
+{
+  "formal_result": false,
+  "created_at_utc": "2026-11-04T14:23:00.337063+00:00",
+  "config_sha256": "a4404a86c5364ef5f3b3c73c04eb842d15fa758f68e6390895ca736f4be38dca",
+  "files": {
+    "runner": {
+      "path": "experiments/run_libero_task1_b_step5_crossed_readout.py",
+      "sha256": "4ddfae863b4b22d539ae58a7f9ddacbf450dc3e2af3619aa8b5b710575a52a93"
+    },
+    "tests": {
+      "path": "tests/test_libero_task1_b_step5_crossed_readout.py",
+      "sha256": "9a090103f4942bf8d70006e25caaf11e54d4bcb67c97d95a9a4a8fc6302a7225"
+    },
+    "protocol": {
+      "path": "docs/libero-task1-b-step5-crossed-readout-protocol-2026-11-04.md",
+      "sha256": "7cae6c8a60bf0eab23edb93921ab0572421cc916602ede189a3922dc26513290"
+    }
+  }
+}

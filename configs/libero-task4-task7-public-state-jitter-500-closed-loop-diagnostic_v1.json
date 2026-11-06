@@ -1,0 +1,164 @@
+{
+  "schema_version": 1,
+  "status": "libero_task4_task7_public_state_jitter_500_closed_loop_diagnostic",
+  "protocol_status": "frozen_protocol_authorized",
+  "formal_result": false,
+  "diagnostic_result": true,
+  "purpose": "Test whether the fixed 500-update public-state-jitter source-demo arm changes the predeclared candidate non-qualification closed-loop diagnostic relative to the pinned 500-update Full Policy baseline",
+  "source_closed_loop_config": "configs/libero-task4-task7-full-policy-closed-loop-diagnostic_v1.json",
+  "source_closed_loop_config_sha256": "8a485866319a386610f141d81169c073cfc332463d273899ba4762e76c0d2969",
+  "source_closed_loop_result_path": "/tmp/libero-task4-task7-full-policy-closed-loop-20261030-v1.json",
+  "source_closed_loop_result_sha256": "03439cc0172f3ba29ee4527d3c64d1da16edd93d2eaf63134344e4c8b15f49ce",
+  "source_budget_sweep_config": "configs/libero-task4-task7-public-state-jitter-augmentation-budget-sweep-diagnostic_v1.json",
+  "source_budget_sweep_config_sha256": "755f06f018687f1599fc9c2db1aff0f2f15a490d1ccd2d83abfe54f544ef40fb",
+  "source_budget_sweep_result_path": "/tmp/libero-task4-task7-public-state-jitter-budget-sweep-20261031-v3.json",
+  "source_budget_sweep_result_sha256": "3a2c13feffc9c9d4824138101ae0c48916938d08cf70d236da93f675000a7110",
+  "task_ids": [
+    4,
+    7
+  ],
+  "training_seeds": [
+    20261022,
+    20261023,
+    20261024
+  ],
+  "training": {
+    "source_role": "meta_support",
+    "readout_arm": "public_state_jitter",
+    "optimizer_updates": 500,
+    "training_executed_in_current_phase": false,
+    "checkpoint_source": "fixed 500-update public_state_jitter checkpoints from the completed budget sweep",
+    "checkpoint_selection": false
+  },
+  "evaluation": {
+    "initial_state_role": "candidate_nonregression",
+    "initial_state_indices": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      15,
+      16,
+      17,
+      18,
+      19
+    ],
+    "initial_state_set_complete": true,
+    "state_set_previously_used_in_diagnostics": true,
+    "environment_seed": 20261022,
+    "stabilization_steps": 5,
+    "max_episode_steps": 300,
+    "action_mode": "deterministic_policy_mean",
+    "adapter_lifecycle": "one_adapter_per_policy_reused_across_initial_states_in_ascending_order",
+    "episode_order": "task_ascending_then_training_seed_ascending_then_initial_state_ascending",
+    "new_episode_budget": 120,
+    "record_stepwise_public_proprioception_offsets_from_post_stabilization_reset": true,
+    "record_private_simulator_state": false,
+    "checkpoint_selection": false,
+    "qualification_accessed": false,
+    "validation_accessed": false,
+    "heldout_accessed": false,
+    "final_evaluation_accessed": false
+  },
+  "baseline_reference": {
+    "source_result": "pinned 500-update Full Policy closed-loop diagnostic",
+    "source_model_count": 6,
+    "source_episode_count": 120,
+    "paired_comparison_keys": [
+      "task_id",
+      "training_seed",
+      "initial_state_index"
+    ]
+  },
+  "fixed_policy": {
+    "model": "CNN-only Full Policy",
+    "optimizer_updates": 500,
+    "checkpoint_selection": false,
+    "checkpoint_files": [
+      {
+        "task_id": 4,
+        "training_seed": 20261022,
+        "path": "/tmp/libero-task4-task7-public-state-jitter-budget-sweep-checkpoints-20261031-v3/task4-seed20261022-arm-public_state_jitter-update0500.pt",
+        "file_sha256": "9cb8d961a5a411df7f37622e6ac93c32d02d95597e0db95e0980d309784e08c2",
+        "weight_sha256": "cfe60cd88d43c39a50841ad143f84ebbe331f9ad978e212b3457ab13b911b155"
+      },
+      {
+        "task_id": 4,
+        "training_seed": 20261023,
+        "path": "/tmp/libero-task4-task7-public-state-jitter-budget-sweep-checkpoints-20261031-v3/task4-seed20261023-arm-public_state_jitter-update0500.pt",
+        "file_sha256": "fb32fba8db305143977dd539fb1236128433df503b49a554cce4f7689b759e48",
+        "weight_sha256": "d7bc646009b6798e57b4df0e96023aeb5eb0a5639016dbae6e385c060d1d3be7"
+      },
+      {
+        "task_id": 4,
+        "training_seed": 20261024,
+        "path": "/tmp/libero-task4-task7-public-state-jitter-budget-sweep-checkpoints-20261031-v3/task4-seed20261024-arm-public_state_jitter-update0500.pt",
+        "file_sha256": "fda652f14feb2be886463c0961fea55dd84017871a676c4023d6bafc877bfe75",
+        "weight_sha256": "3f7cc892d0f9dc537f60fcef2a62640b50e6773c907cfd7e381563addcc57f93"
+      },
+      {
+        "task_id": 7,
+        "training_seed": 20261022,
+        "path": "/tmp/libero-task4-task7-public-state-jitter-budget-sweep-checkpoints-20261031-v3/task7-seed20261022-arm-public_state_jitter-update0500.pt",
+        "file_sha256": "bb143d002414440e997570c39d04e8ce873a52a599d668c25e92d20c0a9861e1",
+        "weight_sha256": "2080a33f7ce770b5afb8757912578b4e4dff227a7ff204d538a20e96ca4d16be"
+      },
+      {
+        "task_id": 7,
+        "training_seed": 20261023,
+        "path": "/tmp/libero-task4-task7-public-state-jitter-budget-sweep-checkpoints-20261031-v3/task7-seed20261023-arm-public_state_jitter-update0500.pt",
+        "file_sha256": "2ba7c761a4c77b0b857ccdbef9b77040f4fac4195648cb7458692146c37da046",
+        "weight_sha256": "c7b2eb1bd86ee12d411e1e5aadff22f3cfab9a1fe16eb5c40a5801daeaf2d4ed"
+      },
+      {
+        "task_id": 7,
+        "training_seed": 20261024,
+        "path": "/tmp/libero-task4-task7-public-state-jitter-budget-sweep-checkpoints-20261031-v3/task7-seed20261024-arm-public_state_jitter-update0500.pt",
+        "file_sha256": "3f401c3ac54dd5dbd7e01b213fe659f8fad279cc163a526c358ed075dcbc7575",
+        "weight_sha256": "724c132b58db4a7ddae11dfbecd0e523c767ae78a97e0715126b73ceec64d2db"
+      }
+    ]
+  },
+  "current_phase_boundary": {
+    "protocol_only": false,
+    "new_rollout_executed": false,
+    "new_training_executed": false,
+    "checkpoint_selected": false,
+    "new_episode_budget_is_zero": false,
+    "qualification_accessed": false,
+    "validation_accessed": false,
+    "heldout_accessed": false,
+    "final_evaluation_accessed": false,
+    "spt_updated": false,
+    "knowledge_updated": false,
+    "module_qualification": false
+  },
+  "interpretation_boundary": {
+    "success_rate_is_diagnostic_not_module_qualification": true,
+    "public_state_offset_is_not_expert_state_error": true,
+    "candidate_nonregression_states_are_not_unseen": true,
+    "query_mse_and_closed_loop_success_are_distinct_outcomes": true,
+    "baseline_is_pinned_reference_not_new_training_result": true,
+    "formal_spi_result": false,
+    "module_qualification": false,
+    "causal_claim": false
+  },
+  "authorization": {
+    "authorized_by_user_instruction": "先按照500 updates进行后续步骤",
+    "authorized_at_utc": "2026-10-31 13:25:00 UTC",
+    "training_budget_change": false,
+    "new_episode_budget": 120,
+    "checkpoint_selection_change": false
+  }
+}

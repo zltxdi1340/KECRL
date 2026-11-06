@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "status": "bound_before_complete_segment_readonly_run",
+  "formal_result": false,
+  "bound_at_utc": "2026-11-03T17:50:25.657614+00:00",
+  "config_sha256": "df860a26504ef23ba712028234bc165fce09f6cc246e474104c4c09e1eb4a2dc",
+  "files": {
+    "analyzer": {
+      "path": "experiments/analyze_libero_source_internal_full_open_segments.py",
+      "sha256": "2fdb090ec81b45b3267471b50b9eaa4c90af56af237136c4345ec2f95e3c0e55"
+    },
+    "tests": {
+      "path": "tests/test_libero_source_internal_full_open_segments.py",
+      "sha256": "88e3a3662eac63054c9de51fd80d8f33079ff4ff1735a826afc91d93091c0bec"
+    }
+  },
+  "validation": {
+    "focused_tests": "101 passed in0.52s",
+    "py_compile": "passed"
+  },
+  "launch_environment": {
+    "CUDA_VISIBLE_DEVICES": "",
+    "OMP_NUM_THREADS": "1",
+    "OPENBLAS_NUM_THREADS": "1",
+    "MKL_NUM_THREADS": "1"
+  },
+  "new_research_model_or_source_payload_calls": 0
+}

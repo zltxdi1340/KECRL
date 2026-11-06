@@ -1,0 +1,56 @@
+{
+  "schema_version": 1,
+  "status": "frozen_readonly_diagnostic",
+  "formal_result": false,
+  "new_environment_or_model_calls": 0,
+  "frozen_at_utc": "2026-11-03T02:59:04.676319+00:00",
+  "training_seeds": [
+    20261022,
+    20261023,
+    20261024
+  ],
+  "conditions": [
+    "eye_in_hand_photo_matched",
+    "eye_in_hand_spatial_matched",
+    "agentview_photo_matched",
+    "agentview_spatial_matched"
+  ],
+  "inputs": {
+    "adapter": {
+      "path": "/home/zl202621/project/KECRL/src/environments/libero_adapter.py",
+      "sha256": "8dfa22a1e19b049d78c8e6ae05494291242cbde8a21194e0fbb321662d56512c"
+    },
+    "wrapper": {
+      "path": "/home/zl202621/third_party/LIBERO/libero/libero/envs/env_wrapper.py",
+      "sha256": "a782fb76c9792268d28979474fe72849e1e98ada49c8e997a65359a8d6b6acd0"
+    },
+    "panda_robot": {
+      "path": "/home/zl202621/.conda/envs/libero-kecrl/lib/python3.10/site-packages/robosuite/models/robots/manipulators/panda_robot.py",
+      "sha256": "cedaeef03d4c01b6a76a56838f9cf8f68b34f85bac823cb2c76543492553c736"
+    },
+    "single_arm": {
+      "path": "/home/zl202621/.conda/envs/libero-kecrl/lib/python3.10/site-packages/robosuite/robots/single_arm.py",
+      "sha256": "d233b1b785e8f88ffb5df1357666b02a397ae930ce98181b079e0496ab35fc57"
+    },
+    "manipulator": {
+      "path": "/home/zl202621/.conda/envs/libero-kecrl/lib/python3.10/site-packages/robosuite/robots/manipulator.py",
+      "sha256": "d37ff4c00112cfba9bf4b96bf48ad5664422fd824dd4fbcd1eebda650a451b64"
+    },
+    "formatter": {
+      "path": "/home/zl202621/.conda/envs/libero-kecrl/lib/python3.10/site-packages/robosuite/models/grippers/panda_gripper.py",
+      "sha256": "a3760a8fc4599fa6f79914304b82466f3c1bda1a945943ca693bb57f00dc59eb"
+    },
+    "task7_predictions": {
+      "path": "/tmp/libero-task4-task7-expert-camera-target-error-artifacts-20261102-v1/task7-predictions-and-error-terms.npz",
+      "sha256": "e42844cf1a43154fe7842cacf6ac1efcaea8d95b8302443def7fc7e7e7697d10"
+    },
+    "prior_analysis": {
+      "path": "/tmp/libero-task7-expert-camera-component-tradeoff-20261103-v1.json",
+      "sha256": "7b2a627d5473669c1c34503c97f3579ce7a9e409fb822b3bfb3d44d57d5d787d"
+    },
+    "audit_script": {
+      "path": "/home/zl202621/project/KECRL/experiments/audit_libero_gripper_action_mapping.py",
+      "sha256": "a3a9bff391ec2eb194c4662d2581bcfd2a64bb6874cd3872585b78c5fbb957bc"
+    }
+  }
+}

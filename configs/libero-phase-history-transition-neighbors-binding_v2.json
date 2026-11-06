@@ -1,0 +1,38 @@
+{
+  "schema_version": 2,
+  "formal_result": false,
+  "status": "frozen_before_saved_neighbor_decomposition_v2",
+  "frozen_at_utc": "2026-11-04T03:40:17.294823+00:00",
+  "config_sha256": "e7c0afc14dbec9c868fe4366f1fce22ccc9fae906827eadea28934442235bd45",
+  "files": {
+    "analyzer": {
+      "path": "experiments/analyze_libero_phase_history_transition_neighbors_v2.py",
+      "sha256": "e00f7dc323f54233b5e505ba4ad9e4ffd4791b9f73d4ea5caef51bcf5a114481"
+    },
+    "tests": {
+      "path": "tests/test_libero_phase_history_transition_neighbors_v2.py",
+      "sha256": "7fd0f5f39e461117498f699710855888309aff945de972d2813d3b635d2c2d2d"
+    },
+    "protocol": {
+      "path": "docs/libero-phase-history-transition-neighbors-execution-v2-2026-11-04.md",
+      "sha256": "36cf4b2d74151d6b1283c2bd124a3cd1d54aab17207709d9fc3a9b6663293030"
+    }
+  },
+  "validation": {
+    "focused_tests": "72 passed in1.06s",
+    "py_compile": "v1/v2 analyzer and tests passed",
+    "prior_environment_check": "Python3.10.22/Torch2.4.1+cu124; CUDA intentionally hidden"
+  },
+  "real_saved_neighbor_decomposition_before_binding": 0,
+  "prior_failed_execution": {
+    "path": "/tmp/libero-phase-history-transition-neighbors-20261104-v1-failed.json",
+    "sha256": "6e25df5e308283ac9221cf151619dc5681fc2e169c8f55f58414ffb2f1e14f09"
+  },
+  "scientific_scope_and_analysis_unchanged": true,
+  "launch_environment": {
+    "CUDA_VISIBLE_DEVICES": "",
+    "OMP_NUM_THREADS": "1",
+    "OPENBLAS_NUM_THREADS": "1",
+    "MKL_NUM_THREADS": "1"
+  }
+}

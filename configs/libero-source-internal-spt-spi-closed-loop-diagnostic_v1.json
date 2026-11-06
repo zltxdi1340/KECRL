@@ -1,0 +1,378 @@
+{
+  "schema_version": 1,
+  "check_type": "libero_source_internal_spt_spi_closed_loop_diagnostic",
+  "formal_result": false,
+  "protocol_status": "frozen_not_executed",
+  "scope": {
+    "task_ids": [
+      0,
+      1
+    ],
+    "training_seeds": [
+      20261022,
+      20261023,
+      20261024
+    ],
+    "arms_in_order": [
+      "A_original",
+      "B_fomaml",
+      "C_pooled_bc"
+    ],
+    "checkpoint_updates": 500,
+    "checkpoint_count": 18,
+    "initial_state_role": "candidate_nonregression",
+    "initial_state_indices": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      15,
+      16,
+      17,
+      18,
+      19
+    ],
+    "initial_state_set_previously_used": true,
+    "episodes_per_model": 20,
+    "episodes": 360,
+    "adapters": 18,
+    "fresh_primary_episodes": 360,
+    "reused_primary_episodes": 0,
+    "environment_seed": 20261022,
+    "stabilization_steps": 5,
+    "policy_action_limit": 300,
+    "native_horizon": 305,
+    "max_policy_actions": 108000,
+    "fixed_zero_stabilization_actions": 1800,
+    "max_native_env_step_calls": 109800,
+    "candidate_rows_to_decode": 40,
+    "qualification_or_reserved_rows_to_decode": 0,
+    "iteration_order": "task_then_training_seed_then_A_B_C_then_initial_index_0_to19",
+    "adapter_lifecycle": "fresh_per_model_reused_for_all20_initials_in_ascending_order",
+    "reset_reference": "post_five_zero_stabilization_public_observation",
+    "reset_pair_reference_count": 40,
+    "reset_exact_comparison_count": 320,
+    "policy_memory_mode": "cnn_only",
+    "deterministic_policy_action": true,
+    "new_optimizer_updates": 0,
+    "new_backward_calls": 0,
+    "new_hdf5_payload_reads": 0,
+    "qualification_accessed": false,
+    "reserved_accessed": false,
+    "validation_accessed": false,
+    "heldout_accessed": false,
+    "final_evaluation_accessed": false,
+    "checkpoint_selected": false,
+    "spt_updated_or_accepted": false,
+    "knowledge_updated": false,
+    "module_registered": false,
+    "private_live_state_recorded": false,
+    "private_initial_vector_values_recorded": false,
+    "physical_gpu": 1,
+    "cuda_visible_devices": "1",
+    "egl_device_id": "1",
+    "inference_device": "cuda:0",
+    "torch_threads": 1,
+    "image_size": 128
+  },
+  "analysis": {
+    "primary": "success_counts_rates_and_B_minus_A_B_minus_C_paired_outcomes_per_task_seed",
+    "pair_keys": [
+      "task_id",
+      "training_seed",
+      "initial_state_index"
+    ],
+    "outcomes": [
+      "both_success",
+      "left_only_success",
+      "right_only_success",
+      "both_failure"
+    ],
+    "reset_gate": "all_nine_models_for_a_task_share_bit_exact_post_stabilization_reset_digest_per_state",
+    "consistent_improvement": "strictly_more_successes_in_each_of_three_training_seeds_per_task",
+    "statistical_significance_tests": false,
+    "iid_episode_or_unseen_generalization_claim": false,
+    "success_rate_is_qualification": false,
+    "historical_success_counts_reused": false,
+    "no_efficacy_based_stopping_checkpoint_or_seed_selection": true,
+    "on_technical_failure": "abort_preserve_partial_and_do_not_replace_or_relax_reset_gate",
+    "record": "all_policy_actions_and_public_joint_gripper_states_offsets_and_reset_digests; no_RGB_pixels"
+  },
+  "frozen_at_utc": "2026-11-03T03:52:32.960810+00:00",
+  "purpose": "Compare actual closed-loop control of all18 fixed source-internal final500 Policies under paired candidate resets; diagnostic only.",
+  "native_initial_root": "/home/zl202621/third_party/LIBERO/libero/libero/init_files",
+  "initial_banks": {
+    "0": {
+      "relative_path": "libero_spatial/pick_up_the_black_bowl_between_the_plate_and_the_ramekin_and_place_it_on_the_plate.pruned_init",
+      "size_bytes": 44271,
+      "sha256": "cbbc73792ce546c9bec181fd328a411d3183074840b282671dee481511381d0a",
+      "pickle_header_sha256": "3def7b6b306c88889367ffbf34f272b5b659234512c438155e710510cbee690c",
+      "candidate_indices": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19
+      ]
+    },
+    "1": {
+      "relative_path": "libero_spatial/pick_up_the_black_bowl_next_to_the_ramekin_and_place_it_on_the_plate.pruned_init",
+      "size_bytes": 44207,
+      "sha256": "9b6927b6ef03460ab055141e1a1154ad85e5e290058d8ed3a8a314aff911f864",
+      "pickle_header_sha256": "b669c73497521c9f590807690c816633671c93a3475764d455cb677f696c26a4",
+      "candidate_indices": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19
+      ]
+    }
+  },
+  "endpoints": [
+    {
+      "task_id": 0,
+      "training_seed": 20261022,
+      "arm": "A_original",
+      "optimizer_updates": 500,
+      "path": "/tmp/libero-source-internal-spt-spi-artifacts-20261103-v2/p0-s20261022-A_original-u500.pt",
+      "sha256": "0096406c9deb8f21ba1c934e822a508bdeadf77cc46b82daa367eaf8ebd8dce6",
+      "weight_hash": "a0d78ac9d7f48f9bf8ecb1ec33df12ba81a519b529613b44639931d0d37b2f53"
+    },
+    {
+      "task_id": 0,
+      "training_seed": 20261022,
+      "arm": "B_fomaml",
+      "optimizer_updates": 500,
+      "path": "/tmp/libero-source-internal-spt-spi-artifacts-20261103-v2/p0-s20261022-B_fomaml-u500.pt",
+      "sha256": "4e2beb58637c564e49521c2893ec43586c81e39b049afc08e867cca248561df4",
+      "weight_hash": "5a9edb680fb3d5b4dbc263b3efffaeb8df20ebd212e6d5effd7f237e30f3e2e8"
+    },
+    {
+      "task_id": 0,
+      "training_seed": 20261022,
+      "arm": "C_pooled_bc",
+      "optimizer_updates": 500,
+      "path": "/tmp/libero-source-internal-spt-spi-artifacts-20261103-v2/p0-s20261022-C_pooled_bc-u500.pt",
+      "sha256": "923ee5499b27fb0b48266dc919165063fd0aca83b36ea735f7e0f69a5ee1ef11",
+      "weight_hash": "582939edc6548ddb1cb40ea009c49c0b92d957f4bb59f4ec663cf3e8916988b1"
+    },
+    {
+      "task_id": 0,
+      "training_seed": 20261023,
+      "arm": "A_original",
+      "optimizer_updates": 500,
+      "path": "/tmp/libero-source-internal-spt-spi-artifacts-20261103-v2/p0-s20261023-A_original-u500.pt",
+      "sha256": "d0354754242bd92e2bf40e2a0f16badc323fc4966c292c1f4b5e43b2b8e41c1d",
+      "weight_hash": "18f6eb51e61eb55774b86a2d2561c7f513dbe6bd298ddf22ebad47081fe388ba"
+    },
+    {
+      "task_id": 0,
+      "training_seed": 20261023,
+      "arm": "B_fomaml",
+      "optimizer_updates": 500,
+      "path": "/tmp/libero-source-internal-spt-spi-artifacts-20261103-v2/p0-s20261023-B_fomaml-u500.pt",
+      "sha256": "aa00c378d523cae926e8a53e0cbf8820fad44daa7f793ce4f02acf514898976d",
+      "weight_hash": "ead3281e765c25a8a8b9a35792f997ccdc0e01e1a871e6ccb0e42f99631587dd"
+    },
+    {
+      "task_id": 0,
+      "training_seed": 20261023,
+      "arm": "C_pooled_bc",
+      "optimizer_updates": 500,
+      "path": "/tmp/libero-source-internal-spt-spi-artifacts-20261103-v2/p0-s20261023-C_pooled_bc-u500.pt",
+      "sha256": "2a37923899ac87ecb0597acf33d428d1a9108f3f8cf491a025b224120f51190f",
+      "weight_hash": "7cdff69d35eff6fd0e76b5febfc4d5e27083a8c44b35c2a49ab1ec398aa404a3"
+    },
+    {
+      "task_id": 0,
+      "training_seed": 20261024,
+      "arm": "A_original",
+      "optimizer_updates": 500,
+      "path": "/tmp/libero-source-internal-spt-spi-artifacts-20261103-v2/p0-s20261024-A_original-u500.pt",
+      "sha256": "fc2e5068bfb3339913b5a30bbb7e30969cd2dfcc37d7fb6c636dad3f39bcb565",
+      "weight_hash": "4cd469bbefee4c285a02f493064baa01317781ed7f9d881b1b6f6d54c7f6e6f9"
+    },
+    {
+      "task_id": 0,
+      "training_seed": 20261024,
+      "arm": "B_fomaml",
+      "optimizer_updates": 500,
+      "path": "/tmp/libero-source-internal-spt-spi-artifacts-20261103-v2/p0-s20261024-B_fomaml-u500.pt",
+      "sha256": "694512d963142471d842cfbceaac1e90b3eb4adbb7f6297068be204e8529ce64",
+      "weight_hash": "32c6f82e5102b389b8c4ef0e2fcc903445878acfbb1d12370c5d5534dc6e8974"
+    },
+    {
+      "task_id": 0,
+      "training_seed": 20261024,
+      "arm": "C_pooled_bc",
+      "optimizer_updates": 500,
+      "path": "/tmp/libero-source-internal-spt-spi-artifacts-20261103-v2/p0-s20261024-C_pooled_bc-u500.pt",
+      "sha256": "d511127f488fccd4deeafd191e3edda1967b694439d49113c56d8b64a090b79a",
+      "weight_hash": "3cc4c755f2dd1dcc5235453336cc8f0ae948cd5da4439a43eac8dfed82595755"
+    },
+    {
+      "task_id": 1,
+      "training_seed": 20261022,
+      "arm": "A_original",
+      "optimizer_updates": 500,
+      "path": "/tmp/libero-source-internal-spt-spi-artifacts-20261103-v2/p1-s20261022-A_original-u500.pt",
+      "sha256": "3f691e85578a3b9436e0fc6a41fc265c777befdd07936481f640a84107101c8e",
+      "weight_hash": "b160231becb1a60bf642a9f6a615ced696f1fa375124a76fe11f83257aece23a"
+    },
+    {
+      "task_id": 1,
+      "training_seed": 20261022,
+      "arm": "B_fomaml",
+      "optimizer_updates": 500,
+      "path": "/tmp/libero-source-internal-spt-spi-artifacts-20261103-v2/p1-s20261022-B_fomaml-u500.pt",
+      "sha256": "9186e4db07cbdf3232f1284aa44e79227187e85053157cfa070c06b5949b2199",
+      "weight_hash": "ab4b4e69df85d39fbebe2a37c14c30ea86dcd134836cb8a7bad6c87517ab9f4e"
+    },
+    {
+      "task_id": 1,
+      "training_seed": 20261022,
+      "arm": "C_pooled_bc",
+      "optimizer_updates": 500,
+      "path": "/tmp/libero-source-internal-spt-spi-artifacts-20261103-v2/p1-s20261022-C_pooled_bc-u500.pt",
+      "sha256": "d9ad913b0c57b0499024490384514a5361b375d1cfe1e250264c0c5dce34b223",
+      "weight_hash": "3f09ba6f09dcc9d9f74c682ec29b445f2f7ba5d44ec1ef41e08a918d71e9cd7d"
+    },
+    {
+      "task_id": 1,
+      "training_seed": 20261023,
+      "arm": "A_original",
+      "optimizer_updates": 500,
+      "path": "/tmp/libero-source-internal-spt-spi-artifacts-20261103-v2/p1-s20261023-A_original-u500.pt",
+      "sha256": "de54b960f694270c61e7cbd47d6ceb7ff7a36193ee45d38aa42ed44e0899c615",
+      "weight_hash": "17d8dab7db1f79a44174b03cab4c6b82b3bf8095321a934f52d34ce12ba3ae9b"
+    },
+    {
+      "task_id": 1,
+      "training_seed": 20261023,
+      "arm": "B_fomaml",
+      "optimizer_updates": 500,
+      "path": "/tmp/libero-source-internal-spt-spi-artifacts-20261103-v2/p1-s20261023-B_fomaml-u500.pt",
+      "sha256": "ae9eb12288f497ac77704ae443b7d4b069eeadb8d91f30019e8bbbe524109a8d",
+      "weight_hash": "52ca7023e108b2efea7d13b920256f1cea15a0e339fe651d4788d09498ad4561"
+    },
+    {
+      "task_id": 1,
+      "training_seed": 20261023,
+      "arm": "C_pooled_bc",
+      "optimizer_updates": 500,
+      "path": "/tmp/libero-source-internal-spt-spi-artifacts-20261103-v2/p1-s20261023-C_pooled_bc-u500.pt",
+      "sha256": "259e6bd7f89f0ca100d77bafe5c96647fef232fbd1ceeff6bb4e51705d9ffee2",
+      "weight_hash": "41551f2e2dd3b9fe491d1610de168658e2676c875974646b5bd1321aff75b605"
+    },
+    {
+      "task_id": 1,
+      "training_seed": 20261024,
+      "arm": "A_original",
+      "optimizer_updates": 500,
+      "path": "/tmp/libero-source-internal-spt-spi-artifacts-20261103-v2/p1-s20261024-A_original-u500.pt",
+      "sha256": "948112af8ef70d412f943976a902165e53a5561f7eba4b7c8f050b91cbaa290c",
+      "weight_hash": "e6d20dac78c67aba57658c7b0ac744916c6b59d1857a206cb640befa1452697d"
+    },
+    {
+      "task_id": 1,
+      "training_seed": 20261024,
+      "arm": "B_fomaml",
+      "optimizer_updates": 500,
+      "path": "/tmp/libero-source-internal-spt-spi-artifacts-20261103-v2/p1-s20261024-B_fomaml-u500.pt",
+      "sha256": "c0c1a06ac18997c6dd012cab364e2a572d659749356a39df506d3c83b4ae86bd",
+      "weight_hash": "f139caf74b31aafb87219eaf84d2eeecb2d6826209e3c31067be4c46056d689d"
+    },
+    {
+      "task_id": 1,
+      "training_seed": 20261024,
+      "arm": "C_pooled_bc",
+      "optimizer_updates": 500,
+      "path": "/tmp/libero-source-internal-spt-spi-artifacts-20261103-v2/p1-s20261024-C_pooled_bc-u500.pt",
+      "sha256": "06208a96c18e466d56a629cc3fe97c1fdf90a81a4349ca3310a4034f9724c1d0",
+      "weight_hash": "b5180c1904ce91d481e3086c2055efa90742367ff062efb2e6da165f8b3daf20"
+    }
+  ],
+  "inputs": {
+    "source_result": {
+      "path": "/tmp/libero-source-internal-spt-spi-20261103-v2.json",
+      "sha256": "66a4fb7fac6288a710072271e440f6cea42167f4fb782b9a774c7554af6d0169"
+    },
+    "source_audit": {
+      "path": "/tmp/libero-source-internal-spt-spi-independent-audit-20261103-v2.json",
+      "sha256": "c9b8b0d5174374cdd0f9c7493bc9211e0f30ee14a7f0be4c5224527a3f7ca68b"
+    },
+    "source_design": {
+      "path": "configs/libero-source-internal-spt-spi-diagnostic_v2.json",
+      "sha256": "9bbf6a3a39b7a8cb4772fcfcd17022a95f040f02f10941fc2754dbe7a11379df"
+    },
+    "source_binding": {
+      "path": "configs/libero-source-internal-spt-spi-execution-binding_v2.json",
+      "sha256": "a94cb9e81160587a846d1fbe739f0ed1f297d5714a5ae3225a802d4104cccc86"
+    },
+    "transfer": {
+      "path": "configs/libero_spatial_transfer_split_candidate_v1.json",
+      "sha256": "6cdc8c3eeaa90886ad0e15f0f4ebbe260aa972b6e69b1f122e95f65ab63dd7d6"
+    },
+    "learning": {
+      "path": "configs/libero_spatial_bc_policy_candidate_v1.json",
+      "sha256": "f5e57c895e9249ef7a3361ebee2119bf06c6cbb48da01c31980b1eb0af8feb1b"
+    },
+    "bank_header_audit": {
+      "path": "/tmp/libero-source-internal-closed-loop-bank-header-audit-20261103-v1.json",
+      "sha256": "0305bb10167d76fd1e846a66f151cd75821724276a603d5ef7385eaf670e82e0"
+    }
+  },
+  "freeze_work_boundary": {
+    "new_real_environment_calls": 0,
+    "new_policy_forward_calls": 0,
+    "official_initial_rows_numerically_decoded": 0,
+    "candidate_container_metadata_headers_read": 2,
+    "source_endpoint_files_pinned": 18
+  },
+  "planned_execution_is_separate_from_this_freeze": true,
+  "native_step_counter_semantics": "Counts calls to native environment.step, split into fixed-zero stabilization and Policy actions; internal physics substeps and constructor/reset internals are not Policy actions.",
+  "failure_rule": "Abort and preserve completed/failed episode files and attempted/completed operation counts; no result-based stopping, sample replacement, hidden initial-state access or tolerance relaxation.",
+  "interpretation": "Previously exposed source tasks/states. No qualification, independent held-out generalization, causal Knowledge or active SPT acceptance claim."
+}

@@ -1,0 +1,56 @@
+{
+  "schema_version": 1,
+  "status": "execution_bound_before_new_observation_checkpoint_payloads_and_policy_calls",
+  "formal_result": false,
+  "frozen_at_utc": "2026-11-03T17:14:14.793155+00:00",
+  "config_sha256": "bf38389d06d2d43c74991365d4763cc0cbbe94ee8517ef1c9cf51ca4d4d40206",
+  "design_binding_sha256": "e81809ebff82d4adebf39aafb2b13cbd963db9d69a4c30aceed155ddca8257d8",
+  "files": {
+    "runner": {
+      "path": "experiments/run_libero_source_internal_gripper_state_local_control.py",
+      "sha256": "49c566707bf1510db7aa27edd40b95e8f646cfaa01a7da09e15e64f37a00f02f"
+    },
+    "tests": {
+      "path": "tests/test_libero_source_internal_gripper_state_local_control_execution.py",
+      "sha256": "6f4359fc6f23691393837abbfd55ffbcbe999125d2e174fde0c62a774c174a68"
+    },
+    "auditor": {
+      "path": "experiments/audit_libero_source_internal_gripper_state_local_control.py",
+      "sha256": "ea1cdb14a49c6a8e9d50543f7fb48b3452c6030db80119f3de3aff442e396e58"
+    },
+    "resource_gate": {
+      "path": "experiments/run_libero_source_internal_spt_spi_diagnostic_v2.py",
+      "sha256": "540ad67acc81543d672b0e144cad7ad57db07e0c5cc60394042b78d7a0e0fbdf"
+    },
+    "execution_protocol": {
+      "path": "docs/libero-source-internal-gripper-state-control-execution-protocol-2026-11-04.md",
+      "sha256": "4a92ffcf5a90d9917bca24b237c98a9fb799446bfd86f9e170f53722863d46b1"
+    }
+  },
+  "runtime": {
+    "python": "3.10.22",
+    "torch": "2.4.1+cu124",
+    "cuda": "12.4",
+    "numpy": "1.22.4",
+    "h5py": "3.11.0"
+  },
+  "launch_environment": {
+    "CUDA_VISIBLE_DEVICES": "1",
+    "CUBLAS_WORKSPACE_CONFIG": ":4096:8",
+    "OMP_NUM_THREADS": "1",
+    "OPENBLAS_NUM_THREADS": "1",
+    "MKL_NUM_THREADS": "1"
+  },
+  "planned_main_forward_batches": 2457,
+  "planned_repeat_forward_batches": 54,
+  "freeze_stage_actual_new_policy_calls": 0,
+  "freeze_stage_actual_new_HDF5_RGB_initial_checkpoint_payload_reads": 0,
+  "validation": {
+    "focused_tests": "90 passed in 0.53s",
+    "py_compile": "passed",
+    "synthetic_only": true
+  },
+  "scientific_design_unchanged": true,
+  "expected_output": "/tmp/libero-source-internal-gripper-state-local-control-20261104-v1.json",
+  "expected_artifacts": "/tmp/libero-source-internal-gripper-state-local-control-artifacts-20261104-v1"
+}

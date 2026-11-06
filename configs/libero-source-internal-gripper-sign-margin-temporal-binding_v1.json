@@ -1,0 +1,29 @@
+{
+  "schema_version": 1,
+  "status": "frozen_before_new_margin_temporal_analysis",
+  "formal_result": false,
+  "bound_at_utc": "2026-11-03T17:29:16.516319+00:00",
+  "config_sha256": "808cf3ff5bd4ec4da7e64eb4392d3aed4cd65f722a938a7fa6b2fe545f83159f",
+  "files": {
+    "analyzer": {
+      "path": "experiments/analyze_libero_source_internal_gripper_sign_margin_temporal.py",
+      "sha256": "d688c0d217fd578626897b75b0a14c777c94b77f8fda80bab989fb07248d618c"
+    },
+    "tests": {
+      "path": "tests/test_libero_source_internal_gripper_sign_margin_temporal.py",
+      "sha256": "9cce5f00226ea146e29f4d357c773f31b8784129de29e5f3e999b7e260b3e1ac"
+    }
+  },
+  "validation": {
+    "focused_tests": "78 passed in 0.44s",
+    "py_compile": "passed"
+  },
+  "new_policy_or_source_payload_calls": 0,
+  "device": "cpu",
+  "launch_environment": {
+    "CUDA_VISIBLE_DEVICES": "",
+    "OMP_NUM_THREADS": "1",
+    "OPENBLAS_NUM_THREADS": "1",
+    "MKL_NUM_THREADS": "1"
+  }
+}

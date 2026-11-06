@@ -1,0 +1,54 @@
+{
+  "schema_version": 1,
+  "status": "readonly_validation_trace_code_bound_before_numeric_read",
+  "diagnostic_only": true,
+  "frozen_at_utc": "2026-11-06T05:46:17.909405+00:00",
+  "config_sha256": "c527f54d2cd0a0c8e7e8651ab3e1b7719f75b2c37d4e8685ecd840fe66bc0772",
+  "files": {
+    "runner": {
+      "path": "experiments/analyze_libero_formal_G_validation_BC_traces.py",
+      "sha256": "ba0a8d0164adef480cdedd69ed46b7d434d5403a5679d50c90d327f43bd79777"
+    },
+    "tests": {
+      "path": "tests/test_libero_formal_G_validation_BC_traces.py",
+      "sha256": "c75175ac1488a8260580d0330ad5c9946108596c533ce0740e31eaebdfbbca5c"
+    },
+    "command_metrics": {
+      "path": "experiments/analyze_libero_source_internal_six_group_paired_traces.py",
+      "sha256": "800d94eea32a76e06c885e541b9605df114aa81b302e3500dda408a31f645e17"
+    },
+    "legacy_action_metrics": {
+      "path": "experiments/analyze_libero_task4_task7_full_policy_closed_loop_diagnostic.py",
+      "sha256": "c26b1bfe7266dd332f0e5c55dfdb6f668d570478a790e01e5f8676766013f181"
+    },
+    "legacy_public_metadata": {
+      "path": "experiments/audit_libero_source_internal_spt_spi_closed_loop_diagnostic.py",
+      "sha256": "079bc5fcdd9c3c4f12459998a1b5c8555dbb3dd0b65c97acf6a8fd4b7ba7406b"
+    },
+    "public_validator": {
+      "path": "experiments/audit_libero_formal_transfer_v2.py",
+      "sha256": "4a09d4209fce7fd5938f0af1d4deb6d08580e7089f3dbda379b44171fda0a132"
+    },
+    "protocol": {
+      "path": "experiments/libero_formal_transfer_protocol_v2.py",
+      "sha256": "6cdb9e51eeb419353cd52d4782a4393981b1d33ed319c6785a5b4444a9f96ee9"
+    }
+  },
+  "verification": {
+    "new_tests_passed": 39,
+    "related_tests_passed": 109,
+    "test_seconds": 2.21,
+    "py_compile_passed": true,
+    "git_diff_check_passed": true
+  },
+  "read_passes": {
+    "analysis": 1,
+    "independent_crosscheck": 1,
+    "same_unique_episode_files": 1600,
+    "maximum_file_reads_across_both_passes": 3200,
+    "maximum_public_state_row_visits_across_both_passes": 846880,
+    "new_trajectories_policy_calls_environment_or_initial_reads": 0
+  },
+  "G_decision_unchanged": true,
+  "heldout_and_qualification_remain_sealed": true
+}

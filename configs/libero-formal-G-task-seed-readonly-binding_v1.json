@@ -1,0 +1,32 @@
+{
+  "schema_version": 1,
+  "status": "posthoc_G_analysis_code_bound_before_run",
+  "diagnostic_only": true,
+  "frozen_at_utc": "2026-11-06T05:22:05.434559+00:00",
+  "config_sha256": "18231bd1e9083ae4dbac4551690f9530aa6098ccbd074ba889a695e2d7a534f9",
+  "files": {
+    "runner": {
+      "path": "experiments/analyze_libero_formal_G_task_seed_differences.py",
+      "sha256": "ac0f8336c688bc2007bae0c9c9411ea1dfb3c9f88062bb6c7e10057843646156"
+    },
+    "tests": {
+      "path": "tests/test_libero_formal_G_task_seed_differences.py",
+      "sha256": "64d60dc5f97e548e53c7476b5c3a8604903fed8ac6c45cf2eb23723e4deb0ded"
+    },
+    "protocol": {
+      "path": "experiments/libero_formal_transfer_protocol_v2.py",
+      "sha256": "6cdb9e51eeb419353cd52d4782a4393981b1d33ed319c6785a5b4444a9f96ee9"
+    }
+  },
+  "verification": {
+    "new_tests_passed": 31,
+    "related_tests_passed": 80,
+    "seconds": 0.86,
+    "py_compile_passed": true,
+    "git_diff_check_passed": true
+  },
+  "no_new_prediction_training_environment_or_initial_decode": true,
+  "all20_seeds_retained": true,
+  "H_and_qualification_remain_sealed": true,
+  "G_decision_unchanged": true
+}

@@ -1,0 +1,611 @@
+{
+  "analysis": {
+    "appearance_cue": "photo_matched_Delta_translation_MSE>0_in_all_three_seeds_per_camera",
+    "arithmetic": "float64_after_float32_predictions_and_targets",
+    "camera_contrast": "hand_minus_agent_paired_DeltaMSE_at_identical_per_frame_pixel_MAE; both cameras reported",
+    "command_masks": "reuse_frozen_expert_helper; source_action0_for_masks_only_not_scored",
+    "components": {
+      "all7": [
+        0,
+        7
+      ],
+      "gripper": [
+        6,
+        7
+      ],
+      "rotation": [
+        3,
+        6
+      ],
+      "translation": [
+        0,
+        3
+      ]
+    },
+    "corrupted_observations_not_new_expert_demonstrations_or_training_labels": true,
+    "empty_strata_or_zero_denominators": "null_with_valid_missing_counts; no_infinity_or_zero_imputation",
+    "flags_can_coexist": true,
+    "identity_max_abs_tolerance": 1e-12,
+    "mse_identity": "all7=(3*translation+3*rotation+gripper)/7",
+    "no_proof_of_geometric_necessity_or_closed_loop_cause": true,
+    "no_significance_independence_or_population_claim": true,
+    "no_training_rollout_checkpoint_or_qualification_promotion": true,
+    "paired_error_identity": "DeltaMSE_D=(2*e_D.dot(delta_D)+delta_D.dot(delta_D))/dim_D; e=clean-target",
+    "per_row_terms": [
+      "clean_MSE",
+      "changed_MSE",
+      "DeltaMSE",
+      "error_alignment_cross_term",
+      "response_energy_term"
+    ],
+    "primary": "step_weighted_translation_MSE_deltas_on_all_support_t_ge1; task_seed_condition_separate",
+    "secondary": "all7_rotation_gripper_MSE; demo_equal_means_medians; command_strata_and_t1",
+    "secondary_all7_flags": "same_rules_separately; cannot_override_translation_primary",
+    "spatial_detail_cue": "(spatial_matched_Delta_translation_MSE-photo_matched_Delta_translation_MSE)>0_AND_spatial_full_Delta_translation_MSE>0_in_all_three_seeds_per_camera",
+    "spatial_probe_removes_texture_and_may_be_off_distribution": true,
+    "strata": [
+      "all",
+      "first_scored_t1",
+      "expert_open",
+      "expert_close",
+      "expert_neutral",
+      "around_close_transition",
+      "around_open_transition"
+    ],
+    "transition_radius": 5,
+    "zero_or_nonfinite_does_not_satisfy_strict_positive": true
+  },
+  "authorization": "用户：下一步先冻结合法专家输入上的目标误差对照，区分眼在手响应是否对应必要几何信息或误差放大；继续保持500 updates和稳定化5步。",
+  "check_type": "libero_expert_camera_target_error_protocol",
+  "execution_binding": {
+    "actual_experiment_result_is_separate": true,
+    "must_pin": [
+      "this_design_sha256",
+      "execution_runner_sha256",
+      "operator_validator_sha256",
+      "launch_environment"
+    ],
+    "scientific_design_must_not_change": true,
+    "status": "pending_runner_implementation_and_pre_run_validation"
+  },
+  "formal_result": false,
+  "frozen_at_utc": "2026-11-02T09:19:04.909753+00:00",
+  "inputs": {
+    "dataset_access_code": {
+      "path": "src/environments/libero_dataset.py",
+      "sha256": "a35ce74905655a1e1f3f0ffb597329eb486e000a5f9dee925d8231885a7f7599"
+    },
+    "dataset_manifest": {
+      "path": "configs/libero_spatial_dataset_manifest_v1.json",
+      "sha256": "866429693febf966a38b48e3b89faa54623acace5d3c50cd67c5c7978010eaf6"
+    },
+    "expert_audit": {
+      "path": "/tmp/libero-task4-task7-expert-action-error-independent-audit-20261101-v1.json",
+      "sha256": "8a2e6ed375680c88b2fabcc0d7b165096f87e806ef20d7ac42b188f39cbf3bf5"
+    },
+    "expert_config": {
+      "path": "configs/libero-task4-task7-expert-action-error-diagnostic_v1.json",
+      "sha256": "9051738cf37d7cc6f3b1fd09a01e93755ff314cda2cb719e83db98f50ff95cef"
+    },
+    "expert_helper": {
+      "path": "experiments/analyze_libero_task4_task7_expert_action_error_diagnostic.py",
+      "sha256": "bd44981057bbb09ecc485379ca4ad13563b3f770d892dbd9c73ce3e1af557425"
+    },
+    "expert_preflight": {
+      "path": "/tmp/libero-task4-task7-expert-target-preflight-20261101-v1.json",
+      "sha256": "d3c4abc420be3e1370d56e27cc6b26f834516abbc343be1c836f93d7ba225f3e"
+    },
+    "expert_result": {
+      "path": "/tmp/libero-task4-task7-expert-action-error-20261101-v1.json",
+      "sha256": "11bed14d3624144553d11e9395b66ee4621e69b5284e740c75117a60e7d7273e"
+    },
+    "input_decomposition_audit": {
+      "path": "/tmp/libero-source-stabilization-input-decomposition-independent-audit-20261102-v1.json",
+      "sha256": "88688b21a7edd74ccf49634129e2addd9c59463eb9a32ece1489a810802d02c5"
+    },
+    "input_decomposition_config": {
+      "path": "configs/libero-task4-task7-source-stabilization-input-decomposition-diagnostic_v1.json",
+      "sha256": "efcdcb8a090923ce5b6726eb746bf5cfa7e1012dd0c16de16d6c68d9d8874613"
+    },
+    "input_decomposition_result": {
+      "path": "/tmp/libero-task4-task7-source-stabilization-input-decomposition-20261102-v1.json",
+      "sha256": "2cc2ab1f14cf6bfdc2ede73d01a2bcd3df1f3d62ed72adc6c722f739df287ecc"
+    },
+    "offline_helpers": {
+      "path": "experiments/analyze_libero_task4_task7_evidence_decomposition.py",
+      "sha256": "9bf4ff6b3d18345be1b7d9e3b50d887a7ca78c1f34e9c039c10ced283472a4a4"
+    },
+    "old_augmentation_result": {
+      "path": "/tmp/libero-runtime-native-prefix-cross-task-eye-hand-augmentation-20261028-v1.json",
+      "sha256": "06e309d7f22bb04dd0b18a5759388989fa56591af015fece3ad4de11eb9f1ecc"
+    },
+    "old_camera_sensitivity_result": {
+      "path": "/tmp/libero-runtime-native-prefix-cross-task-eye-hand-translation-sensitivity-20261028-v1.json",
+      "sha256": "dab39a916d43f2eb2d8dbfad6690504367131983efbdb4afc88f9e71bb892ec7"
+    },
+    "policy_code": {
+      "path": "src/algorithms/libero_bc_policy.py",
+      "sha256": "a3098a68b5ceab21495207856c9d94fd4a6d26c1668737625ecb7b5d46977735"
+    },
+    "policy_config": {
+      "path": "configs/libero_spatial_bc_policy_candidate_v1.json",
+      "sha256": "f5e57c895e9249ef7a3361ebee2119bf06c6cbb48da01c31980b1eb0af8feb1b"
+    },
+    "transfer": {
+      "path": "configs/libero_spatial_transfer_split_candidate_v1.json",
+      "sha256": "6cdc8c3eeaa90886ad0e15f0f4ebbe260aa972b6e69b1f122e95f65ab63dd7d6"
+    }
+  },
+  "models": [
+    {
+      "checkpoint": {
+        "arm": "source_baseline",
+        "file_sha256": "421a48c24fd1580f1c1d4f703a04202decc1e492f3dca2b277dc22e2bc7b2ed6",
+        "optimizer_updates": 500,
+        "path": "/tmp/libero-task4-task7-public-state-jitter-budget-sweep-checkpoints-20261031-v3/task4-seed20261022-arm-source_baseline-update0500.pt",
+        "task_id": 4,
+        "training_seed": 20261022,
+        "weight_sha256": "631f0eaca6fdfc77ff2ca15746e4ad2548160e7e6c1c4190dc3714c149da0915"
+      },
+      "task_id": 4,
+      "training_seed": 20261022
+    },
+    {
+      "checkpoint": {
+        "arm": "source_baseline",
+        "file_sha256": "fac15e21c20693ecb3fced0beae43f78694d0ad2c10bc425b2441ebef67bbfc6",
+        "optimizer_updates": 500,
+        "path": "/tmp/libero-task4-task7-public-state-jitter-budget-sweep-checkpoints-20261031-v3/task4-seed20261023-arm-source_baseline-update0500.pt",
+        "task_id": 4,
+        "training_seed": 20261023,
+        "weight_sha256": "a8f77335c1b5e5ebabb958d37dc01b178e5ce527fb7f66eacb76264484573eeb"
+      },
+      "task_id": 4,
+      "training_seed": 20261023
+    },
+    {
+      "checkpoint": {
+        "arm": "source_baseline",
+        "file_sha256": "f4886a9d0b3727c79884c6c35407ce1f6a651adf4a39a7b0a2124ce98d425421",
+        "optimizer_updates": 500,
+        "path": "/tmp/libero-task4-task7-public-state-jitter-budget-sweep-checkpoints-20261031-v3/task4-seed20261024-arm-source_baseline-update0500.pt",
+        "task_id": 4,
+        "training_seed": 20261024,
+        "weight_sha256": "ee59970109f9a60d1e28dcbb5fccc95d859cee4ad059637f707a0635035da59a"
+      },
+      "task_id": 4,
+      "training_seed": 20261024
+    },
+    {
+      "checkpoint": {
+        "arm": "source_baseline",
+        "file_sha256": "dca7801efc1e76f68477382296d09f624c4455b3b8efb6a8797014e3a3df0b4c",
+        "optimizer_updates": 500,
+        "path": "/tmp/libero-task4-task7-public-state-jitter-budget-sweep-checkpoints-20261031-v3/task7-seed20261022-arm-source_baseline-update0500.pt",
+        "task_id": 7,
+        "training_seed": 20261022,
+        "weight_sha256": "a315bba8251f8a26a00b92b6e86fd29f56e227afeefcf22022b7086341774144"
+      },
+      "task_id": 7,
+      "training_seed": 20261022
+    },
+    {
+      "checkpoint": {
+        "arm": "source_baseline",
+        "file_sha256": "e3bc06129960d19aa63bd656cf53fd0062c07121a54d48acc78493d3b337ee8d",
+        "optimizer_updates": 500,
+        "path": "/tmp/libero-task4-task7-public-state-jitter-budget-sweep-checkpoints-20261031-v3/task7-seed20261023-arm-source_baseline-update0500.pt",
+        "task_id": 7,
+        "training_seed": 20261023,
+        "weight_sha256": "6df6e8163274992c16161cf2772909f73379165b2190f139f20ccebfb308bc50"
+      },
+      "task_id": 7,
+      "training_seed": 20261023
+    },
+    {
+      "checkpoint": {
+        "arm": "source_baseline",
+        "file_sha256": "06d006dfd6487ab738c76fc46a1fd0af74e9b6354a604f02802921fb85abc52f",
+        "optimizer_updates": 500,
+        "path": "/tmp/libero-task4-task7-public-state-jitter-budget-sweep-checkpoints-20261031-v3/task7-seed20261024-arm-source_baseline-update0500.pt",
+        "task_id": 7,
+        "training_seed": 20261024,
+        "weight_sha256": "a63de0d79f83b810343541fd09e9541db53d2d9e89e6c37810ca7d5c02a30d95"
+      },
+      "task_id": 7,
+      "training_seed": 20261024
+    }
+  ],
+  "operator_validator_sha256": "681a3390bc894e753e945fa0bdab6b79b5dd4ee2a60cc2fccb9e18fb10b7d834",
+  "protocol_status": "scientific_design_frozen_execution_binding_pending",
+  "research_run_executed": false,
+  "schema_version": 1,
+  "scope": {
+    "analysis_seed": 20261022,
+    "arm": "source_baseline",
+    "batch_size": 32,
+    "checkpoint_loads": 6,
+    "checkpoint_selected": false,
+    "checkpoint_updates": 500,
+    "conditions": [
+      "identity_uint8",
+      "identity_float",
+      "eye_in_hand_photo_matched",
+      "eye_in_hand_spatial_matched",
+      "agentview_photo_matched",
+      "agentview_spatial_matched",
+      "eye_in_hand_spatial_full",
+      "agentview_spatial_full"
+    ],
+    "default_closed_loop_stabilization_steps": 5,
+    "demo_indices": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      15,
+      16,
+      17,
+      18,
+      19,
+      20,
+      21,
+      22,
+      23,
+      24,
+      25,
+      26,
+      27,
+      28,
+      29
+    ],
+    "device": "cpu",
+    "excluded_t0_rows": 60,
+    "expert_rows_by_task": {
+      "4": 4442,
+      "7": 4188
+    },
+    "final_evaluation_accessed": false,
+    "heldout_accessed": false,
+    "knowledge_updated": false,
+    "memory_mode": "cnn_only",
+    "module_registered": false,
+    "new_backward_calls": 0,
+    "new_environment_resets_or_steps": 0,
+    "new_initial_state_or_private_state_reads": 0,
+    "new_optimizer_updates": 0,
+    "new_policy_control_steps": 0,
+    "offline_extra_stabilization_steps": 0,
+    "planned_main_forward_calls": 7200,
+    "planned_main_prediction_rows": 207120,
+    "planned_original_batch_parity_checks": 900,
+    "planned_repeat_forward_calls": 48,
+    "planned_repeat_prediction_rows": 1536,
+    "planned_uint8_float_identity_checks": 900,
+    "qualification_accessed": false,
+    "reserved_accessed": false,
+    "scored_unique_expert_rows": 8630,
+    "shared_batches_by_task": {
+      "4": 154,
+      "7": 146
+    },
+    "source_action_payload_rows": 8690,
+    "source_query_accessed": false,
+    "source_role": "meta_support",
+    "spt_updated": false,
+    "target_alignment": "stored_HDF5_obs[t-1]_to_original_expert_action[t]; t>=1",
+    "target_origin": "original_source_expert_action_at_unchanged_reference_state",
+    "task_ids": [
+      4,
+      7
+    ],
+    "torch_threads": 1,
+    "training_seeds": [
+      20261022,
+      20261023,
+      20261024
+    ],
+    "unique_source_demonstrations": 60,
+    "validation_accessed": false
+  },
+  "stop_rules": [
+    "all_pinned_source_roles_code_configs_checkpoints_and_support_references_match",
+    "authorize_meta_support_before_opening_HDF5; never_read_query_groups_or_init_attrs",
+    "original_targets_indices_command_masks_and_every_shared_batch_digest_exact_to_old_support_archive",
+    "original_uint8_predictions_exact_to_old_baseline_predictions_in_same_batch_partition",
+    "float_identity_predictions_exact_to_uint8_predictions_for_every_batch",
+    "repeat_all_eight_conditions_for_first_batch_of_each_task_and_seed_exact",
+    "matched_per_frame_pixel_MAE_agrees_with_common_budget_within1e-7_and_all_coefficients<=0.1",
+    "input_target_weight_hashes_unchanged_grad_none_finite_outputs_within_action_bounds",
+    "signed_error_and_component_identities_residual<=1e-12",
+    "actual_calls_rows_source_demo_order_and_t0_exclusions_match_frozen_budget",
+    "on_any_failure_stop_preserve_events_partial_predictions_and_failed_result; never_relax_or_append_budget"
+  ],
+  "support_references": [
+    {
+      "archive": {
+        "arrays": {
+          "action_indices": {
+            "dtype": "int64",
+            "shape": [
+              4442
+            ]
+          },
+          "command_masks": {
+            "dtype": "bool",
+            "shape": [
+              4442,
+              7
+            ]
+          },
+          "demonstration_indices": {
+            "dtype": "int64",
+            "shape": [
+              4442
+            ]
+          },
+          "mask_names": {
+            "dtype": "<U32",
+            "shape": [
+              7
+            ]
+          },
+          "prediction_seed20261022__public_state_jitter": {
+            "dtype": "float32",
+            "shape": [
+              4442,
+              7
+            ]
+          },
+          "prediction_seed20261022__source_baseline": {
+            "dtype": "float32",
+            "shape": [
+              4442,
+              7
+            ]
+          },
+          "prediction_seed20261023__public_state_jitter": {
+            "dtype": "float32",
+            "shape": [
+              4442,
+              7
+            ]
+          },
+          "prediction_seed20261023__source_baseline": {
+            "dtype": "float32",
+            "shape": [
+              4442,
+              7
+            ]
+          },
+          "prediction_seed20261024__public_state_jitter": {
+            "dtype": "float32",
+            "shape": [
+              4442,
+              7
+            ]
+          },
+          "prediction_seed20261024__source_baseline": {
+            "dtype": "float32",
+            "shape": [
+              4442,
+              7
+            ]
+          },
+          "previous_expert_gripper": {
+            "dtype": "float32",
+            "shape": [
+              4442
+            ]
+          },
+          "target_actions": {
+            "dtype": "float32",
+            "shape": [
+              4442,
+              7
+            ]
+          }
+        },
+        "path": "/tmp/libero-task4-task7-expert-action-error-archive-20261101-v1/task4-meta_support.npz",
+        "sha256": "0d4471da5d609606d91ba38b15917151dba21a3658ed67a069161e8116b6fdae",
+        "size_bytes": 757546
+      },
+      "dataset": {
+        "path": "/home/zl202621/third_party/LIBERO/datasets/libero_spatial/pick_up_the_black_bowl_in_the_top_drawer_of_the_wooden_cabinet_and_place_it_on_the_plate_demo.hdf5",
+        "sha256": "7ff1ee60447875c152d8c7819f499d23dbc0eb4d4bf045225d5d87a2cdad99bd"
+      },
+      "role": "meta_support",
+      "shared_input_batch_count": 154,
+      "shared_input_batch_manifest_sha256": "32db2616a0b9ccd58e0453c0384382bce8e309cfcab350eb96f6d029a538a6dd",
+      "source_action_lengths": [
+        153,
+        142,
+        158,
+        129,
+        143,
+        158,
+        167,
+        156,
+        159,
+        132,
+        139,
+        182,
+        145,
+        141,
+        138,
+        150,
+        131,
+        156,
+        148,
+        162,
+        153,
+        163,
+        149,
+        165,
+        140,
+        151,
+        149,
+        132,
+        142,
+        139
+      ],
+      "task_id": 4
+    },
+    {
+      "archive": {
+        "arrays": {
+          "action_indices": {
+            "dtype": "int64",
+            "shape": [
+              4188
+            ]
+          },
+          "command_masks": {
+            "dtype": "bool",
+            "shape": [
+              4188,
+              7
+            ]
+          },
+          "demonstration_indices": {
+            "dtype": "int64",
+            "shape": [
+              4188
+            ]
+          },
+          "mask_names": {
+            "dtype": "<U32",
+            "shape": [
+              7
+            ]
+          },
+          "prediction_seed20261022__public_state_jitter": {
+            "dtype": "float32",
+            "shape": [
+              4188,
+              7
+            ]
+          },
+          "prediction_seed20261022__source_baseline": {
+            "dtype": "float32",
+            "shape": [
+              4188,
+              7
+            ]
+          },
+          "prediction_seed20261023__public_state_jitter": {
+            "dtype": "float32",
+            "shape": [
+              4188,
+              7
+            ]
+          },
+          "prediction_seed20261023__source_baseline": {
+            "dtype": "float32",
+            "shape": [
+              4188,
+              7
+            ]
+          },
+          "prediction_seed20261024__public_state_jitter": {
+            "dtype": "float32",
+            "shape": [
+              4188,
+              7
+            ]
+          },
+          "prediction_seed20261024__source_baseline": {
+            "dtype": "float32",
+            "shape": [
+              4188,
+              7
+            ]
+          },
+          "previous_expert_gripper": {
+            "dtype": "float32",
+            "shape": [
+              4188
+            ]
+          },
+          "target_actions": {
+            "dtype": "float32",
+            "shape": [
+              4188,
+              7
+            ]
+          }
+        },
+        "path": "/tmp/libero-task4-task7-expert-action-error-archive-20261101-v1/task7-meta_support.npz",
+        "sha256": "9affb025650bc71a5514092ed03a1bbd5cf1e776c5ce69c726a1081f0af5ecd0",
+        "size_bytes": 712814
+      },
+      "dataset": {
+        "path": "/home/zl202621/third_party/LIBERO/datasets/libero_spatial/pick_up_the_black_bowl_on_the_stove_and_place_it_on_the_plate_demo.hdf5",
+        "sha256": "1fcb3990cf9fd6185f56531cc9f6dec0a77a59bfa0c7f39dff95b7e43cf6aeaa"
+      },
+      "role": "meta_support",
+      "shared_input_batch_count": 146,
+      "shared_input_batch_manifest_sha256": "aaa2385279b8db562ca48c32f404363a897acf573fee4e809cdfa5a71d22d44d",
+      "source_action_lengths": [
+        155,
+        125,
+        124,
+        191,
+        136,
+        138,
+        133,
+        130,
+        139,
+        145,
+        140,
+        164,
+        124,
+        138,
+        120,
+        137,
+        141,
+        152,
+        137,
+        128,
+        197,
+        124,
+        128,
+        126,
+        144,
+        129,
+        168,
+        132,
+        140,
+        133
+      ],
+      "task_id": 7
+    }
+  ],
+  "transforms": {
+    "distance": "mean_absolute_pixel_delta_on_normalized_RGB",
+    "full_spatial_probe": "one camera replaced by its entire spatial_base; unmatched secondary information-loss probe",
+    "input": "original_uint8_N1281283_RGB_only; other modalities and reference targets unchanged",
+    "inputs_only_not_targets_or_predictions_determine_parameters": true,
+    "matched_budget": "m=0.1*min(d_photo_agent,d_spatial_agent,d_photo_hand,d_spatial_hand) per source frame",
+    "mixture": "U+(m/d)*(base-U); d=0 gives alpha0; all four alpha<=0.1",
+    "no_clipping_or_uint8_requantization": true,
+    "no_strength_direction_roi_or_seed_sweep": true,
+    "normalised_realized_mae_tolerance": 1e-07,
+    "normalization": "torch.from_numpy(uint8).to(float32).div(255); then float64 arithmetic and float32 output",
+    "photo_base": "per_image_per_channel_spatial_mean_broadcast; no spatial resampling",
+    "same_m_for_both_cameras_and_both_matched_controls": true,
+    "spatial_base": "nonoverlapping_8x8_block_means_repeated_to_128x128; no crop_or_translation",
+    "zero_budget_rows": "both matched controls unchanged; retain rows and record active flag; no exclusion"
+  }
+}

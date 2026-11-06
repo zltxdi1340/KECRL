@@ -1,0 +1,237 @@
+{
+  "schema_version": 1,
+  "status": "libero_task4_task7_public_state_jitter_500_transition_rgb_action_diagnostic",
+  "protocol_status": "frozen_protocol_authorized",
+  "formal_result": false,
+  "diagnostic_result": true,
+  "purpose": "Capture paired pre-action RGB/action/proprioception windows for the seven predeclared baseline/jitter success transitions",
+  "source_transition_result_path": "/tmp/libero-task4-task7-public-state-jitter-500-closed-loop-transition-mechanisms-20261031-v1.json",
+  "source_transition_result_sha256": "dd25d2a3bf9a392e6a9b2306e68f0e0f52ee704f172a13364e7dac2d1dc19211",
+  "source_jitter_closed_loop_result_path": "/tmp/libero-task4-task7-public-state-jitter-500-closed-loop-20261031-v1.json",
+  "source_jitter_closed_loop_result_sha256": "8c9c6167f316072efeba909eb5a2dbf8987369698eddbf5d496bdf8320897ed2",
+  "source_closed_loop_config": "configs/libero-task4-task7-full-policy-closed-loop-diagnostic_v1.json",
+  "source_closed_loop_config_sha256": "8a485866319a386610f141d81169c073cfc332463d273899ba4762e76c0d2969",
+  "source_budget_sweep_result_path": "/tmp/libero-task4-task7-public-state-jitter-budget-sweep-20261031-v3.json",
+  "source_budget_sweep_result_sha256": "3a2c13feffc9c9d4824138101ae0c48916938d08cf70d236da93f675000a7110",
+  "source_budget_sweep_config": "configs/libero-task4-task7-public-state-jitter-augmentation-budget-sweep-diagnostic_v1.json",
+  "source_budget_sweep_config_sha256": "755f06f018687f1599fc9c2db1aff0f2f15a490d1ccd2d83abfe54f544ef40fb",
+  "task_ids": [
+    4,
+    7
+  ],
+  "training_seeds": [
+    20261022,
+    20261023,
+    20261024
+  ],
+  "transition_episodes": [
+    {
+      "task_id": 4,
+      "training_seed": 20261023,
+      "initial_state_index": 9,
+      "transition": "jitter_only"
+    },
+    {
+      "task_id": 4,
+      "training_seed": 20261024,
+      "initial_state_index": 17,
+      "transition": "baseline_only"
+    },
+    {
+      "task_id": 7,
+      "training_seed": 20261023,
+      "initial_state_index": 3,
+      "transition": "baseline_only"
+    },
+    {
+      "task_id": 7,
+      "training_seed": 20261024,
+      "initial_state_index": 4,
+      "transition": "baseline_only"
+    },
+    {
+      "task_id": 7,
+      "training_seed": 20261024,
+      "initial_state_index": 5,
+      "transition": "baseline_only"
+    },
+    {
+      "task_id": 7,
+      "training_seed": 20261024,
+      "initial_state_index": 6,
+      "transition": "jitter_only"
+    },
+    {
+      "task_id": 7,
+      "training_seed": 20261024,
+      "initial_state_index": 18,
+      "transition": "jitter_only"
+    }
+  ],
+  "fixed_policy": {
+    "model": "CNN-only Full Policy",
+    "optimizer_updates": 500,
+    "checkpoint_selection": false,
+    "checkpoint_files": [
+      {
+        "task_id": 4,
+        "training_seed": 20261022,
+        "arm": "source_baseline",
+        "path": "/tmp/libero-task4-task7-public-state-jitter-budget-sweep-checkpoints-20261031-v3/task4-seed20261022-arm-source_baseline-update0500.pt",
+        "file_sha256": "421a48c24fd1580f1c1d4f703a04202decc1e492f3dca2b277dc22e2bc7b2ed6",
+        "weight_sha256": "631f0eaca6fdfc77ff2ca15746e4ad2548160e7e6c1c4190dc3714c149da0915"
+      },
+      {
+        "task_id": 4,
+        "training_seed": 20261022,
+        "arm": "public_state_jitter",
+        "path": "/tmp/libero-task4-task7-public-state-jitter-budget-sweep-checkpoints-20261031-v3/task4-seed20261022-arm-public_state_jitter-update0500.pt",
+        "file_sha256": "9cb8d961a5a411df7f37622e6ac93c32d02d95597e0db95e0980d309784e08c2",
+        "weight_sha256": "cfe60cd88d43c39a50841ad143f84ebbe331f9ad978e212b3457ab13b911b155"
+      },
+      {
+        "task_id": 4,
+        "training_seed": 20261023,
+        "arm": "source_baseline",
+        "path": "/tmp/libero-task4-task7-public-state-jitter-budget-sweep-checkpoints-20261031-v3/task4-seed20261023-arm-source_baseline-update0500.pt",
+        "file_sha256": "fac15e21c20693ecb3fced0beae43f78694d0ad2c10bc425b2441ebef67bbfc6",
+        "weight_sha256": "a8f77335c1b5e5ebabb958d37dc01b178e5ce527fb7f66eacb76264484573eeb"
+      },
+      {
+        "task_id": 4,
+        "training_seed": 20261023,
+        "arm": "public_state_jitter",
+        "path": "/tmp/libero-task4-task7-public-state-jitter-budget-sweep-checkpoints-20261031-v3/task4-seed20261023-arm-public_state_jitter-update0500.pt",
+        "file_sha256": "fb32fba8db305143977dd539fb1236128433df503b49a554cce4f7689b759e48",
+        "weight_sha256": "d7bc646009b6798e57b4df0e96023aeb5eb0a5639016dbae6e385c060d1d3be7"
+      },
+      {
+        "task_id": 4,
+        "training_seed": 20261024,
+        "arm": "source_baseline",
+        "path": "/tmp/libero-task4-task7-public-state-jitter-budget-sweep-checkpoints-20261031-v3/task4-seed20261024-arm-source_baseline-update0500.pt",
+        "file_sha256": "f4886a9d0b3727c79884c6c35407ce1f6a651adf4a39a7b0a2124ce98d425421",
+        "weight_sha256": "ee59970109f9a60d1e28dcbb5fccc95d859cee4ad059637f707a0635035da59a"
+      },
+      {
+        "task_id": 4,
+        "training_seed": 20261024,
+        "arm": "public_state_jitter",
+        "path": "/tmp/libero-task4-task7-public-state-jitter-budget-sweep-checkpoints-20261031-v3/task4-seed20261024-arm-public_state_jitter-update0500.pt",
+        "file_sha256": "fda652f14feb2be886463c0961fea55dd84017871a676c4023d6bafc877bfe75",
+        "weight_sha256": "3f7cc892d0f9dc537f60fcef2a62640b50e6773c907cfd7e381563addcc57f93"
+      },
+      {
+        "task_id": 7,
+        "training_seed": 20261022,
+        "arm": "source_baseline",
+        "path": "/tmp/libero-task4-task7-public-state-jitter-budget-sweep-checkpoints-20261031-v3/task7-seed20261022-arm-source_baseline-update0500.pt",
+        "file_sha256": "dca7801efc1e76f68477382296d09f624c4455b3b8efb6a8797014e3a3df0b4c",
+        "weight_sha256": "a315bba8251f8a26a00b92b6e86fd29f56e227afeefcf22022b7086341774144"
+      },
+      {
+        "task_id": 7,
+        "training_seed": 20261022,
+        "arm": "public_state_jitter",
+        "path": "/tmp/libero-task4-task7-public-state-jitter-budget-sweep-checkpoints-20261031-v3/task7-seed20261022-arm-public_state_jitter-update0500.pt",
+        "file_sha256": "bb143d002414440e997570c39d04e8ce873a52a599d668c25e92d20c0a9861e1",
+        "weight_sha256": "2080a33f7ce770b5afb8757912578b4e4dff227a7ff204d538a20e96ca4d16be"
+      },
+      {
+        "task_id": 7,
+        "training_seed": 20261023,
+        "arm": "source_baseline",
+        "path": "/tmp/libero-task4-task7-public-state-jitter-budget-sweep-checkpoints-20261031-v3/task7-seed20261023-arm-source_baseline-update0500.pt",
+        "file_sha256": "e3bc06129960d19aa63bd656cf53fd0062c07121a54d48acc78493d3b337ee8d",
+        "weight_sha256": "6df6e8163274992c16161cf2772909f73379165b2190f139f20ccebfb308bc50"
+      },
+      {
+        "task_id": 7,
+        "training_seed": 20261023,
+        "arm": "public_state_jitter",
+        "path": "/tmp/libero-task4-task7-public-state-jitter-budget-sweep-checkpoints-20261031-v3/task7-seed20261023-arm-public_state_jitter-update0500.pt",
+        "file_sha256": "2ba7c761a4c77b0b857ccdbef9b77040f4fac4195648cb7458692146c37da046",
+        "weight_sha256": "c7b2eb1bd86ee12d411e1e5aadff22f3cfab9a1fe16eb5c40a5801daeaf2d4ed"
+      },
+      {
+        "task_id": 7,
+        "training_seed": 20261024,
+        "arm": "source_baseline",
+        "path": "/tmp/libero-task4-task7-public-state-jitter-budget-sweep-checkpoints-20261031-v3/task7-seed20261024-arm-source_baseline-update0500.pt",
+        "file_sha256": "06d006dfd6487ab738c76fc46a1fd0af74e9b6354a604f02802921fb85abc52f",
+        "weight_sha256": "a63de0d79f83b810343541fd09e9541db53d2d9e89e6c37810ca7d5c02a30d95"
+      },
+      {
+        "task_id": 7,
+        "training_seed": 20261024,
+        "arm": "public_state_jitter",
+        "path": "/tmp/libero-task4-task7-public-state-jitter-budget-sweep-checkpoints-20261031-v3/task7-seed20261024-arm-public_state_jitter-update0500.pt",
+        "file_sha256": "3f401c3ac54dd5dbd7e01b213fe659f8fad279cc163a526c358ed075dcbc7575",
+        "weight_sha256": "724c132b58db4a7ddae11dfbecd0e523c767ae78a97e0715126b73ceec64d2db"
+      }
+    ]
+  },
+  "capture": {
+    "steps": 20,
+    "timing": "pre_action_observation_at_each_step",
+    "keys": [
+      "agentview_rgb",
+      "eye_in_hand_rgb",
+      "joint_states",
+      "gripper_states",
+      "actions"
+    ],
+    "rgb_dtype": "uint8",
+    "rgb_shape": [
+      128,
+      128,
+      3
+    ],
+    "private_simulator_state": false,
+    "archive_format": "compressed_npz_per_episode"
+  },
+  "evaluation": {
+    "initial_state_role": "candidate_nonregression",
+    "state_set_previously_used_in_diagnostics": true,
+    "environment_seed": 20261022,
+    "stabilization_steps": 5,
+    "capture_steps": 20,
+    "new_episode_budget": 14,
+    "qualification_accessed": false,
+    "validation_accessed": false,
+    "heldout_accessed": false,
+    "final_evaluation_accessed": false,
+    "private_simulator_state_read": false,
+    "success_rate_evaluation": false
+  },
+  "current_phase_boundary": {
+    "protocol_only": false,
+    "new_rollout_executed": false,
+    "new_training_executed": false,
+    "checkpoint_selected": false,
+    "new_episode_budget_is_zero": false,
+    "qualification_accessed": false,
+    "validation_accessed": false,
+    "heldout_accessed": false,
+    "final_evaluation_accessed": false,
+    "spt_updated": false,
+    "knowledge_updated": false,
+    "module_qualification": false
+  },
+  "interpretation_boundary": {
+    "formal_spi_result": false,
+    "module_qualification": false,
+    "causal_claim": false,
+    "transition_states_are_outcome_stratified_not_unseen": true,
+    "rgb_action_alignment_is_mechanism_diagnostic_not_success_evaluation": true,
+    "new_rollout_is_short_window_only": true,
+    "runtime_native_artifacts_must_not_be_mixed": true
+  },
+  "authorization": {
+    "authorized_by_user_instruction": "好的按你说的进行下一步",
+    "authorized_at_utc": "2026-11-01 09:00:00 UTC",
+    "training_budget_change": false,
+    "new_episode_budget": 14,
+    "checkpoint_selection_change": false
+  }
+}

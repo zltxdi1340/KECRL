@@ -1,0 +1,172 @@
+{
+  "schema_version": 1,
+  "status": "frozen_nonformal_source_internal_geometry_extension",
+  "formal_result": false,
+  "offline_only": true,
+  "source_tasks": [
+    0,
+    1,
+    3,
+    4,
+    7
+  ],
+  "training_seeds": [
+    20261022,
+    20261023,
+    20261024
+  ],
+  "folds": [
+    {
+      "probe": 4,
+      "source_update_tasks": [
+        0,
+        1,
+        3,
+        7
+      ]
+    },
+    {
+      "probe": 7,
+      "source_update_tasks": [
+        0,
+        1,
+        3,
+        4
+      ]
+    }
+  ],
+  "fold_selection_rule": "Complete the previously exposed source task0/1/4/7 comparison. Task4/7 each have a unique source geometry; leaving either out removes that geometry. Report geometry extrapolation separately; no new task-role or unseen-transfer claim.",
+  "arms": [
+    "A_original",
+    "B_fomaml",
+    "C_pooled_bc"
+  ],
+  "policy_memory_mode": "cnn_only",
+  "alignment": "causal_pre_action_t_ge_1",
+  "sequence_length": 10,
+  "batch_size": 8,
+  "stride": 10,
+  "source_outer_updates": 50,
+  "source_inner_steps": 1,
+  "source_inner_lr": 0.001,
+  "generator_outer_lr": 0.0003,
+  "adaptation_updates": 500,
+  "adaptation_lr": 0.0003,
+  "gradient_clip_norm": 1.0,
+  "curve_updates": [
+    0,
+    50,
+    150,
+    300,
+    500
+  ],
+  "source_objectives": {
+    "B_fomaml": "One SGD support step on disposable Policy, query gradient pulled back through original contextual generator; no second-order derivative.",
+    "C_pooled_bc": "Ordinary unadapted pooled BC on the same support/query batches, averaged before a generator update; no meta objective.",
+    "A_original": "No source update; instantiate from paired untrained generator."
+  },
+  "budget_matching": {
+    "same_B_C_generator_optimizer_updates": true,
+    "same_data_gradient_batch_calls": true,
+    "same_source_batches_and_rows": true,
+    "same_capacity_and_context_generator": true,
+    "same_generator_vjp_calls": true,
+    "same_total_parameter_writes_including_disposable_inner_models": false,
+    "reason": "B alone updates disposable inner Policies. These are counted separately; no exact wall-clock/FLOP or total parameter-write equivalence is claimed."
+  },
+  "budget_totals": {
+    "generator_optimizer_updates": 600,
+    "disposable_source_sgd_updates": 1200,
+    "source_data_gradient_calls": 4800,
+    "generator_vjp_calls": 2400,
+    "probe_adaptation_optimizer_updates": 9000,
+    "probe_policies": 18,
+    "probe_curve_checkpoints": 90
+  },
+  "query_gate": "For each fold, create/read probe meta_query only after all 3 seeds x 3 arms have completed all 500 support updates. No query selects checkpoints or stopping.",
+  "sampling": "With-replacement uniform window sampling; B/C share identical source batches; A/B/C use identical probe adaptation window IDs. Num_workers=0.",
+  "optimizer": "Adam betas=(0.9,0.999), eps=1e-8, weight_decay=0; source inner is SGD without momentum; norms clipped at 1.0.",
+  "loss": "Uniform seven-dimensional valid-step MSE; uint8 RGB/255; no jitter, augmentation, phase or gripper reweighting.",
+  "stopping": "Fixed budgets only. Abort on role/hash/budget mismatch, nonfinite outputs/gradients or resource gate failure; preserve partial attempts; no efficacy-based early stopping or retry tuning.",
+  "statistics": "All seeds/folds and five fixed support/query curve points; paired B-A/B-C endpoint errors, descriptive only. Geometry-extrapolation task4/7 separate from geometry-covered task0/1; no efficacy-based retries, significance claim, checkpoint selection, candidate acceptance or task difficulty ranking.",
+  "dataset_root": "/home/zl202621/third_party/LIBERO/datasets",
+  "maximum_host_cache_bytes": 8589934592,
+  "physical_gpu": 1,
+  "new_environment_steps": 0,
+  "official_initial_state_reads": 0,
+  "closed_loop_default_stabilization_unchanged": 5,
+  "validation_qualification_heldout_access": false,
+  "candidate_acceptance": false,
+  "module_registration": false,
+  "knowledge_update": false,
+  "forbidden": [
+    "validation/held-out demonstration payload",
+    "official evaluation initial-state payload",
+    "qualification",
+    "private simulator state",
+    "active SPT mutation",
+    "checkpoint selection",
+    "new loss/budget search"
+  ],
+  "frozen_at_utc": "2026-11-05T03:45:52.355200+00:00",
+  "references": {
+    "transfer": {
+      "path": "configs/libero_spatial_transfer_split_candidate_v1.json",
+      "sha256": "6cdc8c3eeaa90886ad0e15f0f4ebbe260aa972b6e69b1f122e95f65ab63dd7d6"
+    },
+    "dataset_manifest": {
+      "path": "configs/libero_spatial_dataset_manifest_v1.json",
+      "sha256": "866429693febf966a38b48e3b89faa54623acace5d3c50cd67c5c7978010eaf6"
+    },
+    "family": {
+      "path": "configs/libero_spatial_skill_family_candidate_v1.json",
+      "sha256": "52053991a34b977aa3c9e3d29e2f585e29dcac1c7fd4f817acfeb6445fac3580"
+    },
+    "learning": {
+      "path": "configs/libero_spatial_bc_policy_candidate_v1.json",
+      "sha256": "f5e57c895e9249ef7a3361ebee2119bf06c6cbb48da01c31980b1eb0af8feb1b"
+    },
+    "gripper_mapping_audit": {
+      "path": "/tmp/libero-gripper-action-mapping-audit-20261103-v1.json",
+      "sha256": "e08d181b9c28a5d2b0dcc2fa8ac1754940deb83f4d87d9ec6642e991dbbc66d9"
+    },
+    "theory": {
+      "path": "PROJECT_BIBLE.md",
+      "sha256": "b0b0360da935f6d65147f188151bb4b527dd77b10e2a320a0f92f99fbc8ea880"
+    },
+    "historical_training_config": {
+      "path": "configs/libero-source-internal-spt-spi-diagnostic_v2.json",
+      "sha256": "9bbf6a3a39b7a8cb4772fcfcd17022a95f040f02f10941fc2754dbe7a11379df"
+    },
+    "historical_training_result": {
+      "path": "/tmp/libero-source-internal-spt-spi-20261103-v2.json",
+      "sha256": "66a4fb7fac6288a710072271e440f6cea42167f4fb782b9a774c7554af6d0169"
+    },
+    "cross_task_review": {
+      "path": "docs/libero-task0-task1-task4-task7-results-comparison-2026-11-05.md",
+      "sha256": "6bdf6d5c453a117739c930aea043eb9d7571734dfda9abc7a3312bf5786b3283"
+    }
+  },
+  "execution_revision": "task4_task7_geometry_extension_v1",
+  "pooling_execution_repair": "The 128px CNN produces 16x16 features pooled to4x4; AdaptiveAvgPool bins equal ordinary4x4 AvgPool windows. Parameter count, weights, output dimensions and scientific budgets unchanged. CUDA repeat must be exact and CPU adaptive output/gradient within abs1e-6, rel0.",
+  "geometry_strata": {
+    "4": {
+      "probe_geometry": "open_container",
+      "source_geometries": [
+        "fixture_surface",
+        "movable_object_surface",
+        "table_region"
+      ],
+      "probe_geometry_absent_from_source_updates": true
+    },
+    "7": {
+      "probe_geometry": "fixture_surface",
+      "source_geometries": [
+        "movable_object_surface",
+        "open_container",
+        "table_region"
+      ],
+      "probe_geometry_absent_from_source_updates": true
+    }
+  }
+}

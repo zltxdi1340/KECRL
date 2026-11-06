@@ -1,0 +1,20 @@
+{
+  "formal_result": false,
+  "created_at_utc": "2026-11-04T12:30:30.889854+00:00",
+  "config_sha256": "d8f601227ae3052fee78ecfbcff2106477e74d2893e4f0b4fcd1fbfaedd99b81",
+  "preflight_tests": "178 passed",
+  "files": {
+    "runner": {
+      "path": "experiments/run_libero_task1_b_routed_history_readout.py",
+      "sha256": "8f6f4bf2956cb74e64fb3ce2dd82cdb890fea37c7223c14691645ff62ea700cc"
+    },
+    "tests": {
+      "path": "tests/test_libero_task1_b_routed_history_readout.py",
+      "sha256": "73afd740421507ea87b71dab609520faa8481d6830d04910dcae5f604ae5da2d"
+    },
+    "protocol": {
+      "path": "docs/libero-task1-b-routed-history-readout-protocol-2026-11-04.md",
+      "sha256": "a95991b66f1bff7c03c5005b662c278e155b3415e3256dec2bef6a7a75a82705"
+    }
+  }
+}

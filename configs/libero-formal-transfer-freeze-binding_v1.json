@@ -1,0 +1,75 @@
+{
+  "schema_version": 1,
+  "status": "science_and_statistics_frozen_runtime_binding_not_complete",
+  "formal_result": false,
+  "execution_binding_complete": false,
+  "frozen_at_utc": "2026-11-05T05:02:08.255258+00:00",
+  "config_path": "configs/libero-formal-transfer-protocol_v1.json",
+  "config_sha256": "d1b7e5170760f46902947c5084e7071735bd940b6ccdf6154732f4346f557ad9",
+  "authorization": "用户仅要求正式验证方案冻结；本绑定不授权训练、rollout或封存数据读取。",
+  "files": {
+    "protocol_validator_and_statistics": {
+      "path": "experiments/libero_formal_transfer_protocol.py",
+      "sha256": "59d9ba26e7cb9def75a08c5fc5f3a8aef14c8a1d599450aa7f1064bd9a8d1f31"
+    },
+    "protocol": {
+      "path": "docs/libero-formal-transfer-protocol-2026-11-05.md",
+      "sha256": "0bcc875cf2c706ac71065f40980f281efb543d3eee2a44613ddd9037d86adaba"
+    },
+    "tests": {
+      "path": "tests/test_libero_formal_transfer_protocol.py",
+      "sha256": "9022255642c99633d478a8b06771d04959ca2abbc4b6695424e6ada7af2e8bdc"
+    },
+    "fomaml": {
+      "path": "src/algorithms/libero_bc_fomaml.py",
+      "sha256": "d428efc93e56caec7f917daeb3f9374cfbb60329949dad7300c3c46364341ac8"
+    },
+    "policy": {
+      "path": "src/algorithms/libero_bc_policy.py",
+      "sha256": "a3098a68b5ceab21495207856c9d94fd4a6d26c1668737625ecb7b5d46977735"
+    },
+    "spt": {
+      "path": "src/skills/libero_pick_place_spt.py",
+      "sha256": "23f6a46ece0fccfb55337d107ac1566e2192a4e05858b68514eb566316376200"
+    },
+    "causal_dataset": {
+      "path": "src/environments/libero_causal_t1_dataset.py",
+      "sha256": "e0d3a5c38cbaad96015b427e40584fffc524f465ede88325b0ce91139bfa6dff"
+    },
+    "base_dataset": {
+      "path": "src/environments/libero_dataset.py",
+      "sha256": "a35ce74905655a1e1f3f0ffb597329eb486e000a5f9dee925d8231885a7f7599"
+    },
+    "deterministic_pool": {
+      "path": "src/algorithms/libero_deterministic_pool.py",
+      "sha256": "ce0b21fde45ac780116b6e0fa084839cea00ad3910bd2bf93bf750173557545d"
+    },
+    "contracts": {
+      "path": "src/skills/contracts.py",
+      "sha256": "5ff8665d91bf82b1319da95eb81ac8f5235a5ab8da9a77f93e7dcf82601d0af1"
+    },
+    "models": {
+      "path": "src/skills/models.py",
+      "sha256": "c2c294292722f62fe8818a261e1541f74d401a266ccb50434c3db9af308c6a62"
+    },
+    "adapter": {
+      "path": "src/environments/libero_adapter.py",
+      "sha256": "8dfa22a1e19b049d78c8e6ae05494291242cbde8a21194e0fbb321662d56512c"
+    }
+  },
+  "validation": {
+    "focused_tests_passed": 78,
+    "focused_seconds": 1.6,
+    "cpu_regression_passed": 1410,
+    "cpu_regression_seconds": 19.6,
+    "regression_log": {
+      "path": "/tmp/libero-formal-transfer-freeze-cpu-regression-20261105-v1.log",
+      "sha256": "677d2a8830f8999aa4620b696f823d84b712b3f3508c7dcbdb859c782c2b68a4"
+    },
+    "independent_pure_math_calibration": {
+      "path": "/tmp/libero-formal-transfer-statistical-calibration-20261105-v1.json",
+      "sha256": "e0be095b56b16f83ceb3d431503db182e7ffd40f6e1c22aa209b966d7a5d7d90"
+    }
+  },
+  "new_research_training_forward_environment_dataset_initial_state_calls": 0
+}

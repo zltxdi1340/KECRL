@@ -1,0 +1,143 @@
+{
+  "schema_version": 1,
+  "check_type": "libero_source_internal_six_group_paired_trace_readonly_analysis",
+  "formal_result": false,
+  "frozen_at_utc": "2026-11-03T05:58:12.177077+00:00",
+  "scope": {
+    "task_ids": [
+      0,
+      1
+    ],
+    "training_seeds": [
+      20261022,
+      20261023,
+      20261024
+    ],
+    "arms": [
+      "A_original",
+      "B_fomaml",
+      "C_pooled_bc"
+    ],
+    "unique_episodes": 360,
+    "initial_indices": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      15,
+      16,
+      17,
+      18,
+      19
+    ],
+    "checkpoint_updates": 500,
+    "stabilization_steps": 5,
+    "primary_between_arm_pairs": 240,
+    "secondary_within_arm_cross_seed_pairs": 360,
+    "new_training_policy_environment_HDF5_RGB_initial_checkpoint_calls": 0
+  },
+  "definition": {
+    "primary_comparisons": [
+      [
+        "B_fomaml",
+        "A_original"
+      ],
+      [
+        "B_fomaml",
+        "C_pooled_bc"
+      ]
+    ],
+    "seed_comparisons": [
+      [
+        20261022,
+        20261023
+      ],
+      [
+        20261022,
+        20261024
+      ],
+      [
+        20261023,
+        20261024
+      ]
+    ],
+    "outcomes": [
+      "both_success",
+      "left_only_success",
+      "right_only_success",
+      "both_failure"
+    ],
+    "snapshot_policy_steps": [
+      1,
+      5,
+      10,
+      20,
+      50,
+      100,
+      200,
+      300
+    ],
+    "primary_prefix_steps": 20,
+    "action_index": "action[t] uses public obs[t-1]; trace row[t] is post-action state; row0 is post-five-step reset",
+    "close": "action[6]>0",
+    "open": "action[6]<0",
+    "neutral": "action[6]==0",
+    "release": "first negative command strictly after first positive command; not physical object release",
+    "first_close_run_censor": "positive run reaches observed episode end; no imputed continuation",
+    "no_close_vs_no_open": "separate never-positive and positive-without-subsequent-negative counts",
+    "sign_switches": "adjacent signs including neutral; first command is not a switch",
+    "summary": "total, observed n, missing n, mean, median, min, max; empty mean/median null",
+    "paired_event_order": "compare observed events; for one missing only bound if other event lies within missing arm observed horizon; otherwise indeterminate",
+    "snapshot_comparison": "only if both episodes reach the same policy step; never forward-fill terminated success",
+    "prefix_comparison": "full20 comparison only when both reach20; observed min(20,left_length,right_length) separately labelled",
+    "state_metrics": "offsets from shared reset and between-trajectory state distances; no expert-state error or target distance",
+    "paired_scalar_delta": "left minus right, only when both observed; retain outcome strata and all rows",
+    "cross_seed_secondary": "all three arms and all three seed pairs, all20 source scenes; repeated episodes are not new samples",
+    "physical_phase_labelled": false,
+    "statistical_significance_tests": false,
+    "causal_root_cause_claim": false,
+    "outcome_strata_independent_validation": false,
+    "automatic_training_change": false
+  },
+  "inputs": {
+    "source": {
+      "path": "/tmp/libero-source-internal-spt-spi-closed-loop-20261103-v1.json",
+      "sha256": "4cba11fd4e5cb22d471ee681ae0e18a7b77c4698f904439a36e37ef9f4ba3ad0"
+    },
+    "source_audit": {
+      "path": "/tmp/libero-source-internal-spt-spi-closed-loop-independent-audit-20261103-v1.json",
+      "sha256": "bec300a1adeaedc324dbc6f89325ce53bb13993a5378e08c88ce26cc7a2314e2"
+    },
+    "source_verification": {
+      "path": "/tmp/libero-source-internal-closed-loop-run-verification-20261103-v1.json",
+      "sha256": "12b5dab9d2b3b77134765bbf2ae8059392ecba94e8119b190827f09180a9779a"
+    },
+    "source_config": {
+      "path": "configs/libero-source-internal-spt-spi-closed-loop-diagnostic_v1.json",
+      "sha256": "833299119f2bc34006255de2d4d85fb80ecb843994530468668e0687c6e1d83a"
+    },
+    "source_binding": {
+      "path": "configs/libero-source-internal-spt-spi-closed-loop-execution-binding_v1.json",
+      "sha256": "19e83ab5d13393ed3f5fc00e605c41f2ea30b04b2f96608e894e974b109e2e7f"
+    },
+    "legacy_action_metrics": {
+      "path": "experiments/analyze_libero_task4_task7_full_policy_closed_loop_diagnostic.py",
+      "sha256": "c26b1bfe7266dd332f0e5c55dfdb6f668d570478a790e01e5f8676766013f181"
+    },
+    "gripper_mapping_audit": {
+      "path": "/tmp/libero-gripper-action-mapping-audit-20261103-v1.json",
+      "sha256": "e08d181b9c28a5d2b0dcc2fa8ac1754940deb83f4d87d9ec6642e991dbbc66d9"
+    }
+  }
+}

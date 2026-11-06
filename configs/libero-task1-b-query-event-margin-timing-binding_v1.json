@@ -1,0 +1,34 @@
+{
+  "schema_version": 1,
+  "formal_result": false,
+  "status": "frozen_before_query_event_margin_timing_decomposition",
+  "frozen_at_utc": "2026-11-04T11:50:57.920750+00:00",
+  "config_sha256": "9add68417dbb586dd8121ba2e3043d830af0449c574c725b1872be11c4d8e1be",
+  "files": {
+    "analyzer": {
+      "path": "experiments/analyze_libero_task1_b_query_event_margin_timing.py",
+      "sha256": "938ac2608898a9085d36c4505cb28746bf66103f1c0dcb5a86db49acd0f0e393"
+    },
+    "tests": {
+      "path": "tests/test_libero_task1_b_query_event_margin_timing.py",
+      "sha256": "147c7b9a3f805359ba8b2945f2c475ad66616ba70a242a77e19b8a73c2fff097"
+    },
+    "protocol": {
+      "path": "docs/libero-task1-b-query-event-margin-timing-protocol-2026-11-04.md",
+      "sha256": "de7973879227aacea595391c7077dbe9f3ec96b7308c07d9316e11306e11cca5"
+    }
+  },
+  "validation": {
+    "focused_and_related_tests": "58 passed in1.01s",
+    "py_compile": "2 new Python files passed",
+    "environment_check": "Python3.10.22/Torch2.4.1+cu124; CUDA intentionally hidden"
+  },
+  "real_saved_event_decomposition_before_binding": 0,
+  "new_model_training_HDF5_or_environment_calls": 0,
+  "launch_environment": {
+    "CUDA_VISIBLE_DEVICES": "",
+    "OMP_NUM_THREADS": "1",
+    "OPENBLAS_NUM_THREADS": "1",
+    "MKL_NUM_THREADS": "1"
+  }
+}

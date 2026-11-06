@@ -1,0 +1,39 @@
+{
+  "schema_version": 1,
+  "formal_result": false,
+  "status": "frozen_before_full_support_training_or_query_payloads",
+  "frozen_at_utc": "2026-11-04T09:34:47.947315+00:00",
+  "config_sha256": "e0e717f1c8eadf6447f38dec0b1e6a8d69ea5b92a71054e8265387b3f4174b72",
+  "files": {
+    "runner": {
+      "path": "experiments/run_libero_task1_b_support_query_history_readout.py",
+      "sha256": "740daed435910ebdefc7ec546a3b937ce4f7f561d03d724f95bdbe779be1d12b"
+    },
+    "tests": {
+      "path": "tests/test_libero_task1_b_support_query_history_readout.py",
+      "sha256": "0c6f515db11825cfc6a06612b1d37f435699098cacb8c2d03a254ac733348082"
+    },
+    "protocol": {
+      "path": "docs/libero-task1-b-support-query-history-readout-protocol-2026-11-04.md",
+      "sha256": "67f35845aabe4d8c2304460a2a06fe4503800d08e4fbb101ed5b7c492e112228"
+    }
+  },
+  "validation": {
+    "focused_tests": "50 passed in1.44s",
+    "regression_tests": "48 passed in1.44s",
+    "py_compile": "2 new Python files passed",
+    "environment_check": "Python3.10.22/Torch2.4.1+cu124, CUDA intentionally hidden"
+  },
+  "preflight_command_correction": {
+    "path": "/tmp/libero-task1-b-support-query-history-readout-preflight-command-correction-20261104-v1.json",
+    "sha256": "f079b1c4a6ee8b19d6db24a9932009bf9999bf83c9cc00b6472b6445f0340a69"
+  },
+  "real_readout_optimizer_updates_before_binding": 0,
+  "real_HDF5_RGB_checkpoint_payload_reads_before_binding": 0,
+  "launch_environment": {
+    "CUDA_VISIBLE_DEVICES": "",
+    "OMP_NUM_THREADS": "1",
+    "OPENBLAS_NUM_THREADS": "1",
+    "MKL_NUM_THREADS": "1"
+  }
+}

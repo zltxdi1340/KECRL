@@ -1,0 +1,31 @@
+{
+  "schema_version": 1,
+  "formal_result": false,
+  "status": "readonly_code_bound_before_derived_metrics",
+  "frozen_at_utc": "2026-11-03T06:07:24.357254+00:00",
+  "config_sha256": "5f4d08db8535612c3ff2b1c31bc3865be6725c2300eda1bb6bb68c6b505b393d",
+  "files": {
+    "analyzer": {
+      "path": "experiments/analyze_libero_source_internal_six_group_paired_traces.py",
+      "sha256": "800d94eea32a76e06c885e541b9605df114aa81b302e3500dda408a31f645e17"
+    },
+    "tests": {
+      "path": "tests/test_libero_source_internal_six_group_paired_traces.py",
+      "sha256": "5ceecc61eac516bcf4b4917538bf7ae4776070e0dd8242be67074542e5541e17"
+    },
+    "legacy_action_metrics": {
+      "path": "experiments/analyze_libero_task4_task7_full_policy_closed_loop_diagnostic.py",
+      "sha256": "c26b1bfe7266dd332f0e5c55dfdb6f668d570478a790e01e5f8676766013f181"
+    },
+    "source_public_validator": {
+      "path": "experiments/audit_libero_source_internal_spt_spi_closed_loop_diagnostic.py",
+      "sha256": "079bc5fcdd9c3c4f12459998a1b5c8555dbb3dd0b65c97acf6a8fd4b7ba7406b"
+    },
+    "definition_note": {
+      "path": "docs/libero-source-internal-six-group-paired-trace-protocol-2026-11-03.md",
+      "sha256": "4462490ea20b1cd3839fecc845d2e6fb62c1b463fdad041c51bf4e781efde5c4"
+    }
+  },
+  "new_policy_environment_training_HDF5_RGB_initial_checkpoint_calls": 0,
+  "focused_tests_passed": 32
+}

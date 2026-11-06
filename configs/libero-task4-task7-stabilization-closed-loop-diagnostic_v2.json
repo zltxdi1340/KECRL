@@ -1,0 +1,196 @@
+{
+  "schema_version": 1,
+  "check_type": "libero_task4_task7_stabilization_closed_loop_diagnostic",
+  "formal_result": false,
+  "protocol_status": "frozen_paired_candidate_only",
+  "recorded_at_utc": "2026-11-02T02:57:15.434486+00:00",
+  "authorization": "为什么不比较比较两种设置的闭环成功率：固定已有500-update Policy，执行stabilization0/5配对candidate诊断。",
+  "scope": {
+    "task_ids": [
+      4,
+      7
+    ],
+    "training_seeds": [
+      20261022,
+      20261023,
+      20261024
+    ],
+    "checkpoint_updates": 500,
+    "arm": "source_baseline",
+    "stabilization_arms_in_order": [
+      5,
+      0
+    ],
+    "initial_state_role": "candidate_nonregression",
+    "initial_state_indices": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      15,
+      16,
+      17,
+      18,
+      19
+    ],
+    "initial_state_set_previously_used": true,
+    "environment_seed": 20261022,
+    "policy_action_limit": 300,
+    "native_horizon_both_arms": 305,
+    "builder_stabilization_both_arms": 5,
+    "adapters": 12,
+    "episodes": 240,
+    "episodes_per_arm": 120,
+    "max_policy_action_steps": 72000,
+    "fixed_zero_stabilization_steps": 600,
+    "candidate_initial_rows_decoded": 40,
+    "qualification_or_reserved_rows_decoded": 0,
+    "native_initial_root": "/home/zl202621/third_party/LIBERO/libero/libero/init_files",
+    "adapter_lifecycle": "one_per_task_seed_arm; state0_to19_ascending; all_five_exact_before_any_zero",
+    "inference_device": "cuda:0",
+    "cuda_visible_devices": "1",
+    "egl_device_id": "1",
+    "torch_threads": 1,
+    "new_optimizer_updates": 0,
+    "new_backward_calls": 0,
+    "new_hdf5_payload_reads": 0,
+    "private_live_simulator_state_read": false,
+    "private_initial_vector_values_recorded": false,
+    "qualification_accessed": false,
+    "reserved_accessed": false,
+    "validation_accessed": false,
+    "heldout_accessed": false,
+    "final_evaluation_accessed": false,
+    "checkpoint_selected": false,
+    "spt_updated": false,
+    "knowledge_updated": false,
+    "module_registered": false
+  },
+  "analysis": {
+    "five_arm_reset_action_public_state_and_terminal_exact_to_original": true,
+    "no_tolerance_or_checkpoint_search_on_reproduction_failure": true,
+    "primary": "success_count_and_rate_per_task_seed_arm_and_paired_outcome_table",
+    "paired_keys": [
+      "task_id",
+      "training_seed",
+      "initial_state_index"
+    ],
+    "consistent_zero_improvement": "strictly_more_successes_in_all_three_seeds_per_task",
+    "paired_counts": [
+      "both_success",
+      "zero_only_success",
+      "five_only_success",
+      "both_failure"
+    ],
+    "statistical_significance_test": false,
+    "automatic_default_or_training_change": false,
+    "same_weights_and_native_horizon_and_policy_action_limit": true,
+    "initial_public_state_offsets_are_not_expert_errors": true,
+    "stabilization_changes_physics_and_fixed_zero_actions_not_just_model_input": true,
+    "diagnostic_success_is_not_qualification_or_unseen_generalization": true
+  },
+  "runner_sha256": "fed40bd93ef152b00915b56d4317a332f0981fbef2a6f1b1b38f721de5255912",
+  "inputs": {
+    "baseline": {
+      "path": "/tmp/libero-task4-task7-full-policy-closed-loop-20261030-v1.json",
+      "sha256": "03439cc0172f3ba29ee4527d3c64d1da16edd93d2eaf63134344e4c8b15f49ce"
+    },
+    "source_analysis": {
+      "path": "/tmp/libero-task4-task7-source-stabilization-analysis-20261102-v1.json",
+      "sha256": "a2d3df183cb2f830fdcfdd7a1621ac45792920b7ce18a56f8e1ed797b5229115"
+    },
+    "source_audit": {
+      "path": "/tmp/libero-source-stabilization-independent-audit-20261102-v1.json",
+      "sha256": "f183a6ae3417387e3c3508b5c4bc946d5ece58f2dc99853d7c99764601ec62bf"
+    },
+    "policy_config": {
+      "path": "configs/libero_spatial_bc_policy_candidate_v1.json",
+      "sha256": "f5e57c895e9249ef7a3361ebee2119bf06c6cbb48da01c31980b1eb0af8feb1b"
+    },
+    "transfer": {
+      "path": "configs/libero_spatial_transfer_split_candidate_v1.json",
+      "sha256": "6cdc8c3eeaa90886ad0e15f0f4ebbe260aa972b6e69b1f122e95f65ab63dd7d6"
+    },
+    "policy_code": {
+      "path": "src/algorithms/libero_bc_policy.py",
+      "sha256": "a3098a68b5ceab21495207856c9d94fd4a6d26c1668737625ecb7b5d46977735"
+    },
+    "adapter_code": {
+      "path": "src/environments/libero_adapter.py",
+      "sha256": "8dfa22a1e19b049d78c8e6ae05494291242cbde8a21194e0fbb321662d56512c"
+    },
+    "builder_code": {
+      "path": "experiments/run_libero_bc_closed_loop_attribution.py",
+      "sha256": "767c738e7ab98501f21439f190fd8fc80c98a8c4ece6716476ddc4fa7e0b9557"
+    },
+    "causal_code": {
+      "path": "experiments/run_libero_bc_causal_alignment_diagnostic.py",
+      "sha256": "780e26d1a50d452609fb24b2a7d4740351f4f044dadc03a286e8523bfbe22e22"
+    },
+    "offline_helpers": {
+      "path": "experiments/analyze_libero_task4_task7_evidence_decomposition.py",
+      "sha256": "9bf4ff6b3d18345be1b7d9e3b50d887a7ca78c1f34e9c039c10ced283472a4a4"
+    }
+  },
+  "initial_reader": {
+    "format": "stored_numpy_float64_C_order_pickle_protocol2_latin1_utf8",
+    "candidate_numeric_rows": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      15,
+      16,
+      17,
+      18,
+      19
+    ],
+    "prefix_sha256_by_task": {
+      "4": "22f103ab49c6f3be149e78cbda2075b4499fdbc19b15043497f3fdcadef24708",
+      "7": "c70b3fd4769c65750584c42a6161a6bd45fb3bb5673a32f1e20691687c50ba96"
+    },
+    "qualification_or_reserved_deserialized": false
+  },
+  "resource_gate_before_launch": {
+    "physical_gpu_index": 1,
+    "max_gpu_utilization_percent": 50,
+    "max_memory_used_mib": 4096,
+    "workload": "bounded_single_Policy_inference_and_rendering; no_training; do_not_stop_other_jobs"
+  },
+  "stop_rules": [
+    "all120_five_episodes_exact_before_any_zero",
+    "no_state_or_seed_selection",
+    "no_tolerance_change",
+    "no_retraining_or_checkpoint_selection",
+    "all240_episodes_required_for_aggregate_comparison",
+    "preserve_failures_and_partial_artifacts"
+  ],
+  "supersedes_unexecuted_v1": {
+    "config_sha256": "99948179796c5d67a5769ebd50f6de83393363af6bb8e69d6de7f0f9672ad260",
+    "runner_snapshot": "/tmp/libero-stabilization-closed-loop-runner-preflight-v1-20261102.py"
+  },
+  "prelaunch_revision": "Persist completed episodes before reproduction validation; retain exact numerical gate and all evaluation budgets; record peak CUDA inference allocation.",
+  "resource_policy_reason": "当前GPU1为轻量作业负载且显存占用不足3%；固定小模型推理，无训练，单独记录启动资源和实际峰值。资源门槛修订发生于任何新闭环episode前。"
+}

@@ -1,0 +1,36 @@
+{
+  "check_type": "libero_gradient_decomposition_precision_audit",
+  "formal_result": false,
+  "scope": {
+    "task_id": 4,
+    "training_seed": 20261024,
+    "demo": 0,
+    "start": 41,
+    "stop": 51,
+    "precisions": [
+      "float32",
+      "float64"
+    ],
+    "max_forward_calls": 2,
+    "max_autograd_calls": 8,
+    "new_optimizer_updates": 0,
+    "new_environment_interactions": 0
+  },
+  "execution_script_sha256": "b72d689bdd89186f0cb0430eb51c8a51e86b3e1452083f55051d80fa74767862",
+  "inputs": {
+    "gradient_config": {
+      "path": "/home/zl202621/project/KECRL/configs/libero-task4-task7-gradient-interference-diagnostic_v1.json",
+      "sha256": "e721d00a52c69a32fbca1dca24b373f0a1a8c1ec1831498c2d8de82b50540602"
+    },
+    "failed_result": {
+      "path": "/tmp/libero-task4-task7-gradient-interference-20261101-v1.json",
+      "sha256": "6e58526ec6d8ac29098854e569828504158f0f4bc6f838b400e42464aaf238e2"
+    },
+    "gradient_runner": {
+      "path": "/home/zl202621/project/KECRL/experiments/analyze_libero_task4_task7_gradient_interference_diagnostic.py",
+      "sha256": "10d059271f6c4fe8d3782a6c10bb81562f2ab230567047e3d606141f5fbedbf2"
+    }
+  },
+  "failed_window_input_sha256": "e2b706e81abbb1bbe513ee4a43eefd0920c01e53119aff657288f7dc81746b25",
+  "authorization": "Resolve the retained fail-closed numerical gate with a bounded two-precision audit of that same window; no updates or environment."
+}

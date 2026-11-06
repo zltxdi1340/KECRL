@@ -1,0 +1,149 @@
+{
+  "schema_version": 1,
+  "check_type": "libero_task4_task7_source_stabilization_analysis_diagnostic",
+  "formal_result": false,
+  "protocol_status": "frozen_offline_continuation_from_complete_public_reset_caches",
+  "recorded_at_utc": "2026-11-02T01:35:12.152775+00:00",
+  "runner_sha256": "d87de231aecb6ac624afa54ba8877c6c31a6b1da91f59621a54d9761a8df350a",
+  "scope": {
+    "task_ids": [
+      4,
+      7
+    ],
+    "training_seeds": [
+      20261022,
+      20261023,
+      20261024
+    ],
+    "checkpoint_updates": 500,
+    "source_role": "meta_support",
+    "source_demo_indices": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      15,
+      16,
+      17,
+      18,
+      19,
+      20,
+      21,
+      22,
+      23,
+      24,
+      25,
+      26,
+      27,
+      28,
+      29
+    ],
+    "captured_public_source_rows": 120,
+    "candidate_feature_rows_reused": 2400,
+    "new_source_initial_vector_or_hdf5_payload_reads": 0,
+    "new_environment_resets_or_steps": 0,
+    "main_forward_calls": 12,
+    "repeat_forward_calls": 6,
+    "main_model_rows": 360,
+    "repeat_model_rows": 180,
+    "new_optimizer_updates": 0,
+    "new_backward_calls": 0,
+    "new_policy_control_steps": 0,
+    "official_state_files_read": false,
+    "qualification_accessed": false,
+    "reserved_accessed": false,
+    "validation_accessed": false,
+    "heldout_accessed": false,
+    "final_evaluation_accessed": false,
+    "device": "cpu",
+    "torch_threads": 1,
+    "spt_updated": false,
+    "knowledge_updated": false,
+    "module_registered": false
+  },
+  "analysis": {
+    "spaces": {
+      "visual_concat": 256,
+      "fusion": 256,
+      "projection": 256,
+      "proprio": 9
+    },
+    "neighbors": 5,
+    "bank_rows": 20,
+    "reference_rows": 10,
+    "primary_space": "fusion",
+    "primary_scaling": "fixed_zero_scale",
+    "scaling_modes": [
+      "fixed_zero_scale",
+      "per_arm_scale"
+    ],
+    "fixed_zero_scale": "both_arms_use_only_zero_bank_mean_and_population_std; same_source_demo_ids",
+    "per_arm_scale": "secondary; each_arm_fits_only_its_own_bank; zero_scale_reused",
+    "std_le1e-6_replaced_by1": true,
+    "distance": "mean_of_five_squared_euclidean_distances",
+    "neighbor_ties": "stable_original_bank_demo_order",
+    "reference95": "per_arm_reference_default_linear_quantile",
+    "preaction_horizons": [
+      0,
+      4,
+      9,
+      19
+    ],
+    "consistent_distance_reduction": "candidate_index0_distance_mean_five_over_zero_lt1_in_all_three_seeds",
+    "consistent_exceedance_reduction": "candidate_index0_exceedance_fraction_five_minus_zero_lt0_in_all_three_seeds",
+    "both_required_for_descriptive_alignment_signal": true,
+    "zero_public_observations_must_exactly_match_old_cache": true,
+    "zero_features_and_predictions_must_exactly_match_old_cpu_cache": true,
+    "zero_coverage_horizons_exact_to_old_runtime_t0": true,
+    "repeat_zero_batch_exact": true,
+    "no_expert_target_for_stabilized_observation": true,
+    "no_significance_or_ood_validity_claim": true,
+    "no_training_or_rollout_promotion": true,
+    "no_closed_loop_failure_cause_claim": true
+  },
+  "inputs": {
+    "capture": {
+      "path": "/tmp/libero-task4-task7-source-stabilization-control-20261102-v1.json",
+      "sha256": "d1f19b66a74a7c2aa351ad44ccc16ab25117db4f191b51ab4b6903856486b71d"
+    },
+    "capture_config": {
+      "path": "/home/zl202621/project/KECRL/configs/libero-task4-task7-source-stabilization-control-diagnostic_v1.json",
+      "sha256": "816ea065533ef9080aaab6b9d4bfa1a1e7c9345dd52c5d4e70912041649ffa02"
+    },
+    "capture_code_snapshot": {
+      "path": "/tmp/libero-source-stabilization-capture-runner-frozen-20261102-v1.py",
+      "sha256": "0f44ea3acecb735b9ad52b97b10f9dd4b01d7d26c8c840ce0b5b22b7e551c83a"
+    },
+    "current_control_code": {
+      "path": "/home/zl202621/project/KECRL/experiments/run_libero_task4_task7_source_stabilization_control.py",
+      "sha256": "54163bd674384bf659264c5f3dfcc3b437b47cae5e9c07cb28dcbc995dfcc576"
+    },
+    "launch_record": {
+      "path": "/tmp/libero-source-stabilization-resource-launch-20261102-v1.json",
+      "sha256": "974cbae2a3ea631da41a23fb5bab91ec7f7683e4468217ab2472ae735be70887"
+    },
+    "process_exit_record": {
+      "path": "/tmp/libero-source-stabilization-process-exit-20261102-v1.json",
+      "sha256": "470f507289842349731f3d52a6f10cbcf5a0205c9c511c17786079ceea18e94f"
+    }
+  },
+  "stop_rules": [
+    "only_known_pre_forward_Path_failure",
+    "all_source_resets_complete_and_zero_caches_exact",
+    "no_new_source_capture_or_HDF5_reads",
+    "old_zero_feature_and_coverage_parity_exact",
+    "no_numeric_or_budget_change",
+    "preserve_original_failure_and_all_caches"
+  ]
+}

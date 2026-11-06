@@ -1,0 +1,117 @@
+{
+  "schema_version": 1,
+  "stage": "G",
+  "diagnostic_only": true,
+  "G_outcome_already_observed": true,
+  "status": "posthoc_readonly_definitions_recorded_before_analysis_run",
+  "recorded_at_utc": "2026-11-06T05:20:21.779768+00:00",
+  "authorization": "只读分析已有任务与seed差异；held-out和qualification封存；不追加训练。",
+  "source_tasks": [
+    0,
+    1,
+    3,
+    4,
+    7
+  ],
+  "validation_tasks": [
+    2,
+    6
+  ],
+  "seeds": [
+    20261106,
+    20261107,
+    20261108,
+    20261109,
+    20261110,
+    20261111,
+    20261112,
+    20261113,
+    20261114,
+    20261115,
+    20261116,
+    20261117,
+    20261118,
+    20261119,
+    20261120,
+    20261121,
+    20261122,
+    20261123,
+    20261124,
+    20261125
+  ],
+  "arms": [
+    "A_original",
+    "B_fomaml",
+    "C_pooled_bc"
+  ],
+  "curve_updates": [
+    0,
+    50,
+    150,
+    300,
+    500
+  ],
+  "mse_metrics": [
+    "mse",
+    "translation_mse",
+    "rotation_mse",
+    "gripper_mse"
+  ],
+  "comparisons": {
+    "source": "B_minus_A",
+    "validation": [
+      "B_minus_A",
+      "B_minus_C"
+    ]
+  },
+  "definitions": {
+    "paired_outcomes": "same task, same training seed, same official initial state; B_only minus reference_only reproduces net effect",
+    "task_tradeoffs": "all20 seeds, 3x3 sign table task2 versus task6, ties retained",
+    "source_validation": "source B-A macro and any frozen source guard violation versus validation B-A/B-C; descriptive shared-seed associations",
+    "expert_error": "each task/seed/role/component at identical expert inputs, initial gap plus adaptation-change difference equals500 gap",
+    "terminal_interval": "stored300-to500 MSE changes; no intermediate policy rollout or checkpoint selection",
+    "metric_success": "3x3 endpoint error sign versus closed-loop success sign; lower MSE means improvement",
+    "no_inference": "no p values, significance, population or causal claims; no fitted regression or selected subsets"
+  },
+  "read_budget": {
+    "saved_episode_descriptors": 6400,
+    "saved_models": 320,
+    "saved_metric_records": 2200,
+    "checkpoint_files": 0,
+    "episode_trace_files": 0,
+    "HDF5_files": 0,
+    "numeric_initial_rows": 0,
+    "new_policy_forwards": 0,
+    "new_optimizer_updates": 0,
+    "new_environment_steps": 0,
+    "heldout_payload_reads": 0
+  },
+  "inputs": {
+    "completion": {
+      "path": "/tmp/libero-formal-G-artifacts-20261105-v2/completion.json",
+      "sha256": "04f62f19fbe92f6d657c1f8393d775c3dfe03d54eb6b80aad4bc79e44cea5ad1"
+    },
+    "result": {
+      "path": "/tmp/libero-formal-G-result-20261105-v2.json",
+      "sha256": "0e549dbebfafd8df36e3cea9bd0c0d2a64b9102965c8d2d43a07a27f060fdf99"
+    },
+    "training": {
+      "path": "/tmp/libero-formal-G-artifacts-20261105-v2/training.json",
+      "sha256": "b92b5447fd3d9c8d66141be2919a3954dd360d42a5da12322055ba20cf9bd291"
+    },
+    "complete_audit": {
+      "path": "/tmp/libero-formal-G-artifacts-20261105-v2/complete-audit.json",
+      "sha256": "44674a1ca5a5f16f50b05b7f9e817307b797803c532eb0fb406dcd6c8843d4bd"
+    },
+    "training_audit": {
+      "path": "/tmp/libero-formal-G-artifacts-20261105-v2/training-audit.json",
+      "sha256": "3be389f9c39eadee180646a0e86d1ea215a6b83b5d48156dfd82df568b322bb0"
+    },
+    "scientific_config": {
+      "path": "/home/zl202621/project/KECRL/configs/libero-formal-transfer-protocol_v2.json",
+      "sha256": "74d28d96f5e6dcc29e48baa37ece117706c82278095f211e11829506a70f1440"
+    }
+  },
+  "stopping_decision_unchanged": true,
+  "no_active_SPT_Knowledge_or_Module_writes": true
+}

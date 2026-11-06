@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "status": "readonly_analysis_bound_before_new_phase_metrics",
+  "formal_result": false,
+  "frozen_at_utc": "2026-11-03T09:39:25.776540+00:00",
+  "config_sha256": "162a3248118b94d3c83bb9d898c8bdddbae5210a929795dfd02002966c30d84f",
+  "files": {
+    "analyzer": {
+      "path": "experiments/analyze_libero_source_internal_event_phase_direction_translation.py",
+      "sha256": "c9274a918d4caf24552b3080db0a8401e1c003151689a630bd0798cefd0c78d9"
+    },
+    "tests": {
+      "path": "tests/test_libero_source_internal_event_phase_direction_translation.py",
+      "sha256": "a414964355605c3e0e475a1d24c70518c1450306d4d21aa2869f697ab8ba226a"
+    },
+    "protocol": {
+      "path": "docs/libero-source-internal-event-phase-direction-translation-protocol-2026-11-03.md",
+      "sha256": "1f40ab370bbbe14237cde89130ee4de69f43569161fcc22b69ccc3731b217fe9"
+    }
+  },
+  "validation": {
+    "focused_tests_passed": 42,
+    "new_tests_passed": 17,
+    "elapsed_seconds": 0.31,
+    "py_compile": "passed"
+  },
+  "new_policy_training_environment_HDF5_RGB_initial_checkpoint_calls": 0
+}

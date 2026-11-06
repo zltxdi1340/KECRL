@@ -1,0 +1,180 @@
+{
+  "schema_version": 1,
+  "check_type": "libero_task4_ordered_prefix_reproduction_diagnostic",
+  "formal_result": false,
+  "diagnostic_result": true,
+  "protocol_status": "frozen_authorized_diagnostic",
+  "purpose": "Restore task-4 historical source prefixes by preserving candidate reset ordinal, without training or patching the native runtime",
+  "inputs": {
+    "capture": {
+      "path": "/tmp/libero-task4-task7-public-state-jitter-500-transition-rgb-action-20261101-v3.json",
+      "sha256": "f647ce8642b03f93f92c72c68241038c952c6f07684df266c4b7f2423291e2a3"
+    },
+    "capture_config": {
+      "path": "configs/libero-task4-task7-public-state-jitter-500-transition-rgb-action-diagnostic_v1.json",
+      "sha256": "0de778e7073990b01d0e2e1bc0add193521c70142d4023c37e528d68b3a5a451"
+    },
+    "baseline": {
+      "path": "/tmp/libero-task4-task7-full-policy-closed-loop-20261030-v1.json",
+      "sha256": "03439cc0172f3ba29ee4527d3c64d1da16edd93d2eaf63134344e4c8b15f49ce"
+    },
+    "jitter": {
+      "path": "/tmp/libero-task4-task7-public-state-jitter-500-closed-loop-20261031-v1.json",
+      "sha256": "8c9c6167f316072efeba909eb5a2dbf8987369698eddbf5d496bdf8320897ed2"
+    },
+    "budget_sweep": {
+      "path": "/tmp/libero-task4-task7-public-state-jitter-budget-sweep-20261031-v3.json",
+      "sha256": "3a2c13feffc9c9d4824138101ae0c48916938d08cf70d236da93f675000a7110"
+    },
+    "policy_config": {
+      "path": "configs/libero_spatial_bc_policy_candidate_v1.json",
+      "sha256": "f5e57c895e9249ef7a3361ebee2119bf06c6cbb48da01c31980b1eb0af8feb1b"
+    },
+    "policy_code": {
+      "path": "src/algorithms/libero_bc_policy.py",
+      "sha256": "a3098a68b5ceab21495207856c9d94fd4a6d26c1668737625ecb7b5d46977735"
+    },
+    "ordered_capture": {
+      "path": "/tmp/libero-task4-task7-full-policy-observation-state-replacement-20261031-v2.json",
+      "sha256": "1f225135c3dd1da796660cbb470fc055551a6d4edb03e0794647afc1b96404a9"
+    },
+    "adapter_code": {
+      "path": "src/environments/libero_adapter.py",
+      "sha256": "8dfa22a1e19b049d78c8e6ae05494291242cbde8a21194e0fbb321662d56512c"
+    },
+    "causal_code": {
+      "path": "experiments/run_libero_bc_causal_alignment_diagnostic.py",
+      "sha256": "780e26d1a50d452609fb24b2a7d4740351f4f044dadc03a286e8523bfbe22e22"
+    },
+    "adapter_builder_code": {
+      "path": "experiments/run_libero_bc_closed_loop_attribution.py",
+      "sha256": "767c738e7ab98501f21439f190fd8fc80c98a8c4ece6716476ddc4fa7e0b9557"
+    },
+    "source_audit_code": {
+      "path": "experiments/analyze_libero_task4_task7_evidence_decomposition.py",
+      "sha256": "9bf4ff6b3d18345be1b7d9e3b50d887a7ca78c1f34e9c039c10ced283472a4a4"
+    },
+    "transfer_config": {
+      "path": "configs/libero_spatial_transfer_split_candidate_v1.json",
+      "sha256": "6cdc8c3eeaa90886ad0e15f0f4ebbe260aa972b6e69b1f122e95f65ab63dd7d6"
+    },
+    "native_domain_code": {
+      "path": "/home/zl202621/third_party/LIBERO/libero/libero/envs/bddl_base_domain.py",
+      "sha256": "055836670ac5fcac7e033fc86404718fd53854996e5776b1ff68b646f7bbcc9d"
+    },
+    "native_wrapper_code": {
+      "path": "/home/zl202621/third_party/LIBERO/libero/libero/envs/env_wrapper.py",
+      "sha256": "a782fb76c9792268d28979474fe72849e1e98ada49c8e997a65359a8d6b6acd0"
+    },
+    "native_property_sampler_code": {
+      "path": "/home/zl202621/third_party/LIBERO/libero/libero/envs/regions/object_property_sampler.py",
+      "sha256": "051fbce5a9aadcdf26bd42b447c1b677e610e0e539132807a3ffb578b6feab60"
+    },
+    "native_reset_code": {
+      "path": "/home/zl202621/.conda/envs/libero-kecrl/lib/python3.10/site-packages/robosuite/environments/base.py",
+      "sha256": "3d55a1d8b0350478b7e7e8d1c7a1250c8f173b69a67016ecb9e65c6965e741f6"
+    },
+    "task4_bddl": {
+      "path": "/home/zl202621/third_party/LIBERO/libero/libero/bddl_files/libero_spatial/pick_up_the_black_bowl_in_the_top_drawer_of_the_wooden_cabinet_and_place_it_on_the_plate.bddl",
+      "sha256": "4371189e11d9fd29bb548ab9a8adcd741bb0ce41bb66c612672d0e8cb29a52a9"
+    }
+  },
+  "scope": {
+    "task_ids": [
+      4
+    ],
+    "training_seeds": [
+      20261023,
+      20261024
+    ],
+    "policy_optimizer_updates": 500,
+    "new_optimizer_updates": 0,
+    "checkpoint_selected": false,
+    "new_episode_budget": 56,
+    "max_new_policy_action_steps": 1120,
+    "max_new_stabilization_steps": 280,
+    "max_total_explicit_environment_step_calls": 1400,
+    "environment_seed": 20261022,
+    "stabilization_steps": 5,
+    "window_steps": 20,
+    "native_horizon": 25,
+    "initial_state_role": "candidate_nonregression",
+    "state_set_previously_used_in_diagnostics": true,
+    "qualification_accessed": false,
+    "validation_accessed": false,
+    "heldout_accessed": false,
+    "final_evaluation_accessed": false,
+    "private_simulator_state_read": false,
+    "success_rate_evaluation": false,
+    "spt_updated": false,
+    "knowledge_updated": false,
+    "module_qualified": false,
+    "torch_num_threads": 1,
+    "inference_device": "cuda:0",
+    "inference_rng_seed": 20261022,
+    "renderer": "egl",
+    "egl_device_id": 0
+  },
+  "lifecycle": {
+    "adapter_per_training_seed_and_arm": true,
+    "source_state_order_by_seed": {
+      "20261023": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9
+      ],
+      "20261024": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17
+      ]
+    },
+    "target_state_by_seed": {
+      "20261023": 9,
+      "20261024": 17
+    },
+    "all_preceding_windows_execute_fixed_policy_for_20_steps": true,
+    "archive_only_target_windows": true,
+    "reset_digest_and_action_and_public_state_gate": "exact_no_tolerance",
+    "original_reference_episode_limit": 300,
+    "native_code_or_adapter_patched": false,
+    "record_only_initializer_configuration_counts": true,
+    "read_sim_data_or_model": false
+  },
+  "authorization": {
+    "instruction": "解决 task 4 的复现问题；训练保持 500 updates。",
+    "recorded_at_utc": "2026-11-01T07:35:05+00:00",
+    "new_training_authorized_or_executed": false,
+    "bounded_reproduction_rollout": true
+  },
+  "interpretation_boundary": {
+    "diagnostic_only": true,
+    "selected_states_are_outcome_stratified": true,
+    "exact_20_step_prefix_is_not_full_success_reproduction": true,
+    "native_reset_accumulation_is_not_a_knowledge_evolution_result": true,
+    "no_new_training_variable_or_checkpoint_selection": true,
+    "legacy_pickle_container_deserialized_but_only_candidate_entries_indexed_and_validated": true
+  }
+}

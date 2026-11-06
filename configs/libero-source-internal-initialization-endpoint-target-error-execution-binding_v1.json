@@ -1,0 +1,29 @@
+{
+  "schema_version": 1,
+  "status": "code_and_definition_bound_before_new_arithmetic_decomposition",
+  "formal_result": false,
+  "frozen_at_utc": "2026-11-03T08:10:30.379448+00:00",
+  "config_sha256": "db6a83698c4fe1caa4924a0e7bbd441cdf305b8b63dbcd8210fb457416441d79",
+  "files": {
+    "analyzer": {
+      "path": "experiments/analyze_libero_source_internal_initialization_endpoint_target_error.py",
+      "sha256": "09bf0f2b5484f3b6c6b35b1d786b75a7174442e262c509666429299223b84390"
+    },
+    "tests": {
+      "path": "tests/test_libero_source_internal_initialization_endpoint_target_error.py",
+      "sha256": "a2f85b3196e58677ab47ea33a2d04ad611dac5a9ecbac381ce592c50664ef58c"
+    },
+    "protocol": {
+      "path": "docs/libero-source-internal-initialization-endpoint-target-error-protocol-2026-11-03.md",
+      "sha256": "2c2e0ea9e550a317bab3289070f194581924f6ea11bb7f3a43b436a33054bd03"
+    }
+  },
+  "validation_before_binding": {
+    "focused_tests_passed": 59,
+    "new_tests_passed": 27,
+    "py_compile": "passed",
+    "runtime_check": "Python3.10.22; Torch2.4.1+cu124; CUDA hidden during checks"
+  },
+  "new_forward_budget": 0,
+  "new_model_data_environment_calls": 0
+}

@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "status": "bound_before_reference_means_and_adjusted_contrasts",
+  "formal_result": false,
+  "frozen_at_utc": "2026-11-03T13:15:56.920332+00:00",
+  "config_sha256": "113d7d6b3624cdd8d978aa86c23981bd700bd2403bbd58547653611538a0409a",
+  "files": {
+    "analyzer": {
+      "path": "experiments/analyze_libero_source_internal_nontransition_translation_reference.py",
+      "sha256": "163eef6d5d46f5e40d7b7babf82978799b8af8eef87b192a23256a0338cd8346"
+    },
+    "tests": {
+      "path": "tests/test_libero_source_internal_nontransition_translation_reference.py",
+      "sha256": "bbd88a2c370454b0bfb50c2ce56cca42c2aec2a11da33866e4e58dfbb8e61770"
+    },
+    "protocol": {
+      "path": "docs/libero-source-internal-nontransition-translation-reference-protocol-2026-11-03.md",
+      "sha256": "237fe3e6bd8fba362e5a0e0ca93d97f73509870c5c9c4375139813c3d3b9d245"
+    }
+  },
+  "validation": {
+    "focused_tests_passed": 40,
+    "new_tests_passed": 23,
+    "elapsed_seconds": 0.26,
+    "py_compile": "passed"
+  },
+  "new_policy_training_environment_HDF5_RGB_initial_checkpoint_calls": 0
+}

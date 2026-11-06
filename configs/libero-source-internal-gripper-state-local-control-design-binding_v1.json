@@ -1,0 +1,45 @@
+{
+  "schema_version": 1,
+  "check_type": "libero_source_internal_local_gripper_state_design_operator_binding",
+  "status": "design_and_operators_bound_execution_runner_pending",
+  "bound_at_utc": "2026-11-03T15:46:56.721248+00:00",
+  "formal_result": false,
+  "research_run_executed": false,
+  "config_path": "configs/libero-source-internal-gripper-state-local-control-diagnostic_v1.json",
+  "config_sha256": "bf38389d06d2d43c74991365d4763cc0cbbe94ee8517ef1c9cf51ca4d4d40206",
+  "files": {
+    "validator": {
+      "path": "experiments/validate_libero_source_internal_gripper_state_control_protocol.py",
+      "sha256": "6a59bec341a6da59566cc6d58532af7ea198a0651bdc1650aaeecad54bd91dfa"
+    },
+    "tests": {
+      "path": "tests/test_libero_source_internal_gripper_state_control_protocol.py",
+      "sha256": "4b52e281af6fb9594442f9e59fe085eefdce53cb0c1c63e365e4de965645b6b4"
+    },
+    "protocol": {
+      "path": "docs/libero-source-internal-input-sensitivity-review-and-gripper-state-control-protocol-2026-11-03.md",
+      "sha256": "e3094b0425d64722890f48eee653eba3ed7f2cb4565014b70740a13b862bc683"
+    }
+  },
+  "observed_validation": {
+    "focused_tests": "48 passed in 0.29s",
+    "python_compile": "passed",
+    "cpu_environment_check": "passed with CUDA_VISIBLE_DEVICES empty; Python3.10.22 Torch2.4.1+cu124",
+    "design_and_sample_validator_without_binding": "passed",
+    "independent_sample_budget_audit": {
+      "path": "/tmp/libero-source-internal-gripper-state-control-freeze-independent-audit-20261103-v1.json",
+      "sha256": "634bddafb842e3d7fc7eabf414a410b85103aeb8afedbf155238cb83e946697a"
+    }
+  },
+  "actual_research_counts_this_stage": {
+    "new_policy_forward_batches": 0,
+    "new_optimizer_updates": 0,
+    "new_environment_calls": 0,
+    "HDF5_RGB_initial_private_checkpoint_payload_reads": 0
+  },
+  "future_execution_budget": {
+    "main_forward_batches": 2457,
+    "repeat_forward_batches": 54
+  },
+  "next_step": "Implement runner; separately bind execution implementation/runtime/startup environment before source observations or checkpoint payloads and Policy readout."
+}

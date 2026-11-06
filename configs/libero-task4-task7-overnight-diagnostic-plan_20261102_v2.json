@@ -1,0 +1,131 @@
+{
+  "schema_version": 2,
+  "check_type": "libero_task4_task7_bounded_overnight_diagnostic_plan",
+  "formal_result": false,
+  "authorization": "用户授权睡眠期间按诊断结果和后续安排继续运行，并汇总实验设置、结果、结论；保持既有数据隔离和500-update边界。",
+  "task_ids": [
+    4,
+    7
+  ],
+  "training_seeds": [
+    20261022,
+    20261023,
+    20261024
+  ],
+  "checkpoint_optimizer_updates": 500,
+  "stages": [
+    "freeze_and_run_source_support_leave_one_demo_out_condition_separability",
+    "audit_fixed_policy_wrong_sign_gripper_squashing_gradients_without_updates",
+    "read_only_expert_command_transition_timing_decomposition",
+    "only_if_source_support_gate_passes_freeze_one_paired500_gripper_logit_loss_diagnostic",
+    "only_if_frozen_offline_nonregression_gate_passes_freeze_candidate_only_closed_loop"
+  ],
+  "read_only_budget": {
+    "unique_expert_inputs_t_ge_1": 8630,
+    "model_valid_rows": 25890,
+    "first_batch_repeat_rows": 192,
+    "feature_spaces": [
+      "visual_concat",
+      "fusion",
+      "projection",
+      "proprio"
+    ],
+    "nearest_neighbors": 5,
+    "leave_one_demo_out": true,
+    "new_optimizer_updates": 0,
+    "new_environment_steps": 0
+  },
+  "conditional_training_budget_max": {
+    "new_training_variables": 1,
+    "arms": [
+      "source_baseline",
+      "gripper_logit_bce_origin_gradient_matched"
+    ],
+    "models": 12,
+    "optimizer_updates_per_model": 500,
+    "optimizer_updates_total": 6000,
+    "source_initial_observations": "reuse_pinned_public_source_t0_cache_only",
+    "new_source_resets": 0,
+    "new_source_private_state_reads": 0,
+    "checkpoint_rule": "final_update500_only; baseline_exact_weight_hash_parity",
+    "query_role_rule": "create_meta_query_dataset_only_after_all_six_task_support_fits_complete",
+    "further_protocol_required_before_running": true
+  },
+  "conditional_closed_loop_budget_max": {
+    "task_seed_groups": 6,
+    "candidate_nonregression_indices": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      15,
+      16,
+      17,
+      18,
+      19
+    ],
+    "episodes": 120,
+    "policy_actions_per_episode": 300,
+    "policy_actions_total": 36000,
+    "stabilization_actions_total": 600,
+    "environment_seed": 20261022,
+    "adapter_lifecycle": "one_per_task_seed; preserve_reset_order0_to19",
+    "further_protocol_required_before_running": true
+  },
+  "selection_boundaries": {
+    "task_eligibility_uses_only_source_support": true,
+    "all_three_seeds_required": true,
+    "no_nearby_coefficient_search": true,
+    "no_extra_updates_or_checkpoint_selection": true,
+    "no_training_if_mechanism_gate_fails": true,
+    "no_rollout_if_offline_gate_fails": true,
+    "preserve_failed_attempts": true
+  },
+  "sealed_roles": [
+    "qualification",
+    "reserved_unread",
+    "validation",
+    "held_out_query_spi",
+    "final_evaluation"
+  ],
+  "spt_update": false,
+  "knowledge_update": false,
+  "module_registration": false,
+  "previous_plan": {
+    "path": "/home/zl202621/project/KECRL/configs/libero-task4-task7-overnight-diagnostic-plan_20261102_v1.json",
+    "sha256": "f068bf82011d288b382534d30725cfc1dd0a7759e7a18b8335fc8d72f4b4be3a"
+  },
+  "recorded_at_utc": "2026-11-01T17:44:27.001607+00:00",
+  "source_support_gate_result": {
+    "path": "/tmp/libero-task4-task7-condition-separability-20261102-v1.json",
+    "sha256": "66682c55850acde665ca09c84ffcffe9ba5f0a0e9ae6c743b2390394ddb2a51e",
+    "eligible_tasks": [],
+    "conditional_training_disabled": true,
+    "conditional_rollout_disabled": true
+  },
+  "additional_stage": "cached_closed_loop_feature_coverage_and_matched_source_prefix_runtime_t0_controls",
+  "additional_read_only_budget": {
+    "existing_candidate_archives": 120,
+    "candidate_frames": 2400,
+    "public_source_support_t0_frames": 60,
+    "main_model_valid_rows": 2580,
+    "repeat_model_rows": 192,
+    "main_forward_calls": 84,
+    "repeat_forward_calls": 6,
+    "new_optimizer_updates": 0,
+    "new_environment_resets_or_actions": 0,
+    "official_state_files_read": false,
+    "source_private_state_read": false
+  }
+}

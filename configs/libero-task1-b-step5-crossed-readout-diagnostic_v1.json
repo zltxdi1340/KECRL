@@ -1,0 +1,264 @@
+{
+  "schema_version": 1,
+  "formal_result": false,
+  "frozen_at_utc": "2026-11-04T14:16:58.605550+00:00",
+  "scope": {
+    "task_id": 1,
+    "training_seeds": [
+      20261022,
+      20261023,
+      20261024
+    ],
+    "arms": [
+      "current_all7",
+      "history_motion_current_gripper"
+    ],
+    "encoder_updates": 500,
+    "readout_updates": 500,
+    "stabilization_steps": 5,
+    "environment_seed": 20261022,
+    "initial_state_role": "candidate_nonregression",
+    "initial_state_indices": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      15,
+      16,
+      17,
+      18,
+      19
+    ],
+    "action_step": 5,
+    "history_steps": 5,
+    "source_episode_jsons": 120,
+    "source_action_rows_decoded": 35489,
+    "feature_archives_checksum_checked": 120,
+    "feature_archives_payload_decoded": 60,
+    "feature_rows_decoded": 17489,
+    "feature_archive_action_rows_decoded": 17489,
+    "feature_archive_step_rows_decoded": 17489,
+    "prefix_vectors_used": 300,
+    "readout_head_archives": 6,
+    "paired_cases": 60,
+    "new_cross_readout_batches": 3,
+    "new_cross_readout_rows": 60,
+    "arithmetic_replay_batches": 6,
+    "arithmetic_replay_rows": 120,
+    "linear_matrix_calls": 9,
+    "linear_matrix_rows": 180,
+    "new_encoder_calls": 0,
+    "new_optimizer_updates": 0,
+    "new_backward_calls": 0,
+    "new_environment_calls": 0,
+    "new_HDF5_RGB_initial_private_original_policy_checkpoint_reads": 0,
+    "new_expert_target_rows": 0,
+    "sealed_roles_accessed": false,
+    "checkpoint_selected": false,
+    "training_changed": false,
+    "spt_updated": false,
+    "knowledge_updated": false,
+    "module_registered": false
+  },
+  "definition": {
+    "cells": [
+      "baseline_head_current",
+      "candidate_head_current",
+      "candidate_head_history_motion_current_gripper"
+    ],
+    "current_input": "support-normalized feature5 repeated five times / sqrt5, float32 input",
+    "history_input": "support-normalized features5,4,3,2,1 / sqrt5, float32 input",
+    "shared_prefix": "both arms first4 actions and first5 public observation digests identical; baseline NPZ selected by all seed/state IDs, not outcomes",
+    "npz_decode_accounting": "compressed projection/actions/step arrays decode all17489 baseline rows, then use first5 of each60; candidate feature payload not decoded; all120 hashes verified",
+    "readout_head_selection": "only fixed final500 from6 full-support heads; no OOF/midpoint selection or refit",
+    "operator": "float64 NumPy linear+tanh; H(C) reused for candidate gripper replay, candidate history affects motion0..5 only",
+    "primary_decomposition": "consistent float64 replay: H(H,C)-B(C) = [H(C)-B(C)] + [H(H,C)-H(C)]",
+    "recorded_anchor_secondary": "also store H(C)-savedB and savedH-H(C); tiny gripper content residual is replay rounding, not history effect",
+    "logit_decomposition": true,
+    "component_columns": {
+      "translation": [
+        0,
+        1,
+        2
+      ],
+      "rotation": [
+        3,
+        4,
+        5
+      ],
+      "motion": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "gripper": [
+        6
+      ],
+      "all7": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ]
+    },
+    "term_metrics": [
+      "total_l2",
+      "weight_l2",
+      "content_l2",
+      "weight_content_dot",
+      "weight_signed_projection_fraction",
+      "content_signed_projection_fraction",
+      "weight_content_cosine"
+    ],
+    "signed_projection": "dot(term,total)/dot(total,total); fractions sum1 if total nonzero; can be negative or >1, not probabilities/causal effects; exact zero gives null",
+    "norm_comparison": "count weight/content norm larger or exact tie; no optimized threshold; norms do not add",
+    "strata": [
+      "all",
+      "baseline_only_success",
+      "candidate_only_success",
+      "both_success",
+      "both_failure"
+    ],
+    "baseline_only_cases": [
+      [
+        20261022,
+        2
+      ],
+      [
+        20261022,
+        10
+      ],
+      [
+        20261024,
+        5
+      ]
+    ],
+    "numeric_replay_atol": 1e-05,
+    "gripper_sign_replay_equal_required": true,
+    "decomposition_atol": 1e-12,
+    "audit_atol": 1e-10,
+    "audit_rtol": 1e-12,
+    "no_automatic_training_or_rollout": true,
+    "interpretation": "repeated current is an algebraic reference possibly outside trained history distribution, not independent physical/module causal contribution or task success/target error"
+  },
+  "inputs": {
+    "trace_analysis": {
+      "path": "/tmp/libero-task1-b-routed-paired-traces-20261104-v1.json",
+      "sha256": "e2da94226a51ffe1f69bcf2d0f47c199ba1ef25309ceb9bc1936fe1d7e22d79c"
+    },
+    "trace_audit": {
+      "path": "/tmp/libero-task1-b-routed-paired-traces-independent-audit-20261104-v1.json",
+      "sha256": "4fb063924e1e0bb633dafef764322447b0cb770decbdef42e5c46232203763f9"
+    },
+    "trace_binding": {
+      "path": "configs/libero-task1-b-routed-paired-traces-binding_v1.json",
+      "sha256": "857091dc94ed04d78155805e32e592280d3016813c2aa1031fb46eb1411d5b83"
+    },
+    "trace_verification": {
+      "path": "/tmp/libero-task1-b-routed-paired-traces-final-verification-20261104-v1.json",
+      "sha256": "f9da00d18df785aaaa2055b00511adb4283e7ff2746928c9ee1a70f5c4aedb6f"
+    },
+    "loop_result": {
+      "path": "/tmp/libero-task1-b-routed-history-closed-loop-20261104-v1.json",
+      "sha256": "9cd8039dcbe79ec9c847e4e2681e62b47bf5e962472f3a26e00b4c72ad500084"
+    },
+    "loop_audit": {
+      "path": "/tmp/libero-task1-b-routed-history-closed-loop-independent-audit-20261104-v1.json",
+      "sha256": "978cc7e588654693f13ba134f6668f2e760df9a008f6d7100d89615eebee4bab"
+    },
+    "loop_config": {
+      "path": "configs/libero-task1-b-routed-history-closed-loop-diagnostic_v1.json",
+      "sha256": "b69b72b5fffba3e239e34eddc1e8e2c6bbcd57148473f6bb982f245518aaa288"
+    },
+    "loop_binding": {
+      "path": "configs/libero-task1-b-routed-history-closed-loop-binding_v1.json",
+      "sha256": "0824787f9c6d8bd5e9de98347d21ebc671ea57573248434334653b2901d084ae"
+    },
+    "fit_result": {
+      "path": "/tmp/libero-task1-b-routed-history-readout-20261104-v1.json",
+      "sha256": "4ab522b340662751779f4c0ef3735847a781691b7a832c74f6a2029ddbd55304"
+    },
+    "fit_binding": {
+      "path": "configs/libero-task1-b-routed-history-readout-binding_v1.json",
+      "sha256": "f15b4303bfd3e7a5c2c81c24cc7ad64dfbd63637404dbeb880cbd76fd4d31e67"
+    },
+    "linear_helpers": {
+      "path": "experiments/run_libero_task1_b_crossed_history_readout.py",
+      "sha256": "975388bc123720e560f8033541dc7d6702de353770282408ad6a70fb5c4578ca"
+    },
+    "input_helpers": {
+      "path": "experiments/run_libero_task1_b_support_query_history_readout.py",
+      "sha256": "740daed435910ebdefc7ec546a3b937ce4f7f561d03d724f95bdbe779be1d12b"
+    },
+    "readout_helpers": {
+      "path": "experiments/run_libero_learned_phase_history_readout.py",
+      "sha256": "d26fd19277ebc75215a8b62195f62713558a550dec7630a438fc66a5d01c6289"
+    },
+    "frame_helpers": {
+      "path": "experiments/libero_phase_history_neighbors.py",
+      "sha256": "6b2766eb86a1ab95e88b21188b1405e124644d308a9dd21123b8f38132ed56eb"
+    },
+    "event_helpers": {
+      "path": "experiments/analyze_libero_task1_b_query_event_margin_timing.py",
+      "sha256": "938ac2608898a9085d36c4505cb28746bf66103f1c0dcb5a86db49acd0f0e393"
+    },
+    "segment_helpers": {
+      "path": "experiments/analyze_libero_source_internal_full_open_segments.py",
+      "sha256": "2fdb090ec81b45b3267471b50b9eaa4c90af56af237136c4345ec2f95e3c0e55"
+    },
+    "pure_helpers": {
+      "path": "experiments/analyze_libero_source_internal_gripper_sign_margin_temporal.py",
+      "sha256": "d688c0d217fd578626897b75b0a14c777c94b77f8fda80bab989fb07248d618c"
+    },
+    "20261022_current_all7": {
+      "path": "/tmp/libero-task1-b-routed-history-readout-artifacts-20261104-v1/seed20261022-full_support-foldNone-current_all7.npz",
+      "sha256": "140861ca0d96d2dda263448703bae9677a47ba4a3f68400b01a04c6822c34ba3"
+    },
+    "20261022_history_motion_current_gripper": {
+      "path": "/tmp/libero-task1-b-routed-history-readout-artifacts-20261104-v1/seed20261022-full_support-foldNone-history_motion_current_gripper.npz",
+      "sha256": "2cf1a369f4b296719a9e27c0d362f951a976f0ae6fe6b7c7c8ac3746d7ae4aad"
+    },
+    "20261023_current_all7": {
+      "path": "/tmp/libero-task1-b-routed-history-readout-artifacts-20261104-v1/seed20261023-full_support-foldNone-current_all7.npz",
+      "sha256": "49723808be1ccc71c2bb080ce98238ac05a2d507fcb94142cd550f81ec5a4dd4"
+    },
+    "20261023_history_motion_current_gripper": {
+      "path": "/tmp/libero-task1-b-routed-history-readout-artifacts-20261104-v1/seed20261023-full_support-foldNone-history_motion_current_gripper.npz",
+      "sha256": "01d660d0ea44c83678f8dd61f1ec387c2617c112e6a0bdf5f9a0aa9349e71093"
+    },
+    "20261024_current_all7": {
+      "path": "/tmp/libero-task1-b-routed-history-readout-artifacts-20261104-v1/seed20261024-full_support-foldNone-current_all7.npz",
+      "sha256": "5bc1dbf1e4b36a5c344a52a9da117532b21132287d41a8895a37dd7b3d97a52c"
+    },
+    "20261024_history_motion_current_gripper": {
+      "path": "/tmp/libero-task1-b-routed-history-readout-artifacts-20261104-v1/seed20261024-full_support-foldNone-history_motion_current_gripper.npz",
+      "sha256": "0a54605e88b192621fd533ec14737a441c041eae86c94f4f997607af13b42885"
+    }
+  },
+  "execution": {
+    "python": "3.10.22",
+    "numpy": "1.22.4",
+    "device": "cpu",
+    "threads": 1,
+    "CUDA_VISIBLE_DEVICES": "",
+    "output": "/tmp/libero-task1-b-step5-crossed-readout-20261104-v1.json",
+    "artifacts": "/tmp/libero-task1-b-step5-crossed-readout-artifacts-20261104-v1"
+  }
+}

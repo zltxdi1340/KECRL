@@ -1,0 +1,136 @@
+{
+  "schema_version": 1,
+  "check_type": "libero_task4_task7_gripper_feedback_diagnostic",
+  "formal_result": false,
+  "protocol_status": "frozen_cached_feature_feedback_diagnostic",
+  "scope": {
+    "task_ids": [
+      4,
+      7
+    ],
+    "training_seeds": [
+      20261022,
+      20261023,
+      20261024
+    ],
+    "arm": "source_baseline",
+    "checkpoint_updates": 500,
+    "role": "meta_support",
+    "demo_ids": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      15,
+      16,
+      17,
+      18,
+      19,
+      20,
+      21,
+      22,
+      23,
+      24,
+      25,
+      26,
+      27,
+      28,
+      29
+    ],
+    "first_action_index": 1,
+    "device": "cpu",
+    "torch_threads": 1,
+    "partial_readout_main_chains": 2700,
+    "partial_readout_repeat_chains": 6,
+    "partial_readout_main_rows": 77670,
+    "partial_readout_repeat_rows": 192,
+    "new_full_policy_or_cnn_forwards": 0,
+    "new_model_backward_calls": 0,
+    "new_optimizer_updates": 0,
+    "new_environment_interactions": 0,
+    "hdf5_payload_reads": 0,
+    "private_state_reads": 0,
+    "qualification_accessed": false,
+    "validation_accessed": false,
+    "heldout_accessed": false,
+    "final_evaluation_accessed": false
+  },
+  "analysis": {
+    "variants": [
+      "original",
+      "hold_demo_t1_gripper",
+      "zero_gripper"
+    ],
+    "primary_variant": "hold_demo_t1_gripper",
+    "replacement": "last_two_of_nine_proprio_dimensions_only; visual_and_joint_values_fixed",
+    "hold_anchor": "same_demo_first_scored_pre_action_t1_gripper; causal_past_no_future_or_expert_label_input",
+    "zero_anchor": "two_zeros_secondary_opposite_anchor_control_not_selectable_as_primary",
+    "batch_order": "exact_parent_source_batch_manifest; no_cross_demo_batches",
+    "baseline_prediction_parity": "bitwise_exact_parent_original_full_Policy_predictions",
+    "metrics": "original_uniform7_target_error_and_component_error_by_parent_strata",
+    "primary_signal": "open_window_gripper_mse_lower_all_three_seeds; sign_error_nonincrease_all_three",
+    "translation_mean_ratio_max": 1.02,
+    "translation_each_seed_ratio_max": 1.05,
+    "uniform7_mean_ratio_max": 1.02,
+    "hybrid_observation_is_not_physical_intervention": true,
+    "no_automatic_training_or_qualification": true
+  },
+  "runner_sha256": "a21cbabcc2f5a445ab94b8b72edfd287a633e0d0306f52477dc7378b3f0a4c3d",
+  "inputs": {
+    "parent_result": {
+      "path": "/tmp/libero-task4-task7-condition-separability-20261102-v1.json",
+      "sha256": "66682c55850acde665ca09c84ffcffe9ba5f0a0e9ae6c743b2390394ddb2a51e"
+    },
+    "parent_config": {
+      "path": "/home/zl202621/project/KECRL/configs/libero-task4-task7-condition-separability-diagnostic_v1.json",
+      "sha256": "85769119f0b10bc5c92049a621952577d1380abf29bb5998d1894d0a97b4cd00"
+    },
+    "parent_code": {
+      "path": "/home/zl202621/project/KECRL/experiments/analyze_libero_task4_task7_condition_separability.py",
+      "sha256": "58229e2684ad76bd9111b0c6099542b840380d12212d40eaa1c69943826929c7"
+    },
+    "support4": {
+      "path": "/tmp/libero-task4-task7-condition-separability-artifacts-20261102-v1/task4-support-features-and-neighbors.npz",
+      "sha256": "1d0e9cce3c8d087a2cfd57ccc3f2f430ecf8375ea2ef65ebbff486ad1791c2c5"
+    },
+    "support7": {
+      "path": "/tmp/libero-task4-task7-condition-separability-artifacts-20261102-v1/task7-support-features-and-neighbors.npz",
+      "sha256": "7c297fb04833c7588c098a0d5fb8d3bf71ca632593ec581788878c1565df8efb"
+    },
+    "source_batches": {
+      "path": "/tmp/libero-task4-task7-condition-separability-artifacts-20261102-v1/source_batches.jsonl",
+      "sha256": "ced18768e61edbc1d359857b1514fcc9f7d752e8b68bfea149ed92f256b210fd"
+    },
+    "overnight_plan": {
+      "path": "/home/zl202621/project/KECRL/configs/libero-task4-task7-overnight-diagnostic-plan_20261102_v3.json",
+      "sha256": "ddc59793d4c5487a8acedc1017502e4163fc2dfe0907539926706a6cb9251fa8"
+    },
+    "policy_code": {
+      "path": "/home/zl202621/project/KECRL/src/algorithms/libero_bc_policy.py",
+      "sha256": "a3098a68b5ceab21495207856c9d94fd4a6d26c1668737625ecb7b5d46977735"
+    },
+    "policy_config": {
+      "path": "/home/zl202621/project/KECRL/configs/libero_spatial_bc_policy_candidate_v1.json",
+      "sha256": "f5e57c895e9249ef7a3361ebee2119bf06c6cbb48da01c31980b1eb0af8feb1b"
+    },
+    "offline_helpers": {
+      "path": "/home/zl202621/project/KECRL/experiments/analyze_libero_task4_task7_evidence_decomposition.py",
+      "sha256": "9bf4ff6b3d18345be1b7d9e3b50d887a7ca78c1f34e9c039c10ced283472a4a4"
+    },
+    "expert_code": {
+      "path": "/home/zl202621/project/KECRL/experiments/analyze_libero_task4_task7_expert_action_error_diagnostic.py",
+      "sha256": "bd44981057bbb09ecc485379ca4ad13563b3f770d892dbd9c73ce3e1af557425"
+    }
+  }
+}

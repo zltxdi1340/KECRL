@@ -1,0 +1,334 @@
+{
+  "schema_version": 1,
+  "formal_result": false,
+  "scope": {
+    "task_id": 1,
+    "training_seeds": [
+      20261022,
+      20261023,
+      20261024
+    ],
+    "arms": [
+      "candidate_real_history",
+      "candidate_repeat_current"
+    ],
+    "encoder_updates": 500,
+    "readout_updates": 500,
+    "models": 6,
+    "initial_state_role": "candidate_nonregression",
+    "initial_state_indices": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      15,
+      16,
+      17,
+      18,
+      19
+    ],
+    "initial_states_previously_used": true,
+    "episodes_per_model": 20,
+    "episodes": 120,
+    "fresh_episodes": 120,
+    "reused_success_results": 0,
+    "adapters": 6,
+    "environment_seed": 20261022,
+    "stabilization_steps": 5,
+    "policy_action_limit": 300,
+    "native_horizon": 305,
+    "maximum_policy_actions": 36000,
+    "fixed_zero_actions": 600,
+    "maximum_native_step_calls": 36600,
+    "candidate_initial_rows_decoded": 20,
+    "qualification_reserved_rows_decoded": 0,
+    "reset_digest_references": 20,
+    "reset_digest_comparisons": 100,
+    "maximum_shared_startup_action_comparisons": 240,
+    "maximum_shared_prefix_observation_comparisons": 300,
+    "history_steps": 5,
+    "shared_baseline_startup_actions": 4,
+    "iteration_order": "seed_then_real_history_repeat_current_then_initial_0_to19",
+    "adapter_lifecycle": "fresh_per_model_reused_ascending_20_states",
+    "inference_device": "cpu",
+    "cuda_visible_devices": "",
+    "renderer": "egl",
+    "physical_renderer_gpu": 1,
+    "egl_device_id": "1",
+    "torch_threads": 1,
+    "image_size": 128,
+    "new_optimizer_updates": 0,
+    "new_backward_calls": 0,
+    "new_HDF5_payload_reads": 0,
+    "qualification_accessed": false,
+    "reserved_accessed": false,
+    "validation_accessed": false,
+    "heldout_accessed": false,
+    "final_evaluation_accessed": false,
+    "checkpoint_selected": false,
+    "spt_updated": false,
+    "knowledge_updated": false,
+    "module_registered": false,
+    "private_live_state_recorded": false,
+    "private_initial_vector_values_recorded": false,
+    "same_candidate_weights_between_inputs": true,
+    "maximum_primitive_linear_calls": 53760,
+    "controller_identity_references": 3,
+    "controller_identity_comparisons": 3,
+    "maximum_shared_prefix_feature_comparisons": 300,
+    "maximum_shared_step5_gripper_comparisons": 60
+  },
+  "analysis": {
+    "primary": "per-seed and pooled paired real-history/repeat-current success counts and four outcomes",
+    "strict_consistent_improvement": "repeat-current successes > real-history in each of three seeds, descriptive only",
+    "startup": "same baseline head steps1..4; same candidate head from5; motion input only real_history or repeat_current, gripper always current",
+    "prefix_gate": "bitwise reset; same seed/state actions1..4, pre-action observations/features1..5 and gripper5; honor early termination",
+    "statistics": "no significance or IID/unseen/qualification claims",
+    "stopping": "all120 required for valid primary; abort on technical failure, no replacement or tolerance relaxation",
+    "runtime_feature_archive": "all pre-action 256D features derived from public input; actions and history metadata; no RGB pixels/private state",
+    "no_automatic_training_or_promotion": true,
+    "secondary": "per-pair exact action-array and terminal-length equality, descriptive only",
+    "same_success_does_not_imply_same_trajectory": true
+  },
+  "fixed_encoders": [
+    {
+      "checkpoint": {
+        "task_id": 1,
+        "training_seed": 20261022,
+        "arm": "B_fomaml",
+        "optimizer_updates": 500,
+        "path": "/tmp/libero-source-internal-spt-spi-artifacts-20261103-v2/p1-s20261022-B_fomaml-u500.pt",
+        "sha256": "9186e4db07cbdf3232f1284aa44e79227187e85053157cfa070c06b5949b2199",
+        "weight_hash": "ab4b4e69df85d39fbebe2a37c14c30ea86dcd134836cb8a7bad6c87517ab9f4e"
+      },
+      "support_features": {
+        "path": "/tmp/libero-source-internal-phase-history-observability-artifacts-20261104-v1/task1-seed20261022-B_fomaml-features.npz",
+        "sha256": "eb714291247c1dcb0a380a0237f38f15b3f619778c2892b8a596582a2eb546c3"
+      }
+    },
+    {
+      "checkpoint": {
+        "task_id": 1,
+        "training_seed": 20261023,
+        "arm": "B_fomaml",
+        "optimizer_updates": 500,
+        "path": "/tmp/libero-source-internal-spt-spi-artifacts-20261103-v2/p1-s20261023-B_fomaml-u500.pt",
+        "sha256": "ae9eb12288f497ac77704ae443b7d4b069eeadb8d91f30019e8bbbe524109a8d",
+        "weight_hash": "52ca7023e108b2efea7d13b920256f1cea15a0e339fe651d4788d09498ad4561"
+      },
+      "support_features": {
+        "path": "/tmp/libero-source-internal-phase-history-observability-artifacts-20261104-v1/task1-seed20261023-B_fomaml-features.npz",
+        "sha256": "bf70416872c5ff4eba646e97a3dcb774aa9aea6bbc31f55d141768d7d92cd0f0"
+      }
+    },
+    {
+      "checkpoint": {
+        "task_id": 1,
+        "training_seed": 20261024,
+        "arm": "B_fomaml",
+        "optimizer_updates": 500,
+        "path": "/tmp/libero-source-internal-spt-spi-artifacts-20261103-v2/p1-s20261024-B_fomaml-u500.pt",
+        "sha256": "c0c1a06ac18997c6dd012cab364e2a572d659749356a39df506d3c83b4ae86bd",
+        "weight_hash": "f139caf74b31aafb87219eaf84d2eeecb2d6826209e3c31067be4c46056d689d"
+      },
+      "support_features": {
+        "path": "/tmp/libero-source-internal-phase-history-observability-artifacts-20261104-v1/task1-seed20261024-B_fomaml-features.npz",
+        "sha256": "b2dc9fad5734125b06d37775aeaf4285c2f04de4c871bb5a775ccf8f36fb356b"
+      }
+    }
+  ],
+  "initial_bank": {
+    "relative_path": "libero_spatial/pick_up_the_black_bowl_next_to_the_ramekin_and_place_it_on_the_plate.pruned_init",
+    "size_bytes": 44207,
+    "sha256": "9b6927b6ef03460ab055141e1a1154ad85e5e290058d8ed3a8a314aff911f864",
+    "pickle_header_sha256": "b669c73497521c9f590807690c816633671c93a3475764d455cb677f696c26a4",
+    "candidate_indices": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      15,
+      16,
+      17,
+      18,
+      19
+    ]
+  },
+  "native_initial_root": "/home/zl202621/third_party/LIBERO/libero/libero/init_files",
+  "runtime_versions": {
+    "python": "3.10.22",
+    "torch": "2.4.1+cu124",
+    "numpy": "1.22.4",
+    "robosuite": "1.4.0",
+    "mujoco": "3.2.3"
+  },
+  "LIBERO_revision": "8f1084e3132a39270c3a13ebe37270a43ece2a01",
+  "inputs": {
+    "interface_result": {
+      "path": "/tmp/libero-task1-b-routed-runtime-interface-20261104-v1.json",
+      "sha256": "5a6f52a04a4110a37d219ea24b1c84a0e8e4215db34ce54cedc3ed317392d4f1"
+    },
+    "interface_audit": {
+      "path": "/tmp/libero-task1-b-routed-runtime-interface-independent-audit-20261104-v1.json",
+      "sha256": "0f5112023c7845015718dba49dff0d6e720d8b1544f25a6969cbc6a7fe539501"
+    },
+    "interface_config": {
+      "path": "configs/libero-task1-b-routed-runtime-interface-diagnostic_v1.json",
+      "sha256": "18f178f15c77585464e93f8c002e8dd764fd919d85da225a50f3f9f44f0669f9"
+    },
+    "interface_binding": {
+      "path": "configs/libero-task1-b-routed-runtime-interface-binding_v1.json",
+      "sha256": "3787ff8bb0b354b2527e63ac69cfd9129b202ac936eeb2134c9427faccdf3743"
+    },
+    "runtime_helper": {
+      "path": "experiments/libero_routed_history_runtime.py",
+      "sha256": "7a7dec646984eec71372c03b9bbc0eb7fc845bc6fc80c11a47d6d16c791de458"
+    },
+    "old_loop_helper": {
+      "path": "experiments/run_libero_source_internal_spt_spi_closed_loop_diagnostic.py",
+      "sha256": "cc55f097d331fde48573938fa0498925919807567ba5a5e0bf93a73fad8a6972"
+    },
+    "candidate_reader": {
+      "path": "experiments/run_libero_task4_task7_stabilization_closed_loop.py",
+      "sha256": "fed40bd93ef152b00915b56d4317a332f0981fbef2a6f1b1b38f721de5255912"
+    },
+    "adapter_builder": {
+      "path": "experiments/run_libero_bc_closed_loop_attribution.py",
+      "sha256": "767c738e7ab98501f21439f190fd8fc80c98a8c4ece6716476ddc4fa7e0b9557"
+    },
+    "adapter": {
+      "path": "src/environments/libero_adapter.py",
+      "sha256": "8dfa22a1e19b049d78c8e6ae05494291242cbde8a21194e0fbb321662d56512c"
+    },
+    "policy": {
+      "path": "src/algorithms/libero_bc_policy.py",
+      "sha256": "a3098a68b5ceab21495207856c9d94fd4a6d26c1668737625ecb7b5d46977735"
+    },
+    "pool": {
+      "path": "src/algorithms/libero_deterministic_pool.py",
+      "sha256": "ce0b21fde45ac780116b6e0fa084839cea00ad3910bd2bf93bf750173557545d"
+    },
+    "routed_result": {
+      "path": "/tmp/libero-task1-b-routed-history-readout-20261104-v1.json",
+      "sha256": "4ab522b340662751779f4c0ef3735847a781691b7a832c74f6a2029ddbd55304"
+    },
+    "routed_binding": {
+      "path": "configs/libero-task1-b-routed-history-readout-binding_v1.json",
+      "sha256": "f15b4303bfd3e7a5c2c81c24cc7ad64dfbd63637404dbeb880cbd76fd4d31e67"
+    },
+    "routed_audit": {
+      "path": "/tmp/libero-task1-b-routed-history-readout-independent-audit-20261104-v2.json",
+      "sha256": "1dcc7b43f1ae6a0f0bd3c3dae9b1dee6e383ac20ac216131f4ec577214b737a7"
+    },
+    "transfer": {
+      "path": "configs/libero_spatial_transfer_split_candidate_v1.json",
+      "sha256": "6cdc8c3eeaa90886ad0e15f0f4ebbe260aa972b6e69b1f122e95f65ab63dd7d6"
+    },
+    "learning": {
+      "path": "configs/libero_spatial_bc_policy_candidate_v1.json",
+      "sha256": "f5e57c895e9249ef7a3361ebee2119bf06c6cbb48da01c31980b1eb0af8feb1b"
+    },
+    "20261022_checkpoint": {
+      "path": "/tmp/libero-source-internal-spt-spi-artifacts-20261103-v2/p1-s20261022-B_fomaml-u500.pt",
+      "sha256": "9186e4db07cbdf3232f1284aa44e79227187e85053157cfa070c06b5949b2199"
+    },
+    "20261023_checkpoint": {
+      "path": "/tmp/libero-source-internal-spt-spi-artifacts-20261103-v2/p1-s20261023-B_fomaml-u500.pt",
+      "sha256": "ae9eb12288f497ac77704ae443b7d4b069eeadb8d91f30019e8bbbe524109a8d"
+    },
+    "20261024_checkpoint": {
+      "path": "/tmp/libero-source-internal-spt-spi-artifacts-20261103-v2/p1-s20261024-B_fomaml-u500.pt",
+      "sha256": "c0c1a06ac18997c6dd012cab364e2a572d659749356a39df506d3c83b4ae86bd"
+    },
+    "20261022_current_all7": {
+      "path": "/tmp/libero-task1-b-routed-history-readout-artifacts-20261104-v1/seed20261022-full_support-foldNone-current_all7.npz",
+      "sha256": "140861ca0d96d2dda263448703bae9677a47ba4a3f68400b01a04c6822c34ba3"
+    },
+    "20261022_history_motion_current_gripper": {
+      "path": "/tmp/libero-task1-b-routed-history-readout-artifacts-20261104-v1/seed20261022-full_support-foldNone-history_motion_current_gripper.npz",
+      "sha256": "2cf1a369f4b296719a9e27c0d362f951a976f0ae6fe6b7c7c8ac3746d7ae4aad"
+    },
+    "20261023_current_all7": {
+      "path": "/tmp/libero-task1-b-routed-history-readout-artifacts-20261104-v1/seed20261023-full_support-foldNone-current_all7.npz",
+      "sha256": "49723808be1ccc71c2bb080ce98238ac05a2d507fcb94142cd550f81ec5a4dd4"
+    },
+    "20261023_history_motion_current_gripper": {
+      "path": "/tmp/libero-task1-b-routed-history-readout-artifacts-20261104-v1/seed20261023-full_support-foldNone-history_motion_current_gripper.npz",
+      "sha256": "01d660d0ea44c83678f8dd61f1ec387c2617c112e6a0bdf5f9a0aa9349e71093"
+    },
+    "20261024_current_all7": {
+      "path": "/tmp/libero-task1-b-routed-history-readout-artifacts-20261104-v1/seed20261024-full_support-foldNone-current_all7.npz",
+      "sha256": "5bc1dbf1e4b36a5c344a52a9da117532b21132287d41a8895a37dd7b3d97a52c"
+    },
+    "20261024_history_motion_current_gripper": {
+      "path": "/tmp/libero-task1-b-routed-history-readout-artifacts-20261104-v1/seed20261024-full_support-foldNone-history_motion_current_gripper.npz",
+      "sha256": "0a54605e88b192621fd533ec14737a441c041eae86c94f4f997607af13b42885"
+    },
+    "parent_loop_config": {
+      "path": "configs/libero-task1-b-routed-history-closed-loop-diagnostic_v1.json",
+      "sha256": "b69b72b5fffba3e239e34eddc1e8e2c6bbcd57148473f6bb982f245518aaa288"
+    },
+    "parent_loop_binding": {
+      "path": "configs/libero-task1-b-routed-history-closed-loop-binding_v1.json",
+      "sha256": "0824787f9c6d8bd5e9de98347d21ebc671ea57573248434334653b2901d084ae"
+    },
+    "parent_loop_result": {
+      "path": "/tmp/libero-task1-b-routed-history-closed-loop-20261104-v1.json",
+      "sha256": "9cd8039dcbe79ec9c847e4e2681e62b47bf5e962472f3a26e00b4c72ad500084"
+    },
+    "parent_loop_audit": {
+      "path": "/tmp/libero-task1-b-routed-history-closed-loop-independent-audit-20261104-v1.json",
+      "sha256": "978cc7e588654693f13ba134f6668f2e760df9a008f6d7100d89615eebee4bab"
+    },
+    "step5_config": {
+      "path": "configs/libero-task1-b-step5-crossed-readout-diagnostic_v1.json",
+      "sha256": "a4404a86c5364ef5f3b3c73c04eb842d15fa758f68e6390895ca736f4be38dca"
+    },
+    "step5_binding": {
+      "path": "configs/libero-task1-b-step5-crossed-readout-binding_v1.json",
+      "sha256": "3ea4adbaef5e0f71523293babc433b322b406475db19b7a7bf1dec1d25920b4f"
+    },
+    "step5_result": {
+      "path": "/tmp/libero-task1-b-step5-crossed-readout-20261104-v1.json",
+      "sha256": "ff5fa357bbb80e4447db33d3981d916e042043b33aef087dfcd597dd4e315331"
+    },
+    "step5_audit": {
+      "path": "/tmp/libero-task1-b-step5-crossed-readout-independent-audit-20261104-v1.json",
+      "sha256": "702d7b1cc5f469718024b838b71dc9c3ae3b87ade3e3d18a903a898622e9d339"
+    },
+    "support_query_helper": {
+      "path": "experiments/run_libero_task1_b_support_query_history_readout.py",
+      "sha256": "740daed435910ebdefc7ec546a3b937ce4f7f561d03d724f95bdbe779be1d12b"
+    },
+    "learned_readout_helper": {
+      "path": "experiments/run_libero_learned_phase_history_readout.py",
+      "sha256": "d26fd19277ebc75215a8b62195f62713558a550dec7630a438fc66a5d01c6289"
+    },
+    "readonly_utils": {
+      "path": "experiments/libero_phase_history_neighbors.py",
+      "sha256": "6b2766eb86a1ab95e88b21188b1405e124644d308a9dd21123b8f38132ed56eb"
+    }
+  }
+}

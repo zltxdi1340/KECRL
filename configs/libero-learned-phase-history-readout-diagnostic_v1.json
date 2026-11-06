@@ -1,0 +1,235 @@
+{
+  "schema_version": 1,
+  "formal_result": false,
+  "check_type": "learned_fixed_feature_current_history_readout_diagnostic",
+  "frozen_at_utc": "2026-11-04T07:24:34.566603+00:00",
+  "scope": {
+    "task_ids": [
+      0,
+      1
+    ],
+    "training_seeds": [
+      20261022,
+      20261023,
+      20261024
+    ],
+    "feature_arms": [
+      "A_original",
+      "B_fomaml",
+      "C_pooled_bc"
+    ],
+    "feature_endpoints": 18,
+    "original_policy_updates": 500,
+    "closed_loop_default_stabilization_steps": 5,
+    "source_role": "meta_support",
+    "demonstration_indices": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      15,
+      16,
+      17,
+      18,
+      19,
+      20,
+      21,
+      22,
+      23,
+      24,
+      25,
+      26,
+      27,
+      28,
+      29
+    ],
+    "common_first_action_step": 5,
+    "history_steps": 5,
+    "readout_modes": [
+      "current_repeat5",
+      "causal_history5"
+    ],
+    "folds": 3,
+    "readout_models": 108,
+    "updates_per_readout": 500,
+    "optimizer_updates": 54000,
+    "backward_calls": 54000,
+    "train_forward_batches": 54000,
+    "metric_forward_batches": 432,
+    "train_valid_rows": 3456000,
+    "metric_valid_rows": 1450224,
+    "oof_rows_per_mode": 60426,
+    "event_pairs": 585,
+    "new_full_policy_forward_batches": 0,
+    "new_original_policy_optimizer_updates": 0,
+    "new_environment_calls": 0,
+    "new_HDF5_RGB_initial_private_checkpoint_payload_reads": 0,
+    "new_nearest_neighbor_searches": 0,
+    "source_query_accessed": false,
+    "sealed_roles_accessed": false,
+    "checkpoint_selected": false,
+    "original_policy_modified": false,
+    "spt_updated": false,
+    "knowledge_updated": false,
+    "module_registered": false
+  },
+  "analysis": {
+    "fold_demo_indices": [
+      [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9
+      ],
+      [
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19
+      ],
+      [
+        20,
+        21,
+        22,
+        23,
+        24,
+        25,
+        26,
+        27,
+        28,
+        29
+      ]
+    ],
+    "fold_role": "Each listed group is readout_probe only for that fold; remaining20 support demos are readout_fit. This is inside meta_support, not official validation or meta_query. Encoder previously exposed to all30.",
+    "input": "256D cached pre-head features. Normalize each lag by fit-only current-frame mean/std(float64,std<=1e-6=>1); concatenate5 lags and divide sqrt5, cast float32. Current repeats current feature5 times; history uses t,t-1,..t-4 within same demo.",
+    "model": {
+      "input_dimension": 1280,
+      "output_dimension": 7,
+      "architecture": "single Linear(1280,7) then tanh",
+      "parameters": 8967,
+      "initialization": "weight and bias exactly zero; both arms same predictions at0"
+    },
+    "optimizer": {
+      "name": "Adam",
+      "learning_rate": 0.0003,
+      "betas": [
+        0.9,
+        0.999
+      ],
+      "eps": 1e-08,
+      "weight_decay": 0.0,
+      "gradient_clip_norm": 1.0,
+      "batch_size": 64,
+      "loss": "uniform7D action MSE on common frames"
+    },
+    "sampling": "500 batches of64 fit rows sampled with replacement by numpy default_rng(training_seed+100000*fold). Reuse same array and hash for two modes. Training seed denotes original feature seed and minibatch seed, not an independent set of108 seeds.",
+    "curve_updates": [
+      0,
+      100,
+      250,
+      500
+    ],
+    "checkpoint_rule": "Always fixed final500; earlier points descriptive only, no early stopping or outcome-based selection.",
+    "evaluation": "At each curve point, one full common-frame forward, separately score fit/probe/all. Combine final probe rows over3 folds once per endpoint/mode for primary comparison. Original Policy prediction is contextual only; it trained all30.",
+    "metrics": [
+      "translation_MSE",
+      "rotation_MSE",
+      "gripper_MSE",
+      "seven_dimensional_MSE",
+      "gripper_sign_error_rate",
+      "gripper_zero_n"
+    ],
+    "strata": [
+      "all",
+      "known_open_event",
+      "known_open_segment",
+      "initial_open",
+      "expert_close"
+    ],
+    "primary_joint_cue": "Per task/feature_arm all3 seeds must have history strictly lower OOF open-event sign error, non-increased full known-open-segment sign error, non-increased overall7D MSE and non-increased overall translation MSE. Missing=>null. No automatic Policy training or SPT acceptance.",
+    "interpretation": "Conditional fixed-encoder readout learnability on exposed source support; same param count but different input rank. Cannot establish unseen transfer, necessary memory, closed-loop repair, head independent causality or qualification.",
+    "independent_prediction_tolerance": 1e-05,
+    "metric_tolerance": 1e-10
+  },
+  "inputs": {
+    "phase_history_result": {
+      "path": "/tmp/libero-source-internal-phase-history-observability-20261104-v1.json",
+      "sha256": "50a2c2a0971c2cea6be28e48b9857eb3e40904290d2c2c8a83c221f84eaeee49"
+    },
+    "phase_history_audit": {
+      "path": "/tmp/libero-source-internal-phase-history-observability-independent-audit-20261104-v1.json",
+      "sha256": "3393cdc9232e563f496a52df1bbc5ab7bba4e6c5b2f515386c912c02bc51a128"
+    },
+    "phase_history_config": {
+      "path": "configs/libero-source-internal-phase-history-observability-diagnostic_v1.json",
+      "sha256": "ab53c4c73f4df493749d1476cec50fd60bea79670a777f2817fd6df8450762f3"
+    },
+    "phase_history_binding": {
+      "path": "configs/libero-source-internal-phase-history-observability-binding_v1.json",
+      "sha256": "3d8686fa5868dd70cedb468940f76e8a80edcea24e1fcc1aec382af85621eaf5"
+    },
+    "full_open_result": {
+      "path": "/tmp/libero-source-internal-full-open-segments-20261104-v1.json",
+      "sha256": "6661ba1d9b8079725c754092251ea9d3a7cf381ccbaeaa9ea4defe41cfd458bf"
+    },
+    "task0_archive": {
+      "path": "/tmp/libero-source-internal-fixed500-expert-frame-artifacts-20261103-v1/task0-expert-targets-and-predictions.npz",
+      "sha256": "eae6a721620819458b5e81b0738f23ea95f1de6b043cf4322507a61fc53768bd"
+    },
+    "task1_archive": {
+      "path": "/tmp/libero-source-internal-fixed500-expert-frame-artifacts-20261103-v1/task1-expert-targets-and-predictions.npz",
+      "sha256": "20394b4fb6da65a1d6b6b5e51003c000563935ff16c5420557b53eca265d2ac5"
+    },
+    "pure_saved_array_helpers": {
+      "path": "experiments/analyze_libero_source_internal_gripper_sign_margin_temporal.py",
+      "sha256": "d688c0d217fd578626897b75b0a14c777c94b77f8fda80bab989fb07248d618c"
+    },
+    "neighbor_result": {
+      "path": "/tmp/libero-phase-history-transition-neighbors-20261104-v2.json",
+      "sha256": "c37b1bb934e783687cb7493fac98921eec7b9a16c31e8f48b6739647cc3f454f"
+    },
+    "neighbor_audit": {
+      "path": "/tmp/libero-phase-history-transition-neighbors-independent-audit-20261104-v2.json",
+      "sha256": "4cf54bab5a38117afb804c088ca7f631624f45351e9e7e5415a61cae6eec150e"
+    },
+    "neighbor_report": {
+      "path": "docs/libero-phase-history-transition-neighbors-diagnostic-2026-11-04.md",
+      "sha256": "3884be66cd4e1eb1c167a8ce947ac7abe0452c0a22832f89e85bee510d35c1a1"
+    }
+  },
+  "execution": {
+    "output": "/tmp/libero-learned-phase-history-readout-20261104-v1.json",
+    "artifacts": "/tmp/libero-learned-phase-history-readout-artifacts-20261104-v1",
+    "device": "cpu",
+    "threads": 1,
+    "runtime": {
+      "python": "3.10.22",
+      "torch": "2.4.1+cu124",
+      "numpy": "1.22.4"
+    },
+    "CUDA_VISIBLE_DEVICES": ""
+  }
+}

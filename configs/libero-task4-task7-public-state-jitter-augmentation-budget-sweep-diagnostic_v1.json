@@ -1,0 +1,203 @@
+{
+  "schema_version": 1,
+  "status": "libero_task4_task7_public_state_jitter_augmentation_budget_sweep_diagnostic_protocol",
+  "protocol_status": "frozen_protocol_authorized",
+  "formal_result": false,
+  "diagnostic_result": true,
+  "purpose": "Freeze a paired source-baseline versus public-state-jitter budget sweep with support/query curves at 500, 1000, and 2000 optimizer updates",
+  "source_query_config": "configs/libero-runtime-native-task4-task7-support-query-hdf5-diagnostic_v1.json",
+  "source_query_config_sha256": "9d355ffa017b4b32b87336cecdbd89a33a67a1089cd72e37110043673b78793c",
+  "source_query_result_path": "/tmp/libero-source-meta-query-generalization-task4-task7-20261030-v1.json",
+  "source_query_result_sha256": "091bbb49669d2f0c4196f856ec5f9618e51a08cbc08709dbc844fb747880ac27",
+  "source_training_config_sha256": "bbc4b28c4d2d606f2595642ee0f2936bb3fbcded3e5cbd9449e78b337f134e53",
+  "source_policy_config_sha256": "f5e57c895e9249ef7a3361ebee2119bf06c6cbb48da01c31980b1eb0af8feb1b",
+  "source_transfer_split_sha256": "6cdc8c3eeaa90886ad0e15f0f4ebbe260aa972b6e69b1f122e95f65ab63dd7d6",
+  "task_ids": [
+    4,
+    7
+  ],
+  "training_seeds": [
+    20261022,
+    20261023,
+    20261024
+  ],
+  "data": {
+    "access_phase": "development",
+    "training_role": "meta_support",
+    "training_demonstration_indices": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      15,
+      16,
+      17,
+      18,
+      19,
+      20,
+      21,
+      22,
+      23,
+      24,
+      25,
+      26,
+      27,
+      28,
+      29
+    ],
+    "evaluation_role": "meta_query",
+    "evaluation_demonstration_indices": [
+      30,
+      31,
+      32,
+      33,
+      34,
+      35,
+      36,
+      37,
+      38,
+      39,
+      40,
+      41,
+      42,
+      43,
+      44,
+      45,
+      46,
+      47,
+      48,
+      49
+    ],
+    "observation_action_alignment": "causal_pre_action",
+    "policy_memory_mode": "cnn_only",
+    "dataset_roles_frozen": true,
+    "candidate_nonregression_accessed": false,
+    "qualification_accessed": false,
+    "validation_accessed": false,
+    "heldout_accessed": false,
+    "final_evaluation_accessed": false
+  },
+  "policy": {
+    "model": "CNN-only Full Policy",
+    "loss": "uniform seven-dimensional action MSE",
+    "optimizer": "Adam",
+    "learning_rate": 0.0003,
+    "batch_size": 8,
+    "max_optimizer_updates": 2000,
+    "curve_checkpoint_updates": [
+      500,
+      1000,
+      2000
+    ],
+    "gradient_clip_norm": 1.0,
+    "num_workers": 0,
+    "same_initial_model_and_batch_order_between_arms": true,
+    "checkpoint_selection": false,
+    "source_baseline_reference_arm": "pinned source query Full Policy at 500 updates",
+    "source_jitter_reference_arm": "pinned authorized jitter run at 500 updates",
+    "arm_names": [
+      "source_baseline",
+      "public_state_jitter"
+    ],
+    "endpoint_model_count": 12,
+    "curve_checkpoint_count": 36
+  },
+  "augmentation": {
+    "arm_names": [
+      "source_baseline",
+      "public_state_jitter"
+    ],
+    "apply_to": [
+      "joint_states",
+      "gripper_states"
+    ],
+    "preserve": [
+      "agentview_rgb",
+      "eye_in_hand_rgb",
+      "actions"
+    ],
+    "distribution": "independent_uniform_symmetric_per_element",
+    "joint_half_width": 0.05,
+    "gripper_half_width": 0.005,
+    "clamp_to_observation_range": false,
+    "augmentation_seed_offset": 910041,
+    "training_only": true,
+    "evaluation_augmentation_enabled": false,
+    "single_changed_training_variable": "public joint/gripper input jitter"
+  },
+  "evaluation": {
+    "support_fit_metrics": "offline action MSE on source meta_support at each curve checkpoint",
+    "query_metrics": "offline action MSE on disjoint source meta_query at each curve checkpoint",
+    "query_dataset_created_after_all_support_fits_per_task": true,
+    "policy_actions_executed_in_environment": false,
+    "new_episode_budget": 0,
+    "training_budget_current_phase": 12,
+    "max_optimizer_updates_per_model": 2000,
+    "curve_checkpoint_updates": [
+      500,
+      1000,
+      2000
+    ],
+    "candidate_nonregression_accessed": false,
+    "qualification_accessed": false,
+    "validation_accessed": false,
+    "heldout_accessed": false,
+    "final_evaluation_accessed": false,
+    "checkpoint_selection": false,
+    "curve_checkpoints_are_logging_only": true
+  },
+  "current_phase_boundary": {
+    "protocol_only": false,
+    "new_training_executed": false,
+    "new_rollout_executed": false,
+    "training_budget_is_zero": false,
+    "episode_budget_is_zero": true,
+    "spt_updated": false,
+    "knowledge_updated": false,
+    "module_qualification": false
+  },
+  "interpretation_boundary": {
+    "formal_spi_result": false,
+    "module_qualification": false,
+    "causal_claim": false,
+    "query_is_same_source_task_demo_generalization": true,
+    "query_metrics_are_not_online_policy_success": true,
+    "candidate_states_are_not_used_for_training_variable_selection": true,
+    "runtime_native_policy_artifacts_must_not_be_mixed": true,
+    "curve_points_are_fixed_logging_checkpoints_not_selected_checkpoints": true,
+    "budget_comparison_requires_baseline_and_jitter_at_each_point": true,
+    "execution_requires_explicit_training_budget_change": false
+  },
+  "authorization": {
+    "authorized_by_user_instruction": "继续下一步，冻结一个 500/1000/2000 updates 的预算对照，同时重训 baseline 和 jitter 两臂，记录中间 support/query 曲线",
+    "authorized_at_utc": "2026-10-31 12:40:00 UTC",
+    "budget_change_from_previous_authorized_run": {
+      "previous_endpoint_model_count": 6,
+      "new_endpoint_model_count": 12,
+      "previous_max_optimizer_updates": 500,
+      "new_max_optimizer_updates": 2000,
+      "curve_checkpoint_updates": [
+        500,
+        1000,
+        2000
+      ]
+    },
+    "episode_budget_change": false,
+    "checkpoint_selection_change": false
+  },
+  "source_jitter_result_path": "/tmp/libero-task4-task7-public-state-jitter-augmentation-20261031-v1.json",
+  "source_jitter_result_sha256": "257904ef89aaec64d465311de5bb1d0b2ac2fb6929c22f1977a2e48db132bc7a",
+  "source_jitter_config": "configs/libero-task4-task7-public-state-jitter-augmentation-diagnostic_v2.json",
+  "source_jitter_config_sha256": "1280ebc125e1d9afd01d37cbebdf106245fc247a56a18b56cc833a4e6f1c4d4f"
+}

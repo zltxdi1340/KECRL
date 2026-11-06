@@ -1,0 +1,134 @@
+{
+  "schema_version": 1,
+  "check_type": "libero_source_internal_gripper_sign_margin_temporal_readonly",
+  "formal_result": false,
+  "frozen_at_utc": "2026-11-03T17:25:11.001638+00:00",
+  "scope": {
+    "task_ids": [
+      0,
+      1
+    ],
+    "training_seeds": [
+      20261022,
+      20261023,
+      20261024
+    ],
+    "arms": [
+      "A_original",
+      "B_fomaml",
+      "C_pooled_bc"
+    ],
+    "conditions": [
+      "hold_event_preaction_gripper",
+      "lag1_gripper"
+    ],
+    "primary_condition": "hold_event_preaction_gripper",
+    "checkpoint_updates": 500,
+    "closed_loop_stabilization_steps": 5,
+    "loss_observation_changed": false,
+    "source_role": "meta_support",
+    "demonstration_indices": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      15,
+      16,
+      17,
+      18,
+      19,
+      20,
+      21,
+      22,
+      23,
+      24,
+      25,
+      26,
+      27,
+      28,
+      29
+    ],
+    "selected_frames_by_task": {
+      "0": 149,
+      "1": 157
+    },
+    "reused_models": 18,
+    "selected_model_frame_rows_per_condition": 2754,
+    "expected_correct_to_wrong_by_condition": {
+      "hold_event_preaction_gripper": 17,
+      "lag1_gripper": 5
+    },
+    "new_policy_forward_batches": 0,
+    "new_training_updates": 0,
+    "new_backward_calls": 0,
+    "new_environment_calls": 0,
+    "new_HDF5_RGB_initial_private_checkpoint_payload_reads": 0,
+    "sealed_roles_accessed": false,
+    "checkpoint_selected": false,
+    "spt_updated": false,
+    "knowledge_updated": false,
+    "module_registered": false
+  },
+  "analysis": {
+    "cohort": "All frozen306 post-open/expert-open frames and all18 models, both conditions. Preserve original per-model labels, all65 events including zero selected coverage, all30 demos and empty groups. No new frame selection.",
+    "margin": "abs(float64(original archived gripper action)); report raw original/changed/response and min/median/max/mean. No near-zero cutoff, threshold sweep, probability or force interpretation.",
+    "partition": "Strict original and changed signs in {-1,0,+1}; retain all9 cells. Correct is negative for these expert-open frames; harmed=old<0,new>=0, split positive-close versus exactly-zero. Persistent-at-frame=old>=0,new>=0, not necessarily temporally sustained.",
+    "reference": "Original-correct and original-wrong distributions per same model and selected phase; case empirical margin rank among original-correct frames is descriptive, not significance.",
+    "crossing_identity": "For harmed old<0,new>=0: positive delta_g = abs(old_g)+new_g. Report delta_g/abs(old_g), not explained fraction or causal attribution.",
+    "temporal": "Within identical task/seed/arm/condition/demo/open-event, group sorted observed action t; consecutive means actual t+1, never list adjacency across a missing step, event, demo, seed or model.",
+    "runs": "Report old-wrong, changed-wrong, harmed and persistent-at-frame runs on frozen selected expert-open lags1..5. Temporal repetition means length>=2; zero-length has no inferred endpoint. Keep full availability, missing lags and left/right scope censoring. No extrapolation beyond observed selection.",
+    "extension": "For each harmed run record containing changed-wrong run and count of old-wrong frames in that connected run; this separates only-new-error runs from joining/extending existing errors, not mutually exclusive physical mechanisms.",
+    "outputs": "Every harmed case raw values/lag/event/model IDs, all cohorts and event patterns including zeros, per-model/task-arm/task summaries, model-frame versus unique source-frame/event counts, condition overlap, no pooled-task rate or independent-sample significance.",
+    "decision": "Read-only descriptive audit only. Keep500/stabilization5/currentloss and all prior stop decisions. No automatic new training, inference, SPT/Knowledge/Module promotion."
+  },
+  "failure_rule": "Stop on pin/complete-status/model/source-role/shape/dtype/finite/bounds/frozen-frame-sign/parity/count mismatch, preserve existing files and partial failure metadata; no relaxed gates.",
+  "inputs": {
+    "control_result": {
+      "path": "/tmp/libero-source-internal-gripper-state-local-control-20261104-v1.json",
+      "sha256": "01f8b58b9bf0a880629778547b4bc745b8c757f5ed35c69baaf4702997519ffa"
+    },
+    "control_audit": {
+      "path": "/tmp/libero-source-internal-gripper-state-local-control-independent-audit-20261104-v1.json",
+      "sha256": "b81214ffadd6e53682f445a068f53c2c6fa8d5e84ce8f88d93ede08319914096"
+    },
+    "control_verification": {
+      "path": "/tmp/libero-source-internal-gripper-state-control-execution-final-verification-20261104-v1.json",
+      "sha256": "7c08f45fb03c6ec340cd22151f22626b819cb678c39c9b1f53fa4b97e305c70c"
+    },
+    "samples": {
+      "path": "/tmp/libero-source-internal-gripper-state-control-samples-20261103-v1.json",
+      "sha256": "746d461b9c32ca63d43244a71a9c434582a83de906e9ec3fc43b5b79ad5dc323"
+    },
+    "control_design": {
+      "path": "configs/libero-source-internal-gripper-state-local-control-diagnostic_v1.json",
+      "sha256": "bf38389d06d2d43c74991365d4763cc0cbbe94ee8517ef1c9cf51ca4d4d40206"
+    },
+    "control_design_binding": {
+      "path": "configs/libero-source-internal-gripper-state-local-control-design-binding_v1.json",
+      "sha256": "e81809ebff82d4adebf39aafb2b13cbd963db9d69a4c30aceed155ddca8257d8"
+    },
+    "control_execution_binding": {
+      "path": "configs/libero-source-internal-gripper-state-local-control-execution-binding_v1.json",
+      "sha256": "89975352f247f5b8e8a03421294efdadc7cb2596cfeba11d6e09a785c03cb199"
+    },
+    "task0_archive": {
+      "path": "/tmp/libero-source-internal-fixed500-expert-frame-artifacts-20261103-v1/task0-expert-targets-and-predictions.npz",
+      "sha256": "eae6a721620819458b5e81b0738f23ea95f1de6b043cf4322507a61fc53768bd"
+    },
+    "task1_archive": {
+      "path": "/tmp/libero-source-internal-fixed500-expert-frame-artifacts-20261103-v1/task1-expert-targets-and-predictions.npz",
+      "sha256": "20394b4fb6da65a1d6b6b5e51003c000563935ff16c5420557b53eca265d2ac5"
+    }
+  }
+}

@@ -1,0 +1,41 @@
+{
+  "schema_version": 1,
+  "formal_result": false,
+  "status": "frozen_before_real_feature_extraction",
+  "frozen_at_utc": "2026-11-04T01:27:36.624376+00:00",
+  "config_sha256": "ab53c4c73f4df493749d1476cec50fd60bea79670a777f2817fd6df8450762f3",
+  "files": {
+    "runner": {
+      "path": "experiments/run_libero_source_internal_phase_history_observability.py",
+      "sha256": "7dffe0f0ad4d5685f46dfe5b6ad4b08392e98113cd94ffd00cbbcf11bc72be90"
+    },
+    "neighbors": {
+      "path": "experiments/libero_phase_history_neighbors.py",
+      "sha256": "6b2766eb86a1ab95e88b21188b1405e124644d308a9dd21123b8f38132ed56eb"
+    },
+    "tests": {
+      "path": "tests/test_libero_source_internal_phase_history_observability.py",
+      "sha256": "ccebda1b47f06b986188b64319b4f631699c73711194daf71943e63a36169049"
+    },
+    "protocol": {
+      "path": "docs/libero-source-internal-phase-history-observability-protocol-2026-11-04.md",
+      "sha256": "9285c24f775fa8b42e9fc7e2a7514c8d7c135879049cc696c57eff5053a3dd82"
+    }
+  },
+  "validation": {
+    "focused_tests": "56 passed in1.05s",
+    "py_compile": "passed"
+  },
+  "real_policy_feature_calls_before_binding": 0,
+  "real_HDF5_RGB_checkpoint_payload_reads_before_binding": 0,
+  "planned_main_forward_batches": 819,
+  "planned_repeat_forward_batches": 18,
+  "launch_environment": {
+    "CUDA_VISIBLE_DEVICES": "1",
+    "CUBLAS_WORKSPACE_CONFIG": ":4096:8",
+    "OMP_NUM_THREADS": "1",
+    "OPENBLAS_NUM_THREADS": "1",
+    "MKL_NUM_THREADS": "1"
+  },
+  "distance_dimension_block": 64
+}

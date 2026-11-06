@@ -1,0 +1,71 @@
+{
+  "schema_version": 1,
+  "status": "candidate_design_not_executed",
+  "formal_result": false,
+  "diagnostic_result": true,
+  "execution_enabled": false,
+  "purpose": "Test a single local gripper-loss modification after the fixed-Policy expert-target diagnostic; this is not a complete executable training protocol",
+  "evidence": {
+    "expert_error_result_path": "/tmp/libero-task4-task7-expert-action-error-20261101-v1.json",
+    "expert_error_result_sha256": "11bed14d3624144553d11e9395b66ee4621e69b5284e740c75117a60e7d7273e",
+    "independent_audit_path": "/tmp/libero-task4-task7-expert-action-error-independent-audit-20261101-v1.json",
+    "independent_audit_sha256": "8a2e6ed375680c88b2fabcc0d7b165096f87e806ef20d7ac42b188f39cbf3bf5",
+    "baseline_budget_sweep_config": "configs/libero-task4-task7-public-state-jitter-augmentation-budget-sweep-diagnostic_v1.json",
+    "baseline_budget_sweep_config_sha256": "755f06f018687f1599fc9c2db1aff0f2f15a490d1ccd2d83abfe54f544ef40fb",
+    "historical_global_gripper_weighting_report": "docs/libero-phase-gripper-loss-diagnostic-2026-10-25.md",
+    "interpretation": "An expert-command transition error hotspot motivates one diagnostic candidate; it does not establish a cause of free-running failure"
+  },
+  "proposed_training": {
+    "task_ids": [4, 7],
+    "training_seeds": [20261022, 20261023, 20261024],
+    "arms": ["source_baseline", "open_transition_gripper_weight_2"],
+    "model_count": 12,
+    "optimizer_updates_per_model": 500,
+    "proposed_total_optimizer_updates": 6000,
+    "baseline_weight_hash_must_match_existing_500_update_reference": true,
+    "checkpoint_rule": "final_update_500_only",
+    "training_demonstration_role": "meta_support",
+    "training_demonstration_indices": [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29],
+    "query_demonstration_role": "meta_query",
+    "query_demonstration_indices": [30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49],
+    "observation_memory_optimizer_and_sampling": "identical_to_pinned_CNN_only_uniform_loss_baseline; no_jitter_or_new_augmentation",
+    "source_initial_observation_capture": "must_retain_baseline_contract_and_receive_explicit_budget_in_the_future_execution_protocol",
+    "training_t0": "retain_baseline_real_causal_initial_observation; gripper_weight_1; do_not_drop_or_fabricate_t0"
+  },
+  "single_training_variable": {
+    "name": "local_expert_open_transition_gripper_mse_weight",
+    "open_transition_event": "sign(expert_action[t-1,6])>=0 and sign(expert_action[t,6])<0 for t>=1",
+    "window_radius_steps": 5,
+    "window_clipped_to_demo_action_indices": "1..T-1",
+    "overlapping_windows": "union_single_weight_2_no_accumulation",
+    "inside_window_gripper_weight": 2.0,
+    "outside_window_gripper_weight": 1.0,
+    "other_six_action_weights": 1.0,
+    "loss_numerator": "sum_valid_t(sum_d_0_to_5((pred-target)^2) + w_t*(pred_gripper-target_gripper)^2)",
+    "loss_denominator": "7 * valid_step_count; same_as_baseline",
+    "compute_labels": "per_full_meta_support_demo_before_sequence_window_slicing; never_across_demo_boundaries",
+    "inference_phase_or_expert_action_input": false,
+    "coefficient_search": false,
+    "coefficient_is_an_estimated_optimum": false
+  },
+  "before_execution": [
+    "Implement and test the local loss, preserving baseline hash parity and the single-variable comparison",
+    "Freeze the executable configuration, actual optimizer/runtime, source initial-observation capture budget, and reporting/stop rules",
+    "Check GPU occupation before any training",
+    "Freeze candidate-only closed-loop comparison separately, preserving full state order and native reset history"
+  ],
+  "current_authorization_and_boundary": {
+    "new_optimizer_updates_authorized_by_this_proposal": 0,
+    "new_episodes_authorized_by_this_proposal": 0,
+    "new_training_executed": false,
+    "new_closed_loop_evaluation_executed": false,
+    "jitter_promoted_to_default": false,
+    "qualification_accessed": false,
+    "validation_accessed": false,
+    "heldout_accessed": false,
+    "final_evaluation_accessed": false,
+    "spt_updated": false,
+    "knowledge_updated": false,
+    "module_qualified": false
+  }
+}

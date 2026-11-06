@@ -1,0 +1,96 @@
+{
+  "schema_version": 1,
+  "check_type": "libero_source_internal_nontransition_translation_reference_readonly",
+  "formal_result": false,
+  "frozen_at_utc": "2026-11-03T13:10:17.140358+00:00",
+  "scope": {
+    "task_ids": [
+      0,
+      1
+    ],
+    "training_seeds": [
+      20261022,
+      20261023,
+      20261024
+    ],
+    "arms": [
+      "A_original",
+      "B_fomaml",
+      "C_pooled_bc"
+    ],
+    "checkpoint_updates": 500,
+    "closed_loop_stabilization_steps": 5,
+    "loss_observation_changed": false,
+    "unique_cached_expert_frames": 6954,
+    "existing_model_prediction_rows": 62586,
+    "new_policy_forward_batches": 0,
+    "new_training_updates": 0,
+    "new_environment_calls": 0,
+    "new_HDF5_RGB_initial_checkpoint_payload_reads": 0,
+    "sealed_roles_accessed": false,
+    "checkpoint_selected": false,
+    "active_spt_updated": false,
+    "knowledge_updated": false,
+    "module_registered": false
+  },
+  "analysis": {
+    "reference_mask": "Use saved mask_away_from_transitions, require exact complement of near_open OR near_close; all legal source-support t>=1, all demos0..29.",
+    "expected_reference_frames_by_task": {
+      "0": 2207,
+      "1": 3324
+    },
+    "reference_modes": [
+      "global_nontransition",
+      "same_expert_sign_nontransition"
+    ],
+    "primary_reference": "For each task/arm/seed mean translation MSE on all fixed reference frames; no selection by predictions, errors, outcomes or phase results.",
+    "secondary_reference": "Same fixed mask additionally conditioned on the expert gripper sign of the contrasted frame; zero-reference class gives null, no fallback.",
+    "translation_error": "mean((float64(original_float32_pred[:3])-float64(original_float32_target[:3]))**2)",
+    "centering": "r_seed_frame = translation_MSE_seed_frame - reference_mean_seed; negative residuals retained, no clipping, division or rescaling.",
+    "fixed_contrasts": "Reuse all192 prior cross-seed groups and their exact expert frame IDs and error/correct seed sets. Check against cached strict signs and fixed phase/context definitions; no new filtering.",
+    "identity": "centered_difference = raw_difference - (mean(reference_wrong_seeds)-mean(reference_correct_seeds)); check direct residual difference abs1e-12.",
+    "same_seed_identity": "Subtracting a seed-specific constant cancels in wrong-minus-correct comparisons within that seed and same expert command; do not report it as new independent evidence.",
+    "primary_groups": "open/post/expert_open_pred_close/all for both tasks/all3 arms; preserve pre/at/close/opposite direction/boundary and no-opposite-overlap controls.",
+    "summaries": "Per-frame raw/reference-gap/centered values, count/mean/median/min/max/positive counts; per-demo summaries with missing demos; equal-demo mean/median secondary. No task pooling.",
+    "interpretation_rule": "Positive adjusted mean means the chosen additive nontransition reference does not remove the conditional association; it does not rule out all global-fit confounding or establish phase-specific causality.",
+    "flags": "Report raw_positive_mean, centered_positive_mean and mean-sign reversal separately, null when no valid adjusted contrasts. No statistical significance, training gate, causal explained-fraction or checkpoint choice.",
+    "empty_and_missing": "Keep every original frame record and group; null for missing references/empty contrasts, retain n/missing; never impute0 or alter seed sets.",
+    "preservation": "Original phase outputs, predictions, targets, masks and all checkpoint/data files unchanged.",
+    "training_decision": "Keep500/stabilization5/current loss unless a separately frozen controlled diagnostic supports a specific modification."
+  },
+  "failure_rule": "Abort on hash/source-role/matrix/reference-mask/count/frame-ID/seed-set/phase membership/nonfinite/bounds/identity mismatch; preserve old outputs, never relax gates.",
+  "inputs": {
+    "phase_result": {
+      "path": "/tmp/libero-source-internal-event-phase-direction-translation-20261103-v1.json",
+      "sha256": "50464d935d643769c52c97e34f0af2d38b3e44f8bdd90e0d0685814495a5b470"
+    },
+    "phase_audit": {
+      "path": "/tmp/libero-source-internal-event-phase-direction-translation-independent-audit-20261103-v1.json",
+      "sha256": "b05577dd3e265289f2417ffd5450bea843ed106066a3d0c40837e445e79cbe2f"
+    },
+    "phase_verification": {
+      "path": "/tmp/libero-source-internal-event-phase-final-verification-20261103-v1.json",
+      "sha256": "ac0a372de47c07936d9c533c22eb422f6cfb22258f02d8d477bb0b87c2e16bc3"
+    },
+    "phase_design": {
+      "path": "configs/libero-source-internal-event-phase-direction-translation-readonly_v1.json",
+      "sha256": "162a3248118b94d3c83bb9d898c8bdddbae5210a929795dfd02002966c30d84f"
+    },
+    "phase_binding": {
+      "path": "configs/libero-source-internal-event-phase-direction-translation-execution-binding_v1.json",
+      "sha256": "a69adb6ee7fbd2d89e794d0027f9508f89979087f6e72e7329432ba909f33d71"
+    },
+    "phase_operators": {
+      "path": "experiments/analyze_libero_source_internal_event_phase_direction_translation.py",
+      "sha256": "c9274a918d4caf24552b3080db0a8401e1c003151689a630bd0798cefd0c78d9"
+    },
+    "task0_archive": {
+      "path": "/tmp/libero-source-internal-fixed500-expert-frame-artifacts-20261103-v1/task0-expert-targets-and-predictions.npz",
+      "sha256": "eae6a721620819458b5e81b0738f23ea95f1de6b043cf4322507a61fc53768bd"
+    },
+    "task1_archive": {
+      "path": "/tmp/libero-source-internal-fixed500-expert-frame-artifacts-20261103-v1/task1-expert-targets-and-predictions.npz",
+      "sha256": "20394b4fb6da65a1d6b6b5e51003c000563935ff16c5420557b53eca265d2ac5"
+    }
+  }
+}

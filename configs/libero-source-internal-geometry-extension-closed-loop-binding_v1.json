@@ -1,0 +1,142 @@
+{
+  "schema_version": 1,
+  "status": "execution_frozen_before_geometry_extension_closed_loop",
+  "formal_result": false,
+  "recorded_user_request": "下一步继续做实验，现在进行到哪一步了，这周要把libero做完",
+  "protocol_not_executed_at_freeze": true,
+  "frozen_at_utc": "2026-11-05T03:50:52.206517+00:00",
+  "config_path": "configs/libero-source-internal-geometry-extension-closed-loop-diagnostic_v1.json",
+  "config_sha256": "0d835fa1d74f5696515123f1e828a6b1301cb59813a86a6bf87b306422dc31e3",
+  "planned_episodes": 360,
+  "files": {
+    "runner": {
+      "path": "experiments/run_libero_source_internal_geometry_extension_closed_loop.py",
+      "sha256": "5732a4e1026ee6cb7df1d6a051376be5ebca14527e2dcc558031c71085852141"
+    },
+    "candidate_reader": {
+      "path": "experiments/run_libero_task4_task7_stabilization_closed_loop.py",
+      "sha256": "fed40bd93ef152b00915b56d4317a332f0981fbef2a6f1b1b38f721de5255912"
+    },
+    "candidate_reader_helpers": {
+      "path": "experiments/analyze_libero_task4_task7_evidence_decomposition.py",
+      "sha256": "9bf4ff6b3d18345be1b7d9e3b50d887a7ca78c1f34e9c039c10ced283472a4a4"
+    },
+    "candidate_reader_original": {
+      "path": "experiments/run_libero_task4_task7_full_policy_closed_loop_diagnostic.py",
+      "sha256": "430760b989d08c7a60ec2a8153bece07fe486c55582d95e903951653276bb004"
+    },
+    "adapter_builder": {
+      "path": "experiments/run_libero_bc_closed_loop_attribution.py",
+      "sha256": "767c738e7ab98501f21439f190fd8fc80c98a8c4ece6716476ddc4fa7e0b9557"
+    },
+    "adapter": {
+      "path": "src/environments/libero_adapter.py",
+      "sha256": "8dfa22a1e19b049d78c8e6ae05494291242cbde8a21194e0fbb321662d56512c"
+    },
+    "policy": {
+      "path": "src/algorithms/libero_bc_policy.py",
+      "sha256": "a3098a68b5ceab21495207856c9d94fd4a6d26c1668737625ecb7b5d46977735"
+    },
+    "deterministic_pool": {
+      "path": "src/algorithms/libero_deterministic_pool.py",
+      "sha256": "ce0b21fde45ac780116b6e0fa084839cea00ad3910bd2bf93bf750173557545d"
+    },
+    "gpu_guard": {
+      "path": "experiments/run_libero_source_internal_spt_spi_diagnostic_v2.py",
+      "sha256": "540ad67acc81543d672b0e144cad7ad57db07e0c5cc60394042b78d7a0e0fbdf"
+    },
+    "causal_helpers": {
+      "path": "experiments/run_libero_bc_causal_alignment_diagnostic.py",
+      "sha256": "780e26d1a50d452609fb24b2a7d4740351f4f044dadc03a286e8523bfbe22e22"
+    },
+    "test_protocol": {
+      "path": "tests/test_libero_source_internal_spt_spi_closed_loop_protocol.py",
+      "sha256": "7cd2a52ab6d4c60e02f94ae0ccf48f49d35fe1e4f873bceab6e032f99eabc560"
+    },
+    "test_selective_reader": {
+      "path": "tests/test_libero_stabilization_closed_loop.py",
+      "sha256": "023d9adc9cca24faf95856335bcc7b9985e816594e4b57d71c4f5b01ab7a0533"
+    },
+    "test_pool": {
+      "path": "tests/test_libero_deterministic_pool.py",
+      "sha256": "101283b9ef2703e999b6b8b8ae7de5b914e4dcd58fd190c67b82d9333511f63f"
+    },
+    "protocol_note": {
+      "path": "docs/libero-source-internal-spt-spi-closed-loop-protocol-2026-11-03.md",
+      "sha256": "795e08aa1651599798f0ff3596c1671b303348cde14e13d6369658560c8dd5f4"
+    },
+    "libero_wrapper": {
+      "path": "/home/zl202621/third_party/LIBERO/libero/libero/envs/env_wrapper.py",
+      "sha256": "a782fb76c9792268d28979474fe72849e1e98ada49c8e997a65359a8d6b6acd0"
+    },
+    "libero_domain": {
+      "path": "/home/zl202621/third_party/LIBERO/libero/libero/envs/bddl_base_domain.py",
+      "sha256": "055836670ac5fcac7e033fc86404718fd53854996e5776b1ff68b646f7bbcc9d"
+    },
+    "robosuite_single_arm": {
+      "path": "/home/zl202621/.conda/envs/libero-kecrl/lib/python3.10/site-packages/robosuite/robots/single_arm.py",
+      "sha256": "d233b1b785e8f88ffb5df1357666b02a397ae930ce98181b079e0496ab35fc57"
+    },
+    "robosuite_manipulator": {
+      "path": "/home/zl202621/.conda/envs/libero-kecrl/lib/python3.10/site-packages/robosuite/robots/manipulator.py",
+      "sha256": "d37ff4c00112cfba9bf4b96bf48ad5664422fd824dd4fbcd1eebda650a451b64"
+    },
+    "robosuite_panda_gripper": {
+      "path": "/home/zl202621/.conda/envs/libero-kecrl/lib/python3.10/site-packages/robosuite/models/grippers/panda_gripper.py",
+      "sha256": "a3760a8fc4599fa6f79914304b82466f3c1bda1a945943ca693bb57f00dc59eb"
+    },
+    "robosuite_robot_env": {
+      "path": "/home/zl202621/.conda/envs/libero-kecrl/lib/python3.10/site-packages/robosuite/environments/robot_env.py",
+      "sha256": "a0b39012c175272a2037a7a66a771d416b905a5a7b847e53c60a0588407398af"
+    },
+    "task4_bddl": {
+      "path": "/home/zl202621/third_party/LIBERO/libero/libero/bddl_files/libero_spatial/pick_up_the_black_bowl_in_the_top_drawer_of_the_wooden_cabinet_and_place_it_on_the_plate.bddl",
+      "sha256": "4371189e11d9fd29bb548ab9a8adcd741bb0ce41bb66c612672d0e8cb29a52a9"
+    },
+    "task7_bddl": {
+      "path": "/home/zl202621/third_party/LIBERO/libero/libero/bddl_files/libero_spatial/pick_up_the_black_bowl_on_the_stove_and_place_it_on_the_plate.bddl",
+      "sha256": "dd11837141a30d874ebbbfaae20e91ecc67ec85ab3872ceb4cff3abfcbef7cb0"
+    },
+    "independent_auditor": {
+      "path": "experiments/audit_libero_source_internal_geometry_extension_closed_loop.py",
+      "sha256": "2a3539146ac78a29755493f6e7b1f400d3e3789438b5303caead94061b5a91ca"
+    },
+    "test_geometry_closed_loop": {
+      "path": "tests/test_libero_source_internal_geometry_extension_closed_loop.py",
+      "sha256": "2e8b1ece9e0c5e4bfc1cfd32f4f7a7fec348e919d1731260c53be01109322ad0"
+    },
+    "test_geometry_closed_loop_audit": {
+      "path": "tests/test_audit_libero_source_internal_geometry_extension_closed_loop.py",
+      "sha256": "01d2bd2cbcd446ea2f78b1721577a44bf244633ec37b015f64ab6868cbf0d909"
+    },
+    "scientific_protocol": {
+      "path": "docs/libero-source-internal-geometry-extension-protocol-2026-11-05.md",
+      "sha256": "d0a3441b0602bcb4ca6f3658b8a1f1febc9008b1af570339b31f3ae7eab2d932"
+    }
+  },
+  "launch_environment": {
+    "CUDA_VISIBLE_DEVICES": "1",
+    "MUJOCO_GL": "egl",
+    "MUJOCO_EGL_DEVICE_ID": "1",
+    "CUBLAS_WORKSPACE_CONFIG": ":4096:8",
+    "OMP_NUM_THREADS": "1",
+    "OPENBLAS_NUM_THREADS": "1",
+    "MKL_NUM_THREADS": "1"
+  },
+  "runtime_versions": {
+    "python": "3.10.22",
+    "torch": "2.4.1+cu124",
+    "numpy": "1.22.4",
+    "robosuite": "1.4.0",
+    "mujoco": "3.2.3",
+    "LIBERO_revision": "8f1084e3132a39270c3a13ebe37270a43ece2a01"
+  },
+  "validation_observed": {
+    "source_training_focused_tests_passed": 48,
+    "closed_loop_tests": "pending_before_launch",
+    "new_real_environment_calls_at_freeze": 0,
+    "official_initial_numeric_rows_decoded_at_freeze": 0,
+    "source_independent_audit_status": "passed"
+  },
+  "authorization": "用户要求继续实验、本周完成LIBERO这一轮；task4/7 A/B/C全部固定500端点、360条candidate配对闭环已在训练前协议列明。"
+}

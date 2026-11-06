@@ -1,0 +1,34 @@
+{
+  "schema_version": 1,
+  "formal_result": false,
+  "status": "frozen_before_real_readout_training",
+  "frozen_at_utc": "2026-11-04T07:34:28.736204+00:00",
+  "config_sha256": "0b3a3d73a67e78223a822d8539d648b68ea8e98ac4b05306b80fbc9fb8196cba",
+  "files": {
+    "runner": {
+      "path": "experiments/run_libero_learned_phase_history_readout.py",
+      "sha256": "d26fd19277ebc75215a8b62195f62713558a550dec7630a438fc66a5d01c6289"
+    },
+    "tests": {
+      "path": "tests/test_libero_learned_phase_history_readout.py",
+      "sha256": "36a0561906c66fd63c3e53aa41bc730e42d2cb97037a140b71aacebf8c2ef51c"
+    },
+    "protocol": {
+      "path": "docs/libero-learned-phase-history-readout-protocol-2026-11-04.md",
+      "sha256": "78f899a3e4eb28fb914dc76bdd736a5004225bf01140c6d1a0e5a66d3a29df17"
+    }
+  },
+  "validation": {
+    "focused_tests": "47 passed in1.46s",
+    "training_regression_tests": "44 passed in1.18s",
+    "py_compile": "2 new Python files passed",
+    "environment_check": "passed; CUDA intentionally hidden"
+  },
+  "real_readout_optimizer_updates_before_binding": 0,
+  "launch_environment": {
+    "CUDA_VISIBLE_DEVICES": "",
+    "OMP_NUM_THREADS": "1",
+    "OPENBLAS_NUM_THREADS": "1",
+    "MKL_NUM_THREADS": "1"
+  }
+}

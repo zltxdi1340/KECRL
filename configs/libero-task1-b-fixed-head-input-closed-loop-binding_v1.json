@@ -1,0 +1,23 @@
+{
+  "formal_result": false,
+  "created_at_utc": "2026-11-04T14:47:24.901460+00:00",
+  "config_sha256": "b5ff7ec57bd75aa27a5c3eef37fec36105bca763a8a33614633213ef8a48f5c4",
+  "files": {
+    "runner": {
+      "path": "experiments/run_libero_task1_b_fixed_head_input_closed_loop.py",
+      "sha256": "41e8b58f6b8e1bd01b1bc6eb30aed1ba101f43e15400a635d222972e81ca42ef"
+    },
+    "runtime": {
+      "path": "experiments/libero_fixed_head_input_runtime.py",
+      "sha256": "5cd329559a4aa96a15a20ac1bc4cef22121f5ca775d8205d4026b8d0630571ec"
+    },
+    "tests": {
+      "path": "tests/test_libero_task1_b_fixed_head_input_closed_loop.py",
+      "sha256": "cd9ba0eff5e1b2c927c18bcaa334b57e10991ced6d69db5e074d1a5d52da6d5c"
+    },
+    "protocol": {
+      "path": "docs/libero-task1-b-fixed-head-input-closed-loop-protocol-2026-11-04.md",
+      "sha256": "b055d2fc3a0ba96c1f018e5ee0656ece30c4d7292dfcf4e28a9b3b500bb20b95"
+    }
+  }
+}

@@ -1,0 +1,342 @@
+{
+  "schema_version": 1,
+  "check_type": "libero_source_internal_phase_history_observability_diagnostic",
+  "formal_result": false,
+  "frozen_at_utc": "2026-11-04T01:18:28.897173+00:00",
+  "scope": {
+    "task_ids": [
+      0,
+      1
+    ],
+    "training_seeds": [
+      20261022,
+      20261023,
+      20261024
+    ],
+    "arms": [
+      "A_original",
+      "B_fomaml",
+      "C_pooled_bc"
+    ],
+    "checkpoint_updates": 500,
+    "closed_loop_default_stabilization_steps": 5,
+    "source_role": "meta_support",
+    "demonstration_indices": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      15,
+      16,
+      17,
+      18,
+      19,
+      20,
+      21,
+      22,
+      23,
+      24,
+      25,
+      26,
+      27,
+      28,
+      29
+    ],
+    "history_steps": 5,
+    "common_first_action_step": 5,
+    "primary_space": "pre_action_head_projection256",
+    "secondary_space": "cached_public_gripper2",
+    "modes": [
+      "current",
+      "history5"
+    ],
+    "neighbors": 5,
+    "query_chunk": 64,
+    "main_forward_batches": 819,
+    "repeat_forward_batches": 18,
+    "main_valid_rows": 62586,
+    "repeat_valid_rows": 1440,
+    "main_network_slots": 65340,
+    "repeat_network_slots": 1440,
+    "source_observation_rows_per_modality": 6954,
+    "source_action_rows": 6954,
+    "source_action0_rows": 0,
+    "primary_neighbor_folds": 2160,
+    "primary_neighbor_rows": 179280,
+    "secondary_neighbor_folds": 240,
+    "secondary_neighbor_rows": 19920,
+    "eligible_by_task": {
+      "0": {
+        "command": 2775,
+        "phase": 1372,
+        "events": 31
+      },
+      "1": {
+        "command": 3939,
+        "phase": 1874,
+        "events": 34
+      }
+    },
+    "new_optimizer_updates": 0,
+    "new_backward_calls": 0,
+    "new_environment_calls": 0,
+    "new_initial_private_state_reads": 0,
+    "source_query_accessed": false,
+    "sealed_roles_accessed": false,
+    "loss_observation_or_training_budget_changed": false,
+    "checkpoint_selected": false,
+    "spt_updated": false,
+    "knowledge_updated": false,
+    "module_registered": false,
+    "physical_gpu": 1,
+    "device": "cuda:0",
+    "torch_threads": 1,
+    "maximum_host_cache_bytes": 2147483648
+  },
+  "analysis": {
+    "question": "Can a fixed metric on current versus5 causal past pre-head representations distinguish expert command and two expert-open contexts in exposed source0/1?",
+    "feature_capture": "One normal unchanged CNN-only forward_sequence; non-mutating action_head pre-hook captures last256D representation; post-hook logits must reconstruct outputs exactly. Repeat first original batch, match original62586 predictions and819 source batch digests. No partial/warmup forwards.",
+    "labels": "command=expert sign -1/+1, neutral excluded and reported. phase only expert-open: initial observed prefix=-1, known close/neutral-to-open segment=+1; labels from cached expert targets, not physical phase. No expert actions or phase/event labels enter features.",
+    "history": "[h_t,h_(t-1),...,h_(t-4)] all before expert action t; same demo, t>=5. No padding/future/action0. Current uses same query/reference IDs. Public gripper is a secondary component-only reference, computed once per task, not9 independent seeds.",
+    "fold": "Leave one entire demo out of neighbor bank and standardization. Encoders already trained on all support demos: this is exposed-support feature geometry, not unseen generalization or independent training validation.",
+    "scale": "float64 mean/population std of other-demo common eligible current features only; std<=1e-6 replaced by1. Apply identical scaler to all history lags, both label probes. No label-dependent scaling.",
+    "distance": "Squared Euclidean on zscored current; history is mean of5 squared Euclidean lag-aligned distances. Negative roundoff clipped to0. Stable distance sort keeps original source-row bank order; majority ties use nearest tied label.",
+    "repeat_current_control": "Averaging5 copies of the current-distance matrix is exactly the current matrix by construction; it uses the same predictions. No extra independent rows or metric optimizer.",
+    "primary_metrics": "Per task/arm/seed balanced accuracy for command and phase, plus command error at all31/34 known open event actions. Same candidate source frames for both modes; retain class/stratum/per-demo denominators and empty groups.",
+    "strata": "all eligible; known open event lag0; full known-open segments; initial-open prefix; expert-close; all5 true-history lags are required even for current mode.",
+    "descriptive_flags": "Per task/arm all3 seeds phase_BA_history>current; command_BA_history>current; event_command_error_history<=current. Joint cue requires all three and nonempty classes/events. Secondary gripper cannot rescue primary failure. No significance or training promotion.",
+    "limits": "Nearest-neighbor geometry is metric-specific; failure does not prove unobservability, improvement does not prove memory necessary or a closed-loop cause. Different history content/capacity is explicit; duplicate-current dimensional control carries no new information. Do not infer action-head causality from a different readout class.",
+    "stops": "Retain all original checkpoints, source-only roles and previous augmentation/local-loss stops. No branch training based on these scores."
+  },
+  "inputs": {
+    "control_design": {
+      "path": "configs/libero-source-internal-gripper-state-local-control-diagnostic_v1.json",
+      "sha256": "bf38389d06d2d43c74991365d4763cc0cbbe94ee8517ef1c9cf51ca4d4d40206"
+    },
+    "control_design_binding": {
+      "path": "configs/libero-source-internal-gripper-state-local-control-design-binding_v1.json",
+      "sha256": "e81809ebff82d4adebf39aafb2b13cbd963db9d69a4c30aceed155ddca8257d8"
+    },
+    "control_binding": {
+      "path": "configs/libero-source-internal-gripper-state-local-control-execution-binding_v1.json",
+      "sha256": "89975352f247f5b8e8a03421294efdadc7cb2596cfeba11d6e09a785c03cb199"
+    },
+    "full_open_result": {
+      "path": "/tmp/libero-source-internal-full-open-segments-20261104-v1.json",
+      "sha256": "6661ba1d9b8079725c754092251ea9d3a7cf381ccbaeaa9ea4defe41cfd458bf"
+    },
+    "full_open_audit": {
+      "path": "/tmp/libero-source-internal-full-open-segments-independent-audit-20261104-v1.json",
+      "sha256": "8df6fd195955e28ec46f12de30a897b52c7c0c38f67c8e4a8f30463d733a41cb"
+    },
+    "historical_condition_protocol": {
+      "path": "docs/libero-task4-task7-condition-separability-diagnostic-2026-11-02.md",
+      "sha256": "e936ffee2f3e0e5fea0b5ea3887cfbfc2113228f61093ff8db3919124f6709b1"
+    },
+    "historical_condition_code": {
+      "path": "experiments/analyze_libero_task4_task7_condition_separability.py",
+      "sha256": "58229e2684ad76bd9111b0c6099542b840380d12212d40eaa1c69943826929c7"
+    },
+    "gripper_task0": {
+      "path": "/tmp/libero-source-internal-gripper-state-local-control-artifacts-20261104-v1/task0-gripper-inputs-and-doses.npz",
+      "sha256": "59eab1c600cd7bcd3d8485739acc41ff6a8df9f9e1f17474e739de7ddc403436"
+    },
+    "gripper_task1": {
+      "path": "/tmp/libero-source-internal-gripper-state-local-control-artifacts-20261104-v1/task1-gripper-inputs-and-doses.npz",
+      "sha256": "8de84243f890a05ea2769792160df318e4b7652327c815b19bc01f665a64085b"
+    }
+  },
+  "endpoints": [
+    {
+      "task_id": 0,
+      "training_seed": 20261022,
+      "arm": "A_original",
+      "optimizer_updates": 500,
+      "path": "/tmp/libero-source-internal-spt-spi-artifacts-20261103-v2/p0-s20261022-A_original-u500.pt",
+      "sha256": "0096406c9deb8f21ba1c934e822a508bdeadf77cc46b82daa367eaf8ebd8dce6",
+      "weight_hash": "a0d78ac9d7f48f9bf8ecb1ec33df12ba81a519b529613b44639931d0d37b2f53"
+    },
+    {
+      "task_id": 0,
+      "training_seed": 20261022,
+      "arm": "B_fomaml",
+      "optimizer_updates": 500,
+      "path": "/tmp/libero-source-internal-spt-spi-artifacts-20261103-v2/p0-s20261022-B_fomaml-u500.pt",
+      "sha256": "4e2beb58637c564e49521c2893ec43586c81e39b049afc08e867cca248561df4",
+      "weight_hash": "5a9edb680fb3d5b4dbc263b3efffaeb8df20ebd212e6d5effd7f237e30f3e2e8"
+    },
+    {
+      "task_id": 0,
+      "training_seed": 20261022,
+      "arm": "C_pooled_bc",
+      "optimizer_updates": 500,
+      "path": "/tmp/libero-source-internal-spt-spi-artifacts-20261103-v2/p0-s20261022-C_pooled_bc-u500.pt",
+      "sha256": "923ee5499b27fb0b48266dc919165063fd0aca83b36ea735f7e0f69a5ee1ef11",
+      "weight_hash": "582939edc6548ddb1cb40ea009c49c0b92d957f4bb59f4ec663cf3e8916988b1"
+    },
+    {
+      "task_id": 0,
+      "training_seed": 20261023,
+      "arm": "A_original",
+      "optimizer_updates": 500,
+      "path": "/tmp/libero-source-internal-spt-spi-artifacts-20261103-v2/p0-s20261023-A_original-u500.pt",
+      "sha256": "d0354754242bd92e2bf40e2a0f16badc323fc4966c292c1f4b5e43b2b8e41c1d",
+      "weight_hash": "18f6eb51e61eb55774b86a2d2561c7f513dbe6bd298ddf22ebad47081fe388ba"
+    },
+    {
+      "task_id": 0,
+      "training_seed": 20261023,
+      "arm": "B_fomaml",
+      "optimizer_updates": 500,
+      "path": "/tmp/libero-source-internal-spt-spi-artifacts-20261103-v2/p0-s20261023-B_fomaml-u500.pt",
+      "sha256": "aa00c378d523cae926e8a53e0cbf8820fad44daa7f793ce4f02acf514898976d",
+      "weight_hash": "ead3281e765c25a8a8b9a35792f997ccdc0e01e1a871e6ccb0e42f99631587dd"
+    },
+    {
+      "task_id": 0,
+      "training_seed": 20261023,
+      "arm": "C_pooled_bc",
+      "optimizer_updates": 500,
+      "path": "/tmp/libero-source-internal-spt-spi-artifacts-20261103-v2/p0-s20261023-C_pooled_bc-u500.pt",
+      "sha256": "2a37923899ac87ecb0597acf33d428d1a9108f3f8cf491a025b224120f51190f",
+      "weight_hash": "7cdff69d35eff6fd0e76b5febfc4d5e27083a8c44b35c2a49ab1ec398aa404a3"
+    },
+    {
+      "task_id": 0,
+      "training_seed": 20261024,
+      "arm": "A_original",
+      "optimizer_updates": 500,
+      "path": "/tmp/libero-source-internal-spt-spi-artifacts-20261103-v2/p0-s20261024-A_original-u500.pt",
+      "sha256": "fc2e5068bfb3339913b5a30bbb7e30969cd2dfcc37d7fb6c636dad3f39bcb565",
+      "weight_hash": "4cd469bbefee4c285a02f493064baa01317781ed7f9d881b1b6f6d54c7f6e6f9"
+    },
+    {
+      "task_id": 0,
+      "training_seed": 20261024,
+      "arm": "B_fomaml",
+      "optimizer_updates": 500,
+      "path": "/tmp/libero-source-internal-spt-spi-artifacts-20261103-v2/p0-s20261024-B_fomaml-u500.pt",
+      "sha256": "694512d963142471d842cfbceaac1e90b3eb4adbb7f6297068be204e8529ce64",
+      "weight_hash": "32c6f82e5102b389b8c4ef0e2fcc903445878acfbb1d12370c5d5534dc6e8974"
+    },
+    {
+      "task_id": 0,
+      "training_seed": 20261024,
+      "arm": "C_pooled_bc",
+      "optimizer_updates": 500,
+      "path": "/tmp/libero-source-internal-spt-spi-artifacts-20261103-v2/p0-s20261024-C_pooled_bc-u500.pt",
+      "sha256": "d511127f488fccd4deeafd191e3edda1967b694439d49113c56d8b64a090b79a",
+      "weight_hash": "3cc4c755f2dd1dcc5235453336cc8f0ae948cd5da4439a43eac8dfed82595755"
+    },
+    {
+      "task_id": 1,
+      "training_seed": 20261022,
+      "arm": "A_original",
+      "optimizer_updates": 500,
+      "path": "/tmp/libero-source-internal-spt-spi-artifacts-20261103-v2/p1-s20261022-A_original-u500.pt",
+      "sha256": "3f691e85578a3b9436e0fc6a41fc265c777befdd07936481f640a84107101c8e",
+      "weight_hash": "b160231becb1a60bf642a9f6a615ced696f1fa375124a76fe11f83257aece23a"
+    },
+    {
+      "task_id": 1,
+      "training_seed": 20261022,
+      "arm": "B_fomaml",
+      "optimizer_updates": 500,
+      "path": "/tmp/libero-source-internal-spt-spi-artifacts-20261103-v2/p1-s20261022-B_fomaml-u500.pt",
+      "sha256": "9186e4db07cbdf3232f1284aa44e79227187e85053157cfa070c06b5949b2199",
+      "weight_hash": "ab4b4e69df85d39fbebe2a37c14c30ea86dcd134836cb8a7bad6c87517ab9f4e"
+    },
+    {
+      "task_id": 1,
+      "training_seed": 20261022,
+      "arm": "C_pooled_bc",
+      "optimizer_updates": 500,
+      "path": "/tmp/libero-source-internal-spt-spi-artifacts-20261103-v2/p1-s20261022-C_pooled_bc-u500.pt",
+      "sha256": "d9ad913b0c57b0499024490384514a5361b375d1cfe1e250264c0c5dce34b223",
+      "weight_hash": "3f09ba6f09dcc9d9f74c682ec29b445f2f7ba5d44ec1ef41e08a918d71e9cd7d"
+    },
+    {
+      "task_id": 1,
+      "training_seed": 20261023,
+      "arm": "A_original",
+      "optimizer_updates": 500,
+      "path": "/tmp/libero-source-internal-spt-spi-artifacts-20261103-v2/p1-s20261023-A_original-u500.pt",
+      "sha256": "de54b960f694270c61e7cbd47d6ceb7ff7a36193ee45d38aa42ed44e0899c615",
+      "weight_hash": "17d8dab7db1f79a44174b03cab4c6b82b3bf8095321a934f52d34ce12ba3ae9b"
+    },
+    {
+      "task_id": 1,
+      "training_seed": 20261023,
+      "arm": "B_fomaml",
+      "optimizer_updates": 500,
+      "path": "/tmp/libero-source-internal-spt-spi-artifacts-20261103-v2/p1-s20261023-B_fomaml-u500.pt",
+      "sha256": "ae9eb12288f497ac77704ae443b7d4b069eeadb8d91f30019e8bbbe524109a8d",
+      "weight_hash": "52ca7023e108b2efea7d13b920256f1cea15a0e339fe651d4788d09498ad4561"
+    },
+    {
+      "task_id": 1,
+      "training_seed": 20261023,
+      "arm": "C_pooled_bc",
+      "optimizer_updates": 500,
+      "path": "/tmp/libero-source-internal-spt-spi-artifacts-20261103-v2/p1-s20261023-C_pooled_bc-u500.pt",
+      "sha256": "259e6bd7f89f0ca100d77bafe5c96647fef232fbd1ceeff6bb4e51705d9ffee2",
+      "weight_hash": "41551f2e2dd3b9fe491d1610de168658e2676c875974646b5bd1321aff75b605"
+    },
+    {
+      "task_id": 1,
+      "training_seed": 20261024,
+      "arm": "A_original",
+      "optimizer_updates": 500,
+      "path": "/tmp/libero-source-internal-spt-spi-artifacts-20261103-v2/p1-s20261024-A_original-u500.pt",
+      "sha256": "948112af8ef70d412f943976a902165e53a5561f7eba4b7c8f050b91cbaa290c",
+      "weight_hash": "e6d20dac78c67aba57658c7b0ac744916c6b59d1857a206cb640befa1452697d"
+    },
+    {
+      "task_id": 1,
+      "training_seed": 20261024,
+      "arm": "B_fomaml",
+      "optimizer_updates": 500,
+      "path": "/tmp/libero-source-internal-spt-spi-artifacts-20261103-v2/p1-s20261024-B_fomaml-u500.pt",
+      "sha256": "c0c1a06ac18997c6dd012cab364e2a572d659749356a39df506d3c83b4ae86bd",
+      "weight_hash": "f139caf74b31aafb87219eaf84d2eeecb2d6826209e3c31067be4c46056d689d"
+    },
+    {
+      "task_id": 1,
+      "training_seed": 20261024,
+      "arm": "C_pooled_bc",
+      "optimizer_updates": 500,
+      "path": "/tmp/libero-source-internal-spt-spi-artifacts-20261103-v2/p1-s20261024-C_pooled_bc-u500.pt",
+      "sha256": "06208a96c18e466d56a629cc3fe97c1fdf90a81a4349ca3310a4034f9724c1d0",
+      "weight_hash": "b5180c1904ce91d481e3086c2055efa90742367ff062efb2e6da165f8b3daf20"
+    }
+  ],
+  "execution": {
+    "runtime": {
+      "python": "3.10.22",
+      "torch": "2.4.1+cu124",
+      "cuda": "12.4",
+      "numpy": "1.22.4",
+      "h5py": "3.11.0"
+    },
+    "launch_environment": {
+      "CUDA_VISIBLE_DEVICES": "1",
+      "CUBLAS_WORKSPACE_CONFIG": ":4096:8",
+      "OMP_NUM_THREADS": "1",
+      "OPENBLAS_NUM_THREADS": "1",
+      "MKL_NUM_THREADS": "1"
+    },
+    "resource_gate": "physicalGPU1 memory<=512MiB,util<=5%,no compute process before new observation/checkpoint payloads; no GPU0/CPU fallback.",
+    "failure_rule": "Stop and preserve failed JSON/events/partial feature arrays on hashes, roles, input/output identity, hook counts, repeats, weights/gradients, causal history or exact budgets mismatch; never relax or replace checkpoint."
+  }
+}

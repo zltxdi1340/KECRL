@@ -1,0 +1,19 @@
+{
+  "formal_result": false,
+  "created_at_utc": "2026-11-04T13:54:22.386687+00:00",
+  "config_sha256": "8f32a921bc2c3bc5724df8cf2828600ef370d2291f5356df577fe7a2a4c2eb23",
+  "files": {
+    "analyzer": {
+      "path": "experiments/analyze_libero_task1_b_routed_paired_traces.py",
+      "sha256": "aeb3c56bda0c6d18f7f3bdade184eea3911cb29c858ee0a1224e4175a2b5139d"
+    },
+    "tests": {
+      "path": "tests/test_libero_task1_b_routed_paired_traces.py",
+      "sha256": "58df069893205ae1d27517154d1453a7bee3c5e2acb24044d4e0cc0d6a0c3070"
+    },
+    "protocol": {
+      "path": "docs/libero-task1-b-routed-paired-traces-protocol-2026-11-04.md",
+      "sha256": "a1070018fac1d9db26b4435b9c27c9d15003820958c149a1a7c1c74cf5f84647"
+    }
+  }
+}

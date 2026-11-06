@@ -1,0 +1,270 @@
+{
+  "schema_version": 1,
+  "formal_result": false,
+  "scope": {
+    "task_id": 1,
+    "feature_arm": "B_fomaml",
+    "training_seeds": [
+      20261022,
+      20261023,
+      20261024
+    ],
+    "arms": [
+      "candidate_real_history",
+      "candidate_repeat_current"
+    ],
+    "encoder_updates": 500,
+    "readout_updates": 500,
+    "same_candidate_weights": true,
+    "demonstration_role": "meta_query",
+    "demonstration_indices": [
+      30,
+      31,
+      32,
+      33,
+      34,
+      35,
+      36,
+      37,
+      38,
+      39,
+      40,
+      41,
+      42,
+      43,
+      44,
+      45,
+      46,
+      47,
+      48,
+      49
+    ],
+    "source_query_previously_exposed": true,
+    "history_steps": 5,
+    "first_action_step": 5,
+    "target_rows": 2598,
+    "common_rows_per_seed": 2518,
+    "seed_frame_pairs": 7554,
+    "probe_space": "support_standardized_prehead_representation",
+    "probe_seed": 20261105,
+    "amplitudes": [
+      0.01,
+      0.05
+    ],
+    "signs": [
+      -1,
+      1
+    ],
+    "loci": [
+      "current_only",
+      "past_only",
+      "coherent_all"
+    ],
+    "direction_distribution": "PCG64_Rademacher_per_frame_256D_shared_across_seeds",
+    "baseline_linear_batches": 6,
+    "sham_linear_batches": 6,
+    "perturb_linear_batches": 48,
+    "total_linear_batches": 60,
+    "total_linear_rows": 151080,
+    "logical_prediction_tables": 84,
+    "logical_prediction_rows": 211512,
+    "closed_loop_stabilization_steps": 5,
+    "offline_stabilization_actions": 0,
+    "new_encoder_calls": 0,
+    "new_optimizer_updates": 0,
+    "new_backward_calls": 0,
+    "new_environment_calls": 0,
+    "new_HDF5_RGB_PT_initial_private_reads": 0,
+    "sealed_roles_accessed": false,
+    "checkpoint_selected": false,
+    "spt_updated": false,
+    "knowledge_updated": false,
+    "module_registered": false
+  },
+  "analysis": {
+    "primary": {
+      "amplitude": 0.05,
+      "locus": "coherent_all",
+      "component": "translation",
+      "contrast": "history minus repeat of antithetic MSE cost relative to each clean output"
+    },
+    "antithetic_cost": "0.5*(MSE_plus+MSE_minus)-MSE_clean; signed, no clipping",
+    "primary_consistency": "all three contrast>0 descriptive higher target-error cost; no root-cause or acceptance claim",
+    "secondary_amplitude": 0.01,
+    "components": [
+      "translation",
+      "rotation",
+      "motion",
+      "gripper",
+      "all7"
+    ],
+    "stratum_rows": {
+      "all": 2518,
+      "known_open_event": 23,
+      "known_open_segment": 232,
+      "initial_open": 974,
+      "expert_close": 1312
+    },
+    "proxy_limit": "fixed head representation-space probe; no RGB/proprio sensor or encoder perturbation, no actual deployment shift proof",
+    "probe_precision": "float64 additive probe after exact conversion of existing float32 normalized clean input; no re-quantization",
+    "input_energy": "coherent matched L2^2=256*epsilon^2 per row; current-only history1/5 vs repeat1; past-only history4/5 vs repeat0",
+    "linear_control": "same coherent delta to same Linear head implies equal logit shift, action differences depend on tanh operating point and target alignment",
+    "cost_decomposition": "mean of +/- [2mean((clean-target)*delta)+mean(delta^2)]",
+    "identity_atol": 1e-12,
+    "linear_input_control_atol": 1e-10,
+    "error_algebra_atol": 1e-12,
+    "sham_and_negative_controls": "exact element equality; all condition paired gripper equal; past-only repeat unchanged",
+    "statistics": "descriptive all predefined seeds/frames/loci/amplitudes; no significance or IID/unseen claims",
+    "stopping": "exact full budget and all controls required; preserve technical failures, no replacement or tolerance relaxation",
+    "automatic_training_or_promotion": false
+  },
+  "execution": {
+    "python": "3.10.22",
+    "numpy": "1.22.4",
+    "device": "cpu",
+    "threads": 1,
+    "CUDA_VISIBLE_DEVICES": "",
+    "OMP_NUM_THREADS": "1",
+    "OPENBLAS_NUM_THREADS": "1",
+    "MKL_NUM_THREADS": "1",
+    "order": "seeds22,23,24; amplitudes0.01,0.05; signs-1,+1; loci current,past,coherent"
+  },
+  "inputs": {
+    "fit_result": {
+      "path": "/tmp/libero-task1-b-routed-history-readout-20261104-v1.json",
+      "sha256": "4ab522b340662751779f4c0ef3735847a781691b7a832c74f6a2029ddbd55304"
+    },
+    "fit_audit": {
+      "path": "/tmp/libero-task1-b-routed-history-readout-independent-audit-20261104-v2.json",
+      "sha256": "1dcc7b43f1ae6a0f0bd3c3dae9b1dee6e383ac20ac216131f4ec577214b737a7"
+    },
+    "fit_config": {
+      "path": "configs/libero-task1-b-routed-history-readout-diagnostic_v1.json",
+      "sha256": "d8f601227ae3052fee78ecfbcff2106477e74d2893e4f0b4fcd1fbfaedd99b81"
+    },
+    "fit_binding": {
+      "path": "configs/libero-task1-b-routed-history-readout-binding_v1.json",
+      "sha256": "f15b4303bfd3e7a5c2c81c24cc7ad64dfbd63637404dbeb880cbd76fd4d31e67"
+    },
+    "cache_result": {
+      "path": "/tmp/libero-task1-b-support-query-history-readout-20261104-v1.json",
+      "sha256": "49b6b7484d626d204ef7ba27c0377392ed571b9af2b3bb29980299d97c8db241"
+    },
+    "cache_binding": {
+      "path": "configs/libero-task1-b-support-query-history-readout-binding_v1.json",
+      "sha256": "84364b78b36a1c775a61e9c33af5596de65b0f8f0953252b09277091a613504d"
+    },
+    "loop_result": {
+      "path": "/tmp/libero-task1-b-fixed-head-input-closed-loop-20261104-v1.json",
+      "sha256": "f005e01ee20ac1c2a833c2531279ce498915bd080ab9901ec7b986cadc67df7f"
+    },
+    "loop_audit": {
+      "path": "/tmp/libero-task1-b-fixed-head-input-closed-loop-independent-audit-20261104-v1.json",
+      "sha256": "642390cce550c25bc497936e6dba0a8309c513d06702dc8327c4c6f19d448b14"
+    },
+    "loop_config": {
+      "path": "configs/libero-task1-b-fixed-head-input-closed-loop-diagnostic_v1.json",
+      "sha256": "b5ff7ec57bd75aa27a5c3eef37fec36105bca763a8a33614633213ef8a48f5c4"
+    },
+    "loop_binding": {
+      "path": "configs/libero-task1-b-fixed-head-input-closed-loop-binding_v1.json",
+      "sha256": "532440c6bbe0d5454d305a143d8568134800ba1b64ea2c3c874785acd564c160"
+    },
+    "targets": {
+      "path": "/tmp/libero-task1-b-support-query-history-readout-artifacts-20261104-v1/query-targets-and-frame-ids.npz",
+      "sha256": "3e649f88a86032aa714d9e5fdfa50f38b2853ae11141996fc8bb033f485a2ca8"
+    },
+    "input_helpers": {
+      "path": "experiments/run_libero_task1_b_support_query_history_readout.py",
+      "sha256": "740daed435910ebdefc7ec546a3b937ce4f7f561d03d724f95bdbe779be1d12b"
+    },
+    "train_helpers": {
+      "path": "experiments/run_libero_learned_phase_history_readout.py",
+      "sha256": "d26fd19277ebc75215a8b62195f62713558a550dec7630a438fc66a5d01c6289"
+    },
+    "history_helpers": {
+      "path": "experiments/libero_phase_history_neighbors.py",
+      "sha256": "6b2766eb86a1ab95e88b21188b1405e124644d308a9dd21123b8f38132ed56eb"
+    },
+    "segment_helpers": {
+      "path": "experiments/analyze_libero_source_internal_full_open_segments.py",
+      "sha256": "2fdb090ec81b45b3267471b50b9eaa4c90af56af237136c4345ec2f95e3c0e55"
+    },
+    "pure_helpers": {
+      "path": "experiments/analyze_libero_source_internal_gripper_sign_margin_temporal.py",
+      "sha256": "d688c0d217fd578626897b75b0a14c777c94b77f8fda80bab989fb07248d618c"
+    },
+    "20261022_features": {
+      "path": "/tmp/libero-task1-b-support-query-history-readout-artifacts-20261104-v1/seed20261022-query-features.npz",
+      "sha256": "9afe7eaf2550af0246a48abef78c72314c213d5a5127860222873efa00a3b52c"
+    },
+    "20261022_head": {
+      "path": "/tmp/libero-task1-b-routed-history-readout-artifacts-20261104-v1/seed20261022-full_support-foldNone-history_motion_current_gripper.npz",
+      "sha256": "2cf1a369f4b296719a9e27c0d362f951a976f0ae6fe6b7c7c8ac3746d7ae4aad"
+    },
+    "20261022_saved_real": {
+      "path": "/tmp/libero-task1-b-routed-history-readout-artifacts-20261104-v1/seed20261022-history_motion_current_gripper-query-predictions.npz",
+      "sha256": "5e9614b5207e28978dd69da9d562010d1061a651cffca80f13b4bd3f8fbb0873"
+    },
+    "20261023_features": {
+      "path": "/tmp/libero-task1-b-support-query-history-readout-artifacts-20261104-v1/seed20261023-query-features.npz",
+      "sha256": "0d9d6220d33d65311a6cc66d997d7ba5f91ca38a3f6ef3c64dfe519896bf5080"
+    },
+    "20261023_head": {
+      "path": "/tmp/libero-task1-b-routed-history-readout-artifacts-20261104-v1/seed20261023-full_support-foldNone-history_motion_current_gripper.npz",
+      "sha256": "01d660d0ea44c83678f8dd61f1ec387c2617c112e6a0bdf5f9a0aa9349e71093"
+    },
+    "20261023_saved_real": {
+      "path": "/tmp/libero-task1-b-routed-history-readout-artifacts-20261104-v1/seed20261023-history_motion_current_gripper-query-predictions.npz",
+      "sha256": "82280644315eafd1e60fa7470e79e9ddeb45de4ec70fc8cae8c84d7b4b5a086d"
+    },
+    "20261024_features": {
+      "path": "/tmp/libero-task1-b-support-query-history-readout-artifacts-20261104-v1/seed20261024-query-features.npz",
+      "sha256": "6e95ac12fc2fe615927e50469f83291f93cfbd0a8b7075fdba107cb3466219e7"
+    },
+    "20261024_head": {
+      "path": "/tmp/libero-task1-b-routed-history-readout-artifacts-20261104-v1/seed20261024-full_support-foldNone-history_motion_current_gripper.npz",
+      "sha256": "0a54605e88b192621fd533ec14737a441c041eae86c94f4f997607af13b42885"
+    },
+    "20261024_saved_real": {
+      "path": "/tmp/libero-task1-b-routed-history-readout-artifacts-20261104-v1/seed20261024-history_motion_current_gripper-query-predictions.npz",
+      "sha256": "b4e83abebbc9498c7ae94bc4456f0a83fd838d456d3f465750baf20c2ce031d9"
+    },
+    "parent_config": {
+      "path": "configs/libero-task1-b-fixed-head-expert-target-error-diagnostic_v1.json",
+      "sha256": "873ba3cb325daa6b3bb71f5c98afa8108a847cb1be5d79816b62391b6a430d2c"
+    },
+    "parent_binding": {
+      "path": "configs/libero-task1-b-fixed-head-expert-target-error-binding_v1.json",
+      "sha256": "1ff094a0c9e2487bc7b91016e5931e50ad987ec9e3bb83b51951644da0538714"
+    },
+    "parent_result": {
+      "path": "/tmp/libero-task1-b-fixed-head-expert-target-error-20261104-v1.json",
+      "sha256": "dba9a6047caf5e8f57a0a16357f2b426e545ff26c8acf328e3c09296c474bc3b"
+    },
+    "parent_audit": {
+      "path": "/tmp/libero-task1-b-fixed-head-expert-target-error-independent-audit-20261104-v1.json",
+      "sha256": "7b7560659bcb1c7d587e2aa1ae4470cc6dfc66a031ad27c97cd6f2774a50f7ab"
+    },
+    "parent_runner": {
+      "path": "experiments/run_libero_task1_b_fixed_head_expert_target_error.py",
+      "sha256": "eeca3d1b1c9280cfeb983b6364d6c59f0dba21211988c876980cebbcd443c5cb"
+    },
+    "parent_plan": {
+      "path": "/tmp/libero-task1-b-fixed-head-expert-target-error-artifacts-20261104-v1/common-expert-plan.npz",
+      "sha256": "b29ec5515d71bc01a1a191b72514116b55dab0a3297dc22aac669e85e19646c4"
+    },
+    "20261022_baseline_archive": {
+      "path": "/tmp/libero-task1-b-fixed-head-expert-target-error-artifacts-20261104-v1/seed20261022-paired-target-error.npz",
+      "sha256": "81b6d9b7a415eb48114df40227d58fdcc1e71caf4011d72012b00096455a2134"
+    },
+    "20261023_baseline_archive": {
+      "path": "/tmp/libero-task1-b-fixed-head-expert-target-error-artifacts-20261104-v1/seed20261023-paired-target-error.npz",
+      "sha256": "4091ba29373c3631c44d27e1430e4a44208152387caa169e987846e2fc77c0e8"
+    },
+    "20261024_baseline_archive": {
+      "path": "/tmp/libero-task1-b-fixed-head-expert-target-error-artifacts-20261104-v1/seed20261024-paired-target-error.npz",
+      "sha256": "3add9974b6f17c38b8fb3af1fa4ff9bae1c744e68e9372339b64b85d50a72797"
+    }
+  }
+}

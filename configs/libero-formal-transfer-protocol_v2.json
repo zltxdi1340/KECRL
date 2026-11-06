@@ -1,0 +1,719 @@
+{
+  "schema_version": 2,
+  "status": "method_design_frozen_not_executed",
+  "formal_result": false,
+  "frozen_at_utc": "2026-11-05T05:10:51.904643+00:00",
+  "authorization": "用户要求收束到正式验证方案冻结，明确主假设、训练总预算、对照、统计方法及接受/停止规则；本次不执行实验或解封数据。",
+  "design": {
+    "experiment_type": "fixed_budget_same_family_spt_spi_transfer",
+    "task_roles": {
+      "source_spi": [
+        0,
+        1,
+        3,
+        4,
+        7
+      ],
+      "spt_validation_spi": [
+        2,
+        6
+      ],
+      "heldout_query_spi": [
+        5,
+        8,
+        9
+      ]
+    },
+    "training_seed_cohorts": {
+      "gate": [
+        20261106,
+        20261107,
+        20261108,
+        20261109,
+        20261110,
+        20261111,
+        20261112,
+        20261113,
+        20261114,
+        20261115,
+        20261116,
+        20261117,
+        20261118,
+        20261119,
+        20261120,
+        20261121,
+        20261122,
+        20261123,
+        20261124,
+        20261125
+      ],
+      "final": [
+        20261126,
+        20261127,
+        20261128,
+        20261129,
+        20261130,
+        20261131,
+        20261132,
+        20261133,
+        20261134,
+        20261135,
+        20261136,
+        20261137,
+        20261138,
+        20261139,
+        20261140,
+        20261141,
+        20261142,
+        20261143,
+        20261144,
+        20261145
+      ]
+    },
+    "arms": [
+      "A_original",
+      "B_fomaml",
+      "C_pooled_bc"
+    ],
+    "cohort_separation": {
+      "no_shared_source_generator_weights": true,
+      "no_G_seed_or_accepted_subset_in_H": true,
+      "H_source_training_only_after_G_passes": true,
+      "gate_accepts_method_configuration_not_H_weight_instances": true
+    },
+    "primary_hypothesis": {
+      "metric": "500_update_closed_loop_success_rate",
+      "tasks": [
+        5,
+        8,
+        9
+      ],
+      "paired_independent_unit": "training_seed",
+      "within_seed_task_aggregation": "equal_weight_macro_of_three_fixed_heldout_tasks",
+      "comparisons": [
+        "B_minus_C",
+        "B_minus_A"
+      ],
+      "minimum_observed_mean_gain": 0.05,
+      "inferential_null": "probability_of_strict_positive_seed_macro_difference_at_most_one_half",
+      "not_a_population_mean_or_learning_speed_test": true
+    },
+    "algorithm": {
+      "generator_source_tasks": [
+        0,
+        1,
+        3,
+        4,
+        7
+      ],
+      "source_outer_updates_per_seed_per_B_C": 50,
+      "source_spis_per_update": 5,
+      "source_inner_steps_B_only": 1,
+      "source_inner_optimizer": "SGD",
+      "source_inner_lr": 0.001,
+      "generator_optimizer": "Adam",
+      "generator_lr": 0.0003,
+      "adaptation_updates_per_policy": 500,
+      "adaptation_lr": 0.0003,
+      "adam_betas": [
+        0.9,
+        0.999
+      ],
+      "adam_eps": 1e-08,
+      "weight_decay": 0.0,
+      "clip_norm": 1.0,
+      "batch_size": 8,
+      "sequence_length": 10,
+      "stride": 10,
+      "offline_eval_batch_size": 32,
+      "num_workers": 0,
+      "rng_streams": {
+        "generator_initialization": "seed",
+        "source_batch_sampler": "seed_plus_1000003",
+        "target_batch_sampler": "seed_plus_task_id_times10000_plus777",
+        "online_every_adapter": "environment_seed20261022",
+        "source_task_order": [
+          0,
+          1,
+          3,
+          4,
+          7
+        ],
+        "source_batch_order": "support_then_query_shared_B_C",
+        "pythonhashseed": "0"
+      },
+      "memory_mode": "cnn_only",
+      "action_dimension": 7,
+      "loss": "uniform_seven_dimensional_valid_step_mse",
+      "alignment": "causal_pre_action_t_ge_1",
+      "rgb_normalization": "uint8_div_255",
+      "curve_updates": [
+        0,
+        50,
+        150,
+        300,
+        500
+      ],
+      "selected_update": 500,
+      "source_update_objectives": {
+        "A_original": "no_source_update",
+        "B_fomaml": "query_gradient_after_one_support_sgd_step_via_original_generator_jacobian",
+        "C_pooled_bc": "mean_of_unadapted_support_and_query_gradients_via_same_generator_jacobian"
+      },
+      "paired_initialization_and_batches": true,
+      "no_exact_total_flop_matching_claim": true,
+      "augmentation_or_new_loss": false,
+      "historical_checkpoints_reused": false
+    },
+    "data": {
+      "source_update": {
+        "tasks": [
+          0,
+          1,
+          3,
+          4,
+          7
+        ],
+        "meta_support": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12,
+          13,
+          14,
+          15,
+          16,
+          17,
+          18,
+          19,
+          20,
+          21,
+          22,
+          23,
+          24,
+          25,
+          26,
+          27,
+          28,
+          29
+        ],
+        "meta_query": [
+          30,
+          31,
+          32,
+          33,
+          34,
+          35,
+          36,
+          37,
+          38,
+          39,
+          40,
+          41,
+          42,
+          43,
+          44,
+          45,
+          46,
+          47,
+          48,
+          49
+        ],
+        "query_is_training_feedback": true
+      },
+      "nonregression_adaptation": {
+        "tasks": [
+          0,
+          1,
+          3,
+          4,
+          7
+        ],
+        "arms": [
+          "A_original",
+          "B_fomaml"
+        ],
+        "meta_support": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12,
+          13,
+          14,
+          15,
+          16,
+          17,
+          18,
+          19,
+          20,
+          21,
+          22,
+          23,
+          24,
+          25,
+          26,
+          27,
+          28,
+          29
+        ]
+      },
+      "validation_adaptation": {
+        "tasks": [
+          2,
+          6
+        ],
+        "adaptation_support": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12,
+          13,
+          14,
+          15,
+          16,
+          17,
+          18,
+          19,
+          20,
+          21,
+          22,
+          23,
+          24,
+          25,
+          26,
+          27,
+          28,
+          29
+        ]
+      },
+      "validation_secondary": {
+        "tasks": [
+          2,
+          6
+        ],
+        "selection_query": [
+          30,
+          31,
+          32,
+          33,
+          34,
+          35,
+          36,
+          37,
+          38,
+          39,
+          40,
+          41,
+          42,
+          43,
+          44,
+          45,
+          46,
+          47,
+          48,
+          49
+        ],
+        "gate": "all60_support_fits_per_task_complete",
+        "used_in_gradients": false
+      },
+      "heldout_adaptation": {
+        "tasks": [
+          5,
+          8,
+          9
+        ],
+        "adaptation_support": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12,
+          13,
+          14,
+          15,
+          16,
+          17,
+          18,
+          19,
+          20,
+          21,
+          22,
+          23,
+          24,
+          25,
+          26,
+          27,
+          28,
+          29
+        ],
+        "gate": "validation_and_nonregression_pass_and_execution_bound"
+      },
+      "heldout_secondary": {
+        "tasks": [
+          5,
+          8,
+          9
+        ],
+        "sealed_query": [
+          30,
+          31,
+          32,
+          33,
+          34,
+          35,
+          36,
+          37,
+          38,
+          39,
+          40,
+          41,
+          42,
+          43,
+          44,
+          45,
+          46,
+          47,
+          48,
+          49
+        ],
+        "gate": "all180_fits_and_all5400_final_episodes_complete",
+        "used_in_gradients_or_selection": false
+      },
+      "demo_to_official_state_pairing": "forbidden",
+      "read_or_reconstruct_t0": false
+    },
+    "online": {
+      "source_spi": {
+        "tasks": [
+          0,
+          1,
+          3,
+          4,
+          7
+        ],
+        "arms": [
+          "A_original",
+          "B_fomaml"
+        ],
+        "role": "candidate_nonregression",
+        "indices": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12,
+          13,
+          14,
+          15,
+          16,
+          17,
+          18,
+          19
+        ]
+      },
+      "spt_validation_spi": {
+        "tasks": [
+          2,
+          6
+        ],
+        "arms": [
+          "A_original",
+          "B_fomaml",
+          "C_pooled_bc"
+        ],
+        "role": "candidate_acceptance",
+        "indices": [
+          10,
+          11,
+          12,
+          13,
+          14,
+          15,
+          16,
+          17,
+          18,
+          19,
+          20,
+          21,
+          22,
+          23,
+          24,
+          25,
+          26,
+          27,
+          28,
+          29
+        ]
+      },
+      "heldout_query_spi": {
+        "tasks": [
+          5,
+          8,
+          9
+        ],
+        "arms": [
+          "A_original",
+          "B_fomaml",
+          "C_pooled_bc"
+        ],
+        "role": "final_evaluation",
+        "indices": [
+          20,
+          21,
+          22,
+          23,
+          24,
+          25,
+          26,
+          27,
+          28,
+          29,
+          30,
+          31,
+          32,
+          33,
+          34,
+          35,
+          36,
+          37,
+          38,
+          39,
+          40,
+          41,
+          42,
+          43,
+          44,
+          45,
+          46,
+          47,
+          48,
+          49
+        ]
+      },
+      "checkpoint_selection_states_used": false,
+      "closed_loop_only_at_update": 500,
+      "environment_seed": 20261022,
+      "stabilization_steps": 5,
+      "policy_action_limit": 300,
+      "native_horizon": 305,
+      "image_size": 128,
+      "adapter_lifecycle": "fresh_per_task_seed_arm; ascending_local_indices_of_only_authorized_rows",
+      "task_order": "source_nonregression_then_validation_then_conditional_heldout",
+      "model_order": "task_then_training_seed_then_arm",
+      "global_and_local_initial_indices_recorded": true,
+      "read_other_rows_to_recreate_history": false,
+      "reset_gate": "bit_exact_post_stabilization_digest_per_task_global_state_across_all_models",
+      "private_live_simulator_state_recorded": false
+    },
+    "validation_gate": {
+      "B_macro_success_at_least": 0.2,
+      "B_minus_A_and_C_mean_at_least": 0.05,
+      "strict_positive_macro_seeds_each_comparison_at_least": 16,
+      "source_B_minus_A_each_task_seed_mean_at_least": -0.05,
+      "source_B_minus_A_every_individual_seed_at_least": -0.1,
+      "all_integrity_and_public_interface_checks_pass": true,
+      "validation_query_mse_selects_nothing": true,
+      "failure_action": "stop_no_heldout_access_no_additional_training",
+      "pass_action": "freeze_method_admission_then_retrain_H_sources_with_independent_seed_cohort",
+      "active_spt_mutation": false
+    },
+    "statistics": {
+      "test": "exact_binomial_strict_seed_win_probability",
+      "null_probability": 0.5,
+      "alternative": "greater",
+      "ties": "count_as_nonwins_keep_n20",
+      "multiplicity": "Holm_two_comparisons",
+      "familywise_alpha": 0.05,
+      "effect_sizes": "exact_count_fractions_then_descriptive_mean_median_sd_and_all_seed_values",
+      "win_probability_intervals": "one_sided_Clopper_Pearson_lower97.5_each_Bonferroni_family95",
+      "per_heldout_task_mean_delta_guard_A_and_C": -0.05,
+      "final_uses_no_efficacy_stopping_or_model_selection": true,
+      "final_seed_cohort_independent_of_validation_screening": true,
+      "source_nonregression_is_G_only_not_a_claim_for_each_H_generator": true,
+      "three_fixed_tasks_and_states_not_iid_population_draws": true,
+      "no_episode_binomial_pvalue_or_cross_environment_pooling": true,
+      "secondary": [
+        "support_query_MSE_curves",
+        "translation_rotation_gripper_MSE",
+        "gripper_sign_accuracy",
+        "runtime_actual_update_and_interaction_costs",
+        "per_task_seed_success_four_cells"
+      ],
+      "secondary_cannot_rescue_failed_primary": true
+    },
+    "module_qualification": {
+      "enabled_in_this_study": false,
+      "episodes": 0,
+      "numeric_state_rows": 0,
+      "module_registration": false,
+      "later_minimum_valid_episodes": 20,
+      "later_empirical_success_threshold": 0.8,
+      "later_scope": "explicit_fixed_qualification_bank_only_no_population_confidence_claim",
+      "later_required": [
+        "known_start_conditions",
+        "known_hold_conditions",
+        "detectable_goal",
+        "contract_and_resource_checks",
+        "applicability_scope",
+        "execution_budget"
+      ],
+      "unknown_means_pending_hard_violation_means_failed": true,
+      "later_enable_requires_separate_frozen_qualification_execution_contract": true
+    },
+    "runtime": {
+      "physical_gpu": 1,
+      "cuda_visible_devices": "1",
+      "egl_device_id": "1",
+      "threads": 1,
+      "cublas_workspace_config": ":4096:8",
+      "deterministic_algorithms": true,
+      "tf32": false,
+      "gpu_idle_memory_mib_max": 512,
+      "gpu_idle_utilization_percent_max": 5,
+      "gpu_compute_processes_before_launch": 0,
+      "max_host_tensor_cache_bytes": 8589934592,
+      "maximum_active_wall_hours_per_gate_or_final_stage": 16,
+      "python": "3.10.22",
+      "torch": "2.4.1+cu124",
+      "numpy": "1.22.4",
+      "h5py": "3.11.0",
+      "robosuite": "1.4.0",
+      "mujoco": "3.2.3"
+    },
+    "budget_totals": {
+      "gate_source_generator_adam_updates": 2000,
+      "final_source_generator_adam_updates": 2000,
+      "source_generator_adam_updates": 4000,
+      "gate_source_disposable_sgd_updates": 5000,
+      "final_source_disposable_sgd_updates": 5000,
+      "source_disposable_sgd_updates": 10000,
+      "source_data_gradient_calls": 40000,
+      "source_generator_vjp_calls": 20000,
+      "gate_adaptation_models": 320,
+      "final_adaptation_models": 180,
+      "maximum_adaptation_models": 500,
+      "gate_adaptation_adam_updates": 160000,
+      "final_adaptation_adam_updates": 90000,
+      "maximum_adaptation_adam_updates": 250000,
+      "maximum_total_optimizer_updates": 264000,
+      "maximum_policy_curve_checkpoint_files": 2500,
+      "generator_endpoint_files": 120,
+      "maximum_offline_dataset_sweeps": 4000,
+      "maximum_offline_evaluation_forward_batches": 120000,
+      "gate_nonregression_episodes": 4000,
+      "gate_validation_episodes": 2400,
+      "gate_episodes": 6400,
+      "final_evaluation_episodes": 5400,
+      "maximum_episodes": 11800,
+      "maximum_policy_actions": 3540000,
+      "fixed_zero_actions_if_all_stages_complete": 59000,
+      "maximum_native_steps": 3599000,
+      "maximum_adapters": 500,
+      "maximum_numeric_initial_rows": 230,
+      "maximum_reset_references": 230,
+      "maximum_exact_reset_comparisons": 11570,
+      "qualification_episodes": 0,
+      "source_or_validation_reserved_rows": 0
+    },
+    "stop_rules": {
+      "on_hash_role_scope_reset_nonfinite_budget_resource_error": "technical_abort_preserve_partial_no_primary_result",
+      "invalid_or_unknown_episode": "technical_abort_not_silent_failure_or_denominator_exclusion",
+      "validation_failure": "valid_screening_failure_primary_heldout_not_performed",
+      "failed_primary": "hypothesis_not_supported_no_retraining_or_endpoint_seed_budget_search",
+      "all_final_arms_run_regardless_of_low_interim_success": true,
+      "no_result_based_retry_or_sample_replacement": true
+    },
+    "freeze_boundary": {
+      "method_design_frozen": true,
+      "execution_binding_complete": false,
+      "execution_authorized_by_this_manifest": false,
+      "sealed_payload_access_allowed_now": false,
+      "new_training_forward_environment_initial_state_calls_this_freeze": 0,
+      "knowledge_update": false,
+      "active_spt_update": false,
+      "module_registration": false
+    }
+  },
+  "references": {
+    "transfer": {
+      "path": "configs/libero_spatial_transfer_split_candidate_v1.json",
+      "sha256": "6cdc8c3eeaa90886ad0e15f0f4ebbe260aa972b6e69b1f122e95f65ab63dd7d6"
+    },
+    "family": {
+      "path": "configs/libero_spatial_skill_family_candidate_v1.json",
+      "sha256": "52053991a34b977aa3c9e3d29e2f585e29dcac1c7fd4f817acfeb6445fac3580"
+    },
+    "learning": {
+      "path": "configs/libero_spatial_bc_policy_candidate_v1.json",
+      "sha256": "f5e57c895e9249ef7a3361ebee2119bf06c6cbb48da01c31980b1eb0af8feb1b"
+    },
+    "theory": {
+      "path": "PROJECT_BIBLE.md",
+      "sha256": "b0b0360da935f6d65147f188151bb4b527dd77b10e2a320a0f92f99fbc8ea880"
+    },
+    "diagnostic_summary": {
+      "path": "/tmp/libero-four-task-abc-completion-20261105-v1.json",
+      "sha256": "60ff204b060976fade649f26e2fe37d5352d8a65b0008d517d21c0579a41b4bd"
+    },
+    "diagnostic_report": {
+      "path": "docs/libero-four-task-abc-completion-2026-11-05.md",
+      "sha256": "6ea06ca375722c9f4352be8fde2ac55409f19424c476aba37bc91f98b0c586d0"
+    },
+    "dataset_manifest": {
+      "path": "configs/libero_spatial_dataset_manifest_v1.json",
+      "sha256": "866429693febf966a38b48e3b89faa54623acace5d3c50cd67c5c7978010eaf6"
+    },
+    "preserved_v1_design": {
+      "path": "configs/libero-formal-transfer-protocol_v1.json",
+      "sha256": "d1b7e5170760f46902947c5084e7071735bd940b6ccdf6154732f4346f557ad9"
+    },
+    "v1_cohort_design_review": {
+      "path": "/tmp/libero-formal-transfer-v1-cohort-design-review-20261105-v1.json",
+      "sha256": "bae00c3ee737b5f7c32359759b57255ab58b8e8b911807eb1d24b304a3ab74f9"
+    }
+  },
+  "supersedes_unexecuted_v1": true
+}

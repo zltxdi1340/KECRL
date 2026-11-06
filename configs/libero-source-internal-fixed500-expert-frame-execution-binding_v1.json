@@ -1,0 +1,42 @@
+{
+  "schema_version": 1,
+  "status": "frozen_before_numeric_payload_and_policy_calls",
+  "formal_result": false,
+  "frozen_at_utc": "2026-11-03T09:02:29.373509+00:00",
+  "config_sha256": "7d3447ab1b736a3a123a3dd68dcfa7d22f6e6e54f1aaaae9cedd55a331968e75",
+  "files": {
+    "runner": {
+      "path": "experiments/run_libero_source_internal_fixed500_expert_frame_diagnostic.py",
+      "sha256": "02d62d4cd7bdf73fc2aea65510d1be9b29ee596169c4d98cdb6906ef29b0aa95"
+    },
+    "validator": {
+      "path": "experiments/validate_libero_source_internal_fixed500_expert_frame_protocol.py",
+      "sha256": "b46a7301b3bca28e65b8951bf822f9acf9e17a3b0be7c43ebce3bb6559c76dd0"
+    },
+    "tests": {
+      "path": "tests/test_libero_source_internal_fixed500_expert_frame_protocol.py",
+      "sha256": "586ccce9acc7a094730d8749d5eae5071a28e4d0d15d16d04a845abdcaa67d76"
+    },
+    "protocol": {
+      "path": "docs/libero-source-internal-fixed500-expert-frame-target-error-protocol-2026-11-03.md",
+      "sha256": "8a5385d2201f5c0c4b2f75cdd06831b8a05c63a4e37bcac529d853dc291e2f17"
+    }
+  },
+  "launch_environment": {
+    "CUDA_VISIBLE_DEVICES": "1",
+    "CUBLAS_WORKSPACE_CONFIG": ":4096:8",
+    "OMP_NUM_THREADS": "1",
+    "OPENBLAS_NUM_THREADS": "1",
+    "MKL_NUM_THREADS": "1"
+  },
+  "validation": {
+    "focused_tests_passed": 61,
+    "elapsed_seconds": 0.93,
+    "py_compile": "passed",
+    "metadata_budget_check": "passed"
+  },
+  "freeze_stage_actual_policy_calls": 0,
+  "freeze_stage_numeric_action_RGB_observation_payload_rows": 0,
+  "planned_main_forward_batches": 819,
+  "planned_repeat_forward_batches": 18
+}

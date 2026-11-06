@@ -1,0 +1,107 @@
+{
+  "schema_version": 1,
+  "check_type": "libero_source_internal_event_phase_direction_translation_readonly",
+  "formal_result": false,
+  "frozen_at_utc": "2026-11-03T09:33:42.790779+00:00",
+  "scope": {
+    "task_ids": [
+      0,
+      1
+    ],
+    "training_seeds": [
+      20261022,
+      20261023,
+      20261024
+    ],
+    "arms": [
+      "A_original",
+      "B_fomaml",
+      "C_pooled_bc"
+    ],
+    "checkpoint_updates": 500,
+    "closed_loop_stabilization_steps": 5,
+    "role": "source_meta_support_demonstrations0_to29",
+    "unique_scored_expert_frames": 6954,
+    "existing_model_prediction_rows": 62586,
+    "new_policy_forward_batches": 0,
+    "new_training_updates": 0,
+    "new_environment_calls": 0,
+    "new_HDF5_RGB_initial_checkpoint_payload_reads": 0,
+    "sealed_roles_accessed": false,
+    "checkpoint_selected": false,
+    "active_spt_updated": false,
+    "knowledge_updated": false,
+    "module_registered": false
+  },
+  "analysis": {
+    "primary_event": "open",
+    "secondary_event": "close",
+    "radius": 5,
+    "phases": [
+      "pre",
+      "at",
+      "post",
+      "unresolved_boundary"
+    ],
+    "known_events": "Reconstruct expert sign transitions only at t>=2 from saved action1.. targets. No reconstruction or read of action0.",
+    "assignment": "Each saved near-event frame assigned once to nearest known same-type event within5; ties use earlier event. Unmatched saved frames allowed only t<=6 and retained unresolved_boundary.",
+    "phase_definition": "pre lag-5..-1, at lag0, post lag1..5; unresolved retains missing lag and event.",
+    "contexts": [
+      "all",
+      "without_opposite_transition_overlap"
+    ],
+    "context_rule": "Primary uses all saved union frames. Secondary removes saved near-opposite-type overlap; report both, no primary replacement.",
+    "directions": [
+      "expert_open_pred_close",
+      "expert_close_pred_open",
+      "neutral_involved_mismatch",
+      "sign_correct"
+    ],
+    "direction_partition": "All scored frames partitioned by strict sign; no epsilon. Neutral mismatches retained.",
+    "rate_denominators": "Report wrong count/n_phase and wrong count/n_same_expert_sign separately; absent expert-sign class produces null conditional rate.",
+    "translation_error": "Per-frame mean squared error of original float32 action dimensions0..2, using float64 arithmetic; no thresholds.",
+    "within_seed_control": "For each direction/phase compare wrong frames to sign-correct frames with the same expert sign, and separately per demo when both groups exist. Conditional association, not same-state causal intervention.",
+    "cross_seed_same_frame": "For each frame with at least1 directional-error seed and at least1 sign-correct seed, mean translation error of error seeds minus mean of correct seeds; exactly1 contrast per unique expert frame.",
+    "cross_seed_overlap": "All3-seed directional-error intersection, union and Jaccard, all pairwise intersections; retain frame/demo/lag IDs for every common frame.",
+    "lags": "All eleven integer offsets -5..5 with n/expert-class/direction counts and translation means; no per-event duplication or forward-filling.",
+    "flags": "For each task/arm/event/context/phase/direction, within-seed wrong-minus-correct translation delta strictly positive in all3 valid seeds; null if any seed lacks either group. Descriptive, not significance/causal/training gate.",
+    "paired_arms": "All B-A/B-C task/seed/event/context/phase comparisons of sign-error rate and translation MSE on identical phase frames; no outcome selection.",
+    "summaries": "All tasks/seeds/arms/demos retained, empty groups null with counts; no cross-task pooled inference.",
+    "training_decision": "No automatic loss/observation/budget change, SPT acceptance or checkpoint selection."
+  },
+  "failure_rule": "Stop on hash/role/matrix/IDs/shape/finite/bounds/saved-mask reconstruction mismatch or nonboundary unmatched frame; do not overwrite old outputs or relax gates.",
+  "inputs": {
+    "source_result": {
+      "path": "/tmp/libero-source-internal-fixed500-expert-frame-20261103-v1.json",
+      "sha256": "0b7b12554ce7df86ad1d5e1731417376e8bf72ab72d2d6b7357cf9071f797489"
+    },
+    "source_audit": {
+      "path": "/tmp/libero-source-internal-fixed500-expert-frame-independent-audit-20261103-v1.json",
+      "sha256": "5b0e206a294bee121be4557f573860c672e9022341c773aefb7ada993081bb4e"
+    },
+    "source_verification": {
+      "path": "/tmp/libero-source-internal-fixed500-expert-frame-final-verification-20261103-v1.json",
+      "sha256": "987da40c4b1605f656905acdb1c7f124e42939c9bcceb8bcacecc3270949360b"
+    },
+    "source_config": {
+      "path": "configs/libero-source-internal-fixed500-expert-frame-target-error-diagnostic_v1.json",
+      "sha256": "7d3447ab1b736a3a123a3dd68dcfa7d22f6e6e54f1aaaae9cedd55a331968e75"
+    },
+    "source_binding": {
+      "path": "configs/libero-source-internal-fixed500-expert-frame-execution-binding_v1.json",
+      "sha256": "636780603866708614782165712211d3a011b715bbc6c77365dfb0a9d1a9f47a"
+    },
+    "parent_operators": {
+      "path": "experiments/validate_libero_source_internal_fixed500_expert_frame_protocol.py",
+      "sha256": "b46a7301b3bca28e65b8951bf822f9acf9e17a3b0be7c43ebce3bb6559c76dd0"
+    },
+    "task0_archive": {
+      "path": "/tmp/libero-source-internal-fixed500-expert-frame-artifacts-20261103-v1/task0-expert-targets-and-predictions.npz",
+      "sha256": "eae6a721620819458b5e81b0738f23ea95f1de6b043cf4322507a61fc53768bd"
+    },
+    "task1_archive": {
+      "path": "/tmp/libero-source-internal-fixed500-expert-frame-artifacts-20261103-v1/task1-expert-targets-and-predictions.npz",
+      "sha256": "20394b4fb6da65a1d6b6b5e51003c000563935ff16c5420557b53eca265d2ac5"
+    }
+  }
+}

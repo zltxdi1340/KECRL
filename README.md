@@ -1,6 +1,25 @@
 ﻿
 ## KECRL
 
+几何/接触记录核对完成（2026-11-06）：[字段、证据与下一步](docs/libero-formal-G-geometry-record-availability-audit-2026-11-06.md)。G逐步归档只有动作及joint/gripper，没有末端、物体、接触或RGB帧；历史专家ee_pos及task4/7图像不能拼接成当前36对的几何真值，因此尚不能检验close与实际接近是否协调。本次0原轨迹重读/训练/前向/环境/私有状态，115项重点测试、1648项CPU回归通过（不含可选Crafter收集项）。保持500/5步/现有loss、G阴性停止及封存角色；下一步先另行设计来源candidate的有限几何观测与时钟对齐，尚未冻结或采集，不追加validation或训练。
+
+36对较晚close反例分段完成（2026-11-06）：[只读结果与事件邻域](docs/libero-formal-G-close-runs-late36-diagnostic-2026-11-06.md)。31对输家首段close仍持续至赢家首次close，4对为已结束的单步脉冲，1对为已结束的两步段；首次多步段口径下赢家仍较晚33对、较早2对、同步1对。30条赢家首段因成功终止右删失，不能用观察长度决定保持时长。72条旧轨迹、254段、858行邻域，84项相关测试及15904项独立表级核对通过；原始第二遍复核无完成记录，未计通过、未重试，详见报告。0新训练/Policy前向/环境，G未通过及held-out/qualification封存保持。下一步先明确close与接近物体的几何协调假设和合法观测需求，现有joint/gripper不能替代目标/接触证据，不立即改loss或重训。
+
+validation B/C 800对只读轨迹诊断完成（2026-11-06）：[完整结果与反例](docs/libero-formal-G-validation-BC-trace-diagnostic-2026-11-06.md)。1600条公开轨迹校验通过；相同reset下800对首步平移动作已不同，162对成败不同中155对前20步夹爪符号始终相同。赢家较早close较常见，但36对较晚、9对同一步；83对open因提前终止不可判序，264/326条成功轨迹终止前没有close后的open命令。93对赢家前20步joint路径更短、69对更长，不能直接统一提前close或抑制运动。39项新增、109项相关测试与66010项独立检查通过；0新训练/Policy前向/环境重放，G未通过及held-out/qualification封存保持。后续36对close段与事件邻域已完成，见上方新报告；原G结果保持。
+
+G任务/seed只读诊断完成（2026-11-06）：[分析与全部seed表](docs/libero-formal-G-task-seed-differences-2026-11-06.md)。保留全部20个seed，task2的B−C为7胜/3平/10负、task6为9胜/9平/2负；只有4个seed一任务输一任务赢，3个两任务都赢，均值抵消不是统一根因。17个source护栏违反分布在12个seed；验证表现存在组间差异，也保留违反组5个B−A正向及未违反组1个负向反例。固定专家MSE与闭环方向混合，不据此改loss或加预算。31项新增、80项相关测试及21318项独立核对通过；0新预测/训练/环境/初态，G未通过与H/qualification封存保持。后续800对公开轨迹诊断已完成，见上方新报告，原G结果保持。
+
+G阶段完整复核、准入未通过（2026-11-06）：[最终结果与停止依据](docs/libero-formal-G-results-2026-11-06.md)。320个Policy各500次适应、6400条闭环齐全，原始及本次独立训练/完整审计均通过。validation任务2/6的A/B/C等权成功率为21.125%/20.375%/20.375%；B−A为−0.75个百分点、B−C为0，严格胜出11/20和10/20，均未达预设+5个百分点及16/20门槛。source另有17/100个task×seed配对退化超过10个百分点。累计活动约8小时3分37秒，167000次优化更新及固定预算完成；原审计字段故障与修复记录保留，0重复source训练。按冻结规则结束当前配置，H主检验未开展，held-out/qualification/reserved继续封存；不追加训练、不接受活动SPT/Knowledge/Module。后续只读任务/seed解释已完成，见上方新诊断；原准入和停止决定保持。
+
+以下为启动前冻结快照，实际执行进度以上方记录为准。
+
+正式验证方案v2已冻结（2026-11-05）：[当前有效协议](docs/libero-formal-transfer-protocol-v2-2026-11-05.md)修正v1复用准入/最终训练seed的条件筛选风险；v1未执行且原样保留。G/H各20个独立seed及全新来源生成器，保持每Policy500和5步稳定化；先source非退化+validation2/6，准入通过才做held-out5/8/9。H以20个训练重复作单侧精确胜出概率检验+Holmα0.05，另要求B−A/B−C观测平均增益≥5个百分点和逐task退化护栏。全部阶段上限500适应Policy、250000适应+4000生成器+10000临时SGD=264000更新，6400+5400条闭环。80项相关、1459项CPU回归及32组独立数学核对通过；仅metadata预检，0研究训练/环境/封存payload。执行入口尚待实现/绑定；qualification预算0，不自动写入SPT/Knowledge/Module。
+
+
+四任务A/B/C收尾完成（2026-11-05）：[完整结果](docs/libero-four-task-abc-completion-2026-11-05.md)已补齐task4/7的18个500-update Policy及360条fresh闭环，两份独立审计通过；task0=8/12/12; task1=0/11/1; task4=0/1/1; task7=0/0/0（A/B/C，各60条）。维持5步稳定化/现有loss，task0/1几何覆盖与task4/7几何外推分层，不合并总成功率或挑seed。48项训练相关、133项闭环相关、1351项CPU回归及12项汇总测试通过；已交付36条seed端点、24行四格及360行曲线CSV。本周source内部验证收尾，正式validation/held-out/qualification仍封存；下一步冻结正式方法/预算/统计与停止规则，不自动接受SPT/Knowledge/Module或继续零散调参。
+
+
+
 Minimal CPU smoke and server GPU workflow. The smoke configuration is deliberately a controlled interface validation, not a research result.
 
 ```powershell
@@ -12,6 +31,84 @@ python scripts/check_environment.py
 On a GPU server, install the environment-specific framework separately, run `python scripts/check_environment.py`, then use `configs/server_gpu.yaml`. `device: cuda` fails explicitly when CUDA is unavailable; `device: auto` selects CUDA only when available. Results contain configuration, seed, runtime metadata, JSON and CSV summaries. Formal environment, baseline, metrics and training budgets remain experiment decisions and must be recorded before formal runs.
 
 ## Current research direction (2026-10-20)
+
+最新四任务整理（2026-11-05）：[task0/1/4/7现有结果横向表](docs/libero-task0-task1-task4-task7-results-comparison-2026-11-05.md)已只读核对6个原始结果文件并重算10个方法×任务单元、30条seed记录。task0 A/B/C为8/12/12、task1为0/11/1（各60条）；task4 BC/jitter为3/3、task7为4/3。两套来源更新/初始化协议不同，缺项不能填0或当作难度榜；B收益依赖seed，jitter无统一改善。另列fresh稳定化复核与离线query口径、CSV和provenance，未训练/rollout或读取封存数据。四task同协议方法结论仍需另冻补齐task4/7 A/B/C与几何覆盖，原观测层诊断建议保持待冻结。
+
+最新表示敏感性结果（2026-11-05）：[固定历史输入60批诊断](docs/libero-task1-b-history-input-sensitivity-results-2026-11-05.md)已完成并独立审计。主条件全窗口0.05同能量下，三seed历史平移MSE成本均略低于重复当前（约3.04%/2.88%/5.31%），0.01同向；未支持此代理下历史更脆弱，事件/初始open局部反证仍保留。身份/sham/过去负对照及相同头logit控制通过，4221928项独立检查、63项相关测试通过，重建差0。实际60批151080行、1.817s，0训练/CNN/环境；下一步建议原始公开观测层另冻小窗口单分量诊断及CNN预算，继续500/5步/现有loss，封存角色保持。
+
+前置敏感性协议（2026-11-05，执行结果见上）：[固定候选头历史输入表示探针](docs/libero-task1-b-history-input-sensitivity-diagnostic-2026-11-05.md)已冻结并通过metadata与58项相关测试，尚未数值解码或读出。固定task1三seed500端点、2518帧/seed，以测量seed20261105的正负成对方向、0.01/0.05幅度分别扰动当前/过去/全窗口；主比较全窗口0.05同能量下相对干净输出的平移MSE成本，并检查同头logit增量一致。预算60批151080行，84张逻辑表因当前输出复用而不等于矩阵次数；0新CNN/训练/环境。本项是表示空间代理，不能直接证明RGB/本体或部署shift。下一步按入口执行并独立审计，500/5步/现有loss和封存角色保持。
+
+最新专家目标误差结果（2026-11-04）：[同一候选头双输入6批读出](docs/libero-task1-b-fixed-head-expert-target-error-results-2026-11-04.md)已完成7554配对并独立审计。真实历史三seed整体更准；重复当前平移MSE均增加（均值+30.74%），七维+12.47%，60/60个demo×模型的平均平移误差同向恶化，夹爪按合同严格不变。已知open段平移/七维存在重复当前较准的反证，保留全部分层。497380项独立检查和85项相关测试通过，重建差0；主执行0.289s、0训练/CNN/环境。与此前0/60对4/60闭环排序不一致，不直接删历史或改loss/updates；下一机制建议另冻历史对观测分布变化的敏感性，尚未设计执行，保持500/5步和正式封存角色。
+
+前置冻结快照（2026-11-04，执行结果见上）：[同一候选头双输入专家目标误差](docs/libero-task1-b-fixed-head-expert-target-error-diagnostic-2026-11-04.md)已固定三个候选500头及source meta-query demos30..49的全部2518个完整历史帧/seed，元数据预检通过，尚未读出。共7554配对，当前/历史各3批，总6批15108行矩阵算术；0新CNN/训练/环境/HDF5/初态读取。平移MSE为主，旋转/七维及逐demo为次，夹爪当前精确复用；方向项与响应能量分开。77项相关测试通过，下一步按冻结入口执行并独立审计，再决定训练修改；500/5步/现有loss、旧停止及封存角色保持。
+
+前序同权重闭环结果（2026-11-04）：[真实历史/重复当前120条fresh配对](docs/libero-task1-b-fixed-head-input-closed-loop-results-2026-11-04.md)已执行并独立审计。真实历史0/60、重复当前4/60，新增成功全在seed24，三seed0→0、0→0、0→4，未满足三seed均严格改善。60对第5步运动分叉、该步夹爪相同；53对随后夹爪符号分叉，56对仍共同失败。实际35470 Policy动作+600零动作、625.70s，1147101项独立检查及77项相关专项通过，最大重放差6.67e-7。继续500/5步/现有loss及旧候选停止；下一项建议先另冻同头两输入的合法专家目标误差对照，不直接删历史重训或接受SPT/Knowledge/Module，封存角色保持。
+
+前置冻结快照（2026-11-04，执行结果见上）：[同一候选权重双输入配对闭环](docs/libero-task1-b-fixed-head-input-closed-loop-diagnostic-2026-11-04.md)已独立冻结并通过metadata预检，尚未执行。task1 B三seed、同编码器/候选头500端点，前4动作共享启动，第5步仅运动改用真实历史或重复当前，夹爪始终当前；120条fresh episodes、最多36000 Policy动作+600零动作，保持5步稳定化/现有loss。65项相关专项及1212项CPU回归通过，未新增研究前向/初态解码/环境/训练。下一步按已绑定入口检查GPU1再执行，完整结果后独立审计；旧候选停止及正式封存角色保持。
+
+最新固定头读出（2026-11-04）：[共同第5步交叉读出](docs/libero-task1-b-step5-crossed-readout-diagnostic-2026-11-04.md)按冻结3批60行H(C)+6批120行既有格重放完成。运动内容项范数在50/60更大（seed22/23/24为20/10/20），但权重差、方向抵消及seed23混合均保留；夹爪历史项严格0，不把有符号投影当因果百分比。66项相关测试、280781项独立检查通过，最大动作重放差1.85e-7，0 CNN/训练/环境。保留500/5步/现有loss及候选停止决定；后续同一候选权重的真实历史/重复当前fresh配对闭环已另冻120条、0训练（见上），尚未运行，不直接以更接近baseline认定修复，正式封存角色保持。
+
+最新只读定位（2026-11-04）：[路由闭环60对轨迹](docs/libero-task1-b-routed-paired-traces-diagnostic-2026-11-04.md)完成全部120份JSON、17489个共同帧，0新模型/训练/环境/feature读取。60/60对第5步同观察下已有运动动作差，前20步夹爪符号逐帧相同；3个baseline-only首次close分别晚2/晚166/早1步，不共享统一release或drift模式。双侧已见close38对中候选24早/9晚/5同，不能按成功分层统一调时机或压低位移。57项相关测试、558511项独立检查通过。继续停止路由候选、保持500/5步/现有loss；下一机制建议另冻共同第5步的固定运动头真实历史/重复当前参照，先分离权重差和内容差，不自动训练，正式封存角色保持。
+
+最新闭环诊断（2026-11-04）：[task1 B路由读出120条配对结果](docs/libero-task1-b-routed-history-closed-loop-diagnostic-2026-11-04.md)已完成并独立审计。固定三seed两臂500端点、5步稳定化和已用candidate0..19，baseline3/60、候选0/60，三seed2→0、0→0、1→0；不支持将离线运动MSE收益转化为本配置控制收益，停止路由候选推进。100次reset、240次共同四步动作和300次前缀观察精确比较通过，无技术中止。实际35489个Policy动作+600零动作、639.92s，原权重/训练保持；1149项CPU回归及1184391项独立检查通过。前置[runtime接口](docs/libero-task1-b-routed-runtime-interface-diagnostic-2026-11-04.md)同样通过。下一步只读全部60对，单列3个baseline-only，检查第5步后动作/close/drift，不扩大loss/预算搜索或接受SPT/Knowledge/Module，封存角色保持。
+
+最新配对重训（2026-11-04）：[task1 B运动历史／夹爪当前](docs/libero-task1-b-routed-history-readout-diagnostic-2026-11-04.md)完成整demo三折及全support两臂共24个小读出、每模型500 updates，总12000更新。query三seed平均平移MSE下降11.66%、七维下降5.14%，事件错误仍11/7/10、28/69，完整open139/696保持；通过新路由的非退化条件，未修复夹爪切换。12个baseline逐位复现，178项测试及4052292项独立检查通过，审计标签错误修订与失败均保留。CPU9.49s，原编码器/Policy更新/环境新增0。下一步冻结runtime历史与前4步启动接口并数值核对，再另冻candidate闭环；继续500/5步/现有loss，封存角色和旧完整历史候选失败保持，不接受SPT/Knowledge/Module。
+
+前置交叉读出（2026-11-04）：[固定历史头内容/权重分解](docs/libero-task1-b-crossed-history-readout-diagnostic-2026-11-04.md)新增3批7554行；同头下重复当前纠正原6个新增错号，但运动拟合变差，支持分量路由假设而非直接替换全部历史。重复当前是代数参照，不是自然历史或物理因果。未重训或运行环境；后续路由训练见上。
+
+最新只读定位（2026-11-04）：[task1 B query事件margin/时序](docs/libero-task1-b-query-event-margin-timing-diagnostic-2026-11-04.md)完成69个模型×事件、696个完整段帧配对及690条窗口。35个两者正确、6个新增错误、4个纠正、24个仍错；仍错组的连续误差降低主要解释夹爪MSE下降，不代表切换修复。新增错号当前|g|为0.078–0.312；三个下一帧恢复、另有lag3/5恢复及一条命令段结束未恢复，额外错号仅1帧也可能历史仍错5帧。58项测试、59399项独立检查通过，0新模型/训练/HDF5/feature调用。继续500/5步/现有loss与不推进闭环决定；下一机制先冻结固定读出权重下的历史内容分解，不按query搜索loss或认定记忆根因。
+
+最新source-query检查（2026-11-04）：[task1 B完整support/历史读出](docs/libero-task1-b-support-query-history-readout-diagnostic-2026-11-04.md)完成三seed两臂各500、共3000读出更新；全部fit和CPU数值桥接通过后才读取query demos30..49。query事件错误11→9、7→9、10→12（各23事件），仅1/3改善，联合条件false；虽整体七维0.049108→0.045700、平移0.049107→0.043380，仍按规则停止本配置向闭环推进。CPU26.13s、98项测试和2371项独立检查通过；102个query编码批次+3重复+3桥接完成，原Policy更新/环境/初态读取0。下一步只读已有23个query事件的输出margin和时序，不借query搜loss/预算；原500/5步/现有loss及封存评价角色保持。
+
+最新实际训练（2026-11-04）：[固定表示当前/历史监督读出](docs/libero-learned-phase-history-readout-diagnostic-2026-11-04.md)完成18端点×3整demo折×两模式，共108个8967参数读出各500 updates，总54000更新，CPU25.65s。整体七维/平移MSE在18/18端点改善，但task0三组平均切换错误增加，仅task1 B满足三seed联合条件（1/6组）：事件错误23/23/21→22/20/19，仍错61/102。91项专项/训练回归及108份权重/145万行预测独立核对通过。原Policy、500/5步/现有loss和封存角色保持，0完整Policy前向/原Policy更新/环境调用。只保留task1 B为受限线索；下一项须另冻完整support两臂500拟合与source-query检查，不能挑三折模型直接闭环或接受SPT。
+
+最新只读分解（2026-11-04）：[全部切换点近邻](docs/libero-phase-history-transition-neighbors-diagnostic-2026-11-04.md)完成65事件、585个模型×事件配对：近邻由对变错93、由错变对76、两者正确183、两者错误233。整体BA增益主要来自非切换帧；变差组进入邻居320/409为close，其中224条位于自身open前1..4步，同时存在反向纠正。已选距离交换解释固定5NN规则的取舍，不把近邻变化当Policy改善或记忆根因。v1父状态检查错误在数值读取前中止并保留，v2科学口径不变、0.89s完成；72项相关测试、165968项独立检查通过，0新增前向/训练/环境/全库搜索。保持500/5步/现有loss；下一训练建议先独立冻结同结构/预算的固定表示当前/历史读出，当前未启动，封存角色保持。
+
+阶段／历史可辨性诊断已完成（2026-11-04）：[固定Policy结果](docs/libero-source-internal-phase-history-observability-diagnostic-2026-11-04.md)按冻结819主前向+18重复读取全部18个500端点；总体命令近邻BA在18/18提高，条件open上下文BA在17/18提高，但切换当步收益不一致，仅task1 B/C满足三seed联合条件（2/6组）。task0三臂平均切换错误均增加；高条件phase BA不等于识别何时应open，留一近邻隔离也不等于编码器未见示教。56项相关测试、199200条近邻行和2400次完整库查询的独立审计通过，耗时336.31s、0训练/环境调用。继续500/5步/现有loss，下一步只读既有切换近邻解释总体与事件的差异，不认定历史不足为根因；封存角色及旧停止决定保持。
+
+夜间复核已完成（2026-11-04）：[错误分析与完整open段修正结果](docs/libero-source-internal-overnight-error-review-and-full-open-results-2026-11-04.md)核对实现并完成65事件、1755模型×事件段、540初始前缀的冻结只读分析。未发现需重训的预测/索引/权重失配；5步窗内15处“延长”在全段细分为13处延长、1处桥接、1处示教边界未解，另2处孤立。task0/1整段从未正确20/51段，事件当步错号43.73%/75.16%，首次响应与稳定保持分开。夹爪回退仍无改善；更少重入也可能因正确间隙被消除，不能单指标选修复。259项专项/回归和150436项独立标量检查通过，0新增研究前向/训练/环境/源输入调用。继续500/5步/现有loss，后续转向阶段/历史可辨性机制假设，封存角色保持；本轮无遗留后台训练。
+
+前序只读结果（2026-11-04）：[新增错号的margin与事件时序](docs/libero-source-internal-gripper-sign-margin-temporal-diagnostic-2026-11-04.md)完成全部18模型、两条件的5508条模型×帧核对，0新增前向/训练/源输入调用。主17处原|g|为0.000803–0.031598，lag3/4/5为1/4/12；可见窗内均只新增一帧，15处连接原错close段、2处孤立。lag1五处全部是主条件子集，不能相加。原错仍错457/963帧、margin中位0.337905/0.442673，连续错误仍保留；范围重叠且12处新增位于右端，不推断完整持续时间或闭环单因。78项专项、574940项独立标量检查通过。后续完整命令段与更正已完成，见上方；保持500/5步/现有loss，封存角色保持。
+
+前序受控读出（2026-11-04）：[局部夹爪状态诊断](docs/libero-source-internal-gripper-state-local-control-diagnostic-2026-11-04.md)已绑定代码并完成2457主前向+54重复，18个500端点原预测62586行精确复现，未处理/padding/sham均通过。事件锚点和lag1各18模型的平移/夹爪MSE均数值增加、符号错误率无模型下降；主条件17个模型×帧由正确变错、0个纠正，六组主cue全部false。输入确实改变且有动作响应，不支持用该回退/保持修复局部错误，不证明物理反馈或视觉/head的唯一原因。耗时41.77s、90项专项、605232项独立标量核对通过，0训练/环境。继续500/5步/现有loss，其后margin和时序核对已完成，见上方最新结果，封存角色保持。
+
+前序冻结快照（2026-11-03）：[输入敏感性复核与局部夹爪状态协议](docs/libero-source-internal-input-sensitivity-review-and-gripper-state-control-protocol-2026-11-03.md)核对旧审计后，仅将task0/1全部18个500端点的两维公开gripper状态作为新受控分量。固定149/157个open后expert-open帧，主事件pre-action锚点、次级lag1，RGB/joint/权重/目标保持。未来预算2457主前向+54重复；当时只有旧缓存、合成算子和设计绑定，实际新Policy/HDF5/RGB/checkpoint/环境/训练调用0。48项专项与独立样本/预算核对通过；保持500/5步/现有loss及旧停止决定。后续执行已完成，见上方结果；该执行前快照不改写，封存角色保持。
+
+前序参照核对（2026-11-03）：[非切换帧平移参照](docs/libero-source-internal-nontransition-translation-reference-diagnostic-2026-11-03.md)仅读取原预测，将每seed固定参照均值从原同帧差中扣除。open后B task0由+0.052950变为+0.047595、task1由+0.070214变为+0.081137；同专家符号参照为+0.049245/+0.064848，A/C也保持正均值。所选加性均值差不足以消除关联，但未排除所有整体拟合混杂，其他阶段存在参照反号。40项专项、482110项独立检查通过，0新研究调用；保持500/5步和现有loss。该阶段建议的输入审计复核和单分量设计冻结已完成，见上方进度，新读出尚未执行。
+
+前序只读分解（2026-11-03）：[事件前后、错号方向与同帧平移误差](docs/libero-source-internal-event-phase-direction-translation-diagnostic-2026-11-03.md)完成全部18端点既有缓存分解，0新增前向/训练/源数据调用。共同模式在open后：专家open而预测close时，两task三臂的同帧跨seed平移差均值均正；B为+0.052950/+0.070214，57/113个有效同帧对照，分别43/97帧为正。open当步task0及close后B存在反例，不能推广为所有错号都导致平移误差。共同错号覆盖4/8个demo，排除事件重叠后仍保留；42项专项与191092项独立检查通过。保持500/5步和现有loss，该阶段提出的非切换帧参照核对已完成，见上方最新进度，封存数据保持。
+
+前序逐帧读出（2026-11-03）：[固定500端点专家动作误差诊断](docs/libero-source-internal-fixed500-expert-frame-target-error-diagnostic-2026-11-03.md)先冻预算与代码，再实际完成819主前向+18重复，18个重复/历史汇总核对均通过。task0/1全部三seed三臂的open窗口四项主误差均高于补集，close窗口夹爪误差也一致集中；早期符号错误全部0，但600帧/任务的专家目标全为open，不能推出runtime首动作正确。B的open窗口占11.71%/8.89%帧，平均含58.28%/54.09%符号错误，错误方向随seed反转，不统一增加open偏好或重启局部loss。61项专项、294770项独立检查通过；0训练/环境交互，保持500与5步、封存角色。该阶段提出的事件前后分解现已完成，见上方最新只读结果。
+
+前序只读结论（2026-11-03）：[固定专家输入的0/500点误差分解](docs/libero-source-internal-initialization-endpoint-target-error-diagnostic-2026-11-03.md)已冻结并完成，直接复用原训练的36组source-support分量指标，无新增前向、训练或数据payload访问。B-A平移/夹爪优势在适应前已存在，500步后平均差距缩小；B-C夹爪起点六组均更差，适应后各task仅2/3 seed更低。task0 seed22/23保留专家误差与闭环成败反向的案例，不把代数分解当因果贡献或据此改loss。27项新增、59项相关测试与独立2930项检查通过；保持500、闭环5步和封存角色。该阶段提出的逐帧读出建议现已执行，见上方最新进度。
+
+前序只读结论（2026-11-03）：[六组配对轨迹分析](docs/libero-source-internal-six-group-paired-trace-diagnostic-2026-11-03.md)完成全部360条episode、240对B-A/B-C及360对跨seed描述。首步同观测下动作已不同；task0 seed22的B收益伴随恢复/维持close，但task1 seed24的11条B胜出逐对都晚于A/C close，长close也有全失败组。同首步符号/时机仍有成败反转，早期公开位移不等于目标误差，故保持500与现有loss，不统一提前close、增加夹爪权重或抑制drift。独立复核133166项检查、813项CPU回归通过，分析新增Policy/环境/训练/HDF5/RGB/初态/checkpoint调用0。该阶段建议另冻合法source-support专家输入上0/500点目标误差对照；后续完成情况见上，封存角色保持。
+
+最新闭环结果（2026-11-03）：[18个500端点、360 episodes配对闭环](docs/libero-source-internal-spt-spi-closed-loop-diagnostic-2026-11-03.md)已实际完成并独立复核。task0 A/B/C为8/60、12/60、12/60，task1为0/60、11/60、1/60；B的主要收益集中在task0 seed22与task1 seed24，两个task均无B-A/B-C三seed严格改善。实际99457个Policy动作、1800个稳定化零动作，320次reset精确比较通过，耗时1851.77s。360份轨迹、99817行公开记录和18份权重核验通过，792项CPU回归通过；0新训练/HDF5读取、封存角色保持，不接受活动SPT或注册Module。下一步只读全部六个task×seed组的正反配对轨迹，解释seed差异，不追加训练或挑选checkpoint。
+
+冻结阶段记录（2026-11-03）：[360 episodes配对协议](docs/libero-source-internal-spt-spi-closed-loop-protocol-2026-11-03.md)在执行前独立冻结。固定全部18个500-update端点，task0/1×三seed×A/B/C×candidate初态0..19，稳定化5步、环境seed20261022、horizon300；最多108000个Policy动作，另1800个零动作。74项相关专项、781项CPU回归通过；当时仅复核权重和容器头部元数据，环境/Policy前向/初态数值解码0。该快照保留，实际执行结果见上。
+
+前序主线进度（2026-11-03）：[source内部SPT/SPI可行性对照](docs/libero-source-internal-spt-spi-diagnostic-2026-11-03.md)已完成。task0/1轮流作为已暴露的source内部探针，三seed、A原始SPT/B上下文FOMAML/C普通预训练，18个Policy各适应500 updates；隔离候选更新、source训练query与探针独立query分开。端点query MSE均值task0 A/B/C为0.085372/0.081612/0.079437，task1为0.052681/0.052996/0.053334；B相对A的曲线面积两任务各3/3 seed降低，但相对C没有稳定优势。108份权重与180组指标独立复核、739项CPU回归通过。原CUDA确定性失败和资源拒绝保留，v2在GPU1按原预算完成，环境交互0、不接受活动SPT或注册Module。后续闭环冻结状态见上，正式validation/held-out/qualification仍封存。
+
+机制诊断收束（2026-11-03）：[夹爪动作映射核对](docs/libero-gripper-action-mapping-audit-2026-11-03.md)确认当前Panda按动作符号累计控制量；相同历史下同号幅值差不会改变夹爪增量。task7 seed24的4122个同号帧在五个合成历史下全部相同；连续夹爪MSE恶化不能直接写成物理闭合变弱，不据此继续搜索loss。新增训练/环境/模型调用0。
+
+前序只读定位（2026-11-03）：[task7平移—夹爪取舍分层](docs/libero-task7-expert-camera-component-tradeoff-diagnostic-2026-11-03.md)已完成并独立复核。seed24眼在手弱空间干预的夹爪恶化主要见于expert close，open类及open切换窗口反而改善；3934帧两者符号均正确，这类帧占正向夹爪恶化量66.7%。三个seed共有1045帧同向局部取舍，demos3/10的demo均值也同向，但全局方向不同，不证明优化冲突或闭环根因。新模型/训练/环境/HDF5调用均0，13项新测试、690项CPU回归通过。保持500 updates与5步，后续动作映射结论见上。
+
+最新诊断（2026-11-02）：[专家相机干预与目标动作误差](docs/libero-task4-task7-expert-camera-target-error-diagnostic-2026-11-02.md)已绑定代码并完成7200主前向+48重复，独立复核通过。六个baseline500、source-support全部8630个causal输入；两个任务、两个相机均未满足平移主指标的三seed一致外观放大或空间细节flag，弱干预可改善也可恶化误差。完整块均值probe使六模型误差均上升，但不能单独证明几何必要性；七维次级线索不覆盖平移主判断。耗时426.51s、208656行预测、0新训练/环境，900+900+48精确检查和677项CPU回归通过。保持500 updates与闭环5步，下一步只读既有分层定位task7平移/夹爪取舍，不自动改训练或进入qualification。
+
+前序设计快照（2026-11-02）：[合法专家输入的相机干预—目标误差设计](docs/libero-task4-task7-expert-camera-target-error-protocol-2026-11-02.md)已冻结并通过元数据校验，尚未运行。固定六个baseline500、闭环默认5步，只用source-support全部8630个`t>=1` causal输入；八条件比较同帧同像素MAE的外观/空间扰动，分解目标误差变化的方向项与响应能量。未来预算7200主前向+48重复、0训练/环境；空间probe同时损失纹理，只作空间细节依赖线索，不证明几何必要性。当前算子/协议已锁，下一步实现并绑定执行runner，再按冻结口径读出，不访问query或资格数据。
+
+前序固定Policy实验（2026-11-02）：[source稳定化缓存的RGB／本体分解](docs/libero-task4-task7-source-stabilization-input-decomposition-diagnostic-2026-11-02.md)完成六个baseline500、60对source首观察的八组合读出。两个任务在三seed、两参照下均为RGB响应大于本体、eye-in-hand大于agentview，逐组30/30 demos同向；没有夹爪符号变化，不能据此解释六组闭环结果或宣布视觉根因。48主批次+12重复、1800行预测、12自然端点/12重复精确通过，CPU elapsed4.345s，新增训练/环境/HDF5读取0；独立复核、18项新测试及649项CPU回归通过。保持500 updates与5步，不重启已停止的4像素增强；后续目标误差设计已冻结，见上方最新协议，尚未运行。
+
+前序只读结果（2026-11-02）：[stabilization0/5的120对轨迹机制对齐](docs/libero-task4-task7-stabilization-trace-alignment-diagnostic-2026-11-02.md)已完成并独立复核，6组相反结果逐对列出。3组zero-only首次close较早，但另有2组更早close仍失败；持续长度和sign switches也无统一成功方向。task7/seed23/state3首步由close变open最突出，尚不能判物理抓取根因。两臂成功率仍各7/120，保持5步和500 updates。新增训练/Policy/环境调用均0，17项新测试、631项CPU回归通过。其后source缓存输入分解已完成，见上方最新实验；不据选中轨迹直接改训练。
+
+前序闭环结果（2026-11-02）：[当前执行环境下stabilization0/5闭环对照](docs/libero-task4-task7-stabilization-contemporary-closed-loop-diagnostic-2026-11-02.md)已完成并独立复核。两臂240条全部fresh，固定baseline500；0步和5步均为 `7/120=5.83%`，task4为 `2/60 vs 3/60`，task7为 `5/60 vs 4/60`。各有3组初态只在一臂成功，没有三seed一致零步改善，因此保留现行5步与500 updates。实际70,188 Policy动作、600固定零动作、新训练0；614项CPU回归通过。两次历史长轨迹复现仍为failed，独立来源和额外技术成本不混入主分母。其后120对只读分析已完成，见上方最新报告；不把该诊断称作正式资格或SPT/Knowledge更新。
+
+历史复现尝试（2026-11-02）：[原完整轨迹复现协议](docs/libero-task4-task7-stabilization-closed-loop-diagnostic-2026-11-02.md)在task7的长轨迹分叉处停止，两次尝试保留failed，不把当前对照补成其原门槛通过。后续两臂均fresh、同一当前执行栈的比较有独立配置和结果；source特征距离变化不等于闭环收益。
+
+前序source输入诊断（2026-11-02）：[source 稳定化 0/5 配对诊断](docs/libero-task4-task7-source-stabilization-control-diagnostic-2026-11-02.md)已完成并独立复核。保持六个 baseline500、相同 horizon/reset 顺序和参照规模，两任务三个 seed 的共同尺度首步距离均下降，five/zero 比值 task 4 为 `0.0529–0.4340`、task 7 为 `0.0513–0.0892`，但不是动作正确性或闭环收益。实际 120 source resets、300 固定零动作、0 Policy 控制/训练；60 个零步观察及六模型旧读出精确复现。Path 类型错误与缓存续算单列 provenance，没有重复采集。55 项相关测试、566 项 CPU 回归通过；下一步用这批缓存分离 RGB 与本体状态响应，不直接把新五步观察配旧 action[0] 训练。
+
+前序夜间工作（2026-11-02）：[夜间诊断与晨间报告](docs/libero-overnight-diagnostic-progress-2026-11-02.md)已完成条件可分性、饱和、命令时序、已有闭环输入覆盖、source 首步目标及夹爪反馈检查，并独立复核。六个 baseline500 的 open 命令有偏迟线索，但 projection 区分下降和错误 tanh 强饱和未通过预设条件，因此未启动 BCE 候选训练。夹爪输入固定后的局部 MSE 虽均下降，每个任务仍各有一个 seed 的符号错误增加；不直接采用。初始覆盖差异依赖时相/参照库，不能称全局 OOD 或闭环根因。保留原 baseline 与 500 updates，新增训练/环境交互为 0，CPU 回归 `532 passed`；反馈 JSON 导出失败及零模型重算恢复均保留 provenance。下一步先冻结 source 稳定化匹配对照，分离已有 runtime_t0 参照的混杂。下文按执行顺序保留历史进度，不将 diagnostic 写成正式 SPT/SPI/Knowledge 或 Module qualification。
 
 The repository now follows a staged validation route:
 
@@ -44,6 +141,46 @@ The phase-command diagnostic is complete without retraining or environment rollo
 The task-4/task-7 module-freeze readout diagnostic, seed replication, and disjoint source-demo query check are complete. The strict source-support MSE ordering `full < freeze_visual < freeze_visual+fusion < action_head_only` held across all replicated seeds; the same order held on `meta_query` demonstrations `30–49` in all 6 task × seed groups. For full Policy, query action MSE was `0.03852` on task 4 and `0.04263` on task 7, versus `0.21473/0.18305` for action-head-only. This is offline same-task demonstration generalization, not online success, task-instance transfer, or a causal module claim. The next diagnostic retrains only Full Policy with the same fixed budget and requires exact final-weight hashes before evaluating the full source `candidate_nonregression` state set `0–19`; these states have prior diagnostic use and are not qualification data. The frozen protocol is [here](configs/libero-task4-task7-full-policy-closed-loop-diagnostic_v1.json); the source meta-query result is documented [here](docs/libero-source-meta-query-generalization-diagnostic-2026-10-30.md).
 
 The Full Policy closed-loop diagnostic is complete: `7/120` successes (`5.83%`) across task 4/7 and three seeds; all other episodes reached the 300-step time limit. The result confirms that offline query MSE does not yet translate into reliable free-running control. See the [closed-loop report](docs/libero-task4-task7-full-policy-closed-loop-diagnostic-2026-10-30.md). Qualification and held-out states remain untouched.
+
+The read-only follow-up analyzed all 120 public state traces without replaying the environment. All seven successes emitted a positive close command; 32/113 time-limit episodes never did, while 66/113 reached a command-phase release heuristic and still failed. Success/failure first-action norms and joint/gripper offsets remain descriptive and task-dependent because no expert action or private target state is available. The detailed mechanism analysis and provenance are in the [closed-loop attribution report](docs/libero-task4-task7-full-policy-closed-loop-attribution-diagnostic-2026-10-31.md); it does not change the protocol, SPT, Knowledge, or Module boundary.
+
+The follow-up action-to-public-state alignment read the same 120 traces and found similar first-step joint/gripper responses between success and time-limit groups. After the first close, joint response decreased more in the seven successful episodes, but task-4/task-7 directions differed and the sample is too small for a causal claim. Task 7 still has 27/56 time-limit episodes without close, versus 5/57 for task 4. The [state-action alignment report](docs/libero-task4-task7-full-policy-closed-loop-state-action-alignment-diagnostic-2026-10-31.md) records the fixed-window metrics and preserves the no-retraining/no-new-rollout boundary.
+
+The close/release run follow-up further separates the same failures into no close, close without later release, and long release runs. Release runs are much longer in time-limit episodes, but that comparison is coupled to 300-step censoring; close-run length reverses direction between task 4 and task 7. The [phase-response report](docs/libero-task4-task7-full-policy-closed-loop-phase-response-diagnostic-2026-10-31.md) keeps these as command-trajectory diagnostics and does not promote a global gripper timing fix.
+
+A future fixed Full Policy public-state replacement protocol is now frozen, but deliberately not run: its current new-episode budget is zero, it pins the six existing Full Policy checkpoints, and it captures no qualification data. The [protocol note](docs/libero-task4-task7-full-policy-observation-state-replacement-protocol-2026-10-31.md) records the exact boundary and the required future budget change.
+
+The user-authorized v2 protocol has now run on 120 short windows using the same six fixed Full Policy checkpoints. Public joint/gripper reset replacement changed the step-20 action L2 by `0.076515` overall, `0.065864` on task 4 and `0.087166` on task 7, with most change in translation and little gripper-action change. Replacement actions were never sent to the environment; see the [observation/state replacement diagnostic](docs/libero-task4-task7-full-policy-observation-state-replacement-diagnostic-2026-10-31.md). This remains local input-sensitivity evidence, not a long-horizon success or causal result.
+
+The sensitivity follow-up shows task-conditioned structure: at horizon 20, episode-level joint-drift/action-delta correlation is `0.694` for task 4 and `0.428` for task 7, while pooled correlation is `-0.391` because task means differ. The [sensitivity report](docs/libero-task4-task7-full-policy-observation-state-replacement-sensitivity-diagnostic-2026-10-31.md) treats this as descriptive stratification and does not infer a causal state-drift mechanism.
+
+The user-authorized public joint/gripper state-jitter diagnostic is complete on six models (task 4/7 × three seeds), using causal HDF5 `meta_support` demonstrations `0–29` for 500 updates and disjoint `meta_query` demonstrations `30–49` for offline evaluation. Query MSE improved for all three task-4 seeds (mean delta `-0.001227`) but had mixed direction on task 7 (mean delta `+0.000231`). This remains a non-formal offline diagnostic; it did not run rollouts or access qualification data. See the [protocol](docs/libero-task4-task7-public-state-jitter-augmentation-protocol-2026-10-31.md) and [training diagnostic report](docs/libero-task4-task7-public-state-jitter-augmentation-diagnostic-2026-10-31.md).
+
+The 141.24-second runtime is consistent with the bounded diagnostic budget: each model ran exactly 500 optimizer updates over roughly 434–461 causal support windows, with 821,704 trainable parameters and no rollout. This budget is enough for the fixed offline comparison, but not evidence of convergence or stable closed-loop control; a future 500/1000/2000 budget sweep must retrain both baseline and jitter arms under a separately frozen protocol.
+
+The frozen 500/1000/2000 budget sweep is now complete. Baseline and public-state-jitter arms were both retrained to 2,000 updates for task 4/7 and three seeds, with support/query metrics recorded at all three checkpoints. Support error kept falling, while query gains were non-monotonic: at 2,000 updates jitter query MSE was lower than baseline by `0.001045` on task 4 and `0.001898` on task 7. This remains an offline source-demo diagnostic and does not establish closed-loop or causal benefit. See the [budget-sweep report](docs/libero-task4-task7-public-state-jitter-budget-sweep-diagnostic-2026-10-31.md).
+
+Using the selected 500-update budget, the fixed public-state-jitter arm was then run on the same 120 candidate nonregression episodes as the pinned Full Policy baseline. Baseline achieved `7/120` and jitter `6/120`; paired transitions were baseline-only `4`, jitter-only `3`, both `3`, neither `110`. This did not improve closed-loop control and remains a non-formal diagnostic. See the [500-update closed-loop report](docs/libero-task4-task7-public-state-jitter-500-closed-loop-diagnostic-2026-10-31.md).
+
+The paired read-only trace alignment found fewer jitter episodes with a close command (`77/120` versus `88/120`) and later first close on episodes that closed (`80.8` versus `68.5` steps). Joint drift was higher for jitter at steps 50/100 but lower at steps 200/300, while gripper offsets stayed close. This is descriptive mechanism evidence only; see the [paired trace alignment report](docs/libero-task4-task7-public-state-jitter-500-closed-loop-alignment-diagnostic-2026-10-31.md).
+
+The seven success-transition traces split into four descriptive patterns: jitter added a missing close on one episode, reached success before the release heuristic on two, lost close on one baseline-only episode, and changed close/release timing on the other three. The small transition set does not isolate a causal mechanism. See the [transition mechanism report](docs/libero-task4-task7-public-state-jitter-500-closed-loop-transition-mechanisms-2026-10-31.md).
+
+The existing closed-loop artifacts contain public state and action traces but no paired agentview or eye-in-hand RGB frames. A read-only first-20-step action alignment was therefore estimable, while RGB/action alignment was explicitly marked not estimable; a new RGB-capturing rollout would be required for that comparison. See the [RGB/action audit](docs/libero-task4-task7-public-state-jitter-500-transition-rgb-action-alignment-diagnostic-2026-11-01.md).
+
+A bounded RGB/action capture was then completed for the seven transition pairs: 14 episodes and 20 pre-action steps per episode. Eye-in-hand RGB MAE exceeded agentview MAE, and fixed-policy RGB-only input swaps changed actions more than proprio-only swaps in both transition groups. This is local input sensitivity evidence, not a camera-causal or closed-loop result. See the [RGB/action capture report](docs/libero-task4-task7-public-state-jitter-500-transition-rgb-action-capture-diagnostic-2026-11-01.md).
+
+后续只读复核修订：上述 RGB 补采内部两臂 reset digest 为 `7/7` 对齐，但与原始闭环前缀只有 task 7 的 `10/10` 个窗口完全一致，task 4 的 `4` 个窗口不一致。task 4 暂时只能作为新短窗口案例；不能将全部汇总称为原 success transition 的精确复现。此外 RGB-only swap 同时替换两路相机，眼在手像素差较大不能直接推出它对 action 的影响更大。下一步先做复现检查和现有 archive 的逐相机/同观察跨 Policy 分解，暂不扩采 120 对或新训练。审计证据与计划见 [500-update 后续计划](docs/libero-500-update-next-step-plan-2026-11-01.md)。
+
+500-update 证据核对与离线分解已完成：14 个 archive、8 个 checkpoint 完整核验，task 7 五对进入主要分析，task 4 两对单列。同观察 Policy 差异为 `0.100411–0.111334`，高于固定 Policy 完整观察替换的 `0.026819–0.037324`；首步观察一致而跨 Policy 动作不同。逐相机替换也确认了这五对中眼在手输入的局部动作敏感性更高。没有训练或新增 rollout，相关测试 `85 passed`。当前保留原 baseline，下一步先冻结 task 4 源前缀复现修复协议；详见 [证据核对与离线分解](docs/libero-task4-task7-evidence-decomposition-diagnostic-2026-11-01.md)。
+
+task 4 前缀复现已修复：补采需保留原环境的重置顺序，原生抽屉属性采样器配置会随 reset 累积。按冻结协议从状态 0 递增到目标后，`56/56` 个 20 步窗口的 reset/action/公开状态精确匹配，四个目标 RGB archive 全部通过；训练仍为现有 `500 updates`，新增训练为 0。实际新增 56 episodes、1,120 Policy actions，耗时 `127.68s`，相关测试 `100 passed`。这没有重测最终 success，也没有修复低成功率本身。下一步用修复后的 task 4 两对补齐离线分解，再决定一个训练变量；详见 [task 4 按原重置顺序复现诊断](docs/libero-task4-ordered-prefix-reproduction-diagnostic-2026-11-01.md)。
+
+修复后的 task 4 离线分解已完成：同观察换 Policy 的前 20 步 action L2 差为 `0.045174–0.045448`，高于固定 Policy 换完整观察的 `0.019082–0.022118`；首步观察相同而动作不同。task 7 五对重算与旧结果精确一致。两任务均对 eye-in-hand 的局部变化最敏感，但 task 4 夹爪输出差很小，不能统一归因或直接选训练修复。新增训练/rollout 均为 0，CPU elapsed `6.59s`，相关测试 `115 passed`。下一步固定所有三 seed 的 500-update 两臂，做有专家目标的动作分量/命令段误差分解；纯离线范围先冻结为 HDF5 `t>=1` 的 causal 对齐。详细结果、解释边界与 provenance 见 [修复前缀离线分解](docs/libero-task4-task7-repaired-evidence-decomposition-diagnostic-2026-11-01.md)。
+
+三个 seed 的专家目标误差诊断已完成：12 个固定 500-update 模型在相同 `t>=1` causal 示教输入上比较，共 14,490 个输入、86,940 行预测，零新增训练/环境交互。jitter 的 query 平移 MSE 在两任务均为三 seed 下降，夹爪却没有统一收益；24/24 个 task×role×seed×arm 组合的夹爪误差都在专家 open 切换附近最高。相关测试 `136 passed`。下一训练候选已限定为 open 切换 ±5 步内的局部 2× gripper MSE，保留 baseline 对照、500 updates 及其他设置；[候选设计](configs/libero-task4-task7-open-transition-gripper-weighting-proposal_v1.json) 尚未执行，需先接入 runner 并冻结完整执行预算/规则。结果和完整 provenance 见 [专家目标动作误差诊断](docs/libero-task4-task7-expert-action-error-diagnostic-2026-11-01.md)；该误差热点不能直接解释为闭环失败根因。
+
+局部 open-transition gripper loss 配对诊断已完成：12 个模型各 500 updates、总计 6,000，六个 baseline 权重精确复现。候选在两个任务的 query open 窗口 MSE 都只改善 2/3 seed；task 4 平移 MSE 均值增加 `7.03%`，task 4/7 七维 MSE 分别增加 `4.19%/6.63%`，未通过预先冻结门槛，**停止该候选分支，保留原 baseline**。100 个 source 首帧已重建并保存公开观测，Policy rollout 为 0；总 elapsed `387.79s`，训练循环合计 `68.41s`。专项 `41 passed`、排除 Crafter/smoke 组的 CPU 回归 `433 passed`，checkpoint/输入/168 个分层指标经独立复核。配置、停止规则、索引 access record 与实际 causal 训练视图的区别及完整 provenance 见 [局部损失配对诊断](docs/libero-task4-task7-local-gripper-loss-diagnostic-2026-11-01.md)。不追加权重搜索、训练预算或该候选闭环。
 
 ## Crafter historical status
 

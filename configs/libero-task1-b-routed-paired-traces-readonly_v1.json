@@ -1,0 +1,189 @@
+{
+  "schema_version": 1,
+  "formal_result": false,
+  "frozen_at_utc": "2026-11-04T13:47:27.341430+00:00",
+  "scope": {
+    "task_id": 1,
+    "training_seeds": [
+      20261022,
+      20261023,
+      20261024
+    ],
+    "arms": [
+      "current_all7",
+      "history_motion_current_gripper"
+    ],
+    "encoder_updates": 500,
+    "readout_updates": 500,
+    "stabilization_steps": 5,
+    "environment_seed": 20261022,
+    "initial_state_role": "candidate_nonregression",
+    "initial_state_indices": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      15,
+      16,
+      17,
+      18,
+      19
+    ],
+    "unique_episodes": 120,
+    "public_trace_rows": 35609,
+    "saved_action_rows": 35489,
+    "paired_episodes": 60,
+    "baseline_only_pairs": 3,
+    "both_failure_pairs": 57,
+    "candidate_only_pairs": 0,
+    "both_success_pairs": 0,
+    "common_action_frame_pairs": 17489,
+    "first20_frame_pairs": 1200,
+    "step5_to20_frame_pairs": 960,
+    "snapshot_policy_steps": [
+      1,
+      4,
+      5,
+      6,
+      10,
+      20,
+      50,
+      100,
+      200,
+      300
+    ],
+    "snapshot_records": 600,
+    "new_policy_encoder_readout_calls": 0,
+    "new_optimizer_updates": 0,
+    "new_backward_calls": 0,
+    "new_environment_calls": 0,
+    "new_HDF5_RGB_initial_private_checkpoint_reads": 0,
+    "new_feature_payload_reads": 0,
+    "sealed_roles_accessed": false,
+    "checkpoint_selected": false,
+    "training_changed": false,
+    "spt_updated": false,
+    "knowledge_updated": false,
+    "module_registered": false
+  },
+  "definition": {
+    "delta_direction": "candidate minus baseline for actions, state offset magnitudes and event times",
+    "action_clock": "action[t] uses public obs[t-1]; trace[t] is post-action state, trace0 post-stabilization reset",
+    "action_components": {
+      "translation": [
+        0,
+        1,
+        2
+      ],
+      "rotation": [
+        3,
+        4,
+        5
+      ],
+      "gripper": [
+        6
+      ]
+    },
+    "shared_startup_gate": "first4 actions and first5 pre-action observation digests equal; public state rows0..4 equal",
+    "certified_same_full_observation": "steps1..5 only, from saved public observation digests; later null, not inferred from proprio alone",
+    "first_difference": "first any exact nonzero component on common observed steps; no optimized epsilon; magnitude is reported and not a physical threshold",
+    "primary_windows": [
+      [
+        1,
+        20
+      ],
+      [
+        5,
+        20
+      ]
+    ],
+    "paired_full_horizon": "stop at min(baseline_steps,candidate_steps); separate from unpaired full-episode metrics",
+    "close": "action[6]>0",
+    "open": "action[6]<0",
+    "neutral": "action[6]==0",
+    "release": "first negative command strictly after first positive; not physical object release",
+    "sign_switches": "adjacent sign changes including zero, no initial switch",
+    "close_duration_censor": "run ending at observed episode/window boundary is right-censored; no imputed continuation",
+    "missing_events": "null with observed n/total/missing; one-sided order bounded only within the other observed horizon",
+    "state_metrics": "public joint/gripper offsets from common reset, path lengths and between-trajectory distances; not expert error/target geometry",
+    "outcome_strata": [
+      "all",
+      "baseline_only_success",
+      "candidate_only_success",
+      "both_success",
+      "both_failure"
+    ],
+    "baseline_only_cases": [
+      [
+        20261022,
+        2
+      ],
+      [
+        20261022,
+        10
+      ],
+      [
+        20261024,
+        5
+      ]
+    ],
+    "seed_groups": "all three seeds separately, all60 pooled descriptively, all outcome strata including empty",
+    "statistics": "n/total/missing, mean/median/min/max; no significance, IID, causal root or outcome-independent validation claim",
+    "decision": "retain stop of routed candidate, no automatic training change; mechanism findings must precede a separately frozen hypothesis",
+    "recompute_parent_summary": true,
+    "input_protection": "metadata hashes before any episode JSON decode, no NPZ feature/head payload",
+    "metric_audit_atol": 1e-10,
+    "metric_audit_rtol": 1e-12
+  },
+  "inputs": {
+    "parent_result": {
+      "path": "/tmp/libero-task1-b-routed-history-closed-loop-20261104-v1.json",
+      "sha256": "9cd8039dcbe79ec9c847e4e2681e62b47bf5e962472f3a26e00b4c72ad500084"
+    },
+    "parent_audit": {
+      "path": "/tmp/libero-task1-b-routed-history-closed-loop-independent-audit-20261104-v1.json",
+      "sha256": "978cc7e588654693f13ba134f6668f2e760df9a008f6d7100d89615eebee4bab"
+    },
+    "parent_config": {
+      "path": "configs/libero-task1-b-routed-history-closed-loop-diagnostic_v1.json",
+      "sha256": "b69b72b5fffba3e239e34eddc1e8e2c6bbcd57148473f6bb982f245518aaa288"
+    },
+    "parent_binding": {
+      "path": "configs/libero-task1-b-routed-history-closed-loop-binding_v1.json",
+      "sha256": "0824787f9c6d8bd5e9de98347d21ebc671ea57573248434334653b2901d084ae"
+    },
+    "parent_verification": {
+      "path": "/tmp/libero-task1-b-routed-runtime-and-loop-final-verification-20261104-v1.json",
+      "sha256": "18dfb7438946cb3824a42b02f75557c48da71d55762b4abee2f8cfe0afc4f036"
+    },
+    "episode_metrics_helper": {
+      "path": "experiments/analyze_libero_source_internal_six_group_paired_traces.py",
+      "sha256": "800d94eea32a76e06c885e541b9605df114aa81b302e3500dda408a31f645e17"
+    },
+    "command_metrics_helper": {
+      "path": "experiments/analyze_libero_task4_task7_full_policy_closed_loop_diagnostic.py",
+      "sha256": "c26b1bfe7266dd332f0e5c55dfdb6f668d570478a790e01e5f8676766013f181"
+    },
+    "helper_import_dependency": {
+      "path": "experiments/audit_libero_source_internal_spt_spi_closed_loop_diagnostic.py",
+      "sha256": "079bc5fcdd9c3c4f12459998a1b5c8555dbb3dd0b65c97acf6a8fd4b7ba7406b"
+    }
+  },
+  "execution": {
+    "device": "cpu",
+    "python": "3.10.22",
+    "numpy": "1.22.4",
+    "output": "/tmp/libero-task1-b-routed-paired-traces-20261104-v1.json"
+  }
+}

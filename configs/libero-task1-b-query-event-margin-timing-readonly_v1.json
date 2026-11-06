@@ -1,0 +1,142 @@
+{
+  "schema_version": 1,
+  "formal_result": false,
+  "check_type": "readonly_query_event_margin_and_timing",
+  "frozen_at_utc": "2026-11-04T11:42:46.252684+00:00",
+  "scope": {
+    "task_id": 1,
+    "feature_arm": "B_fomaml",
+    "training_seeds": [
+      20261022,
+      20261023,
+      20261024
+    ],
+    "readout_modes": [
+      "current_repeat5",
+      "causal_history5"
+    ],
+    "readout_updates": 500,
+    "original_policy_updates": 500,
+    "closed_loop_default_stabilization_steps": 5,
+    "demonstration_role": "meta_query",
+    "demonstration_indices": [
+      30,
+      31,
+      32,
+      33,
+      34,
+      35,
+      36,
+      37,
+      38,
+      39,
+      40,
+      41,
+      42,
+      43,
+      44,
+      45,
+      46,
+      47,
+      48,
+      49
+    ],
+    "cached_target_rows": 2598,
+    "cached_prediction_rows": 15108,
+    "common_rows_per_model": 2518,
+    "prediction_archives": 6,
+    "known_open_events": 23,
+    "model_event_pairs": 69,
+    "full_post_model_frame_pairs": 696,
+    "relative_window_records": 690,
+    "relative_lags": [
+      -4,
+      -3,
+      -2,
+      -1,
+      0,
+      1,
+      2,
+      3,
+      4,
+      5
+    ],
+    "new_model_forward_calls": 0,
+    "new_optimizer_updates": 0,
+    "new_backward_calls": 0,
+    "new_environment_calls": 0,
+    "new_HDF5_RGB_initial_private_checkpoint_payload_reads": 0,
+    "new_feature_payload_reads": 0,
+    "loss_budget_or_policy_changed": false,
+    "checkpoint_selected": false,
+    "sealed_roles_accessed": false,
+    "spt_updated": false,
+    "knowledge_updated": false,
+    "module_registered": false
+  },
+  "analysis": {
+    "cases": [
+      "stable_correct",
+      "harmed",
+      "repaired",
+      "wrong_both"
+    ],
+    "event_source": "All known expert >=0 to <0 command switches, t>=2; common predictions t>=5. Require exact23 eligible events and parent event counts. Never infer physical phases or fabricate initial-prefix events.",
+    "frame_pair_fields": "Both raw predicted gripper values, abs distance to0, sign and correctness, delta_g, actual expert target; current/history gripper squared errors and exact delta identity (h-c)*(h+c-2*y). Same-frame translation/rotation/7D errors are secondary and descriptive.",
+    "mse_accounting": "Partition event rows by paired correctness. Each case contribution is sum(delta_squared_error)/all23 events for that seed, not conditional mean. Four contributions add to parent event MSE delta; harmed-repaired count equals parent error-count delta. Report actual target values, do not assume target=-1.",
+    "margin_rule": "No near-zero cutoff, calibration, sign-threshold tuning or significance tests. Preserve every event and every changed case; means/medians/ranges only. Empty conditional stats null, empty sum/all23 contribution0.",
+    "pre_window": "lags-4..-1: same-demo cached prediction only, preserve actual expert sign; null+reason if missing, never padding or cross-demo. Event windows can overlap and do not add independent evidence.",
+    "post_window": "lag0..5 only while the original expert-open command continues; missing after command end is censored/changed-label, not0 or wrong. Every window has10 availability records.",
+    "full_post": "Track the entire observed expert-open command segment from event through next nonnegative target or demo_end, no arbitrary truncation. Save696 paired frame records and per-segment current/history wrong runs, first correct, maintained correct tail, error reentry and boundary reason.",
+    "prefix_rule": "For event-harmed cases report both initial consecutive additional-wrong frames(current correct/history wrong) and history total initial-wrong prefix. The former may end because current also becomes wrong; it is not necessarily history recovery. Symmetric rule for repaired cases.",
+    "nulls_and_timing": "First-correct/tail-start missing stays null, with counts separately. Compare timing only if both observed; never call missing0. Reentry count has first-correct eligibility denominator. Segment end is not episode success/failure.",
+    "aggregation": "Per seed and all3seed pooled fixed model/event descriptors; retain all69 events and696 full-post frame pairs. No cross-arm/source-task samples, outcome/seed selection or independent-episode claim.",
+    "landmarks": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      10,
+      20
+    ],
+    "prior_gate": "Retain parent joint_query_cue=false and no-rollout decision regardless of decomposition; no automatic training/candidate acceptance.",
+    "metric_tolerance": 1e-10
+  },
+  "inputs": {
+    "parent_result": {
+      "path": "/tmp/libero-task1-b-support-query-history-readout-20261104-v1.json",
+      "sha256": "49b6b7484d626d204ef7ba27c0377392ed571b9af2b3bb29980299d97c8db241"
+    },
+    "parent_audit": {
+      "path": "/tmp/libero-task1-b-support-query-history-readout-independent-audit-20261104-v1.json",
+      "sha256": "98affa088ad00e52a58a01e888333c34eb975613be2008e1f706d4952bafaccd"
+    },
+    "parent_config": {
+      "path": "configs/libero-task1-b-support-query-history-readout-diagnostic_v1.json",
+      "sha256": "e0e717f1c8eadf6447f38dec0b1e6a8d69ea5b92a71054e8265387b3f4174b72"
+    },
+    "parent_binding": {
+      "path": "configs/libero-task1-b-support-query-history-readout-binding_v1.json",
+      "sha256": "84364b78b36a1c775a61e9c33af5596de65b0f8f0953252b09277091a613504d"
+    },
+    "parent_report": {
+      "path": "docs/libero-task1-b-support-query-history-readout-diagnostic-2026-11-04.md",
+      "sha256": "6cf70ed694f5cea318e9fee79f7f45518a3e768c28da6a22f39975c78acd4222"
+    },
+    "full_segment_code": {
+      "path": "experiments/analyze_libero_source_internal_full_open_segments.py",
+      "sha256": "2fdb090ec81b45b3267471b50b9eaa4c90af56af237136c4345ec2f95e3c0e55"
+    },
+    "base_helpers": {
+      "path": "experiments/analyze_libero_source_internal_gripper_sign_margin_temporal.py",
+      "sha256": "d688c0d217fd578626897b75b0a14c777c94b77f8fda80bab989fb07248d618c"
+    }
+  },
+  "execution": {
+    "device": "cpu",
+    "output": "/tmp/libero-task1-b-query-event-margin-timing-20261104-v1.json",
+    "allowed_numeric_payloads": "parent query targets/IDs plus six saved query predictions only; no features, support NPZ, HDF5 or checkpoint payloads"
+  }
+}

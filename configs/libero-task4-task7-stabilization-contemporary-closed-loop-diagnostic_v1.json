@@ -1,0 +1,140 @@
+{
+  "schema_version": 1,
+  "check_type": "libero_task4_task7_stabilization_contemporary_closed_loop",
+  "formal_result": false,
+  "protocol_status": "frozen_fresh_two_arm_current_runtime_not_historical_replication",
+  "recorded_at_utc": "2026-11-02T03:30:44.538123+00:00",
+  "runner_sha256": "55a7061794080c406f02e2072851e1364667b8bc6c4e6e06a81b67dbedf5890c",
+  "scope": {
+    "task_ids": [
+      4,
+      7
+    ],
+    "training_seeds": [
+      20261022,
+      20261023,
+      20261024
+    ],
+    "checkpoint_updates": 500,
+    "initial_state_role": "candidate_nonregression",
+    "initial_state_indices": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      15,
+      16,
+      17,
+      18,
+      19
+    ],
+    "stabilization_arms_in_order": [
+      5,
+      0
+    ],
+    "environment_seed": 20261022,
+    "policy_action_limit": 300,
+    "native_horizon_both_arms": 305,
+    "fresh_episodes": 240,
+    "fresh_episodes_per_arm": 120,
+    "reused_primary_episodes": 0,
+    "new_adapter_budget": 12,
+    "new_candidate_initial_rows_decoded": 40,
+    "max_new_policy_steps": 72000,
+    "new_fixed_zero_steps": 600,
+    "previous_technical_episode_attempts": 74,
+    "previous_technical_policy_steps": 21861,
+    "previous_technical_zero_steps": 370,
+    "max_cumulative_policy_steps": 93861,
+    "cumulative_fixed_zero_steps": 970,
+    "cumulative_episode_attempts": 314,
+    "cumulative_candidate_numeric_reads": 120,
+    "cuda_visible_devices": "0",
+    "egl_device_id": "0",
+    "inference_device": "cuda:0",
+    "torch_threads": 1,
+    "new_optimizer_updates": 0,
+    "new_backward_calls": 0,
+    "new_hdf5_payload_reads": 0,
+    "private_live_simulator_state_read": false,
+    "private_initial_vector_values_recorded": false,
+    "qualification_accessed": false,
+    "reserved_accessed": false,
+    "validation_accessed": false,
+    "heldout_accessed": false,
+    "final_evaluation_accessed": false,
+    "checkpoint_selected": false,
+    "spt_updated": false,
+    "knowledge_updated": false,
+    "module_registered": false
+  },
+  "analysis": {
+    "estimand": "paired_success_under_two_reset_regimes_in_one_current_execution_stack",
+    "historical_full_replication_failures_remain_failed": true,
+    "both_arms_all240_episodes_fresh": true,
+    "historical_success_counts_not_reused": true,
+    "strict_five_reset_and_first20_policy_public_state_prefix_exact_to_prior_frozen_window": true,
+    "historical_long_trace_agreement": "record_per_episode_separately; not_a_claim_of_historical_full_replication",
+    "current_reference_long_trace_agreement": "record_for_all67_available_recent_five_episodes; not_select_samples",
+    "within_arm_same_task_state_reset_digest_exact_across_training_seeds": true,
+    "same_weights_device_horizon_seed_reset_order_and_action_budget_in_both_arms": true,
+    "paired_outcomes_and_three_seed_direction_rule": "strictly_more_successes_in_all_three_seeds_per_task",
+    "no_statistical_significance_or_unseen_or_qualification_claim": true,
+    "no_automatic_setting_or_checkpoint_selection": true,
+    "stabilization_intervention_includes_physics_and_fixed_zero_commands": true
+  },
+  "inputs": {
+    "base_code": {
+      "path": "/home/zl202621/project/KECRL/experiments/run_libero_task4_task7_stabilization_closed_loop.py",
+      "sha256": "fed40bd93ef152b00915b56d4317a332f0981fbef2a6f1b1b38f721de5255912"
+    },
+    "historical_config": {
+      "path": "/home/zl202621/project/KECRL/configs/libero-task4-task7-stabilization-closed-loop-diagnostic_v2.json",
+      "sha256": "72fbc906fd6f6aaea2bfed8643d7db39c5f989db1757693816d670565065b34f"
+    },
+    "device1_failed": {
+      "path": "/tmp/libero-task4-task7-stabilization-closed-loop-20261102-v2.json",
+      "sha256": "077e546e63164f39a23ea7771190e1062a084cdf55e3c7469f67cfda46d94f84"
+    },
+    "device0_failed": {
+      "path": "/tmp/libero-task4-task7-stabilization-closed-loop-device0-20261102-v1.json",
+      "sha256": "1bc2ee77c544d6bcb1460eb0273d56a73dd2c1395395e9d0857cd6d9f2248a5b"
+    }
+  },
+  "authorization": "继续完成用户要求的stabilization0/5闭环成功率对照；两臂在相同当前device0环境下全部重跑，不使用历史成功率替代新基线。",
+  "scope_revision_reason": "Two recent runs match each other fully on the late-divergent task7 case but fail exact historical long traces; preserve those failures and define an independently frozen current-runtime comparison.",
+  "budget_revision": {
+    "fresh_primary_episodes": 240,
+    "previous_technical_attempts": 74,
+    "max_cumulative_episode_attempts": 314,
+    "max_new_policy_steps": 72000,
+    "max_cumulative_policy_steps": 93861,
+    "cumulative_fixed_zero_steps": 970,
+    "new_optimizer_updates": 0,
+    "no_private_qualification_reserved_or_other_locked_numeric_rows": true
+  },
+  "resource_gate_before_launch": {
+    "physical_gpu_index": 0,
+    "max_gpu_utilization_percent": 50,
+    "max_memory_used_mib": 4096
+  },
+  "stop_rules": [
+    "all120_five_reset_and_preexisting20step_prefix_exact_before_zero",
+    "cross_seed_within_arm_reset_exact",
+    "weights_roles_device_horizon_fixed",
+    "all240_fresh_before_comparison",
+    "preserve_historical_full_failures_no_relabel",
+    "no_training_checkpoint_or_setting_selection"
+  ]
+}

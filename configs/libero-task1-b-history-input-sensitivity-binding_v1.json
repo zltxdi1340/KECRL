@@ -1,0 +1,19 @@
+{
+  "formal_result": false,
+  "created_at_utc": "2026-11-04T18:02:16.675124+00:00",
+  "config_sha256": "a8574a7d3c0ded9cf1fdbedb86dd8e791dee99f8e1b5a43ca0c7e23acf2e8735",
+  "files": {
+    "runner": {
+      "path": "experiments/run_libero_task1_b_history_input_sensitivity.py",
+      "sha256": "7dc42fa840aeea2764fdf4c8136d82346a67ac002cfac3148e9cecbb2eaf02c4"
+    },
+    "tests": {
+      "path": "tests/test_libero_task1_b_history_input_sensitivity.py",
+      "sha256": "763762313e5cdd4d76a901a6b0750e657fc60544296f60dbb425bc127aab3097"
+    },
+    "protocol": {
+      "path": "docs/libero-task1-b-history-input-sensitivity-protocol-2026-11-05.md",
+      "sha256": "8c54b1fdc7dff64bbf0f998222c372f62d15d56aceff9573ff783fe71ab00643"
+    }
+  }
+}
