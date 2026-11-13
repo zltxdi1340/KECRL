@@ -1,0 +1,3192 @@
+{
+  "status": "bound_before_payload",
+  "before_research_payload": true,
+  "created_at_utc": "2026-11-09T17:03:54.978772+00:00",
+  "science_config": {
+    "path": "/home/zl202621/project/KECRL/configs/libero-task7-mse-gate-stop-direction-grid-readonly_v1.json",
+    "sha256": "ab870764b427d77bfc95fe3c6757e87b16d94d9c0232ffcf756079e3c1526c8f"
+  },
+  "budget": {
+    "head_cohort": {
+      "candidate_total": 18,
+      "exhausted": 11,
+      "zero": 6,
+      "short": 5,
+      "full50_metadata_only": 7
+    },
+    "source_CSV_passes_per_stage": 3,
+    "source_rows_per_stage": {
+      "endpoints": 54,
+      "parameters": 13878,
+      "trials": 10090
+    },
+    "selected_rows_per_stage": {
+      "endpoints": 22,
+      "parameters": 5654,
+      "trials": 132
+    },
+    "projected_cells_per_stage": {
+      "endpoints": 572,
+      "parameters": 62194,
+      "trials": 2772
+    },
+    "lexical_cells_per_stage": 380100,
+    "total_source_CSV_passes": 6,
+    "total_source_rows": 48044,
+    "total_selected_rows": 11616,
+    "total_projected_cells": 131076,
+    "total_lexical_cells": 760200,
+    "source_SHA_per_stage": 6,
+    "total_source_SHA": 12,
+    "cached_gradient_vector_coordinates_per_stage": 22616,
+    "gradient_coordinate_rows_checked_per_stage": 5654,
+    "new_model_forward_gradient_update_array_or_sealed_calls": 0,
+    "tables": {
+      "points": 22,
+      "trials": 132,
+      "heads": 11,
+      "strata": 12
+    },
+    "output_rows": 177
+  },
+  "CPU_environment": {
+    "CUDA_VISIBLE_DEVICES": "",
+    "PYTHONHASHSEED": "0",
+    "OMP_NUM_THREADS": "1",
+    "OPENBLAS_NUM_THREADS": "1",
+    "MKL_NUM_THREADS": "1"
+  },
+  "future_output": "/tmp/libero-task7-mse-gate-stop-direction-grid-20261109-v1.json",
+  "future_artifacts": "/tmp/libero-task7-mse-gate-stop-direction-grid-artifacts-20261109-v1",
+  "parent_binding": {
+    "path": "/home/zl202621/project/KECRL/configs/libero-task7-mse-nonregression-acceptance-execution-binding_v1.json",
+    "sha256": "c4ca468bd54ea62e102154741dad21f9b9381b529f374a4e1a0122679eea497c"
+  },
+  "dependencies": [
+    {
+      "path": "/home/zl202621/.conda/envs/libero-kecrl/lib/python3.10/site-packages/torch/_compile.py",
+      "sha256": "d304aebdccd9f062bbf0c816cccf9f0632909ae70196b33ba8e8e816cf2716ab"
+    },
+    {
+      "path": "/home/zl202621/.conda/envs/libero-kecrl/lib/python3.10/site-packages/torch/nn/utils/clip_grad.py",
+      "sha256": "05f55b47e6bbebdc95a73a76fd447f07eaafb34a6df8bb4ccfce92dcd346c8b3"
+    },
+    {
+      "path": "/home/zl202621/.conda/envs/libero-kecrl/lib/python3.10/site-packages/torch/optim/adam.py",
+      "sha256": "e65c27d66e66a4dddd2b96816999a2025a58fff196ffce9f20a32492b1c7341a"
+    },
+    {
+      "path": "/home/zl202621/.conda/envs/libero-kecrl/lib/python3.10/site-packages/torch/optim/optimizer.py",
+      "sha256": "46f911d59955d779b3323a61cbc35c33725da64edfff6b9b2fa7e59b732b1a5b"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/configs/libero-task7-current-residual-correctability-diagnostic_v1.json",
+      "sha256": "722b626c34f7faff67356b3d7e385784536aad4b95abf80084f685079855c58e"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/configs/libero-task7-direction-harm-alignment-execution-binding_v1.json",
+      "sha256": "7d5442063141051c2fecae5f5021d1bfd457a17ac1cf83df129c9fd0da7d7d21"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/configs/libero-task7-direction-harm-alignment-readonly_v1.json",
+      "sha256": "dafd50602e7122d60a62970b9c41dc5f75e68e72429dc67389214cc821c41fce"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/configs/libero-task7-endpoint-gradient-diagnostic_v1.json",
+      "sha256": "f9f2c53b3dab4cbe16ba921bac767e146c0dab1c2b99fca2b83405d01ac1fec7"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/configs/libero-task7-endpoint-gradient-diagnostic_v2.json",
+      "sha256": "5231b172352871ea0d1f760b8bfa637c85f0a1b3d595a49c43ff9ed38ef2831c"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/configs/libero-task7-endpoint-gradient-execution-binding_v1.json",
+      "sha256": "ed48c481ef370516f458c47d4d5760c51e47050510f798cd612d0d67c8db596c"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/configs/libero-task7-endpoint-gradient-execution-binding_v2.json",
+      "sha256": "bc6f25bcac14cbcd307addbb8873d815560864f63cfb8b546f86411b501bf414"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/configs/libero-task7-fixed-representation-optimization-diagnostic_v1.json",
+      "sha256": "95c476741cabf0ef79b4a34848e634c8d72eeee4d80fec5687241dbc89f576fa"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/configs/libero-task7-fixed-representation-optimization-execution-binding_v1.json",
+      "sha256": "936c7becdcc476c54ec39d986d4811f5d3982c28c9ea0822779badefd954d583"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/configs/libero-task7-mse-gate-stop-direction-grid-readonly_v1.json",
+      "sha256": "ab870764b427d77bfc95fe3c6757e87b16d94d9c0232ffcf756079e3c1526c8f"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/configs/libero-task7-mse-nonregression-acceptance-diagnostic_v1.json",
+      "sha256": "b470d22c51b11848e2aa920cd2969dbf5cfe6520e8a36f481ce3be55b433515b"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/configs/libero-task7-needed-direction-diagnostic_v1.json",
+      "sha256": "7f9308766a36a681320f6cdec3d0ce9fbde1234f88f01d5710a38430ddaaebdc"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/configs/libero-task7-needed-direction-execution-binding_v1.json",
+      "sha256": "78696d17457ba76536ddc52b22a3b15e6abbaae0cb4b7449a10ae3aaabf7cd85"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/configs/libero-task7-optimization-path-decomposition-readonly_v1.json",
+      "sha256": "6d01cf826d9fd1c65f5c3cbed937118ea89afcbde8c8a2f153bb5fc8b7621eb3"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/configs/libero-task7-policy-error-focus-alignment-readonly_v1.json",
+      "sha256": "39fd9bbe7c578ddd80191602762a68ceeebc15e1731f6117ce531c5453690f30"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/configs/libero-task7-protection-residual-decomposition-execution-binding_v1.json",
+      "sha256": "72fe68e5fd5121c882b41f6be76016801ac220f9e8993c0e017a5ba45885d3c1"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/docs/libero-task7-current-residual-correctability-execution-contract-2026-11-08.md",
+      "sha256": "198a7b31a7b4f1d79812ceace27a3864351f3fe42cfd4ef2ab2de40f2b48deb1"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/docs/libero-task7-current-residual-correctability-plan-2026-11-08.md",
+      "sha256": "1fc36ae5227e787b3e3420b433a6fd47e9b0d8e2dd62f7a3030a6bf9b36495a7"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/docs/libero-task7-direction-harm-alignment-execution-contract-2026-11-09.md",
+      "sha256": "9c88b4b592d6082843fa3599aab411a8144bd3f4e4001c51ca5b5d8090e6c6c7"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/docs/libero-task7-direction-harm-alignment-plan-2026-11-09.md",
+      "sha256": "ca29449a548bd4bf4b620f84734a7fd67203552c0de5455d8343bbb4e1e80458"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/docs/libero-task7-endpoint-gradient-correction-plan-2026-11-09.md",
+      "sha256": "e391e4ae9b6d1b6d02993fdaa66b3cc926c7d993ccfefdecfa4514dbbee54645"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/docs/libero-task7-endpoint-gradient-execution-contract-2026-11-09.md",
+      "sha256": "348e6bfb5911da23c15081d18d7b2b7d28604cf840dac4d7dbd5fe24a603c0fe"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/docs/libero-task7-endpoint-gradient-plan-2026-11-09.md",
+      "sha256": "8054d097baff051a02c05c2369ad92b964e67987280429882c1ad283384bdb99"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/docs/libero-task7-endpoint-gradient-results-2026-11-09.md",
+      "sha256": "88d4619971a5dbf4db22323af126873c78dd144de6ca9c4d0340aa1cccd1b4b5"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/docs/libero-task7-fixed-representation-optimization-execution-contract-2026-11-09.md",
+      "sha256": "563858a0b6b192b064dec8bca0c172c018522b8c2c605859497106a365bc6d37"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/docs/libero-task7-fixed-representation-optimization-plan-2026-11-09.md",
+      "sha256": "c4d3bcf0fb7b74b7f68f0d2a28f3551338be6cce427ddf97c9af34a4517bdd0d"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/docs/libero-task7-fixed-representation-optimization-results-2026-11-09.md",
+      "sha256": "da2e76656df6dc91e15e2910727d6952c2824a3e5f4b646085fdfc552e6c8577"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/docs/libero-task7-mse-gate-stop-direction-grid-execution-contract-2026-11-09.md",
+      "sha256": "66ead73da2827e4c2d0f3f23353f5276ece83724f838cd3d5e199f6f99b228c1"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/docs/libero-task7-mse-gate-stop-direction-grid-plan-2026-11-09.md",
+      "sha256": "46e4208528f3355d265dfcdd463033f63f6748f4657f399a7a214dfc54006da8"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/docs/libero-task7-mse-nonregression-acceptance-execution-contract-2026-11-09.md",
+      "sha256": "376d02e3a30bfb427f0d375d77d9f9b6e1b73e04d481a73133169af503eb76b4"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/docs/libero-task7-mse-nonregression-acceptance-plan-2026-11-09.md",
+      "sha256": "0cda751c88ed5c1f7d95e27821e826e28e574f955ea44146c4e2e826712197ff"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/docs/libero-task7-needed-direction-execution-contract-2026-11-09.md",
+      "sha256": "4fe2c1b7785532d0d4c356fe01fda382150ff580173bba93c246ac685128d36f"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/docs/libero-task7-needed-direction-plan-2026-11-09.md",
+      "sha256": "91cfbc95d9915b29f23449736b40a100546e073e368443bf45aea47530915c35"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/docs/libero-task7-optimization-path-decomposition-plan-2026-11-09.md",
+      "sha256": "219acf586022ca4d90e708be35a3a0f691f7eaffd1426b9b5f823b04046fd2c4"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/docs/libero-task7-policy-error-focus-alignment-execution-contract-2026-11-08.md",
+      "sha256": "cefa0fcf733efdb7d31a0bc609a4b1953db0b3200ead0e48d8640de99f5786d3"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/docs/libero-task7-policy-error-focus-alignment-plan-2026-11-08.md",
+      "sha256": "93f73b4bab558670c76ff1bcf93588a52f018ad5a3f44b9a12c8e0a69d61bdc1"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/docs/libero-task7-protection-residual-decomposition-execution-contract-2026-11-08.md",
+      "sha256": "da246f8a613fbffdf7f484856303d5fee3c674be62143f2728efdb7c5e1d725b"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/docs/libero-task7-protection-residual-decomposition-plan-2026-11-08.md",
+      "sha256": "9a663fe4ed82652dd65920c661df105db56aa008df93a22ac96969ea4d35df7a"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/docs/libero-task7-residual-harm-protection-execution-contract-2026-11-08.md",
+      "sha256": "ec42c5c2d5bc014a80e3d11eb66eb0c902caa0977e12eb583abfd18705e09aaf"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/docs/libero-task7-residual-harm-protection-plan-2026-11-08.md",
+      "sha256": "8809a5f968ffb9c81a825d599fee257e545c883e3d060a71b0dddab19a22ff27"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/docs/libero-task7-residual-sign-transition-execution-contract-2026-11-08.md",
+      "sha256": "64ee43e6db4b954391e91c0df599d69a08108d79401e1bcc2532a16809e20f15"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/docs/libero-task7-residual-sign-transition-plan-2026-11-08.md",
+      "sha256": "d49486e65621ec5a7daf16f9ddc18205e2d32566626da86da00abee4be2b2f74"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/docs/libero-task7-target-magnitude-matching-execution-contract-2026-11-08.md",
+      "sha256": "a4b9d51f44196a3dd3bff17bd2748927be6e6da3f3aabbb3d44cf74d9496fe01"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/docs/libero-task7-target-magnitude-matching-plan-2026-11-08.md",
+      "sha256": "b789bfb7a9e64b468bedfa6150c29d499fc7805b89399c55e679c5ec27c8239a"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/__init__.py",
+      "sha256": "976715d377d710412661a8b81a44a41726b4fffae23abf4a260cb030165eab74"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/analyze_controlled_torch_fomaml_formal_v1.py",
+      "sha256": "2c9195a60deaf34fd9dd343c0d7bbb40684e66338ceb9efd3152ce46cd540bc7"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/analyze_controlled_torch_fomaml_v5.py",
+      "sha256": "892c47caea665230ed9564e2b86edc289021799241e79fc0d4bd2855528d8c4e"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/analyze_crafter_actor_head_failures.py",
+      "sha256": "563331636b173e6afb2e8ebbcf652bbfb514d7f3e1865bcf6aaecb38e034ea55"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/analyze_crafter_gather_spt_transfer_comparability.py",
+      "sha256": "ae309c00d06d0e5e2c4e6d5aa1e5b42a1edd3b0b1a2dd0f05f268222ea908986"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/analyze_crafter_gather_spt_transfer_e2.py",
+      "sha256": "4482b7ff4f5d39ba3eec678ead54976b79306e01b0a4e8fec068922b1f5ea5a2"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/analyze_crafter_gather_spt_transfer_e2_candidate.py",
+      "sha256": "4a499cc4714c13cf9fc54fab2a55cf7ea86da0b51136f628704d21c1db137a1f"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/analyze_crafter_gather_spt_transfer_erratum.py",
+      "sha256": "4eebb69a96008129a02a92e81854f034323288d951a2a01d2d8069e63dddfc27"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/analyze_crafter_gather_spt_transfer_pilot.py",
+      "sha256": "3955e272adffdd84c544519018fd44e1465888b166fc8907cf55bd2c59bad695"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/analyze_crafter_wood3_action_consequence.py",
+      "sha256": "5ad86c338d9fecdb2d0edbf6e19a6983fcf5326250496bbbca38ebda8943b128"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/analyze_crafter_wood3_actor_head_conditioning.py",
+      "sha256": "9448cef910fe783c5352ef9af936d70e9a233f0c871f37cd3d786f9cd8e49585"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/analyze_crafter_wood3_actor_natural_migration.py",
+      "sha256": "b55c962ffd3b30ee289e8f19386c206506e5a9396336d757a325fe401eaf41ad"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/analyze_crafter_wood3_actor_only_local.py",
+      "sha256": "d0e6c3ef8ad80f70621f0b8f20f4ffb8ec04077845ca6d72dde9f6f42d3d921b"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/analyze_crafter_wood3_approach_death.py",
+      "sha256": "bb6728ed19f9e51cbc0cdac8434e02b1db9fe73aafa7d19b6b5e0cecf8f75bf2"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/analyze_crafter_wood3_cnn_layer_readout.py",
+      "sha256": "01a96a671177cb1e463eb19435dd0930d99a4f7515b27633228706bacd5c178d"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/analyze_crafter_wood3_collection_opportunity.py",
+      "sha256": "c2bcce741b455062a92c3c37d7413a8073d091a91c1799034420a481a7a52efb"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/analyze_crafter_wood3_controlled_collection.py",
+      "sha256": "2f2b3e10d589258484358007f2a00bbc9399d39e18a9be0f8bca736e89377d54"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/analyze_crafter_wood3_local_event_auxiliary.py",
+      "sha256": "037b9c02f0c862f40b1f59322244554b7b8ed7da2335eeda53f61cf56008b3c4"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/analyze_crafter_wood3_natural_coverage.py",
+      "sha256": "1ad5234aa3efa879a8420de98865d39ca19f55ca5eaa5f15d0440cb96702269e"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/analyze_crafter_wood3_natural_coverage_matched.py",
+      "sha256": "2ae4527d0ecbe46ea99216d3ff198f7697e6f752c3937b055f2aa65b13d2a834"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/analyze_crafter_wood3_natural_readout.py",
+      "sha256": "449ede28955b21caab586c9ea49bdaa0b6383d9f6f8dd23f7c12ee312c8ae597"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/analyze_crafter_wood3_natural_readout_capacity.py",
+      "sha256": "e6d1c0a48b0b24908bd4de1e06332b9f0570fa9c62f720d4f451dda3cf9ac313"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/analyze_crafter_wood3_natural_spatial_probe.py",
+      "sha256": "96606dadacf1499bac3115ddef5be747293f3ed102294c713744d1ac535adde5"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/analyze_crafter_wood3_natural_state_cross_readout.py",
+      "sha256": "50298a698ff7d9b3c40593d3dc0133e588c9e0bf7af94b74a9a9d0fe1ad54cfb"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/analyze_crafter_wood3_natural_state_window.py",
+      "sha256": "116a66e44ab6e96d359117538aa3ce5f8615ba588affd3994b3c197efa3c8e15"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/analyze_crafter_wood3_ready_do_intervention.py",
+      "sha256": "05450b1a314f4b5ccc6f986526b309a212d331fb6faecc7ea395fde0731c6c5d"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/analyze_crafter_wood3_rgb_chain.py",
+      "sha256": "56485f5ec8ae5147264fea50893b593e08605e051f73535fef774152fb8bfa30"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/analyze_crafter_wood3_rgb_chain_cross_readout.py",
+      "sha256": "adec9fc91d5bb3ab853a654ceee1474db1ae343a469a5c03964d517a7ba49c31"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/analyze_crafter_wood3_rgb_chain_learning.py",
+      "sha256": "8bd40ce1f9406812256d10ee1a1292ef97ce48f3943af0abacb8f0518571b034"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/analyze_crafter_wood3_rgb_chain_ready_distillation.py",
+      "sha256": "3c70e6de53f511bb611f8312184fc9a4d9ad71c23119b681676731ddf13b9452"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/analyze_crafter_wood3_spatial_actor_cross_readout.py",
+      "sha256": "b18bbeef8e7e164945df7f373b4ee670d8b4453677aee166dfe7bc71c0878875"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/analyze_crafter_wood3_spatial_actor_fresh.py",
+      "sha256": "abb077f237dc4f750ac0d6cd9e42de19ed9d81f25b912c37d41a61336dba9656"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/analyze_crafter_wood3_spatial_coverage.py",
+      "sha256": "ef4410e0d9871f97d0b06f081ba2edba8daed4834f0f48e2e681e3a7cea98ab5"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/analyze_crafter_wood3_spatial_coverage_equal_n.py",
+      "sha256": "ef4410e0d9871f97d0b06f081ba2edba8daed4834f0f48e2e681e3a7cea98ab5"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/analyze_crafter_wood3_spatial_readout.py",
+      "sha256": "c9e61478ddcc8d57dfa28a7f8382c8429cc26ee25776e0c1d4bc1d896810301f"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/analyze_crafter_wood3_turn_ready_do_approach_intervention.py",
+      "sha256": "18a517c232de4f70bc7a51e68a0988de42ca27055fe7cf5c118df64e811caa2f"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/analyze_crafter_wood3_turn_ready_do_intervention.py",
+      "sha256": "7d67aec58e7e51a6b8aaa26cb9150b0a5b6efa897b9ae90f047fa9256ed6338e"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/analyze_libero_formal_G_close_runs_late36.py",
+      "sha256": "fa1f89e80a47ccbd6d52b6cfbf177b600720dd6394ab25aed4f899d2fa097fd7"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/analyze_libero_formal_G_task_seed_differences.py",
+      "sha256": "ac0f8336c688bc2007bae0c9c9411ea1dfb3c9f88062bb6c7e10057843646156"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/analyze_libero_formal_G_validation_BC_traces.py",
+      "sha256": "ba0a8d0164adef480cdedd69ed46b7d434d5403a5679d50c90d327f43bd79777"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/analyze_libero_four_task_abc_completion.py",
+      "sha256": "8082d652bbc3c450d4419b1bbd361b98625e76a0f9ff22759ac086e89f26fcc7"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/analyze_libero_phase_history_transition_neighbors.py",
+      "sha256": "bdea76465c9ca523c7bef27afc66ca91e89fb8bbd4465fcfd066b818753bf4c1"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/analyze_libero_phase_history_transition_neighbors_v2.py",
+      "sha256": "e00f7dc323f54233b5e505ba4ad9e4ffd4791b9f73d4ea5caef51bcf5a114481"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/analyze_libero_source_candidate_close_geometry_alignment.py",
+      "sha256": "789db9b64f0b48f7375b472c760153b87284a063f62846d19d7aaa885c1e5a02"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/analyze_libero_source_candidate_native_goal_pose.py",
+      "sha256": "f8c82413fb5019c303a3f4b8279b2ccad37908d51b729d12421da9bb157ebafc"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/analyze_libero_source_expert_component3_error_types.py",
+      "sha256": "b61d6ddb3684f897d2db1ac08c01f2853e1d28b49791b874c4718258110fc2e6"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/analyze_libero_source_expert_translation_amplitude.py",
+      "sha256": "07834886ff3129fc69846abe202258ee2acce944b82fb51c22421659e00ffccc"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/analyze_libero_source_internal_event_phase_direction_translation.py",
+      "sha256": "c9274a918d4caf24552b3080db0a8401e1c003151689a630bd0798cefd0c78d9"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/analyze_libero_source_internal_full_open_segments.py",
+      "sha256": "2fdb090ec81b45b3267471b50b9eaa4c90af56af237136c4345ec2f95e3c0e55"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/analyze_libero_source_internal_gripper_sign_margin_temporal.py",
+      "sha256": "d688c0d217fd578626897b75b0a14c777c94b77f8fda80bab989fb07248d618c"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/analyze_libero_source_internal_initialization_endpoint_target_error.py",
+      "sha256": "09bf0f2b5484f3b6c6b35b1d786b75a7174442e262c509666429299223b84390"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/analyze_libero_source_internal_nontransition_translation_reference.py",
+      "sha256": "163eef6d5d46f5e40d7b7babf82978799b8af8eef87b192a23256a0338cd8346"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/analyze_libero_source_internal_six_group_paired_traces.py",
+      "sha256": "800d94eea32a76e06c885e541b9605df114aa81b302e3500dda408a31f645e17"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/analyze_libero_task1_b_query_event_margin_timing.py",
+      "sha256": "938ac2608898a9085d36c4505cb28746bf66103f1c0dcb5a86db49acd0f0e393"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/analyze_libero_task1_b_routed_paired_traces.py",
+      "sha256": "aeb3c56bda0c6d18f7f3bdade184eea3911cb29c858ee0a1224e4175a2b5139d"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/analyze_libero_task4_task7_cached_input_coverage.py",
+      "sha256": "b09d1ca768f98aaf56690b3345fd02dbd73caf79b7f8e8b44e6fcc664aa96109"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/analyze_libero_task4_task7_condition_separability.py",
+      "sha256": "58229e2684ad76bd9111b0c6099542b840380d12212d40eaa1c69943826929c7"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/analyze_libero_task4_task7_evidence_decomposition.py",
+      "sha256": "9bf4ff6b3d18345be1b7d9e3b50d887a7ca78c1f34e9c039c10ced283472a4a4"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/analyze_libero_task4_task7_expert_action_error_diagnostic.py",
+      "sha256": "bd44981057bbb09ecc485379ca4ad13563b3f770d892dbd9c73ce3e1af557425"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/analyze_libero_task4_task7_expert_command_timing.py",
+      "sha256": "78ef0868f81962d135d9a50287a7d6c0e1944137bc1cab7ceb3a134bd1427957"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/analyze_libero_task4_task7_full_policy_closed_loop_diagnostic.py",
+      "sha256": "c26b1bfe7266dd332f0e5c55dfdb6f668d570478a790e01e5f8676766013f181"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/analyze_libero_task4_task7_full_policy_closed_loop_phase_response.py",
+      "sha256": "f91dd7ce3d21463b26a3c134993c429413d6ec2be373356f05ba4bcf834f56a0"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/analyze_libero_task4_task7_full_policy_closed_loop_state_action_alignment.py",
+      "sha256": "12e810c11aad4f289e8001d8288e2935a522699233b4d1f2ce59a84e1bee2f96"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/analyze_libero_task4_task7_full_policy_observation_state_replacement_sensitivity.py",
+      "sha256": "bb49ccc8e8caa640467a6c849caff62ef7b9013766f8eaa880ba818f251732b0"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/analyze_libero_task4_task7_gradient_interference_diagnostic.py",
+      "sha256": "51f940f48abe12cc5adb1e4dbeeea24ac0b97f9abc4daf32a434c27c818df6e8"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/analyze_libero_task4_task7_gripper_feedback.py",
+      "sha256": "06e3792cfb77ddf2168b4d6b23919911cb105f2e55f4b3bd02068e4797700325"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/analyze_libero_task4_task7_public_state_jitter_500_closed_loop_alignment.py",
+      "sha256": "3f8f525f17906e247cb8923942f7d86becd407573318130010107faf89ceb9c8"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/analyze_libero_task4_task7_public_state_jitter_500_closed_loop_transition_mechanisms.py",
+      "sha256": "076ce9da4a7cbc174e3c4da3d0de9e8f948049d1efc56c57afeee0e4e26d088a"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/analyze_libero_task4_task7_public_state_jitter_500_transition_rgb_action_alignment.py",
+      "sha256": "fd80f0a57b7bac10e8f7eb53f8c823a6bc26f8cfc8f530eda7285691969363b5"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/analyze_libero_task4_task7_public_state_jitter_500_transition_rgb_action_capture.py",
+      "sha256": "15a651607296cd30f6019dd993d4fd67e6d848fdcef2d699abf6b729d9560ad0"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/analyze_libero_task4_task7_repaired_evidence_decomposition.py",
+      "sha256": "4d16c105c824cd95e0521178a03cf981232a72525ac8492d0ca030bc501ad1de"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/analyze_libero_task4_task7_source_stabilization_control.py",
+      "sha256": "d87de231aecb6ac624afa54ba8877c6c31a6b1da91f59621a54d9761a8df350a"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/analyze_libero_task4_task7_source_stabilization_input_decomposition.py",
+      "sha256": "be31dbd71adeb4bebb35952285a7fa92050fa0ef73840449bf71ca6de563f575"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/analyze_libero_task4_task7_source_t0_target_error.py",
+      "sha256": "cfcdc74f6a6193383566b1636e204905e2c35bae5765e0995f41b6194fb95ccd"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/analyze_libero_task4_task7_stabilization_trace_alignment.py",
+      "sha256": "4555822bcc7a58caf8a3c91fa0326988ebbf0fb723249881acd4a3cd834186b0"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/analyze_libero_task7_component3_history_transition.py",
+      "sha256": "ea5525f928928b317a65538e34aca7039433a0f36d79129a29ef8d4136d0f41e"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/analyze_libero_task7_direction_harm_alignment.py",
+      "sha256": "d00e2fd97731f0871832d50030702a3b3f2ac1232ce3498e6a830b1f837b8162"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/analyze_libero_task7_expert_camera_component_tradeoff.py",
+      "sha256": "8b315fcb33effbc3a7eae101e90a04928ab7ced98f027fc1f7c052a90ddb8989"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/analyze_libero_task7_lag_neighbor_decomposition.py",
+      "sha256": "a5d87c4852545e5e36ba89b1c64be59f510583a87e616c04767531a60ad7e3de"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/analyze_libero_task7_mse_gate_stop_direction_grid.py",
+      "sha256": "f0b93165745a370740f48b17be009886213a6f38b2318c655dcb079106ea9fe4"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/analyze_libero_task7_optimization_path_decomposition.py",
+      "sha256": "c1d4ba4e87ba9f8ecd314c875bbb023bce8562102729f89d51b50c14b5ebae82"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/analyze_libero_task7_policy_error_focus_alignment.py",
+      "sha256": "f7a3dde785c0df089fdc5dd4dd465a5169abca35dad7c1a6f18834bfb9f60b0b"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/analyze_libero_task7_protection_residual_decomposition.py",
+      "sha256": "87ab81c02a3af1fd272e2616c0b8a56f08a7592cc44e6a2bc2274894208ac6dc"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/analyze_libero_task7_residual_sign_transition.py",
+      "sha256": "eb34fb3fa4470f82e2b537849f9b8d067b2d6a7f0576d0ca56c261a04a52015e"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/analyze_libero_task7_target_magnitude_matching.py",
+      "sha256": "e4e8d663e60009cd865210ef6016eca46acb16c3ca814ac7e6fe15f571aa3a88"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/analyze_stage_training.py",
+      "sha256": "e5c6ff485bafb836d3944ac8a016401d78e7109f101f33e418cec2f5ce0040d8"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/audit_crafter_formal_freeze.py",
+      "sha256": "07ba2538c2a50bdb645149da4ed14e5201915165038f54027977c7e9cf9fc466"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/audit_crafter_knowledge_boundary.py",
+      "sha256": "171985d87143ae1ecc57b4da04dc75a6fb0e162e3c3d404e0fa05591b3970333"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/audit_crafter_material_gather_role_geometry.py",
+      "sha256": "e7a29a0050641bfcb93fb604c58fee585bb149ab0eebab26bb14e25838156467"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/audit_crafter_material_gather_scene_v2.py",
+      "sha256": "30dd20ecf965954c3af67c550a9adce5b4cd9a05ef094a7c052f15929496934b"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/audit_crafter_policy_representation_pilot.py",
+      "sha256": "06b2a31285abf968b920b7f6097382e156946430ec3379017a1795f8550f046e"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/audit_crafter_prerequisite_aware_candidate.py",
+      "sha256": "4b15eca5169cfdc22534750cd19093b17fa734776f534cdd89ec59306aa50a97"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/audit_crafter_task_learnability_budget.py",
+      "sha256": "8115131254ddb7bd28b4af10ad04e75260bca1e1a4784fa2dd993a32fd05cc0c"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/audit_crafter_task_local_composition_candidate.py",
+      "sha256": "6e1bf7e8ebc9f2b1bec71f2b2864ddc9f90f9181a811e391636a15f6c6348bfc"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/audit_crafter_task_prerequisites.py",
+      "sha256": "82ef021d181d5c253ebf51fa520d65042a5de8d554522acaef450863ff65631c"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/audit_crafter_thresholds.py",
+      "sha256": "b0eebcbd3c31efd94845d2874b6f3cd4e78d2ce3949ab40ba9f934cc7e7f1436"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/audit_experiment_readiness.py",
+      "sha256": "6a08e56fa8ae6c151c79a565d950cabc2ba8f625bf4b42ab7817d7efdd0e13e5"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/audit_formal_freeze.py",
+      "sha256": "ce16fffe1d5b86619c3e1e1b9561c70c487b30ae3f294a32a90ebe86a2103718"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/audit_libero_formal_transfer.py",
+      "sha256": "aeebe869b619c1c6660d8e0f64b933b9f3d4b1306d371045b66d4143d6e99166"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/audit_libero_formal_transfer_v2.py",
+      "sha256": "4a09d4209fce7fd5938f0af1d4deb6d08580e7089f3dbda379b44171fda0a132"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/audit_libero_gradient_decomposition_precision.py",
+      "sha256": "b72d689bdd89186f0cb0430eb51c8a51e86b3e1452083f55051d80fa74767862"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/audit_libero_gripper_action_mapping.py",
+      "sha256": "a3a9bff391ec2eb194c4662d2581bcfd2a64bb6874cd3872585b78c5fbb957bc"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/audit_libero_runtime_native_prefix_protocol.py",
+      "sha256": "54f9dee6e1e6e7030dca4c480dd4b552fe8a9ad2e9b0b58b17cccfce0a2bc1a5"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/audit_libero_source_candidate_close_geometry_alignment.py",
+      "sha256": "46d7d589e547d2aea736e8824fdb95951e6413e5f7255ac02fdf34bb5aa9a34c"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/audit_libero_source_candidate_geometry_capture.py",
+      "sha256": "9f95cdb46e69fc38556a4f66277c4a5e13f16641c6d088d68c646a6028b19005"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/audit_libero_source_candidate_native_goal_pose.py",
+      "sha256": "264989553564f76580cdfcd80947ac191b5052ddee05cd01282b3dbb5727d7e4"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/audit_libero_source_expert_component3_error_types.py",
+      "sha256": "a8a81098940a6bbc87523e21d4cc80ebdb7ba8112c9ee6673757d5e15a2409d1"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/audit_libero_source_expert_component3_observability.py",
+      "sha256": "bac41a65828614a324ee6103389222217279f19125640e26d1adea39980a5ca7"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/audit_libero_source_expert_late_translation_readout.py",
+      "sha256": "103a318d655871243acf873d79af2d495f688b7a18f00ffae120bd158962a22a"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/audit_libero_source_expert_prediction_cache_availability.py",
+      "sha256": "701f8375f7987145a6d1443be3eaa6f8460c9e7c464455c29d57ad33c3dfa851"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/audit_libero_source_expert_translation_amplitude.py",
+      "sha256": "ae24ae7222280e409edce6dacfc4629722c07a668f8b694f7482d6b5129b4f86"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/audit_libero_source_internal_geometry_extension_closed_loop.py",
+      "sha256": "2a3539146ac78a29755493f6e7b1f400d3e3789438b5303caead94061b5a91ca"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/audit_libero_source_internal_geometry_extension_diagnostic.py",
+      "sha256": "17015959747f5c5423a0014e9b0c687d2e7a919b574271fbdd49cb7786d1897e"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/audit_libero_source_internal_gripper_state_local_control.py",
+      "sha256": "ea1cdb14a49c6a8e9d50543f7fb48b3452c6030db80119f3de3aff442e396e58"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/audit_libero_source_internal_spt_spi_closed_loop_diagnostic.py",
+      "sha256": "079bc5fcdd9c3c4f12459998a1b5c8555dbb3dd0b65c97acf6a8fd4b7ba7406b"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/audit_libero_source_internal_spt_spi_diagnostic.py",
+      "sha256": "f9a9863bac4d8dad34d91c73b6077806078afa475f3cd357a8b1a1d63a6671fe"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/audit_libero_task1_b_fixed_head_expert_target_error.py",
+      "sha256": "ea4585bed83529df872204cc637cd645b72df739739920dfdafae409e7c26d22"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/audit_libero_task1_b_fixed_head_input_closed_loop.py",
+      "sha256": "034892282d4fc0a394b59107eb6689fa2ddfe81d8f58fa468e2ffae2fa1b5453"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/audit_libero_task1_b_history_input_sensitivity.py",
+      "sha256": "18e626e7651d35a3c617249006442f67f30aa96e5500243988d75ae9e07a0394"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/audit_libero_task7_component3_history_transition.py",
+      "sha256": "f7dab39b3483fd8469de60e1dde8faa10cc58ed2dff7df5d76defbc206a0dd1e"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/audit_libero_task7_current_residual_correctability.py",
+      "sha256": "11ace545508b187c370e74c0e5c3fbbd3aa919f8f96ded0d364a4ddad6b0f81e"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/audit_libero_task7_direction_harm_alignment.py",
+      "sha256": "9dd682dc29e3f30829aacf9eb93db7c386b05027b78419f84268ef0e0661eab9"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/audit_libero_task7_endpoint_gradient_diagnostic.py",
+      "sha256": "9b0bfbd9a8783f63b819c6f90dfd42e54e89cd26275ae086846a090af77ed04b"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/audit_libero_task7_endpoint_gradient_diagnostic_v2.py",
+      "sha256": "d3255c1f971d0928b21da54391a40895003ca8a22e2f8db50a68efcb446b67b1"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/audit_libero_task7_fixed_representation_optimization.py",
+      "sha256": "7d7a6b43da2f9826118f0bb961c497b70aa3ba3179c347750606145438b751e8"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/audit_libero_task7_lag_neighbor_decomposition.py",
+      "sha256": "2227eb41e4b255818e7852a203bd4f2032e0d90370496fec46de067461f4f239"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/audit_libero_task7_mse_gate_stop_direction_grid.py",
+      "sha256": "0af8f20a448fbd79b80d05f742b7c467e73c2c13f3125cd9a8a3eefa480d04f6"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/audit_libero_task7_mse_nonregression_acceptance.py",
+      "sha256": "6bbbf9d0223c03c5898171ffeead06ef907869b4ac01b749e2456f97794a7ca2"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/audit_libero_task7_needed_direction.py",
+      "sha256": "ec9eff44e861f2d292905d9086103004e3c50788a02791a7a3d7efb8ff98b2c3"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/audit_libero_task7_needed_direction_summary.py",
+      "sha256": "8596530f0ac69c5b8d9444c6e54611077807e92eaa47550b01916fa45d34a490"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/audit_libero_task7_optimization_path_decomposition.py",
+      "sha256": "03541db989ba7e2484e030600ef0599845a1bec4246902438bc4bcde0529cbfe"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/audit_libero_task7_policy_error_focus_alignment.py",
+      "sha256": "cfeebd2fab4f282c779c4977cde2085e9b6b2ef70cbcfb36b6fb7465b43ef76b"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/audit_libero_task7_protection_residual_decomposition.py",
+      "sha256": "d085c58a8f02bafba752adda0f527e8cc0315dd403197724717a7b13caeb014e"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/audit_libero_task7_residual_harm_protection.py",
+      "sha256": "b517002af05272f3a2302cb4fbc5526b07b03e687b49aedd06028a904ed8e04b"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/audit_libero_task7_residual_sign_transition.py",
+      "sha256": "bed3be73b3594ca833cf8f50a27ca1cdaf9b7ea06099ead8910845c47b271cba"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/audit_libero_task7_target_magnitude_matching.py",
+      "sha256": "9a921c2c2d594f332b5e6106a68877304d6766a070c39faab1e0387fa7c53fc5"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/collect_libero_runtime_native_prefix.py",
+      "sha256": "4d0ccc915b6a57739f7ed770bd3e6abc44892e1025f75c94eea703bb1a4ae408"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/crafter_actor_head_ablation.py",
+      "sha256": "cb55e1af7300e81935af42100c4354e8df4fb655f4d90022bd6789f34f78cbba"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/crafter_actor_only_local.py",
+      "sha256": "f82e3ab6492d79102b6002560f4374df952117e95212022d295063158d0f2cfa"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/crafter_cnn_layer_readout.py",
+      "sha256": "927bb9fd468ed151b1afdaeb8335c3c627a28ec9c05f40ffc440303c73ce26cf"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/crafter_controlled_collection_scene.py",
+      "sha256": "780efc020649692fcd88b266450634835b4d987e964a68d5c277f09a665d8582"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/crafter_formal_manifest.py",
+      "sha256": "d769b2c9ffa89da83f1083d0fd70bf1369ef1aaa6412feed26dee1164a0396d7"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/crafter_local_action_reference.py",
+      "sha256": "06b30489bdc9b6317ca7c5079deb7fb9031b70209d1ec78af7990c7376469697"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/crafter_material_gather_scene.py",
+      "sha256": "391d044eb08f8aa8de15817394bc173d75767ec0243d6de32d3c14a8de094728"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/crafter_natural_readout.py",
+      "sha256": "a0e02eb1cf28d1a3c70d9de6d84a85aa444325d5226535ae1de0e3a3b5b2b4fa"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/crafter_natural_readout_capacity.py",
+      "sha256": "d6951a28d5fec8f7fa9421df959666ef8364ac0394707d378b3f50144ea0b1af"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/crafter_natural_spatial_probe.py",
+      "sha256": "3eb2f07b9759a77f44ba00bdfdfa569436a638dc1a321a5bd6eaf840d1e37ef4"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/crafter_natural_state_window.py",
+      "sha256": "408a647222113afb8622d5b67ad328b3dbe26f7102b3f144a49934d8df913c8c"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/crafter_spatial_action_head.py",
+      "sha256": "37bb6cfefda64cfd918e1a9ecfc9f007c816805821d723472686d17a36f274f9"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/crafter_spatial_readout_data.py",
+      "sha256": "d919bb31626e05ed9663e734bc2c1a794aca5ad850a4b173594c7cf18c584a65"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/crafter_spatial_readouts.py",
+      "sha256": "7779dbe9d97d2c083de2cd0684f4a9a53e978b2816b317908bb2d19d437adc29"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/evaluate.py",
+      "sha256": "0a10021f640c0bd0c750c2e5452c4965162ed2fe109cb12c31994b7131349c5e"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/export_stage_tables.py",
+      "sha256": "89cfe44b60afb05d8ad09ab9d7b1433c79b76f953abb7772133b46af5d7721e7"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/freeze_crafter_gather_spt_transfer_formal.py",
+      "sha256": "2b36466b752ac787cd8779e3f9ab9a65235e35a419f657172d0a9ab9c04022df"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/libero_component3_direction_neighbors.py",
+      "sha256": "6a092cf40fcd684cd98ebff2084e8e24c9e2a31e5ca9f34827004d53372103f6"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/libero_fixed_head_input_runtime.py",
+      "sha256": "5cd329559a4aa96a15a20ac1bc4cef22121f5ca775d8205d4026b8d0630571ec"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/libero_formal_execution.py",
+      "sha256": "b73dfc9a939bb2e5203e70e0b0d6ffac3d3d9a3d11cdf944a0667e6d09f82cc8"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/libero_formal_rollout.py",
+      "sha256": "b8d2e6e40390c303ec7bf91067fdd1476dc76a3f8edcb25903bf3c38498b7151"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/libero_formal_source_continuation.py",
+      "sha256": "ac0f2019262ff7a91fc6025940a8d6405c0ddebad1c058543dedb492efa9cd5b"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/libero_formal_training.py",
+      "sha256": "be843ba7c747719fdb930d3914f9fa53ed9744d4e213bbe5580d4d8454f1a7e2"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/libero_formal_transfer_protocol.py",
+      "sha256": "59d9ba26e7cb9def75a08c5fc5f3a8aef14c8a1d599450aa7f1064bd9a8d1f31"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/libero_formal_transfer_protocol_v2.py",
+      "sha256": "6cdb9e51eeb419353cd52d4782a4393981b1d33ed319c6785a5b4444a9f96ee9"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/libero_phase_history_neighbors.py",
+      "sha256": "6b2766eb86a1ab95e88b21188b1405e124644d308a9dd21123b8f38132ed56eb"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/libero_routed_history_runtime.py",
+      "sha256": "7a7dec646984eec71372c03b9bbc0eb7fc845bc6fc80c11a47d6d16c791de458"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/libero_source_candidate_geometry_capture_protocol.py",
+      "sha256": "05fb42cbb9b1359205f6081f04b9f3074f81c47a57a499d0b79709e17218376e"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/libero_source_expert_component3_observability_access.py",
+      "sha256": "52cb41c66971e4a18b692e928a5bcc0e5cc540f806266131818cd30e50018566"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/libero_source_expert_component3_observability_protocol.py",
+      "sha256": "7fa13fda1f17ac3e2916aad6e4fd21926960c301d3c3ea82a05722a15891c665"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/libero_source_expert_late_translation_protocol.py",
+      "sha256": "7c82df697db37d09e54175a588e07d75da4209a0ed210d4c9517ebb2b4e6f9c6"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/libero_task7_component3_history_transition_access.py",
+      "sha256": "7a8a04700e53466b30a56e6fd08beb68faf4bba1d527f1aaf5122d76944d72b1"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/libero_task7_component3_history_transition_protocol.py",
+      "sha256": "da707932b52b63b67b94a86650fa76b63615bd45283e3a646a8d58c2f5d38fd5"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/libero_task7_current_residual_correctability_access.py",
+      "sha256": "ea5a44162504fa67dd74878d77ed7a46d97bc4b680210b0db413ae5198df9d17"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/libero_task7_current_residual_correctability_protocol.py",
+      "sha256": "b1610cbfeb6e3b075f7ae1930696353da8a882545c70dca139a253ff20605f3f"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/libero_task7_direction_harm_alignment_access.py",
+      "sha256": "dad82595d227baa4b7815fd6dbaf3af3254cd6a22ece6037fd3de33e5eafb70b"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/libero_task7_direction_harm_alignment_protocol.py",
+      "sha256": "04bd1ff1b0cab990ec0dacfdaaaa30bd6b5c5c32746d0cad4e336bd1131ac544"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/libero_task7_endpoint_gradient_access.py",
+      "sha256": "430f420fe7bf3a3a45f65d56f236dcca3c9d9596ddde729e4865360032cf4efc"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/libero_task7_endpoint_gradient_access_v2.py",
+      "sha256": "59a5f9964fb083ff6790b097f602f6a0a2223b37231d3568ffaa7131a9bd4eb0"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/libero_task7_endpoint_gradient_protocol.py",
+      "sha256": "065f81035868770457436ee8009ce1c5636a56f41e601b53ae0ed82ddd96a771"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/libero_task7_endpoint_gradient_protocol_v2.py",
+      "sha256": "b34c727b015a9dab6f6832a845754c97b1db02e78c7684d4b770731810755ac2"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/libero_task7_fixed_representation_optimization_access.py",
+      "sha256": "8dd5c8f5012b2bd13c304ead1a9a93688f09a26e1c38650ca2b20a56cb280034"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/libero_task7_fixed_representation_optimization_protocol.py",
+      "sha256": "6047e9c56a903397d3002c445c6d3d8f7d21657bf62dedf709eb22d87201609f"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/libero_task7_lag_neighbor_decomposition_access.py",
+      "sha256": "c77d0ac66f8fbf705d54a42d621460bc4f0a9f64e7576fae200805f5b215d819"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/libero_task7_lag_neighbor_decomposition_protocol.py",
+      "sha256": "61ccbc8390f81ac42dd5b43187a1f18519efdf13b5ec4ca7163f974a547eae83"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/libero_task7_mse_gate_stop_direction_grid_access.py",
+      "sha256": "2fb366fb9fcb88fd9e52c7bc40c60f80d3ac8460957ff85a3f0fbb528b5e5b9c"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/libero_task7_mse_gate_stop_direction_grid_protocol.py",
+      "sha256": "3e9f067519e0216624804113c89bb6d421fb0659108cfcda3115801817a5c68c"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/libero_task7_mse_nonregression_acceptance_access.py",
+      "sha256": "bf41fc3e8c2dc9e66ca85d9562a412aed3c25dad14443b4f02db707d4ba9e19a"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/libero_task7_mse_nonregression_acceptance_protocol.py",
+      "sha256": "fa37d7602537d948b3099db8c1101e0156fa0f19fe4895ab079fefb7153e7920"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/libero_task7_needed_direction_access.py",
+      "sha256": "54bba981d6248b6e30afb814a4e21ee1b59265e07c7e377a833b2ee67a62d11c"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/libero_task7_needed_direction_protocol.py",
+      "sha256": "8b607492b1d599e2fc1629a1a66fe5067cc0bbe478697ebfd4d7d39905a5ac88"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/libero_task7_optimization_path_decomposition_access.py",
+      "sha256": "a0a6f4eebe4e3bf2aed1d74b5088ea11bc1336ee9f41270522e464c5b0c82d9e"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/libero_task7_optimization_path_decomposition_protocol.py",
+      "sha256": "dab64da11124eacb848ce3f7d59a471489a72495839f83593d3ab24c24dc7674"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/libero_task7_policy_error_focus_alignment_access.py",
+      "sha256": "06e27efb2895124a7a068962a2ffa83bbf59bb83e8bcf4f5de7a10eb5be9a8f2"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/libero_task7_policy_error_focus_alignment_protocol.py",
+      "sha256": "588f60f01bbd35a3afb9896c7f9e96c6c5b1cbb14e9c226b4b06cc2220acb5b3"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/libero_task7_protection_residual_decomposition_access.py",
+      "sha256": "fb8a3efaed33d94b0f80dfb2035a78655eb9b95c7aef43d3a7daab247929bcf3"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/libero_task7_protection_residual_decomposition_protocol.py",
+      "sha256": "c6e537a84a5a742cee881c04e638cd5bb0ccebd04060d7c9fc27a6c4b078d609"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/libero_task7_residual_harm_protection_access.py",
+      "sha256": "584bb1a966878a29e074e5c48b1349299a3d4f7449cc1b4c248da9dbb80b5421"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/libero_task7_residual_harm_protection_protocol.py",
+      "sha256": "fae4058cda5fc094b07e94fbe4715e50f2180b785200f87728bfb2193da5902b"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/libero_task7_residual_sign_transition_access.py",
+      "sha256": "1996e10a986af5212cabb18c8d52647be286e4823f88067e48eeb180d31ac6bf"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/libero_task7_residual_sign_transition_protocol.py",
+      "sha256": "98202c6904eb6ed41966be95c89cdae1a8a790aa0740f0dcac656e3bc3d231bc"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/libero_task7_target_magnitude_matching_access.py",
+      "sha256": "31465a4c9be144fc8ff86676c136fe91d686f731b5cb9ebc5b8fee0609795a31"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/libero_task7_target_magnitude_matching_protocol.py",
+      "sha256": "c3fac4a10c38b8379ccd2eb3a8898ababd7e16f5a73593c5dc85d62c3bfb20a9"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/plot_libero_source_candidate_close_geometry_alignment.py",
+      "sha256": "a19895cc1f3a6e2ef473ff5463d3cb34768fa62fcc6c658bbb7dfaaf7770b4e7"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/plot_libero_source_expert_component3_error_types.py",
+      "sha256": "dd137e6bc44d51c0c29a939a2f6feeb17e8f27a75683bf23b780c44942f469ab"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/plot_libero_source_expert_component3_observability.py",
+      "sha256": "d7589e080f10b326d483b0503c1a82e6f1f2c86e2cf9aecb08f19b14b7911b7a"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/plot_libero_source_expert_late_translation_readout.py",
+      "sha256": "16e8d05daab4ce458a1914b703d3567621efab49be1476368c1312287ee35eab"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/plot_libero_source_expert_translation_amplitude.py",
+      "sha256": "211c6438dd3a4b7bdbb9955285b2df718f6b53cf1f8faeefecca587bbd763b95"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/plot_libero_source_internal_spt_spi_diagnostic.py",
+      "sha256": "c8c630a5d18d5bbe07f1352fe83719b63865d19a74c6c2cfbadc223fd11c8986"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/plot_libero_task7_component3_history_transition.py",
+      "sha256": "4317c1d22e806723c626ed394adcc5f440239f306b2b6e74a71641369d98873d"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/prepare_crafter_protocol.py",
+      "sha256": "737eda0bbff42fe299c49b841f5f9da6a4092e05532b4d891ad4489c3442e664"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/prepare_dataset.py",
+      "sha256": "9643e3520aef72f2c71e5b6e5f6c6d1ba3e5cbbf354baa1836102bbdffcf5958"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/prepare_libero_formal_execution.py",
+      "sha256": "ba008e360a491f6312eb872cc409a8fac6490ad25f6acf6699b6b91dba9b48e8"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/recover_libero_gripper_feedback_serialization.py",
+      "sha256": "e2182e2cb5e7a5fb1ba7fae8d67147e1dbfdf9a8b5fcc64295ec97f5eb8c5d22"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/run.py",
+      "sha256": "56faf73266b3093300e0c33777d57287cc9dfccbb47a34469e530c5439bcc2b4"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/run_crafter_action_inventory_diagnostic.py",
+      "sha256": "c3c83252bf2e4c5ca3533eae140c334e136cc4e8aa267a98b915a2e1510e2577"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/run_crafter_auxiliary_ppo_independent.py",
+      "sha256": "87376af78cdcbf5667d08d700727ddca31340154aaf95113c37092826572a862"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/run_crafter_auxiliary_ppo_pilot.py",
+      "sha256": "3cfb12be37364a560b67b40a5150da7ed2cfb36d8961b75f543d82877b5e4199"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/run_crafter_context_fomaml_independent.py",
+      "sha256": "ab4251b203e129a56884c70390355452584ebab47fa505a368a7bf962794bc7d"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/run_crafter_context_fomaml_smoke.py",
+      "sha256": "67a1c1c630e80e4b1007b2712b47a2c7ba0251ea8e8734944777361e01d0124a"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/run_crafter_context_policy_smoke.py",
+      "sha256": "a7075dc470621e639b84fd0897eb8dcc141b4a6718e5998b4eb4ad128590e096"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/run_crafter_continual_session_boundary_diagnostic.py",
+      "sha256": "b64768c2bd69c9e472fe78d58cdb8fcefd4991bec0e9b9c5e98aed8aafdcf1ac"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/run_crafter_fomaml_module_pipeline_diagnostic.py",
+      "sha256": "57e4ce20ffc50913666a75018f20b6d1515d01ac7dde069c7c1821ae6a60966c"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/run_crafter_fomaml_smoke.py",
+      "sha256": "5656c0a6d2257bad12da85659711a34d13027acf42b6b80027874e6f7d627c3f"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/run_crafter_gather_execution_chain_diagnostic.py",
+      "sha256": "a852454def26dca3228edc2dfd0358735251929b8e1897a7a7f5269d97c4eb46"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/run_crafter_gather_spt_transfer_e2.py",
+      "sha256": "2b46b8cfc5daa17205fb71e616a51fa81a1d5062c64a80d3c435057f70aa2d35"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/run_crafter_gather_spt_transfer_pilot.py",
+      "sha256": "40fceed7d3636045fd86d0d0b8cbfe07025de11e3bf2287d127e38dd145fe314"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/run_crafter_knowledge_evolution.py",
+      "sha256": "62764751c27bf45b572c198ed49c39a969565ae903f17ce795668683c2d41c18"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/run_crafter_module_pipeline_diagnostic.py",
+      "sha256": "3d0f8fdefe204afed6b3585d304d82dd1a57ef46eafbbdaa2b09ac40f2939e4f"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/run_crafter_module_reuse_diagnostic.py",
+      "sha256": "55d66aa09a4bf3ce67eb5732caba8fffbdcd84463ab95f75365e3b2c2bc3cedd"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/run_crafter_paired_reference.py",
+      "sha256": "648d4186ead08538e4234fd33cb90c3691604c408a89324b60b418d7dcc50803"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/run_crafter_persistent_policy_feasibility.py",
+      "sha256": "11b3c53e4754e912b2a3b041567c7a7f74e9f9d0fb1d6f026958c7142456eced"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/run_crafter_pipeline_smoke.py",
+      "sha256": "49580041b51f19c681cfd6838a90c1dc540a1b7e4f1d64fe160d83d808cfd6ad"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/run_crafter_policy_adaptation_smoke.py",
+      "sha256": "063112f85a322795c0e0901adece729dad94bf5fcfc9aa494cf05c99b459a3f7"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/run_crafter_policy_representation_pilot.py",
+      "sha256": "ecb8205386d5ae934887741a246c814d3498c9c4fbc0e42845b7d8e2ecd1fed1"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/run_crafter_qualification_feasibility.py",
+      "sha256": "60150c350e48113bd91ac81923a88d7a010c5bfa1d1629ff2fae590dd03679db"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/run_crafter_qualification_smoke.py",
+      "sha256": "9cd9e5383470c4553f3496eec330d2412589ace30928036d58dee73621704ec3"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/run_crafter_reference_verifier_diagnostic.py",
+      "sha256": "5a14f5fd71889a417c4d6d8b7b4bd241284cd7dc8b8a0ae52c62848a682a59dd"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/run_crafter_replay_order_audit.py",
+      "sha256": "95be0399b043c48669abce23f3ad19b241366f5d76ab3a5eeba3ba8be156c072"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/run_crafter_rgb_oracle_imitation_diagnostic.py",
+      "sha256": "9a77437ebf50b2f7c7df0a86579b467586498edb82ed15d515c6c30280edb7f4"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/run_crafter_setup_boundary_diagnostic.py",
+      "sha256": "ef5a233566e8d012d87d79779bf4967edba3c04dd5e72bdb9917e85ce377bed4"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/run_crafter_smoke.py",
+      "sha256": "260ebb031229886b5277ab63bf2bfac130069ce8065cd76f6f09f746b9f4bfb8"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/run_crafter_spatial_training_determinism_audit.py",
+      "sha256": "e93d4b2c6b07ff619469ec7f3fdb15f6825370d2fcee3c96e7b309e554a8ab09"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/run_crafter_split_feasibility.py",
+      "sha256": "d90a60f0fb18c8a4c22aedc72b847ee4ac64aafebd821e48c05da73e53d8af43"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/run_crafter_survival_checkpoint_diagnostic.py",
+      "sha256": "90c73bec5abf83d5a82cc891599c087d5715f6a05ad3a7b4f2e056ee6f4b1c34"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/run_crafter_task_learnability_budget_pilot.py",
+      "sha256": "df998701b08dc769f226c515be9c7f7b5a23c39b70604f1a0c56f1ca75a8619d"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/run_crafter_task_local_oracle_pipeline_diagnostic.py",
+      "sha256": "68fe777da0444f8e75c511b831ad67f84e0cbc831ad6e5dddfab29564259c86f"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/run_crafter_task_local_runtime_diagnostic.py",
+      "sha256": "c9873c45e4e0061ddb78a7dc9c86d36b7584ccd2d207bfe297ac9fff2ebee4b6"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/run_crafter_wood3_actor_head_ablation.py",
+      "sha256": "f03d422035746fc72dbb1acb66a723e7fccaed8947d759f86abeeeb2d5eea628"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/run_crafter_wood3_actor_head_fresh.py",
+      "sha256": "2bffb68830b769532789f420c5875bbee4adc6d4fc24d05b3bc8ebcb17879c4a"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/run_crafter_wood3_actor_natural_migration.py",
+      "sha256": "64c119aaac5067d884f124364685fbc58cf64a5be1268f1d5f467e7b90a3790d"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/run_crafter_wood3_actor_only_local.py",
+      "sha256": "f1d4603247571ccabebab95f47c9ccbe855d8b1a90cd1ebeabbf21bf3424a319"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/run_crafter_wood3_budget_curve.py",
+      "sha256": "605bb8446057912a096464f2e42c7da91c7ca682d1687797c0c0dca52fa9e6d5"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/run_crafter_wood3_cnn_layer_readout.py",
+      "sha256": "7026cf324944fee8325af3bbb352d21c1e235fcb8d380f8f2c6ffba7e8d9d643"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/run_crafter_wood3_collection_opportunity.py",
+      "sha256": "84946b2c90f236c5026b9c816fc69e4d0b820ae8224b642ba5222ccf074eceae"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/run_crafter_wood3_controlled_collection.py",
+      "sha256": "bd016e3d3bed5f8b1fcc6b0e5a5499371849dfab40affc615a0895ee0f0e217e"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/run_crafter_wood3_death_penalty_diagnostic.py",
+      "sha256": "52e23f13645d6cc8c2c899323dbe1fd3a914899971f4b26acc799679e3273486"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/run_crafter_wood3_do_wood_gain_auxiliary_diagnostic.py",
+      "sha256": "da43b5473fc597ea3fde8a8a4a7a31006b364dcbb888135f393485e40d659978"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/run_crafter_wood3_local_event_diagnostic.py",
+      "sha256": "735470263e3719858d9c0db202bc285db184dc39a697bb66b760ff2d20358478"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/run_crafter_wood3_natural_coverage.py",
+      "sha256": "1fdaa099d13f92a32e3a41290022a9b110c87890eb88e3fc2219a12b9f9af281"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/run_crafter_wood3_natural_coverage_matched.py",
+      "sha256": "7c37587b34f8129510185bfa4b5cf748c5394a82a2ba7026374c9eecafdba658"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/run_crafter_wood3_natural_readout.py",
+      "sha256": "22c75be7a670c14d876851a9193ca0bf55ceb9972972024a421e6548540cf942"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/run_crafter_wood3_natural_readout_capacity.py",
+      "sha256": "d568d8e3756893f266801063d866db6534f8e3f018a12e932617c4c48231866a"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/run_crafter_wood3_natural_spatial_probe.py",
+      "sha256": "659468b6b7272036a8fa5bd33064bf22bc9ba8329af64885f2e45d62cfcad690"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/run_crafter_wood3_natural_state_cross_readout.py",
+      "sha256": "8462ed69b6991c73dd69f188889c9b244d0069102c50564d206348cea2194aab"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/run_crafter_wood3_natural_state_window.py",
+      "sha256": "066ca54e8d2dc5329a2f46fc41663a20ede6457ea105c7ff3b81ba7c9ce4f2db"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/run_crafter_wood3_paired_budget_pilot.py",
+      "sha256": "d85ea0d62800f7db38e2ff98af7820cd15ee4f0ffa920533f340a0e541a4efa4"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/run_crafter_wood3_ppo_calibration.py",
+      "sha256": "077a8a01ca50ce81189b928a0a5b835947c2d238975fa3458a20e3b3c7a4a3cb"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/run_crafter_wood3_ready_do_intervention.py",
+      "sha256": "47a87f07c221d6c221cf1f193d416504ddbb1bd2e151d71f9e2b47fc18356fdd"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/run_crafter_wood3_rgb_chain_learning.py",
+      "sha256": "0a86a000e2b441c16e92f8de6c6e6feca9d30075f9944277bb686b4e018441b4"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/run_crafter_wood3_rgb_chain_ready_distillation.py",
+      "sha256": "7cfe673ea80394ed3c043637573f6c40f8840237676a9197631d12afea3f891f"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/run_crafter_wood3_spatial_actor_cross_readout.py",
+      "sha256": "e2439d353a45e44771f96a8c6dd13b02e10aee20fdf5b087705563f1c7128b76"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/run_crafter_wood3_spatial_actor_fresh.py",
+      "sha256": "c5f42daaf4cfb9ec352ff45eb72fb6f871371010c2910aeb59c39d66b57058ec"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/run_crafter_wood3_spatial_coverage.py",
+      "sha256": "dc573626dc6d9199f6beb36ae6ac11f7d96fd2fcd6f2c8a1a4f6d53317f2528f"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/run_crafter_wood3_spatial_coverage_equal_n.py",
+      "sha256": "dc573626dc6d9199f6beb36ae6ac11f7d96fd2fcd6f2c8a1a4f6d53317f2528f"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/run_crafter_wood3_spatial_gru_pilot.py",
+      "sha256": "f13168e4155f2ce5ecdada369d604e002bddc1e7f64560f6bed534db3293f0f7"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/run_crafter_wood3_spatial_readout.py",
+      "sha256": "d31d0715dc610c6d867719f75e63cef0846cf4a1780dc192cbe2408e47380580"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/run_crafter_wood3_spatial_representation_curve.py",
+      "sha256": "7974134f47a68af468fee12c60891affbdd53893cbbf3e4b2d0634fee4e67677"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/run_crafter_wood3_turn_ready_do_approach_intervention.py",
+      "sha256": "0a5d252517f1f265a5dbeeee7a2433122f664df5bcbd467e29eed9ed56f16606"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/run_crafter_wood3_turn_ready_do_intervention.py",
+      "sha256": "11c6868d3657c7610c13b42a45a9802c1bc34a93d653d6051a12b532532ee12b"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/run_holdout_prior.py",
+      "sha256": "e208ae89ef25955a9dab6747a5b25fcf6264217884f9a294ff61888381482fd2"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/run_libero_action_head_representation_diagnostic.py",
+      "sha256": "b2e54525bb896d98310d5c862f6715b4f3d97f78c2af867d404414d5e3871946"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/run_libero_bc_causal_alignment_diagnostic.py",
+      "sha256": "780e26d1a50d452609fb24b2a7d4740351f4f044dadc03a286e8523bfbe22e22"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/run_libero_bc_closed_loop_attribution.py",
+      "sha256": "767c738e7ab98501f21439f190fd8fc80c98a8c4ece6716476ddc4fa7e0b9557"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/run_libero_cnn_only_phase_loss_paired_diagnostic.py",
+      "sha256": "3c04ca0a092eec913fe9d89abe68d4174350a22700e600828dbdc1d7bac3059d"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/run_libero_cnn_only_phase_replication_diagnostic.py",
+      "sha256": "397c1f74a036f1235e8e37a9f45fadaa03eb1c8af51718442fa3e76148379bd0"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/run_libero_cnn_only_uniform_closed_loop_diagnostic.py",
+      "sha256": "dbcb810220702d0b1d24580471368b6d813b1cec083b0975461820ad426b81c6"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/run_libero_cnn_only_uniform_policy_trace_diagnostic.py",
+      "sha256": "27f1107e3f7e93c54fc0f892b0a22ace80847df4976e1da340fcdcae9b5b73fa"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/run_libero_conditional_coverage_audit.py",
+      "sha256": "cf5cb2d78778e844dab153a8e23baa1aecc529a6a7f42525f037f8307fe9464e"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/run_libero_current_runtime_replay_audit.py",
+      "sha256": "7efcc2642a84684f7f4adde431bdc134a567eaa5f070a500281b0ae478ad89a5"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/run_libero_expert_error_free_alignment.py",
+      "sha256": "ac16c9419a7613084e2d7eef4bfea22c818b959866ade98bd38bd5bfa6445963"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/run_libero_expert_replay_consistency_audit.py",
+      "sha256": "5020bab43d88eae41e3e38bedc667910bbef44e305a0c170d106c5defafe963f"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/run_libero_eye_hand_robustness_pilot.py",
+      "sha256": "8612dca05e5aa126fd844fe8ac9a37f02f994e6a166c52403df958fd48c57ee9"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/run_libero_eye_hand_synthetic_sensitivity.py",
+      "sha256": "971ab97ae4eaafa110e1de1b91fb5fe40c863725d9a6c466e6454e0711fd24ba"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/run_libero_formal_transfer.py",
+      "sha256": "49a5c18b9a0fb15e4efa4c7e6492183300491cb3a9136d005ebe0651d11fd193"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/run_libero_formal_transfer_G_continuation_v2.py",
+      "sha256": "1a65e28e7f783a018de59b4184026d3beb46a2d2b5bff23ae8d61c9201eeedff"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/run_libero_learned_phase_history_readout.py",
+      "sha256": "d26fd19277ebc75215a8b62195f62713558a550dec7630a438fc66a5d01c6289"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/run_libero_memory_representation_diagnostic.py",
+      "sha256": "146f166472c1f8c76c935ae6626dd16cade0faf38bc9fc9cc046c1aab3d20275"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/run_libero_phase_gripper_loss_diagnostic.py",
+      "sha256": "36ded1889ba96319a28e8ed36e0edf86bbadc96a06ac3d27ebc6ea87cd5dd77c"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/run_libero_policy_input_replacement_sensitivity_audit.py",
+      "sha256": "c3f0a08fa174b1fe153031a90a4e9cd9c387f3a563dc771b9e1c68dade014304"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/run_libero_replay_input_alignment_audit.py",
+      "sha256": "bac56bd8838aa4c8e62ccadf7120eab727f12b5ebca51035149f09ca9735b49c"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/run_libero_replay_semantics_audit.py",
+      "sha256": "d72fbadd98f521ddf3db360a056caea46efb372785a696488d257a6461544403"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/run_libero_replay_state_alignment_audit.py",
+      "sha256": "924e0db99a601fa1f737fd8e25f430110cbb907c08f5bff7ce53047e29130eba"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/run_libero_runtime_native_prefix_cross_task_camera_diagnostic.py",
+      "sha256": "5b693a7b46ebddcfe3b40160c50f0255c4a445b246d76a3bf0bc7acdcf7093dd"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/run_libero_runtime_native_prefix_cross_task_eye_hand_augmentation_diagnostic.py",
+      "sha256": "07a31d330819eddffeeff2323c2a78e2241a89357b9974894a435475ccf6a830"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/run_libero_runtime_native_prefix_cross_task_eye_hand_translation_sensitivity_diagnostic.py",
+      "sha256": "17cc260c83eba425b269493b2c0a81fb8711b076277f0f5a72c56ebf835986eb"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/run_libero_runtime_native_prefix_cross_task_observation_diagnostic.py",
+      "sha256": "273ee1a95c6ecbc2c01c2069e00d429cf4b7b28e920cb9dfbc298c62b21c111a"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/run_libero_runtime_native_prefix_failure_trace_diagnostic.py",
+      "sha256": "ec51d758b18bfa938af42e5a83584083af164276e5b26ad7a0eff084d76bb4a2"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/run_libero_runtime_native_prefix_phase_command_diagnostic.py",
+      "sha256": "ba83a23851990d9593e401ec7bf2d01eff852edf6717bea994a51c6fe4b8632b"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/run_libero_runtime_native_prefix_task3_camera_diagnostic.py",
+      "sha256": "c74ae3f0b7a2ff66c22527b7887d7d8a947397aad65e2ca30e35e220375d8d22"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/run_libero_runtime_native_prefix_task3_modality_diagnostic.py",
+      "sha256": "b66d47ce5e17cdcca523ccbff58fe973e489f80e72571ee912a3cd5a72531520"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/run_libero_runtime_native_prefix_task4_task7_action_head_readout_diagnostic.py",
+      "sha256": "90e64b0932c7098cd7c2e504a737543f69da152f5bf6cd04f55aaecc18f356fc"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/run_libero_runtime_native_prefix_task4_task7_module_freeze_readout_diagnostic.py",
+      "sha256": "2b03f2fcc9955f6c6e8e104551368cc71694def1d6d8668f99b904abdb4c8240"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/run_libero_runtime_native_prefix_task4_task7_module_freeze_seed_replication_diagnostic.py",
+      "sha256": "c8843e517c04eddf407fff8a78644ba3db98c4576c364306f0d351e08dd61d31"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/run_libero_runtime_native_prefix_task7_cross_input_diagnostic.py",
+      "sha256": "89056985245f8eaededcdddbc56a89cce6de4e3f1795b8043af59848adb6c6f5"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/run_libero_runtime_native_prefix_task7_gripper_output_diagnostic.py",
+      "sha256": "2a08dfd72cf1d26ef25e1ffe4ff218e457c07b17a01a4072f595ea462f15bc3b"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/run_libero_runtime_native_prefix_task7_initial_observation_diagnostic.py",
+      "sha256": "2b0eb3b853fb133b949cc7a98a903ea56ac4e0a766ca0b1bcc5bcbb98b507c46"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/run_libero_runtime_native_prefix_training_pilot.py",
+      "sha256": "88cb18582cf0d568b824f1d1373887bd6cbfd4a0310cf26c91f4c8de7349b01f"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/run_libero_single_spi_bc_diagnostic.py",
+      "sha256": "6a12e576b8061f2cc95310b58501e69e5d2202b2d0b552639ad87e750fdcf0e3"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/run_libero_source_candidate_geometry_capture.py",
+      "sha256": "490a22f5c596ec1fe1188d78b393a116b2b642f069b1f44b5ca127ab903e650b"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/run_libero_source_expert_component3_observability.py",
+      "sha256": "73adee8a1c9a278cb84cec3705d09ce93020f750607b9910a997d72b11938c2b"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/run_libero_source_expert_late_translation_readout.py",
+      "sha256": "f3c6b867a50066cf35b22e47e69d48132ee2298bd131b5ee0cfdfe5d03503406"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/run_libero_source_internal_fixed500_expert_frame_diagnostic.py",
+      "sha256": "02d62d4cd7bdf73fc2aea65510d1be9b29ee596169c4d98cdb6906ef29b0aa95"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/run_libero_source_internal_geometry_extension_closed_loop.py",
+      "sha256": "5732a4e1026ee6cb7df1d6a051376be5ebca14527e2dcc558031c71085852141"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/run_libero_source_internal_geometry_extension_diagnostic.py",
+      "sha256": "31f7140457587bb0fdded791db0175445dd56700a14989cbb45a44abc1280851"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/run_libero_source_internal_gripper_state_local_control.py",
+      "sha256": "49c566707bf1510db7aa27edd40b95e8f646cfaa01a7da09e15e64f37a00f02f"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/run_libero_source_internal_phase_history_observability.py",
+      "sha256": "7dffe0f0ad4d5685f46dfe5b6ad4b08392e98113cd94ffd00cbbcf11bc72be90"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/run_libero_source_internal_spt_spi_closed_loop_diagnostic.py",
+      "sha256": "cc55f097d331fde48573938fa0498925919807567ba5a5e0bf93a73fad8a6972"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/run_libero_source_internal_spt_spi_diagnostic.py",
+      "sha256": "12ba5cc016fce0a897c9a562343c92d7f36df6047b6b9724ae2d8b5639ea44da"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/run_libero_source_internal_spt_spi_diagnostic_v2.py",
+      "sha256": "540ad67acc81543d672b0e144cad7ad57db07e0c5cc60394042b78d7a0e0fbdf"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/run_libero_source_meta_query_generalization_diagnostic.py",
+      "sha256": "995e7618949e290f9314b9898054ee1decb82892ef3f762c49d5c9d625320b4f"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/run_libero_source_support_replay_feasibility_audit.py",
+      "sha256": "7c1a32ad40252fc8e870178189160aba2a0045db26debf163a0f5f5844267b59"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/run_libero_stratified_error_diagnostic.py",
+      "sha256": "6db0465cc13255b01b1ba04ea10b43de6f9fdfa0be99e739568a802d1bc7352c"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/run_libero_task1_b_crossed_history_readout.py",
+      "sha256": "975388bc123720e560f8033541dc7d6702de353770282408ad6a70fb5c4578ca"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/run_libero_task1_b_fixed_head_expert_target_error.py",
+      "sha256": "eeca3d1b1c9280cfeb983b6364d6c59f0dba21211988c876980cebbcd443c5cb"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/run_libero_task1_b_fixed_head_input_closed_loop.py",
+      "sha256": "41e8b58f6b8e1bd01b1bc6eb30aed1ba101f43e15400a635d222972e81ca42ef"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/run_libero_task1_b_history_input_sensitivity.py",
+      "sha256": "7dc42fa840aeea2764fdf4c8136d82346a67ac002cfac3148e9cecbb2eaf02c4"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/run_libero_task1_b_routed_history_closed_loop.py",
+      "sha256": "fdc4cbd3e96bd713a5c58a1e1341cfc000f62a321b7f1cdf4903403cc743b07d"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/run_libero_task1_b_routed_history_readout.py",
+      "sha256": "8f6f4bf2956cb74e64fb3ce2dd82cdb890fea37c7223c14691645ff62ea700cc"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/run_libero_task1_b_routed_runtime_interface.py",
+      "sha256": "49bbdece2e4e028b067f71482fa43c6dabe5473d29a9d65e932515459983e6ef"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/run_libero_task1_b_step5_crossed_readout.py",
+      "sha256": "4ddfae863b4b22d539ae58a7f9ddacbf450dc3e2af3619aa8b5b710575a52a93"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/run_libero_task1_b_support_query_history_readout.py",
+      "sha256": "740daed435910ebdefc7ec546a3b937ce4f7f561d03d724f95bdbe779be1d12b"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/run_libero_task4_ordered_prefix_reproduction_diagnostic.py",
+      "sha256": "972f4c5dba9522b23bc1a7d70d71bd4b036e1d5ad54470c9b52fb373100671e6"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/run_libero_task4_task7_expert_camera_target_error_diagnostic.py",
+      "sha256": "5a3ed5c2bc611120521a71f9ae821e46b09e4a607c8d1aae6163e6e784793067"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/run_libero_task4_task7_full_policy_closed_loop_diagnostic.py",
+      "sha256": "430760b989d08c7a60ec2a8153bece07fe486c55582d95e903951653276bb004"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/run_libero_task4_task7_full_policy_observation_state_replacement_diagnostic.py",
+      "sha256": "75e7ce37261d5f99ae56af08b30e03bdee2ed4df0671482725fdb0b119a683f8"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/run_libero_task4_task7_local_gripper_loss_diagnostic.py",
+      "sha256": "7da1127b15c25bc1c5248e608f34771faf3e52cc5322a399b1ae33886f3428d9"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/run_libero_task4_task7_public_state_jitter_500_closed_loop_diagnostic.py",
+      "sha256": "87a789d5f3e43feab117beb721b410d18888a01b8a16bf0004c140e9be6630d9"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/run_libero_task4_task7_public_state_jitter_500_transition_rgb_action_diagnostic.py",
+      "sha256": "a43aa204685681e5feddf8b27e43506c832715aa372c80c3b243e16b7ceb0a4b"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/run_libero_task4_task7_public_state_jitter_augmentation_diagnostic.py",
+      "sha256": "db33ef40cc06f0b019b95da79c9143618c377b54d4a21c8cfa75c055a28f17d2"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/run_libero_task4_task7_public_state_jitter_budget_sweep_diagnostic.py",
+      "sha256": "a9247888709198be435886f9f2073886d65d72812d2081389ecddbf8a01e2969"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/run_libero_task4_task7_source_stabilization_control.py",
+      "sha256": "54163bd674384bf659264c5f3dfcc3b437b47cae5e9c07cb28dcbc995dfcc576"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/run_libero_task4_task7_stabilization_closed_loop.py",
+      "sha256": "fed40bd93ef152b00915b56d4317a332f0981fbef2a6f1b1b38f721de5255912"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/run_libero_task4_task7_stabilization_closed_loop_device0.py",
+      "sha256": "117eb35775c13fd653fda3b1310a14b72812a87513c8ddc1aeb60c5e219b571e"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/run_libero_task4_task7_stabilization_contemporary_closed_loop.py",
+      "sha256": "55a7061794080c406f02e2072851e1364667b8bc6c4e6e06a81b67dbedf5890c"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/run_libero_task7_current_residual_correctability.py",
+      "sha256": "d07563b4a3ed9c90c45bd2141e4bb91f0f5662fcafbbe7cd483ce495b069568e"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/run_libero_task7_endpoint_gradient_diagnostic.py",
+      "sha256": "2c689fb682c17506f378790128e10d9198a7a1dc03b3c65d504794809c645384"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/run_libero_task7_endpoint_gradient_diagnostic_v2.py",
+      "sha256": "89a8516b15dfb8f551740e1105cd00724c05f6426ab24cd971b62a250326b29a"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/run_libero_task7_fixed_representation_optimization.py",
+      "sha256": "75cb404ed765151c08d1c30b27cbbd6207f60642daa421b7dbf9350942ba88c5"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/run_libero_task7_mse_nonregression_acceptance.py",
+      "sha256": "6a152ddc7be7ed9bce921525c390ece4186d9395dbd056871bb047ab146f93a0"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/run_libero_task7_needed_direction.py",
+      "sha256": "65b99a9c2b5dc8d5998d2804b6e33607b6ceafd9548b8fe818f0cc5713e09aa8"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/run_libero_task7_residual_harm_protection.py",
+      "sha256": "60f19d9aa679788669880f3e897ec711dc7dc658e66e90c728583e3c6ec6fbf8"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/run_prior_scan.py",
+      "sha256": "2765e0d306570c8f9d8ecc86260fe1a22b00db9a54b999cbaebe3c8610b88e70"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/scan_knowledge_budget.py",
+      "sha256": "718be9f35546ab2be29fdf81991e02c3d1112fb4e541c64fb0d4bea11617ce1d"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/summarize_crafter_wood3_spatial_coverage.py",
+      "sha256": "20a32909613ae517ed0aad15686f6df8ecb978f1d1e6c4d25daa3bdbedfbd87b"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/summarize_crafter_wood3_spatial_cross_readout.py",
+      "sha256": "3f512fc51f3af44ba490c857d4887a88f30353ee61cf0e88fcd178f21987582a"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/summarize_libero_task7_needed_direction.py",
+      "sha256": "4e09c7b540bb6005dc03d46d2c3757f665e1896d00081d9d906da5de6919043d"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/train_controlled.py",
+      "sha256": "19c86909133f149404239b8cb3fa36b06d7552bd4896b1b4beac126b69de3889"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/train_controlled_torch_fomaml.py",
+      "sha256": "615f7cc05a42fc6e9302a8f4ad716cca5ec791e10e1ce8821bf762864507614c"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/train_controlled_torch_fomaml_formal_v1.py",
+      "sha256": "fdf35f51066f12a768a990c7070f2162787422d316344035fda81ecdcc05153f"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/train_controlled_torch_fomaml_v5.py",
+      "sha256": "1acd1cb3115179070ed2c22c3f4f7b56eecdb47c9abde1f9e55289739880f759"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/train_crafter_policy_smoke.py",
+      "sha256": "e764d0079f6dd35a51505bbde1aef63100736158990c63d105d324acbd1529b0"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/validate_libero_source_internal_fixed500_expert_frame_protocol.py",
+      "sha256": "b46a7301b3bca28e65b8951bf822f9acf9e17a3b0be7c43ebce3bb6559c76dd0"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/validate_libero_source_internal_gripper_state_control_protocol.py",
+      "sha256": "6a59bec341a6da59566cc6d58532af7ea198a0651bdc1650aaeecad54bd91dfa"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/validate_libero_task4_task7_expert_camera_target_error_protocol.py",
+      "sha256": "681a3390bc894e753e945fa0bdab6b79b5dd4ee2a60cc2fccb9e18fb10b7d834"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/validate_libero_task4_task7_full_policy_observation_state_replacement_protocol.py",
+      "sha256": "3c0ab67f3e6236ac06ef023988d9aaa95e30ae3010c6d9476c8457815504e522"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/validate_libero_task4_task7_public_state_jitter_500_closed_loop_protocol.py",
+      "sha256": "276ef7fd3e0dfba2c35f6df01610d47a35439e44f517b4a32726cb3b1701bafe"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/validate_libero_task4_task7_public_state_jitter_500_transition_rgb_action_protocol.py",
+      "sha256": "f51b28a0d7c57469c9e39ae2ad44a8b10c846a58694a2da855dd3b7012569259"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/validate_libero_task4_task7_public_state_jitter_augmentation_protocol.py",
+      "sha256": "18964906620658b54d0b051074d890dd34939f7ab89d9b1468ae6c70c46763ae"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/validate_libero_task4_task7_public_state_jitter_budget_sweep_protocol.py",
+      "sha256": "516d8e15f69578e2ab2ad6471c043f9a55305b95b0f5aaedc0596527910657b4"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/verify_crafter_wood3_actor_head_conditioning.py",
+      "sha256": "b3326ab8a41d8476d457c188bf6a927b763f8d5cbe001913edc6da3d2f261ccb"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/verify_crafter_wood3_actor_only_local.py",
+      "sha256": "dee44ca3b6d2f045c250965487546ddbcf5fda0148b41fcb73a055b4e9f7b62c"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/pyproject.toml",
+      "sha256": "36227784cab33ee932c6b2453df5496459c692b1365b38a4344adbc98e726cf0"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/scripts/audit_libero_dataset.py",
+      "sha256": "5da0f59cd2de6c479dc06e2a61cf400d76ff56f7a04ef64a446a684f2d9c1c43"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/scripts/audit_libero_demonstration_structure.py",
+      "sha256": "6d90a397403adf666b6a5115783b6444ce5c67cda685583fa1b81acf122585ac"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/scripts/audit_libero_skill_family.py",
+      "sha256": "94cd76f6629225396da389191ec237a145c56fb0b2de13d654064fdf85024cc4"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/scripts/audit_libero_transfer_split.py",
+      "sha256": "ef3b8cfebe77c484d40a197bec3e046d36e21922ccb3f5cc34f3bf81af5b863d"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/scripts/check_environment.py",
+      "sha256": "18cb0ad655f6397846eac44b6bd8536ba3605666eb6b07b2741ada2a1c22e993"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/scripts/check_libero_adapter.py",
+      "sha256": "4665878ef2337be18cf50c429cce28b0c79ffc83c89a05d3ed67690af463d269"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/scripts/check_libero_bc_pipeline.py",
+      "sha256": "06b1812f67ea7bef27a2e78002e3211e129c3147072a407f5020ca56e9172969"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/scripts/check_libero_cuda_training.py",
+      "sha256": "52cff6d7886d5622a4c56f1f0bf9499de9083a8bdaa17371294adc23d9f8475d"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/scripts/check_libero_environment.py",
+      "sha256": "1c61ebdcd42234d702c4261590bb8dab5c7322333ab57ead97f2a6eeafbbeb70"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/src/__init__.py",
+      "sha256": "57f52c715042e5740ec82c5884c7be258f8cbe42b3e998d904f014597a3db33b"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/src/algorithms/__init__.py",
+      "sha256": "793c6b4225dfd0ef657755f86264a917b9fe6574550652c05ea995351c01150a"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/src/algorithms/libero_bc_fomaml.py",
+      "sha256": "d428efc93e56caec7f917daeb3f9374cfbb60329949dad7300c3c46364341ac8"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/src/algorithms/libero_bc_local_gripper_loss.py",
+      "sha256": "0ad7c1afa68ba3c988ed7712d45ecc54b6695b93713b14e29d816cab87b21027"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/src/algorithms/libero_bc_policy.py",
+      "sha256": "a3098a68b5ceab21495207856c9d94fd4a6d26c1668737625ecb7b5d46977735"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/src/algorithms/libero_deterministic_pool.py",
+      "sha256": "ce0b21fde45ac780116b6e0fa084839cea00ad3910bd2bf93bf750173557545d"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/src/algorithms/spatial_crafter_policy.py",
+      "sha256": "7d4c3245ef690f9ef166592fe858659b0ed3a5d54acefaf18fe4eb6916ee08b2"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/src/continual_learning/__init__.py",
+      "sha256": "b18ef80ae691bb3d0b8b5c56608e46f948262c721c70745b5b2e30a9880fd7d9"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/src/continual_learning/contracts.py",
+      "sha256": "2b42d518b7a70cb5956d851f3790691208f6a45523533a2f8c23089aa3180d16"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/src/counterfactual/__init__.py",
+      "sha256": "6df64d6b7a35c34be483bf6ae3f15777baf287cdab05a316cad00c9101f5a7c1"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/src/counterfactual/crafter_reference.py",
+      "sha256": "eebfdd7eed4640679ce79d579e30dc388e176edf99ac5f8bf10522a95ae8c500"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/src/counterfactual/crafter_reference_runner.py",
+      "sha256": "5e1b44a945b4113c4c7176db517b3a279820874d8f688063fb525c99e7a87a53"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/src/environments/__init__.py",
+      "sha256": "53c64b55e6503ee519dbdccd5157d8d760c157704e0aaf996c9f6b52a5e9a2ab"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/src/environments/crafter_adapter.py",
+      "sha256": "f91423e5ba35062d797babae736c67c1526bb19aae73be103807d89d25330b78"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/src/environments/crafter_collection_diagnostics.py",
+      "sha256": "de691d134621883eb7e0d062fca40c0e7ba6ecc8d92d0f6245c10f4e3e9860f1"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/src/environments/crafter_continual.py",
+      "sha256": "571126e78c86927221b87c38a297ad46f12531e2b0b04b4db6b774b7e4e4d88b"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/src/environments/crafter_determinism.py",
+      "sha256": "d9b211824b4ef8cc90da43bf907bc81d31f4e26ff5c048a8b167b757e17bb082"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/src/environments/crafter_task_plan.py",
+      "sha256": "11dc5ceccc7d4de226c7dc8f33ecb15fdd9002e173b51f999159e5b0459e4b98"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/src/environments/crafter_tasks.py",
+      "sha256": "00d0bbe290f3698b5ee66963c37579e6954cc0a674a656e28e4aa237434c2d70"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/src/environments/discrete_resources.py",
+      "sha256": "68307a4196c5a49ebdf47ea5155859a7e423ab58a25274645262ae6b8193878f"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/src/environments/libero_adapter.py",
+      "sha256": "8dfa22a1e19b049d78c8e6ae05494291242cbde8a21194e0fbb321662d56512c"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/src/environments/libero_causal_t1_dataset.py",
+      "sha256": "e0d3a5c38cbaad96015b427e40584fffc524f465ede88325b0ce91139bfa6dff"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/src/environments/libero_dataset.py",
+      "sha256": "a35ce74905655a1e1f3f0ffb597329eb486e000a5f9dee925d8231885a7f7599"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/src/environments/libero_geometry_capture_adapter.py",
+      "sha256": "b238737051a1cd1620e6d279d5a70ec7485b5503188368b886e31d5fcf3af925"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/src/environments/libero_geometry_observer.py",
+      "sha256": "1325edc61fa5cff8eec025f1476f2ad762d8c7e6e97a79dc7a4779c56e7a9b0c"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/src/environments/libero_initial_state_reader.py",
+      "sha256": "8640743007c0484d9ee01200787b5b40302b983a08923ed1654b90237905ce85"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/src/environments/simulated.py",
+      "sha256": "f8934813b840ee081df38464e2e7c876f0dff70409a4a55b75c459bb9d8f2eab"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/src/knowledge/__init__.py",
+      "sha256": "ac4499db6dc7c2a55313d74ad299ac659c07ad43cd20ecab745bed6c5c2ab0a8"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/src/knowledge/contracts.py",
+      "sha256": "50eff2b9893a380a009bb5cfdf496043975b36109706a9ed74a806aa98da81cb"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/src/knowledge/evolution.py",
+      "sha256": "c54a345bc5e66b8a34f464e5556b54f3df11e683247c99127056709c67cb244e"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/src/skills/__init__.py",
+      "sha256": "b3ed4df6d02e38910b9a45569046c3afae23b55c417238e754f1dabc5015c315"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/src/skills/context_fomaml.py",
+      "sha256": "8a153ac2e623d604899db6184e6c0c1693b7762b9ef971ebe973721ea76a36ad"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/src/skills/context_policy.py",
+      "sha256": "a760d342a82a7ab9f96e56b3963e40e21eae8a6d02e74472f2a44a59fb14e29e"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/src/skills/contracts.py",
+      "sha256": "5ff8665d91bf82b1319da95eb81ac8f5235a5ab8da9a77f93e7dcf82601d0af1"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/src/skills/crafter_policy_module.py",
+      "sha256": "4f6ea8c40b48c6588590f27fd888c1f9218cda110f3b9e7c2a698a82a92fe2d6"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/src/skills/crafter_task_plan_executor.py",
+      "sha256": "a5e3eaed405f8bb9d44c8e00b3baeb5bee3e37bdc78ad4caecf8407df85fec45"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/src/skills/evolution.py",
+      "sha256": "34e1f76aff41948792369758de7445876cbf9e502f55c7b611e94f06c19b2b3e"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/src/skills/libero_pick_place_spt.py",
+      "sha256": "23f6a46ece0fccfb55337d107ac1566e2192a4e05858b68514eb566316376200"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/src/skills/models.py",
+      "sha256": "c2c294292722f62fe8818a261e1541f74d401a266ccb50434c3db9af308c6a62"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/src/skills/spatial_gather_spt.py",
+      "sha256": "e130e78d6a732a98aea6ddce809c2b585f01a2ecddc7fe7dcaed7eac86286f08"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/src/skills/torch_fomaml.py",
+      "sha256": "a6714831f6dd05071269560411ef515e6bac4260e3a26d1d6850e41cf7f4e0d8"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/src/skills/torch_policy.py",
+      "sha256": "cb520123c2a944e9df75d9c3fbf2aac888263c4659f7533b77ccc627849b3e7c"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/src/utils/__init__.py",
+      "sha256": "d440b067320ec4d2abf10515ed28751867ebb6954ce534b302095952a3be1f3a"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/src/utils/config.py",
+      "sha256": "11e640f7cd950ec62c7fbcbfb26ee426da8b88c953fa9e527f3df283cb196aa5"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/tests/test_analyze_controlled_torch_fomaml_formal_v1.py",
+      "sha256": "7e1ec7ac0235edb7772a4673635e9c4fa1a07a20007941fed819fa20b3a574f3"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/tests/test_analyze_controlled_torch_fomaml_v5.py",
+      "sha256": "937990f8a0dcaab949ca6e55c49ff0a1e7d57962c85428e6ee7e0dcc9203fef7"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/tests/test_analyze_libero_task4_task7_full_policy_closed_loop_diagnostic.py",
+      "sha256": "92ecc4e20fb215f7deacb16e2abb4cabab4abf0fe7d27a461381bd3e8e770927"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/tests/test_analyze_libero_task4_task7_full_policy_closed_loop_phase_response.py",
+      "sha256": "ed941554fee68e6d91c992c03349d04126d8a5314aafe398415779049db8f9db"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/tests/test_analyze_libero_task4_task7_full_policy_closed_loop_state_action_alignment.py",
+      "sha256": "978d0e544ef33c25e4673776146d28ef9688f724aa55c89e69cdac92b30b60da"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/tests/test_analyze_libero_task4_task7_full_policy_observation_state_replacement_sensitivity.py",
+      "sha256": "55cb54e8d5aa5112bf87f4d99330e2a49d2fe32446e73c99a52054d0aacfdd3e"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/tests/test_analyze_libero_task4_task7_public_state_jitter_500_closed_loop_alignment.py",
+      "sha256": "324447f95cb5cde88c9eb76676ed4f43de8e0e055bf59c47f15471203485d9c3"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/tests/test_analyze_libero_task4_task7_public_state_jitter_500_closed_loop_transition_mechanisms.py",
+      "sha256": "5a6e8821adc2f7236cb65bf47a7ca937c69dab40124f3a0cdc2243cfa82696dc"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/tests/test_analyze_libero_task4_task7_public_state_jitter_500_transition_rgb_action_alignment.py",
+      "sha256": "16e511feb2887354983c6013e5560f2ac8ac30f3fbbe63dd108c49318bd0b822"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/tests/test_analyze_libero_task4_task7_public_state_jitter_500_transition_rgb_action_capture.py",
+      "sha256": "de326da643c91936b5c7836a101823d2c692db3309f0b2296c9b3aac72ea6122"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/tests/test_analyze_stage_training.py",
+      "sha256": "3ee6595b5356fd7ecf21c2e2a6cbc6473d6345ade79b65ff157e242a4fe584e0"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/tests/test_audit_crafter_formal_freeze.py",
+      "sha256": "cd44523236e028c2c425b608af08914ac9cd3d6302785e564b82beb46cfa50e9"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/tests/test_audit_crafter_knowledge_boundary.py",
+      "sha256": "d70f71aa71793e53eb20d5c569c0a0c93a4cfc64a0d797eed2707924d0d1c39e"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/tests/test_audit_crafter_policy_representation_pilot.py",
+      "sha256": "6062cb23c2a142cf2e4dc46e60ec04d5ea2e72bd3ca7eaeba3a5de06663fc273"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/tests/test_audit_crafter_task_learnability_budget.py",
+      "sha256": "8bac9b38b4081321ec362b7d44a2f3f5e74a9786d0f6f4ea97945afb4b18a981"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/tests/test_audit_crafter_thresholds.py",
+      "sha256": "1a0a2c16da778c1cc8ffb8dc584bf8ea45f991015728575f5ac0224e2adae326"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/tests/test_audit_experiment_readiness.py",
+      "sha256": "9b3e6621068cea250632e6ae0504432349a347c0d02adaba589c7dccd595b5ca"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/tests/test_audit_formal_freeze.py",
+      "sha256": "fca6ace8fd74744c28673a9313e0d027f350a943b7f39d16e8f2ded03387ac04"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/tests/test_audit_libero_formal_transfer.py",
+      "sha256": "671a35a78ac2888e38229e788e039b80ed4fc4deab917fa48a4c99368d480958"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/tests/test_audit_libero_formal_transfer_v2.py",
+      "sha256": "413f04b0942fee8e4d0bb54ee115754acc30eb5cf701df4cbfca53549a7fe085"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/tests/test_audit_libero_source_internal_geometry_extension_closed_loop.py",
+      "sha256": "01d2bd2cbcd446ea2f78b1721577a44bf244633ec37b015f64ab6868cbf0d909"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/tests/test_audit_libero_source_internal_spt_spi_closed_loop_diagnostic.py",
+      "sha256": "90c155e59fe2b2b9c1249e97c2e453657c85178ad0ea0a7ed86063d08d0e4789"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/tests/test_collect_libero_runtime_native_prefix.py",
+      "sha256": "41001497ff943c5fbc8ffbab0a60fc3c4ba528dfd2344eb2ccdfd2db087219a8"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/tests/test_context_fomaml.py",
+      "sha256": "e3e82191ab8552cecf303b25a870cc3ef15fb5b4a2c54c859620d1cf1bb9a290"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/tests/test_context_policy.py",
+      "sha256": "69ec3085fdfd983c02f613470076197a9b56db00403c9d44c5919e10e50a3f39"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/tests/test_controlled_torch_fomaml_formal_v1.py",
+      "sha256": "eef77be14baa66e247547a8e9ba7f1ec2221ef9ee6a50709982c4ebb4e0ac6eb"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/tests/test_controlled_torch_fomaml_v5.py",
+      "sha256": "f632d4c748354a96485a83b1fc3b3017ef792066c207daf0c5b58ed86695f733"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/tests/test_crafter_action_consequence.py",
+      "sha256": "7b34a8660894b76e06b06c707faee4f6271526c3a9df81e70df110a9e66eb954"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/tests/test_crafter_action_inventory_diagnostic.py",
+      "sha256": "589e2c56c4180cb5defdae69984da2c97da312ea2e086dda4f7f0f399a61b3e6"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/tests/test_crafter_actor_head_ablation.py",
+      "sha256": "5aab332f0c989c6f9cb253ecfc7fc3075690821a4c36ae81564f5c634fd7539b"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/tests/test_crafter_actor_natural_migration.py",
+      "sha256": "6813e0b1fe660a9c2b633df339d326b8791273eba315089c3220bdcb5cbfec2f"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/tests/test_crafter_actor_only_local.py",
+      "sha256": "d65f4828dbebba1447bd262862b984bcdd24cc1d3c1ebff302f9d9ec0c6934e6"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/tests/test_crafter_adapter.py",
+      "sha256": "22109bd47b08ee929975d87c3e14fbdde845ddf23549ceaa023e3f3afbd6325f"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/tests/test_crafter_auxiliary_gather_wood3_pilot.py",
+      "sha256": "a234898759d331808d533bb5678808bb69b1e80c0936ea76ab21f3c8b3831c39"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/tests/test_crafter_auxiliary_ppo_pilot.py",
+      "sha256": "177d6955b567a79d5e3763780218bbaf369b2e4c42b250038f7b564ddd0c56d8"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/tests/test_crafter_cnn_layer_readout.py",
+      "sha256": "24200273b73f9b90c6f54357a2d2eb6ba302de34047d2719098994b9948b41e2"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/tests/test_crafter_collection_opportunity.py",
+      "sha256": "d5502ba4487f8ca0ba9ee31354edff31ce9eb151b0ebb671ccc6641dffac3044"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/tests/test_crafter_continual_session_boundary_diagnostic.py",
+      "sha256": "5de64ef6e7951069a6d54358d7f9666c5ca94130a6a5708eeb2d50c75edd76ef"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/tests/test_crafter_controlled_collection.py",
+      "sha256": "85c0eb6f91845b7f8b8a727ec351135f6eff98ea61a9512d3f5e71de5b49cf21"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/tests/test_crafter_determinism.py",
+      "sha256": "0e29ea44f3933e2b98f08113ee2861443fe2171b30108fd9813f95918582abc5"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/tests/test_crafter_do_wood_gain_auxiliary.py",
+      "sha256": "1672926da5851b2ffaa29bd75b5dd5eba826f0d13d958675c21607411647272d"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/tests/test_crafter_fomaml_module_pipeline_diagnostic.py",
+      "sha256": "cce1a47fa3eb0b195bda8c859e9aaac8a9b5e0708f945ca6dffd360c412d38a0"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/tests/test_crafter_gather_audit_erratum.py",
+      "sha256": "a3898cea09d05eaf8cc5b8e68360b4a9d4fcfa46b7651313c2e470025c5b5a9a"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/tests/test_crafter_knowledge_evolution.py",
+      "sha256": "d2c07d573e51d6472133f47d9a1bf70ac7444957ab0e145fdf11e082ccdc3c9b"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/tests/test_crafter_module_pipeline_diagnostic.py",
+      "sha256": "40846412694dfce890bc47a7615e3c8fe6275c383f1ddf79211288c944c630cc"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/tests/test_crafter_module_reuse_diagnostic.py",
+      "sha256": "0695c09e2cbd77ecc55be45d768ddf27874b06a4da8c328ff4adf68173980748"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/tests/test_crafter_natural_coverage.py",
+      "sha256": "956fca5eec9f3ff5787a0f408b8f26104c1646bd78e0bc48cd4396aeb79b33c7"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/tests/test_crafter_natural_coverage_matched.py",
+      "sha256": "fd2856034a20119c966ef3829b8cecddbc1176fdb775de50a1f9327ad3ca35e4"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/tests/test_crafter_natural_readout.py",
+      "sha256": "620e7ae04a8e6a320f47b216025e18ed45b0bd0bb603f8d8c2df1eb4be3eb909"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/tests/test_crafter_natural_spatial_probe.py",
+      "sha256": "1148d04aca206e2b801ad6320a7d63b13bad2be4a915c676a65c0aaf9b0c1c26"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/tests/test_crafter_natural_state_cross_readout.py",
+      "sha256": "6617fa328d22e18fcd5a8e91a430267e32ed34a850c07a131fdba297e55c536f"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/tests/test_crafter_natural_state_window.py",
+      "sha256": "1aa56237020fcc4bee94786e66b5cd9e30eb10692a4ac8c564ca23e6881fcda6"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/tests/test_crafter_natural_state_window_analysis.py",
+      "sha256": "e731d53682da9df4f62ccf7a16aedd2898a3cef3b4298182f811ae628a2b3b5b"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/tests/test_crafter_persistent_policy_feasibility.py",
+      "sha256": "41545a1dcb316d86849658960a51bbb38bb2159bd49704167b51a2277084eb24"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/tests/test_crafter_policy_representation_pilot.py",
+      "sha256": "cd74a47f686ca65f42593186320ec5939e9ca34d4d623102ffeb64cf534010b3"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/tests/test_crafter_prerequisite_aware_candidate.py",
+      "sha256": "bf3501a7eb58e10921961b5a1713fb60537e020b2a4c287069a5f1ac73355a6e"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/tests/test_crafter_protocol.py",
+      "sha256": "5d4cadff9f53a950f7a076d03794e323796fcc8a1708510f3f9146ed622cddf5"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/tests/test_crafter_qualification_feasibility.py",
+      "sha256": "18a4023636900e9232f7336d2676ee75fe44833703b46e465040af166f0d3129"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/tests/test_crafter_ready_do_intervention.py",
+      "sha256": "2d90250b0050663cdf477047c86bf9ede3fce4a16e4902e315535e0f4b50bf50"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/tests/test_crafter_reference_runner.py",
+      "sha256": "519ecc44e0dfe479dbf96517a3ba593ff6a312f7309a62a84008eb08a41abf3a"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/tests/test_crafter_reference_verifier.py",
+      "sha256": "8e01bfcdb5d16ac6774e4c8d03e078df3d7a93608c38fae820713dde3d3cb557"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/tests/test_crafter_reference_verifier_diagnostic.py",
+      "sha256": "fced26b752e90d6189cc5c9aed32a58d1dddb5e38912c2e4e2e11a34d54172d6"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/tests/test_crafter_rgb_chain_audit.py",
+      "sha256": "845a3cd2a3efd74d554b8e8514c6116fb902a68a9c5182f064bd2a2fda444945"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/tests/test_crafter_rgb_chain_cross_readout.py",
+      "sha256": "e8990d2dd2dcd4886988f05d8767b86c78398445a553bb1e6dcd952902966d7c"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/tests/test_crafter_rgb_chain_learning.py",
+      "sha256": "6229a27c79efca1ba4f4f9ad8fb3ae4279f542826b9718f713255892003a5f6c"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/tests/test_crafter_rgb_chain_ready_distillation.py",
+      "sha256": "208d467c3034c7b7df582a3c44753781888c1a659d6e9d0690f35e78676cdf4f"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/tests/test_crafter_rgb_chain_ready_distillation_analysis.py",
+      "sha256": "3ac63ff6e3caf72f518d709d6e10dd74de4813e725f0177202151a45c87ffcfa"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/tests/test_crafter_role_geometry.py",
+      "sha256": "f654e75a72841e4663fc4c58de0771f26b72d4f298c916d36ad021e06d31f594"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/tests/test_crafter_spatial_action_head.py",
+      "sha256": "f22f9b5cc765eb70ac043258ca3fdb66180bbe6bf3b84d57d3b0dfaefff96cd0"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/tests/test_crafter_spatial_actor_cross_readout.py",
+      "sha256": "98f7e06914695c386aaec95cb26f260dfd333684626e38d9efa178b1d151f945"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/tests/test_crafter_spatial_actor_fresh.py",
+      "sha256": "dce55863a24c48c9535d43056ed749b3723821091f7c9c6075932cb1e3677c9f"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/tests/test_crafter_spatial_cross_readout_stage_summary.py",
+      "sha256": "1493a1842b57de616712cf320a0cf1dc850be2c39e22cbd73bbbc4b93f49b433"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/tests/test_crafter_spatial_readout.py",
+      "sha256": "d99881258eb5e60e4d4816efd4a7a339dce8b29aa633e3985ac0465d7a3b66aa"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/tests/test_crafter_spatial_representation.py",
+      "sha256": "f2fa371284705dcd60f5386f3961048c7b1bee92494dea334209c76078bbea68"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/tests/test_crafter_split_feasibility.py",
+      "sha256": "e26012b523980012c6329c3abb8b9444b39520fb5d17f3c1a1e612c2821eae41"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/tests/test_crafter_task_learnability_budget_pilot.py",
+      "sha256": "cf0de441e58f349ad0329e683aee0975ca1e538cc4ad0c243b24f8dd8b2cec66"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/tests/test_crafter_task_local_composition_audit.py",
+      "sha256": "76aa5d35b3436b9b7a963cd234f08a3277e312e4ac231b3be59ef1a2154cb61b"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/tests/test_crafter_task_local_oracle_pipeline_diagnostic.py",
+      "sha256": "5d235bc727bbad0bb288182fbb2dd0f2754f37ef9c4419a3dac21f248d2046ce"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/tests/test_crafter_task_local_plan.py",
+      "sha256": "154e7289e2a65917d1f653b6662b6ffa0cbda847f3df7b2c314303cb64567208"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/tests/test_crafter_task_local_runtime_diagnostic.py",
+      "sha256": "a7f91505c135712a5011133a3851e68f09fe4dd20670c83e8a9977a95226b0b9"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/tests/test_crafter_task_prerequisites.py",
+      "sha256": "20db18f759a534b8801367a0206032b0e8578669d8dcc9dc0623ef79736dfba5"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/tests/test_crafter_terminal_death_penalty.py",
+      "sha256": "6524dff8507646b362cf760900248d96dd49bb6560027992ac33498e144fa0fe"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/tests/test_crafter_turn_ready_do_approach_intervention.py",
+      "sha256": "4e7e22be384041be7ababebff5ce2adfd6a18d16767c94feecca2b2f2e4bc995"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/tests/test_crafter_turn_ready_do_intervention.py",
+      "sha256": "91d245b874eb0a9632f2786a508359cd5139613056a44a1b7e0191f897c486ad"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/tests/test_crafter_wood3_approach_death.py",
+      "sha256": "d25e4195099544079b513ae8e97216be145c300e26703cc96cadad64c5938a55"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/tests/test_crafter_wood3_budget_curve.py",
+      "sha256": "957b699542dae1127757dab87bd63b98b97d93847851fbe8f604703bd94027ee"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/tests/test_crafter_wood3_local_event_diagnostic.py",
+      "sha256": "89012d929fb65429013620cbcc6c1db0aa0880d58687c8f8c99c9fac6d36cd47"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/tests/test_crafter_wood3_spatial_coverage.py",
+      "sha256": "60ca70cdd115a928b7d4133b3f2e4a31290290be1c3d8e889d1dc2c5fd0cad4f"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/tests/test_discrete_resources.py",
+      "sha256": "368080ed4787e757045f779c2a85e27710288f90afc193426ec51aeaa4fcdac7"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/tests/test_libero_action_head_representation_diagnostic.py",
+      "sha256": "426b805dd8fff4ddba2a09961e88a9900ae3745b4d2dd432bfacf13485b85ca7"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/tests/test_libero_adapter.py",
+      "sha256": "fd763b7573b3505458be034ad5076f3851028d23747abff860c61df07e1da47b"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/tests/test_libero_bc_causal_alignment_diagnostic.py",
+      "sha256": "35dfd785d280025545d6119dea0ef79bb2504c50df71e3039f989b594cd46234"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/tests/test_libero_bc_closed_loop_attribution.py",
+      "sha256": "6a8b4d7dbf6dd7ba295aca66780a7d0b0c294751bfd095ce20c290bf9f33af6d"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/tests/test_libero_bc_fomaml.py",
+      "sha256": "8eea90a8be1547d63362c4fb1c680afd14eacef72be504de681ee494eaaa39be"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/tests/test_libero_bc_policy.py",
+      "sha256": "659669e733374faeb97eb854cc5ef8a602eb1269432dc2bb4c3c8f1d9cf520ff"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/tests/test_libero_cached_input_coverage.py",
+      "sha256": "28ca9c3ae9d571f50eae2813104416f3568a6a1cd32733fb865e8c9be9a82772"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/tests/test_libero_causal_t1_dataset.py",
+      "sha256": "ed9cf370054eb52b48ae5c204e289151e959a9627e96b8185280291cc388ceca"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/tests/test_libero_cnn_only_phase_loss_paired_diagnostic.py",
+      "sha256": "a880db0f34789e25ce9e0841c52d1ada902c25e8ced44c6148ab60c30860663d"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/tests/test_libero_cnn_only_phase_replication_diagnostic.py",
+      "sha256": "3f3cf6897d5504e31d7829aada42215f342a00dcb009d88366bc14c586a8aaf6"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/tests/test_libero_cnn_only_uniform_closed_loop_diagnostic.py",
+      "sha256": "67676061e17a3601062e33c93ce97f3b461bc00df249840a7fef81d1f44eb475"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/tests/test_libero_cnn_only_uniform_policy_trace_diagnostic.py",
+      "sha256": "1a4d14c4a381af23712e43cd35f7b7300d940af2e656bd5f087cc14aba967793"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/tests/test_libero_condition_separability_diagnostic.py",
+      "sha256": "fcee571292e8253d8bea6de58baae232563667fa1e59cb2dd8e950b4c38942d1"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/tests/test_libero_conditional_coverage_audit.py",
+      "sha256": "b31a3731ee7951ac31861ea32b96b37774adac77476d52e8d3ea31f9c5d3dc4b"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/tests/test_libero_cuda_training_smoke.py",
+      "sha256": "aae2858fc0abf7ed98bb27d2586be45c5156a9c609dd7eeb7efb62ece1aa8856"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/tests/test_libero_current_runtime_replay_audit.py",
+      "sha256": "a978a6324535fe1e4725fef49f77befe8dcba604f011a21bb1100ac8faa523d0"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/tests/test_libero_dataset_audit.py",
+      "sha256": "ed59f6b17e8c9bd4cde23335a5891c143b3d87181184839a899ceed5347f5bb5"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/tests/test_libero_dataset_loader.py",
+      "sha256": "6d79efd5d45d37ad8f85cde37624836251e5db28de6748d239d90e55cbba20d1"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/tests/test_libero_demonstration_structure.py",
+      "sha256": "88c5a0e2f49ca645959c22af1a695259e9bccfe2b4923d2b1c414cb3c194f506"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/tests/test_libero_deterministic_pool.py",
+      "sha256": "101283b9ef2703e999b6b8b8ae7de5b914e4dcd58fd190c67b82d9333511f63f"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/tests/test_libero_evidence_decomposition.py",
+      "sha256": "ff22af7df750763dd172749ba8f8b335bb4a0e60aae2cf1f91bcab593c23b032"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/tests/test_libero_expert_action_error_diagnostic.py",
+      "sha256": "84b374a84e029c1bf02e2dcfcc44cafc489a86ec5b04b68949660d025a2540e2"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/tests/test_libero_expert_camera_target_error_execution.py",
+      "sha256": "008568b31ffb48fc6e559fcd4bcb62960a750cdd7a3b15b6b692cee0b9fc2bb2"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/tests/test_libero_expert_camera_target_error_protocol.py",
+      "sha256": "3bdb80efb346fa3d302b21b3abbfb6ac70bfa447db90815046d99b29477ea8a1"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/tests/test_libero_expert_command_timing.py",
+      "sha256": "97c257f269414a9925278f00342778704c8c8174062971632f2c02888b660e73"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/tests/test_libero_expert_error_free_alignment.py",
+      "sha256": "05809937bf4fd6de7273864d08a53e45d7f0868c8cbe9524da852e64a86d9b09"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/tests/test_libero_expert_replay_consistency_audit.py",
+      "sha256": "fc4cc526a9ceb6083855491ff17d1551f1a3e9c29723b07f2275a843a544ec59"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/tests/test_libero_eye_hand_robustness_pilot.py",
+      "sha256": "37a2d60bfc13030feb2ceda4953a274d2dc88a20fa8c014741db35f01a401cef"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/tests/test_libero_eye_hand_synthetic_sensitivity.py",
+      "sha256": "c997fec6471bb4f6374a622dd042a33a22d21bb2c97b5469027308e46b22617f"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/tests/test_libero_formal_G_close_runs_late36.py",
+      "sha256": "73bce952a444f571150e49e9c6605d828ac6fa7bcc6c2883b74640690cdf88c5"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/tests/test_libero_formal_G_task_seed_differences.py",
+      "sha256": "64d60dc5f97e548e53c7476b5c3a8604903fed8ac6c45cf2eb23723e4deb0ded"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/tests/test_libero_formal_G_validation_BC_traces.py",
+      "sha256": "c75175ac1488a8260580d0330ad5c9946108596c533ce0740e31eaebdfbbca5c"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/tests/test_libero_formal_execution.py",
+      "sha256": "35f143d7bfc08c43292704b1f283dacddf68adec79e13e6f41fdf87c3b0564ad"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/tests/test_libero_formal_execution_preflight.py",
+      "sha256": "48783e4eb39fdafbd3379183b3793119dfc8e76e5011f2567fe51c03b9c40f8f"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/tests/test_libero_formal_source_continuation.py",
+      "sha256": "f362c5330aeb14087ae0ab31fbf535a883afc9c7ef45b3ec981e0802927ddad1"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/tests/test_libero_formal_training.py",
+      "sha256": "b87b94f7ceb80513d64cfe6ac76d83c20458b5d99fb3ac522703a49941828eee"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/tests/test_libero_formal_transfer_protocol.py",
+      "sha256": "9022255642c99633d478a8b06771d04959ca2abbc4b6695424e6ada7af2e8bdc"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/tests/test_libero_formal_transfer_protocol_v2.py",
+      "sha256": "33c61e473f1ec0083f6af143bc208f6037ce4eba77eaa74c70972cf44167b0b5"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/tests/test_libero_four_task_abc_completion.py",
+      "sha256": "29ffc14c6842e6e13063c56ffadc4871380ef3d163747d164c262f3b4e04f5e0"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/tests/test_libero_gradient_interference_diagnostic.py",
+      "sha256": "5aec3e55fe96ebda1c1773567a0e3e0e3649b0dabea09d6acd91ec9d82364401"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/tests/test_libero_gripper_action_mapping_audit.py",
+      "sha256": "e090ba8c91110848846f15d1374647c443f14e2003e51a80cd0fa1860dae79e1"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/tests/test_libero_gripper_feedback.py",
+      "sha256": "967a8508dfb0c86c295f2c1ff4c71cae799f7888e145460857fa4ef5537160cb"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/tests/test_libero_gripper_feedback_recovery.py",
+      "sha256": "8d0f796ba463d6efa9731990d096021825e8964358e8683c59b8bb1498f86c5e"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/tests/test_libero_initial_state_reader.py",
+      "sha256": "8eef6a564c7696301875af6181646259881214017858fc444945a2ea22c012e1"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/tests/test_libero_learned_phase_history_readout.py",
+      "sha256": "36a0561906c66fd63c3e53aa41bc730e42d2cb97037a140b71aacebf8c2ef51c"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/tests/test_libero_local_gripper_loss_diagnostic.py",
+      "sha256": "802142276da9409d66b49be7be1ac306b978709c737dce8a7e63546e850f0e30"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/tests/test_libero_memory_representation_diagnostic.py",
+      "sha256": "30d0e391b6b49c99eb395c711d1784c44a999eee0348f0c80400e0ab51d23894"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/tests/test_libero_phase_gripper_loss_diagnostic.py",
+      "sha256": "463862c451f965aa8b42fcbbf1589af6816f6fef4777f3c9b556709b7e083f23"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/tests/test_libero_phase_history_transition_neighbors.py",
+      "sha256": "42f03a3644bcbfc3fb1f622b2ffffcf678e130a9bffbce6c578384be0fc88533"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/tests/test_libero_phase_history_transition_neighbors_v2.py",
+      "sha256": "7fd0f5f39e461117498f699710855888309aff945de972d2813d3b635d2c2d2d"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/tests/test_libero_pick_place_spt.py",
+      "sha256": "1b4680b5ffcca4b815ea772aef0806562ae599bcd0ad3048628eda3a28ac21c2"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/tests/test_libero_policy_input_replacement_sensitivity_audit.py",
+      "sha256": "989c0aa8016dcb90f3a475439d36c38b3220e5e9392e6d6732c6ba168a12dc56"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/tests/test_libero_repaired_evidence_decomposition.py",
+      "sha256": "d2678495f4ebc604d8aef832c38962d16e7c9e6b7f79d813f400e2292d65f52a"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/tests/test_libero_replay_input_alignment_audit.py",
+      "sha256": "71a5436b9d21f4edb803f427155f76fb640628f5870c707f8e947a54e1d3be4c"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/tests/test_libero_replay_semantics_audit.py",
+      "sha256": "5512b9ec672981c5829f3d338fc28141ec76e74e31842450fe37083e6f596a26"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/tests/test_libero_replay_state_alignment_audit.py",
+      "sha256": "6100cfddce7f2058f3993551f7751da34d6f07b598300ad1a96c645e27a8a32a"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/tests/test_libero_runtime_native_prefix_cross_task_camera_diagnostic.py",
+      "sha256": "82f1d1e5fd06bed32ede6d0264c5a844a0ed1bbd9d77ae3f6baa3d34cbfe00f6"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/tests/test_libero_runtime_native_prefix_cross_task_eye_hand_augmentation_diagnostic.py",
+      "sha256": "2325c734f53535d66142b3133e367b2c752dc1fcf5e34a9a652083e79d4eafa4"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/tests/test_libero_runtime_native_prefix_cross_task_eye_hand_translation_sensitivity_diagnostic.py",
+      "sha256": "95a6f6abd55528bb957cfce77f5734a76d5ec5d65dac219e475ef93036c4a916"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/tests/test_libero_runtime_native_prefix_cross_task_observation_diagnostic.py",
+      "sha256": "892721c1ba82550d5a81cf15de55d01d58fb69256622103fe525cfbfac600afa"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/tests/test_libero_runtime_native_prefix_failure_trace_diagnostic.py",
+      "sha256": "9c23d670452ead58755f61a700a6ddebdf34ab2cc1dae6994d22f2c728d6bc40"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/tests/test_libero_runtime_native_prefix_phase_command_diagnostic.py",
+      "sha256": "71e43617c81a768e8b0ed3252a238af3a1bb5032d2fa71e8f85399ed0e7b697e"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/tests/test_libero_runtime_native_prefix_protocol.py",
+      "sha256": "3f156f668f772075be071e6eb61b44e7940c67b361d061383b2fc5651f3dc582"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/tests/test_libero_runtime_native_prefix_task3_camera_diagnostic.py",
+      "sha256": "800855a0567e81c207193779ccbff5df6ee3e69b3ae10cc54f08ed94773a6aca"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/tests/test_libero_runtime_native_prefix_task3_modality_diagnostic.py",
+      "sha256": "ad0bd33bbf184ecdce3cf883871b39f30157a1432c508308a0bb9f0bdb02e76c"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/tests/test_libero_runtime_native_prefix_task4_task7_action_head_readout_diagnostic.py",
+      "sha256": "96960e69e09a240e9d77440407eed4d1ed5295d0e72d8f73a54d5f614b8ea65e"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/tests/test_libero_runtime_native_prefix_task4_task7_module_freeze_readout_diagnostic.py",
+      "sha256": "308b3dc02994d7e122e3afb84c99694b91bd169ddd527cb44f15552d0fbfc758"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/tests/test_libero_runtime_native_prefix_task4_task7_module_freeze_seed_replication_diagnostic.py",
+      "sha256": "444e70b0c5ef77cded896913144c641383aca0c8c1deca03329977e537ede231"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/tests/test_libero_runtime_native_prefix_task7_cross_input_diagnostic.py",
+      "sha256": "cb5dfcc7994494ad9f29f11c38f0d67a544ce086711a1aac7b7a11fad5df9dd3"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/tests/test_libero_runtime_native_prefix_task7_gripper_output_diagnostic.py",
+      "sha256": "7620099aa7dc3af7f9555893e87fffd8808eecaadde71d0c6ccf3665c51b7c6c"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/tests/test_libero_runtime_native_prefix_task7_initial_observation_diagnostic.py",
+      "sha256": "79434662a7397c4f82f963ae633e1271011ad09b967edfb6884b5756fe357e5e"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/tests/test_libero_runtime_native_prefix_training_pilot.py",
+      "sha256": "9bf81bf2125ed1ea9528316447e2b6468a0b24cdfc00a3cff252c756fac5d26a"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/tests/test_libero_single_spi_bc_diagnostic.py",
+      "sha256": "c04ed98165b6bec69667334f6cb6c995f2b9fc55d86998d1db0295e1f0ded62d"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/tests/test_libero_skill_family_audit.py",
+      "sha256": "cf5fce91d50f5d2ae6b14ab2e5b478ee8d199a360b52e1bf8c750d5c145bf8c4"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/tests/test_libero_source_candidate_close_geometry_alignment.py",
+      "sha256": "923de7a8b4d57f2e8cdec932ee6b946856060404fa34bb22411158c95eff2ab6"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/tests/test_libero_source_candidate_geometry_capture.py",
+      "sha256": "599c470071447145ab9d3e2e8ac33e337ca395e7b74ad1abacd3366bfb83b290"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/tests/test_libero_source_candidate_geometry_capture_protocol.py",
+      "sha256": "7347aa4c9a6133fe938cf1de6bc909bb3f186b88e13ceeea065d03d9389dba9e"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/tests/test_libero_source_candidate_native_goal_pose.py",
+      "sha256": "d5bb49183f99b239a762835c60c138da34cdfc267aac3930f87ba7557ae40547"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/tests/test_libero_source_expert_component3_error_types.py",
+      "sha256": "8b4414e4fa60e1444623a75427e0bf75b77a7d3522f89e152f05268d76406c20"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/tests/test_libero_source_expert_component3_observability.py",
+      "sha256": "1c93e5a849d44273e9c451da0c75e54c19587d6ed96947780b5d0a3a8bb24b22"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/tests/test_libero_source_expert_component3_observability_protocol.py",
+      "sha256": "a12e01718a2e6a445f11c8aa15f7a1a23c0ac082c51ffe2669dd8c34e4cdde79"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/tests/test_libero_source_expert_late_translation_readout.py",
+      "sha256": "7c7d7d92024b8208b71d53e30275fffe9ec71e41066aad2c143428708d369900"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/tests/test_libero_source_expert_prediction_cache_availability.py",
+      "sha256": "024a73979a2396cab8cbca4ccbb525e843802efccb00c1381b70ecc711b523a6"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/tests/test_libero_source_expert_translation_amplitude.py",
+      "sha256": "ec8770560bd473f2d1d61fd1fc89b7667a658a56974ea0e1ac306baefd9341d5"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/tests/test_libero_source_internal_event_phase_direction_translation.py",
+      "sha256": "a414964355605c3e0e475a1d24c70518c1450306d4d21aa2869f697ab8ba226a"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/tests/test_libero_source_internal_fixed500_expert_frame_protocol.py",
+      "sha256": "586ccce9acc7a094730d8749d5eae5071a28e4d0d15d16d04a845abdcaa67d76"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/tests/test_libero_source_internal_full_open_segments.py",
+      "sha256": "88e3a3662eac63054c9de51fd80d8f33079ff4ff1735a826afc91d93091c0bec"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/tests/test_libero_source_internal_geometry_extension.py",
+      "sha256": "9f29296cebf011e3601fc3210f7b649fea1f85642fe3b2e9f188bfbd073198ab"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/tests/test_libero_source_internal_geometry_extension_closed_loop.py",
+      "sha256": "2e8b1ece9e0c5e4bfc1cfd32f4f7a7fec348e919d1731260c53be01109322ad0"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/tests/test_libero_source_internal_gripper_sign_margin_temporal.py",
+      "sha256": "9cce5f00226ea146e29f4d357c773f31b8784129de29e5f3e999b7e260b3e1ac"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/tests/test_libero_source_internal_gripper_state_control_protocol.py",
+      "sha256": "4b52e281af6fb9594442f9e59fe085eefdce53cb0c1c63e365e4de965645b6b4"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/tests/test_libero_source_internal_gripper_state_local_control_execution.py",
+      "sha256": "6f4359fc6f23691393837abbfd55ffbcbe999125d2e174fde0c62a774c174a68"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/tests/test_libero_source_internal_initialization_endpoint_target_error.py",
+      "sha256": "a2f85b3196e58677ab47ea33a2d04ad611dac5a9ecbac381ce592c50664ef58c"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/tests/test_libero_source_internal_nontransition_translation_reference.py",
+      "sha256": "bbd88a2c370454b0bfb50c2ce56cca42c2aec2a11da33866e4e58dfbb8e61770"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/tests/test_libero_source_internal_phase_history_observability.py",
+      "sha256": "ccebda1b47f06b986188b64319b4f631699c73711194daf71943e63a36169049"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/tests/test_libero_source_internal_six_group_paired_traces.py",
+      "sha256": "5ceecc61eac516bcf4b4917538bf7ae4776070e0dd8242be67074542e5541e17"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/tests/test_libero_source_internal_spt_spi_closed_loop_protocol.py",
+      "sha256": "7cd2a52ab6d4c60e02f94ae0ccf48f49d35fe1e4f873bceab6e032f99eabc560"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/tests/test_libero_source_internal_spt_spi_diagnostic.py",
+      "sha256": "43b8ab3be4f50c3e371da72f0c80e6acc2928670823e895934ea6fec129ea953"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/tests/test_libero_source_internal_spt_spi_v2.py",
+      "sha256": "c92ed5fbc6d84b6369f068936458bcd9c12951b6f31d69e5dd8f4a96c070a346"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/tests/test_libero_source_meta_query_generalization_diagnostic.py",
+      "sha256": "7cfb97ad9a600138d09a10c42ebad7c89234f5d106b44d67b180fc0171ebd3a0"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/tests/test_libero_source_stabilization_analysis.py",
+      "sha256": "c815e975b94c7a948f0d3e37b963fe93a8775ad10cbf142057da3877f49ddf6a"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/tests/test_libero_source_stabilization_control.py",
+      "sha256": "219612f233cfa8eb7846d3991e716ac1b8e04190016609706ff99a4d9ab74cd0"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/tests/test_libero_source_stabilization_input_decomposition.py",
+      "sha256": "75ef9308557df709171dad64697f16ad9473c6e971e5405e7c9d5cda6687fbbc"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/tests/test_libero_source_support_replay_feasibility_audit.py",
+      "sha256": "3f2ed392db9c3983173b5ac9fe94a6e8cb2c45d2cb51982c0054ed1d13b0a651"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/tests/test_libero_source_t0_target_error.py",
+      "sha256": "79b5d1afec44394492558a3091471353271bfcd8d65a3515775c8a87721969c6"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/tests/test_libero_stabilization_closed_loop.py",
+      "sha256": "023d9adc9cca24faf95856335bcc7b9985e816594e4b57d71c4f5b01ab7a0533"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/tests/test_libero_stabilization_contemporary.py",
+      "sha256": "863eb1a4f30c0ec951f7f77e1230b1e2b80acfe764423757070f729f5feec052"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/tests/test_libero_stabilization_device0.py",
+      "sha256": "aed3d287181d698af2ac7de1aa4134a92c43cca06acd95f2b37a1aefbefb99cc"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/tests/test_libero_stabilization_trace_alignment.py",
+      "sha256": "80a892dee2c4d03b3a952a20768e7b053926afad0e947209c6c1aa715b93f615"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/tests/test_libero_stratified_error_diagnostic.py",
+      "sha256": "a46faa19b63a807df56a5f259a727e69398bc958c61e4b9c006e4ecc337b0179"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/tests/test_libero_task1_b_crossed_history_readout.py",
+      "sha256": "3e8d801fca518504d93d477fba2140aac60140050d255a2402074b4d99b7c8b1"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/tests/test_libero_task1_b_fixed_head_expert_target_error.py",
+      "sha256": "967efc5a3d3e3dda62fe0ab7c1d00e9832883da410cd30a60b463f9325b444fc"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/tests/test_libero_task1_b_fixed_head_expert_target_error_audit.py",
+      "sha256": "3f71a6cd0bfbd3fe9e2d7ec31c56820801a44d0cce9ec725c6c813ddaa2334d0"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/tests/test_libero_task1_b_fixed_head_input_audit.py",
+      "sha256": "3ecde950241ebac48c1d4a71c4adefc56e3701901b74f31e0a55c3d81c859708"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/tests/test_libero_task1_b_fixed_head_input_closed_loop.py",
+      "sha256": "cd9ba0eff5e1b2c927c18bcaa334b57e10991ced6d69db5e074d1a5d52da6d5c"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/tests/test_libero_task1_b_history_input_sensitivity.py",
+      "sha256": "763762313e5cdd4d76a901a6b0750e657fc60544296f60dbb425bc127aab3097"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/tests/test_libero_task1_b_history_input_sensitivity_audit.py",
+      "sha256": "2ebf153c1a78d7d4003f370bf682f34274a7b9e0cc7dfefb9f13a9b0eaf8529b"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/tests/test_libero_task1_b_query_event_margin_timing.py",
+      "sha256": "147c7b9a3f805359ba8b2945f2c475ad66616ba70a242a77e19b8a73c2fff097"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/tests/test_libero_task1_b_routed_history_closed_loop.py",
+      "sha256": "3bda353759f2abd33aa27d578410266e2af4ccd8e56042a39e98d2a6f7f86209"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/tests/test_libero_task1_b_routed_history_readout.py",
+      "sha256": "73afd740421507ea87b71dab609520faa8481d6830d04910dcae5f604ae5da2d"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/tests/test_libero_task1_b_routed_paired_traces.py",
+      "sha256": "58df069893205ae1d27517154d1453a7bee3c5e2acb24044d4e0cc0d6a0c3070"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/tests/test_libero_task1_b_routed_runtime_interface.py",
+      "sha256": "3ad1afe8d5f6e919d33e0b36f1b7534a20779773ad64868a21e417d91821938d"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/tests/test_libero_task1_b_step5_crossed_readout.py",
+      "sha256": "9a090103f4942bf8d70006e25caaf11e54d4bcb67c97d95a9a4a8fc6302a7225"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/tests/test_libero_task1_b_support_query_history_readout.py",
+      "sha256": "0c6f515db11825cfc6a06612b1d37f435699098cacb8c2d03a254ac733348082"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/tests/test_libero_task4_ordered_prefix_reproduction_diagnostic.py",
+      "sha256": "e9a04dccb177921ab17f19f28f2a6947114bad2568bc9fe7b627a489f16ead98"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/tests/test_libero_task4_task7_full_policy_closed_loop_diagnostic.py",
+      "sha256": "9dba606b7e64e514dd1040f889804bdae7d80165a9691a737c832bfbc1bf8bec"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/tests/test_libero_task4_task7_full_policy_observation_state_replacement_diagnostic.py",
+      "sha256": "d2b6755c7933502237124458a1e3d0b4b6b00e2138b10ad097d98d15d1b362d9"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/tests/test_libero_task4_task7_full_policy_observation_state_replacement_protocol.py",
+      "sha256": "3dd10cbe8298b04fd9ef31d4af4891837d024ab28a528d11e2be6bf2e184f27c"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/tests/test_libero_task4_task7_public_state_jitter_500_closed_loop_diagnostic.py",
+      "sha256": "c59f8d4bf94c8836f0226085c7e4e3ee946b675433a22949ae4e2b7122843faf"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/tests/test_libero_task4_task7_public_state_jitter_500_closed_loop_protocol.py",
+      "sha256": "c5e67a7c56a20f2d62348cac01adfa5b0c2ee88f29806b8b09958f9032ff1bbb"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/tests/test_libero_task4_task7_public_state_jitter_500_transition_rgb_action_protocol.py",
+      "sha256": "48f6b250446d99b94fc4734074bf85d3414f161aa25acf2e6f2c7ad8f3b2ccac"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/tests/test_libero_task4_task7_public_state_jitter_augmentation_diagnostic.py",
+      "sha256": "d7d0ffee1f00233b7c39c1a66dc6b84976abe0768595a6cb97c8e8d3511a82a3"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/tests/test_libero_task4_task7_public_state_jitter_augmentation_protocol.py",
+      "sha256": "cea44e7f4759f96a6052ef5fead650a337eb6e989744b9142da35e7b994a69f9"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/tests/test_libero_task4_task7_public_state_jitter_budget_sweep_diagnostic.py",
+      "sha256": "2640a81260d57ce7ea16bab1c9da3d45c424f3c407d2c2ed6d5e88cbfdca9e49"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/tests/test_libero_task4_task7_public_state_jitter_budget_sweep_protocol.py",
+      "sha256": "a21a5f5b4e52f81276df643b2010246bc54b9b5dc983e4d3ce4599e16adf057c"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/tests/test_libero_task7_component3_history_transition.py",
+      "sha256": "42e5cac78e4d26761a1ca69ed763d6f1746e248a0429a99ca47b253239258c59"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/tests/test_libero_task7_component3_history_transition_protocol.py",
+      "sha256": "2532ccf5e1899a6e33533c745c975422552ca903443b363d1eda9672f9dce213"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/tests/test_libero_task7_current_residual_correctability.py",
+      "sha256": "b3fdbc8b950587c69096b149dc16be224521c333aaded32eb88997a813668bda"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/tests/test_libero_task7_current_residual_correctability_protocol.py",
+      "sha256": "f2491ba7e147370eaeb50a0c2137a2914d209e936436009e7fab16fc54f4db0f"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/tests/test_libero_task7_direction_harm_alignment.py",
+      "sha256": "1b475fd8ac462a77f57d7eec9e33c6c00ebcfa9a2c58cdfb7f4f8338f2e367a2"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/tests/test_libero_task7_endpoint_gradient_diagnostic.py",
+      "sha256": "a51f21701c2258b8845219d8a0b0b9030c02648f3e645358d8d1a36d6f74e4a5"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/tests/test_libero_task7_endpoint_gradient_diagnostic_v2.py",
+      "sha256": "8e1a70442ed28cdc1798dbe0c7d056fe06013c79a5812a2a953fba7dda9dbc1b"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/tests/test_libero_task7_endpoint_gradient_protocol.py",
+      "sha256": "f6f58c73fdc34edee58cd7ef8dd5c259c2f62d6d4bae78c04a774e3091a8efa3"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/tests/test_libero_task7_expert_camera_component_tradeoff.py",
+      "sha256": "d7180dd7af4fe19bb30a5b4a190f9e2c4e946d5e38cf2b264ae5d76a733c07ee"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/tests/test_libero_task7_fixed_representation_optimization.py",
+      "sha256": "c920510ca6a6660e3d37e84610b7cdfb41d593fc4648462240e4e72b49bb4259"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/tests/test_libero_task7_fixed_representation_optimization_protocol.py",
+      "sha256": "ff61731932106919b050d9969ced4cbb741ac42b06577e3f398abc6c6d6736e9"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/tests/test_libero_task7_lag_neighbor_decomposition.py",
+      "sha256": "f2efa18de17084e75340baf9c3a0e94880cf1c717f5c070097063d47d7c62162"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/tests/test_libero_task7_lag_neighbor_decomposition_protocol.py",
+      "sha256": "2f66bcac35fa9abe0fa344a3b166c15d0870b3514989d561027c1419f3023b8a"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/tests/test_libero_task7_mse_gate_stop_direction_grid.py",
+      "sha256": "655edcf87b17301b7743d634b7ab74d4c82fed42618248c16884cf72112ad4aa"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/tests/test_libero_task7_mse_gate_stop_direction_grid_protocol.py",
+      "sha256": "d4e628cb67b1d6582ba59865141e625dcdeee389f94fbdcb32433c5fc08d21fb"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/tests/test_libero_task7_mse_nonregression_acceptance.py",
+      "sha256": "87daaf0b224167b446406a4d3007c8ff0d969daa4f8cab5e1cae1b083f2f089a"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/tests/test_libero_task7_mse_nonregression_acceptance_protocol.py",
+      "sha256": "25982c1591084efcdeaff353f90b41ff755db24a634544ac924f9af03b369b7d"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/tests/test_libero_task7_needed_direction.py",
+      "sha256": "224c33cb157bb183a8481ab0f58577c6e19643d61c3c97fab87c165f35119fb9"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/tests/test_libero_task7_optimization_path_decomposition.py",
+      "sha256": "22d51fbe1a47b2666bc9e92fe60bc0af4d2a5cb9980da2b604a03a46c219180a"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/tests/test_libero_task7_policy_error_focus_alignment.py",
+      "sha256": "3f35e3730d2de492f9e43c1d15d7e5055e55349c3901e2ec41de1db991a96ffc"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/tests/test_libero_task7_policy_error_focus_alignment_protocol.py",
+      "sha256": "afbe0f1cae90733d72d33ee4f687384ca5a7db6a3f0baa41b035d4f7fab168df"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/tests/test_libero_task7_protection_residual_decomposition.py",
+      "sha256": "1acc9ec6db79b89045428aa980402ef70d1fd6e97c0f9d0a1641229f538c3aac"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/tests/test_libero_task7_protection_residual_decomposition_protocol.py",
+      "sha256": "2ed338b31f44844bd09b8e2e52112cbeecabf286d55718a4906e271731e7d57c"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/tests/test_libero_task7_residual_harm_protection.py",
+      "sha256": "5e2c4b2d2b36a160b82b697ff5cf9154d033d35181a6ae1a7201af9d098e9f1b"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/tests/test_libero_task7_residual_harm_protection_protocol.py",
+      "sha256": "5511803a0287a0c068738615f6691e01e5ea9d41033a1b20341af07fb86353a3"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/tests/test_libero_task7_residual_sign_transition.py",
+      "sha256": "f9f10b365e424cd20cdcafb76d5ec9ecbcfb3a7482cd39da0052690ad5e71231"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/tests/test_libero_task7_residual_sign_transition_protocol.py",
+      "sha256": "23c849f5a1d3c382f619e427f06a637136336372d15dbc0b1bceec813d2d4d9a"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/tests/test_libero_task7_target_magnitude_matching.py",
+      "sha256": "58016d086715e0eb54dfc48747d79335a50441c48cabab8e970d819d3e43c687"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/tests/test_libero_task7_target_magnitude_matching_protocol.py",
+      "sha256": "489cb8dca224113a917ec38f96a67303094c5169527a7a598a7fd6e231ee4162"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/tests/test_libero_transfer_split.py",
+      "sha256": "d63fe2c628671a84cf13811605b629f99f062274de0650eb25e750be2c4c3bd3"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/tests/test_prepare_dataset.py",
+      "sha256": "f4a705e1922902c6a795e20802f472c555c5be2ca76f054b9c540893e10bdbdb"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/tests/test_scan_knowledge_budget.py",
+      "sha256": "f135650719af3e23a1cb3a97d9929e1a06826f60684dbdd2a0ceb92f99bfcaac"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/tests/test_skill_evolution.py",
+      "sha256": "3f311850f53a6fe58a3379699b62279dcaccb957958876fcafd9147fc9a9a7ec"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/tests/test_smoke.py",
+      "sha256": "bbdbd97bedbdbb37e5e10ab6143e94cb7f8b6c9fed55c3f45bee09639c77239f"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/tests/test_spatial_gather_spt.py",
+      "sha256": "4fddc982e534634418782e904e7b02e7634c3c62176802944c9e835a7ec5280b"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/tests/test_task_plan_pipeline.py",
+      "sha256": "3538cb502629c794dccf3580b1444691c1746ebca8456a56d2fa6bad5f2e75de"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/tests/test_torch_fomaml.py",
+      "sha256": "0f8da75eac5596793aa73e604d55edb238f6e6656efb0816e3de5b03a0bf26cb"
+    },
+    {
+      "path": "/tmp/libero-task7-endpoint-gradient-20261109-v1-process.json",
+      "sha256": "ba994551f3b9d0fa081af163d805a0d0652819bf6a6d0d830d45b58b5f63033e"
+    },
+    {
+      "path": "/tmp/libero-task7-endpoint-gradient-20261109-v1.json",
+      "sha256": "f56da26798fc9d43f718f37af75d50f0c1c9db7d2d6c1b734e941d7ae7d39e54"
+    },
+    {
+      "path": "/tmp/libero-task7-endpoint-gradient-20261109-v2.json",
+      "sha256": "43ace1221276fdfd68aaaaed9fda6366e0120d608856762d7f956dbee2886601"
+    },
+    {
+      "path": "/tmp/libero-task7-endpoint-gradient-artifacts-20261109-v1/completion.json",
+      "sha256": "531c9f8428a13ef045986c948fe2bb3df82f9b719581773b8dd5ee5e80b0d5f1"
+    },
+    {
+      "path": "/tmp/libero-task7-endpoint-gradient-artifacts-20261109-v1/independent-audit.json",
+      "sha256": "caddfc87b11374225fe486b285613b99fde15ec7cbb7ace8cf41299986fb8a3e"
+    },
+    {
+      "path": "/tmp/libero-task7-endpoint-gradient-artifacts-20261109-v2/completion.json",
+      "sha256": "f5c2ee4ed8b51e545c92d40043ca881774d8d475c63d873049bf550f074a6b29"
+    },
+    {
+      "path": "/tmp/libero-task7-endpoint-gradient-artifacts-20261109-v2/independent-audit.json",
+      "sha256": "698fe898fc7525416556e1175a368831bcf827a7261f2cd9d304383289c1908e"
+    },
+    {
+      "path": "/tmp/libero-task7-endpoint-gradient-v1-budget-deviation-20261109-v1.json",
+      "sha256": "daced34af4a4bbd67794b670383e643dbf21727b890fb3b262293ec2eb12d991"
+    },
+    {
+      "path": "/tmp/libero-task7-fixed-representation-optimization-20261109-v1.json",
+      "sha256": "33021ef69f0040396d33923b5606c62248815c55d0c3655d76cfcc94515b1132"
+    },
+    {
+      "path": "/tmp/libero-task7-fixed-representation-optimization-artifacts-20261109-v1/completion.json",
+      "sha256": "4c79178ede41348124177ccd6c53caf6e1e567f3b4fcf6a0c7fc1e2c63fc1832"
+    },
+    {
+      "path": "/tmp/libero-task7-fixed-representation-optimization-artifacts-20261109-v1/independent-audit.json",
+      "sha256": "88acec5c4276bec92778237448abdf7da71eab2fb189c5c14509e500458ad6d2"
+    },
+    {
+      "path": "/tmp/libero-task7-needed-direction-reporting-binding-20261109-v1.json",
+      "sha256": "bd7df78e4583de90142ba68d7f6bdd72c7ff62f7574031c4abebf1fa05db3fe3"
+    }
+  ],
+  "dependency_count": 754,
+  "code_references": {
+    "analysis": {
+      "path": "/home/zl202621/project/KECRL/experiments/analyze_libero_task7_mse_gate_stop_direction_grid.py",
+      "sha256": "f0b93165745a370740f48b17be009886213a6f38b2318c655dcb079106ea9fe4"
+    },
+    "audit": {
+      "path": "/home/zl202621/project/KECRL/experiments/audit_libero_task7_mse_gate_stop_direction_grid.py",
+      "sha256": "0af8f20a448fbd79b80d05f742b7c467e73c2c13f3125cd9a8a3eefa480d04f6"
+    },
+    "guard": {
+      "path": "/home/zl202621/project/KECRL/experiments/libero_task7_mse_gate_stop_direction_grid_access.py",
+      "sha256": "2fb366fb9fcb88fd9e52c7bc40c60f80d3ac8460957ff85a3f0fbb528b5e5b9c"
+    },
+    "runtime_tests": {
+      "path": "/home/zl202621/project/KECRL/tests/test_libero_task7_mse_gate_stop_direction_grid.py",
+      "sha256": "655edcf87b17301b7743d634b7ab74d4c82fed42618248c16884cf72112ad4aa"
+    },
+    "metadata": {
+      "path": "/home/zl202621/project/KECRL/experiments/libero_task7_mse_gate_stop_direction_grid_protocol.py",
+      "sha256": "3e9f067519e0216624804113c89bb6d421fb0659108cfcda3115801817a5c68c"
+    },
+    "metadata_tests": {
+      "path": "/home/zl202621/project/KECRL/tests/test_libero_task7_mse_gate_stop_direction_grid_protocol.py",
+      "sha256": "d4e628cb67b1d6582ba59865141e625dcdeee389f94fbdcb32433c5fc08d21fb"
+    },
+    "plan": {
+      "path": "/home/zl202621/project/KECRL/docs/libero-task7-mse-gate-stop-direction-grid-plan-2026-11-09.md",
+      "sha256": "46e4208528f3355d265dfcdd463033f63f6748f4657f399a7a214dfc54006da8"
+    }
+  },
+  "execution_contract": {
+    "path": "/home/zl202621/project/KECRL/docs/libero-task7-mse-gate-stop-direction-grid-execution-contract-2026-11-09.md",
+    "sha256": "66ead73da2827e4c2d0f3f23353f5276ece83724f838cd3d5e199f6f99b228c1"
+  },
+  "validation": {
+    "tests": {
+      "unit": {
+        "file": {
+          "path": "/tmp/libero-task7-mse-gate-direction-grid-unit-20261110-v1.xml",
+          "sha256": "a8b9e43f58cc3250cd67d2d47249539057f99d0c091cd3f9ad36516cc9f9bd70"
+        },
+        "tests": 32,
+        "failures": 0,
+        "errors": 0,
+        "seconds": 17.25
+      },
+      "extra-guard": {
+        "file": {
+          "path": "/tmp/libero-task7-mse-gate-direction-grid-extra-guard-20261110-v1.xml",
+          "sha256": "9846d57e5dddec6dfd79c61a6f2cb4376a68f59b19a2516f8acaf17b70aded53"
+        },
+        "tests": 2,
+        "failures": 0,
+        "errors": 0,
+        "seconds": 1.283
+      },
+      "synthetic": {
+        "file": {
+          "path": "/tmp/libero-task7-mse-gate-direction-grid-synthetic-20261110-v1.xml",
+          "sha256": "b76f62d2d4c05e615fe49ced3be6cabccb42288dca3d0c7e4556d85dad3db20a"
+        },
+        "tests": 1,
+        "failures": 0,
+        "errors": 0,
+        "seconds": 1.014
+      },
+      "focused": {
+        "file": {
+          "path": "/tmp/libero-task7-mse-gate-direction-grid-focused-20261110-v1.xml",
+          "sha256": "cab1ba0ada2d8ad1d19c81e71cffab81fea870e68fc1f9e398056b60cd5b3d75"
+        },
+        "tests": 300,
+        "failures": 0,
+        "errors": 0,
+        "seconds": 95.169
+      },
+      "cpu": {
+        "file": {
+          "path": "/tmp/libero-task7-mse-gate-direction-grid-cpu-20261110-v1.xml",
+          "sha256": "a65451539662768ed1fce4fc54750450757780a827d9f54f5c432370eb5e71a0"
+        },
+        "tests": 3395,
+        "failures": 0,
+        "errors": 0,
+        "seconds": 216.558
+      }
+    },
+    "environment": {
+      "path": "/tmp/libero-task7-mse-gate-direction-grid-environment-20261110-v1.json",
+      "sha256": "7c3d6b7e5aefa40ed09b0e324e7465d96a09dd5d07886aa806a91b891cea7897"
+    },
+    "prebinding_proof": {
+      "path": "/tmp/libero-task7-mse-gate-direction-grid-prebinding-proof-20261110-v1.json",
+      "sha256": "62aeb5f6e752cce318e1448bbeab53e75ba6428fc2fd8e48c1abc1ad6564e81a"
+    },
+    "CPU_selection": {
+      "path": "/tmp/libero-task7-mse-gate-direction-grid-cpu-selection-20261110-v1.json",
+      "sha256": "7753621bab2b52780a3641d6dfe6d3323de393a18c63f2d7674f0f66e0f2de3b"
+    },
+    "py_compile": "passed",
+    "git_diff_check": "passed",
+    "real_source_CSV_SHA_or_reads_before_binding": 0,
+    "full_Crafter_suite_run": false
+  },
+  "technical_retries": 0,
+  "overwrite": false,
+  "actual_local_date": "2026-11-10",
+  "frozen_artifact_prefix_retained": "20261109"
+}

@@ -1,0 +1,457 @@
+{
+  "kind": "task7_saved_M_margin_finite_step_decomposition",
+  "version": 1,
+  "formal_result": false,
+  "status": "scientific_freeze_only_execution_binding_required",
+  "parents": {
+    "science": {
+      "path": "/home/zl202621/project/KECRL/configs/libero-task7-m-descent-margin-direction-diagnostic_v1.json",
+      "sha256": "0101f655813b94f0036048eefc2f3e2c922fb4db20da06e7ccbb637cfacc6600"
+    },
+    "binding": {
+      "path": "/home/zl202621/project/KECRL/configs/libero-task7-m-descent-margin-direction-execution-binding_v1.json",
+      "sha256": "18002a8ad84979eb25ef889f58b1ee7099a264ab2e10e579d4658b39b6315c3f"
+    },
+    "result": {
+      "path": "/tmp/libero-task7-m-descent-margin-direction-20261111-v1.json",
+      "sha256": "e38929b55b41a2c8db404bc02d8abe96745e562f624cfd1316d8133b8569efad"
+    },
+    "completion": {
+      "path": "/tmp/libero-task7-m-descent-margin-direction-artifacts-20261111-v1/completion.json",
+      "sha256": "0a682ed0b215e5d652a1d93c2b7900fcfac4e606c8165cd2fce0a03aba726d21"
+    },
+    "process": {
+      "path": "/tmp/libero-task7-m-descent-margin-direction-20261111-v1-process.json",
+      "sha256": "fff3d8127a338bd14b4989a2d8493477a35753fdcaeb7f817f99b7712ffad572"
+    },
+    "report": {
+      "path": "/home/zl202621/project/KECRL/docs/libero-task7-m-descent-margin-direction-results-2026-11-11.md",
+      "sha256": "4ddee803b70b62c22f2c960bc6ca5bb3a726aec82fbabd690e42e121d1fd8345"
+    }
+  },
+  "inputs": {
+    "P": {
+      "path": "/tmp/libero-task7-m-descent-margin-direction-artifacts-20261111-v1/primary-result.json",
+      "sha256": "4c5a316f2d1824cb517b5edeb2d54dcc463146a45c7f48c078e679e3b319e1a4"
+    },
+    "U": {
+      "path": "/tmp/libero-task7-m-descent-margin-direction-artifacts-20261111-v1/independent-audit.json",
+      "sha256": "95afa7fab0b5f3749106f99858fefaa68aa3883a260b1a950b600f1f361ecba1"
+    }
+  },
+  "identities": [
+    {
+      "task": 7,
+      "seed": 20261106,
+      "arm": "A_original",
+      "fold": 0,
+      "mode": "harm_protected_affine"
+    },
+    {
+      "task": 7,
+      "seed": 20261106,
+      "arm": "A_original",
+      "fold": 1,
+      "mode": "harm_protected_affine"
+    },
+    {
+      "task": 7,
+      "seed": 20261106,
+      "arm": "A_original",
+      "fold": 2,
+      "mode": "harm_protected_affine"
+    },
+    {
+      "task": 7,
+      "seed": 20261106,
+      "arm": "B_fomaml",
+      "fold": 0,
+      "mode": "harm_protected_affine"
+    },
+    {
+      "task": 7,
+      "seed": 20261106,
+      "arm": "B_fomaml",
+      "fold": 1,
+      "mode": "harm_protected_affine"
+    },
+    {
+      "task": 7,
+      "seed": 20261106,
+      "arm": "B_fomaml",
+      "fold": 2,
+      "mode": "harm_protected_affine"
+    },
+    {
+      "task": 7,
+      "seed": 20261107,
+      "arm": "A_original",
+      "fold": 0,
+      "mode": "harm_protected_affine"
+    },
+    {
+      "task": 7,
+      "seed": 20261107,
+      "arm": "A_original",
+      "fold": 1,
+      "mode": "harm_protected_affine"
+    },
+    {
+      "task": 7,
+      "seed": 20261107,
+      "arm": "A_original",
+      "fold": 2,
+      "mode": "harm_protected_affine"
+    },
+    {
+      "task": 7,
+      "seed": 20261107,
+      "arm": "B_fomaml",
+      "fold": 0,
+      "mode": "harm_protected_affine"
+    },
+    {
+      "task": 7,
+      "seed": 20261107,
+      "arm": "B_fomaml",
+      "fold": 1,
+      "mode": "harm_protected_affine"
+    },
+    {
+      "task": 7,
+      "seed": 20261107,
+      "arm": "B_fomaml",
+      "fold": 2,
+      "mode": "harm_protected_affine"
+    },
+    {
+      "task": 7,
+      "seed": 20261108,
+      "arm": "A_original",
+      "fold": 0,
+      "mode": "harm_protected_affine"
+    },
+    {
+      "task": 7,
+      "seed": 20261108,
+      "arm": "A_original",
+      "fold": 1,
+      "mode": "harm_protected_affine"
+    },
+    {
+      "task": 7,
+      "seed": 20261108,
+      "arm": "A_original",
+      "fold": 2,
+      "mode": "harm_protected_affine"
+    },
+    {
+      "task": 7,
+      "seed": 20261108,
+      "arm": "B_fomaml",
+      "fold": 0,
+      "mode": "harm_protected_affine"
+    },
+    {
+      "task": 7,
+      "seed": 20261108,
+      "arm": "B_fomaml",
+      "fold": 1,
+      "mode": "harm_protected_affine"
+    },
+    {
+      "task": 7,
+      "seed": 20261108,
+      "arm": "B_fomaml",
+      "fold": 2,
+      "mode": "harm_protected_affine"
+    }
+  ],
+  "candidate": "norm_matched_T_priority_M_margin",
+  "input_contract": {
+    "status_by_engine": {
+      "P": "complete_M_margin_pending_same_parameter_audit",
+      "U": "passed_independent_M_margin_direction_audit"
+    },
+    "science_config": {
+      "path": "/home/zl202621/project/KECRL/configs/libero-task7-m-descent-margin-direction-diagnostic_v1.json",
+      "sha256": "0101f655813b94f0036048eefc2f3e2c922fb4db20da06e7ccbb637cfacc6600"
+    },
+    "binding": {
+      "path": "/home/zl202621/project/KECRL/configs/libero-task7-m-descent-margin-direction-execution-binding_v1.json",
+      "sha256": "18002a8ad84979eb25ef889f58b1ee7099a264ab2e10e579d4658b39b6315c3f"
+    },
+    "U_primary": {
+      "path": "/tmp/libero-task7-m-descent-margin-direction-artifacts-20261111-v1/primary-result.json",
+      "sha256": "4c5a316f2d1824cb517b5edeb2d54dcc463146a45c7f48c078e679e3b319e1a4"
+    },
+    "formal_result": false,
+    "order": "validate_status_pins_identity_then_candidate_scalar_projection"
+  },
+  "scope": {
+    "original_Policy_updates": 500,
+    "future_stabilization_steps": 5,
+    "loss_lambda": 1,
+    "fixed_rho": 0.01,
+    "construction_kappa": 0.02,
+    "current_M500_and_last_accepted_rules_unchanged": true,
+    "source": "own20_fit_meta_support0..29_tge1_encoder_seen_all30",
+    "all18_no_focus_or_checkpoint_selection": true,
+    "outcome_conditioned": true,
+    "original_training_forward_gradient_environment_or_sealed_calls": 0,
+    "source_meta_query_validation_heldout_qualification_reserved_final_access": false
+  },
+  "projections": {
+    "states": [
+      "task",
+      "seed",
+      "arm",
+      "fold",
+      "mode",
+      "optimization_arm",
+      "extra_updates",
+      "n",
+      "component3_mse",
+      "penalty",
+      "trainable_objective",
+      "exact_MSE_slope",
+      "exact_penalty_slope",
+      "directional_derivative",
+      "required_M_slope_bound",
+      "selected_margin_met",
+      "exact_margin_met",
+      "branch_digest",
+      "clip_below_n",
+      "clip_low_tie_n",
+      "clip_inside_n",
+      "clip_high_tie_n",
+      "clip_above_n",
+      "hinge_negative_n",
+      "hinge_zero_n",
+      "hinge_positive_n"
+    ],
+    "candidate_trials": [
+      "task",
+      "seed",
+      "arm",
+      "fold",
+      "mode",
+      "optimization_arm",
+      "from_extra_updates",
+      "trial_index",
+      "alpha",
+      "component3_mse",
+      "penalty",
+      "trainable_objective",
+      "current_component3_mse",
+      "delta_component3_mse",
+      "start500_component3_mse",
+      "slope",
+      "armijo_bound",
+      "armijo_pass",
+      "mse_envelope_pass",
+      "mse_gate_applied",
+      "accepted",
+      "reason"
+    ],
+    "other_rows": "optimization_arm_label_only;control_numeric_fields_not_used",
+    "unselected": "vectors_parameters_endpoints_heads_local_tables_not_used",
+    "physical_decode": "whole_pinned_JSON;semantic_scalar_whitelist_only"
+  },
+  "design": {
+    "reference": "407_actual_trial_M_up_vs493_nonincrease_each_engine;all18_heads",
+    "classification": "raw_accepted_trial_M_minus_current_state_M;save_next_state_sign_disagreement",
+    "accounting": "delta_T=delta_M/7+delta_P;R_T=R_M/7+R_P",
+    "finite_remainder": "actual_saved_trial_change_minus_alpha_saved_exact_right_derivative",
+    "M500_slack": "original_own500_M_minus_current_or_trial_M",
+    "ratios": "null_with_reason_on_nonpositive_denominator_or_nonfinite_result;no_epsilon",
+    "step_reference": "all_accepted_and_all_preceding_actual_rejections;first_acceptance_only",
+    "hypothetical_previous_M_gate": "flag_saved_trials_only;no_counterfactual_path_or_budget_prediction",
+    "windows": [
+      [
+        0,
+        10
+      ],
+      [
+        10,
+        20
+      ],
+      [
+        20,
+        30
+      ],
+      [
+        30,
+        40
+      ],
+      [
+        40,
+        50
+      ]
+    ],
+    "alpha_grid_indices": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      15,
+      16,
+      17,
+      18,
+      19
+    ],
+    "alpha_index_bins": [
+      [
+        0,
+        4
+      ],
+      [
+        5,
+        9
+      ],
+      [
+        10,
+        14
+      ],
+      [
+        15,
+        19
+      ]
+    ],
+    "matched": "within_engine_head_10update_window_5index_bin;both_outcomes_or_null",
+    "summaries": "counts_mean_median_signed_sums_ranges;equal_head_fold_then_seed;empty_null",
+    "branches": "endpoint_digest_and_clip_hinge_counts;unchanged_does_not_exclude_between_point_crossing",
+    "P_U": "compare_same_ID_round_descriptively;no_cross_path_local_tolerance_or_forced_equality",
+    "numeric_absolute_tolerance": 1e-10,
+    "numeric_relative_tolerance": 0,
+    "raw_decisions": "no_epsilon_for_delta_signs_or_original_Armijo_M500_acceptance",
+    "no_pvalues_causal_threshold_optimization_or_safe_alpha_estimation": true
+  },
+  "decision": {
+    "validation": "every_identity_k0to50;all_rounds_first_accepted;900_steps407up493nonincrease_per_engine;conservation",
+    "interpretation": "descriptive_support_and_counterevidence_for_finite_step_remainder_P_compensation_and_slack",
+    "stopping": "any_provenance_projection_budget_or_conservation_mismatch_fail_closed_keep_partial_no_retry",
+    "training": "none;0of18_parent_condition_G_H_and_formal_sealing_unchanged",
+    "next": "only_after_independent_scalar_audit_decide_whether_to_freeze_one_new_training_or_acceptance_variable"
+  },
+  "budget": {
+    "stages": 2,
+    "source_JSON_passes_per_stage": 2,
+    "source_SHA_per_stage": 4,
+    "total_source_JSON_passes": 4,
+    "total_source_SHA": 8,
+    "primary_result_JSON_reads_by_audit": 1,
+    "primary_result_SHA_by_audit": 2,
+    "physical_table_rows_by_engine": {
+      "P": {
+        "all_states": 1017,
+        "all_trials": 7690
+      },
+      "U": {
+        "all_states": 1010,
+        "all_trials": 7641
+      }
+    },
+    "per_stage_arm_label_reads": 17358,
+    "per_stage_candidate_states": 1836,
+    "per_stage_candidate_trials": 14034,
+    "per_stage_accepted_trials": 1800,
+    "per_stage_rejected_trials": 12234,
+    "per_engine_candidate_states": 918,
+    "per_engine_candidate_trials": 7017,
+    "per_engine_accepted": 900,
+    "per_engine_M_up": 407,
+    "per_engine_M_nonincrease": 493,
+    "per_stage_scalar_field_projections": 357972,
+    "total_scalar_field_projections": 715944,
+    "steps_per_head": 50,
+    "states_per_head": 51,
+    "heads_per_engine": 18,
+    "trial_indices": [
+      0,
+      19
+    ],
+    "output_rows_per_stage": {
+      "steps": 1800,
+      "saved_trials": 14034,
+      "rounds": 1800,
+      "heads": 36,
+      "head_window_outcome": 360,
+      "alpha_source_outcome": 160,
+      "source_seed_outcome": 24,
+      "source_outcome": 8,
+      "engine_outcome": 4,
+      "matched_head_window_alpha": 720,
+      "P_U_round_comparison": 900
+    },
+    "total_output_rows": 39692,
+    "source_CSV_NPZ_checkpoint_reads_or_SHA": 0,
+    "extra_forward_gradient_trial_update_environment_calls": 0,
+    "technical_retries": 0,
+    "overwrite": 0
+  },
+  "execution": {
+    "python": "3.10.22",
+    "device": "CPU",
+    "seconds_per_stage": 120,
+    "overall_seconds": 300,
+    "RSS_bytes": 536870912,
+    "input_JSON_bytes_max": 100663296,
+    "output_JSON_bytes_max": 33554432,
+    "environment": {
+      "CUDA_VISIBLE_DEVICES": "",
+      "PYTHONHASHSEED": "0",
+      "OMP_NUM_THREADS": "1",
+      "OPENBLAS_NUM_THREADS": "1",
+      "MKL_NUM_THREADS": "1"
+    },
+    "independent_audit": "new_process_stdlib_only;no_import_of_primary_numeric_or_summary_helpers",
+    "source_order": [
+      "P",
+      "U"
+    ],
+    "audit_reads_primary_output_once": true
+  },
+  "code": {
+    "metadata": {
+      "path": "/home/zl202621/project/KECRL/experiments/libero_task7_m_margin_finite_step_decomposition_protocol.py",
+      "sha256": "9e6f46ecd13f042d7a20271b9cee00384aa76277f60aace43af34ca7aebf4b40"
+    },
+    "tests": {
+      "path": "/home/zl202621/project/KECRL/tests/test_libero_task7_m_margin_finite_step_decomposition_protocol.py",
+      "sha256": "e5cc5a973157dfce649eb04e582636aa9c3172982b70dbe41fc684305da0df9b"
+    }
+  },
+  "plan": {
+    "path": "/home/zl202621/project/KECRL/docs/libero-task7-m-margin-finite-step-decomposition-plan-2026-11-11.md",
+    "sha256": "aa20f02305a88f874eac381aec73a549711d3315288ed7eb833ce729f61afc48"
+  },
+  "future_files": {
+    "analysis": "/home/zl202621/project/KECRL/experiments/analyze_libero_task7_m_margin_finite_step_decomposition.py",
+    "audit": "/home/zl202621/project/KECRL/experiments/audit_libero_task7_m_margin_finite_step_decomposition.py",
+    "guard": "/home/zl202621/project/KECRL/experiments/libero_task7_m_margin_finite_step_decomposition_access.py",
+    "runtime_tests": "/home/zl202621/project/KECRL/tests/test_libero_task7_m_margin_finite_step_decomposition.py"
+  },
+  "future_contract": "/home/zl202621/project/KECRL/docs/libero-task7-m-margin-finite-step-decomposition-execution-contract-2026-11-11.md",
+  "artifacts": "/tmp/libero-task7-m-margin-finite-step-decomposition-20261111-v1",
+  "output": "/tmp/libero-task7-m-margin-finite-step-decomposition-20261111-v1/analysis.json",
+  "audit": "/tmp/libero-task7-m-margin-finite-step-decomposition-20261111-v1/independent-audit.json",
+  "freeze_access": {
+    "source_payload_JSON_reads_or_SHA": 0,
+    "real_scalar_decomposition": 0,
+    "CSV_NPZ_checkpoint_forward_gradient_trial_update_environment": 0,
+    "metadata_and_human_made_scalars_only": true,
+    "execution_binding_present": false
+  }
+}

@@ -1,0 +1,195 @@
+{
+  "kind": "postmaintenance_A_support_only_rerun",
+  "version": 1,
+  "formal_result": false,
+  "historical_restoration": false,
+  "authorization": "用户2026-11-13要求重新生成实验文件、重跑并上传GitHub；本段仅不读query的A_original，B范围等待澄清。",
+  "frozen_at_UTC": "2026-11-13T03:29:30.058507+00:00",
+  "seeds": [
+    20261106,
+    20261107,
+    20261108
+  ],
+  "arm": "A_original",
+  "task": 7,
+  "demonstrations": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20,
+    21,
+    22,
+    23,
+    24,
+    25,
+    26,
+    27,
+    28,
+    29
+  ],
+  "policy_updates": 500,
+  "source_outer_updates": 0,
+  "source_meta_query_allowed": false,
+  "data_root": "/data/zl202621/KECRL/third_party/LIBERO/datasets",
+  "source": {
+    "path": "/data/zl202621/KECRL/third_party/LIBERO/datasets/libero_spatial/pick_up_the_black_bowl_on_the_stove_and_place_it_on_the_plate_demo.hdf5",
+    "sha256": "1fcb3990cf9fd6185f56531cc9f6dec0a77a59bfa0c7f39dff95b7e43cf6aeaa",
+    "size_bytes": 711715594
+  },
+  "action_lengths": [
+    155,
+    125,
+    124,
+    191,
+    136,
+    138,
+    133,
+    130,
+    139,
+    145,
+    140,
+    164,
+    124,
+    138,
+    120,
+    137,
+    141,
+    152,
+    137,
+    128,
+    197,
+    124,
+    128,
+    126,
+    144,
+    129,
+    168,
+    132,
+    140,
+    133
+  ],
+  "metadata_inputs": {
+    "transfer": {
+      "path": "/data/zl202621/KECRL/configs/libero_spatial_transfer_split_candidate_v1.json",
+      "sha256": "6cdc8c3eeaa90886ad0e15f0f4ebbe260aa972b6e69b1f122e95f65ab63dd7d6"
+    },
+    "dataset_manifest": {
+      "path": "/data/zl202621/KECRL/configs/libero_spatial_dataset_manifest_v1.json",
+      "sha256": "866429693febf966a38b48e3b89faa54623acace5d3c50cd67c5c7978010eaf6"
+    },
+    "family": {
+      "path": "/data/zl202621/KECRL/configs/libero_spatial_skill_family_candidate_v1.json",
+      "sha256": "52053991a34b977aa3c9e3d29e2f585e29dcac1c7fd4f817acfeb6445fac3580"
+    },
+    "learning": {
+      "path": "/data/zl202621/KECRL/configs/libero_spatial_bc_policy_candidate_v1.json",
+      "sha256": "f5e57c895e9249ef7a3361ebee2119bf06c6cbb48da01c31980b1eb0af8feb1b"
+    }
+  },
+  "historical_endpoints": [
+    {
+      "task": 7,
+      "seed": 20261106,
+      "arm": "A_original",
+      "checkpoint_update": 500,
+      "support_role": "meta_support",
+      "checkpoint": {
+        "path": "/tmp/libero-formal-G-artifacts-20261105-v2/G-task7-seed20261106-A_original-u500.pt",
+        "sha256": "c5cb770a456185a5ef4885311ba4aab452aa287039c8d6b9fda48d9f895a9909",
+        "weight_hash": "a4e74450ffa2b38e51bd175a6e57d6e368c9cc00b687c8b9c43342606f61b200"
+      }
+    },
+    {
+      "task": 7,
+      "seed": 20261107,
+      "arm": "A_original",
+      "checkpoint_update": 500,
+      "support_role": "meta_support",
+      "checkpoint": {
+        "path": "/tmp/libero-formal-G-artifacts-20261105-v2/G-task7-seed20261107-A_original-u500.pt",
+        "sha256": "2058d4d47f5293e77c596f5a104529708b03a6a89052a8423c82e2030ed13ace",
+        "weight_hash": "0273bc2183d1d0f3810458306cedc378d3f481632fadc5f969a90a57371373bb"
+      }
+    },
+    {
+      "task": 7,
+      "seed": 20261108,
+      "arm": "A_original",
+      "checkpoint_update": 500,
+      "support_role": "meta_support",
+      "checkpoint": {
+        "path": "/tmp/libero-formal-G-artifacts-20261105-v2/G-task7-seed20261108-A_original-u500.pt",
+        "sha256": "b264be47a6ca54a1370fbdd53a2d5f0f96615f8c2f19207afef3f977e41b1538",
+        "weight_hash": "fbfd635652d71fa60019e1152060f722e795ee0c65ca431da6877e66c175cd67"
+      }
+    }
+  ],
+  "environment": {
+    "CUDA_VISIBLE_DEVICES": "1",
+    "CUBLAS_WORKSPACE_CONFIG": ":4096:8",
+    "OMP_NUM_THREADS": "1",
+    "OPENBLAS_NUM_THREADS": "1",
+    "MKL_NUM_THREADS": "1",
+    "PYTHONHASHSEED": "0"
+  },
+  "audit_environment": {
+    "CUDA_VISIBLE_DEVICES": "",
+    "CUBLAS_WORKSPACE_CONFIG": ":4096:8",
+    "OMP_NUM_THREADS": "1",
+    "OPENBLAS_NUM_THREADS": "1",
+    "MKL_NUM_THREADS": "1",
+    "PYTHONHASHSEED": "0"
+  },
+  "versions": {
+    "numpy": "1.22.4",
+    "torch": "2.4.1+cu124",
+    "h5py": "3.11.0"
+  },
+  "GPU_uuid": "GPU-d90bd7b2-16f6-c0fe-fbc1-7ed4060e95ff",
+  "artifacts": "/data/zl202621/KECRL/results/libero-postmaintenance-task7-A-rerun-20261113-v1",
+  "budget": {
+    "policy_updates_total": 1500,
+    "capture_forward_main": 42,
+    "capture_forward_repeat": 3,
+    "source_file_SHA_passes": 1,
+    "HDF5_opens": 2,
+    "public_array_slices": 2160,
+    "query_numeric_reads": 0,
+    "sealed_evaluation_reads": 0,
+    "environment_calls": 0,
+    "main_wall_seconds": 900,
+    "host_tensor_cache_bytes": 1073741824
+  },
+  "limits": {
+    "overwrite": false,
+    "automatic_retry": false,
+    "fixed_checkpoint_updates": [
+      0,
+      50,
+      150,
+      300,
+      500
+    ]
+  },
+  "plan": {
+    "path": "/data/zl202621/KECRL/docs/libero-postmaintenance-rebuild-plan-2026-11-13.md",
+    "sha256": "b9a82897eeee337ed273e452f240342e950255116bcc20cba4b3a1dd4b37a0c2"
+  }
+}

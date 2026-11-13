@@ -1,0 +1,669 @@
+{
+  "kind": "task7_saved_optimization_path_decomposition",
+  "version": 1,
+  "formal_result": false,
+  "status": "scientific_frozen_execution_binding_required",
+  "parents": {
+    "science": {
+      "path": "/home/zl202621/project/KECRL/configs/libero-task7-fixed-representation-optimization-diagnostic_v1.json",
+      "sha256": "95c476741cabf0ef79b4a34848e634c8d72eeee4d80fec5687241dbc89f576fa"
+    },
+    "binding": {
+      "path": "/home/zl202621/project/KECRL/configs/libero-task7-fixed-representation-optimization-execution-binding_v1.json",
+      "sha256": "936c7becdcc476c54ec39d986d4811f5d3982c28c9ea0822779badefd954d583"
+    },
+    "result": {
+      "path": "/tmp/libero-task7-fixed-representation-optimization-20261109-v1.json",
+      "sha256": "33021ef69f0040396d33923b5606c62248815c55d0c3655d76cfcc94515b1132"
+    },
+    "audit": {
+      "path": "/tmp/libero-task7-fixed-representation-optimization-artifacts-20261109-v1/independent-audit.json",
+      "sha256": "88acec5c4276bec92778237448abdf7da71eab2fb189c5c14509e500458ad6d2"
+    },
+    "completion": {
+      "path": "/tmp/libero-task7-fixed-representation-optimization-artifacts-20261109-v1/completion.json",
+      "sha256": "4c79178ede41348124177ccd6c53caf6e1e567f3b4fcf6a0c7fc1e2c63fc1832"
+    },
+    "report": {
+      "path": "/home/zl202621/project/KECRL/docs/libero-task7-fixed-representation-optimization-results-2026-11-09.md",
+      "sha256": "da2e76656df6dc91e15e2910727d6952c2824a3e5f4b646085fdfc552e6c8577"
+    }
+  },
+  "scope": {
+    "task_ids": [
+      7
+    ],
+    "seeds": [
+      20261106,
+      20261107,
+      20261108
+    ],
+    "source_arms": [
+      "A_original",
+      "B_fomaml"
+    ],
+    "original_Policy_updates": 500,
+    "saved_auxiliary_extra_updates": 50,
+    "future_stabilization_steps": 5,
+    "source": "own20_fit_demos_of_support0..29_all_tge1;encoder_seen_all30;no_new_unseen_data",
+    "loss_representation_thresholds_or_checkpoints_changed": false,
+    "archive_head_checkpoint_HDF5_RGB_proprio_reads_including_SHA": 0,
+    "new_training_forward_gradient_environment_or_sealed_calls": 0,
+    "probe_source_query_validation_heldout_qualification_reserved_final_access": false,
+    "Policy_SPT_Knowledge_Module_changes": false,
+    "old_cues_G_failed_H_unrun_unchanged": true
+  },
+  "design": {
+    "cohorts": "all36;outcome_stratified_lambda1_MSEup11_and_nonjoint21;not_blind_or_causal",
+    "terms": "DeltaT=DeltaMSE3/7+lambda*DeltaP;DeltaF=DeltaT;C6_fixed;endpoint_equals_50step_sum",
+    "step_classes": [
+      "mse_up_penalty_down",
+      "both_down",
+      "mse_down_penalty_up",
+      "other"
+    ],
+    "compensation": "positive_DeltaMSE3/7_over_minus_DeltaP_only;zero_denominator_null_no_epsilon",
+    "anchors": [
+      0,
+      10,
+      20,
+      30,
+      40,
+      50
+    ],
+    "windows": [
+      [
+        0,
+        10
+      ],
+      [
+        10,
+        20
+      ],
+      [
+        20,
+        30
+      ],
+      [
+        30,
+        40
+      ],
+      [
+        40,
+        50
+      ]
+    ],
+    "path": "all50_updates;first_Armijo_acceptance;accepted_trial_equals_next_state;alpha_min_median_max;reject_counts;gradient_increases_and_nonzero_change_sign_switches",
+    "normalizations": "window_T_drop_over_head_T0;window_T_drop_over_total_Tdrop;Gend_over_Gstart;zero_null",
+    "groups": "12_source_loss_seed_x(all+4_goal_classes)=60;6_lambda1_source_seed_x2_MSEcohorts=12;retain_empty",
+    "numeric_signs": "strict_on_saved_float64_no_epsilon_relabel",
+    "statistics": "descriptive_equal_head_fold_values;no_pvalues_or_independent_fold_claim",
+    "limit": "aggregate_fit_only_no_identification_of_specific_frames_directions_or_physical_phase;no_checkpoint_or_training_decision_from_validation"
+  },
+  "execution": {
+    "status": "binding_required_before_source_CSV_SHA_or_data",
+    "device": "CPU",
+    "python": "3.10.22",
+    "environment": {
+      "CUDA_VISIBLE_DEVICES": "",
+      "PYTHONHASHSEED": "0",
+      "OMP_NUM_THREADS": "1",
+      "OPENBLAS_NUM_THREADS": "1",
+      "MKL_NUM_THREADS": "1"
+    },
+    "seconds_per_stage": 120,
+    "RSS_bytes_per_stage": 268435456,
+    "overall_seconds": 300,
+    "CSV_bytes_max": 16777216,
+    "absolute_tolerance": 1e-10,
+    "relative_tolerance": 0,
+    "technical_retries": 0,
+    "overwrite": false,
+    "stop": "any_lineage_projection_schema_role_coverage_conservation_path_or_audit_mismatch_keep_partial_no_relaxation"
+  },
+  "budget": {
+    "source_CSV_passes_per_stage": 4,
+    "rows_per_stage": {
+      "states": 1836,
+      "trials": 12285,
+      "endpoints": 72,
+      "heads": 36
+    },
+    "projected_cells_per_stage": {
+      "states": 44064,
+      "trials": 159705,
+      "endpoints": 1800,
+      "heads": 720
+    },
+    "lexical_cells_per_stage": 219609,
+    "total_source_CSV_passes": 8,
+    "total_source_rows": 28458,
+    "total_projected_cells": 412578,
+    "total_lexical_cells": 439218,
+    "source_SHA_per_stage": 8,
+    "total_source_SHA": 16,
+    "tables": {
+      "heads": 36,
+      "transitions": 1800,
+      "windows": 180,
+      "anchors": 216,
+      "strata": 72
+    },
+    "output_rows": 2304,
+    "seed_summaries": 12,
+    "source_loss_summaries": 4,
+    "new_training_forward_gradient_array_or_sealed_reads": 0
+  },
+  "inputs": {
+    "states": {
+      "path": "/tmp/libero-task7-fixed-representation-optimization-artifacts-20261109-v1/states.csv",
+      "sha256": "cd7e8e5a7fd8a56f076597df0dce3128ae51f14d4336e41b6565186ef6b57f89",
+      "rows": 1836,
+      "columns": [
+        "task",
+        "seed",
+        "arm",
+        "fold",
+        "mode",
+        "extra_updates",
+        "parameter_digest",
+        "n",
+        "fixed_other6_floor",
+        "component3_mse",
+        "penalty",
+        "trainable_objective",
+        "total_objective",
+        "base_l2",
+        "penalty_l2",
+        "total_l2",
+        "total_rms",
+        "total_linf",
+        "directional_derivative",
+        "anchor_objective",
+        "anchor_max_action_delta",
+        "anchor_harm_disagreements",
+        "branch_digest",
+        "clip_below_n",
+        "clip_low_tie_n",
+        "clip_inside_n",
+        "clip_high_tie_n",
+        "clip_above_n",
+        "hinge_negative_n",
+        "hinge_zero_n",
+        "hinge_positive_n"
+      ]
+    },
+    "trials": {
+      "path": "/tmp/libero-task7-fixed-representation-optimization-artifacts-20261109-v1/trials.csv",
+      "sha256": "6d342790a8489b638aa8b05a86a6de97b0a2a53ef9b32140fd5dad7321bbf7bc",
+      "rows": 12285,
+      "columns": [
+        "task",
+        "seed",
+        "arm",
+        "fold",
+        "mode",
+        "from_extra_updates",
+        "trial_index",
+        "alpha",
+        "trainable_objective",
+        "total_objective",
+        "slope",
+        "armijo_bound",
+        "accepted"
+      ]
+    },
+    "endpoints": {
+      "path": "/tmp/libero-task7-fixed-representation-optimization-artifacts-20261109-v1/endpoints.csv",
+      "sha256": "a8faf5ae75215881c6b76496f58c97c7f8d889be6ba43fe816fc7f84c067f149",
+      "rows": 72,
+      "columns": [
+        "task",
+        "seed",
+        "arm",
+        "fold",
+        "mode",
+        "condition",
+        "extra_updates",
+        "n",
+        "fixed_other6_floor",
+        "component3_mse",
+        "penalty",
+        "trainable_objective",
+        "total_objective",
+        "base_l2",
+        "penalty_l2",
+        "total_l2",
+        "total_rms",
+        "total_linf",
+        "directional_derivative",
+        "anchor_objective",
+        "anchor_max_action_delta",
+        "anchor_harm_disagreements",
+        "branch_digest",
+        "clip_below_n",
+        "clip_low_tie_n",
+        "clip_inside_n",
+        "clip_high_tie_n",
+        "clip_above_n",
+        "hinge_negative_n",
+        "hinge_zero_n",
+        "hinge_positive_n"
+      ]
+    },
+    "heads": {
+      "path": "/tmp/libero-task7-fixed-representation-optimization-artifacts-20261109-v1/heads.csv",
+      "sha256": "9634e5ef09b74e678f20add1bfe9e5fb7528deb973dcde3ff282a7daa2d16c56",
+      "rows": 36,
+      "columns": [
+        "task",
+        "seed",
+        "arm",
+        "fold",
+        "mode",
+        "extra_updates",
+        "trials",
+        "terminal_reason",
+        "initial_objective",
+        "final_objective",
+        "initial_trainable_objective",
+        "final_trainable_objective",
+        "initial_gradient_l2",
+        "final_gradient_l2",
+        "final_normalized_remaining_descent",
+        "trainable_ratio",
+        "gradient_ratio",
+        "objective_target_met",
+        "gradient_target_met",
+        "joint_cue",
+        "status"
+      ]
+    }
+  },
+  "projections": {
+    "states": [
+      "task",
+      "seed",
+      "arm",
+      "fold",
+      "mode",
+      "extra_updates",
+      "n",
+      "fixed_other6_floor",
+      "component3_mse",
+      "penalty",
+      "trainable_objective",
+      "total_objective",
+      "base_l2",
+      "penalty_l2",
+      "total_l2",
+      "directional_derivative",
+      "clip_below_n",
+      "clip_low_tie_n",
+      "clip_inside_n",
+      "clip_high_tie_n",
+      "clip_above_n",
+      "hinge_negative_n",
+      "hinge_zero_n",
+      "hinge_positive_n"
+    ],
+    "trials": [
+      "task",
+      "seed",
+      "arm",
+      "fold",
+      "mode",
+      "from_extra_updates",
+      "trial_index",
+      "alpha",
+      "trainable_objective",
+      "total_objective",
+      "slope",
+      "armijo_bound",
+      "accepted"
+    ],
+    "endpoints": [
+      "task",
+      "seed",
+      "arm",
+      "fold",
+      "mode",
+      "condition",
+      "extra_updates",
+      "n",
+      "fixed_other6_floor",
+      "component3_mse",
+      "penalty",
+      "trainable_objective",
+      "total_objective",
+      "base_l2",
+      "penalty_l2",
+      "total_l2",
+      "directional_derivative",
+      "clip_below_n",
+      "clip_low_tie_n",
+      "clip_inside_n",
+      "clip_high_tie_n",
+      "clip_above_n",
+      "hinge_negative_n",
+      "hinge_zero_n",
+      "hinge_positive_n"
+    ],
+    "heads": [
+      "task",
+      "seed",
+      "arm",
+      "fold",
+      "mode",
+      "extra_updates",
+      "trials",
+      "terminal_reason",
+      "initial_objective",
+      "final_objective",
+      "initial_trainable_objective",
+      "final_trainable_objective",
+      "initial_gradient_l2",
+      "final_gradient_l2",
+      "trainable_ratio",
+      "gradient_ratio",
+      "objective_target_met",
+      "gradient_target_met",
+      "joint_cue",
+      "status"
+    ]
+  },
+  "head_identities": [
+    {
+      "task": 7,
+      "seed": 20261106,
+      "arm": "A_original",
+      "fold": 0,
+      "mode": "uniform_affine"
+    },
+    {
+      "task": 7,
+      "seed": 20261106,
+      "arm": "A_original",
+      "fold": 0,
+      "mode": "harm_protected_affine"
+    },
+    {
+      "task": 7,
+      "seed": 20261106,
+      "arm": "A_original",
+      "fold": 1,
+      "mode": "uniform_affine"
+    },
+    {
+      "task": 7,
+      "seed": 20261106,
+      "arm": "A_original",
+      "fold": 1,
+      "mode": "harm_protected_affine"
+    },
+    {
+      "task": 7,
+      "seed": 20261106,
+      "arm": "A_original",
+      "fold": 2,
+      "mode": "uniform_affine"
+    },
+    {
+      "task": 7,
+      "seed": 20261106,
+      "arm": "A_original",
+      "fold": 2,
+      "mode": "harm_protected_affine"
+    },
+    {
+      "task": 7,
+      "seed": 20261106,
+      "arm": "B_fomaml",
+      "fold": 0,
+      "mode": "uniform_affine"
+    },
+    {
+      "task": 7,
+      "seed": 20261106,
+      "arm": "B_fomaml",
+      "fold": 0,
+      "mode": "harm_protected_affine"
+    },
+    {
+      "task": 7,
+      "seed": 20261106,
+      "arm": "B_fomaml",
+      "fold": 1,
+      "mode": "uniform_affine"
+    },
+    {
+      "task": 7,
+      "seed": 20261106,
+      "arm": "B_fomaml",
+      "fold": 1,
+      "mode": "harm_protected_affine"
+    },
+    {
+      "task": 7,
+      "seed": 20261106,
+      "arm": "B_fomaml",
+      "fold": 2,
+      "mode": "uniform_affine"
+    },
+    {
+      "task": 7,
+      "seed": 20261106,
+      "arm": "B_fomaml",
+      "fold": 2,
+      "mode": "harm_protected_affine"
+    },
+    {
+      "task": 7,
+      "seed": 20261107,
+      "arm": "A_original",
+      "fold": 0,
+      "mode": "uniform_affine"
+    },
+    {
+      "task": 7,
+      "seed": 20261107,
+      "arm": "A_original",
+      "fold": 0,
+      "mode": "harm_protected_affine"
+    },
+    {
+      "task": 7,
+      "seed": 20261107,
+      "arm": "A_original",
+      "fold": 1,
+      "mode": "uniform_affine"
+    },
+    {
+      "task": 7,
+      "seed": 20261107,
+      "arm": "A_original",
+      "fold": 1,
+      "mode": "harm_protected_affine"
+    },
+    {
+      "task": 7,
+      "seed": 20261107,
+      "arm": "A_original",
+      "fold": 2,
+      "mode": "uniform_affine"
+    },
+    {
+      "task": 7,
+      "seed": 20261107,
+      "arm": "A_original",
+      "fold": 2,
+      "mode": "harm_protected_affine"
+    },
+    {
+      "task": 7,
+      "seed": 20261107,
+      "arm": "B_fomaml",
+      "fold": 0,
+      "mode": "uniform_affine"
+    },
+    {
+      "task": 7,
+      "seed": 20261107,
+      "arm": "B_fomaml",
+      "fold": 0,
+      "mode": "harm_protected_affine"
+    },
+    {
+      "task": 7,
+      "seed": 20261107,
+      "arm": "B_fomaml",
+      "fold": 1,
+      "mode": "uniform_affine"
+    },
+    {
+      "task": 7,
+      "seed": 20261107,
+      "arm": "B_fomaml",
+      "fold": 1,
+      "mode": "harm_protected_affine"
+    },
+    {
+      "task": 7,
+      "seed": 20261107,
+      "arm": "B_fomaml",
+      "fold": 2,
+      "mode": "uniform_affine"
+    },
+    {
+      "task": 7,
+      "seed": 20261107,
+      "arm": "B_fomaml",
+      "fold": 2,
+      "mode": "harm_protected_affine"
+    },
+    {
+      "task": 7,
+      "seed": 20261108,
+      "arm": "A_original",
+      "fold": 0,
+      "mode": "uniform_affine"
+    },
+    {
+      "task": 7,
+      "seed": 20261108,
+      "arm": "A_original",
+      "fold": 0,
+      "mode": "harm_protected_affine"
+    },
+    {
+      "task": 7,
+      "seed": 20261108,
+      "arm": "A_original",
+      "fold": 1,
+      "mode": "uniform_affine"
+    },
+    {
+      "task": 7,
+      "seed": 20261108,
+      "arm": "A_original",
+      "fold": 1,
+      "mode": "harm_protected_affine"
+    },
+    {
+      "task": 7,
+      "seed": 20261108,
+      "arm": "A_original",
+      "fold": 2,
+      "mode": "uniform_affine"
+    },
+    {
+      "task": 7,
+      "seed": 20261108,
+      "arm": "A_original",
+      "fold": 2,
+      "mode": "harm_protected_affine"
+    },
+    {
+      "task": 7,
+      "seed": 20261108,
+      "arm": "B_fomaml",
+      "fold": 0,
+      "mode": "uniform_affine"
+    },
+    {
+      "task": 7,
+      "seed": 20261108,
+      "arm": "B_fomaml",
+      "fold": 0,
+      "mode": "harm_protected_affine"
+    },
+    {
+      "task": 7,
+      "seed": 20261108,
+      "arm": "B_fomaml",
+      "fold": 1,
+      "mode": "uniform_affine"
+    },
+    {
+      "task": 7,
+      "seed": 20261108,
+      "arm": "B_fomaml",
+      "fold": 1,
+      "mode": "harm_protected_affine"
+    },
+    {
+      "task": 7,
+      "seed": 20261108,
+      "arm": "B_fomaml",
+      "fold": 2,
+      "mode": "uniform_affine"
+    },
+    {
+      "task": 7,
+      "seed": 20261108,
+      "arm": "B_fomaml",
+      "fold": 2,
+      "mode": "harm_protected_affine"
+    }
+  ],
+  "fit_rows": {
+    "0": 2782,
+    "1": 2817,
+    "2": 2777
+  },
+  "expected_counts": {
+    "heads": 36,
+    "lambda1_mse_up": 11,
+    "nonjoint": 21,
+    "goal_classes": {
+      "both": 15,
+      "gradient_only": 10,
+      "objective_only": 2,
+      "neither": 9
+    }
+  },
+  "code": {
+    "metadata": {
+      "path": "/home/zl202621/project/KECRL/experiments/libero_task7_optimization_path_decomposition_protocol.py",
+      "sha256": "dab64da11124eacb848ce3f7d59a471489a72495839f83593d3ab24c24dc7674"
+    },
+    "tests": {
+      "path": "/home/zl202621/project/KECRL/tests/test_libero_task7_optimization_path_decomposition.py",
+      "sha256": "22d51fbe1a47b2666bc9e92fe60bc0af4d2a5cb9980da2b604a03a46c219180a"
+    }
+  },
+  "plan": {
+    "path": "/home/zl202621/project/KECRL/docs/libero-task7-optimization-path-decomposition-plan-2026-11-09.md",
+    "sha256": "219acf586022ca4d90e708be35a3a0f691f7eaffd1426b9b5f823b04046fd2c4"
+  },
+  "future_files": {
+    "analysis": "/home/zl202621/project/KECRL/experiments/analyze_libero_task7_optimization_path_decomposition.py",
+    "audit": "/home/zl202621/project/KECRL/experiments/audit_libero_task7_optimization_path_decomposition.py",
+    "guard": "/home/zl202621/project/KECRL/experiments/libero_task7_optimization_path_decomposition_access.py",
+    "metadata": "/home/zl202621/project/KECRL/experiments/libero_task7_optimization_path_decomposition_protocol.py",
+    "tests": "/home/zl202621/project/KECRL/tests/test_libero_task7_optimization_path_decomposition.py",
+    "plan": "/home/zl202621/project/KECRL/docs/libero-task7-optimization-path-decomposition-plan-2026-11-09.md"
+  },
+  "output": "/tmp/libero-task7-optimization-path-decomposition-20261109-v1.json",
+  "artifacts": "/tmp/libero-task7-optimization-path-decomposition-artifacts-20261109-v1"
+}

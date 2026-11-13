@@ -1,0 +1,470 @@
+{
+  "kind": "task7_saved_terminal_gradient_linear_geometry",
+  "version": 1,
+  "formal_result": false,
+  "status": "scientific_freeze_only_execution_binding_required",
+  "parents": {
+    "science": {
+      "path": "/home/zl202621/project/KECRL/configs/libero-task7-m-priority-direction-diagnostic_v1.json",
+      "sha256": "6f13044f54f06e19fcd745625f368daf6104dd1d2a88d6bab62a82e4b35b402f"
+    },
+    "binding": {
+      "path": "/home/zl202621/project/KECRL/configs/libero-task7-m-priority-direction-execution-binding_v1.json",
+      "sha256": "33ccca6b67b3eb569aafdf1308707d010bf2a8b420af0f70cdca7d0f467647fb"
+    },
+    "result": {
+      "path": "/tmp/libero-task7-m-priority-direction-20261111-v1.json",
+      "sha256": "8d869c68ed5543ce6794f5eb0e5bf6024a948aa18781f9be8cbd4c3202d930fc"
+    },
+    "completion": {
+      "path": "/tmp/libero-task7-m-priority-direction-artifacts-20261111-v1/completion.json",
+      "sha256": "9e2180fb5b2755e2f1541b4da5710a8df944c233d52bcfea04893459a1cc965b"
+    },
+    "process": {
+      "path": "/tmp/libero-task7-m-priority-direction-20261111-v1-process.json",
+      "sha256": "6bedaabb41f0bcaf3437080127e51023079acf7a42faecd3bba1be28c4607aab"
+    },
+    "report": {
+      "path": "/home/zl202621/project/KECRL/docs/libero-task7-m-priority-direction-results-2026-11-11.md",
+      "sha256": "21a9d17f60fff49ee2c51d791c651c11bde27fcd28ee0284aea8ec10f73c1ac1"
+    }
+  },
+  "inputs": {
+    "P": {
+      "path": "/tmp/libero-task7-m-priority-direction-artifacts-20261111-v1/primary-result.json",
+      "sha256": "e3e1554cde2128fa07afa7723f244c5c32f79cea9aacbfe82d4b138ee7e651b7"
+    },
+    "U": {
+      "path": "/tmp/libero-task7-m-priority-direction-artifacts-20261111-v1/independent-audit.json",
+      "sha256": "f70838eec9c2498b20b585c74bae4201114ecb83b0a26b8f1214b53d21a59db5"
+    }
+  },
+  "identities": [
+    {
+      "task": 7,
+      "seed": 20261106,
+      "arm": "A_original",
+      "fold": 0,
+      "mode": "harm_protected_affine",
+      "cohort": "full50",
+      "prior_control_updates": 50,
+      "prior_control_stop": "update_cap"
+    },
+    {
+      "task": 7,
+      "seed": 20261106,
+      "arm": "A_original",
+      "fold": 1,
+      "mode": "harm_protected_affine",
+      "cohort": "short",
+      "prior_control_updates": 7,
+      "prior_control_stop": "line_search_exhausted"
+    },
+    {
+      "task": 7,
+      "seed": 20261106,
+      "arm": "A_original",
+      "fold": 2,
+      "mode": "harm_protected_affine",
+      "cohort": "zero",
+      "prior_control_updates": 0,
+      "prior_control_stop": "line_search_exhausted"
+    },
+    {
+      "task": 7,
+      "seed": 20261106,
+      "arm": "B_fomaml",
+      "fold": 0,
+      "mode": "harm_protected_affine",
+      "cohort": "short",
+      "prior_control_updates": 7,
+      "prior_control_stop": "line_search_exhausted"
+    },
+    {
+      "task": 7,
+      "seed": 20261106,
+      "arm": "B_fomaml",
+      "fold": 1,
+      "mode": "harm_protected_affine",
+      "cohort": "zero",
+      "prior_control_updates": 0,
+      "prior_control_stop": "line_search_exhausted"
+    },
+    {
+      "task": 7,
+      "seed": 20261106,
+      "arm": "B_fomaml",
+      "fold": 2,
+      "mode": "harm_protected_affine",
+      "cohort": "zero",
+      "prior_control_updates": 0,
+      "prior_control_stop": "line_search_exhausted"
+    },
+    {
+      "task": 7,
+      "seed": 20261107,
+      "arm": "A_original",
+      "fold": 0,
+      "mode": "harm_protected_affine",
+      "cohort": "full50",
+      "prior_control_updates": 50,
+      "prior_control_stop": "update_cap"
+    },
+    {
+      "task": 7,
+      "seed": 20261107,
+      "arm": "A_original",
+      "fold": 1,
+      "mode": "harm_protected_affine",
+      "cohort": "short",
+      "prior_control_updates": 8,
+      "prior_control_stop": "line_search_exhausted"
+    },
+    {
+      "task": 7,
+      "seed": 20261107,
+      "arm": "A_original",
+      "fold": 2,
+      "mode": "harm_protected_affine",
+      "cohort": "full50",
+      "prior_control_updates": 50,
+      "prior_control_stop": "update_cap"
+    },
+    {
+      "task": 7,
+      "seed": 20261107,
+      "arm": "B_fomaml",
+      "fold": 0,
+      "mode": "harm_protected_affine",
+      "cohort": "full50",
+      "prior_control_updates": 50,
+      "prior_control_stop": "update_cap"
+    },
+    {
+      "task": 7,
+      "seed": 20261107,
+      "arm": "B_fomaml",
+      "fold": 1,
+      "mode": "harm_protected_affine",
+      "cohort": "zero",
+      "prior_control_updates": 0,
+      "prior_control_stop": "line_search_exhausted"
+    },
+    {
+      "task": 7,
+      "seed": 20261107,
+      "arm": "B_fomaml",
+      "fold": 2,
+      "mode": "harm_protected_affine",
+      "cohort": "full50",
+      "prior_control_updates": 50,
+      "prior_control_stop": "update_cap"
+    },
+    {
+      "task": 7,
+      "seed": 20261108,
+      "arm": "A_original",
+      "fold": 0,
+      "mode": "harm_protected_affine",
+      "cohort": "short",
+      "prior_control_updates": 16,
+      "prior_control_stop": "line_search_exhausted"
+    },
+    {
+      "task": 7,
+      "seed": 20261108,
+      "arm": "A_original",
+      "fold": 1,
+      "mode": "harm_protected_affine",
+      "cohort": "full50",
+      "prior_control_updates": 50,
+      "prior_control_stop": "update_cap"
+    },
+    {
+      "task": 7,
+      "seed": 20261108,
+      "arm": "A_original",
+      "fold": 2,
+      "mode": "harm_protected_affine",
+      "cohort": "zero",
+      "prior_control_updates": 0,
+      "prior_control_stop": "line_search_exhausted"
+    },
+    {
+      "task": 7,
+      "seed": 20261108,
+      "arm": "B_fomaml",
+      "fold": 0,
+      "mode": "harm_protected_affine",
+      "cohort": "short",
+      "prior_control_updates": 10,
+      "prior_control_stop": "line_search_exhausted"
+    },
+    {
+      "task": 7,
+      "seed": 20261108,
+      "arm": "B_fomaml",
+      "fold": 1,
+      "mode": "harm_protected_affine",
+      "cohort": "full50",
+      "prior_control_updates": 50,
+      "prior_control_stop": "update_cap"
+    },
+    {
+      "task": 7,
+      "seed": 20261108,
+      "arm": "B_fomaml",
+      "fold": 2,
+      "mode": "harm_protected_affine",
+      "cohort": "zero",
+      "prior_control_updates": 0,
+      "prior_control_stop": "line_search_exhausted"
+    }
+  ],
+  "source_optimization_arms": [
+    "stepwise_M_nonincrease_guarded_margin",
+    "norm_matched_M_priority_with_step_M_gate"
+  ],
+  "zero_ids": [
+    [
+      "A_original",
+      20261106,
+      2
+    ],
+    [
+      "B_fomaml",
+      20261106,
+      1
+    ],
+    [
+      "B_fomaml",
+      20261106,
+      2
+    ],
+    [
+      "B_fomaml",
+      20261107,
+      1
+    ],
+    [
+      "A_original",
+      20261108,
+      2
+    ],
+    [
+      "B_fomaml",
+      20261108,
+      2
+    ]
+  ],
+  "selection": {
+    "terminal_condition": "norm_matched_M_priority_with_step_M_gate_final",
+    "control_zero_condition": "saved500",
+    "expected_heads": 36,
+    "expected_endpoints": 54,
+    "candidate_updates": 33,
+    "candidate_trials": 266,
+    "control_updates": 900,
+    "control_trials": 7691,
+    "terminal_stop": "non_descent_selected_direction",
+    "zero_subset": "fixed_outcome_stratum_6;not_new_generalization"
+  },
+  "fields": {
+    "head_headers": [
+      "task",
+      "seed",
+      "arm",
+      "fold",
+      "mode",
+      "optimization_arm"
+    ],
+    "endpoint_headers": [
+      "task",
+      "seed",
+      "arm",
+      "fold",
+      "mode",
+      "condition"
+    ],
+    "heads": [
+      "task",
+      "seed",
+      "arm",
+      "fold",
+      "mode",
+      "optimization_arm",
+      "extra_updates",
+      "trials",
+      "terminal_reason",
+      "accepted_MSE_step_increases"
+    ],
+    "point_scalars": [
+      "task",
+      "seed",
+      "arm",
+      "fold",
+      "mode",
+      "condition",
+      "extra_updates",
+      "n",
+      "component3_mse",
+      "penalty",
+      "trainable_objective",
+      "total_l2",
+      "base_l2",
+      "penalty_l2",
+      "direction_total_reference_norm",
+      "direction_base_reference_norm",
+      "chosen_direction_norm",
+      "selected_T_slope",
+      "selected_MSE_slope",
+      "directional_derivative",
+      "exact_MSE_slope",
+      "exact_penalty_slope",
+      "required_M_slope_bound",
+      "required_margin_fraction",
+      "selected_joint",
+      "selected_margin_met",
+      "exact_margin_met",
+      "direction_status",
+      "direction_construction_status",
+      "branch_digest",
+      "clip_below_n",
+      "clip_low_tie_n",
+      "clip_inside_n",
+      "clip_high_tie_n",
+      "clip_above_n",
+      "hinge_negative_n",
+      "hinge_zero_n",
+      "hinge_positive_n"
+    ],
+    "point_vectors": [
+      "total_gradient",
+      "base_gradient",
+      "penalty_gradient",
+      "direction"
+    ]
+  },
+  "scope": {
+    "original_Policy_updates": 500,
+    "future_stabilization_steps": 5,
+    "loss_lambda": 1,
+    "source": "own20_fit_support0..29_tge1_encoder_seen_all30",
+    "original_control_stopping_and_four_reference_cues_unchanged": true,
+    "extra_original_archives_parameters_inputs_features_targets_or_trials_semantic_reads": 0,
+    "SPT_Knowledge_Module_changes": false
+  },
+  "geometry": {
+    "radius": "saved_direction_total_reference_norm_not_renormalized",
+    "M_bound": "saved_required_M_slope_bound_not_replaced_by_ideal_rho",
+    "linear_model": "G=stored_total_gradient;Gb=stored_base_gradient;norm_d<=r;7Gb_dot_d<=B;G_dot_d<0",
+    "exact_arithmetic": "binary64_as_exact_rationals;no_sqrt_or_epsilon_or_cosine_clamp_in_feasibility",
+    "proof": "A=G.G;B2=Gb.Gb;z=G.Gb;m=B/7;C=r^2*B2-m^2;D=r^2*(A*B2-z^2)-m^2*A;C>=0_and_A>0_and_(z>0_or_D>0)",
+    "raw_readout": "four_norms_and_six_dots_per_point;cosines_G_Gb_G_Gp_Gb_Gp;raw_out_of_range_flag_no_clamp",
+    "conservation": "G~Gb+Gp_per_coordinate_abs1e-10;keep_stored_G",
+    "branch": "counts_no_clip_ties_and_no_hinge_zero_is_sufficient_smooth_label;otherwise_alternative_exact_unknown",
+    "never_claim": "linear_feasible_does_not_verify_new_direction_exact_or_fixed_grid_Armijo_or_qualification"
+  },
+  "audit": {
+    "primary": "stdlib_Fraction_exact_capacity_Gram_and_gap_signs",
+    "independent": "own_common_power_of_two_integer_coordinates;no_primary_math_import",
+    "local_float_absolute_tolerance": 1e-10,
+    "relative_tolerance": 0,
+    "exact_signs_and_IDs_tolerance": 0,
+    "P_U": "classifications_and_branch_disagreements_reported;not_same_parameter_gate_across_independent_paths",
+    "zero_receipt": "3gradient_bits_and_branch_equal;zero_update_same_start_from_parent_validated_lineage;cached_control_selected_exact_certificates_only"
+  },
+  "budget": {
+    "stages": 2,
+    "per_stage_source_JSON_passes": 2,
+    "per_stage_source_SHA": 4,
+    "total_source_JSON_passes": 4,
+    "total_source_SHA": 8,
+    "per_JSON_rows": {
+      "head_headers": 36,
+      "endpoint_headers": 54,
+      "heads": 36,
+      "terminal_points": 18,
+      "zero_saved500_points": 6
+    },
+    "per_stage_header_values": 1080,
+    "per_stage_scalar_body_values": 2544,
+    "per_stage_vector_coordinates": 49344,
+    "per_stage_projection_values": 52968,
+    "total_projection_values": 105936,
+    "points_per_stage": 48,
+    "total_points": 96,
+    "vector_dimension": 257,
+    "per_stage_float_norms": 192,
+    "per_stage_float_dots": 288,
+    "per_stage_float_dot_coordinate_products": 74016,
+    "per_stage_gradient_sum_coordinate_checks": 12336,
+    "per_stage_zero_gradient_coordinate_comparisons": 9252,
+    "per_stage_exact_inner_product_reductions": 144,
+    "per_stage_exact_coordinate_products": 37008,
+    "total_float_norms": 384,
+    "total_float_dots": 576,
+    "total_exact_inner_product_reductions": 288,
+    "total_exact_coordinate_products": 74016,
+    "primary_result_audit_JSON_reads": 1,
+    "primary_result_audit_SHA": 2,
+    "technical_retries": 0,
+    "output_rows": {
+      "terminal_geometry": 36,
+      "zero_same_point_control": 12,
+      "source_seed": 12,
+      "source": 4,
+      "cross_engine": 18
+    },
+    "source_NPZ_CSV_HDF5_checkpoint_private_or_sealed_reads_including_SHA": 0,
+    "new_forward_gradient_autograd_optimizer_trial_environment_calls": 0,
+    "new_direction_vectors": 0
+  },
+  "execution": {
+    "device": "CPU",
+    "python": "3.10.22",
+    "seconds_per_stage": 120,
+    "overall_seconds": 300,
+    "RSS_bytes": 536870912,
+    "input_JSON_bytes_max": 201326592,
+    "output_JSON_bytes_max": 4194304,
+    "environment": {
+      "CUDA_VISIBLE_DEVICES": "",
+      "PYTHONHASHSEED": "0",
+      "OMP_NUM_THREADS": "1",
+      "OPENBLAS_NUM_THREADS": "1",
+      "MKL_NUM_THREADS": "1"
+    },
+    "technical_stop": "source_provenance_fields_shapes_counts_nonfinite_or_conservation_or_independent_audit_mismatch;retain_partial_no_retry"
+  },
+  "code": {
+    "metadata": {
+      "path": "/home/zl202621/project/KECRL/experiments/libero_task7_terminal_gradient_geometry_protocol.py",
+      "sha256": "554e9fcb29c2d828d479a701e0b21a743df771076ea40c6acf604d197d9994cb"
+    },
+    "tests": {
+      "path": "/home/zl202621/project/KECRL/tests/test_libero_task7_terminal_gradient_geometry_protocol.py",
+      "sha256": "147fb82bf63c0a3da86ffe5c6db529ccbbefec17b43ff6fdcb39f0292e665e8e"
+    }
+  },
+  "plan": {
+    "path": "/home/zl202621/project/KECRL/docs/libero-task7-terminal-gradient-geometry-plan-2026-11-11.md",
+    "sha256": "1eb23881209e17511ce41374f16e0f5cb5638d1620eec3ba1f3ce027e2b749c2"
+  },
+  "future_files": {
+    "primary": "/home/zl202621/project/KECRL/experiments/analyze_libero_task7_terminal_gradient_geometry.py",
+    "guard": "/home/zl202621/project/KECRL/experiments/libero_task7_terminal_gradient_geometry_access.py",
+    "audit": "/home/zl202621/project/KECRL/experiments/audit_libero_task7_terminal_gradient_geometry.py",
+    "runtime_tests": "/home/zl202621/project/KECRL/tests/test_libero_task7_terminal_gradient_geometry.py"
+  },
+  "future_contract": "/home/zl202621/project/KECRL/docs/libero-task7-terminal-gradient-geometry-execution-contract-2026-11-11.md",
+  "output": "/tmp/libero-task7-terminal-gradient-geometry-20261111-v1/analysis.json",
+  "audit_output": "/tmp/libero-task7-terminal-gradient-geometry-20261111-v1/independent-audit.json",
+  "freeze_access": {
+    "source_numeric_JSON_reads_or_SHA": 0,
+    "source_NPZ_CSV_checkpoint_HDF5_reads_or_SHA": 0,
+    "research_gradient_geometry_or_directions": 0,
+    "metadata_and_human_vectors_only": true,
+    "execution_binding_present": false
+  }
+}

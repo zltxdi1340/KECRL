@@ -1,0 +1,797 @@
+{
+  "schema_version": 1,
+  "status": "science_frozen_not_execution_bound",
+  "formal_result": false,
+  "diagnostic_only": true,
+  "design": {
+    "scope": {
+      "tasks": [
+        0,
+        1,
+        3,
+        4,
+        7
+      ],
+      "seeds": [
+        20261106,
+        20261107,
+        20261108
+      ],
+      "arms": [
+        "A_original",
+        "B_fomaml"
+      ],
+      "initial_role": "candidate_nonregression",
+      "global_initial_indices": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "selection_rule": "all_source_tasks; first_three_G_seed_ids; first_four_candidate_indices",
+      "known_outcomes": true,
+      "selection_uses_performance_ranking": false,
+      "cohort": "new_fresh_adapter_prefixes; not a replay of G or validation36"
+    },
+    "fixed_policy": {
+      "checkpoint_update": 500,
+      "new_training_updates": 0,
+      "loss": "uniform_seven_dimensional_valid_step_masked_action_MSE",
+      "policy_observation": [
+        "agentview_rgb",
+        "eye_in_hand_rgb",
+        "joint_states",
+        "gripper_states"
+      ],
+      "family": "CNN_only",
+      "deterministic": true,
+      "eval_mode": true,
+      "dtype": "float32",
+      "TF32": false,
+      "new_loss_augmentation_or_history": false
+    },
+    "capture": {
+      "environment_seed": 20261022,
+      "stabilization_steps": 5,
+      "stabilization_action": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "maximum_policy_actions_per_prefix": 150,
+      "native_policy_horizon": 300,
+      "native_horizon_including_stabilization": 305,
+      "control_frequency_hz": 20,
+      "physics_timestep_seconds": 0.002,
+      "physics_substeps_per_control": 25,
+      "boundary_dt_tolerance_seconds": 1e-09,
+      "lifecycle": "fresh_adapter_per_episode; no prior_scene_history",
+      "adapter_construction": "inject_native_environment_and_single_authorized_row; never_default_bank_loader",
+      "episode_python_numpy_torch_seed_before_adapter": 20261022,
+      "order": "task_then_seed_then_arm_then_ascending_global_initial_index",
+      "native_reset_attempts_per_episode": 1,
+      "automatic_retries": 0,
+      "cutoff_reason": "diagnostic_prefix_limit_not_environment_timeout",
+      "stop_at_native_success": true,
+      "hidden_state_reset_per_episode": true
+    },
+    "observer": {
+      "classification": "privileged_evaluation_only_geometry_sidecar",
+      "native_simulation_writes_or_extra_forward_or_step": 0,
+      "shadow_method": "one_independent_MjData_per_episode; mj_fwdPosition_once_per_saved_boundary",
+      "shadow_copied_fields": [
+        "qpos",
+        "qvel",
+        "time",
+        "mocap_pos",
+        "mocap_quat",
+        "eq_active"
+      ],
+      "raw_private_state_serialization": false,
+      "positions": "world_metres; gripper_grip_site and bowl/plate_root_body_origins",
+      "rotations": "world_3x3_row_major_matrices",
+      "source_object": "akita_black_bowl_1",
+      "target_object": "plate_1",
+      "eef_resolution": "robot0.gripper.important_sites[grip_site]",
+      "finger_resolution": "important_geoms[left_finger] and [right_finger], including pads",
+      "object_resolution": "objects_dict[name].root_body and contact_geoms; validate against obj_body_id",
+      "contact_records": "shadow_collision_contacts_involving_bowl_only; geom_names_ids,dist_m,pos_world",
+      "contacts_per_snapshot_cap": 256,
+      "contact_overflow": "stop_not_truncate",
+      "touch_proxy": "shadow_contact_distance_le_zero; retain_positive_margin_records_separately",
+      "bilateral_touch_proxy": "both_finger_groups_touch_bowl_at_same_saved_boundary",
+      "force_or_stable_grasp_claim": false,
+      "site_check_contact_used": false,
+      "policy_receives_geometry": false,
+      "original_RGB_or_observation_recomputed": false,
+      "RGB_archived": false,
+      "all_native_buffers_unchanged_after_observer": true
+    },
+    "analysis": {
+      "state_zero": "post_five_step_stabilization",
+      "action_k_pre_state": "k_minus_1",
+      "action_k_post_state": "k",
+      "close_onset_time": "state[k_minus_1].sim_time",
+      "touch_time": "state[j].sim_time; state0_touch_is_preexisting",
+      "close_to_touch_seconds": "touch_time_minus_close_onset_time; not_j_minus_k",
+      "pre_close_distance_deltas": "d[t]-d[t-1], t=max(1,k-5)..k-1",
+      "first_close": "action[6]>0",
+      "neutral": "separate_sign_zero",
+      "first_multi_close": "first_observed_run_of_at_least_two_positive_actions; retrospective_start",
+      "first_open": "first_negative_after_first_close",
+      "event_window_offsets": [
+        -5,
+        -4,
+        -3,
+        -2,
+        -1,
+        0,
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "primary": [
+        "pre_close_eef_to_bowl_xyz_xy_signed_z",
+        "first_close_to_first_bilateral_touch_proxy_time_order_with_censoring"
+      ],
+      "secondary": [
+        "pre_close_five_transition_distance_changes",
+        "bowl_height_change_from_reset",
+        "bowl_to_plate_xyz_xy",
+        "close_runs_and_open_after_close_with_geometry"
+      ],
+      "paired_alignment": "same_absolute_state/action_index_within_each_event_anchor",
+      "retention": "all_60_pairs; all_15_task_seed_groups; missing_and_prefix_terminal_censoring",
+      "distance_phase_threshold_or_grasp_qualification": null,
+      "forward_fill_or_adaptive_window_extension": false,
+      "significance_causal_or_unseen_generalization_claims": false,
+      "full_300_step_success_rate_estimated": false,
+      "loss_checkpoint_seed_or_method_selection": false
+    },
+    "budget": {
+      "models": 30,
+      "paired_scenes": 60,
+      "episodes": 120,
+      "checkpoint_deserializations_max": 30,
+      "adapter_creations_max": 120,
+      "native_reset_attempts_max": 120,
+      "policy_forwards_and_actions_max": 18000,
+      "zero_actions_max": 600,
+      "native_control_steps_max": 18600,
+      "native_physics_steps_max": 465000,
+      "public_rows_max": 18120,
+      "shadow_allocations_max": 120,
+      "shadow_position_forwards_max": 18120,
+      "geometry_rows_max": 18120,
+      "saved_bowl_contact_records_max": 4638720,
+      "initial_containers_max": 5,
+      "numeric_initial_rows_max": 20,
+      "active_wall_seconds_max": 3600,
+      "new_optimizer_updates": 0,
+      "HDF5_reads": 0,
+      "old_raw_trajectory_reads": 0,
+      "new_RGB_archives": 0,
+      "validation_heldout_qualification_reserved_or_final_payload_reads": 0,
+      "technical_rerun_or_replacement_episodes": 0
+    },
+    "gates": {
+      "technical": [
+        "separate_execution_code_and_independent_audit_binding_before_payload",
+        "all30_checkpoint_file_and_weight_hashes_match_before_first_environment",
+        "bounded_reset_without_legacy_unlimited_retry",
+        "paired_reset_public_digest_and_geometry_exact",
+        "native_state_and_policy_inputs_unchanged_by_shadow_observer",
+        "resolved_site_body_and_disjoint_finger_object_geom_groups",
+        "finite_coordinates_rotations_and_time_alignment",
+        "complete_pair_accounting_and_attempt_completed_resource_ledger"
+      ],
+      "technical_failure": "retain_partial_and_failure; stop; no_retry_or_new_budget",
+      "no_close_or_touch_before_prefix_end": "right_censored_not_invalid_or_full_episode_failure",
+      "performance_stop_or_accept_threshold": null,
+      "G_decision": "failed_unchanged; H_sealed",
+      "SPT_Knowledge_or_Module_updates": false
+    },
+    "runtime": {
+      "conda_environment": "libero-kecrl",
+      "python": "3.10.22",
+      "torch": "2.4.1+cu124",
+      "robosuite": "1.4.0",
+      "mujoco": "3.2.3",
+      "libero_revision": "8f1084e3132a39270c3a13ebe37270a43ece2a01",
+      "device": "CUDA_float32; physical_GPU_UUID_and_occupancy_bound_before_execution",
+      "silent_device_fallback": false,
+      "archive_outside_repository": true
+    },
+    "freeze_boundary": {
+      "scientific_design_frozen": true,
+      "execution_binding_complete": false,
+      "capture_implementation_present_at_freeze": false,
+      "capture_authorized_by_this_preflight": false,
+      "new_policy_optimizer_environment_initial_private_or_shadow_calls_this_freeze": 0
+    }
+  },
+  "metadata_inputs": {
+    "result": {
+      "path": "/tmp/libero-formal-G-result-20261105-v2.json",
+      "sha256": "0e549dbebfafd8df36e3cea9bd0c0d2a64b9102965c8d2d43a07a27f060fdf99"
+    },
+    "training": {
+      "path": "/tmp/libero-formal-G-artifacts-20261105-v2/training.json",
+      "sha256": "b92b5447fd3d9c8d66141be2919a3954dd360d42a5da12322055ba20cf9bd291"
+    },
+    "training_audit": {
+      "path": "/tmp/libero-formal-G-artifacts-20261105-v2/training-audit.json",
+      "sha256": "3be389f9c39eadee180646a0e86d1ea215a6b83b5d48156dfd82df568b322bb0"
+    },
+    "completion": {
+      "path": "/tmp/libero-formal-G-artifacts-20261105-v2/completion.json",
+      "sha256": "04f62f19fbe92f6d657c1f8393d775c3dfe03d54eb6b80aad4bc79e44cea5ad1"
+    },
+    "complete_audit": {
+      "path": "/tmp/libero-formal-G-artifacts-20261105-v2/complete-audit.json",
+      "sha256": "44674a1ca5a5f16f50b05b7f9e817307b797803c532eb0fb406dcd6c8843d4bd"
+    },
+    "manifest": {
+      "path": "/home/zl202621/project/KECRL/configs/libero-formal-G-execution-manifest_v2.json",
+      "sha256": "1956451aca41a06a53c57dfca5e3c62bc650c644ed3a32722a90b81a06d655c3"
+    },
+    "family": {
+      "path": "/home/zl202621/project/KECRL/configs/libero_spatial_skill_family_candidate_v1.json",
+      "sha256": "52053991a34b977aa3c9e3d29e2f585e29dcac1c7fd4f817acfeb6445fac3580"
+    }
+  },
+  "source_references": {
+    "prior_science": {
+      "path": "/home/zl202621/project/KECRL/configs/libero-formal-transfer-protocol_v2.json",
+      "sha256": "74d28d96f5e6dcc29e48baa37ece117706c82278095f211e11829506a70f1440"
+    },
+    "prior_execution_binding": {
+      "path": "/home/zl202621/project/KECRL/configs/libero-formal-G-execution-binding_v2.json",
+      "sha256": "d4a4461e44a66278f008995d3f2a970a7c27563bc011a51f7a950e80c62bcf5a"
+    },
+    "prior_protocol": {
+      "path": "/home/zl202621/project/KECRL/experiments/libero_formal_transfer_protocol_v2.py",
+      "sha256": "6cdb9e51eeb419353cd52d4782a4393981b1d33ed319c6785a5b4444a9f96ee9"
+    },
+    "public_adapter": {
+      "path": "/home/zl202621/project/KECRL/src/environments/libero_adapter.py",
+      "sha256": "8dfa22a1e19b049d78c8e6ae05494291242cbde8a21194e0fbb321662d56512c"
+    },
+    "selective_initial_reader": {
+      "path": "/home/zl202621/project/KECRL/src/environments/libero_initial_state_reader.py",
+      "sha256": "8640743007c0484d9ee01200787b5b40302b983a08923ed1654b90237905ce85"
+    },
+    "policy": {
+      "path": "/home/zl202621/project/KECRL/src/algorithms/libero_bc_policy.py",
+      "sha256": "a3098a68b5ceab21495207856c9d94fd4a6d26c1668737625ecb7b5d46977735"
+    },
+    "libero_wrapper": {
+      "path": "/home/zl202621/third_party/LIBERO/libero/libero/envs/env_wrapper.py",
+      "sha256": "a782fb76c9792268d28979474fe72849e1e98ada49c8e997a65359a8d6b6acd0"
+    },
+    "libero_domain": {
+      "path": "/home/zl202621/third_party/LIBERO/libero/libero/envs/bddl_base_domain.py",
+      "sha256": "055836670ac5fcac7e033fc86404718fd53854996e5776b1ff68b646f7bbcc9d"
+    },
+    "libero_object_states": {
+      "path": "/home/zl202621/third_party/LIBERO/libero/libero/envs/object_states/base_object_states.py",
+      "sha256": "ca6f53123336b6487bdb4feb02534ddb3a0627a4b847fe89da4460520ef01366"
+    },
+    "robosuite_environment": {
+      "path": "/home/zl202621/.conda/envs/libero-kecrl/lib/python3.10/site-packages/robosuite/environments/base.py",
+      "sha256": "3d55a1d8b0350478b7e7e8d1c7a1250c8f173b69a67016ecb9e65c6965e741f6"
+    },
+    "robosuite_binding": {
+      "path": "/home/zl202621/.conda/envs/libero-kecrl/lib/python3.10/site-packages/robosuite/utils/binding_utils.py",
+      "sha256": "f5c8aada3bc85d3e66b9c4719c62892f0a32e4ea3489f66cc9abcaa170282c04"
+    },
+    "robosuite_single_arm": {
+      "path": "/home/zl202621/.conda/envs/libero-kecrl/lib/python3.10/site-packages/robosuite/robots/single_arm.py",
+      "sha256": "d233b1b785e8f88ffb5df1357666b02a397ae930ce98181b079e0496ab35fc57"
+    },
+    "robosuite_gripper": {
+      "path": "/home/zl202621/.conda/envs/libero-kecrl/lib/python3.10/site-packages/robosuite/models/grippers/panda_gripper.py",
+      "sha256": "a3760a8fc4599fa6f79914304b82466f3c1bda1a945943ca693bb57f00dc59eb"
+    },
+    "robosuite_gripper_model": {
+      "path": "/home/zl202621/.conda/envs/libero-kecrl/lib/python3.10/site-packages/robosuite/models/grippers/gripper_model.py",
+      "sha256": "0543b5a9e1d8b41e21880d8445c5d8fbf8535a4ac6fd55c5e70a3b1f323c3735"
+    },
+    "robosuite_macros": {
+      "path": "/home/zl202621/.conda/envs/libero-kecrl/lib/python3.10/site-packages/robosuite/macros.py",
+      "sha256": "d09834e770db690f43f46d6dc93605efe316b8b5eb7fe6cf2bc1647df95a302d"
+    }
+  },
+  "model_endpoints": [
+    {
+      "task": 0,
+      "seed": 20261106,
+      "arm": "A_original",
+      "checkpoint_update": 500,
+      "support_role": "meta_support",
+      "initial_state_role": "candidate_nonregression",
+      "checkpoint": {
+        "path": "/tmp/libero-formal-G-artifacts-20261105-v2/G-task0-seed20261106-A_original-u500.pt",
+        "sha256": "6028c689cf6bcb9e12e8943791e552aa3ffdc1a81434a65f3fd2f2fe39619503",
+        "weight_hash": "09a88f0746d93e3b7fec1f8b4b982e7c95d3d85c324b66838c78ccee41857330"
+      }
+    },
+    {
+      "task": 0,
+      "seed": 20261106,
+      "arm": "B_fomaml",
+      "checkpoint_update": 500,
+      "support_role": "meta_support",
+      "initial_state_role": "candidate_nonregression",
+      "checkpoint": {
+        "path": "/tmp/libero-formal-G-artifacts-20261105-v2/G-task0-seed20261106-B_fomaml-u500.pt",
+        "sha256": "78041c5aaf923e5d71aeaa9dec24c9f284b543f06d1f7ec6bca663f1890e958c",
+        "weight_hash": "1226fe994f96a1bc95d04a5d2ad3bdee82080bb65400cea62f0275c7a27091f4"
+      }
+    },
+    {
+      "task": 0,
+      "seed": 20261107,
+      "arm": "A_original",
+      "checkpoint_update": 500,
+      "support_role": "meta_support",
+      "initial_state_role": "candidate_nonregression",
+      "checkpoint": {
+        "path": "/tmp/libero-formal-G-artifacts-20261105-v2/G-task0-seed20261107-A_original-u500.pt",
+        "sha256": "a29906a5c9fdefa07ba48961edaf176e2f354ebb3b87adf46c5b542bd121040d",
+        "weight_hash": "72f54fbc17243f5dae2761549e924c1511985ee4da9cd7df3b353bc562abbabc"
+      }
+    },
+    {
+      "task": 0,
+      "seed": 20261107,
+      "arm": "B_fomaml",
+      "checkpoint_update": 500,
+      "support_role": "meta_support",
+      "initial_state_role": "candidate_nonregression",
+      "checkpoint": {
+        "path": "/tmp/libero-formal-G-artifacts-20261105-v2/G-task0-seed20261107-B_fomaml-u500.pt",
+        "sha256": "04ce1f7ad7b0d8580f04333a7ee6ee5f11f68f4aebf4d73423a4aec2a7bc96c9",
+        "weight_hash": "f39968dba104e0276e7f63ce7cec91a1384c7998b043c3a722591754ff35c484"
+      }
+    },
+    {
+      "task": 0,
+      "seed": 20261108,
+      "arm": "A_original",
+      "checkpoint_update": 500,
+      "support_role": "meta_support",
+      "initial_state_role": "candidate_nonregression",
+      "checkpoint": {
+        "path": "/tmp/libero-formal-G-artifacts-20261105-v2/G-task0-seed20261108-A_original-u500.pt",
+        "sha256": "13fba55cd0bfeb41c4e238c5ac42ba24bfcd0c552ce54bef02771c6559e886fd",
+        "weight_hash": "2290bbff91ef0015f633a0ec3da53a934dd69ab531febf9ba78157f2a6edd06f"
+      }
+    },
+    {
+      "task": 0,
+      "seed": 20261108,
+      "arm": "B_fomaml",
+      "checkpoint_update": 500,
+      "support_role": "meta_support",
+      "initial_state_role": "candidate_nonregression",
+      "checkpoint": {
+        "path": "/tmp/libero-formal-G-artifacts-20261105-v2/G-task0-seed20261108-B_fomaml-u500.pt",
+        "sha256": "7e3562f9a67cef03b5ad025b312b8653dcaae63e80ce15de62f67c81f1c091e7",
+        "weight_hash": "86a78dbf3e1deedba6eacb31f2b7667221b28896bf90a238787b5f93c47f1f4b"
+      }
+    },
+    {
+      "task": 1,
+      "seed": 20261106,
+      "arm": "A_original",
+      "checkpoint_update": 500,
+      "support_role": "meta_support",
+      "initial_state_role": "candidate_nonregression",
+      "checkpoint": {
+        "path": "/tmp/libero-formal-G-artifacts-20261105-v2/G-task1-seed20261106-A_original-u500.pt",
+        "sha256": "d70440bf56c4be0ec7e7fbfb8578cdaa6b9019d0e27dc379dbe1720a56b750dd",
+        "weight_hash": "99beccb5e240edd4e51bd125b9a36287ab1193da894a72abf2be2aedda4802c9"
+      }
+    },
+    {
+      "task": 1,
+      "seed": 20261106,
+      "arm": "B_fomaml",
+      "checkpoint_update": 500,
+      "support_role": "meta_support",
+      "initial_state_role": "candidate_nonregression",
+      "checkpoint": {
+        "path": "/tmp/libero-formal-G-artifacts-20261105-v2/G-task1-seed20261106-B_fomaml-u500.pt",
+        "sha256": "cc24c3cb72e95678035050d5e369408f2ff0834acf00f97a6e5736f2e9fa79aa",
+        "weight_hash": "28be1571511e72a062a673e3e79ade7d20f7de83c63dc170ae06e10317f63d64"
+      }
+    },
+    {
+      "task": 1,
+      "seed": 20261107,
+      "arm": "A_original",
+      "checkpoint_update": 500,
+      "support_role": "meta_support",
+      "initial_state_role": "candidate_nonregression",
+      "checkpoint": {
+        "path": "/tmp/libero-formal-G-artifacts-20261105-v2/G-task1-seed20261107-A_original-u500.pt",
+        "sha256": "128de52b0dcbece13699a04f4ea8fd99017d24af860341f9785a2a1ab469e1d8",
+        "weight_hash": "ea20c36f820b75d228d1a29eb5a5fe37973052bfd0d816ddb8b89567a14b9c0f"
+      }
+    },
+    {
+      "task": 1,
+      "seed": 20261107,
+      "arm": "B_fomaml",
+      "checkpoint_update": 500,
+      "support_role": "meta_support",
+      "initial_state_role": "candidate_nonregression",
+      "checkpoint": {
+        "path": "/tmp/libero-formal-G-artifacts-20261105-v2/G-task1-seed20261107-B_fomaml-u500.pt",
+        "sha256": "8ed299ac078b43dfd42da6153151c3d98ab972680382c7bd002073ce128472e5",
+        "weight_hash": "f2bc567b19093d24c407e8f07b256b3f993ccac6038b2d7c7ebca45c3581eca9"
+      }
+    },
+    {
+      "task": 1,
+      "seed": 20261108,
+      "arm": "A_original",
+      "checkpoint_update": 500,
+      "support_role": "meta_support",
+      "initial_state_role": "candidate_nonregression",
+      "checkpoint": {
+        "path": "/tmp/libero-formal-G-artifacts-20261105-v2/G-task1-seed20261108-A_original-u500.pt",
+        "sha256": "5b1f7b09c0ca45de515fc2aa6de308b3301b441d7e75d1f1c5d5cab187b264df",
+        "weight_hash": "1e935216b86240c78fcc7d3371dd5dee80bd85508483108eaf73038f899c024f"
+      }
+    },
+    {
+      "task": 1,
+      "seed": 20261108,
+      "arm": "B_fomaml",
+      "checkpoint_update": 500,
+      "support_role": "meta_support",
+      "initial_state_role": "candidate_nonregression",
+      "checkpoint": {
+        "path": "/tmp/libero-formal-G-artifacts-20261105-v2/G-task1-seed20261108-B_fomaml-u500.pt",
+        "sha256": "238ac949de82a37a430662936a7a74913a4e26f2c886f83a8c775b1616e80e51",
+        "weight_hash": "0c724e6e770586454336d0bbe9170473ecc50795ed50126e82d65658beae060f"
+      }
+    },
+    {
+      "task": 3,
+      "seed": 20261106,
+      "arm": "A_original",
+      "checkpoint_update": 500,
+      "support_role": "meta_support",
+      "initial_state_role": "candidate_nonregression",
+      "checkpoint": {
+        "path": "/tmp/libero-formal-G-artifacts-20261105-v2/G-task3-seed20261106-A_original-u500.pt",
+        "sha256": "1f11c0ac544416b8096b178a8ba67a2244343774b09093c5db2164a211091c53",
+        "weight_hash": "60ec64d03e4754cb0dbc217dc5c461fd75412791ae55c154a4b8ff407b7d0628"
+      }
+    },
+    {
+      "task": 3,
+      "seed": 20261106,
+      "arm": "B_fomaml",
+      "checkpoint_update": 500,
+      "support_role": "meta_support",
+      "initial_state_role": "candidate_nonregression",
+      "checkpoint": {
+        "path": "/tmp/libero-formal-G-artifacts-20261105-v2/G-task3-seed20261106-B_fomaml-u500.pt",
+        "sha256": "7fd92e2a24997f2ae3647efb611a909f836f28e836a226d78e53be6927a35f65",
+        "weight_hash": "33cf95c06803e1df5305fd302cf28d8d4c5d3232004ccbc2e8c5c4619fabd0c6"
+      }
+    },
+    {
+      "task": 3,
+      "seed": 20261107,
+      "arm": "A_original",
+      "checkpoint_update": 500,
+      "support_role": "meta_support",
+      "initial_state_role": "candidate_nonregression",
+      "checkpoint": {
+        "path": "/tmp/libero-formal-G-artifacts-20261105-v2/G-task3-seed20261107-A_original-u500.pt",
+        "sha256": "3c4125ebcdb5e52dfc9746af078b5ff3ad72788de194fc725bd14e4c9b995699",
+        "weight_hash": "97341c6a1ee0b093cf2491acdd7cb833e275e6785b83822b2c6b32ff3f6bc608"
+      }
+    },
+    {
+      "task": 3,
+      "seed": 20261107,
+      "arm": "B_fomaml",
+      "checkpoint_update": 500,
+      "support_role": "meta_support",
+      "initial_state_role": "candidate_nonregression",
+      "checkpoint": {
+        "path": "/tmp/libero-formal-G-artifacts-20261105-v2/G-task3-seed20261107-B_fomaml-u500.pt",
+        "sha256": "f7731ea5b3a4cebe2d58a1d8cf3bec17a634b8a3ddafebaae569b36851d21f42",
+        "weight_hash": "d4a04b7369768ae1412e2214389f62485b3c5af66e6d1d05271babe81dfc5539"
+      }
+    },
+    {
+      "task": 3,
+      "seed": 20261108,
+      "arm": "A_original",
+      "checkpoint_update": 500,
+      "support_role": "meta_support",
+      "initial_state_role": "candidate_nonregression",
+      "checkpoint": {
+        "path": "/tmp/libero-formal-G-artifacts-20261105-v2/G-task3-seed20261108-A_original-u500.pt",
+        "sha256": "c6c51041eed22795bdc456edba9fd47ef30b80784bdc97456276717a443307e1",
+        "weight_hash": "8e7b467e4abb13ec2abcf98077011b3ba30dc868db3b3fdcaa3ebb8d5ca09a15"
+      }
+    },
+    {
+      "task": 3,
+      "seed": 20261108,
+      "arm": "B_fomaml",
+      "checkpoint_update": 500,
+      "support_role": "meta_support",
+      "initial_state_role": "candidate_nonregression",
+      "checkpoint": {
+        "path": "/tmp/libero-formal-G-artifacts-20261105-v2/G-task3-seed20261108-B_fomaml-u500.pt",
+        "sha256": "3d0758676110d3bc6330389155576b0c5fa5e48f73137513158f99f5d8a2633d",
+        "weight_hash": "b64bb178d0a0f03fad489823222f1ecbcf1770f349fccc31179eb1ec3d33145b"
+      }
+    },
+    {
+      "task": 4,
+      "seed": 20261106,
+      "arm": "A_original",
+      "checkpoint_update": 500,
+      "support_role": "meta_support",
+      "initial_state_role": "candidate_nonregression",
+      "checkpoint": {
+        "path": "/tmp/libero-formal-G-artifacts-20261105-v2/G-task4-seed20261106-A_original-u500.pt",
+        "sha256": "d9af03031d5f252e1ca0c43d32e9d3b87c90dcf5bf07043b4bdb75b48ca013b9",
+        "weight_hash": "fe5e5367c59dc20fb5b6c8fc7804f40662d93c1c6026e636fe005ce3c3dfb5bf"
+      }
+    },
+    {
+      "task": 4,
+      "seed": 20261106,
+      "arm": "B_fomaml",
+      "checkpoint_update": 500,
+      "support_role": "meta_support",
+      "initial_state_role": "candidate_nonregression",
+      "checkpoint": {
+        "path": "/tmp/libero-formal-G-artifacts-20261105-v2/G-task4-seed20261106-B_fomaml-u500.pt",
+        "sha256": "6d1a7e8ddb2daa17ad4b8a698abcd30181105ab1236ba4afc46c314da0b5aa2f",
+        "weight_hash": "41dec6e7bfa9e1aa34a511da19de9f47877a30a7af22bde7059d233296ab8bdd"
+      }
+    },
+    {
+      "task": 4,
+      "seed": 20261107,
+      "arm": "A_original",
+      "checkpoint_update": 500,
+      "support_role": "meta_support",
+      "initial_state_role": "candidate_nonregression",
+      "checkpoint": {
+        "path": "/tmp/libero-formal-G-artifacts-20261105-v2/G-task4-seed20261107-A_original-u500.pt",
+        "sha256": "b60eaf36dc14b3eda10d135c349a6554f68533c9116c515a2afa4bb6b58e1409",
+        "weight_hash": "3157820d53e46c1533ea65e7d781e8b44e39a2993e43e71a8fb3c333999306c9"
+      }
+    },
+    {
+      "task": 4,
+      "seed": 20261107,
+      "arm": "B_fomaml",
+      "checkpoint_update": 500,
+      "support_role": "meta_support",
+      "initial_state_role": "candidate_nonregression",
+      "checkpoint": {
+        "path": "/tmp/libero-formal-G-artifacts-20261105-v2/G-task4-seed20261107-B_fomaml-u500.pt",
+        "sha256": "69ebb763df6c3276a71fb5e7d36b66416dd563a9ad78429ab8d289fca3794e8a",
+        "weight_hash": "31a9e9e901155ce31b0f9c101ac86aa4902536bc2dd4fbecd83d08e7fedf977a"
+      }
+    },
+    {
+      "task": 4,
+      "seed": 20261108,
+      "arm": "A_original",
+      "checkpoint_update": 500,
+      "support_role": "meta_support",
+      "initial_state_role": "candidate_nonregression",
+      "checkpoint": {
+        "path": "/tmp/libero-formal-G-artifacts-20261105-v2/G-task4-seed20261108-A_original-u500.pt",
+        "sha256": "54fc4bc3976694f65dfd978a8a0d6234a7bbc628ed8f849d03ab3ea3c8b226ec",
+        "weight_hash": "b2e5707cb5aa156439baf9bb8b2416074bee3a1f7b75f67602524a716627b0c9"
+      }
+    },
+    {
+      "task": 4,
+      "seed": 20261108,
+      "arm": "B_fomaml",
+      "checkpoint_update": 500,
+      "support_role": "meta_support",
+      "initial_state_role": "candidate_nonregression",
+      "checkpoint": {
+        "path": "/tmp/libero-formal-G-artifacts-20261105-v2/G-task4-seed20261108-B_fomaml-u500.pt",
+        "sha256": "93e9cc9abe88e519f1198dd54fa859b9248c3036c984a5dad173b58d95e310f5",
+        "weight_hash": "e23ff4d4b300ea7e8095b5800305cbe30787ee40c9725d17ec7c2aaa69a2b890"
+      }
+    },
+    {
+      "task": 7,
+      "seed": 20261106,
+      "arm": "A_original",
+      "checkpoint_update": 500,
+      "support_role": "meta_support",
+      "initial_state_role": "candidate_nonregression",
+      "checkpoint": {
+        "path": "/tmp/libero-formal-G-artifacts-20261105-v2/G-task7-seed20261106-A_original-u500.pt",
+        "sha256": "c5cb770a456185a5ef4885311ba4aab452aa287039c8d6b9fda48d9f895a9909",
+        "weight_hash": "a4e74450ffa2b38e51bd175a6e57d6e368c9cc00b687c8b9c43342606f61b200"
+      }
+    },
+    {
+      "task": 7,
+      "seed": 20261106,
+      "arm": "B_fomaml",
+      "checkpoint_update": 500,
+      "support_role": "meta_support",
+      "initial_state_role": "candidate_nonregression",
+      "checkpoint": {
+        "path": "/tmp/libero-formal-G-artifacts-20261105-v2/G-task7-seed20261106-B_fomaml-u500.pt",
+        "sha256": "cba1dc95887721f1cd44068e72aff914cadf863dcda593e38d31f86c48949eaa",
+        "weight_hash": "69dd5ed7abb5929db10800e2a55d0ac1fb93fb0e25ac0c2a10bea2b12e09a1f2"
+      }
+    },
+    {
+      "task": 7,
+      "seed": 20261107,
+      "arm": "A_original",
+      "checkpoint_update": 500,
+      "support_role": "meta_support",
+      "initial_state_role": "candidate_nonregression",
+      "checkpoint": {
+        "path": "/tmp/libero-formal-G-artifacts-20261105-v2/G-task7-seed20261107-A_original-u500.pt",
+        "sha256": "2058d4d47f5293e77c596f5a104529708b03a6a89052a8423c82e2030ed13ace",
+        "weight_hash": "0273bc2183d1d0f3810458306cedc378d3f481632fadc5f969a90a57371373bb"
+      }
+    },
+    {
+      "task": 7,
+      "seed": 20261107,
+      "arm": "B_fomaml",
+      "checkpoint_update": 500,
+      "support_role": "meta_support",
+      "initial_state_role": "candidate_nonregression",
+      "checkpoint": {
+        "path": "/tmp/libero-formal-G-artifacts-20261105-v2/G-task7-seed20261107-B_fomaml-u500.pt",
+        "sha256": "c8d007ce68f23ce67306398adbf9e8438b401a1b6f667d515f012881bef11a26",
+        "weight_hash": "faa71e0f12c3eadd9be8688ba5a9a0f99eddba838bf00d16bbd3797969445879"
+      }
+    },
+    {
+      "task": 7,
+      "seed": 20261108,
+      "arm": "A_original",
+      "checkpoint_update": 500,
+      "support_role": "meta_support",
+      "initial_state_role": "candidate_nonregression",
+      "checkpoint": {
+        "path": "/tmp/libero-formal-G-artifacts-20261105-v2/G-task7-seed20261108-A_original-u500.pt",
+        "sha256": "b264be47a6ca54a1370fbdd53a2d5f0f96615f8c2f19207afef3f977e41b1538",
+        "weight_hash": "fbfd635652d71fa60019e1152060f722e795ee0c65ca431da6877e66c175cd67"
+      }
+    },
+    {
+      "task": 7,
+      "seed": 20261108,
+      "arm": "B_fomaml",
+      "checkpoint_update": 500,
+      "support_role": "meta_support",
+      "initial_state_role": "candidate_nonregression",
+      "checkpoint": {
+        "path": "/tmp/libero-formal-G-artifacts-20261105-v2/G-task7-seed20261108-B_fomaml-u500.pt",
+        "sha256": "5f8740383959991e9abfc0dcc2069d5b7b067c36e26a6fdc576d16f79b7316df",
+        "weight_hash": "74276f271b063870e932f7bf40f14413fce919c1d51a45ab59c9750ac810b089"
+      }
+    }
+  ],
+  "initial_banks": {
+    "0": {
+      "relative_path": "libero_spatial/pick_up_the_black_bowl_between_the_plate_and_the_ramekin_and_place_it_on_the_plate.pruned_init",
+      "size_bytes": 44271,
+      "sha256": "cbbc73792ce546c9bec181fd328a411d3183074840b282671dee481511381d0a",
+      "pickle_header_sha256": "3def7b6b306c88889367ffbf34f272b5b659234512c438155e710510cbee690c"
+    },
+    "1": {
+      "relative_path": "libero_spatial/pick_up_the_black_bowl_next_to_the_ramekin_and_place_it_on_the_plate.pruned_init",
+      "size_bytes": 44207,
+      "sha256": "9b6927b6ef03460ab055141e1a1154ad85e5e290058d8ed3a8a314aff911f864",
+      "pickle_header_sha256": "b669c73497521c9f590807690c816633671c93a3475764d455cb677f696c26a4"
+    },
+    "3": {
+      "relative_path": "libero_spatial/pick_up_the_black_bowl_on_the_cookie_box_and_place_it_on_the_plate.pruned_init",
+      "size_bytes": 44143,
+      "sha256": "0627f5f5ce3ef23be546571012be8ef603d93bcb4032bc80feb34937ba580140",
+      "pickle_header_sha256": "2d6d25bc900b4f1283a046d5a72f4e5d6f9e34bdf4c8623516699b58f791f7b5"
+    },
+    "4": {
+      "relative_path": "libero_spatial/pick_up_the_black_bowl_in_the_top_drawer_of_the_wooden_cabinet_and_place_it_on_the_plate.pruned_init",
+      "size_bytes": 44591,
+      "sha256": "deef3df529e0bb57658b973bbb3baf02b02922db065c025a73ebfcd11eb54d46",
+      "pickle_header_sha256": "22f103ab49c6f3be149e78cbda2075b4499fdbc19b15043497f3fdcadef24708"
+    },
+    "7": {
+      "relative_path": "libero_spatial/pick_up_the_black_bowl_on_the_stove_and_place_it_on_the_plate.pruned_init",
+      "size_bytes": 44335,
+      "sha256": "ea9cba2814bc166f3682f3f5a97329467839bcf584069cd419191b6c17adae25",
+      "pickle_header_sha256": "c70b3fd4769c65750584c42a6161a6bd45fb3bb5673a32f1e20691687c50ba96"
+    }
+  },
+  "task_bindings": [
+    {
+      "task": 0,
+      "task_name": "pick_up_the_black_bowl_between_the_plate_and_the_ramekin_and_place_it_on_the_plate",
+      "source_object": "akita_black_bowl_1",
+      "target_object": "plate_1",
+      "source_geometry": "table_region",
+      "source_initial_predicate": [
+        "on",
+        "akita_black_bowl_1",
+        "main_table_between_plate_ramekin_region"
+      ]
+    },
+    {
+      "task": 1,
+      "task_name": "pick_up_the_black_bowl_next_to_the_ramekin_and_place_it_on_the_plate",
+      "source_object": "akita_black_bowl_1",
+      "target_object": "plate_1",
+      "source_geometry": "table_region",
+      "source_initial_predicate": [
+        "on",
+        "akita_black_bowl_1",
+        "main_table_next_to_ramekin_region"
+      ]
+    },
+    {
+      "task": 3,
+      "task_name": "pick_up_the_black_bowl_on_the_cookie_box_and_place_it_on_the_plate",
+      "source_object": "akita_black_bowl_1",
+      "target_object": "plate_1",
+      "source_geometry": "movable_object_surface",
+      "source_initial_predicate": [
+        "on",
+        "akita_black_bowl_1",
+        "cookies_1"
+      ]
+    },
+    {
+      "task": 4,
+      "task_name": "pick_up_the_black_bowl_in_the_top_drawer_of_the_wooden_cabinet_and_place_it_on_the_plate",
+      "source_object": "akita_black_bowl_1",
+      "target_object": "plate_1",
+      "source_geometry": "open_container",
+      "source_initial_predicate": [
+        "in",
+        "akita_black_bowl_1",
+        "wooden_cabinet_1_top_region"
+      ]
+    },
+    {
+      "task": 7,
+      "task_name": "pick_up_the_black_bowl_on_the_stove_and_place_it_on_the_plate",
+      "source_object": "akita_black_bowl_1",
+      "target_object": "plate_1",
+      "source_geometry": "fixture_surface",
+      "source_initial_predicate": [
+        "on",
+        "akita_black_bowl_1",
+        "flat_stove_1_cook_region"
+      ]
+    }
+  ]
+}

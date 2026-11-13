@@ -1,0 +1,465 @@
+{
+  "kind": "task7_derived_CSV_target_magnitude_within_demo_matching",
+  "version": 1,
+  "formal_result": false,
+  "status": "scientific_frozen_execution_unbound",
+  "parents": {
+    "science": {
+      "path": "/home/zl202621/project/KECRL/configs/libero-task7-residual-sign-transition-readonly_v1.json",
+      "sha256": "7de0233952c2913c50b59071d7af79706dc26477f4db635d1bd6606a7aac0c0a"
+    },
+    "binding": {
+      "path": "/home/zl202621/project/KECRL/configs/libero-task7-residual-sign-transition-execution-binding_v1.json",
+      "sha256": "7804869d9df1c025e7ae1ff1a3da15f968468431141f51d16c1dbef885ceaa95"
+    },
+    "result": {
+      "path": "/tmp/libero-task7-residual-sign-transition-20261108-v1.json",
+      "sha256": "f702c18e6a1f61a66d88d53805dfcba95c5dacf1267b05c8d0b40974f4a11184"
+    },
+    "audit": {
+      "path": "/tmp/libero-task7-residual-sign-transition-artifacts-20261108-v1/independent-audit.json",
+      "sha256": "6fa7968780569c827a09f15dfd4c1db1c20fa30f6a0919761195ad652fe91bff"
+    },
+    "completion": {
+      "path": "/tmp/libero-task7-residual-sign-transition-artifacts-20261108-v1/completion.json",
+      "sha256": "56b83176cc33656611312f0a34f352ea793e9b2a96863f4567be6f8b528d4845"
+    }
+  },
+  "scope": {
+    "task_ids": [
+      7
+    ],
+    "training_seeds": [
+      20261106,
+      20261107,
+      20261108
+    ],
+    "feature_source_arms": [
+      "A_original",
+      "B_fomaml"
+    ],
+    "readout_modes": [
+      "original",
+      "bias_only",
+      "current_affine"
+    ],
+    "original_Policy_updates": 500,
+    "readout_endpoint_updates": 500,
+    "closed_loop_default_stabilization_steps": 5,
+    "loss": "uniform_seven_dimensional_valid_step_masked_action_MSE",
+    "component_index": 2,
+    "source_role": "meta_support_exposed_representation_OOF_readout",
+    "encoder_has_seen_all30_support_demos": true,
+    "demonstration_indices": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      15,
+      16,
+      17,
+      18,
+      19,
+      20,
+      21,
+      22,
+      23,
+      24,
+      25,
+      26,
+      27,
+      28,
+      29
+    ],
+    "causal_alignment": "obs[t-1] -> action[t]",
+    "action_step_min": 5,
+    "target_material_margin_inclusive": 0.025,
+    "source_common_material_frames": 3598,
+    "new_research_training_optimizer_or_forward_calls": 0,
+    "array_archive_checkpoint_HDF5_observation_feature_state_reads_including_byte_hashes": 0,
+    "original_oof_frames_curves_NN_tags_or_other_source_CSV_reads": 0,
+    "source_meta_query_accessed": false,
+    "sealed_roles_accessed": false,
+    "checkpoint_fold_seed_or_threshold_selection": false,
+    "all_parent_cues_false_unchanged": true,
+    "G_failed_H_unrun_unchanged": true,
+    "SPT_Knowledge_Module_changes": false,
+    "automatic_candidate_training_rollout_or_protocol_promotion": false
+  },
+  "design": {
+    "question": "reference_output_magnitude_association_after_controlling_observed_target_scale_within_demo_common_support",
+    "comparisons_candidate_reference": [
+      [
+        "bias_only",
+        "original"
+      ],
+      [
+        "current_affine",
+        "original"
+      ],
+      [
+        "current_affine",
+        "bias_only"
+      ]
+    ],
+    "phases": [
+      "all_common",
+      "tail20",
+      "complement"
+    ],
+    "directions": [
+      "negative",
+      "positive"
+    ],
+    "all_transitions": [
+      "stays_correct",
+      "corrected",
+      "new_error",
+      "stays_wrong"
+    ],
+    "contrasts_focus_control": [
+      [
+        "corrected",
+        "stays_wrong"
+      ],
+      [
+        "new_error",
+        "stays_correct"
+      ]
+    ],
+    "schemes": [
+      "exact_target",
+      "coarse_bin"
+    ],
+    "primary": "exact_target_all_common;preserve_tail20_complement_and_coarse_bin_as_secondary_diagnostics",
+    "bin_edges": [
+      0.025,
+      0.05,
+      0.1,
+      0.2,
+      0.4,
+      0.6,
+      0.8,
+      1.0
+    ],
+    "bin_interval": "left_closed_right_open;last_right_closed_at1;float64_decimal_edges_no_rounding_or_epsilon",
+    "primary_key": "within_endpoint_comparison_phase_direction_contrast:demo_and_exact_float32_abs_target_bits",
+    "coarse_key": "same_endpoint_comparison_phase_direction_contrast_and_demo_and_one_of7_fixed_bins",
+    "matching": "all_observed_focus_control_frames_in_cell;paired_iff_both_n_positive;no_one_to_one_or_nearest_neighbor_cartesian_expansion",
+    "exact_cells": "union_of_observed_focus_or_control_keys_only;retain_one_sided;no_empty_empty_exact_cell",
+    "coarse_cells": "all30_demos_by7_bins_including_empty_empty;within_bin_target_imbalance_is_not_exact_control",
+    "weights": "equal_matched_target_cells_within_each_demo_then_equal_eligible_demos;identical_weights_for_focus_and_control",
+    "decomposition": "full_frame_weighted_raw;common_support_frame_weighted;cell_equal_demo_equal;coverage_alongside_all3",
+    "estimand_limit": "standardization_changes_support_and_weights;raw_to_matched_attenuation_not_uniquely_target_scale_causation",
+    "metrics": [
+      "target_abs",
+      "reference_abs",
+      "reference_abs_over_target_abs",
+      "reference_squared_error",
+      "candidate_squared_error",
+      "delta_squared_error",
+      "reference_relative_squared_error",
+      "candidate_relative_squared_error",
+      "delta_relative_squared_error",
+      "raw_shift",
+      "signed_effective_shift",
+      "absolute_effective_shift_over_target_abs"
+    ],
+    "relative_denominator": "abs_target_ge.025_or_target_squared;no_zero_denominator_no_epsilon",
+    "cell_checks": "exact_key_target_imbalance0;coarse_report_focus_control_target_mean_min_max_and_delta;all_metrics_finite",
+    "demo_missing": "retain_all30;both_empty_focus_empty_control_empty_no_common_exact_target_or_no_common_target_bin",
+    "coverage": "full_and_matched_focus_control_frame_n;matched_cells_and_demos;unmatched_counts_rates_null_when_denominator0",
+    "no_fallback": "empty_common_support_means_null;no_caliper_relaxation_bin_merging_or_min_sample_threshold_search",
+    "bin_transition_checks": "all7bins_all4transitions_both_directions;count_SSE_and_net_error_conservation",
+    "join_checks": "source_row_demo_step_tail_from30lengths;all6models_by3comparisons_by3598_IDs_unique_complete;same_targets_and3mode_scalars_cross_comparison",
+    "primitive_checks": "saved_target_and_predictions_float32_range;strict_categories_signs_error_bands_SSE_delta;raw_residual_clip_reconstruction_using_original_mode",
+    "frame_assignment": "one_row_per_input_pair_fixed_bin_exact_target_bits_reference_correctness_and_exact_coarse_match_flags_all_common_and_own_phase",
+    "cross_seed": "per_arm_all3_raw_values_and_complete_mean;common3_matched_cell_intersection_secondary_recomputed_with_same_hierarchical_weights",
+    "cross_seed_limit": "same_demo_target_key_does_not_force_same_focus_control_frame_membership;A_B_not6_independent_seeds",
+    "interpretation": "descriptive_outcome_defined_groups_only;matching_does_not_control_unobserved_geometry_history_or_establish_cause_or_missing_information",
+    "decision": "no_new_acceptance_threshold_or_training_selection;no_pvalues_significance_bootstrap_or_frame_independence;parent_stop_stays"
+  },
+  "execution": {
+    "status": "scientific_freeze_only_execution_binding_required",
+    "device": "CPU",
+    "runtime": {
+      "python": "3.10.22",
+      "numpy": "1.22.4"
+    },
+    "environment": {
+      "CUDA_VISIBLE_DEVICES": "",
+      "PYTHONHASHSEED": "0",
+      "OMP_NUM_THREADS": "1",
+      "OPENBLAS_NUM_THREADS": "1",
+      "MKL_NUM_THREADS": "1"
+    },
+    "analysis_active_seconds_max": 180,
+    "audit_active_seconds_max": 180,
+    "overall_watchdog_seconds": 420,
+    "working_memory_bytes_max": 536870912,
+    "output_CSV_bytes_max": 268435456,
+    "technical_retries": 0,
+    "output_overwrite": false,
+    "metadata": "five_pinned_parent_JSON_for_provenance_only;no_metric_payload_as_new_analysis_source",
+    "access": "one_pinned_derived_paired_frames_CSV_only_one_pass28_projected_fields_per_stage;deny_original_CSV_arrays_and_alternate_readers",
+    "byte_SHA": "only_this_input_CSV_before_after_separate_from_data_pass;never_hash_original_arrays_or_old_input_CSV",
+    "audit": "fresh_process_independent_numeric_ID_group_matching_weights_coverage_and_all_outputs;no_primary_numerics_import",
+    "float_absolute_tolerance": 1e-10,
+    "float_relative_tolerance": 0,
+    "ID_counts_bits_saved_float32_and_categories_tolerance": 0,
+    "stop": "any_metadata_SHA_role_ID_projection_scalar_key_conservation_budget_or_audit_mismatch_keep_partial_stop_no_retry"
+  },
+  "budget": {
+    "models": 6,
+    "comparisons": 3,
+    "shared_material_frames": 3598,
+    "phases": 3,
+    "directions": 2,
+    "contrasts": 2,
+    "schemes": 2,
+    "demos": 30,
+    "fixed_target_bins": 7,
+    "per_stage": {
+      "input_CSV_data_passes": 1,
+      "input_CSV_lexical_rows": 64764,
+      "projected_columns": 28,
+      "projected_cells": 1813392
+    },
+    "total_input_CSV_data_passes": 2,
+    "total_input_CSV_lexical_rows": 129528,
+    "total_projected_cells": 3626784,
+    "fixed_table_rows": {
+      "frame-strata": 64764,
+      "bin-transitions": 3024,
+      "coarse-bin-cells": 45360,
+      "demo-matched": 12960,
+      "model-matched": 432,
+      "common3-summary": 144
+    },
+    "variable_table_rows_max": {
+      "exact-target-cells": 129528
+    },
+    "total_output_table_rows_max": 256212,
+    "exact_cell_bound": "sum_union_focus_control_target_keys_le_material_frame_visits;6models*3comparisons*2phase_visits*3598",
+    "seed_summary_JSON_rows": 144,
+    "new_original_CSV_array_archive_weight_or_observation_reads_including_hashes": 0,
+    "new_training_forward_optimizer_environment_neighbor_or_sealed_calls": 0
+  },
+  "columns": [
+    "task",
+    "seed",
+    "arm",
+    "comparison",
+    "candidate",
+    "reference",
+    "source_row",
+    "demo",
+    "action_step",
+    "target_sign",
+    "tail20",
+    "target_2",
+    "reference_prediction_2",
+    "candidate_prediction_2",
+    "reference_category",
+    "candidate_category",
+    "reference_clip",
+    "candidate_clip",
+    "transition",
+    "reference_error",
+    "candidate_error",
+    "reference_band",
+    "candidate_band",
+    "reference_sse",
+    "candidate_sse",
+    "delta_sse",
+    "reference_raw_residual",
+    "candidate_raw_residual"
+  ],
+  "inputs": {
+    "paired_frames": {
+      "path": "/tmp/libero-task7-residual-sign-transition-artifacts-20261108-v1/paired-frames.csv",
+      "sha256": "7003a9cbb404abbfd4be1212b603419a4e1751b4c4614f3cf70c0015a95a5ef0",
+      "rows": 64764,
+      "columns": [
+        "task",
+        "seed",
+        "arm",
+        "comparison",
+        "candidate",
+        "reference",
+        "source_row",
+        "demo",
+        "action_step",
+        "target_sign",
+        "tail20",
+        "target_2",
+        "reference_prediction_2",
+        "candidate_prediction_2",
+        "reference_sign",
+        "candidate_sign",
+        "reference_category",
+        "candidate_category",
+        "reference_clip",
+        "candidate_clip",
+        "transition",
+        "reference_error",
+        "candidate_error",
+        "reference_band",
+        "candidate_band",
+        "reference_sse",
+        "candidate_sse",
+        "delta_sse",
+        "target_abs",
+        "reference_abs",
+        "candidate_abs",
+        "reference_raw_residual",
+        "candidate_raw_residual",
+        "raw_shift",
+        "effective_shift",
+        "signed_effective_shift",
+        "clip_or_rounding_gap",
+        "signed_reference_margin",
+        "signed_candidate_margin",
+        "effective_shift_over_abs_reference",
+        "raw_shift_over_abs_reference"
+      ]
+    },
+    "endpoints": [
+      {
+        "task": 7,
+        "seed": 20261106,
+        "arm": "A_original",
+        "checkpoint": {
+          "path": "/tmp/libero-formal-G-artifacts-20261105-v2/G-task7-seed20261106-A_original-u500.pt",
+          "sha256": "c5cb770a456185a5ef4885311ba4aab452aa287039c8d6b9fda48d9f895a9909",
+          "weight_hash": "a4e74450ffa2b38e51bd175a6e57d6e368c9cc00b687c8b9c43342606f61b200"
+        }
+      },
+      {
+        "task": 7,
+        "seed": 20261106,
+        "arm": "B_fomaml",
+        "checkpoint": {
+          "path": "/tmp/libero-formal-G-artifacts-20261105-v2/G-task7-seed20261106-B_fomaml-u500.pt",
+          "sha256": "cba1dc95887721f1cd44068e72aff914cadf863dcda593e38d31f86c48949eaa",
+          "weight_hash": "69dd5ed7abb5929db10800e2a55d0ac1fb93fb0e25ac0c2a10bea2b12e09a1f2"
+        }
+      },
+      {
+        "task": 7,
+        "seed": 20261107,
+        "arm": "A_original",
+        "checkpoint": {
+          "path": "/tmp/libero-formal-G-artifacts-20261105-v2/G-task7-seed20261107-A_original-u500.pt",
+          "sha256": "2058d4d47f5293e77c596f5a104529708b03a6a89052a8423c82e2030ed13ace",
+          "weight_hash": "0273bc2183d1d0f3810458306cedc378d3f481632fadc5f969a90a57371373bb"
+        }
+      },
+      {
+        "task": 7,
+        "seed": 20261107,
+        "arm": "B_fomaml",
+        "checkpoint": {
+          "path": "/tmp/libero-formal-G-artifacts-20261105-v2/G-task7-seed20261107-B_fomaml-u500.pt",
+          "sha256": "c8d007ce68f23ce67306398adbf9e8438b401a1b6f667d515f012881bef11a26",
+          "weight_hash": "faa71e0f12c3eadd9be8688ba5a9a0f99eddba838bf00d16bbd3797969445879"
+        }
+      },
+      {
+        "task": 7,
+        "seed": 20261108,
+        "arm": "A_original",
+        "checkpoint": {
+          "path": "/tmp/libero-formal-G-artifacts-20261105-v2/G-task7-seed20261108-A_original-u500.pt",
+          "sha256": "b264be47a6ca54a1370fbdd53a2d5f0f96615f8c2f19207afef3f977e41b1538",
+          "weight_hash": "fbfd635652d71fa60019e1152060f722e795ee0c65ca431da6877e66c175cd67"
+        }
+      },
+      {
+        "task": 7,
+        "seed": 20261108,
+        "arm": "B_fomaml",
+        "checkpoint": {
+          "path": "/tmp/libero-formal-G-artifacts-20261105-v2/G-task7-seed20261108-B_fomaml-u500.pt",
+          "sha256": "5f8740383959991e9abfc0dcc2069d5b7b067c36e26a6fdc576d16f79b7316df",
+          "weight_hash": "74276f271b063870e932f7bf40f14413fce919c1d51a45ab59c9750ac810b089"
+        }
+      }
+    ],
+    "action_lengths": [
+      155,
+      125,
+      124,
+      191,
+      136,
+      138,
+      133,
+      130,
+      139,
+      145,
+      140,
+      164,
+      124,
+      138,
+      120,
+      137,
+      141,
+      152,
+      137,
+      128,
+      197,
+      124,
+      128,
+      126,
+      144,
+      129,
+      168,
+      132,
+      140,
+      133
+    ]
+  },
+  "code": [
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/libero_task7_target_magnitude_matching_protocol.py",
+      "sha256": "c3fac4a10c38b8379ccd2eb3a8898ababd7e16f5a73593c5dc85d62c3bfb20a9"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/tests/test_libero_task7_target_magnitude_matching_protocol.py",
+      "sha256": "489cb8dca224113a917ec38f96a67303094c5169527a7a598a7fd6e231ee4162"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/libero_task7_residual_sign_transition_protocol.py",
+      "sha256": "98202c6904eb6ed41966be95c89cdae1a8a790aa0740f0dcac656e3bc3d231bc"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/analyze_libero_task7_residual_sign_transition.py",
+      "sha256": "eb34fb3fa4470f82e2b537849f9b8d067b2d6a7f0576d0ca56c261a04a52015e"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/audit_libero_task7_residual_sign_transition.py",
+      "sha256": "bed3be73b3594ca833cf8f50a27ca1cdaf9b7ea06099ead8910845c47b271cba"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/libero_source_expert_late_translation_protocol.py",
+      "sha256": "7c82df697db37d09e54175a588e07d75da4209a0ed210d4c9517ebb2b4e6f9c6"
+    }
+  ],
+  "protocol": {
+    "path": "/home/zl202621/project/KECRL/docs/libero-task7-target-magnitude-matching-plan-2026-11-08.md",
+    "sha256": "b789bfb7a9e64b468bedfa6150c29d499fc7805b89399c55e679c5ec27c8239a"
+  },
+  "output": "/tmp/libero-task7-target-magnitude-matching-20261108-v1.json",
+  "artifacts": "/tmp/libero-task7-target-magnitude-matching-artifacts-20261108-v1"
+}

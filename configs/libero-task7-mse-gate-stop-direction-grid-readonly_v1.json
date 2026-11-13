@@ -1,0 +1,487 @@
+{
+  "kind": "task7_mse_gate_stop_direction_grid_readonly",
+  "version": 1,
+  "formal_result": false,
+  "status": "scientific_freeze_only_execution_binding_required",
+  "parents": {
+    "science": {
+      "path": "/home/zl202621/project/KECRL/configs/libero-task7-mse-nonregression-acceptance-diagnostic_v1.json",
+      "sha256": "b470d22c51b11848e2aa920cd2969dbf5cfe6520e8a36f481ce3be55b433515b"
+    },
+    "binding": {
+      "path": "/home/zl202621/project/KECRL/configs/libero-task7-mse-nonregression-acceptance-execution-binding_v1.json",
+      "sha256": "c4ca468bd54ea62e102154741dad21f9b9381b529f374a4e1a0122679eea497c"
+    },
+    "result": {
+      "path": "/tmp/libero-task7-mse-nonregression-acceptance-20261109-v1.json",
+      "sha256": "5ff96041da1af933f2054e85816bda921a5c54581c77bc918a5e04041f52bfa6"
+    },
+    "audit": {
+      "path": "/tmp/libero-task7-mse-nonregression-acceptance-artifacts-20261109-v1/independent-audit.json",
+      "sha256": "d5ccf67d596e7a1b5abba789f7f0b2f6f808508858e8b3cb0f1c8aeffea173c6"
+    },
+    "completion": {
+      "path": "/tmp/libero-task7-mse-nonregression-acceptance-artifacts-20261109-v1/completion.json",
+      "sha256": "b5f18a8b13c470d4e98a42b8f65035f9299c6a2baa04d9195fea2afb4c88ce44"
+    },
+    "process": {
+      "path": "/tmp/libero-task7-mse-nonregression-acceptance-20261109-v1-process.json",
+      "sha256": "3c6f0dd513a7d5a141eb6a55c82fa827a662ef29c4b60a0a23bb48691231b96d"
+    },
+    "report": {
+      "path": "/home/zl202621/project/KECRL/docs/libero-task7-mse-nonregression-acceptance-results-2026-11-09.md",
+      "sha256": "a9177ae9996e5bc054bc17fee67a540f8539a15be9920bc527df84943cfac136"
+    }
+  },
+  "scope": {
+    "task_ids": [
+      7
+    ],
+    "training_seeds": [
+      20261106,
+      20261107,
+      20261108
+    ],
+    "feature_source_arms": [
+      "A_original",
+      "B_fomaml"
+    ],
+    "original_Policy_updates": 500,
+    "source_auxiliary_updates": 500,
+    "future_stabilization_steps": 5,
+    "analysis_cohort": "all11_candidate_line_search_exhausted_of18;6zero5short;outcome_selected_not_causal",
+    "full50_heads": "7_metadata_only_denominator_not_gradient_controls",
+    "source_role": "own20_fit_demos_of_support0..29_all_tge1;encoder_seen_all30",
+    "new_optimization_gradient_or_model_forward_environment_calls": 0,
+    "array_checkpoint_HDF5_RGB_proprio_reads_including_SHA": 0,
+    "probe_source_query_validation_heldout_qualification_reserved_final_access": false,
+    "loss_representation_search_direction_grid_budget_or_checkpoint_rule_changes": false,
+    "Policy_SPT_Knowledge_Module_changes": false,
+    "old_cues_G_failed_H_unrun_unchanged": true
+  },
+  "design": {
+    "points": [
+      "saved500",
+      "start500_mse_guarded_armijo_final"
+    ],
+    "dimension": 257,
+    "vectors": "Gb=selected_base_derivative_MSE3/7,Gp=selected_penalty_subgradient,G=Gb+Gp,d=-G;coordinate_and_cached_norm_checks",
+    "selection": "11_head_IDs_from_audited_metadata;two_points_each_even_zero_update;last12_candidate_trials_at_saved_stop_k",
+    "gradient_outputs": "norms_dot_Gb_Gp_cosine;dot_Gb_d_dot_Gp_d_dot_G_d;start_stop_vector_changes;zero_norm_cosine_null",
+    "exact_total_slope": "reuse_cached_exact_right_directional_derivative_sT;never_replace_by_minus_normG_squared_at_kinks",
+    "exact_MSE_slope": "only_if_clip_low_tie_plus_high_tie_is0:7*dot_Gb_d;else_null_clip_kink_unresolved",
+    "exact_penalty_slope": "if_exact_MSE_available:sT-dot_Gb_d;valid_even_hinge_ties;else_null",
+    "hinge_gap": "when_no_clip_ties:sT-dot_G_d>=-1e-10;hinge0_requires_abs_gap<=1e-10;gap_is_not_new_forward",
+    "point_pair": "all4vector_change_norms;zero_update_start_stop_vectors_and_selected_scalars_exact_equal",
+    "slack": "M500-Mstop>=0_strict;fixed_auxiliary500_not_original_Policy_or_previous_state",
+    "trial_outputs": "actual_DeltaM_step_and_gate_excess_DeltaP_DeltaT;Armijo_margin;secants;eligible_first_order_prediction_and_residual",
+    "alpha_linear": "slack/exact_MSE_slope_only_if_both_positive;scale_only_not_safe_step_or_trial",
+    "classification": "positive_robust_slack_plus_negative_sT_implies_local_feasibility_by_continuity;boundary_exact_positive_MSE_slope_implies_near0_conflict;boundary_negative_both_implies_local_feasibility;clip_or_nearzero_unresolved",
+    "numeric_band": "abs1e-10_descriptive_inference_only;retain_strict_signs;never_relax_or_relabel_trial_acceptance_or_slack",
+    "no_new_alpha": "no_untried_alpha_evaluation_no_feature_read_or_gradient_recomputation_no_direction_search",
+    "grouping": "6source_seed_cells_each_zero_and_short_including_empty=12;equal_head_values_folds_not_independent_seeds",
+    "statistics": "descriptive_only_no_pvalues_no_global_feasibility_loss_root_cause_or_closed_loop_claim"
+  },
+  "execution": {
+    "status": "scientific_freeze_only_execution_binding_required",
+    "device": "CPU",
+    "python": "3.10.22",
+    "environment": {
+      "CUDA_VISIBLE_DEVICES": "",
+      "PYTHONHASHSEED": "0",
+      "OMP_NUM_THREADS": "1",
+      "OPENBLAS_NUM_THREADS": "1",
+      "MKL_NUM_THREADS": "1"
+    },
+    "pure_stdlib_no_numpy_torch_import": true,
+    "seconds_per_stage": 120,
+    "RSS_bytes_per_stage": 268435456,
+    "overall_seconds": 300,
+    "CSV_bytes_max": 16777216,
+    "absolute_tolerance": 1e-10,
+    "relative_tolerance": 0,
+    "ID_count_shape_role_flags_and_decisions_tolerance": 0,
+    "technical_retries": 0,
+    "overwrite": false,
+    "stop": "any_lineage_projection_coverage_coordinate_identity_norm_slope_conservation_grid_or_audit_mismatch;retain_partial_no_relaxation"
+  },
+  "budget": {
+    "head_cohort": {
+      "candidate_total": 18,
+      "exhausted": 11,
+      "zero": 6,
+      "short": 5,
+      "full50_metadata_only": 7
+    },
+    "source_CSV_passes_per_stage": 3,
+    "source_rows_per_stage": {
+      "endpoints": 54,
+      "parameters": 13878,
+      "trials": 10090
+    },
+    "selected_rows_per_stage": {
+      "endpoints": 22,
+      "parameters": 5654,
+      "trials": 132
+    },
+    "projected_cells_per_stage": {
+      "endpoints": 572,
+      "parameters": 62194,
+      "trials": 2772
+    },
+    "lexical_cells_per_stage": 380100,
+    "total_source_CSV_passes": 6,
+    "total_source_rows": 48044,
+    "total_selected_rows": 11616,
+    "total_projected_cells": 131076,
+    "total_lexical_cells": 760200,
+    "source_SHA_per_stage": 6,
+    "total_source_SHA": 12,
+    "cached_gradient_vector_coordinates_per_stage": 22616,
+    "gradient_coordinate_rows_checked_per_stage": 5654,
+    "new_model_forward_gradient_update_array_or_sealed_calls": 0,
+    "tables": {
+      "points": 22,
+      "trials": 132,
+      "heads": 11,
+      "strata": 12
+    },
+    "output_rows": 177
+  },
+  "inputs": {
+    "endpoints": {
+      "path": "/tmp/libero-task7-mse-nonregression-acceptance-artifacts-20261109-v1/endpoints.csv",
+      "sha256": "7eaba130081242b1190d2d27397753b048da5eed774edea5bc98369630a661dc",
+      "rows": 54,
+      "columns": [
+        "task",
+        "seed",
+        "arm",
+        "fold",
+        "mode",
+        "condition",
+        "extra_updates",
+        "n",
+        "fixed_other6_floor",
+        "component3_mse",
+        "penalty",
+        "trainable_objective",
+        "total_objective",
+        "base_l2",
+        "penalty_l2",
+        "total_l2",
+        "total_rms",
+        "total_linf",
+        "directional_derivative",
+        "anchor_objective",
+        "anchor_max_action_delta",
+        "anchor_harm_disagreements",
+        "branch_digest",
+        "clip_below_n",
+        "clip_low_tie_n",
+        "clip_inside_n",
+        "clip_high_tie_n",
+        "clip_above_n",
+        "hinge_negative_n",
+        "hinge_zero_n",
+        "hinge_positive_n"
+      ]
+    },
+    "parameters": {
+      "path": "/tmp/libero-task7-mse-nonregression-acceptance-artifacts-20261109-v1/parameters.csv",
+      "sha256": "a8ddd4274f1e82dd058ab23b6cff456343b83f59ea6ef460f0e9fa6ee9d7fb32",
+      "rows": 13878,
+      "columns": [
+        "task",
+        "seed",
+        "arm",
+        "fold",
+        "mode",
+        "condition",
+        "coordinate",
+        "parameter",
+        "base_gradient",
+        "penalty_gradient",
+        "total_gradient",
+        "direction"
+      ]
+    },
+    "trials": {
+      "path": "/tmp/libero-task7-mse-nonregression-acceptance-artifacts-20261109-v1/trials.csv",
+      "sha256": "6bd01b5b00666db8fa3ddabc324ce535aeebf770d7f808adbad172a019d4e697",
+      "rows": 10090,
+      "columns": [
+        "task",
+        "seed",
+        "arm",
+        "fold",
+        "mode",
+        "optimization_arm",
+        "from_extra_updates",
+        "trial_index",
+        "alpha",
+        "component3_mse",
+        "penalty",
+        "trainable_objective",
+        "total_objective",
+        "start500_component3_mse",
+        "slope",
+        "armijo_bound",
+        "armijo_pass",
+        "mse_envelope_pass",
+        "mse_gate_applied",
+        "accepted",
+        "reason"
+      ]
+    }
+  },
+  "projections": {
+    "endpoints": [
+      "task",
+      "seed",
+      "arm",
+      "fold",
+      "mode",
+      "condition",
+      "extra_updates",
+      "n",
+      "fixed_other6_floor",
+      "component3_mse",
+      "penalty",
+      "trainable_objective",
+      "total_objective",
+      "base_l2",
+      "penalty_l2",
+      "total_l2",
+      "directional_derivative",
+      "branch_digest",
+      "clip_below_n",
+      "clip_low_tie_n",
+      "clip_inside_n",
+      "clip_high_tie_n",
+      "clip_above_n",
+      "hinge_negative_n",
+      "hinge_zero_n",
+      "hinge_positive_n"
+    ],
+    "parameters": [
+      "task",
+      "seed",
+      "arm",
+      "fold",
+      "mode",
+      "condition",
+      "coordinate",
+      "base_gradient",
+      "penalty_gradient",
+      "total_gradient",
+      "direction"
+    ],
+    "trials": [
+      "task",
+      "seed",
+      "arm",
+      "fold",
+      "mode",
+      "optimization_arm",
+      "from_extra_updates",
+      "trial_index",
+      "alpha",
+      "component3_mse",
+      "penalty",
+      "trainable_objective",
+      "total_objective",
+      "start500_component3_mse",
+      "slope",
+      "armijo_bound",
+      "armijo_pass",
+      "mse_envelope_pass",
+      "mse_gate_applied",
+      "accepted",
+      "reason"
+    ]
+  },
+  "heads": [
+    {
+      "task": 7,
+      "seed": 20261106,
+      "arm": "A_original",
+      "fold": 1,
+      "mode": "harm_protected_affine",
+      "stop_extra_updates": 3,
+      "cohort": "short"
+    },
+    {
+      "task": 7,
+      "seed": 20261106,
+      "arm": "A_original",
+      "fold": 2,
+      "mode": "harm_protected_affine",
+      "stop_extra_updates": 0,
+      "cohort": "zero"
+    },
+    {
+      "task": 7,
+      "seed": 20261106,
+      "arm": "B_fomaml",
+      "fold": 0,
+      "mode": "harm_protected_affine",
+      "stop_extra_updates": 3,
+      "cohort": "short"
+    },
+    {
+      "task": 7,
+      "seed": 20261106,
+      "arm": "B_fomaml",
+      "fold": 1,
+      "mode": "harm_protected_affine",
+      "stop_extra_updates": 0,
+      "cohort": "zero"
+    },
+    {
+      "task": 7,
+      "seed": 20261106,
+      "arm": "B_fomaml",
+      "fold": 2,
+      "mode": "harm_protected_affine",
+      "stop_extra_updates": 0,
+      "cohort": "zero"
+    },
+    {
+      "task": 7,
+      "seed": 20261107,
+      "arm": "A_original",
+      "fold": 1,
+      "mode": "harm_protected_affine",
+      "stop_extra_updates": 5,
+      "cohort": "short"
+    },
+    {
+      "task": 7,
+      "seed": 20261107,
+      "arm": "B_fomaml",
+      "fold": 1,
+      "mode": "harm_protected_affine",
+      "stop_extra_updates": 0,
+      "cohort": "zero"
+    },
+    {
+      "task": 7,
+      "seed": 20261108,
+      "arm": "A_original",
+      "fold": 0,
+      "mode": "harm_protected_affine",
+      "stop_extra_updates": 11,
+      "cohort": "short"
+    },
+    {
+      "task": 7,
+      "seed": 20261108,
+      "arm": "A_original",
+      "fold": 2,
+      "mode": "harm_protected_affine",
+      "stop_extra_updates": 0,
+      "cohort": "zero"
+    },
+    {
+      "task": 7,
+      "seed": 20261108,
+      "arm": "B_fomaml",
+      "fold": 0,
+      "mode": "harm_protected_affine",
+      "stop_extra_updates": 4,
+      "cohort": "short"
+    },
+    {
+      "task": 7,
+      "seed": 20261108,
+      "arm": "B_fomaml",
+      "fold": 2,
+      "mode": "harm_protected_affine",
+      "stop_extra_updates": 0,
+      "cohort": "zero"
+    }
+  ],
+  "full50_metadata_only": [
+    {
+      "task": 7,
+      "seed": 20261106,
+      "arm": "A_original",
+      "fold": 0,
+      "mode": "harm_protected_affine"
+    },
+    {
+      "task": 7,
+      "seed": 20261107,
+      "arm": "A_original",
+      "fold": 0,
+      "mode": "harm_protected_affine"
+    },
+    {
+      "task": 7,
+      "seed": 20261107,
+      "arm": "A_original",
+      "fold": 2,
+      "mode": "harm_protected_affine"
+    },
+    {
+      "task": 7,
+      "seed": 20261107,
+      "arm": "B_fomaml",
+      "fold": 0,
+      "mode": "harm_protected_affine"
+    },
+    {
+      "task": 7,
+      "seed": 20261107,
+      "arm": "B_fomaml",
+      "fold": 2,
+      "mode": "harm_protected_affine"
+    },
+    {
+      "task": 7,
+      "seed": 20261108,
+      "arm": "A_original",
+      "fold": 1,
+      "mode": "harm_protected_affine"
+    },
+    {
+      "task": 7,
+      "seed": 20261108,
+      "arm": "B_fomaml",
+      "fold": 1,
+      "mode": "harm_protected_affine"
+    }
+  ],
+  "fit_rows": {
+    "0": 2782,
+    "1": 2817,
+    "2": 2777
+  },
+  "code": {
+    "metadata": {
+      "path": "/home/zl202621/project/KECRL/experiments/libero_task7_mse_gate_stop_direction_grid_protocol.py",
+      "sha256": "3e9f067519e0216624804113c89bb6d421fb0659108cfcda3115801817a5c68c"
+    },
+    "tests": {
+      "path": "/home/zl202621/project/KECRL/tests/test_libero_task7_mse_gate_stop_direction_grid_protocol.py",
+      "sha256": "d4e628cb67b1d6582ba59865141e625dcdeee389f94fbdcb32433c5fc08d21fb"
+    }
+  },
+  "plan": {
+    "path": "/home/zl202621/project/KECRL/docs/libero-task7-mse-gate-stop-direction-grid-plan-2026-11-09.md",
+    "sha256": "46e4208528f3355d265dfcdd463033f63f6748f4657f399a7a214dfc54006da8"
+  },
+  "future_files": {
+    "analysis": "/home/zl202621/project/KECRL/experiments/analyze_libero_task7_mse_gate_stop_direction_grid.py",
+    "audit": "/home/zl202621/project/KECRL/experiments/audit_libero_task7_mse_gate_stop_direction_grid.py",
+    "guard": "/home/zl202621/project/KECRL/experiments/libero_task7_mse_gate_stop_direction_grid_access.py",
+    "runtime_tests": "/home/zl202621/project/KECRL/tests/test_libero_task7_mse_gate_stop_direction_grid.py",
+    "metadata": "/home/zl202621/project/KECRL/experiments/libero_task7_mse_gate_stop_direction_grid_protocol.py",
+    "metadata_tests": "/home/zl202621/project/KECRL/tests/test_libero_task7_mse_gate_stop_direction_grid_protocol.py",
+    "plan": "/home/zl202621/project/KECRL/docs/libero-task7-mse-gate-stop-direction-grid-plan-2026-11-09.md"
+  },
+  "future_contract": "/home/zl202621/project/KECRL/docs/libero-task7-mse-gate-stop-direction-grid-execution-contract-2026-11-09.md",
+  "output": "/tmp/libero-task7-mse-gate-stop-direction-grid-20261109-v1.json",
+  "artifacts": "/tmp/libero-task7-mse-gate-stop-direction-grid-artifacts-20261109-v1"
+}

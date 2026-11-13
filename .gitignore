@@ -92,3 +92,8 @@ secrets.*
 experiments/logs/*
 results/crafter_wood3_spatial_actor_fresh_cuda_pilot_v2_20261015_v1/summary.json
 results/crafter_wood3_spatial_actor_cross_readout_cuda_pilot_20261015_v1/summary.json
+
+# Persistent server storage; preserve existing compact result exceptions above.
+/cache/
+/tmp/
+/third_party/

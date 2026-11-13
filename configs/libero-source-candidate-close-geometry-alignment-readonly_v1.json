@@ -1,0 +1,107 @@
+{
+  "schema_version": 1,
+  "status": "readonly_saved_source_close_geometry_alignment",
+  "formal_result": false,
+  "diagnostic_only": true,
+  "prior_outcomes_known": true,
+  "tasks": [
+    0,
+    1,
+    3,
+    4,
+    7
+  ],
+  "seeds": [
+    20261106,
+    20261107,
+    20261108
+  ],
+  "arms": [
+    "A_original",
+    "B_fomaml"
+  ],
+  "global_initial_indices": [
+    0,
+    1,
+    2,
+    3
+  ],
+  "candidate_role": "candidate_nonregression",
+  "checkpoint_update": 500,
+  "stabilization_steps": 5,
+  "loss": "uniform_seven_dimensional_valid_step_masked_action_MSE",
+  "capture_root": "/tmp/libero-source-candidate-geometry-capture-artifacts-20261107-v1",
+  "inputs": {
+    "capture": {
+      "path": "/tmp/libero-source-candidate-geometry-capture-20261107-v1.json",
+      "sha256": "eda000e69441e63497349a5d9c97d20647532117b00c58f41edeb3274f09225f"
+    },
+    "audit": {
+      "path": "/tmp/libero-source-candidate-geometry-capture-independent-audit-20261107-v1.json",
+      "sha256": "144e52a6bfbd188abe819010dade779e76c9734eead5b36ca6c1a32ea07aa8ad"
+    },
+    "completion": {
+      "path": "/tmp/libero-source-candidate-geometry-capture-completion-20261107-v1.json",
+      "sha256": "56cefa2dab2ed601bba0efb3ea56e0f9e92905d67bc2e00b46accdaae5dea431"
+    },
+    "interpretation": {
+      "path": "/tmp/libero-source-candidate-geometry-capture-interpretation-20261107-v1.json",
+      "sha256": "546f7b13c4588623737912a8ad6819908002a8941b32ca50c20d06473b84a9b0"
+    },
+    "prior_runs": {
+      "path": "/tmp/libero-source-candidate-geometry-capture-command-runs-20261107-v1.csv",
+      "sha256": "1cc9e05ecc3b221f90a58b7c045d350488942fd78a0677d4b1a6cabee802c2da"
+    }
+  },
+  "neighborhood_half_window": 5,
+  "scope": {
+    "prefixes": 120,
+    "pairs": 60,
+    "task_seed_groups": 15,
+    "all_command_runs": 359,
+    "positive_command_runs": 170,
+    "analysis_raw_JSON_passes": 1,
+    "independent_audit_raw_JSON_passes": 1,
+    "JSON_files_per_pass": 240,
+    "geometry_rows_per_pass": 17247,
+    "schema_inspection_before_main_analysis": "one existing prefix public/geometry JSON; stored prior-run CSV; no new research calls"
+  },
+  "close_interval": "states[start-1..end], action k uses state k-1 and produces state k",
+  "touch_interval": "both fingers dist<=0 collision boundary proxy; no force or grasp label",
+  "pairing": "same absolute states, all availability retained, common cutoff=min(nA,nB)",
+  "continuous_metrics": [
+    "eef_to_bowl_xyz",
+    "eef_to_bowl_xy",
+    "eef_minus_bowl_signed_z",
+    "bowl_height_change",
+    "bowl_to_plate_xyz",
+    "bowl_to_plate_xy"
+  ],
+  "post_touch": "first proxy in close to close-end, separately first proxy in prefix to prefix-end; no causal effect",
+  "anchors": [
+    "close_onset_pre",
+    "close_end_post",
+    "first_touch_in_close",
+    "immediate_open_post"
+  ],
+  "no_distance_or_phase_thresholds": true,
+  "missing_or_terminal_fill": false,
+  "new_research_calls": {
+    "Policy_forward": 0,
+    "optimizer_update": 0,
+    "environment": 0,
+    "reset": 0,
+    "shadow_forward": 0,
+    "checkpoint": 0,
+    "initial_bank": 0,
+    "HDF5": 0,
+    "RGB": 0,
+    "sealed_payload": 0
+  },
+  "G_decision_unchanged_H_not_run": true,
+  "SPT_Knowledge_Module_changes": false,
+  "output": "/tmp/libero-source-candidate-close-geometry-alignment-20261107-v1.json",
+  "tables": "/tmp/libero-source-candidate-close-geometry-alignment-tables-20261107-v1",
+  "independent_audit": "/tmp/libero-source-candidate-close-geometry-alignment-audit-20261107-v1.json",
+  "figures": "/tmp/libero-source-candidate-close-geometry-alignment-figures-20261107-v1"
+}

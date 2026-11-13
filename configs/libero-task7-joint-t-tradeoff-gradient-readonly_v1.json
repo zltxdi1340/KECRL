@@ -1,0 +1,450 @@
+{
+  "kind": "joint_T_saved_M_P_T_and_residual_gradient_accounting",
+  "version": 1,
+  "formal_result": false,
+  "parents": {
+    "science": {
+      "path": "/home/zl202621/project/KECRL/configs/libero-task7-original-m-bound-joint-t-direction-diagnostic_v1.json",
+      "sha256": "d5849f6e6a7fa54bf767251464d3107396fa4c393121d44574643f1523f57b71"
+    },
+    "binding": {
+      "path": "/home/zl202621/project/KECRL/configs/libero-task7-original-m-bound-joint-t-direction-execution-binding_v1.json",
+      "sha256": "d6372c0347be110c6892862596b0194f1c412690666f622ddf5e121e037afd29"
+    },
+    "result": {
+      "path": "/tmp/libero-task7-original-m-bound-joint-t-direction-20261111-v1.json",
+      "sha256": "35be3fa0440ea272cf8b8a95b7aa5a6ffbe3a6b4515a226afde1fbebded32ae9"
+    },
+    "completion": {
+      "path": "/tmp/libero-task7-original-m-bound-joint-t-direction-artifacts-20261111-v1/completion.json",
+      "sha256": "ea45029c864275de2368abde9bf7539af77354116dcfd5d6db0824454817ad33"
+    },
+    "process": {
+      "path": "/tmp/libero-task7-original-m-bound-joint-t-direction-20261111-v1-process.json",
+      "sha256": "5c432f70c000700eaf1356d695fab9c51b400805f8b8cb90882b0a72e82053bb"
+    },
+    "report": {
+      "path": "/home/zl202621/project/KECRL/docs/libero-task7-original-m-bound-joint-t-direction-results-2026-11-11.md",
+      "sha256": "a5154a83a2d0308512c6b1093d91186e8d33fcdc2c73aabbc725679b50446a74"
+    }
+  },
+  "inputs": {
+    "P": {
+      "path": "/tmp/libero-task7-original-m-bound-joint-t-direction-artifacts-20261111-v1/primary-result.json",
+      "sha256": "942078ca737ad5779b3104a29d1557e89226d4163e6bfaecbcebf83bf4935dde"
+    },
+    "U": {
+      "path": "/tmp/libero-task7-original-m-bound-joint-t-direction-artifacts-20261111-v1/independent-audit.json",
+      "sha256": "ab7772504153076722b9a66775b32106a46e2fb030ba66dd3346db4cd5cca9ef"
+    }
+  },
+  "identities": [
+    {
+      "task": 7,
+      "seed": 20261106,
+      "arm": "A_original",
+      "fold": 0,
+      "mode": "harm_protected_affine",
+      "cohort": "full50",
+      "prior_control_updates": 50,
+      "prior_control_stop": "update_cap"
+    },
+    {
+      "task": 7,
+      "seed": 20261106,
+      "arm": "A_original",
+      "fold": 1,
+      "mode": "harm_protected_affine",
+      "cohort": "short",
+      "prior_control_updates": 7,
+      "prior_control_stop": "line_search_exhausted"
+    },
+    {
+      "task": 7,
+      "seed": 20261106,
+      "arm": "A_original",
+      "fold": 2,
+      "mode": "harm_protected_affine",
+      "cohort": "zero",
+      "prior_control_updates": 0,
+      "prior_control_stop": "line_search_exhausted"
+    },
+    {
+      "task": 7,
+      "seed": 20261106,
+      "arm": "B_fomaml",
+      "fold": 0,
+      "mode": "harm_protected_affine",
+      "cohort": "short",
+      "prior_control_updates": 7,
+      "prior_control_stop": "line_search_exhausted"
+    },
+    {
+      "task": 7,
+      "seed": 20261106,
+      "arm": "B_fomaml",
+      "fold": 1,
+      "mode": "harm_protected_affine",
+      "cohort": "zero",
+      "prior_control_updates": 0,
+      "prior_control_stop": "line_search_exhausted"
+    },
+    {
+      "task": 7,
+      "seed": 20261106,
+      "arm": "B_fomaml",
+      "fold": 2,
+      "mode": "harm_protected_affine",
+      "cohort": "zero",
+      "prior_control_updates": 0,
+      "prior_control_stop": "line_search_exhausted"
+    },
+    {
+      "task": 7,
+      "seed": 20261107,
+      "arm": "A_original",
+      "fold": 0,
+      "mode": "harm_protected_affine",
+      "cohort": "full50",
+      "prior_control_updates": 50,
+      "prior_control_stop": "update_cap"
+    },
+    {
+      "task": 7,
+      "seed": 20261107,
+      "arm": "A_original",
+      "fold": 1,
+      "mode": "harm_protected_affine",
+      "cohort": "short",
+      "prior_control_updates": 8,
+      "prior_control_stop": "line_search_exhausted"
+    },
+    {
+      "task": 7,
+      "seed": 20261107,
+      "arm": "A_original",
+      "fold": 2,
+      "mode": "harm_protected_affine",
+      "cohort": "full50",
+      "prior_control_updates": 50,
+      "prior_control_stop": "update_cap"
+    },
+    {
+      "task": 7,
+      "seed": 20261107,
+      "arm": "B_fomaml",
+      "fold": 0,
+      "mode": "harm_protected_affine",
+      "cohort": "full50",
+      "prior_control_updates": 50,
+      "prior_control_stop": "update_cap"
+    },
+    {
+      "task": 7,
+      "seed": 20261107,
+      "arm": "B_fomaml",
+      "fold": 1,
+      "mode": "harm_protected_affine",
+      "cohort": "zero",
+      "prior_control_updates": 0,
+      "prior_control_stop": "line_search_exhausted"
+    },
+    {
+      "task": 7,
+      "seed": 20261107,
+      "arm": "B_fomaml",
+      "fold": 2,
+      "mode": "harm_protected_affine",
+      "cohort": "full50",
+      "prior_control_updates": 50,
+      "prior_control_stop": "update_cap"
+    },
+    {
+      "task": 7,
+      "seed": 20261108,
+      "arm": "A_original",
+      "fold": 0,
+      "mode": "harm_protected_affine",
+      "cohort": "short",
+      "prior_control_updates": 16,
+      "prior_control_stop": "line_search_exhausted"
+    },
+    {
+      "task": 7,
+      "seed": 20261108,
+      "arm": "A_original",
+      "fold": 1,
+      "mode": "harm_protected_affine",
+      "cohort": "full50",
+      "prior_control_updates": 50,
+      "prior_control_stop": "update_cap"
+    },
+    {
+      "task": 7,
+      "seed": 20261108,
+      "arm": "A_original",
+      "fold": 2,
+      "mode": "harm_protected_affine",
+      "cohort": "zero",
+      "prior_control_updates": 0,
+      "prior_control_stop": "line_search_exhausted"
+    },
+    {
+      "task": 7,
+      "seed": 20261108,
+      "arm": "B_fomaml",
+      "fold": 0,
+      "mode": "harm_protected_affine",
+      "cohort": "short",
+      "prior_control_updates": 10,
+      "prior_control_stop": "line_search_exhausted"
+    },
+    {
+      "task": 7,
+      "seed": 20261108,
+      "arm": "B_fomaml",
+      "fold": 1,
+      "mode": "harm_protected_affine",
+      "cohort": "full50",
+      "prior_control_updates": 50,
+      "prior_control_stop": "update_cap"
+    },
+    {
+      "task": 7,
+      "seed": 20261108,
+      "arm": "B_fomaml",
+      "fold": 2,
+      "mode": "harm_protected_affine",
+      "cohort": "zero",
+      "prior_control_updates": 0,
+      "prior_control_stop": "line_search_exhausted"
+    }
+  ],
+  "optimization_arms": [
+    "stepwise_M_nonincrease_guarded_margin",
+    "interior_joint_T_under_original_M_bound"
+  ],
+  "fit_n_by_fold": {
+    "0": 2782,
+    "1": 2817,
+    "2": 2777
+  },
+  "projections": {
+    "heads": [
+      "task",
+      "seed",
+      "arm",
+      "fold",
+      "mode",
+      "optimization_arm",
+      "extra_updates",
+      "trials",
+      "terminal_reason",
+      "initial_component3_mse",
+      "final_component3_mse",
+      "initial_penalty",
+      "final_penalty",
+      "initial_trainable_objective",
+      "final_trainable_objective",
+      "initial_gradient_l2",
+      "final_gradient_l2",
+      "accepted_MSE_step_increases",
+      "trainable_ratio",
+      "gradient_ratio",
+      "objective_target_met",
+      "gradient_target_met",
+      "joint_cue"
+    ],
+    "pairs": [
+      "task",
+      "seed",
+      "arm",
+      "fold",
+      "mode",
+      "cohort",
+      "candidate_progress_from500",
+      "step_M_invariant_met",
+      "guarded_T_control_pair_cue",
+      "margin_anchor_cue",
+      "zero_anchor_cue",
+      "bisector_anchor_cue",
+      "paired_joint_cue",
+      "candidate_minus_control_MSE",
+      "candidate_minus_control_T",
+      "candidate_minus_margin_MSE",
+      "candidate_minus_margin_T",
+      "candidate_minus_zero_MSE",
+      "candidate_minus_zero_T",
+      "candidate_minus_bisector_MSE",
+      "candidate_minus_bisector_T",
+      "margin_anchor_component3_mse",
+      "margin_anchor_penalty",
+      "margin_anchor_trainable_objective",
+      "margin_anchor_total_l2",
+      "margin_anchor_extra_updates",
+      "zero_anchor_component3_mse",
+      "zero_anchor_penalty",
+      "zero_anchor_trainable_objective",
+      "zero_anchor_total_l2",
+      "zero_anchor_extra_updates",
+      "bisector_anchor_component3_mse",
+      "bisector_anchor_penalty",
+      "bisector_anchor_trainable_objective",
+      "bisector_anchor_total_l2",
+      "bisector_anchor_extra_updates"
+    ],
+    "states": [
+      "task",
+      "seed",
+      "arm",
+      "fold",
+      "mode",
+      "optimization_arm",
+      "extra_updates",
+      "n",
+      "component3_mse",
+      "penalty",
+      "trainable_objective",
+      "total_l2",
+      "base_l2",
+      "penalty_l2",
+      "branch_digest"
+    ]
+  },
+  "references": [
+    "own500",
+    "control",
+    "margin",
+    "zero",
+    "bisector"
+  ],
+  "windows": [
+    [
+      0,
+      10
+    ],
+    [
+      10,
+      20
+    ],
+    [
+      20,
+      30
+    ],
+    [
+      30,
+      40
+    ],
+    [
+      40,
+      50
+    ]
+  ],
+  "scope": {
+    "original_Policy_updates": 500,
+    "future_stabilization_steps": 5,
+    "loss_lambda": 1,
+    "source": "own20_fit_support0..29_tge1_encoder_seen_all30;not_unseen_generalization",
+    "no_new_training_or_loss_direction_checkpoint_choice": true,
+    "SPT_Knowledge_Module_changes": false,
+    "all18_both_arms_retained": true,
+    "formal_evaluation_data_stays_sealed": true
+  },
+  "design": {
+    "point": "M=component3_expert_MSE;P=positive_excess_vs_originalPolicy_error/7;T=M/7+P",
+    "comparison": "candidate_final_minus_own500_and_all4_preserved_references;raw_sign_categories",
+    "gradients": "saved_G_Gb_Gp_norms_only;no_new_gradient_vector_or_geometric_certificate",
+    "original_targets": "saved_t50/t0<=.99_and_saved_g50/g0<=.1;None_for_zero_denominator;no_new_threshold",
+    "gradient_focus": "all18_retained;candidate_original_gradient_target_false_is_known_outcome_stratum",
+    "late": "fixed40_to50_window;fractions_of_0_to50_total_T_saving_only_when_defined",
+    "norm_ratio": "saved_normG/(saved_normGb+saved_normGp);descriptive_not_angle_or_causal_cancellation_proof",
+    "path": "all51_saved_states;raw_M_nonincrease_T_strict_lower;gradient_not_assumed_monotone",
+    "branch": "raw_digest_changes_only;cannot_identify_clip_vs_hinge_or_establish_causation",
+    "statistics": "equal_fold_within_source_seed;equal_head_source;means_medians_counts_no_pvalues",
+    "numerical_absolute_tolerance": 1e-10,
+    "relative_tolerance": 0,
+    "raw_classification_and_flags_tolerance": 0,
+    "cannot_claim": "residual_gradient_does_not_prove_more_updates_help_or_convergence;T_lower_not_M_lower;no_formal_promotion"
+  },
+  "budget": {
+    "stages": 2,
+    "source_JSON_passes_per_stage": 2,
+    "source_SHA_per_stage": 4,
+    "total_source_JSON_passes": 4,
+    "total_source_SHA": 8,
+    "rows_per_JSON": {
+      "heads": 36,
+      "pairs": 18,
+      "states": 1836
+    },
+    "projected_rows_per_stage": 3780,
+    "projected_scalar_fields_per_stage": 58032,
+    "total_projected_scalar_fields": 116064,
+    "saved_paths_per_stage": 72,
+    "saved_transitions_per_stage": 3600,
+    "windows_per_stage": 360,
+    "endpoint_gradient_summaries_per_stage": 72,
+    "primary_result_audit_reads": 1,
+    "primary_result_audit_SHA": 2,
+    "technical_retries": 0,
+    "output_rows": {
+      "comparisons": 180,
+      "gradient_endpoints": 72,
+      "path_windows": 360,
+      "comparison_source_seed": 60,
+      "comparison_source": 20,
+      "gradient_source_seed": 24,
+      "gradient_source": 8,
+      "window_source_seed": 120,
+      "window_source": 40,
+      "cross_engine": 18
+    },
+    "new_forward_gradient_autograd_optimizer_trial_environment_calls": 0,
+    "extra_NPZ_CSV_HDF5_checkpoint_vectors_parameters_inputs_private_or_sealed_reads_including_SHA": 0
+  },
+  "execution": {
+    "python": "3.10.22",
+    "device": "CPU",
+    "seconds_per_stage": 120,
+    "overall_seconds": 300,
+    "RSS_bytes": 536870912,
+    "input_JSON_bytes_max": 201326592,
+    "output_JSON_bytes_max": 8388608,
+    "environment": {
+      "CUDA_VISIBLE_DEVICES": "",
+      "PYTHONHASHSEED": "0",
+      "OMP_NUM_THREADS": "1",
+      "OPENBLAS_NUM_THREADS": "1",
+      "MKL_NUM_THREADS": "1"
+    },
+    "stop": "metadata_fields_roles_identity_coverage_nonfinite_conservation_or_audit_mismatch_fail_closed;no_retry_no_overwrite"
+  },
+  "roles": {
+    "protocol": {
+      "path": "/home/zl202621/project/KECRL/experiments/libero_task7_joint_t_tradeoff_gradient_protocol.py",
+      "sha256": "536407a0a274b629e545ec48a0cf496419e3459e9f0b483db7ee08906e867eea"
+    },
+    "guard": {
+      "path": "/home/zl202621/project/KECRL/experiments/libero_task7_joint_t_tradeoff_gradient_access.py",
+      "sha256": "e0a9d4948c25a653b200683c3a172af5117b676a2a902d4220dcf2f48a0c0aab"
+    },
+    "analysis": {
+      "path": "/home/zl202621/project/KECRL/experiments/analyze_libero_task7_joint_t_tradeoff_gradient.py",
+      "sha256": "81daa23bc156fb5e55ff194ae31e3201f307761d628fe382aea8ec16700c4ca4"
+    },
+    "audit": {
+      "path": "/home/zl202621/project/KECRL/experiments/audit_libero_task7_joint_t_tradeoff_gradient.py",
+      "sha256": "912e558377cfdb34eed48c81a4f76cdfd514c69c34f30b2f7848cc8f56db514f"
+    },
+    "tests": {
+      "path": "/home/zl202621/project/KECRL/tests/test_libero_task7_joint_t_tradeoff_gradient.py",
+      "sha256": "b9450d5ac20f9d74faa9b934fadbe2c24a9be49d0d517f436580b517d545fd18"
+    },
+    "plan": {
+      "path": "/home/zl202621/project/KECRL/docs/libero-task7-joint-t-tradeoff-gradient-plan-2026-11-11.md",
+      "sha256": "1714d5e492fae6807029fb9a479280a27bbeb61bf7bf497321d04fec7569f293"
+    }
+  },
+  "output": "/tmp/libero-task7-joint-t-tradeoff-gradient-20261111-v1/analysis.json",
+  "audit": "/tmp/libero-task7-joint-t-tradeoff-gradient-20261111-v1/independent-audit.json"
+}

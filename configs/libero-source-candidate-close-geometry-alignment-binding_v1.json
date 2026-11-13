@@ -1,0 +1,53 @@
+{
+  "schema_version": 1,
+  "status": "readonly_alignment_execution_bound",
+  "formal_result": false,
+  "bound_at_utc": "2026-11-07T06:29:36.977410+00:00",
+  "prior_outcomes_known": true,
+  "config_sha256": "4326a8e12f1371d355a76c347d4ea218e4c5d357585f9499be0177c01214dd58",
+  "base_git_commit": "2beb6271ee66dfba423d517762ff92acfd83444f",
+  "files": {
+    "runner": {
+      "path": "experiments/analyze_libero_source_candidate_close_geometry_alignment.py",
+      "sha256": "01e41561ca99ab3a3a42fcce91423e871d510809601772ddedcb26d697f0c263"
+    },
+    "independent_auditor": {
+      "path": "experiments/audit_libero_source_candidate_close_geometry_alignment.py",
+      "sha256": "46d7d589e547d2aea736e8824fdb95951e6413e5f7255ac02fdf34bb5aa9a34c"
+    },
+    "plotter": {
+      "path": "experiments/plot_libero_source_candidate_close_geometry_alignment.py",
+      "sha256": "a19895cc1f3a6e2ef473ff5463d3cb34768fa62fcc6c658bbb7dfaaf7770b4e7"
+    },
+    "tests": {
+      "path": "tests/test_libero_source_candidate_close_geometry_alignment.py",
+      "sha256": "7ead8fb593282ad4157bb2f0d8f285b8c2302ad85a0bb297730271c6c61f4cf2"
+    },
+    "analysis_plan": {
+      "path": "docs/libero-source-candidate-close-geometry-alignment-plan-2026-11-07.md",
+      "sha256": "3bb9e0d9eff8ef593e5cbca3bd30b0df0d54de858c4942c482cd691c5e9c7d07"
+    },
+    "saved_field_validator": {
+      "path": "experiments/audit_libero_source_candidate_geometry_capture.py",
+      "sha256": "9f95cdb46e69fc38556a4f66277c4a5e13f16641c6d088d68c646a6028b19005"
+    },
+    "science_metadata": {
+      "path": "experiments/libero_source_candidate_geometry_capture_protocol.py",
+      "sha256": "05fb42cbb9b1359205f6081f04b9f3074f81c47a57a499d0b79709e17218376e"
+    },
+    "package": {
+      "path": "experiments/__init__.py",
+      "sha256": "976715d377d710412661a8b81a44a41726b4fffae23abf4a260cb030165eab74"
+    }
+  },
+  "software_verification": {
+    "new_synthetic_tests_passed": 24,
+    "focused_tests_passed": 106,
+    "pytest_seconds": 8.37,
+    "log": "/tmp/libero-source-candidate-close-geometry-alignment-focused-tests-20261107-v1.log",
+    "compile_passed": true,
+    "no_new_full_CPU_regression": "Isolated saved-field analysis; original 1714-test regression retained, not rerun."
+  },
+  "new_policy_optimizer_environment_shadow_checkpoint_or_initial_calls": 0,
+  "analysis_performance_or_phase_threshold_selection": false
+}

@@ -1,0 +1,607 @@
+{
+  "kind": "task7_cached_residual_action_sign_transition_readonly",
+  "version": 1,
+  "formal_result": false,
+  "status": "scientific_frozen_execution_unbound",
+  "parents": {
+    "science": {
+      "path": "/home/zl202621/project/KECRL/configs/libero-task7-current-residual-correctability-diagnostic_v1.json",
+      "sha256": "722b626c34f7faff67356b3d7e385784536aad4b95abf80084f685079855c58e"
+    },
+    "binding": {
+      "path": "/home/zl202621/project/KECRL/configs/libero-task7-current-residual-correctability-execution-binding_v1.json",
+      "sha256": "634889184ab14dcea00fbf7f104b7e0026e90dc9b5db3c13c6ea51130fd3c18c"
+    },
+    "result": {
+      "path": "/tmp/libero-task7-current-residual-correctability-20261108-v1.json",
+      "sha256": "3dede2f27f67135c2ac6a54e1402b79869b330c562f7bc10b35aab0e7ffc5973"
+    },
+    "audit": {
+      "path": "/tmp/libero-task7-current-residual-correctability-artifacts-20261108-v1/independent-audit.json",
+      "sha256": "c932f93555f518b194732e3ac2052456454a120a5334007aa1d51841b13b09c1"
+    },
+    "completion": {
+      "path": "/tmp/libero-task7-current-residual-correctability-artifacts-20261108-v1/completion.json",
+      "sha256": "042a426495aebc53496bf9ebcb2d4e3500222c650a1caa5eb0f247f7eb9affd0"
+    }
+  },
+  "scope": {
+    "task_ids": [
+      7
+    ],
+    "training_seeds": [
+      20261106,
+      20261107,
+      20261108
+    ],
+    "feature_source_arms": [
+      "A_original",
+      "B_fomaml"
+    ],
+    "readout_modes": [
+      "original",
+      "bias_only",
+      "current_affine"
+    ],
+    "original_Policy_updates": 500,
+    "readout_endpoint_updates": 500,
+    "closed_loop_default_stabilization_steps": 5,
+    "loss": "uniform_seven_dimensional_valid_step_masked_action_MSE",
+    "role": "source_meta_support_exposed_representation_OOF_readout_diagnostic",
+    "demonstration_indices": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      15,
+      16,
+      17,
+      18,
+      19,
+      20,
+      21,
+      22,
+      23,
+      24,
+      25,
+      26,
+      27,
+      28,
+      29
+    ],
+    "encoder_has_seen_all30_support_demos": true,
+    "causal_alignment": "obs[t-1] -> action[t],t>=1",
+    "pair_first_action_step": 5,
+    "component_index": 2,
+    "target_material_margin_inclusive": 0.025,
+    "new_training_or_optimizer_updates": 0,
+    "new_forward_readout_CNN_Policy_or_environment_calls": 0,
+    "NPZ_NPY_checkpoint_HDF5_RGB_feature_public_proprio_or_private_state_reads_including_byte_hashes": 0,
+    "old_NN_or_history_tag_CSV_reads": 0,
+    "checkpoint_fold_or_seed_selection": false,
+    "source_meta_query_accessed": false,
+    "sealed_roles_accessed": false,
+    "parent_all4_joint_cues_false_unchanged": true,
+    "G_failed_H_unrun_unchanged": true,
+    "SPT_Knowledge_Module_changes": false,
+    "automatic_training_or_rollout_promotion": false
+  },
+  "design": {
+    "question": "net_sign_error_change_corrected_vs_new_error;reference_output_margin_and_raw_vs_effective_residual;cross_seed_and_bias_affine_overlap",
+    "primary_contrast_focus": "positive_corrected_and_negative_new_error;keep_both_directions_all4_cells_and_all3_comparisons",
+    "action_transition_not_NN": "strict_sign_of_saved_continuous_outputs_vs_expert_material_target;not_previous_NN_tag_or_episode_success_transition",
+    "comparisons_candidate_reference": [
+      [
+        "bias_only",
+        "original"
+      ],
+      [
+        "current_affine",
+        "original"
+      ],
+      [
+        "current_affine",
+        "bias_only"
+      ]
+    ],
+    "phases": [
+      "all_common",
+      "tail20",
+      "complement"
+    ],
+    "directions": [
+      "negative",
+      "positive"
+    ],
+    "transitions": [
+      "stays_correct",
+      "corrected",
+      "new_error",
+      "stays_wrong"
+    ],
+    "reference_and_candidate_output_bands": [
+      "zero",
+      "nonzero_abs_lt.025",
+      "abs_ge.025"
+    ],
+    "strict_error_classes": [
+      "wrong_sign",
+      "prediction_zero",
+      "same_sign_under",
+      "same_sign_over",
+      "exact_match",
+      "zero_target_nonzero"
+    ],
+    "input_frames": "one_lexical_pass75384rows_project17columns;all_raw_tge1_IDs_and_three_modes_required",
+    "input_curves": "one_lexical_pass4608rows_project9IDcolumns_allrows;project14metrics_only_update500_AND_roleprobe_576rows",
+    "curve_filter": "no_fit_numeric_metrics_no_update0_100_250_numeric_metrics;ID_coverage_all4608_checked",
+    "join": "one_to_one_task_seed_arm_mode_source_row;rebuild_demo_step_probe_fold_tail_from30lengths;target_and_IDs_match_all_modes_and_seeds",
+    "scalar_parity": "target_prediction_finite_range_float32_exact;error=prediction-target;category_target_direction_clip_match;original_residual0",
+    "prediction_reconstruction": "float32(clip(original_prediction_2+saved_raw_residual,-1,1))equals_saved_prediction;no_weight_or_feature_forward",
+    "bias_only_parity": "raw_residual_is_one_float32_constant_for_each_endpoint_probe_fold;no_inference_of_current_affine_bias",
+    "pair_material": "tge5_abs_target2_ge.025_3598shared;neutral_and_first4_frames_read_for_ID_and_probe_parity_only",
+    "transition_rule": "correct_iff_target_sign*prediction>0;zero_wrong_for_material;four_cells_complete_and_exclusive",
+    "conservation": "candidate_error_n-reference_error_n=new_error_n-corrected_n;four_counts_sum_class_n;SSE_delta_sum_conserves",
+    "signed_zero_cells": "report_ref_and_candidate_signs_minus_zero_plus_9counts_and_separate_zero_counts_in_each_transition",
+    "margins": "signed_margin=target_sign*prediction;reference_and_candidate_abs0_distance;fixed.025_bands_no_search",
+    "raw_vs_effective": "raw_shift=residual_candidate-residual_reference;effective_shift=prediction_candidate-prediction_reference;clip_or_rounding_gap=effective-raw",
+    "gap_limit": "gap_includes_clamp_AND_saved_float32_rounding;report_ref_candidate_clip_flags_separately;nonzero_gap_does_not_prove_clipping",
+    "ratio": "abs(effective_shift)/abs(reference_prediction);raw_shift_ratio_also;denominator0_null_with_count_no_epsilon",
+    "crossing": "new_error_refmargin>0_candmargin_le0;corrected_refmargin_le0_candmargin>0;ratio_ge1_alone_does_not_define_harm",
+    "same_frame_errors": "ref_candidate_component2_SSE_MSE_MAE_bias_target_energy_relative_zero_error;delta_SSE_lower_tie_higher_per_transition",
+    "descriptions": "target_abs_ref_abs_candidate_abs_raw_residuals_raw_shift_effective_shift_clip_or_rounding_gap_signed_margins_and_ratios;n_mean_median_q25_q75_min_max_float64_linear",
+    "fixed_transition_references": [
+      [
+        "corrected",
+        "stays_wrong"
+      ],
+      [
+        "new_error",
+        "stays_correct"
+      ]
+    ],
+    "references_limit": "match_reference_correctness_and_target_sign;report_target_scale_and_group_n;not_causal_or_same_sample_group_effect",
+    "demo": "retain_all30_empty_groups;paired_demo_delta_only_both_nonempty;equal_demo_mean_and_higher_tie_lower_null_counts",
+    "cross_seed": "per_arm_comparison_same3598frames;keep_all3_transitions_and_ref_error_candidate_error_and4transition_votes0to3;baseline_common_errors_separate",
+    "bias_affine_overlap": "same_endpoint_frame_original_to_bias_transition_by_original_to_affine_transition4x4;not_affine_Wz_vs_bias_parameter_decomposition",
+    "parity": "recompute14metrics_for_all576_final500probe_curve_rows_from_mode_OOF_frames;no_fit_or_earlier_checkpoint_prediction_reconstruction",
+    "empties": "n_counts_SSE0;rates_MSE_quantiles_null;zero_energy_ratios_null;never_drop_seed_demo_or_cell",
+    "aggregation": "all3_seeds_per_A_B_source_arm_raw_values_and_complete_mean;no_pvalues_significance_or_independent_frame_assumption",
+    "interpretation": "offline_error_association_and_output_shift_only;not_missing_history_visual_head_root_cause_physical_phase_worldz_or_closed_loop_gain",
+    "data_limit": "CSV_has_no_W_b_features_or_observations;cannot_separate_current_affine_internal_Wz_and_b_or_retrain_or_restore_G_H",
+    "decision": "all_parent_cues_false_stay_false;no_new_acceptance_threshold_or_candidate_selection;describe_evidence_and_counterexamples_only"
+  },
+  "execution": {
+    "status": "scientific_freeze_only_execution_binding_required",
+    "device": "CPU",
+    "runtime": {
+      "python": "3.10.22",
+      "numpy": "1.22.4"
+    },
+    "environment": {
+      "CUDA_VISIBLE_DEVICES": "",
+      "PYTHONHASHSEED": "0",
+      "OMP_NUM_THREADS": "1",
+      "OPENBLAS_NUM_THREADS": "1",
+      "MKL_NUM_THREADS": "1"
+    },
+    "analysis_active_seconds_max": 180,
+    "audit_active_seconds_max": 180,
+    "overall_watchdog_seconds": 420,
+    "working_memory_bytes_max": 536870912,
+    "memory_monitor": "current_/proc/self/status_VmHWM_VmRSS",
+    "output_CSV_bytes_max": 268435456,
+    "technical_retries": 0,
+    "output_overwrite": false,
+    "access": "two_fixed_CSV_only_one_data_pass_each_per_stage;conditional_projected_columns;deny_raw_unlisted_CSV_or_all_archives_and_alternate_readers",
+    "metadata": "five_fixed_parent_JSON_for_provenance_only;no_parent_metric_payload_used_as_new_analysis_input",
+    "byte_SHA": "two_input_CSV_before_after_separate_from_data_passes;never_hash_NPZ_or_checkpoint",
+    "audit": "separate_process_independent_numerical_reconstruction_no_primary_analysis_import;repeat_same2CSV_passes_projection_and_all_output_checks",
+    "float_absolute_tolerance": 1e-10,
+    "float_relative_tolerance": 0,
+    "integer_ID_category_and_f32_prediction_tolerance": 0,
+    "stop": "any_hash_provenance_role_ID_header_duplicate_missing_projection_scalar_curve_parity_budget_or_audit_mismatch_keep_partial_stop_no_retry"
+  },
+  "budget": {
+    "source_endpoints": 6,
+    "modes": 3,
+    "comparisons": 3,
+    "raw_source_rows_shared": 4188,
+    "raw_mode_frame_rows": 75384,
+    "material_common_rows_shared": 3598,
+    "pair_frame_rows": 64764,
+    "cross_seed_frame_rows": 21588,
+    "phases": 3,
+    "directions": 2,
+    "demos": 30,
+    "per_stage": {
+      "CSV_data_passes": 2,
+      "frames_lexical_rows": 75384,
+      "curve_lexical_rows": 4608,
+      "CSV_lexical_rows": 79992,
+      "frame_projected_columns": 17,
+      "frame_projected_cells": 1281528,
+      "curve_ID_columns": 9,
+      "curve_ID_projected_cells": 41472,
+      "selected_curve_numeric_rows": 576,
+      "selected_curve_metric_columns": 14,
+      "selected_curve_metric_cells": 8064,
+      "projected_cells": 1331064
+    },
+    "total_CSV_data_passes": 4,
+    "total_CSV_lexical_rows": 159984,
+    "total_projected_cells": 2662128,
+    "probe_curve_scalar_parity_checks_per_stage": 8064,
+    "tables": {
+      "paired-frames": 64764,
+      "model-transitions": 432,
+      "demo-transitions": 12960,
+      "margin-cells": 3888,
+      "error-cells": 3888,
+      "contrasts": 216,
+      "demo-contrasts": 6480,
+      "demo-standardized": 216,
+      "crossseed-frames": 21588,
+      "crossseed-summary": 144,
+      "head-overlap": 576,
+      "probe-parity": 576
+    },
+    "seed_summary_JSON_rows": 72,
+    "NPZ_NPY_checkpoint_feature_or_other_array_reads_including_hashes": 0,
+    "new_training_or_forward_environment_neighbor_or_sealed_calls": 0
+  },
+  "frame_columns": [
+    "task",
+    "seed",
+    "arm",
+    "mode",
+    "update",
+    "source_row",
+    "probe_fold",
+    "demo",
+    "action_step",
+    "target_direction",
+    "tail20",
+    "component3_category",
+    "raw_residual",
+    "clip",
+    "target_2",
+    "prediction_2",
+    "error_2"
+  ],
+  "curve_ID_columns": [
+    "task",
+    "seed",
+    "arm",
+    "fold",
+    "mode",
+    "update",
+    "role",
+    "phase",
+    "direction"
+  ],
+  "curve_metric_columns": [
+    "n",
+    "material_n",
+    "component3_mse",
+    "component3_sse",
+    "component3_mae",
+    "component3_bias",
+    "material_sign_error_n",
+    "material_sign_error_rate",
+    "clip_n",
+    "clip_fraction",
+    "raw_residual_mean",
+    "raw_residual_abs_mean",
+    "raw_residual_min",
+    "raw_residual_max"
+  ],
+  "inputs": {
+    "tables": {
+      "frames": {
+        "path": "/tmp/libero-task7-current-residual-correctability-artifacts-20261108-v1/oof-frames.csv",
+        "sha256": "5c4cb891cc24c90f3edba7b781b4389f8cc63f73ae61bffa060ec1b87f2eec00",
+        "rows": 75384,
+        "columns": [
+          "task",
+          "seed",
+          "arm",
+          "mode",
+          "update",
+          "source_row",
+          "probe_fold",
+          "demo",
+          "action_step",
+          "target_direction",
+          "tail20",
+          "component3_category",
+          "raw_residual",
+          "clip",
+          "target_0",
+          "prediction_0",
+          "error_0",
+          "target_1",
+          "prediction_1",
+          "error_1",
+          "target_2",
+          "prediction_2",
+          "error_2",
+          "target_3",
+          "prediction_3",
+          "error_3",
+          "target_4",
+          "prediction_4",
+          "error_4",
+          "target_5",
+          "prediction_5",
+          "error_5",
+          "target_6",
+          "prediction_6",
+          "error_6"
+        ]
+      },
+      "curves": {
+        "path": "/tmp/libero-task7-current-residual-correctability-artifacts-20261108-v1/curves.csv",
+        "sha256": "42175f71dc314f95ad9b1642c535bf39e60e803c8094c0680b272a91f5e8203e",
+        "rows": 4608,
+        "columns": [
+          "task",
+          "seed",
+          "arm",
+          "fold",
+          "mode",
+          "update",
+          "role",
+          "phase",
+          "direction",
+          "n",
+          "component3_sse",
+          "component3_mse",
+          "component3_mae",
+          "component3_bias",
+          "component3_target_energy",
+          "component3_target_energy_mean",
+          "component3_relative_zero_error",
+          "wrong_sign_n",
+          "wrong_sign_fraction",
+          "wrong_sign_sse",
+          "wrong_sign_sse_fraction",
+          "prediction_zero_n",
+          "prediction_zero_fraction",
+          "prediction_zero_sse",
+          "prediction_zero_sse_fraction",
+          "same_sign_under_n",
+          "same_sign_under_fraction",
+          "same_sign_under_sse",
+          "same_sign_under_sse_fraction",
+          "same_sign_over_n",
+          "same_sign_over_fraction",
+          "same_sign_over_sse",
+          "same_sign_over_sse_fraction",
+          "exact_match_n",
+          "exact_match_fraction",
+          "exact_match_sse",
+          "exact_match_sse_fraction",
+          "zero_target_nonzero_n",
+          "zero_target_nonzero_fraction",
+          "zero_target_nonzero_sse",
+          "zero_target_nonzero_sse_fraction",
+          "wrong_sign_below_margin_n",
+          "wrong_sign_below_margin_sse",
+          "wrong_sign_ge_margin_n",
+          "wrong_sign_ge_margin_sse",
+          "target_abs_n",
+          "target_abs_mean",
+          "target_abs_median",
+          "target_abs_q25",
+          "target_abs_q75",
+          "prediction_abs_n",
+          "prediction_abs_mean",
+          "prediction_abs_median",
+          "prediction_abs_q25",
+          "prediction_abs_q75",
+          "error_abs_n",
+          "error_abs_mean",
+          "error_abs_median",
+          "error_abs_q25",
+          "error_abs_q75",
+          "axis0_mse",
+          "axis0_mae",
+          "axis0_bias",
+          "axis0_target_energy",
+          "axis0_relative_zero_error",
+          "axis1_mse",
+          "axis1_mae",
+          "axis1_bias",
+          "axis1_target_energy",
+          "axis1_relative_zero_error",
+          "axis2_mse",
+          "axis2_mae",
+          "axis2_bias",
+          "axis2_target_energy",
+          "axis2_relative_zero_error",
+          "axis3_mse",
+          "axis3_mae",
+          "axis3_bias",
+          "axis3_target_energy",
+          "axis3_relative_zero_error",
+          "axis4_mse",
+          "axis4_mae",
+          "axis4_bias",
+          "axis4_target_energy",
+          "axis4_relative_zero_error",
+          "axis5_mse",
+          "axis5_mae",
+          "axis5_bias",
+          "axis5_target_energy",
+          "axis5_relative_zero_error",
+          "axis6_mse",
+          "axis6_mae",
+          "axis6_bias",
+          "axis6_target_energy",
+          "axis6_relative_zero_error",
+          "all7_mse",
+          "translation_mse",
+          "other_translation_mse",
+          "rotation_mse",
+          "gripper_mse",
+          "gripper_sign_accuracy",
+          "gripper_target_zero_n",
+          "gripper_prediction_zero_n",
+          "material_n",
+          "material_sign_error_n",
+          "material_sign_error_rate",
+          "clip_n",
+          "clip_fraction",
+          "at_boundary_n",
+          "saved_output_abs_lt1e5_n",
+          "raw_residual_min",
+          "raw_residual_max",
+          "raw_residual_n",
+          "raw_residual_mean",
+          "raw_residual_median",
+          "raw_residual_q25",
+          "raw_residual_q75",
+          "raw_residual_abs_n",
+          "raw_residual_abs_mean",
+          "raw_residual_abs_median",
+          "raw_residual_abs_q25",
+          "raw_residual_abs_q75"
+        ]
+      }
+    },
+    "action_lengths": [
+      155,
+      125,
+      124,
+      191,
+      136,
+      138,
+      133,
+      130,
+      139,
+      145,
+      140,
+      164,
+      124,
+      138,
+      120,
+      137,
+      141,
+      152,
+      137,
+      128,
+      197,
+      124,
+      128,
+      126,
+      144,
+      129,
+      168,
+      132,
+      140,
+      133
+    ],
+    "endpoints": [
+      {
+        "task": 7,
+        "seed": 20261106,
+        "arm": "A_original",
+        "checkpoint": {
+          "path": "/tmp/libero-formal-G-artifacts-20261105-v2/G-task7-seed20261106-A_original-u500.pt",
+          "sha256": "c5cb770a456185a5ef4885311ba4aab452aa287039c8d6b9fda48d9f895a9909",
+          "weight_hash": "a4e74450ffa2b38e51bd175a6e57d6e368c9cc00b687c8b9c43342606f61b200"
+        }
+      },
+      {
+        "task": 7,
+        "seed": 20261106,
+        "arm": "B_fomaml",
+        "checkpoint": {
+          "path": "/tmp/libero-formal-G-artifacts-20261105-v2/G-task7-seed20261106-B_fomaml-u500.pt",
+          "sha256": "cba1dc95887721f1cd44068e72aff914cadf863dcda593e38d31f86c48949eaa",
+          "weight_hash": "69dd5ed7abb5929db10800e2a55d0ac1fb93fb0e25ac0c2a10bea2b12e09a1f2"
+        }
+      },
+      {
+        "task": 7,
+        "seed": 20261107,
+        "arm": "A_original",
+        "checkpoint": {
+          "path": "/tmp/libero-formal-G-artifacts-20261105-v2/G-task7-seed20261107-A_original-u500.pt",
+          "sha256": "2058d4d47f5293e77c596f5a104529708b03a6a89052a8423c82e2030ed13ace",
+          "weight_hash": "0273bc2183d1d0f3810458306cedc378d3f481632fadc5f969a90a57371373bb"
+        }
+      },
+      {
+        "task": 7,
+        "seed": 20261107,
+        "arm": "B_fomaml",
+        "checkpoint": {
+          "path": "/tmp/libero-formal-G-artifacts-20261105-v2/G-task7-seed20261107-B_fomaml-u500.pt",
+          "sha256": "c8d007ce68f23ce67306398adbf9e8438b401a1b6f667d515f012881bef11a26",
+          "weight_hash": "faa71e0f12c3eadd9be8688ba5a9a0f99eddba838bf00d16bbd3797969445879"
+        }
+      },
+      {
+        "task": 7,
+        "seed": 20261108,
+        "arm": "A_original",
+        "checkpoint": {
+          "path": "/tmp/libero-formal-G-artifacts-20261105-v2/G-task7-seed20261108-A_original-u500.pt",
+          "sha256": "b264be47a6ca54a1370fbdd53a2d5f0f96615f8c2f19207afef3f977e41b1538",
+          "weight_hash": "fbfd635652d71fa60019e1152060f722e795ee0c65ca431da6877e66c175cd67"
+        }
+      },
+      {
+        "task": 7,
+        "seed": 20261108,
+        "arm": "B_fomaml",
+        "checkpoint": {
+          "path": "/tmp/libero-formal-G-artifacts-20261105-v2/G-task7-seed20261108-B_fomaml-u500.pt",
+          "sha256": "5f8740383959991e9abfc0dcc2069d5b7b067c36e26a6fdc576d16f79b7316df",
+          "weight_hash": "74276f271b063870e932f7bf40f14413fce919c1d51a45ab59c9750ac810b089"
+        }
+      }
+    ]
+  },
+  "code": [
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/libero_task7_residual_sign_transition_protocol.py",
+      "sha256": "98202c6904eb6ed41966be95c89cdae1a8a790aa0740f0dcac656e3bc3d231bc"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/tests/test_libero_task7_residual_sign_transition_protocol.py",
+      "sha256": "23c849f5a1d3c382f619e427f06a637136336372d15dbc0b1bceec813d2d4d9a"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/libero_task7_current_residual_correctability_protocol.py",
+      "sha256": "b1610cbfeb6e3b075f7ae1930696353da8a882545c70dca139a253ff20605f3f"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/libero_source_expert_late_translation_protocol.py",
+      "sha256": "7c82df697db37d09e54175a588e07d75da4209a0ed210d4c9517ebb2b4e6f9c6"
+    },
+    {
+      "path": "/home/zl202621/project/KECRL/experiments/run_libero_task7_current_residual_correctability.py",
+      "sha256": "d07563b4a3ed9c90c45bd2141e4bb91f0f5662fcafbbe7cd483ce495b069568e"
+    }
+  ],
+  "protocol": {
+    "path": "/home/zl202621/project/KECRL/docs/libero-task7-residual-sign-transition-plan-2026-11-08.md",
+    "sha256": "d49486e65621ec5a7daf16f9ddc18205e2d32566626da86da00abee4be2b2f74"
+  },
+  "output": "/tmp/libero-task7-residual-sign-transition-20261108-v1.json",
+  "artifacts": "/tmp/libero-task7-residual-sign-transition-artifacts-20261108-v1"
+}

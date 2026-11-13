@@ -1,0 +1,140 @@
+{
+  "schema_version": 1,
+  "status": "readonly_source_native_goal_semantics_and_saved_terminal_pose",
+  "formal_result": false,
+  "diagnostic_only": true,
+  "prior_outcomes_and_endpoint_distances_known": true,
+  "tasks": [
+    0,
+    1,
+    3,
+    4,
+    7
+  ],
+  "seeds": [
+    20261106,
+    20261107,
+    20261108
+  ],
+  "arms": [
+    "A_original",
+    "B_fomaml"
+  ],
+  "global_initial_indices": [
+    0,
+    1,
+    2,
+    3
+  ],
+  "initial_role": "candidate_nonregression",
+  "checkpoint_update": 500,
+  "stabilization_steps": 5,
+  "loss_unchanged": true,
+  "last_saved_boundaries": 6,
+  "capture_root": "/tmp/libero-source-candidate-geometry-capture-artifacts-20261107-v1",
+  "inputs": {
+    "capture": {
+      "path": "/tmp/libero-source-candidate-geometry-capture-20261107-v1.json",
+      "sha256": "eda000e69441e63497349a5d9c97d20647532117b00c58f41edeb3274f09225f"
+    },
+    "capture_audit": {
+      "path": "/tmp/libero-source-candidate-geometry-capture-independent-audit-20261107-v1.json",
+      "sha256": "144e52a6bfbd188abe819010dade779e76c9734eead5b36ca6c1a32ea07aa8ad"
+    },
+    "alignment": {
+      "path": "/tmp/libero-source-candidate-close-geometry-alignment-20261107-v1.json",
+      "sha256": "4ef42c89bd0fc7d4a161b6634e4680f49f9c27ffe7c57bfdc04ec4fabe1efc31"
+    },
+    "alignment_audit": {
+      "path": "/tmp/libero-source-candidate-close-geometry-alignment-audit-20261107-v1.json",
+      "sha256": "49bcd6bffc0108ae14b827ce48a2cf28424107d6b1ccd353aecd42c68d73d308"
+    },
+    "alignment_completion": {
+      "path": "/tmp/libero-source-candidate-close-geometry-alignment-completion-20261107-v1.json",
+      "sha256": "e28b21f3da4a03649a38fed6495acaf04c8395f9c61fbe337caed34a745d6e10"
+    }
+  },
+  "native_sources": {
+    "object_states": {
+      "path": "/home/zl202621/third_party/LIBERO/libero/libero/envs/object_states/base_object_states.py",
+      "sha256": "ca6f53123336b6487bdb4feb02534ddb3a0627a4b847fe89da4460520ef01366"
+    },
+    "predicates": {
+      "path": "/home/zl202621/third_party/LIBERO/libero/libero/envs/predicates/base_predicates.py",
+      "sha256": "319137e95330dbb22a266a8dceb8110f18413c2bf17461550222228c4bc310a1"
+    },
+    "predicate_registry": {
+      "path": "/home/zl202621/third_party/LIBERO/libero/libero/envs/predicates/__init__.py",
+      "sha256": "e059a52d635ae4bdfe0e4bd6f0a0ca9b53a04444b39b53664fffb38d0838679e"
+    },
+    "problem": {
+      "path": "/home/zl202621/third_party/LIBERO/libero/libero/envs/problems/libero_tabletop_manipulation.py",
+      "sha256": "0defb17c0bbab8f6bd34c021ac15598ea101fe1e48690cb440d4ef92762880fe"
+    },
+    "domain": {
+      "path": "/home/zl202621/third_party/LIBERO/libero/libero/envs/bddl_base_domain.py",
+      "sha256": "055836670ac5fcac7e033fc86404718fd53854996e5776b1ff68b646f7bbcc9d"
+    },
+    "wrapper": {
+      "path": "/home/zl202621/third_party/LIBERO/libero/libero/envs/env_wrapper.py",
+      "sha256": "a782fb76c9792268d28979474fe72849e1e98ada49c8e997a65359a8d6b6acd0"
+    },
+    "binding": {
+      "path": "/home/zl202621/.conda/envs/libero-kecrl/lib/python3.10/site-packages/robosuite/utils/binding_utils.py",
+      "sha256": "f5c8aada3bc85d3e66b9c4719c62892f0a32e4ea3489f66cc9abcaa170282c04"
+    },
+    "robosuite_environment": {
+      "path": "/home/zl202621/.conda/envs/libero-kecrl/lib/python3.10/site-packages/robosuite/environments/base.py",
+      "sha256": "3d55a1d8b0350478b7e7e8d1c7a1250c8f173b69a67016ecb9e65c6965e741f6"
+    },
+    "adapter": {
+      "path": "/home/zl202621/project/KECRL/src/environments/libero_adapter.py",
+      "sha256": "8dfa22a1e19b049d78c8e6ae05494291242cbde8a21194e0fbb321662d56512c"
+    }
+  },
+  "source_bddls": {
+    "0": {
+      "path": "/home/zl202621/third_party/LIBERO/libero/libero/bddl_files/libero_spatial/pick_up_the_black_bowl_between_the_plate_and_the_ramekin_and_place_it_on_the_plate.bddl",
+      "sha256": "9b59eb1287802868ad9bc78d58e6d36d4ba31134e679cfdbdf4b0feb660c959b"
+    },
+    "1": {
+      "path": "/home/zl202621/third_party/LIBERO/libero/libero/bddl_files/libero_spatial/pick_up_the_black_bowl_next_to_the_ramekin_and_place_it_on_the_plate.bddl",
+      "sha256": "53a7516571412a2f46a27cbf8482d3b76dbad4221858c8f6b565d506c274e61d"
+    },
+    "3": {
+      "path": "/home/zl202621/third_party/LIBERO/libero/libero/bddl_files/libero_spatial/pick_up_the_black_bowl_on_the_cookie_box_and_place_it_on_the_plate.bddl",
+      "sha256": "3d4ccf070c3d9883ae0676f2d888588f98c696ddad71b7694f47c379fc99ef36"
+    },
+    "4": {
+      "path": "/home/zl202621/third_party/LIBERO/libero/libero/bddl_files/libero_spatial/pick_up_the_black_bowl_in_the_top_drawer_of_the_wooden_cabinet_and_place_it_on_the_plate.bddl",
+      "sha256": "4371189e11d9fd29bb548ab9a8adcd741bb0ce41bb66c612672d0e8cb29a52a9"
+    },
+    "7": {
+      "path": "/home/zl202621/third_party/LIBERO/libero/libero/bddl_files/libero_spatial/pick_up_the_black_bowl_on_the_stove_and_place_it_on_the_plate.bddl",
+      "sha256": "dd11837141a30d874ebbbfaae20e91ecc67ec85ab3872ceb4cff3abfcbef7cb0"
+    }
+  },
+  "LIBERO_revision": "8f1084e3132a39270c3a13ebe37270a43ece2a01",
+  "LIBERO_worktree_clean_at_source_check": true,
+  "native_XY_radius_m_from_source": 0.03,
+  "native_XY_gate": "strict_less_than",
+  "native_Z_gate": "bowl_root_z>=plate_root_z",
+  "native_contact_gate": "any matched plate/bowl record; includes positive margin; not force or gripper contact",
+  "raw_data_passes": {
+    "analysis": 1,
+    "independent_audit": 1,
+    "files_per_pass": 240,
+    "geometry_rows_per_pass": 17247
+  },
+  "maximum_terminal_rows": 120,
+  "maximum_last6_rows": 720,
+  "exact_native_goal_reconstruction": false,
+  "native_cached_body_xpos_and_contact_buffers_saved": false,
+  "proxy_disagreements": "preserve_native_label_and_report_all",
+  "new_research_calls": 0,
+  "SPT_Knowledge_Module_changes": false,
+  "G_decision_unchanged_H_not_run": true,
+  "output": "/tmp/libero-source-candidate-native-goal-pose-20261107-v1.json",
+  "tables": "/tmp/libero-source-candidate-native-goal-pose-tables-20261107-v1",
+  "independent_audit": "/tmp/libero-source-candidate-native-goal-pose-independent-audit-20261107-v1.json"
+}

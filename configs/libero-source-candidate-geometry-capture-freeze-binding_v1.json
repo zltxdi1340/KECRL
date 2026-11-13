@@ -1,0 +1,37 @@
+{
+  "schema_version": 1,
+  "status": "source_candidate_geometry_science_frozen",
+  "formal_result": false,
+  "diagnostic_only": true,
+  "frozen_at_utc": "2026-11-06T12:39:47.084495+00:00",
+  "base_git_commit": "2beb6271ee66dfba423d517762ff92acfd83444f",
+  "config_sha256": "057d98818cf36c23a1dac1dd84d4d742603e92e3360744efa4e8b77ac97d5b7e",
+  "execution_binding_complete": false,
+  "capture_authorized": false,
+  "files": {
+    "protocol_validator": {
+      "path": "experiments/libero_source_candidate_geometry_capture_protocol.py",
+      "sha256": "05fb42cbb9b1359205f6081f04b9f3074f81c47a57a499d0b79709e17218376e"
+    },
+    "protocol_report": {
+      "path": "docs/libero-source-candidate-geometry-capture-protocol-2026-11-06.md",
+      "sha256": "018f75d738dc332eab140c23731e7fcec5a81c19afc88bdae0140f225bde8c1f"
+    },
+    "tests": {
+      "path": "tests/test_libero_source_candidate_geometry_capture_protocol.py",
+      "sha256": "7347aa4c9a6133fe938cf1de6bc909bb3f186b88e13ceeea065d03d9389dba9e"
+    }
+  },
+  "software_verification": {
+    "new_tests_passed": 35,
+    "related_tests_passed": 100,
+    "test_seconds": 1.17,
+    "py_compile_passed": true,
+    "git_diff_check_passed": true,
+    "verification_record": "/tmp/libero-source-candidate-geometry-freeze-software-checks-20261106-v2.json"
+  },
+  "current_numeric_checkpoint_initial_or_private_payload_reads": 0,
+  "current_policy_optimizer_environment_or_shadow_calls": 0,
+  "separate_execution_entry_observer_and_independent_auditor_required": true,
+  "G_decision_unchanged": "failed_keep_H_sealed"
+}

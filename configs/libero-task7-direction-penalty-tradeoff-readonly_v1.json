@@ -1,0 +1,379 @@
+{
+  "kind": "task7_direction_v2_saved_scalar_penalty_tradeoff",
+  "version": 1,
+  "formal_result": false,
+  "parents": {
+    "science": {
+      "path": "/home/zl202621/project/KECRL/configs/libero-task7-joint-direction-diagnostic_v2.json",
+      "sha256": "253061977b288bbec50a232e49b630f0f1e825370bdafeeabdc248e0106ac50c"
+    },
+    "binding": {
+      "path": "/home/zl202621/project/KECRL/configs/libero-task7-joint-direction-execution-binding_v2.json",
+      "sha256": "d81444c3fc17c103343cd273941732c5e532ca434eba2b0956da4fee44a677d7"
+    },
+    "result": {
+      "path": "/tmp/libero-task7-joint-direction-20261110-v2.json",
+      "sha256": "28615e083c656c5a5f6f779f958d6b831bc8c21c52272cc703e3f7247c4e5cc3"
+    },
+    "process": {
+      "path": "/tmp/libero-task7-joint-direction-20261110-v2-process.json",
+      "sha256": "c50646b9dbc0d60dfb0c15b8623cd5b453384f4afa00209c47a580e3a7cc1475"
+    },
+    "completion": {
+      "path": "/tmp/libero-task7-joint-direction-artifacts-20261110-v2/completion.json",
+      "sha256": "2884652664aec65a8d170bc746d8fa3ec5a27d0e7f8e5fa5962014c0bfceecfb"
+    },
+    "report": {
+      "path": "/home/zl202621/project/KECRL/docs/libero-task7-joint-direction-results-v2-2026-11-10.md",
+      "sha256": "e251b28445ed32efddf94b313b3dbb7a1307c57e975484d2390d5c838310522c"
+    }
+  },
+  "inputs": {
+    "P": {
+      "path": "/tmp/libero-task7-joint-direction-artifacts-20261110-v2/primary-result.json",
+      "sha256": "f9d3c390ed1a2f96ef27fb1a7204f55ec2e88ae99d671a205aaa6d440355e058"
+    },
+    "U": {
+      "path": "/tmp/libero-task7-joint-direction-artifacts-20261110-v2/independent-audit.json",
+      "sha256": "9be5913ecae646a8c9b1861b966c517396836ab15d340893fd7634b252fe6ca4"
+    }
+  },
+  "identities": [
+    {
+      "task": 7,
+      "seed": 20261106,
+      "arm": "A_original",
+      "fold": 0,
+      "mode": "harm_protected_affine",
+      "cohort": "full50",
+      "prior_control_updates": 50,
+      "prior_control_stop": "update_cap"
+    },
+    {
+      "task": 7,
+      "seed": 20261106,
+      "arm": "A_original",
+      "fold": 1,
+      "mode": "harm_protected_affine",
+      "cohort": "short",
+      "prior_control_updates": 7,
+      "prior_control_stop": "line_search_exhausted"
+    },
+    {
+      "task": 7,
+      "seed": 20261106,
+      "arm": "A_original",
+      "fold": 2,
+      "mode": "harm_protected_affine",
+      "cohort": "zero",
+      "prior_control_updates": 0,
+      "prior_control_stop": "line_search_exhausted"
+    },
+    {
+      "task": 7,
+      "seed": 20261106,
+      "arm": "B_fomaml",
+      "fold": 0,
+      "mode": "harm_protected_affine",
+      "cohort": "short",
+      "prior_control_updates": 7,
+      "prior_control_stop": "line_search_exhausted"
+    },
+    {
+      "task": 7,
+      "seed": 20261106,
+      "arm": "B_fomaml",
+      "fold": 1,
+      "mode": "harm_protected_affine",
+      "cohort": "zero",
+      "prior_control_updates": 0,
+      "prior_control_stop": "line_search_exhausted"
+    },
+    {
+      "task": 7,
+      "seed": 20261106,
+      "arm": "B_fomaml",
+      "fold": 2,
+      "mode": "harm_protected_affine",
+      "cohort": "zero",
+      "prior_control_updates": 0,
+      "prior_control_stop": "line_search_exhausted"
+    },
+    {
+      "task": 7,
+      "seed": 20261107,
+      "arm": "A_original",
+      "fold": 0,
+      "mode": "harm_protected_affine",
+      "cohort": "full50",
+      "prior_control_updates": 50,
+      "prior_control_stop": "update_cap"
+    },
+    {
+      "task": 7,
+      "seed": 20261107,
+      "arm": "A_original",
+      "fold": 1,
+      "mode": "harm_protected_affine",
+      "cohort": "short",
+      "prior_control_updates": 8,
+      "prior_control_stop": "line_search_exhausted"
+    },
+    {
+      "task": 7,
+      "seed": 20261107,
+      "arm": "A_original",
+      "fold": 2,
+      "mode": "harm_protected_affine",
+      "cohort": "full50",
+      "prior_control_updates": 50,
+      "prior_control_stop": "update_cap"
+    },
+    {
+      "task": 7,
+      "seed": 20261107,
+      "arm": "B_fomaml",
+      "fold": 0,
+      "mode": "harm_protected_affine",
+      "cohort": "full50",
+      "prior_control_updates": 50,
+      "prior_control_stop": "update_cap"
+    },
+    {
+      "task": 7,
+      "seed": 20261107,
+      "arm": "B_fomaml",
+      "fold": 1,
+      "mode": "harm_protected_affine",
+      "cohort": "zero",
+      "prior_control_updates": 0,
+      "prior_control_stop": "line_search_exhausted"
+    },
+    {
+      "task": 7,
+      "seed": 20261107,
+      "arm": "B_fomaml",
+      "fold": 2,
+      "mode": "harm_protected_affine",
+      "cohort": "full50",
+      "prior_control_updates": 50,
+      "prior_control_stop": "update_cap"
+    },
+    {
+      "task": 7,
+      "seed": 20261108,
+      "arm": "A_original",
+      "fold": 0,
+      "mode": "harm_protected_affine",
+      "cohort": "short",
+      "prior_control_updates": 16,
+      "prior_control_stop": "line_search_exhausted"
+    },
+    {
+      "task": 7,
+      "seed": 20261108,
+      "arm": "A_original",
+      "fold": 1,
+      "mode": "harm_protected_affine",
+      "cohort": "full50",
+      "prior_control_updates": 50,
+      "prior_control_stop": "update_cap"
+    },
+    {
+      "task": 7,
+      "seed": 20261108,
+      "arm": "A_original",
+      "fold": 2,
+      "mode": "harm_protected_affine",
+      "cohort": "zero",
+      "prior_control_updates": 0,
+      "prior_control_stop": "line_search_exhausted"
+    },
+    {
+      "task": 7,
+      "seed": 20261108,
+      "arm": "B_fomaml",
+      "fold": 0,
+      "mode": "harm_protected_affine",
+      "cohort": "short",
+      "prior_control_updates": 10,
+      "prior_control_stop": "line_search_exhausted"
+    },
+    {
+      "task": 7,
+      "seed": 20261108,
+      "arm": "B_fomaml",
+      "fold": 1,
+      "mode": "harm_protected_affine",
+      "cohort": "full50",
+      "prior_control_updates": 50,
+      "prior_control_stop": "update_cap"
+    },
+    {
+      "task": 7,
+      "seed": 20261108,
+      "arm": "B_fomaml",
+      "fold": 2,
+      "mode": "harm_protected_affine",
+      "cohort": "zero",
+      "prior_control_updates": 0,
+      "prior_control_stop": "line_search_exhausted"
+    }
+  ],
+  "scope": {
+    "original_Policy_updates": 500,
+    "future_stabilization_steps": 5,
+    "loss_lambda": 1,
+    "original_Policy_training_forward_gradient_environment_and_sealed_access": 0,
+    "extra_array_CSV_checkpoint_HDF5_or_private_reads_including_SHA": 0,
+    "source": "own20_fit_of_support0..29_tge1_encoder_seen_all30",
+    "outcome_conditioned": true
+  },
+  "projections": {
+    "states": [
+      "task",
+      "seed",
+      "arm",
+      "fold",
+      "mode",
+      "optimization_arm",
+      "extra_updates",
+      "n",
+      "component3_mse",
+      "penalty",
+      "trainable_objective",
+      "exact_MSE_slope",
+      "exact_penalty_slope",
+      "directional_derivative",
+      "hinge_positive_n",
+      "branch_digest"
+    ],
+    "accepted_trials": [
+      "task",
+      "seed",
+      "arm",
+      "fold",
+      "mode",
+      "optimization_arm",
+      "from_extra_updates",
+      "trial_index",
+      "alpha",
+      "accepted"
+    ]
+  },
+  "focus": [
+    [
+      "A_original",
+      20261106,
+      0
+    ],
+    [
+      "B_fomaml",
+      20261107,
+      0
+    ],
+    [
+      "B_fomaml",
+      20261107,
+      2
+    ],
+    [
+      "B_fomaml",
+      20261108,
+      1
+    ]
+  ],
+  "anchors": [
+    0,
+    1,
+    5,
+    10,
+    20,
+    30,
+    40,
+    50
+  ],
+  "windows": [
+    [
+      0,
+      10
+    ],
+    [
+      10,
+      40
+    ],
+    [
+      40,
+      50
+    ]
+  ],
+  "design": {
+    "reference": "own500_matched_control_previous_accepted",
+    "penalty": "mean_relu(error_minus_originalPolicy_error)/7",
+    "active_factorization": "symmetric_product;zero_active_conditional_mean_null",
+    "finite_remainder": "observed_change_minus_alpha_times_saved_exact_directional_derivative",
+    "strict_signs": true,
+    "conservation_absolute_tolerance": 1e-10,
+    "no_checkpoint_selection_no_pvalues_no_causal_claim": true
+  },
+  "budget": {
+    "per_stage_source_JSON_passes": 2,
+    "per_stage_states": 2668,
+    "per_stage_trial_flags": 21840,
+    "per_stage_accepted_trials": 2596,
+    "per_stage_source_SHA_checks": 4,
+    "stages": 2,
+    "technical_retries": 0,
+    "output_rows": {
+      "own_endpoints": 72,
+      "pair_endpoints": 36,
+      "steps": 2596,
+      "matched_full50": 714,
+      "full50_paths": 14
+    }
+  },
+  "execution": {
+    "python": "3.10.22",
+    "device": "CPU",
+    "seconds_per_stage": 120,
+    "RSS_bytes": 536870912,
+    "overall_seconds": 300,
+    "input_JSON_bytes_max": 100663296,
+    "output_JSON_bytes_max": 16777216,
+    "environment": {
+      "CUDA_VISIBLE_DEVICES": "",
+      "PYTHONHASHSEED": "0",
+      "OMP_NUM_THREADS": "1",
+      "OPENBLAS_NUM_THREADS": "1",
+      "MKL_NUM_THREADS": "1"
+    }
+  },
+  "roles": {
+    "protocol": {
+      "path": "/home/zl202621/project/KECRL/experiments/libero_task7_direction_penalty_tradeoff_protocol.py",
+      "sha256": "5f0233db47c7b2abe751869dd43a6b331725ec7c40f0ae188a648997a6129c4c"
+    },
+    "guard": {
+      "path": "/home/zl202621/project/KECRL/experiments/libero_task7_direction_penalty_tradeoff_access.py",
+      "sha256": "395907711e3281a97d031644441d30f1d8f7dd317513db48b869e01bdcb0cd45"
+    },
+    "analysis": {
+      "path": "/home/zl202621/project/KECRL/experiments/analyze_libero_task7_direction_penalty_tradeoff.py",
+      "sha256": "af53571a8b4c6f62bd85615d734eba2d9eb62c56f7a1158addbcb138aed13bdb"
+    },
+    "audit": {
+      "path": "/home/zl202621/project/KECRL/experiments/audit_libero_task7_direction_penalty_tradeoff.py",
+      "sha256": "e380ea922d87414aa349705ff98b1b581a23a1c8fdeef1e8d6cd87c3a9bce89c"
+    },
+    "tests": {
+      "path": "/home/zl202621/project/KECRL/tests/test_libero_task7_direction_penalty_tradeoff.py",
+      "sha256": "a7eb6d6967aa2370600056dfef769b9cb37d4099bd3908044554c6ec87835f51"
+    },
+    "plan": {
+      "path": "/home/zl202621/project/KECRL/docs/libero-task7-direction-penalty-tradeoff-plan-2026-11-10.md",
+      "sha256": "9f6d3a9be05f8046320069eaf19ad6c962ab391a679c2a5d4a000cd18d77d15a"
+    }
+  },
+  "output": "/tmp/libero-task7-direction-penalty-tradeoff-20261110-v1/analysis.json",
+  "audit": "/tmp/libero-task7-direction-penalty-tradeoff-20261110-v1/independent-audit.json"
+}

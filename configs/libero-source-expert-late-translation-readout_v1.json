@@ -1,0 +1,1174 @@
+{
+  "schema_version": 1,
+  "status": "frozen_source_expert_late_translation_readout_science",
+  "formal_result": false,
+  "diagnostic_only": true,
+  "frozen_at_utc": "2026-11-07T07:54:38.218595+00:00",
+  "user_request": "继续下一步：冻结并按408批预算对固定30个500端点读出、保存并独立审计。",
+  "design": {
+    "tasks": [
+      0,
+      1,
+      3,
+      4,
+      7
+    ],
+    "seeds": [
+      20261106,
+      20261107,
+      20261108
+    ],
+    "arms": [
+      "A_original",
+      "B_fomaml"
+    ],
+    "role": "meta_support",
+    "demos": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      15,
+      16,
+      17,
+      18,
+      19,
+      20,
+      21,
+      22,
+      23,
+      24,
+      25,
+      26,
+      27,
+      28,
+      29
+    ],
+    "checkpoint_update": 500,
+    "new_optimizer_updates": 0,
+    "closed_loop_stabilization": 5,
+    "offline_extra_stabilization": 0,
+    "sequence_length": 10,
+    "stride": 10,
+    "batch_size": 32,
+    "tail_last_valid_actions_per_demo": 20,
+    "causal_alignment": "obs[t-1] -> action[t], t>=1",
+    "dtype": "float32",
+    "deterministic": true,
+    "TF32": false,
+    "augmentation": false,
+    "loss": "uniform_seven_dimensional_valid_step_masked_action_MSE",
+    "memory_mode": "cnn_only",
+    "metrics": [
+      "mse",
+      "translation_mse",
+      "rotation_mse",
+      "gripper_mse",
+      "gripper_sign_accuracy"
+    ],
+    "strata": [
+      "all",
+      "tail20",
+      "complement"
+    ],
+    "G_parity_absolute_tolerance": 1e-10,
+    "G_parity_relative_tolerance": 0.0,
+    "repeat_first_batch_per_model": 1,
+    "repeat_exact_including_padding": true,
+    "new_training_or_checkpoint_selection": false,
+    "main_forward_batches": 378,
+    "repeat_forward_batches": 30,
+    "active_seconds": 600,
+    "GPU_wait_seconds_max": 3600,
+    "GPU_wait_poll_seconds": 30,
+    "technical_retry_or_replacement": 0,
+    "host_cache_bytes_max": 2147483648,
+    "raw_RGB_or_private_state_archive": false,
+    "SPT_Knowledge_Module_changes": false,
+    "G_failed_H_unrun_and_sealed_roles_unchanged": true
+  },
+  "inputs": {
+    "source_capture_config": {
+      "path": "/home/zl202621/project/KECRL/configs/libero-source-candidate-geometry-capture-diagnostic_v1.json",
+      "sha256": "057d98818cf36c23a1dac1dd84d4d742603e92e3360744efa4e8b77ac97d5b7e"
+    },
+    "G_manifest": {
+      "path": "/home/zl202621/project/KECRL/configs/libero-formal-G-execution-manifest_v2.json",
+      "sha256": "1956451aca41a06a53c57dfca5e3c62bc650c644ed3a32722a90b81a06d655c3"
+    },
+    "G_training": {
+      "path": "/tmp/libero-formal-G-artifacts-20261105-v2/training.json",
+      "sha256": "b92b5447fd3d9c8d66141be2919a3954dd360d42a5da12322055ba20cf9bd291"
+    },
+    "transfer": {
+      "path": "/home/zl202621/project/KECRL/configs/libero_spatial_transfer_split_candidate_v1.json",
+      "sha256": "6cdc8c3eeaa90886ad0e15f0f4ebbe260aa972b6e69b1f122e95f65ab63dd7d6"
+    },
+    "dataset_manifest": {
+      "path": "/home/zl202621/project/KECRL/configs/libero_spatial_dataset_manifest_v1.json",
+      "sha256": "866429693febf966a38b48e3b89faa54623acace5d3c50cd67c5c7978010eaf6"
+    },
+    "native_goal_completion": {
+      "path": "/tmp/libero-source-candidate-native-goal-pose-completion-20261107-v1.json",
+      "sha256": "0067c6f2efa52ec7629775edfdad6afc5767b9d2b5c5f6f518b089eddffae2ed"
+    },
+    "cache_completion": {
+      "path": "/tmp/libero-source-expert-cache-availability-completion-20261107-v1.json",
+      "sha256": "dca73e7acd0ffead80f18efac311b7e8c2c0ef0d2f7ab530383bf373234a0bef"
+    }
+  },
+  "endpoints": [
+    {
+      "task": 0,
+      "seed": 20261106,
+      "arm": "A_original",
+      "checkpoint_update": 500,
+      "support_role": "meta_support",
+      "initial_state_role": "candidate_nonregression",
+      "checkpoint": {
+        "path": "/tmp/libero-formal-G-artifacts-20261105-v2/G-task0-seed20261106-A_original-u500.pt",
+        "sha256": "6028c689cf6bcb9e12e8943791e552aa3ffdc1a81434a65f3fd2f2fe39619503",
+        "weight_hash": "09a88f0746d93e3b7fec1f8b4b982e7c95d3d85c324b66838c78ccee41857330"
+      }
+    },
+    {
+      "task": 0,
+      "seed": 20261106,
+      "arm": "B_fomaml",
+      "checkpoint_update": 500,
+      "support_role": "meta_support",
+      "initial_state_role": "candidate_nonregression",
+      "checkpoint": {
+        "path": "/tmp/libero-formal-G-artifacts-20261105-v2/G-task0-seed20261106-B_fomaml-u500.pt",
+        "sha256": "78041c5aaf923e5d71aeaa9dec24c9f284b543f06d1f7ec6bca663f1890e958c",
+        "weight_hash": "1226fe994f96a1bc95d04a5d2ad3bdee82080bb65400cea62f0275c7a27091f4"
+      }
+    },
+    {
+      "task": 0,
+      "seed": 20261107,
+      "arm": "A_original",
+      "checkpoint_update": 500,
+      "support_role": "meta_support",
+      "initial_state_role": "candidate_nonregression",
+      "checkpoint": {
+        "path": "/tmp/libero-formal-G-artifacts-20261105-v2/G-task0-seed20261107-A_original-u500.pt",
+        "sha256": "a29906a5c9fdefa07ba48961edaf176e2f354ebb3b87adf46c5b542bd121040d",
+        "weight_hash": "72f54fbc17243f5dae2761549e924c1511985ee4da9cd7df3b353bc562abbabc"
+      }
+    },
+    {
+      "task": 0,
+      "seed": 20261107,
+      "arm": "B_fomaml",
+      "checkpoint_update": 500,
+      "support_role": "meta_support",
+      "initial_state_role": "candidate_nonregression",
+      "checkpoint": {
+        "path": "/tmp/libero-formal-G-artifacts-20261105-v2/G-task0-seed20261107-B_fomaml-u500.pt",
+        "sha256": "04ce1f7ad7b0d8580f04333a7ee6ee5f11f68f4aebf4d73423a4aec2a7bc96c9",
+        "weight_hash": "f39968dba104e0276e7f63ce7cec91a1384c7998b043c3a722591754ff35c484"
+      }
+    },
+    {
+      "task": 0,
+      "seed": 20261108,
+      "arm": "A_original",
+      "checkpoint_update": 500,
+      "support_role": "meta_support",
+      "initial_state_role": "candidate_nonregression",
+      "checkpoint": {
+        "path": "/tmp/libero-formal-G-artifacts-20261105-v2/G-task0-seed20261108-A_original-u500.pt",
+        "sha256": "13fba55cd0bfeb41c4e238c5ac42ba24bfcd0c552ce54bef02771c6559e886fd",
+        "weight_hash": "2290bbff91ef0015f633a0ec3da53a934dd69ab531febf9ba78157f2a6edd06f"
+      }
+    },
+    {
+      "task": 0,
+      "seed": 20261108,
+      "arm": "B_fomaml",
+      "checkpoint_update": 500,
+      "support_role": "meta_support",
+      "initial_state_role": "candidate_nonregression",
+      "checkpoint": {
+        "path": "/tmp/libero-formal-G-artifacts-20261105-v2/G-task0-seed20261108-B_fomaml-u500.pt",
+        "sha256": "7e3562f9a67cef03b5ad025b312b8653dcaae63e80ce15de62f67c81f1c091e7",
+        "weight_hash": "86a78dbf3e1deedba6eacb31f2b7667221b28896bf90a238787b5f93c47f1f4b"
+      }
+    },
+    {
+      "task": 1,
+      "seed": 20261106,
+      "arm": "A_original",
+      "checkpoint_update": 500,
+      "support_role": "meta_support",
+      "initial_state_role": "candidate_nonregression",
+      "checkpoint": {
+        "path": "/tmp/libero-formal-G-artifacts-20261105-v2/G-task1-seed20261106-A_original-u500.pt",
+        "sha256": "d70440bf56c4be0ec7e7fbfb8578cdaa6b9019d0e27dc379dbe1720a56b750dd",
+        "weight_hash": "99beccb5e240edd4e51bd125b9a36287ab1193da894a72abf2be2aedda4802c9"
+      }
+    },
+    {
+      "task": 1,
+      "seed": 20261106,
+      "arm": "B_fomaml",
+      "checkpoint_update": 500,
+      "support_role": "meta_support",
+      "initial_state_role": "candidate_nonregression",
+      "checkpoint": {
+        "path": "/tmp/libero-formal-G-artifacts-20261105-v2/G-task1-seed20261106-B_fomaml-u500.pt",
+        "sha256": "cc24c3cb72e95678035050d5e369408f2ff0834acf00f97a6e5736f2e9fa79aa",
+        "weight_hash": "28be1571511e72a062a673e3e79ade7d20f7de83c63dc170ae06e10317f63d64"
+      }
+    },
+    {
+      "task": 1,
+      "seed": 20261107,
+      "arm": "A_original",
+      "checkpoint_update": 500,
+      "support_role": "meta_support",
+      "initial_state_role": "candidate_nonregression",
+      "checkpoint": {
+        "path": "/tmp/libero-formal-G-artifacts-20261105-v2/G-task1-seed20261107-A_original-u500.pt",
+        "sha256": "128de52b0dcbece13699a04f4ea8fd99017d24af860341f9785a2a1ab469e1d8",
+        "weight_hash": "ea20c36f820b75d228d1a29eb5a5fe37973052bfd0d816ddb8b89567a14b9c0f"
+      }
+    },
+    {
+      "task": 1,
+      "seed": 20261107,
+      "arm": "B_fomaml",
+      "checkpoint_update": 500,
+      "support_role": "meta_support",
+      "initial_state_role": "candidate_nonregression",
+      "checkpoint": {
+        "path": "/tmp/libero-formal-G-artifacts-20261105-v2/G-task1-seed20261107-B_fomaml-u500.pt",
+        "sha256": "8ed299ac078b43dfd42da6153151c3d98ab972680382c7bd002073ce128472e5",
+        "weight_hash": "f2bc567b19093d24c407e8f07b256b3f993ccac6038b2d7c7ebca45c3581eca9"
+      }
+    },
+    {
+      "task": 1,
+      "seed": 20261108,
+      "arm": "A_original",
+      "checkpoint_update": 500,
+      "support_role": "meta_support",
+      "initial_state_role": "candidate_nonregression",
+      "checkpoint": {
+        "path": "/tmp/libero-formal-G-artifacts-20261105-v2/G-task1-seed20261108-A_original-u500.pt",
+        "sha256": "5b1f7b09c0ca45de515fc2aa6de308b3301b441d7e75d1f1c5d5cab187b264df",
+        "weight_hash": "1e935216b86240c78fcc7d3371dd5dee80bd85508483108eaf73038f899c024f"
+      }
+    },
+    {
+      "task": 1,
+      "seed": 20261108,
+      "arm": "B_fomaml",
+      "checkpoint_update": 500,
+      "support_role": "meta_support",
+      "initial_state_role": "candidate_nonregression",
+      "checkpoint": {
+        "path": "/tmp/libero-formal-G-artifacts-20261105-v2/G-task1-seed20261108-B_fomaml-u500.pt",
+        "sha256": "238ac949de82a37a430662936a7a74913a4e26f2c886f83a8c775b1616e80e51",
+        "weight_hash": "0c724e6e770586454336d0bbe9170473ecc50795ed50126e82d65658beae060f"
+      }
+    },
+    {
+      "task": 3,
+      "seed": 20261106,
+      "arm": "A_original",
+      "checkpoint_update": 500,
+      "support_role": "meta_support",
+      "initial_state_role": "candidate_nonregression",
+      "checkpoint": {
+        "path": "/tmp/libero-formal-G-artifacts-20261105-v2/G-task3-seed20261106-A_original-u500.pt",
+        "sha256": "1f11c0ac544416b8096b178a8ba67a2244343774b09093c5db2164a211091c53",
+        "weight_hash": "60ec64d03e4754cb0dbc217dc5c461fd75412791ae55c154a4b8ff407b7d0628"
+      }
+    },
+    {
+      "task": 3,
+      "seed": 20261106,
+      "arm": "B_fomaml",
+      "checkpoint_update": 500,
+      "support_role": "meta_support",
+      "initial_state_role": "candidate_nonregression",
+      "checkpoint": {
+        "path": "/tmp/libero-formal-G-artifacts-20261105-v2/G-task3-seed20261106-B_fomaml-u500.pt",
+        "sha256": "7fd92e2a24997f2ae3647efb611a909f836f28e836a226d78e53be6927a35f65",
+        "weight_hash": "33cf95c06803e1df5305fd302cf28d8d4c5d3232004ccbc2e8c5c4619fabd0c6"
+      }
+    },
+    {
+      "task": 3,
+      "seed": 20261107,
+      "arm": "A_original",
+      "checkpoint_update": 500,
+      "support_role": "meta_support",
+      "initial_state_role": "candidate_nonregression",
+      "checkpoint": {
+        "path": "/tmp/libero-formal-G-artifacts-20261105-v2/G-task3-seed20261107-A_original-u500.pt",
+        "sha256": "3c4125ebcdb5e52dfc9746af078b5ff3ad72788de194fc725bd14e4c9b995699",
+        "weight_hash": "97341c6a1ee0b093cf2491acdd7cb833e275e6785b83822b2c6b32ff3f6bc608"
+      }
+    },
+    {
+      "task": 3,
+      "seed": 20261107,
+      "arm": "B_fomaml",
+      "checkpoint_update": 500,
+      "support_role": "meta_support",
+      "initial_state_role": "candidate_nonregression",
+      "checkpoint": {
+        "path": "/tmp/libero-formal-G-artifacts-20261105-v2/G-task3-seed20261107-B_fomaml-u500.pt",
+        "sha256": "f7731ea5b3a4cebe2d58a1d8cf3bec17a634b8a3ddafebaae569b36851d21f42",
+        "weight_hash": "d4a04b7369768ae1412e2214389f62485b3c5af66e6d1d05271babe81dfc5539"
+      }
+    },
+    {
+      "task": 3,
+      "seed": 20261108,
+      "arm": "A_original",
+      "checkpoint_update": 500,
+      "support_role": "meta_support",
+      "initial_state_role": "candidate_nonregression",
+      "checkpoint": {
+        "path": "/tmp/libero-formal-G-artifacts-20261105-v2/G-task3-seed20261108-A_original-u500.pt",
+        "sha256": "c6c51041eed22795bdc456edba9fd47ef30b80784bdc97456276717a443307e1",
+        "weight_hash": "8e7b467e4abb13ec2abcf98077011b3ba30dc868db3b3fdcaa3ebb8d5ca09a15"
+      }
+    },
+    {
+      "task": 3,
+      "seed": 20261108,
+      "arm": "B_fomaml",
+      "checkpoint_update": 500,
+      "support_role": "meta_support",
+      "initial_state_role": "candidate_nonregression",
+      "checkpoint": {
+        "path": "/tmp/libero-formal-G-artifacts-20261105-v2/G-task3-seed20261108-B_fomaml-u500.pt",
+        "sha256": "3d0758676110d3bc6330389155576b0c5fa5e48f73137513158f99f5d8a2633d",
+        "weight_hash": "b64bb178d0a0f03fad489823222f1ecbcf1770f349fccc31179eb1ec3d33145b"
+      }
+    },
+    {
+      "task": 4,
+      "seed": 20261106,
+      "arm": "A_original",
+      "checkpoint_update": 500,
+      "support_role": "meta_support",
+      "initial_state_role": "candidate_nonregression",
+      "checkpoint": {
+        "path": "/tmp/libero-formal-G-artifacts-20261105-v2/G-task4-seed20261106-A_original-u500.pt",
+        "sha256": "d9af03031d5f252e1ca0c43d32e9d3b87c90dcf5bf07043b4bdb75b48ca013b9",
+        "weight_hash": "fe5e5367c59dc20fb5b6c8fc7804f40662d93c1c6026e636fe005ce3c3dfb5bf"
+      }
+    },
+    {
+      "task": 4,
+      "seed": 20261106,
+      "arm": "B_fomaml",
+      "checkpoint_update": 500,
+      "support_role": "meta_support",
+      "initial_state_role": "candidate_nonregression",
+      "checkpoint": {
+        "path": "/tmp/libero-formal-G-artifacts-20261105-v2/G-task4-seed20261106-B_fomaml-u500.pt",
+        "sha256": "6d1a7e8ddb2daa17ad4b8a698abcd30181105ab1236ba4afc46c314da0b5aa2f",
+        "weight_hash": "41dec6e7bfa9e1aa34a511da19de9f47877a30a7af22bde7059d233296ab8bdd"
+      }
+    },
+    {
+      "task": 4,
+      "seed": 20261107,
+      "arm": "A_original",
+      "checkpoint_update": 500,
+      "support_role": "meta_support",
+      "initial_state_role": "candidate_nonregression",
+      "checkpoint": {
+        "path": "/tmp/libero-formal-G-artifacts-20261105-v2/G-task4-seed20261107-A_original-u500.pt",
+        "sha256": "b60eaf36dc14b3eda10d135c349a6554f68533c9116c515a2afa4bb6b58e1409",
+        "weight_hash": "3157820d53e46c1533ea65e7d781e8b44e39a2993e43e71a8fb3c333999306c9"
+      }
+    },
+    {
+      "task": 4,
+      "seed": 20261107,
+      "arm": "B_fomaml",
+      "checkpoint_update": 500,
+      "support_role": "meta_support",
+      "initial_state_role": "candidate_nonregression",
+      "checkpoint": {
+        "path": "/tmp/libero-formal-G-artifacts-20261105-v2/G-task4-seed20261107-B_fomaml-u500.pt",
+        "sha256": "69ebb763df6c3276a71fb5e7d36b66416dd563a9ad78429ab8d289fca3794e8a",
+        "weight_hash": "31a9e9e901155ce31b0f9c101ac86aa4902536bc2dd4fbecd83d08e7fedf977a"
+      }
+    },
+    {
+      "task": 4,
+      "seed": 20261108,
+      "arm": "A_original",
+      "checkpoint_update": 500,
+      "support_role": "meta_support",
+      "initial_state_role": "candidate_nonregression",
+      "checkpoint": {
+        "path": "/tmp/libero-formal-G-artifacts-20261105-v2/G-task4-seed20261108-A_original-u500.pt",
+        "sha256": "54fc4bc3976694f65dfd978a8a0d6234a7bbc628ed8f849d03ab3ea3c8b226ec",
+        "weight_hash": "b2e5707cb5aa156439baf9bb8b2416074bee3a1f7b75f67602524a716627b0c9"
+      }
+    },
+    {
+      "task": 4,
+      "seed": 20261108,
+      "arm": "B_fomaml",
+      "checkpoint_update": 500,
+      "support_role": "meta_support",
+      "initial_state_role": "candidate_nonregression",
+      "checkpoint": {
+        "path": "/tmp/libero-formal-G-artifacts-20261105-v2/G-task4-seed20261108-B_fomaml-u500.pt",
+        "sha256": "93e9cc9abe88e519f1198dd54fa859b9248c3036c984a5dad173b58d95e310f5",
+        "weight_hash": "e23ff4d4b300ea7e8095b5800305cbe30787ee40c9725d17ec7c2aaa69a2b890"
+      }
+    },
+    {
+      "task": 7,
+      "seed": 20261106,
+      "arm": "A_original",
+      "checkpoint_update": 500,
+      "support_role": "meta_support",
+      "initial_state_role": "candidate_nonregression",
+      "checkpoint": {
+        "path": "/tmp/libero-formal-G-artifacts-20261105-v2/G-task7-seed20261106-A_original-u500.pt",
+        "sha256": "c5cb770a456185a5ef4885311ba4aab452aa287039c8d6b9fda48d9f895a9909",
+        "weight_hash": "a4e74450ffa2b38e51bd175a6e57d6e368c9cc00b687c8b9c43342606f61b200"
+      }
+    },
+    {
+      "task": 7,
+      "seed": 20261106,
+      "arm": "B_fomaml",
+      "checkpoint_update": 500,
+      "support_role": "meta_support",
+      "initial_state_role": "candidate_nonregression",
+      "checkpoint": {
+        "path": "/tmp/libero-formal-G-artifacts-20261105-v2/G-task7-seed20261106-B_fomaml-u500.pt",
+        "sha256": "cba1dc95887721f1cd44068e72aff914cadf863dcda593e38d31f86c48949eaa",
+        "weight_hash": "69dd5ed7abb5929db10800e2a55d0ac1fb93fb0e25ac0c2a10bea2b12e09a1f2"
+      }
+    },
+    {
+      "task": 7,
+      "seed": 20261107,
+      "arm": "A_original",
+      "checkpoint_update": 500,
+      "support_role": "meta_support",
+      "initial_state_role": "candidate_nonregression",
+      "checkpoint": {
+        "path": "/tmp/libero-formal-G-artifacts-20261105-v2/G-task7-seed20261107-A_original-u500.pt",
+        "sha256": "2058d4d47f5293e77c596f5a104529708b03a6a89052a8423c82e2030ed13ace",
+        "weight_hash": "0273bc2183d1d0f3810458306cedc378d3f481632fadc5f969a90a57371373bb"
+      }
+    },
+    {
+      "task": 7,
+      "seed": 20261107,
+      "arm": "B_fomaml",
+      "checkpoint_update": 500,
+      "support_role": "meta_support",
+      "initial_state_role": "candidate_nonregression",
+      "checkpoint": {
+        "path": "/tmp/libero-formal-G-artifacts-20261105-v2/G-task7-seed20261107-B_fomaml-u500.pt",
+        "sha256": "c8d007ce68f23ce67306398adbf9e8438b401a1b6f667d515f012881bef11a26",
+        "weight_hash": "faa71e0f12c3eadd9be8688ba5a9a0f99eddba838bf00d16bbd3797969445879"
+      }
+    },
+    {
+      "task": 7,
+      "seed": 20261108,
+      "arm": "A_original",
+      "checkpoint_update": 500,
+      "support_role": "meta_support",
+      "initial_state_role": "candidate_nonregression",
+      "checkpoint": {
+        "path": "/tmp/libero-formal-G-artifacts-20261105-v2/G-task7-seed20261108-A_original-u500.pt",
+        "sha256": "b264be47a6ca54a1370fbdd53a2d5f0f96615f8c2f19207afef3f977e41b1538",
+        "weight_hash": "fbfd635652d71fa60019e1152060f722e795ee0c65ca431da6877e66c175cd67"
+      }
+    },
+    {
+      "task": 7,
+      "seed": 20261108,
+      "arm": "B_fomaml",
+      "checkpoint_update": 500,
+      "support_role": "meta_support",
+      "initial_state_role": "candidate_nonregression",
+      "checkpoint": {
+        "path": "/tmp/libero-formal-G-artifacts-20261105-v2/G-task7-seed20261108-B_fomaml-u500.pt",
+        "sha256": "5f8740383959991e9abfc0dcc2069d5b7b067c36e26a6fdc576d16f79b7316df",
+        "weight_hash": "74276f271b063870e932f7bf40f14413fce919c1d51a45ab59c9750ac810b089"
+      }
+    }
+  ],
+  "action_lengths": {
+    "0": [
+      98,
+      84,
+      90,
+      97,
+      105,
+      134,
+      92,
+      92,
+      79,
+      89,
+      93,
+      128,
+      86,
+      88,
+      112,
+      84,
+      89,
+      97,
+      75,
+      99,
+      87,
+      121,
+      96,
+      85,
+      100,
+      91,
+      105,
+      113,
+      92,
+      124
+    ],
+    "1": [
+      152,
+      123,
+      140,
+      175,
+      142,
+      155,
+      145,
+      131,
+      152,
+      127,
+      111,
+      117,
+      114,
+      125,
+      150,
+      128,
+      135,
+      113,
+      112,
+      125,
+      162,
+      134,
+      132,
+      109,
+      189,
+      143,
+      145,
+      116,
+      167,
+      120
+    ],
+    "3": [
+      99,
+      101,
+      95,
+      115,
+      103,
+      99,
+      111,
+      95,
+      111,
+      129,
+      89,
+      97,
+      93,
+      99,
+      100,
+      119,
+      101,
+      94,
+      171,
+      100,
+      96,
+      96,
+      96,
+      97,
+      96,
+      98,
+      92,
+      101,
+      95,
+      106
+    ],
+    "4": [
+      153,
+      142,
+      158,
+      129,
+      143,
+      158,
+      167,
+      156,
+      159,
+      132,
+      139,
+      182,
+      145,
+      141,
+      138,
+      150,
+      131,
+      156,
+      148,
+      162,
+      153,
+      163,
+      149,
+      165,
+      140,
+      151,
+      149,
+      132,
+      142,
+      139
+    ],
+    "7": [
+      155,
+      125,
+      124,
+      191,
+      136,
+      138,
+      133,
+      130,
+      139,
+      145,
+      140,
+      164,
+      124,
+      138,
+      120,
+      137,
+      141,
+      152,
+      137,
+      128,
+      197,
+      124,
+      128,
+      126,
+      144,
+      129,
+      168,
+      132,
+      140,
+      133
+    ]
+  },
+  "data_root": "/home/zl202621/third_party/LIBERO/datasets",
+  "data_files": {
+    "0": {
+      "task_id": 0,
+      "task_name": "pick_up_the_black_bowl_between_the_plate_and_the_ramekin_and_place_it_on_the_plate",
+      "path": "libero_spatial/pick_up_the_black_bowl_between_the_plate_and_the_ramekin_and_place_it_on_the_plate_demo.hdf5",
+      "size_bytes": 508779600,
+      "sha256": "ff6f26121653c77280eb40a38773a74141c11a8509f3466058cb56dd2cc60ead"
+    },
+    "1": {
+      "task_id": 1,
+      "task_name": "pick_up_the_black_bowl_next_to_the_ramekin_and_place_it_on_the_plate",
+      "path": "libero_spatial/pick_up_the_black_bowl_next_to_the_ramekin_and_place_it_on_the_plate_demo.hdf5",
+      "size_bytes": 671583385,
+      "sha256": "bf1090dd4826eacb49eb052f17d04798e2a1eb2f74f8d024bc3b9c5d234c25f9"
+    },
+    "3": {
+      "task_id": 3,
+      "task_name": "pick_up_the_black_bowl_on_the_cookie_box_and_place_it_on_the_plate",
+      "path": "libero_spatial/pick_up_the_black_bowl_on_the_cookie_box_and_place_it_on_the_plate_demo.hdf5",
+      "size_bytes": 507189857,
+      "sha256": "0c053db7317e584632549bddb963bee8a237661b4bd29f0581a245f715e8eb72"
+    },
+    "4": {
+      "task_id": 4,
+      "task_name": "pick_up_the_black_bowl_in_the_top_drawer_of_the_wooden_cabinet_and_place_it_on_the_plate",
+      "path": "libero_spatial/pick_up_the_black_bowl_in_the_top_drawer_of_the_wooden_cabinet_and_place_it_on_the_plate_demo.hdf5",
+      "size_bytes": 748271833,
+      "sha256": "7ff1ee60447875c152d8c7819f499d23dbc0eb4d4bf045225d5d87a2cdad99bd"
+    },
+    "7": {
+      "task_id": 7,
+      "task_name": "pick_up_the_black_bowl_on_the_stove_and_place_it_on_the_plate",
+      "path": "libero_spatial/pick_up_the_black_bowl_on_the_stove_and_place_it_on_the_plate_demo.hdf5",
+      "size_bytes": 711715594,
+      "sha256": "1fcb3990cf9fd6185f56531cc9f6dec0a77a59bfa0c7f39dff95b7e43cf6aeaa"
+    }
+  },
+  "G_reference_selection": {
+    "effective_policy_config": {
+      "cnn_channels": [
+        32,
+        64,
+        128
+      ],
+      "spatial_pool_size": 4,
+      "visual_embedding_dim": 128,
+      "fusion_dim": 256,
+      "recurrent_hidden_dim": 256,
+      "action_dimension": 7,
+      "memory_mode": "cnn_only"
+    },
+    "source500_references": [
+      {
+        "task": 0,
+        "seed": 20261106,
+        "arm": "A_original",
+        "metrics": {
+          "valid_steps": 2895,
+          "mse": 0.05150421004202591,
+          "translation_mse": 0.06100974012161009,
+          "rotation_mse": 0.003048932522174377,
+          "gripper_mse": 0.16835345236282806,
+          "gripper_sign_accuracy": 0.9426597582037997
+        }
+      },
+      {
+        "task": 0,
+        "seed": 20261106,
+        "arm": "B_fomaml",
+        "metrics": {
+          "valid_steps": 2895,
+          "mse": 0.060237100032048,
+          "translation_mse": 0.06695130495993201,
+          "rotation_mse": 0.003003680211031835,
+          "gripper_mse": 0.2117947447114444,
+          "gripper_sign_accuracy": 0.9260794473229707
+        }
+      },
+      {
+        "task": 0,
+        "seed": 20261107,
+        "arm": "A_original",
+        "metrics": {
+          "valid_steps": 2895,
+          "mse": 0.06146110240151604,
+          "translation_mse": 0.07243434979901314,
+          "rotation_mse": 0.003036601369209757,
+          "gripper_mse": 0.2038148633059436,
+          "gripper_sign_accuracy": 0.9267702936096719
+        }
+      },
+      {
+        "task": 0,
+        "seed": 20261107,
+        "arm": "B_fomaml",
+        "metrics": {
+          "valid_steps": 2895,
+          "mse": 0.0562541714719789,
+          "translation_mse": 0.06539136118081632,
+          "rotation_mse": 0.0029716634167960133,
+          "gripper_mse": 0.18869012651101538,
+          "gripper_sign_accuracy": 0.933678756476684
+        }
+      },
+      {
+        "task": 0,
+        "seed": 20261108,
+        "arm": "A_original",
+        "metrics": {
+          "valid_steps": 2895,
+          "mse": 0.05192123238504761,
+          "translation_mse": 0.06278818675774672,
+          "rotation_mse": 0.003076616275343143,
+          "gripper_mse": 0.1658542175960637,
+          "gripper_sign_accuracy": 0.9457685664939551
+        }
+      },
+      {
+        "task": 0,
+        "seed": 20261108,
+        "arm": "B_fomaml",
+        "metrics": {
+          "valid_steps": 2895,
+          "mse": 0.05131335899451999,
+          "translation_mse": 0.06114648263875914,
+          "rotation_mse": 0.002966587267408965,
+          "gripper_mse": 0.1668543032431356,
+          "gripper_sign_accuracy": 0.9412780656303973
+        }
+      },
+      {
+        "task": 1,
+        "seed": 20261106,
+        "arm": "A_original",
+        "metrics": {
+          "valid_steps": 4059,
+          "mse": 0.05295564618521839,
+          "translation_mse": 0.05393041949862585,
+          "rotation_mse": 0.0020502148179951975,
+          "gripper_mse": 0.20274762034666563,
+          "gripper_sign_accuracy": 0.9283074648928308
+        }
+      },
+      {
+        "task": 1,
+        "seed": 20261106,
+        "arm": "B_fomaml",
+        "metrics": {
+          "valid_steps": 4059,
+          "mse": 0.047854835119416086,
+          "translation_mse": 0.047886760843804034,
+          "rotation_mse": 0.002011334014908393,
+          "gripper_mse": 0.1852895612597753,
+          "gripper_sign_accuracy": 0.934220251293422
+        }
+      },
+      {
+        "task": 1,
+        "seed": 20261107,
+        "arm": "A_original",
+        "metrics": {
+          "valid_steps": 4059,
+          "mse": 0.04811094610108021,
+          "translation_mse": 0.05542996085270093,
+          "rotation_mse": 0.001968904973717251,
+          "gripper_mse": 0.1645800252283069,
+          "gripper_sign_accuracy": 0.94579945799458
+        }
+      },
+      {
+        "task": 1,
+        "seed": 20261107,
+        "arm": "B_fomaml",
+        "metrics": {
+          "valid_steps": 4059,
+          "mse": 0.04581797052772129,
+          "translation_mse": 0.05246164624841035,
+          "rotation_mse": 0.0018707112856267477,
+          "gripper_mse": 0.15772872109193778,
+          "gripper_sign_accuracy": 0.9490022172949002
+        }
+      },
+      {
+        "task": 1,
+        "seed": 20261108,
+        "arm": "A_original",
+        "metrics": {
+          "valid_steps": 4059,
+          "mse": 0.05294246920721865,
+          "translation_mse": 0.05870084286317945,
+          "rotation_mse": 0.001921855851701094,
+          "gripper_mse": 0.1887291883058889,
+          "gripper_sign_accuracy": 0.9349593495934959
+        }
+      },
+      {
+        "task": 1,
+        "seed": 20261108,
+        "arm": "B_fomaml",
+        "metrics": {
+          "valid_steps": 4059,
+          "mse": 0.05199103342870021,
+          "translation_mse": 0.0542341144077984,
+          "rotation_mse": 0.0018853726325988498,
+          "gripper_mse": 0.19557877287970973,
+          "gripper_sign_accuracy": 0.9356984478935698
+        }
+      },
+      {
+        "task": 3,
+        "seed": 20261106,
+        "arm": "A_original",
+        "metrics": {
+          "valid_steps": 3064,
+          "mse": 0.047449452770432415,
+          "translation_mse": 0.04591567261241891,
+          "rotation_mse": 0.0013856100042246692,
+          "gripper_mse": 0.19024232154309617,
+          "gripper_sign_accuracy": 0.9343994778067886
+        }
+      },
+      {
+        "task": 3,
+        "seed": 20261106,
+        "arm": "B_fomaml",
+        "metrics": {
+          "valid_steps": 3064,
+          "mse": 0.049150171615464776,
+          "translation_mse": 0.05060632586419968,
+          "rotation_mse": 0.0014330887342503505,
+          "gripper_mse": 0.18793295751290334,
+          "gripper_sign_accuracy": 0.9295039164490861
+        }
+      },
+      {
+        "task": 3,
+        "seed": 20261107,
+        "arm": "A_original",
+        "metrics": {
+          "valid_steps": 3064,
+          "mse": 0.04286272970486202,
+          "translation_mse": 0.043388758531433085,
+          "rotation_mse": 0.0013738008289803688,
+          "gripper_mse": 0.16575142985279373,
+          "gripper_sign_accuracy": 0.943864229765013
+        }
+      },
+      {
+        "task": 3,
+        "seed": 20261107,
+        "arm": "B_fomaml",
+        "metrics": {
+          "valid_steps": 3064,
+          "mse": 0.04058123143071855,
+          "translation_mse": 0.04037198907040919,
+          "rotation_mse": 0.0013613794162874917,
+          "gripper_mse": 0.15886851455493986,
+          "gripper_sign_accuracy": 0.9461488250652742
+        }
+      },
+      {
+        "task": 3,
+        "seed": 20261108,
+        "arm": "A_original",
+        "metrics": {
+          "valid_steps": 3064,
+          "mse": 0.05539109193752445,
+          "translation_mse": 0.04825326934067188,
+          "rotation_mse": 0.001603361150672005,
+          "gripper_mse": 0.2381677520886395,
+          "gripper_sign_accuracy": 0.9053524804177546
+        }
+      },
+      {
+        "task": 3,
+        "seed": 20261108,
+        "arm": "B_fomaml",
+        "metrics": {
+          "valid_steps": 3064,
+          "mse": 0.061342254906203514,
+          "translation_mse": 0.05346110758444609,
+          "rotation_mse": 0.0018941892617759097,
+          "gripper_mse": 0.26332989380475863,
+          "gripper_sign_accuracy": 0.8968668407310705
+        }
+      },
+      {
+        "task": 4,
+        "seed": 20261106,
+        "arm": "A_original",
+        "metrics": {
+          "valid_steps": 4442,
+          "mse": 0.039078826763393575,
+          "translation_mse": 0.03774955025345324,
+          "rotation_mse": 0.0022822265282284016,
+          "gripper_mse": 0.15345645699871008,
+          "gripper_sign_accuracy": 0.9457451598379109
+        }
+      },
+      {
+        "task": 4,
+        "seed": 20261106,
+        "arm": "B_fomaml",
+        "metrics": {
+          "valid_steps": 4442,
+          "mse": 0.0442447172689204,
+          "translation_mse": 0.03916175309882543,
+          "rotation_mse": 0.002265234134250439,
+          "gripper_mse": 0.1854320591832152,
+          "gripper_sign_accuracy": 0.9360648356596127
+        }
+      },
+      {
+        "task": 4,
+        "seed": 20261107,
+        "arm": "A_original",
+        "metrics": {
+          "valid_steps": 4442,
+          "mse": 0.035818899452701766,
+          "translation_mse": 0.041255479767773655,
+          "rotation_mse": 0.0025178120118940655,
+          "gripper_mse": 0.11941242082990917,
+          "gripper_sign_accuracy": 0.9570013507429086
+        }
+      },
+      {
+        "task": 4,
+        "seed": 20261107,
+        "arm": "B_fomaml",
+        "metrics": {
+          "valid_steps": 4442,
+          "mse": 0.03503134521730417,
+          "translation_mse": 0.03858506988449961,
+          "rotation_mse": 0.002607345661571945,
+          "gripper_mse": 0.12164216988291458,
+          "gripper_sign_accuracy": 0.9583520936515083
+        }
+      },
+      {
+        "task": 4,
+        "seed": 20261108,
+        "arm": "A_original",
+        "metrics": {
+          "valid_steps": 4442,
+          "mse": 0.03297836455636724,
+          "translation_mse": 0.03725606283769792,
+          "rotation_mse": 0.002325357252913968,
+          "gripper_mse": 0.11210429162273507,
+          "gripper_sign_accuracy": 0.9624043223773076
+        }
+      },
+      {
+        "task": 4,
+        "seed": 20261108,
+        "arm": "B_fomaml",
+        "metrics": {
+          "valid_steps": 4442,
+          "mse": 0.033688522877146486,
+          "translation_mse": 0.03863741033601796,
+          "rotation_mse": 0.002260763833255222,
+          "gripper_mse": 0.11312513763220587,
+          "gripper_sign_accuracy": 0.9615038271049077
+        }
+      },
+      {
+        "task": 7,
+        "seed": 20261106,
+        "arm": "A_original",
+        "metrics": {
+          "valid_steps": 4188,
+          "mse": 0.036912436277488594,
+          "translation_mse": 0.03400214287093393,
+          "rotation_mse": 0.0018412836388732405,
+          "gripper_mse": 0.15085677441299866,
+          "gripper_sign_accuracy": 0.9498567335243553
+        }
+      },
+      {
+        "task": 7,
+        "seed": 20261106,
+        "arm": "B_fomaml",
+        "metrics": {
+          "valid_steps": 4188,
+          "mse": 0.037079733256855846,
+          "translation_mse": 0.03453396474562107,
+          "rotation_mse": 0.0018156076845560355,
+          "gripper_mse": 0.15050941550745958,
+          "gripper_sign_accuracy": 0.9517669531996179
+        }
+      },
+      {
+        "task": 7,
+        "seed": 20261107,
+        "arm": "A_original",
+        "metrics": {
+          "valid_steps": 4188,
+          "mse": 0.041713165138918165,
+          "translation_mse": 0.03747625223054565,
+          "rotation_mse": 0.0019054470456766454,
+          "gripper_mse": 0.17384705814376028,
+          "gripper_sign_accuracy": 0.940305635148042
+        }
+      },
+      {
+        "task": 7,
+        "seed": 20261107,
+        "arm": "B_fomaml",
+        "metrics": {
+          "valid_steps": 4188,
+          "mse": 0.04039830727414008,
+          "translation_mse": 0.03754441139421309,
+          "rotation_mse": 0.001805487441686105,
+          "gripper_mse": 0.164738454411283,
+          "gripper_sign_accuracy": 0.9426934097421203
+        }
+      },
+      {
+        "task": 7,
+        "seed": 20261108,
+        "arm": "A_original",
+        "metrics": {
+          "valid_steps": 4188,
+          "mse": 0.04078663732859147,
+          "translation_mse": 0.03645382924154224,
+          "rotation_mse": 0.0018001151447964412,
+          "gripper_mse": 0.17074462814112426,
+          "gripper_sign_accuracy": 0.9400668576886342
+        }
+      },
+      {
+        "task": 7,
+        "seed": 20261108,
+        "arm": "B_fomaml",
+        "metrics": {
+          "valid_steps": 4188,
+          "mse": 0.039464513202816104,
+          "translation_mse": 0.03719169984544796,
+          "rotation_mse": 0.001765270856830811,
+          "gripper_mse": 0.1593806803128764,
+          "gripper_sign_accuracy": 0.9426934097421203
+        }
+      }
+    ],
+    "selection_audit": {
+      "model_identity_records_scanned": 320,
+      "source_records_decoded": 30,
+      "nonselected_model_records_decoded": 0,
+      "validation_curve_payloads_decoded": 0
+    }
+  },
+  "output": "/tmp/libero-source-expert-late-translation-readout-20261107-v1.json",
+  "artifacts": "/tmp/libero-source-expert-late-translation-artifacts-20261107-v1",
+  "new_model_data_or_policy_payload_reads_at_science_freeze": 0,
+  "interpretation_limits": [
+    "Training-fit diagnostics on source-support; not unseen generalization or formal qualification.",
+    "Tail20 is an expert time index, not a physical phase; action error is not world position centimetres.",
+    "No geometry/native-goal operand is an input or loss label; no loss/weight/checkpoint selection.",
+    "GPU waits are before payload, bounded3600s; no research retry, replacement or device fallback."
+  ],
+  "budget": {
+    "model_load": 30,
+    "policy_object": 30,
+    "HDF5_open": 10,
+    "source_window": 1933,
+    "payload_rows_agentview_rgb": 18648,
+    "payload_rows_eye_in_hand_rgb": 18648,
+    "payload_rows_joint_states": 18648,
+    "payload_rows_gripper_states": 18648,
+    "payload_rows_actions": 18648,
+    "main_forward": 378,
+    "repeat_forward": 30,
+    "main_valid_rows": 111888,
+    "repeat_valid_rows": 9210,
+    "main_slots": 115980,
+    "repeat_slots": 9600,
+    "repeat_exact": 30,
+    "G_parity": 30,
+    "input_unchanged": 378,
+    "input_paired": 315,
+    "weight_after": 30,
+    "backward": 0,
+    "optimizer": 0,
+    "environment": 0,
+    "initial_state": 0,
+    "private_state": 0,
+    "sealed_payload": 0,
+    "old_prediction_load": 0
+  }
+}

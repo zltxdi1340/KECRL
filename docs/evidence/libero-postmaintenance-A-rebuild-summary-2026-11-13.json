@@ -1,0 +1,303 @@
+{
+  "kind": "postmaintenance_A_rebuild_verified_summary",
+  "at_UTC": "2026-11-13T03:51:43.208286+00:00",
+  "formal_result": false,
+  "all_missing_artifacts_recovered": false,
+  "cohort": {
+    "task": 7,
+    "arm": "A_original",
+    "seeds": [
+      20261106,
+      20261107,
+      20261108
+    ],
+    "query_numeric_reads": 0,
+    "validation_heldout_final_reads": 0,
+    "environment_calls": 0
+  },
+  "policy_rerun": {
+    "actual_updates": 1500,
+    "updates_per_policy": 500,
+    "source_outer_updates": 0,
+    "capture_main_forwards": 42,
+    "capture_repeat_forwards": 3,
+    "GPU_work_seconds": 13.537831741996342,
+    "primary": {
+      "path": "/data/zl202621/KECRL/results/libero-postmaintenance-task7-A-rerun-20261113-v1/rerun-result.json",
+      "sha256": "29617f8ae279f404228ac63e0fa93dc50f09e20391b20ee4c71724850cf36ff3"
+    },
+    "independent_audit": {
+      "path": "/data/zl202621/KECRL/results/libero-postmaintenance-task7-A-rerun-20261113-v1/independent-audit.json",
+      "sha256": "4f4963daf04a0388850de9b431e5625f18359a62cae1271c771b92c29ef7e057"
+    },
+    "completion": {
+      "path": "/data/zl202621/KECRL/results/libero-postmaintenance-task7-A-rerun-20261113-v1/rerun-completion.json",
+      "sha256": "5050b300e77e878a490f1603dcfab08ba51600236b51ee62d01fad9bf79ac208"
+    },
+    "audit_checks": [
+      {
+        "task": 7,
+        "seed": 20261106,
+        "arm": "A_original",
+        "historical_tensor_hash_matches": true,
+        "maximum_logit_error": 7.517936899681388e-07,
+        "maximum_tanh_error": 8.927200001451752e-08,
+        "source_support_all7_MSE": 0.0369124362774886
+      },
+      {
+        "task": 7,
+        "seed": 20261107,
+        "arm": "A_original",
+        "historical_tensor_hash_matches": true,
+        "maximum_logit_error": 8.848357637702975e-07,
+        "maximum_tanh_error": 1.0246526327417627e-07,
+        "source_support_all7_MSE": 0.041713165138918165
+      },
+      {
+        "task": 7,
+        "seed": 20261108,
+        "arm": "A_original",
+        "historical_tensor_hash_matches": true,
+        "maximum_logit_error": 8.106847162459019e-07,
+        "maximum_tanh_error": 9.369377240719956e-08,
+        "source_support_all7_MSE": 0.04078663732859147
+      }
+    ]
+  },
+  "head_rerun": {
+    "heads": 9,
+    "coefficient": 1,
+    "actual_auxiliary_updates": 4500,
+    "Policy_updates": 0,
+    "runtime": {
+      "CPU_work_seconds": 2.9984081750008045,
+      "device": "CPU",
+      "versions": {
+        "numpy": "1.22.4",
+        "torch": "2.4.1+cu124"
+      },
+      "torch_threads": 1,
+      "torch_interop_threads": 1,
+      "peak_RSS_bytes": 431931392
+    },
+    "audit_runtime": {
+      "CPU_work_seconds": 0.2811054169869749,
+      "device": "CPU",
+      "versions": {
+        "numpy": "1.22.4",
+        "torch": "2.4.1+cu124"
+      },
+      "peak_RSS_bytes": 96333824
+    },
+    "primary": {
+      "path": "/data/zl202621/KECRL/results/libero-postmaintenance-task7-A-head-rerun-20261113-v1/head-rerun-result.json",
+      "sha256": "84073b8d60a89255039b2b77238975c76262af2f11c3abb89568196cddcd5218"
+    },
+    "independent_audit": {
+      "path": "/data/zl202621/KECRL/results/libero-postmaintenance-task7-A-head-rerun-20261113-v1/independent-audit.json",
+      "sha256": "3d2abeae8cbabb02f416863fe04ac3b2e461ebc5d96920a96943e5e8fab8d007"
+    },
+    "maximum_training_prediction_error": 6.963385668079525e-08
+  },
+  "new_execution": {
+    "libero-postmaintenance-task7-A-rebuild_v1.json": {
+      "path": "/data/zl202621/KECRL/configs/libero-postmaintenance-task7-A-rebuild_v1.json",
+      "sha256": "b2452e7a4960be0e2e240eb1f9c996ef8bf983dcd148d63eca01366b861810c0"
+    },
+    "libero-postmaintenance-task7-A-rebuild-execution-binding_v1.json": {
+      "path": "/data/zl202621/KECRL/configs/libero-postmaintenance-task7-A-rebuild-execution-binding_v1.json",
+      "sha256": "4707c54e5b4c1243dd8d9c8422cac6171e1e00e917433926515a6d687a9c5013"
+    },
+    "libero-postmaintenance-task7-A-head-rebuild_v1.json": {
+      "path": "/data/zl202621/KECRL/configs/libero-postmaintenance-task7-A-head-rebuild_v1.json",
+      "sha256": "ac608191c03a3b0c5c710f7ce93995e16f27f0286e2434cee26bdfcf9dcc7c83"
+    },
+    "libero-postmaintenance-task7-A-head-rebuild-execution-binding_v1.json": {
+      "path": "/data/zl202621/KECRL/configs/libero-postmaintenance-task7-A-head-rebuild-execution-binding_v1.json",
+      "sha256": "b8e479fa7e1db80a56b45979b6ecf58fc3664adc28c2a3536aa9dc060f691e35"
+    }
+  },
+  "verified_original_bytes": [
+    {
+      "original_path": "/tmp/libero-formal-G-artifacts-20261105-v2/G-task7-seed20261106-A_original-u500.pt",
+      "original_sha256": "c5cb770a456185a5ef4885311ba4aab452aa287039c8d6b9fda48d9f895a9909",
+      "regenerated_path": "/data/zl202621/KECRL/results/libero-postmaintenance-task7-A-rerun-20261113-v1/task7-seed20261106-A_original-u500.pt",
+      "verified_sha256": "c5cb770a456185a5ef4885311ba4aab452aa287039c8d6b9fda48d9f895a9909",
+      "kind": "Policy500_checkpoint",
+      "status": "recomputed_and_original_SHA256_matches"
+    },
+    {
+      "original_path": "/tmp/libero-formal-G-artifacts-20261105-v2/G-task7-seed20261107-A_original-u500.pt",
+      "original_sha256": "2058d4d47f5293e77c596f5a104529708b03a6a89052a8423c82e2030ed13ace",
+      "regenerated_path": "/data/zl202621/KECRL/results/libero-postmaintenance-task7-A-rerun-20261113-v1/task7-seed20261107-A_original-u500.pt",
+      "verified_sha256": "2058d4d47f5293e77c596f5a104529708b03a6a89052a8423c82e2030ed13ace",
+      "kind": "Policy500_checkpoint",
+      "status": "recomputed_and_original_SHA256_matches"
+    },
+    {
+      "original_path": "/tmp/libero-formal-G-artifacts-20261105-v2/G-task7-seed20261108-A_original-u500.pt",
+      "original_sha256": "b264be47a6ca54a1370fbdd53a2d5f0f96615f8c2f19207afef3f977e41b1538",
+      "regenerated_path": "/data/zl202621/KECRL/results/libero-postmaintenance-task7-A-rerun-20261113-v1/task7-seed20261108-A_original-u500.pt",
+      "verified_sha256": "b264be47a6ca54a1370fbdd53a2d5f0f96615f8c2f19207afef3f977e41b1538",
+      "kind": "Policy500_checkpoint",
+      "status": "recomputed_and_original_SHA256_matches"
+    },
+    {
+      "original_path": "/tmp/libero-source-expert-component3-observability-artifacts-20261107-v1/task7-seed20261106-A_original-features.npz",
+      "original_sha256": "9fa10f9abd87f86f9fa85f5f86c0b2e9c43f7a976c3d7152816bc1160e17e36e",
+      "regenerated_path": "/data/zl202621/KECRL/results/libero-postmaintenance-task7-A-head-rerun-20261113-v1/task7-seed20261106-A_original-features-original-layout.npz",
+      "verified_sha256": "9fa10f9abd87f86f9fa85f5f86c0b2e9c43f7a976c3d7152816bc1160e17e36e",
+      "kind": "current_feature_archive",
+      "status": "recomputed_and_original_SHA256_matches"
+    },
+    {
+      "original_path": "/tmp/libero-source-expert-component3-observability-artifacts-20261107-v1/task7-seed20261107-A_original-features.npz",
+      "original_sha256": "16ae32045daa66b5663e109d55c07b33ad19349e69e1d2f3eae524cdfdbf1357",
+      "regenerated_path": "/data/zl202621/KECRL/results/libero-postmaintenance-task7-A-head-rerun-20261113-v1/task7-seed20261107-A_original-features-original-layout.npz",
+      "verified_sha256": "16ae32045daa66b5663e109d55c07b33ad19349e69e1d2f3eae524cdfdbf1357",
+      "kind": "current_feature_archive",
+      "status": "recomputed_and_original_SHA256_matches"
+    },
+    {
+      "original_path": "/tmp/libero-source-expert-component3-observability-artifacts-20261107-v1/task7-seed20261108-A_original-features.npz",
+      "original_sha256": "34be04be0b2fe895628a25245d0473a621302b582ac8c8543c66d078f0059f96",
+      "regenerated_path": "/data/zl202621/KECRL/results/libero-postmaintenance-task7-A-head-rerun-20261113-v1/task7-seed20261108-A_original-features-original-layout.npz",
+      "verified_sha256": "34be04be0b2fe895628a25245d0473a621302b582ac8c8543c66d078f0059f96",
+      "kind": "current_feature_archive",
+      "status": "recomputed_and_original_SHA256_matches"
+    },
+    {
+      "original_path": "/tmp/libero-task7-residual-harm-protection-artifacts-20261108-v1/head-task7-seed20261106-A_original-fold0-harm_protected_affine.npz",
+      "original_sha256": "82b97ef4bc38a2b147a421d1001b8d2d8d3af568cf105c7459226f87cde19741",
+      "regenerated_path": "/data/zl202621/KECRL/results/libero-postmaintenance-task7-A-head-rerun-20261113-v1/head-task7-seed20261106-A_original-fold0-harm_protected_affine.npz",
+      "verified_sha256": "82b97ef4bc38a2b147a421d1001b8d2d8d3af568cf105c7459226f87cde19741",
+      "kind": "harm_protected_affine_head",
+      "status": "recomputed_and_original_SHA256_matches"
+    },
+    {
+      "original_path": "/tmp/libero-task7-residual-harm-protection-artifacts-20261108-v1/head-task7-seed20261106-A_original-fold1-harm_protected_affine.npz",
+      "original_sha256": "a322833f5ac262333ce21e4cafde781c82ff42509ce2b38c1b1bcae99f7dc572",
+      "regenerated_path": "/data/zl202621/KECRL/results/libero-postmaintenance-task7-A-head-rerun-20261113-v1/head-task7-seed20261106-A_original-fold1-harm_protected_affine.npz",
+      "verified_sha256": "a322833f5ac262333ce21e4cafde781c82ff42509ce2b38c1b1bcae99f7dc572",
+      "kind": "harm_protected_affine_head",
+      "status": "recomputed_and_original_SHA256_matches"
+    },
+    {
+      "original_path": "/tmp/libero-task7-residual-harm-protection-artifacts-20261108-v1/head-task7-seed20261106-A_original-fold2-harm_protected_affine.npz",
+      "original_sha256": "7ac26f9dbf207515653cac0a2f6e45cd463726354e067be645a21b3073f1967a",
+      "regenerated_path": "/data/zl202621/KECRL/results/libero-postmaintenance-task7-A-head-rerun-20261113-v1/head-task7-seed20261106-A_original-fold2-harm_protected_affine.npz",
+      "verified_sha256": "7ac26f9dbf207515653cac0a2f6e45cd463726354e067be645a21b3073f1967a",
+      "kind": "harm_protected_affine_head",
+      "status": "recomputed_and_original_SHA256_matches"
+    },
+    {
+      "original_path": "/tmp/libero-task7-residual-harm-protection-artifacts-20261108-v1/head-task7-seed20261107-A_original-fold0-harm_protected_affine.npz",
+      "original_sha256": "89fda4837e0569cfe28ceeb043178657070319dcca26078728aa522d224741c4",
+      "regenerated_path": "/data/zl202621/KECRL/results/libero-postmaintenance-task7-A-head-rerun-20261113-v1/head-task7-seed20261107-A_original-fold0-harm_protected_affine.npz",
+      "verified_sha256": "89fda4837e0569cfe28ceeb043178657070319dcca26078728aa522d224741c4",
+      "kind": "harm_protected_affine_head",
+      "status": "recomputed_and_original_SHA256_matches"
+    },
+    {
+      "original_path": "/tmp/libero-task7-residual-harm-protection-artifacts-20261108-v1/head-task7-seed20261107-A_original-fold1-harm_protected_affine.npz",
+      "original_sha256": "f5e92a517e892251d0484c799740684e32b4eacadb541a1ed7bb2b3a7e2c911a",
+      "regenerated_path": "/data/zl202621/KECRL/results/libero-postmaintenance-task7-A-head-rerun-20261113-v1/head-task7-seed20261107-A_original-fold1-harm_protected_affine.npz",
+      "verified_sha256": "f5e92a517e892251d0484c799740684e32b4eacadb541a1ed7bb2b3a7e2c911a",
+      "kind": "harm_protected_affine_head",
+      "status": "recomputed_and_original_SHA256_matches"
+    },
+    {
+      "original_path": "/tmp/libero-task7-residual-harm-protection-artifacts-20261108-v1/head-task7-seed20261107-A_original-fold2-harm_protected_affine.npz",
+      "original_sha256": "d2c3ea9de3022ba8de8eae3ad5937ac568ddc511c6cc72476bb02ba0456bbb4e",
+      "regenerated_path": "/data/zl202621/KECRL/results/libero-postmaintenance-task7-A-head-rerun-20261113-v1/head-task7-seed20261107-A_original-fold2-harm_protected_affine.npz",
+      "verified_sha256": "d2c3ea9de3022ba8de8eae3ad5937ac568ddc511c6cc72476bb02ba0456bbb4e",
+      "kind": "harm_protected_affine_head",
+      "status": "recomputed_and_original_SHA256_matches"
+    },
+    {
+      "original_path": "/tmp/libero-task7-residual-harm-protection-artifacts-20261108-v1/head-task7-seed20261108-A_original-fold0-harm_protected_affine.npz",
+      "original_sha256": "1cb1f50a19cbf31f3b52bb4610d995651676bf65fd8900cfcf4fa3525c3b3231",
+      "regenerated_path": "/data/zl202621/KECRL/results/libero-postmaintenance-task7-A-head-rerun-20261113-v1/head-task7-seed20261108-A_original-fold0-harm_protected_affine.npz",
+      "verified_sha256": "1cb1f50a19cbf31f3b52bb4610d995651676bf65fd8900cfcf4fa3525c3b3231",
+      "kind": "harm_protected_affine_head",
+      "status": "recomputed_and_original_SHA256_matches"
+    },
+    {
+      "original_path": "/tmp/libero-task7-residual-harm-protection-artifacts-20261108-v1/head-task7-seed20261108-A_original-fold1-harm_protected_affine.npz",
+      "original_sha256": "c7f21c6f83303231bd9c66a012b279f94b242a3a2dd561f4bce902685e7708f8",
+      "regenerated_path": "/data/zl202621/KECRL/results/libero-postmaintenance-task7-A-head-rerun-20261113-v1/head-task7-seed20261108-A_original-fold1-harm_protected_affine.npz",
+      "verified_sha256": "c7f21c6f83303231bd9c66a012b279f94b242a3a2dd561f4bce902685e7708f8",
+      "kind": "harm_protected_affine_head",
+      "status": "recomputed_and_original_SHA256_matches"
+    },
+    {
+      "original_path": "/tmp/libero-task7-residual-harm-protection-artifacts-20261108-v1/head-task7-seed20261108-A_original-fold2-harm_protected_affine.npz",
+      "original_sha256": "b22c97755910193ee595230ba03d99aae5ca807879fdf2d26c27bf83d1ea1432",
+      "regenerated_path": "/data/zl202621/KECRL/results/libero-postmaintenance-task7-A-head-rerun-20261113-v1/head-task7-seed20261108-A_original-fold2-harm_protected_affine.npz",
+      "verified_sha256": "b22c97755910193ee595230ba03d99aae5ca807879fdf2d26c27bf83d1ea1432",
+      "kind": "harm_protected_affine_head",
+      "status": "recomputed_and_original_SHA256_matches"
+    }
+  ],
+  "remaining_no_verified_counterpart": 79,
+  "source_query_permission_for_B": "pending_user_clarification",
+  "scientific_settings": {
+    "original_Policy_updates": 500,
+    "future_stabilization_steps": 5,
+    "original_loss_changed": false,
+    "active_SPT_or_Knowledge_updated": false,
+    "Module_registered": false
+  },
+  "validation": {
+    "source_and_rebuild_focused_tests_passed": 37,
+    "head_scoped_tests_passed": 3,
+    "full_pytest_run": false,
+    "published_actual_evidence_copies": [
+      {
+        "original_log": "/data/zl202621/KECRL/logs/postmaintenance-rebuild-20261113-v1/focused-tests.log",
+        "published_path": "docs/evidence/libero-rebuild-focused-tests-2026-11-13.txt",
+        "sha256": "74f83cafa9f1bcb4c4ecc88486d8c187a850ac9e00f7dabfbc7d187b035fb933"
+      },
+      {
+        "original_log": "/data/zl202621/KECRL/logs/postmaintenance-rebuild-20261113-v1/focused-tests.xml",
+        "published_path": "docs/evidence/libero-rebuild-focused-tests-2026-11-13.xml",
+        "sha256": "d73713a528c856ea1e429b491826fe2945ed76cba8eeb9b3a636fbfced053683"
+      },
+      {
+        "original_log": "/data/zl202621/KECRL/logs/postmaintenance-rebuild-20261113-v1/head-tests.log",
+        "published_path": "docs/evidence/libero-rebuild-head-tests-2026-11-13.txt",
+        "sha256": "723da7b49f865c5c16be612b377938b0f62f53ccd287966470919961a0c8dce1"
+      },
+      {
+        "original_log": "/data/zl202621/KECRL/logs/postmaintenance-rebuild-20261113-v1/head-tests.xml",
+        "published_path": "docs/evidence/libero-rebuild-head-tests-2026-11-13.xml",
+        "sha256": "65c4e969abedf9dc4d0d45b9b2f914bdd74ab7b74305dd4c9a5075a84ffbed3f"
+      },
+      {
+        "original_log": "/data/zl202621/KECRL/logs/postmaintenance-rebuild-20261113-v1/real-A-run.log",
+        "published_path": "docs/evidence/libero-rebuild-A-run-2026-11-13.txt",
+        "sha256": "bb0a0b7552ac21d926e95fe3548a65d7a461821b86b516683e79dbfb2bf12d76"
+      },
+      {
+        "original_log": "/data/zl202621/KECRL/logs/postmaintenance-rebuild-20261113-v1/real-A-independent-audit.log",
+        "published_path": "docs/evidence/libero-rebuild-A-audit-2026-11-13.txt",
+        "sha256": "e29cb8154da954dd28fea02593ccfa5c5290ba1b10e8d3f062964b7495c8992b"
+      },
+      {
+        "original_log": "/data/zl202621/KECRL/logs/postmaintenance-rebuild-20261113-v1/real-A-head-train.log",
+        "published_path": "docs/evidence/libero-rebuild-head-run-2026-11-13.txt",
+        "sha256": "755458766675ec8b287997b2d29689fcf01bb1257a0ebf5d0dc6f5fbc10c6a9d"
+      },
+      {
+        "original_log": "/data/zl202621/KECRL/logs/postmaintenance-rebuild-20261113-v1/real-A-head-audit.log",
+        "published_path": "docs/evidence/libero-rebuild-head-audit-2026-11-13.txt",
+        "sha256": "25cff13b01c5bea3549eb342f45eaa83b5dc3de51a516b231acf721091cede6f"
+      }
+    ]
+  },
+  "recovery_ledger": {
+    "path": "/data/zl202621/KECRL/results/libero-postmaintenance-task7-A-head-rerun-20261113-v1/recovery-ledger.json",
+    "sha256": "146efb9abe7b82bf768d41893a4d2b2127c39951a23806c2eff694ded4b6c120"
+  },
+  "publication": "Code, configs, plans and this compact summary; datasets, checkpoints and NPZ remain on personal data storage."
+}

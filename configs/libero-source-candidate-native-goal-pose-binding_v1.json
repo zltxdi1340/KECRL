@@ -1,0 +1,55 @@
+{
+  "schema_version": 1,
+  "status": "readonly_native_goal_source_pose_execution_bound",
+  "formal_result": false,
+  "bound_at_utc": "2026-11-07T07:06:20.588726+00:00",
+  "config_sha256": "a15f2cc84c9ecfa98b0b0358eeb70adaafa3f6f866f940e44c8741d17149e063",
+  "base_git_commit": "2beb6271ee66dfba423d517762ff92acfd83444f",
+  "files": {
+    "runner": {
+      "path": "experiments/analyze_libero_source_candidate_native_goal_pose.py",
+      "sha256": "f8c82413fb5019c303a3f4b8279b2ccad37908d51b729d12421da9bb157ebafc"
+    },
+    "independent_auditor": {
+      "path": "experiments/audit_libero_source_candidate_native_goal_pose.py",
+      "sha256": "264989553564f76580cdfcd80947ac191b5052ddee05cd01282b3dbb5727d7e4"
+    },
+    "tests": {
+      "path": "tests/test_libero_source_candidate_native_goal_pose.py",
+      "sha256": "d5bb49183f99b239a762835c60c138da34cdfc267aac3930f87ba7557ae40547"
+    },
+    "analysis_plan": {
+      "path": "docs/libero-source-candidate-native-goal-pose-plan-2026-11-07.md",
+      "sha256": "ff7a3c28b1ef3abe0ee3bb8adc669ffde4eb528911db8815038d17eb4320d2a3"
+    },
+    "prior_alignment": {
+      "path": "experiments/analyze_libero_source_candidate_close_geometry_alignment.py",
+      "sha256": "789db9b64f0b48f7375b472c760153b87284a063f62846d19d7aaa885c1e5a02"
+    },
+    "saved_geometry_validator": {
+      "path": "experiments/audit_libero_source_candidate_geometry_capture.py",
+      "sha256": "9f95cdb46e69fc38556a4f66277c4a5e13f16641c6d088d68c646a6028b19005"
+    },
+    "science_metadata": {
+      "path": "experiments/libero_source_candidate_geometry_capture_protocol.py",
+      "sha256": "05fb42cbb9b1359205f6081f04b9f3074f81c47a57a499d0b79709e17218376e"
+    },
+    "package": {
+      "path": "experiments/__init__.py",
+      "sha256": "976715d377d710412661a8b81a44a41726b4fffae23abf4a260cb030165eab74"
+    },
+    "prior_code_binding": {
+      "path": "configs/libero-source-candidate-close-geometry-alignment-binding_v2.json",
+      "sha256": "2f30237058ce3c2369411f9dcb50c4dcf62467ea06522777f26b95f13c8df7d6"
+    }
+  },
+  "software_verification": {
+    "new_synthetic_tests": 22,
+    "focused_passed": 132,
+    "pytest_seconds": 9.8,
+    "compile_passed": true,
+    "log": "/tmp/libero-source-candidate-native-goal-pose-focused-tests-20261107-v1.log"
+  },
+  "new_research_calls_before_binding": 0,
+  "native_goal_labels_not_rewritten": true
+}
