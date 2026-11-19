@@ -1,0 +1,932 @@
+{
+  "status": "complete_audited_restricted_visual_source_development",
+  "formal_result": false,
+  "science": {
+    "path": "/data/zl202621/KECRL/configs/libero-restricted-vision-finetune-diagnostic_v1.json",
+    "sha256": "48868dfe74a51e31e571e9efc58372299f9bc9e8fe283e498f953be39a42bce0"
+  },
+  "scientific_freeze": {
+    "path": "/data/zl202621/KECRL/configs/libero-restricted-vision-finetune-freeze-binding_v1.json",
+    "sha256": "6e63ec3a656196480cb4f896d4956f3eeb3a950ad73259d1c9f5bc29729cf397"
+  },
+  "training_binding": {
+    "path": "/data/zl202621/KECRL/configs/libero-restricted-vision-finetune-training-binding_v1.json",
+    "sha256": "a602d74792a3ec66e1e690e31824bb603d57d8a379576f5e06d90ecb4521d816"
+  },
+  "evaluation_binding": {
+    "path": "/data/zl202621/KECRL/configs/libero-restricted-vision-finetune-evaluation-binding_v1.json",
+    "sha256": "2ff7f4365d1d7101024df95e7b6d5d9fb1b4bf7f25a777c45bafaf8821090ba0"
+  },
+  "source_initial_authorization": {
+    "path": "/data/zl202621/KECRL/configs/libero-restricted-vision-finetune-source-initial-authorization_v1.json",
+    "sha256": "53ea952a030036230662c144ffcda9752ecccf0107426495602482c21eed2a1e"
+  },
+  "training": {
+    "path": "/data/zl202621/KECRL/results/libero-restricted-vision-finetune-20261114-v1/training.json",
+    "sha256": "bfe606987a00c49fec3c054aca695c00960a5f049ef48da7ed6028b6fb8723c9"
+  },
+  "training_audit": {
+    "path": "/data/zl202621/KECRL/results/libero-restricted-vision-finetune-20261114-v1/training-audit.json",
+    "sha256": "8d44d565fe9e11fb67fc028f9897319af67568fa2dfcadf4658bdf1489a7b171"
+  },
+  "evaluation": {
+    "path": "/data/zl202621/KECRL/results/libero-restricted-vision-finetune-20261114-v1/evaluation.json",
+    "sha256": "4e6d56c7e99a59b101dd42e8374c202c3d52958ef1b2fc85d2d6a1d77832184c"
+  },
+  "completion": {
+    "path": "/data/zl202621/KECRL/results/libero-restricted-vision-finetune-20261114-v1/completion.json",
+    "sha256": "e9639de47048a8438fc5e17b55b00941439fb186f4b8144369a316bddea73fe9"
+  },
+  "totals": {
+    "frozen_resnet18": {
+      "successes": 16,
+      "episodes": 120,
+      "success_fraction": "2/15"
+    },
+    "layer4_conv_finetune": {
+      "successes": 12,
+      "episodes": 120,
+      "success_fraction": "1/10"
+    }
+  },
+  "per_model": [
+    {
+      "task": 4,
+      "seed": 20261106,
+      "arm": "frozen_resnet18",
+      "successes": 6,
+      "episodes": 20,
+      "success_fraction": "3/10"
+    },
+    {
+      "task": 4,
+      "seed": 20261106,
+      "arm": "layer4_conv_finetune",
+      "successes": 2,
+      "episodes": 20,
+      "success_fraction": "1/10"
+    },
+    {
+      "task": 4,
+      "seed": 20261107,
+      "arm": "frozen_resnet18",
+      "successes": 1,
+      "episodes": 20,
+      "success_fraction": "1/20"
+    },
+    {
+      "task": 4,
+      "seed": 20261107,
+      "arm": "layer4_conv_finetune",
+      "successes": 0,
+      "episodes": 20,
+      "success_fraction": "0"
+    },
+    {
+      "task": 4,
+      "seed": 20261108,
+      "arm": "frozen_resnet18",
+      "successes": 0,
+      "episodes": 20,
+      "success_fraction": "0"
+    },
+    {
+      "task": 4,
+      "seed": 20261108,
+      "arm": "layer4_conv_finetune",
+      "successes": 6,
+      "episodes": 20,
+      "success_fraction": "3/10"
+    },
+    {
+      "task": 7,
+      "seed": 20261106,
+      "arm": "frozen_resnet18",
+      "successes": 1,
+      "episodes": 20,
+      "success_fraction": "1/20"
+    },
+    {
+      "task": 7,
+      "seed": 20261106,
+      "arm": "layer4_conv_finetune",
+      "successes": 3,
+      "episodes": 20,
+      "success_fraction": "3/20"
+    },
+    {
+      "task": 7,
+      "seed": 20261107,
+      "arm": "frozen_resnet18",
+      "successes": 6,
+      "episodes": 20,
+      "success_fraction": "3/10"
+    },
+    {
+      "task": 7,
+      "seed": 20261107,
+      "arm": "layer4_conv_finetune",
+      "successes": 1,
+      "episodes": 20,
+      "success_fraction": "1/20"
+    },
+    {
+      "task": 7,
+      "seed": 20261108,
+      "arm": "frozen_resnet18",
+      "successes": 2,
+      "episodes": 20,
+      "success_fraction": "1/10"
+    },
+    {
+      "task": 7,
+      "seed": 20261108,
+      "arm": "layer4_conv_finetune",
+      "successes": 0,
+      "episodes": 20,
+      "success_fraction": "0"
+    }
+  ],
+  "per_task": [
+    {
+      "task": 4,
+      "frozen_successes": 7,
+      "finetune_successes": 8,
+      "episodes_per_arm": 60,
+      "delta_fraction": "1/60",
+      "both_success": 0,
+      "frozen_only": 7,
+      "finetune_only": 8,
+      "both_failure": 45
+    },
+    {
+      "task": 7,
+      "frozen_successes": 9,
+      "finetune_successes": 4,
+      "episodes_per_arm": 60,
+      "delta_fraction": "-1/12",
+      "both_success": 1,
+      "frozen_only": 8,
+      "finetune_only": 3,
+      "both_failure": 48
+    }
+  ],
+  "per_seed": [
+    {
+      "seed": 20261106,
+      "frozen_successes": 7,
+      "finetune_successes": 5,
+      "episodes_per_arm": 40,
+      "delta_fraction": "-1/20"
+    },
+    {
+      "seed": 20261107,
+      "frozen_successes": 7,
+      "finetune_successes": 1,
+      "episodes_per_arm": 40,
+      "delta_fraction": "-3/20"
+    },
+    {
+      "seed": 20261108,
+      "frozen_successes": 2,
+      "finetune_successes": 6,
+      "episodes_per_arm": 40,
+      "delta_fraction": "1/10"
+    }
+  ],
+  "paired": {
+    "both_success": 1,
+    "frozen_only": 15,
+    "finetune_only": 11,
+    "both_failure": 93
+  },
+  "paired_by_task_seed": [
+    {
+      "task": 4,
+      "seed": 20261106,
+      "both_success": 0,
+      "frozen_only": 6,
+      "finetune_only": 2,
+      "both_failure": 12,
+      "indices": {
+        "both_success": [],
+        "frozen_only": [
+          0,
+          4,
+          8,
+          12,
+          13,
+          16
+        ],
+        "finetune_only": [
+          7,
+          14
+        ],
+        "both_failure": [
+          1,
+          2,
+          3,
+          5,
+          6,
+          9,
+          10,
+          11,
+          15,
+          17,
+          18,
+          19
+        ]
+      }
+    },
+    {
+      "task": 4,
+      "seed": 20261107,
+      "both_success": 0,
+      "frozen_only": 1,
+      "finetune_only": 0,
+      "both_failure": 19,
+      "indices": {
+        "both_success": [],
+        "frozen_only": [
+          12
+        ],
+        "finetune_only": [],
+        "both_failure": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          13,
+          14,
+          15,
+          16,
+          17,
+          18,
+          19
+        ]
+      }
+    },
+    {
+      "task": 4,
+      "seed": 20261108,
+      "both_success": 0,
+      "frozen_only": 0,
+      "finetune_only": 6,
+      "both_failure": 14,
+      "indices": {
+        "both_success": [],
+        "frozen_only": [],
+        "finetune_only": [
+          2,
+          6,
+          7,
+          9,
+          12,
+          18
+        ],
+        "both_failure": [
+          0,
+          1,
+          3,
+          4,
+          5,
+          8,
+          10,
+          11,
+          13,
+          14,
+          15,
+          16,
+          17,
+          19
+        ]
+      }
+    },
+    {
+      "task": 7,
+      "seed": 20261106,
+      "both_success": 0,
+      "frozen_only": 1,
+      "finetune_only": 3,
+      "both_failure": 16,
+      "indices": {
+        "both_success": [],
+        "frozen_only": [
+          11
+        ],
+        "finetune_only": [
+          5,
+          10,
+          17
+        ],
+        "both_failure": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          6,
+          7,
+          8,
+          9,
+          12,
+          13,
+          14,
+          15,
+          16,
+          18,
+          19
+        ]
+      }
+    },
+    {
+      "task": 7,
+      "seed": 20261107,
+      "both_success": 1,
+      "frozen_only": 5,
+      "finetune_only": 0,
+      "both_failure": 14,
+      "indices": {
+        "both_success": [
+          14
+        ],
+        "frozen_only": [
+          3,
+          6,
+          13,
+          15,
+          17
+        ],
+        "finetune_only": [],
+        "both_failure": [
+          0,
+          1,
+          2,
+          4,
+          5,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12,
+          16,
+          18,
+          19
+        ]
+      }
+    },
+    {
+      "task": 7,
+      "seed": 20261108,
+      "both_success": 0,
+      "frozen_only": 2,
+      "finetune_only": 0,
+      "both_failure": 18,
+      "indices": {
+        "both_success": [],
+        "frozen_only": [
+          5,
+          16
+        ],
+        "finetune_only": [],
+        "both_failure": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12,
+          13,
+          14,
+          15,
+          17,
+          18,
+          19
+        ]
+      }
+    }
+  ],
+  "frozen_success_retention_fraction": "1/16",
+  "decision": {
+    "continue_to_all_source_development": false,
+    "gates": {
+      "mean_gain_at_least_ten_percentage_points": false,
+      "both_task_means_nonregressing": false,
+      "all_seed_means_nonregressing": false
+    },
+    "mean_delta_fraction": "-1/30",
+    "task_delta_fraction": {
+      "4": "1/60",
+      "7": "-1/12"
+    },
+    "seed_delta_fraction": {
+      "20261106": "-1/20",
+      "20261107": "-3/20",
+      "20261108": "1/10"
+    },
+    "paired": {
+      "both_success": 1,
+      "frozen_only": 15,
+      "finetune_only": 11,
+      "both_failure": 93
+    },
+    "frozen_success_retention_fraction": "1/16",
+    "counts": [
+      {
+        "task": 4,
+        "seed": 20261106,
+        "arm": "frozen_resnet18",
+        "successes": 6,
+        "episodes": 20
+      },
+      {
+        "task": 4,
+        "seed": 20261106,
+        "arm": "layer4_conv_finetune",
+        "successes": 2,
+        "episodes": 20
+      },
+      {
+        "task": 4,
+        "seed": 20261107,
+        "arm": "frozen_resnet18",
+        "successes": 1,
+        "episodes": 20
+      },
+      {
+        "task": 4,
+        "seed": 20261107,
+        "arm": "layer4_conv_finetune",
+        "successes": 0,
+        "episodes": 20
+      },
+      {
+        "task": 4,
+        "seed": 20261108,
+        "arm": "frozen_resnet18",
+        "successes": 0,
+        "episodes": 20
+      },
+      {
+        "task": 4,
+        "seed": 20261108,
+        "arm": "layer4_conv_finetune",
+        "successes": 6,
+        "episodes": 20
+      },
+      {
+        "task": 7,
+        "seed": 20261106,
+        "arm": "frozen_resnet18",
+        "successes": 1,
+        "episodes": 20
+      },
+      {
+        "task": 7,
+        "seed": 20261106,
+        "arm": "layer4_conv_finetune",
+        "successes": 3,
+        "episodes": 20
+      },
+      {
+        "task": 7,
+        "seed": 20261107,
+        "arm": "frozen_resnet18",
+        "successes": 6,
+        "episodes": 20
+      },
+      {
+        "task": 7,
+        "seed": 20261107,
+        "arm": "layer4_conv_finetune",
+        "successes": 1,
+        "episodes": 20
+      },
+      {
+        "task": 7,
+        "seed": 20261108,
+        "arm": "frozen_resnet18",
+        "successes": 2,
+        "episodes": 20
+      },
+      {
+        "task": 7,
+        "seed": 20261108,
+        "arm": "layer4_conv_finetune",
+        "successes": 0,
+        "episodes": 20
+      }
+    ],
+    "formal_transfer_or_module_admitted": false,
+    "stay_in_LIBERO": true
+  },
+  "training_ledger": {
+    "caps": {
+      "train_forward": 6000,
+      "backward": 6000,
+      "optimizer": 6000,
+      "checkpoint": 12,
+      "prefix_forward": 302,
+      "layer4_forward": 12024,
+      "parity_forward": 12,
+      "dataset_items": 1100,
+      "source_sha": 2,
+      "model_create": 14,
+      "adapter": 0,
+      "reset": 0,
+      "episode": 0,
+      "policy_forward": 0,
+      "policy_action": 0,
+      "zero_step": 0,
+      "native_step": 0,
+      "numeric_rows": 0
+    },
+    "counts": {
+      "train_forward": {
+        "attempted": 6000,
+        "completed": 6000
+      },
+      "backward": {
+        "attempted": 6000,
+        "completed": 6000
+      },
+      "optimizer": {
+        "attempted": 6000,
+        "completed": 6000
+      },
+      "checkpoint": {
+        "attempted": 12,
+        "completed": 12
+      },
+      "prefix_forward": {
+        "attempted": 248,
+        "completed": 248
+      },
+      "layer4_forward": {
+        "attempted": 12024,
+        "completed": 12024
+      },
+      "parity_forward": {
+        "attempted": 12,
+        "completed": 12
+      },
+      "dataset_items": {
+        "attempted": 890,
+        "completed": 890
+      },
+      "source_sha": {
+        "attempted": 2,
+        "completed": 2
+      },
+      "model_create": {
+        "attempted": 14,
+        "completed": 14
+      },
+      "adapter": {
+        "attempted": 0,
+        "completed": 0
+      },
+      "reset": {
+        "attempted": 0,
+        "completed": 0
+      },
+      "episode": {
+        "attempted": 0,
+        "completed": 0
+      },
+      "policy_forward": {
+        "attempted": 0,
+        "completed": 0
+      },
+      "policy_action": {
+        "attempted": 0,
+        "completed": 0
+      },
+      "zero_step": {
+        "attempted": 0,
+        "completed": 0
+      },
+      "native_step": {
+        "attempted": 0,
+        "completed": 0
+      },
+      "numeric_rows": {
+        "attempted": 0,
+        "completed": 0
+      }
+    },
+    "elapsed_seconds": 72.91871947899926
+  },
+  "evaluation_ledger": {
+    "caps": {
+      "train_forward": 0,
+      "backward": 0,
+      "optimizer": 0,
+      "checkpoint": 0,
+      "prefix_forward": 144000,
+      "layer4_forward": 144000,
+      "parity_forward": 0,
+      "dataset_items": 0,
+      "source_sha": 0,
+      "model_create": 12,
+      "adapter": 12,
+      "reset": 240,
+      "episode": 240,
+      "policy_forward": 72000,
+      "policy_action": 72000,
+      "zero_step": 1200,
+      "native_step": 73200,
+      "numeric_rows": 40
+    },
+    "counts": {
+      "train_forward": {
+        "attempted": 0,
+        "completed": 0
+      },
+      "backward": {
+        "attempted": 0,
+        "completed": 0
+      },
+      "optimizer": {
+        "attempted": 0,
+        "completed": 0
+      },
+      "checkpoint": {
+        "attempted": 0,
+        "completed": 0
+      },
+      "prefix_forward": {
+        "attempted": 137184,
+        "completed": 137184
+      },
+      "layer4_forward": {
+        "attempted": 137184,
+        "completed": 137184
+      },
+      "parity_forward": {
+        "attempted": 0,
+        "completed": 0
+      },
+      "dataset_items": {
+        "attempted": 0,
+        "completed": 0
+      },
+      "source_sha": {
+        "attempted": 0,
+        "completed": 0
+      },
+      "model_create": {
+        "attempted": 12,
+        "completed": 12
+      },
+      "adapter": {
+        "attempted": 12,
+        "completed": 12
+      },
+      "reset": {
+        "attempted": 240,
+        "completed": 240
+      },
+      "episode": {
+        "attempted": 240,
+        "completed": 240
+      },
+      "policy_forward": {
+        "attempted": 68592,
+        "completed": 68592
+      },
+      "policy_action": {
+        "attempted": 68592,
+        "completed": 68592
+      },
+      "zero_step": {
+        "attempted": 1200,
+        "completed": 1200
+      },
+      "native_step": {
+        "attempted": 69792,
+        "completed": 69792
+      },
+      "numeric_rows": {
+        "attempted": 40,
+        "completed": 40
+      }
+    },
+    "elapsed_seconds": 1276.4628639590228
+  },
+  "initial_access": {
+    "4": {
+      "pickle_header_sha256": "22f103ab49c6f3be149e78cbda2075b4499fdbc19b15043497f3fdcadef24708",
+      "payload_offset": 257,
+      "encoded_payload_bytes_total": 43985,
+      "numeric_rows_decoded": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19
+      ],
+      "checksum_reads_entire_container_bytes": true,
+      "global_to_local_index": {
+        "0": 0,
+        "1": 1,
+        "2": 2,
+        "3": 3,
+        "4": 4,
+        "5": 5,
+        "6": 6,
+        "7": 7,
+        "8": 8,
+        "9": 9,
+        "10": 10,
+        "11": 11,
+        "12": 12,
+        "13": 13,
+        "14": 14,
+        "15": 15,
+        "16": 16,
+        "17": 17,
+        "18": 18,
+        "19": 19
+      },
+      "skipped_rows_numerically_decoded": [],
+      "skipped_rows_buffered": false,
+      "skipped_utf8_bytes": 0,
+      "selected_utf8_bytes": 17580,
+      "decoded_selected_bytes": 14720,
+      "used_pickle_or_torch_deserialization": false,
+      "source_path": "/data/zl202621/KECRL/third_party/LIBERO/libero/libero/init_files/libero_spatial/pick_up_the_black_bowl_in_the_top_drawer_of_the_wooden_cabinet_and_place_it_on_the_plate.pruned_init",
+      "container_sha256": "deef3df529e0bb57658b973bbb3baf02b02922db065c025a73ebfcd11eb54d46",
+      "selected_row_sha256": {
+        "0": "2e3f91b350eaef1b23c2d4ee14c513b2158a106bff7ed6c249b58e2cf89367f4",
+        "1": "d1f552d41794709fdcdccf886e4be6384f15a50c1d0e6227a99e08d86e19e23e",
+        "2": "d5a2a728be37ce588fd1326df08b48cb9e1913b333c6719bb7059308783d4731",
+        "3": "7e950b4903eb62f247605b60952d62aca17222446e05c299de3d8b615756a2fb",
+        "4": "eacc257cf75be38a89bdf75e5300cded0aee0ec1d0a2ac4b91d4c4cdb11c763b",
+        "5": "b87346216738a7ce42130dcd154c43380035d684b66a383eaa412aa7d7295b7c",
+        "6": "58efbae8fa8cdf03edfa2542dbbda4caf806bdf5268b8320a00f1549b00bec95",
+        "7": "f90125fb43ad6d5983af928adc76f7ad7520f2ce624dbd25bb45e1888a5a9e56",
+        "8": "2b61811f6b6a9a61b89a236fd0b30a5b10539a70b67c34209624cfdf52af4e5a",
+        "9": "6a71ea6e55326efc34ec666f301a018286ad06f19222511f0c3af44896801580",
+        "10": "7bb0de6b71378924db79db6837d31679f6792129b7d9861f58532ba7332d6eb3",
+        "11": "7ca087b8eea266273cbf99c09f51cc5cfee48a1e6408b367fedf168fc1c9cb15",
+        "12": "08c27762b56ead1630b15d284b71f591009a21d824139674181aae9060b98920",
+        "13": "066159b34ab7fd2c9a3292b11143f7a8d51f697aff2ea00ea90e7eeeeb06e2ba",
+        "14": "cf92dad8abe4770b520ec4e6bf4a9c074cbdc829e6c7bffae73060682dee7d69",
+        "15": "cb5e701ddd05a14b73dade2a434b1ce1bd338ce61091f2e5c21eef2af3c91ce2",
+        "16": "2fd6bf6a9d7196b0c22521e814d89983b55b5ee584b68a3de0ca6ff4659cfaba",
+        "17": "f5d465f187549523ee7aaedba70bf6427cc717feb1cdc5beffdb576b406b6ead",
+        "18": "aa414e9c1b365ba49f5754f04a6d22fe76579e537cc0532defd2b143c8162449",
+        "19": "c3c1ec2925956850aa3e3a52f63f7b6887c58e2e6cd4900bb07100abe491a044"
+      }
+    },
+    "7": {
+      "pickle_header_sha256": "c70b3fd4769c65750584c42a6161a6bd45fb3bb5673a32f1e20691687c50ba96",
+      "payload_offset": 257,
+      "encoded_payload_bytes_total": 43732,
+      "numeric_rows_decoded": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19
+      ],
+      "checksum_reads_entire_container_bytes": true,
+      "global_to_local_index": {
+        "0": 0,
+        "1": 1,
+        "2": 2,
+        "3": 3,
+        "4": 4,
+        "5": 5,
+        "6": 6,
+        "7": 7,
+        "8": 8,
+        "9": 9,
+        "10": 10,
+        "11": 11,
+        "12": 12,
+        "13": 13,
+        "14": 14,
+        "15": 15,
+        "16": 16,
+        "17": 17,
+        "18": 18,
+        "19": 19
+      },
+      "skipped_rows_numerically_decoded": [],
+      "skipped_rows_buffered": false,
+      "skipped_utf8_bytes": 0,
+      "selected_utf8_bytes": 17509,
+      "decoded_selected_bytes": 14720,
+      "used_pickle_or_torch_deserialization": false,
+      "source_path": "/data/zl202621/KECRL/third_party/LIBERO/libero/libero/init_files/libero_spatial/pick_up_the_black_bowl_on_the_stove_and_place_it_on_the_plate.pruned_init",
+      "container_sha256": "ea9cba2814bc166f3682f3f5a97329467839bcf584069cd419191b6c17adae25",
+      "selected_row_sha256": {
+        "0": "501105aff4e1897d96cac0d0ee69fc702ad209e317511807e27df8b421ae1f2a",
+        "1": "9fb3287b9233e63f3c25de74a5c1697d6c3e3ce33d71da6cb975e98884df7b65",
+        "2": "055ebb922514bbc2796db6201c2eb1f36c0f2dc6d3e906bdfed720d9d67f25e1",
+        "3": "fb10b9a998805283abff88cfd066b7f6b4130868e2b53e5f6def7247f72b6c5a",
+        "4": "3caf9d7ec66e840dd915ee960dc5e226df2aee678fa087f77cac918e4169531e",
+        "5": "b887ede88d157e4e55c6c31aa79eec7ea0c950034f6111fd9f619c423469d483",
+        "6": "583801d2f7fa2816c9b5a290cd4e954a88c7b5a43f9bc4c7735ba26633f7997d",
+        "7": "7a2ae9fdc7b6512f45182c6c1eb0605cfc023075e306c0c5909078fe235db309",
+        "8": "ab1daae4e2f98cfe102420e3659a5e9b27643619d8637f8985b729db38be5b54",
+        "9": "546f905e8563676df7f13cf4071337c8e75b41ba50d997ad1732d0d666be50f5",
+        "10": "134b79de0703478113dd0dcff51a78fc95723a65f5bc0ace2fea3a4b429706ce",
+        "11": "86e1a1699c62958a3e3fe25e7f8a598cd67698b05f68e4c44d5ccfe3a34d2415",
+        "12": "da8243989fd7207ad4188c0b95665984656070c8d5f5c8fe7450de83d3db9467",
+        "13": "97cdc22f59d8f3ca1195ffe3005c257478fa743b2edc7427950718b01381a7ae",
+        "14": "ab04f435365a442c36f1fcfaf55412b385fb16192a1abca51fc22276b8f81f71",
+        "15": "c2d397c97dff15be672ebc121b0bf6a49522c58cc15164b688b81dcf1f53486c",
+        "16": "7ca0656515f25ac924542e0f9fdc1de90bd8f52c93368dde245b0d8d902b7b1f",
+        "17": "dfefa2e8fbfa660e7ad3f9fe8abfc5f0334de73d23101a02f4832a3e88b399f7",
+        "18": "a8adffa84c6ca0334dbd7c5f04255f37049725d84d1fff85bffd76f24e22a98c",
+        "19": "33513be059126ac134cdc4bc4e77077909122fc4e90b908bf8e9f3a149568415"
+      }
+    }
+  },
+  "evaluation_started_at_UTC": "2026-11-14T05:02:58.235129+00:00",
+  "evaluation_finished_at_UTC": "2026-11-14T05:24:14.697992+00:00",
+  "evaluation_peak_cuda_allocated_bytes": 137806848,
+  "evaluation_gpu": {
+    "gpu_rows_before_run": "0, GPU-beb93e4f-e8b8-8589-1e45-06ad2b320bbe, NVIDIA GeForce RTX 4090, 1, 0\n1, GPU-d90bd7b2-16f6-c0fe-fbc1-7ed4060e95ff, NVIDIA GeForce RTX 4090, 1, 0\n",
+    "compute_processes_before_run": "",
+    "target_gpu": [
+      "1",
+      "GPU-d90bd7b2-16f6-c0fe-fbc1-7ed4060e95ff",
+      "NVIDIA GeForce RTX 4090",
+      "1",
+      "0"
+    ]
+  },
+  "derived_csv": [
+    {
+      "path": "/data/zl202621/KECRL/results/libero-restricted-vision-finetune-20261114-v1/paired-outcomes.csv",
+      "sha256": "3fdd9e753ecbeeb2f3e5f73e3e192c7e5936690d8e12eb1667bbd7cb0179d4ca"
+    },
+    {
+      "path": "/data/zl202621/KECRL/results/libero-restricted-vision-finetune-20261114-v1/per-model-success.csv",
+      "sha256": "bf44c7cbdef062abcc9fb34e7e280a34fc73cb8a4557d66a7866def73698b0de"
+    },
+    {
+      "path": "/data/zl202621/KECRL/results/libero-restricted-vision-finetune-20261114-v1/per-task-success.csv",
+      "sha256": "a5166c75f8fd3b10fbdb76ee12ffdd99a32d78e961d1f58eb7544675b7622697"
+    },
+    {
+      "path": "/data/zl202621/KECRL/results/libero-restricted-vision-finetune-20261114-v1/per-seed-success.csv",
+      "sha256": "49b77425e062c5bc70d4da537335c884fe848e673f5b3527ccef777bf265e93c"
+    }
+  ],
+  "arithmetic_script": {
+    "path": "/data/zl202621/KECRL/logs/libero-restricted-vision-finetune-execution-20261114-v1/summarize_completed_outputs.py",
+    "sha256": "0c55a3d8ee6012731969460cffaf4f83eb443890c2bc27c4deabd6a7d484f1ff"
+  },
+  "no_new_training_or_simulation_in_summary": true,
+  "independent_integer_fraction_recomputation_passed": true
+}

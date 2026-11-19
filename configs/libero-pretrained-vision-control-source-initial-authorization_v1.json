@@ -1,0 +1,49 @@
+{
+  "kind": "explicit_user_source_development_initial_authorization",
+  "version": 1,
+  "user_approved": true,
+  "recorded_at_UTC": "2026-11-13T15:57:27.855714+00:00",
+  "user_quote": "确认本轮仅开放task4/7已用过的source开发初态0..19用于这次评估",
+  "tasks": [
+    4,
+    7
+  ],
+  "indices": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19
+  ],
+  "role": "candidate_nonregression",
+  "paired_episodes": 240,
+  "policy_actions_per_episode_max": 300,
+  "stabilization_steps": 5,
+  "source_meta_query_allowed": false,
+  "validation_allowed": false,
+  "held_out_allowed": false,
+  "H_allowed": false,
+  "qualification_allowed": false,
+  "reserved_allowed": false,
+  "final_allowed": false,
+  "scientific_configuration": {
+    "path": "/data/zl202621/KECRL/configs/libero-pretrained-vision-control-diagnostic_v1.json",
+    "sha256": "d2a39cb0e1f18f817b582d2013ec9a68a049ee90c78aea09a2d3b9657b634a92"
+  },
+  "purpose": "本轮已训练12个500-update Policy的固定配对source开发闭环，仅此范围"
+}

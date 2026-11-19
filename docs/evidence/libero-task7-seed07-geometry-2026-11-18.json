@@ -1,0 +1,61 @@
+{
+  "kind": "task7_seed07_targeted_geometry_evidence",
+  "formal_result": false,
+  "report": {
+    "path": "/data/zl202621/KECRL/docs/libero-task7-seed07-geometry-results-2026-11-18.md",
+    "sha256": "bdb9d42629f2e171ab603507d885561705c8ecb749455bbba6a5cabb38fa1551"
+  },
+  "science": {
+    "path": "/data/zl202621/KECRL/configs/libero-task7-seed07-geometry_v1.json",
+    "sha256": "986eb493a635bb64585c2bd355d995abff8a44e1fda3ac09d2b58f2e328be638"
+  },
+  "binding": {
+    "path": "/data/zl202621/KECRL/configs/libero-task7-seed07-geometry-binding_v1.json",
+    "sha256": "9a01270a572dce862b2bd54b92e3fe0594ce23d7336466a3f6270db799bddce2"
+  },
+  "completion": {
+    "path": "/data/zl202621/KECRL/results/libero-task7-seed07-geometry-20261118-v1/completion.json",
+    "sha256": "9cd6ff66cb76db7f5c1938fdbbc0aabfcd1825e210dbddb31709dd220c89c190"
+  },
+  "analysis": {
+    "path": "/data/zl202621/KECRL/results/libero-task7-seed07-geometry-20261118-v1/analysis.json",
+    "sha256": "db674451a769c81d72ff11f886e2a8bd207ae1c3dc0b9aa2e3b908b6eae27757"
+  },
+  "audit": {
+    "path": "/data/zl202621/KECRL/results/libero-task7-seed07-geometry-20261118-v1/audit.json",
+    "sha256": "d2ffbddbcfbb200195dfb45b28a7fc1245137cfdd45b6cd3b68d8f9acc877633"
+  },
+  "capture": {
+    "path": "/data/zl202621/KECRL/results/libero-task7-seed07-geometry-20261118-v1/capture.json",
+    "sha256": "878f73dc0695556be4e4ada79f6c9694eafc1785dcb093453c2dc779c9777c31"
+  },
+  "process": {
+    "path": "/data/zl202621/KECRL/logs/libero-task7-seed07-geometry-20261118-v1-execution/process.json",
+    "sha256": "59992a50d82f0e77d2aea34800837ea846aabb5a30af62d79cde78ae93ac58f7"
+  },
+  "validation": [
+    {
+      "path": "/data/zl202621/KECRL/logs/libero-task7-seed07-geometry-20261118-v1-validation/tests-final.txt",
+      "sha256": "e8d42d03596d6c58b25a33b69dca4ce0b88a35063f85bec84050418ea7ab1a2e"
+    },
+    {
+      "path": "/data/zl202621/KECRL/logs/libero-task7-seed07-geometry-20261118-v1-validation/tests-final.xml",
+      "sha256": "2f46fcf2ce0798482c49ff374e5012e1259eac6e85fcd62bb19cd9d493c25e3a"
+    },
+    {
+      "path": "/data/zl202621/KECRL/logs/libero-task7-seed07-geometry-20261118-v1-validation/environment.txt",
+      "sha256": "b6924c40cb10997493cb2d6c788fc66f5421c71967cbf59d680c540448f97161"
+    }
+  ],
+  "native_steps": 2931,
+  "policy_forwards": 0,
+  "optimizer_updates": 0,
+  "geometry_samples": 1335,
+  "checks": 44577,
+  "formula_checks": 1585,
+  "RGB_warning_camera_frames": 0,
+  "candidate_ever_aligned3": 0,
+  "v3_last50_Z1_XY0_C1": 150,
+  "causal_model_mechanism_proven": false,
+  "new_training_authorized": false
+}

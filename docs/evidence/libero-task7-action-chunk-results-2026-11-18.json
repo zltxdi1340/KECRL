@@ -1,0 +1,1080 @@
+{
+  "status": "audited_v5_paired_result_metadata_summary",
+  "formal_result": false,
+  "science": {
+    "path": "/data/zl202621/KECRL/configs/libero-task7-action-chunk_v5.json",
+    "sha256": "fd945fce0843625fc279b4cb4e77b217a676d505cb123a09ea02f48fa063b56e"
+  },
+  "scientific_binding": {
+    "path": "/data/zl202621/KECRL/configs/libero-task7-action-chunk-freeze-binding_v5.json",
+    "sha256": "1c4b17799c395616c29246e1ef84acc48906196aa7d0639e1aed44aa3675fa65"
+  },
+  "bindings": {
+    "training": {
+      "path": "/data/zl202621/KECRL/configs/libero-task7-action-chunk-training-binding_v5.json",
+      "sha256": "65fb37ab80e6fbdc21fce21614b349a38520d238675b36b41a3f70e889573a59"
+    },
+    "handoff": {
+      "path": "/data/zl202621/KECRL/configs/libero-task7-action-chunk-handoff-binding_v5.json",
+      "sha256": "6c3529e479dc08894ae46a5f6667ba353edfb1b0726f0e645b42c90f233ce43d"
+    }
+  },
+  "dependency_counts": {
+    "training": 1002,
+    "handoff": 1005
+  },
+  "training_completion": {
+    "path": "/data/zl202621/KECRL/results/libero-task7-action-chunk-20261118-v5/train/completion.json",
+    "sha256": "3584e011e77bfbf67ba203455cc20db1993fa5f44f7c4d290858d67dcffd6c50"
+  },
+  "handoff_completion": {
+    "path": "/data/zl202621/KECRL/results/libero-task7-action-chunk-20261118-v5/handoff/completion.json",
+    "sha256": "da0d63e524bd6c19b0f88c07767728982d16965a40cb003d28464651a953bd72"
+  },
+  "training_audit_checks": 4152,
+  "handoff_audit_checks": 154292,
+  "decision": {
+    "stage": "handoff",
+    "totals": {
+      "h1_spatial_control": 11,
+      "joint_h4_k1_spatial": 7
+    },
+    "per_seed": {
+      "20261106": {
+        "h1_spatial_control": 8,
+        "joint_h4_k1_spatial": 5
+      },
+      "20261107": {
+        "h1_spatial_control": 3,
+        "joint_h4_k1_spatial": 0
+      },
+      "20261108": {
+        "h1_spatial_control": 0,
+        "joint_h4_k1_spatial": 2
+      }
+    },
+    "pairs": 22,
+    "required_net": 4,
+    "gain_fraction": "-2/11",
+    "gates": {
+      "net_gain_at_least_threshold": false,
+      "each_seed_nonregressing": false
+    },
+    "passed": false
+  },
+  "sets": {
+    "both_success": [
+      "flip00-confirm5",
+      "flip03-unchanged",
+      "flip05-unchanged",
+      "flip05-confirm5",
+      "flip06-unchanged"
+    ],
+    "control_only": [
+      "flip00-unchanged",
+      "flip03-confirm5",
+      "flip04-unchanged",
+      "flip09-unchanged",
+      "flip11-unchanged",
+      "flip11-confirm5"
+    ],
+    "candidate_only": [
+      "flip12-unchanged",
+      "flip12-confirm5"
+    ],
+    "both_fail": [
+      "flip01-unchanged",
+      "flip01-confirm5",
+      "flip04-confirm5",
+      "flip06-confirm5",
+      "flip08-unchanged",
+      "flip08-confirm5",
+      "flip09-confirm5",
+      "flip10-unchanged",
+      "flip10-confirm5"
+    ]
+  },
+  "table": [
+    {
+      "source_id": "flip00-unchanged",
+      "seed": 20261106,
+      "anchor_step": 75,
+      "control_success": true,
+      "control_terminal_step": 116,
+      "control_net_steps": 41,
+      "candidate_success": false,
+      "candidate_terminal_step": 300,
+      "candidate_net_steps": 225,
+      "candidate_minus_control_steps": null,
+      "category": "control_only"
+    },
+    {
+      "source_id": "flip00-confirm5",
+      "seed": 20261106,
+      "anchor_step": 75,
+      "control_success": true,
+      "control_terminal_step": 134,
+      "control_net_steps": 59,
+      "candidate_success": true,
+      "candidate_terminal_step": 129,
+      "candidate_net_steps": 54,
+      "candidate_minus_control_steps": -5,
+      "category": "both_success"
+    },
+    {
+      "source_id": "flip01-unchanged",
+      "seed": 20261106,
+      "anchor_step": 150,
+      "control_success": false,
+      "control_terminal_step": 300,
+      "control_net_steps": 150,
+      "candidate_success": false,
+      "candidate_terminal_step": 300,
+      "candidate_net_steps": 150,
+      "candidate_minus_control_steps": null,
+      "category": "both_fail"
+    },
+    {
+      "source_id": "flip01-confirm5",
+      "seed": 20261106,
+      "anchor_step": 150,
+      "control_success": false,
+      "control_terminal_step": 300,
+      "control_net_steps": 150,
+      "candidate_success": false,
+      "candidate_terminal_step": 300,
+      "candidate_net_steps": 150,
+      "candidate_minus_control_steps": null,
+      "category": "both_fail"
+    },
+    {
+      "source_id": "flip03-unchanged",
+      "seed": 20261106,
+      "anchor_step": 75,
+      "control_success": true,
+      "control_terminal_step": 142,
+      "control_net_steps": 67,
+      "candidate_success": true,
+      "candidate_terminal_step": 137,
+      "candidate_net_steps": 62,
+      "candidate_minus_control_steps": -5,
+      "category": "both_success"
+    },
+    {
+      "source_id": "flip03-confirm5",
+      "seed": 20261106,
+      "anchor_step": 75,
+      "control_success": true,
+      "control_terminal_step": 132,
+      "control_net_steps": 57,
+      "candidate_success": false,
+      "candidate_terminal_step": 300,
+      "candidate_net_steps": 225,
+      "candidate_minus_control_steps": null,
+      "category": "control_only"
+    },
+    {
+      "source_id": "flip04-unchanged",
+      "seed": 20261106,
+      "anchor_step": 75,
+      "control_success": true,
+      "control_terminal_step": 212,
+      "control_net_steps": 137,
+      "candidate_success": false,
+      "candidate_terminal_step": 300,
+      "candidate_net_steps": 225,
+      "candidate_minus_control_steps": null,
+      "category": "control_only"
+    },
+    {
+      "source_id": "flip04-confirm5",
+      "seed": 20261106,
+      "anchor_step": 75,
+      "control_success": false,
+      "control_terminal_step": 300,
+      "control_net_steps": 225,
+      "candidate_success": false,
+      "candidate_terminal_step": 300,
+      "candidate_net_steps": 225,
+      "candidate_minus_control_steps": null,
+      "category": "both_fail"
+    },
+    {
+      "source_id": "flip05-unchanged",
+      "seed": 20261106,
+      "anchor_step": 100,
+      "control_success": true,
+      "control_terminal_step": 145,
+      "control_net_steps": 45,
+      "candidate_success": true,
+      "candidate_terminal_step": 138,
+      "candidate_net_steps": 38,
+      "candidate_minus_control_steps": -7,
+      "category": "both_success"
+    },
+    {
+      "source_id": "flip05-confirm5",
+      "seed": 20261106,
+      "anchor_step": 100,
+      "control_success": true,
+      "control_terminal_step": 173,
+      "control_net_steps": 73,
+      "candidate_success": true,
+      "candidate_terminal_step": 165,
+      "candidate_net_steps": 65,
+      "candidate_minus_control_steps": -8,
+      "category": "both_success"
+    },
+    {
+      "source_id": "flip06-unchanged",
+      "seed": 20261106,
+      "anchor_step": 75,
+      "control_success": true,
+      "control_terminal_step": 126,
+      "control_net_steps": 51,
+      "candidate_success": true,
+      "candidate_terminal_step": 120,
+      "candidate_net_steps": 45,
+      "candidate_minus_control_steps": -6,
+      "category": "both_success"
+    },
+    {
+      "source_id": "flip06-confirm5",
+      "seed": 20261106,
+      "anchor_step": 75,
+      "control_success": false,
+      "control_terminal_step": 300,
+      "control_net_steps": 225,
+      "candidate_success": false,
+      "candidate_terminal_step": 300,
+      "candidate_net_steps": 225,
+      "candidate_minus_control_steps": null,
+      "category": "both_fail"
+    },
+    {
+      "source_id": "flip08-unchanged",
+      "seed": 20261107,
+      "anchor_step": 100,
+      "control_success": false,
+      "control_terminal_step": 300,
+      "control_net_steps": 200,
+      "candidate_success": false,
+      "candidate_terminal_step": 300,
+      "candidate_net_steps": 200,
+      "candidate_minus_control_steps": null,
+      "category": "both_fail"
+    },
+    {
+      "source_id": "flip08-confirm5",
+      "seed": 20261107,
+      "anchor_step": 100,
+      "control_success": false,
+      "control_terminal_step": 300,
+      "control_net_steps": 200,
+      "candidate_success": false,
+      "candidate_terminal_step": 300,
+      "candidate_net_steps": 200,
+      "candidate_minus_control_steps": null,
+      "category": "both_fail"
+    },
+    {
+      "source_id": "flip09-unchanged",
+      "seed": 20261107,
+      "anchor_step": 125,
+      "control_success": true,
+      "control_terminal_step": 133,
+      "control_net_steps": 8,
+      "candidate_success": false,
+      "candidate_terminal_step": 300,
+      "candidate_net_steps": 175,
+      "candidate_minus_control_steps": null,
+      "category": "control_only"
+    },
+    {
+      "source_id": "flip09-confirm5",
+      "seed": 20261107,
+      "anchor_step": 125,
+      "control_success": false,
+      "control_terminal_step": 300,
+      "control_net_steps": 175,
+      "candidate_success": false,
+      "candidate_terminal_step": 300,
+      "candidate_net_steps": 175,
+      "candidate_minus_control_steps": null,
+      "category": "both_fail"
+    },
+    {
+      "source_id": "flip10-unchanged",
+      "seed": 20261107,
+      "anchor_step": 100,
+      "control_success": false,
+      "control_terminal_step": 300,
+      "control_net_steps": 200,
+      "candidate_success": false,
+      "candidate_terminal_step": 300,
+      "candidate_net_steps": 200,
+      "candidate_minus_control_steps": null,
+      "category": "both_fail"
+    },
+    {
+      "source_id": "flip10-confirm5",
+      "seed": 20261107,
+      "anchor_step": 100,
+      "control_success": false,
+      "control_terminal_step": 300,
+      "control_net_steps": 200,
+      "candidate_success": false,
+      "candidate_terminal_step": 300,
+      "candidate_net_steps": 200,
+      "candidate_minus_control_steps": null,
+      "category": "both_fail"
+    },
+    {
+      "source_id": "flip11-unchanged",
+      "seed": 20261107,
+      "anchor_step": 200,
+      "control_success": true,
+      "control_terminal_step": 222,
+      "control_net_steps": 22,
+      "candidate_success": false,
+      "candidate_terminal_step": 300,
+      "candidate_net_steps": 100,
+      "candidate_minus_control_steps": null,
+      "category": "control_only"
+    },
+    {
+      "source_id": "flip11-confirm5",
+      "seed": 20261107,
+      "anchor_step": 200,
+      "control_success": true,
+      "control_terminal_step": 225,
+      "control_net_steps": 25,
+      "candidate_success": false,
+      "candidate_terminal_step": 300,
+      "candidate_net_steps": 100,
+      "candidate_minus_control_steps": null,
+      "category": "control_only"
+    },
+    {
+      "source_id": "flip12-unchanged",
+      "seed": 20261108,
+      "anchor_step": 100,
+      "control_success": false,
+      "control_terminal_step": 300,
+      "control_net_steps": 200,
+      "candidate_success": true,
+      "candidate_terminal_step": 138,
+      "candidate_net_steps": 38,
+      "candidate_minus_control_steps": null,
+      "category": "candidate_only"
+    },
+    {
+      "source_id": "flip12-confirm5",
+      "seed": 20261108,
+      "anchor_step": 100,
+      "control_success": false,
+      "control_terminal_step": 300,
+      "control_net_steps": 200,
+      "candidate_success": true,
+      "candidate_terminal_step": 145,
+      "candidate_net_steps": 45,
+      "candidate_minus_control_steps": null,
+      "category": "candidate_only"
+    }
+  ],
+  "training": [
+    {
+      "seed": 20261106,
+      "controller": "h1_spatial_control",
+      "trainable_parameters": 1499144,
+      "registered_nonbackbone_parameters": 1504541,
+      "first50_joint_loss": 0.09806506257504224,
+      "last50_joint_loss": 0.022671711696311832,
+      "last50_offset_mse": [
+        0.022671711842427226,
+        null,
+        null,
+        null
+      ],
+      "supervised_pairs_per_offset": [
+        39002,
+        0,
+        0,
+        0
+      ],
+      "last50_agent_normalized_entropy": 0.923986059260285,
+      "last50_hand_normalized_entropy": 0.9137549680219696,
+      "future_heads_unchanged": true,
+      "future_gradient_isolated": true
+    },
+    {
+      "seed": 20261106,
+      "controller": "joint_h4_k1_spatial",
+      "trainable_parameters": 1504541,
+      "registered_nonbackbone_parameters": 1504541,
+      "first50_joint_loss": 0.10913841273635626,
+      "last50_joint_loss": 0.02395101699978113,
+      "last50_offset_mse": [
+        0.0242499214489564,
+        0.02357559608203126,
+        0.02379671814920058,
+        0.024177134749658928
+      ],
+      "supervised_pairs_per_offset": [
+        39002,
+        35002,
+        31009,
+        27028
+      ],
+      "last50_agent_normalized_entropy": 0.9185199313642843,
+      "last50_hand_normalized_entropy": 0.9042326572411806,
+      "future_heads_unchanged": false,
+      "future_gradient_isolated": null
+    },
+    {
+      "seed": 20261107,
+      "controller": "h1_spatial_control",
+      "trainable_parameters": 1499144,
+      "registered_nonbackbone_parameters": 1504541,
+      "first50_joint_loss": 0.09584077395498752,
+      "last50_joint_loss": 0.020792074324563144,
+      "last50_offset_mse": [
+        0.02079207454335413,
+        null,
+        null,
+        null
+      ],
+      "supervised_pairs_per_offset": [
+        38723,
+        0,
+        0,
+        0
+      ],
+      "last50_agent_normalized_entropy": 0.9218433077275837,
+      "last50_hand_normalized_entropy": 0.9111227932564898,
+      "future_heads_unchanged": true,
+      "future_gradient_isolated": true
+    },
+    {
+      "seed": 20261107,
+      "controller": "joint_h4_k1_spatial",
+      "trainable_parameters": 1504541,
+      "registered_nonbackbone_parameters": 1504541,
+      "first50_joint_loss": 0.1069555277004838,
+      "last50_joint_loss": 0.025351495407521726,
+      "last50_offset_mse": [
+        0.025020936759448872,
+        0.024670428369905774,
+        0.02551142649976063,
+        0.026503313372381904
+      ],
+      "supervised_pairs_per_offset": [
+        38723,
+        34723,
+        30741,
+        26781
+      ],
+      "last50_agent_normalized_entropy": 0.9169585525721959,
+      "last50_hand_normalized_entropy": 0.902630346598135,
+      "future_heads_unchanged": false,
+      "future_gradient_isolated": null
+    },
+    {
+      "seed": 20261108,
+      "controller": "h1_spatial_control",
+      "trainable_parameters": 1499144,
+      "registered_nonbackbone_parameters": 1504541,
+      "first50_joint_loss": 0.10412324875593186,
+      "last50_joint_loss": 0.022371491743251683,
+      "last50_offset_mse": [
+        0.02237149176131749,
+        null,
+        null,
+        null
+      ],
+      "supervised_pairs_per_offset": [
+        38859,
+        0,
+        0,
+        0
+      ],
+      "last50_agent_normalized_entropy": 0.9256531317666611,
+      "last50_hand_normalized_entropy": 0.9114295701429848,
+      "future_heads_unchanged": true,
+      "future_gradient_isolated": true
+    },
+    {
+      "seed": 20261108,
+      "controller": "joint_h4_k1_spatial",
+      "trainable_parameters": 1504541,
+      "registered_nonbackbone_parameters": 1504541,
+      "first50_joint_loss": 0.12305062353610992,
+      "last50_joint_loss": 0.028524361988529562,
+      "last50_offset_mse": [
+        0.02738815032217033,
+        0.027388267809645327,
+        0.02866909520004059,
+        0.03146081207339536
+      ],
+      "supervised_pairs_per_offset": [
+        38859,
+        34859,
+        30869,
+        26904
+      ],
+      "last50_agent_normalized_entropy": 0.918428452003662,
+      "last50_hand_normalized_entropy": 0.9007787113572409,
+      "future_heads_unchanged": false,
+      "future_gradient_isolated": null
+    }
+  ],
+  "training_ledger": {
+    "caps": {
+      "train_forward": 3000,
+      "backward": 3000,
+      "optimizer": 3000,
+      "checkpoint": 6,
+      "model_create": 7,
+      "dataset_items": 550,
+      "source_sha": 1,
+      "public_weight_sha": 1,
+      "public_weight_load": 1,
+      "frozen_encoder": 150,
+      "parity_forward": 6,
+      "hdf5_opens": 2,
+      "hdf5_slices": 2750,
+      "spatial_readout": 6012,
+      "spatial_image_rows": 480960,
+      "spatial_heatmaps": 123125760,
+      "spatial_probability_values": 1970012160,
+      "spatial_coordinate_values": 246251520,
+      "spatial_entropy_values": 123125760,
+      "entropy_training_summaries": 3000,
+      "zero_xyz_coordinate_writes": 721440,
+      "initial_row_loads": 0,
+      "numeric_rows": 0,
+      "native_steps": 0,
+      "policy_forward": 0,
+      "eef_payload_reads": 0,
+      "private_object_state_reads": 0,
+      "extra_render_calls": 0,
+      "returned_chunk_values": 6733440,
+      "inactive_action_zero_writes": 2525040,
+      "action_output_values": 4208400,
+      "spatial_readout_control": 3006,
+      "action_head_0_control": 1503,
+      "action_head_1_control": 0,
+      "action_head_2_control": 0,
+      "action_head_3_control": 0,
+      "spatial_readout_candidate": 3006,
+      "action_head_0_candidate": 1503,
+      "action_head_1_candidate": 1503,
+      "action_head_2_candidate": 1503,
+      "action_head_3_candidate": 1503,
+      "action_head_0": 3006,
+      "action_head_1": 1503,
+      "action_head_2": 1503,
+      "action_head_3": 1503,
+      "target_builds": 3000,
+      "target_pair_slots": 960000,
+      "target_action_values": 6720000,
+      "loss_evaluations": 3000,
+      "supervised_pairs": 528000,
+      "supervised_action_values": 3696000
+    },
+    "counts": {
+      "train_forward": {
+        "attempted": 3000,
+        "completed": 3000
+      },
+      "backward": {
+        "attempted": 3000,
+        "completed": 3000
+      },
+      "optimizer": {
+        "attempted": 3000,
+        "completed": 3000
+      },
+      "checkpoint": {
+        "attempted": 6,
+        "completed": 6
+      },
+      "model_create": {
+        "attempted": 7,
+        "completed": 7
+      },
+      "dataset_items": {
+        "attempted": 432,
+        "completed": 432
+      },
+      "source_sha": {
+        "attempted": 1,
+        "completed": 1
+      },
+      "public_weight_sha": {
+        "attempted": 1,
+        "completed": 1
+      },
+      "public_weight_load": {
+        "attempted": 1,
+        "completed": 1
+      },
+      "frozen_encoder": {
+        "attempted": 120,
+        "completed": 120
+      },
+      "parity_forward": {
+        "attempted": 6,
+        "completed": 6
+      },
+      "hdf5_opens": {
+        "attempted": 2,
+        "completed": 2
+      },
+      "hdf5_slices": {
+        "attempted": 2160,
+        "completed": 2160
+      },
+      "spatial_readout": {
+        "attempted": 6012,
+        "completed": 6012
+      },
+      "spatial_image_rows": {
+        "attempted": 480960,
+        "completed": 480960
+      },
+      "spatial_heatmaps": {
+        "attempted": 123125760,
+        "completed": 123125760
+      },
+      "spatial_probability_values": {
+        "attempted": 1970012160,
+        "completed": 1970012160
+      },
+      "spatial_coordinate_values": {
+        "attempted": 246251520,
+        "completed": 246251520
+      },
+      "spatial_entropy_values": {
+        "attempted": 123125760,
+        "completed": 123125760
+      },
+      "entropy_training_summaries": {
+        "attempted": 3000,
+        "completed": 3000
+      },
+      "zero_xyz_coordinate_writes": {
+        "attempted": 721440,
+        "completed": 721440
+      },
+      "initial_row_loads": {
+        "attempted": 0,
+        "completed": 0
+      },
+      "numeric_rows": {
+        "attempted": 0,
+        "completed": 0
+      },
+      "native_steps": {
+        "attempted": 0,
+        "completed": 0
+      },
+      "policy_forward": {
+        "attempted": 0,
+        "completed": 0
+      },
+      "eef_payload_reads": {
+        "attempted": 0,
+        "completed": 0
+      },
+      "private_object_state_reads": {
+        "attempted": 0,
+        "completed": 0
+      },
+      "extra_render_calls": {
+        "attempted": 0,
+        "completed": 0
+      },
+      "returned_chunk_values": {
+        "attempted": 6733440,
+        "completed": 6733440
+      },
+      "inactive_action_zero_writes": {
+        "attempted": 2525040,
+        "completed": 2525040
+      },
+      "action_output_values": {
+        "attempted": 4208400,
+        "completed": 4208400
+      },
+      "spatial_readout_control": {
+        "attempted": 3006,
+        "completed": 3006
+      },
+      "action_head_0_control": {
+        "attempted": 1503,
+        "completed": 1503
+      },
+      "action_head_1_control": {
+        "attempted": 0,
+        "completed": 0
+      },
+      "action_head_2_control": {
+        "attempted": 0,
+        "completed": 0
+      },
+      "action_head_3_control": {
+        "attempted": 0,
+        "completed": 0
+      },
+      "spatial_readout_candidate": {
+        "attempted": 3006,
+        "completed": 3006
+      },
+      "action_head_0_candidate": {
+        "attempted": 1503,
+        "completed": 1503
+      },
+      "action_head_1_candidate": {
+        "attempted": 1503,
+        "completed": 1503
+      },
+      "action_head_2_candidate": {
+        "attempted": 1503,
+        "completed": 1503
+      },
+      "action_head_3_candidate": {
+        "attempted": 1503,
+        "completed": 1503
+      },
+      "action_head_0": {
+        "attempted": 3006,
+        "completed": 3006
+      },
+      "action_head_1": {
+        "attempted": 1503,
+        "completed": 1503
+      },
+      "action_head_2": {
+        "attempted": 1503,
+        "completed": 1503
+      },
+      "action_head_3": {
+        "attempted": 1503,
+        "completed": 1503
+      },
+      "target_builds": {
+        "attempted": 3000,
+        "completed": 3000
+      },
+      "target_pair_slots": {
+        "attempted": 960000,
+        "completed": 960000
+      },
+      "target_action_values": {
+        "attempted": 6720000,
+        "completed": 6720000
+      },
+      "loss_evaluations": {
+        "attempted": 3000,
+        "completed": 3000
+      },
+      "supervised_pairs": {
+        "attempted": 511084,
+        "completed": 511084
+      },
+      "supervised_action_values": {
+        "attempted": 3577588,
+        "completed": 3577588
+      }
+    },
+    "elapsed_seconds": 190.63421967998147
+  },
+  "handoff_actual": {
+    "model_create": 6,
+    "checkpoint_sha": 6,
+    "checkpoint_load": 6,
+    "model_weight_checks": 12,
+    "adapters": 44,
+    "resets": 556,
+    "episodes": 44,
+    "prefix_actions": 4700,
+    "warm_forward": 396,
+    "policy_forward": 5832,
+    "policy_actions": 5832,
+    "frozen_encoder": 12456,
+    "temporal_rows": 6228,
+    "spatial_readout": 12456,
+    "spatial_image_rows": 12456,
+    "spatial_heatmaps": 3188736,
+    "spatial_probability_values": 51019776,
+    "spatial_coordinate_values": 6377472,
+    "spatial_entropy_values": 3188736,
+    "entropy_evaluation_summaries": 6228,
+    "zero_xyz_coordinate_writes": 18684,
+    "zero_steps": 2780,
+    "native_steps": 13312,
+    "initial_row_loads": 1,
+    "numeric_rows": 19,
+    "observations": 11088,
+    "rgb_frames": 22176,
+    "raw_rgb_bytes": 1089994752,
+    "source_episode_parses": 22,
+    "source_episode_bytes": 4642666,
+    "source_scalar_projections": 58948,
+    "backwards": 0,
+    "optimizer_updates": 0,
+    "hdf5_reads": 0,
+    "public_weight_reads": 0,
+    "eef_payload_reads": 0,
+    "private_object_state_reads": 0,
+    "extra_render_calls": 0,
+    "returned_chunk_values": 174384,
+    "inactive_action_zero_writes": 61068,
+    "action_output_values": 113316,
+    "spatial_readout_control": 5816,
+    "action_head_0_control": 2908,
+    "action_head_1_control": 0,
+    "action_head_2_control": 0,
+    "action_head_3_control": 0,
+    "spatial_readout_candidate": 6640,
+    "action_head_0_candidate": 3320,
+    "action_head_1_candidate": 3320,
+    "action_head_2_candidate": 3320,
+    "action_head_3_candidate": 3320,
+    "action_head_0": 6228,
+    "action_head_1": 3320,
+    "action_head_2": 3320,
+    "action_head_3": 3320
+  },
+  "handoff_ledger_seconds": 681.763545815018,
+  "runtime": {
+    "gpu_rows_before_run": "0, GPU-beb93e4f-e8b8-8589-1e45-06ad2b320bbe, NVIDIA GeForce RTX 4090, 1, 0\n1, GPU-d90bd7b2-16f6-c0fe-fbc1-7ed4060e95ff, NVIDIA GeForce RTX 4090, 1, 0\n",
+    "compute_processes_before_run": "",
+    "target_gpu": [
+      "1",
+      "GPU-d90bd7b2-16f6-c0fe-fbc1-7ed4060e95ff",
+      "NVIDIA GeForce RTX 4090",
+      "1",
+      "0"
+    ]
+  },
+  "control_training_reproduction": {
+    "status": "metadata_control_training_comparison",
+    "cache_hash_matches": true,
+    "per_seed": [
+      {
+        "seed": 20261106,
+        "legacy_weight_hash_matches": true,
+        "all500_losses_match": true,
+        "sampling_matches": true,
+        "future_heads_unchanged": true
+      },
+      {
+        "seed": 20261107,
+        "legacy_weight_hash_matches": true,
+        "all500_losses_match": true,
+        "sampling_matches": true,
+        "future_heads_unchanged": true
+      },
+      {
+        "seed": 20261108,
+        "legacy_weight_hash_matches": true,
+        "all500_losses_match": true,
+        "sampling_matches": true,
+        "future_heads_unchanged": true
+      }
+    ],
+    "reads": [
+      "new_audited_training_JSON",
+      "old_audited_v3_training_JSON"
+    ],
+    "extra_checkpoint_reads": 0,
+    "extra_HDF5_reads": 0,
+    "extra_policy_forwards": 0
+  },
+  "control_handoff_reproduction": [
+    {
+      "source_id": "flip00-unchanged",
+      "success_matches": true,
+      "terminal_step_matches": true,
+      "public_digest_sequence_matches": true
+    },
+    {
+      "source_id": "flip00-confirm5",
+      "success_matches": true,
+      "terminal_step_matches": true,
+      "public_digest_sequence_matches": true
+    },
+    {
+      "source_id": "flip01-unchanged",
+      "success_matches": true,
+      "terminal_step_matches": true,
+      "public_digest_sequence_matches": true
+    },
+    {
+      "source_id": "flip01-confirm5",
+      "success_matches": true,
+      "terminal_step_matches": true,
+      "public_digest_sequence_matches": true
+    },
+    {
+      "source_id": "flip03-unchanged",
+      "success_matches": true,
+      "terminal_step_matches": true,
+      "public_digest_sequence_matches": true
+    },
+    {
+      "source_id": "flip03-confirm5",
+      "success_matches": true,
+      "terminal_step_matches": true,
+      "public_digest_sequence_matches": true
+    },
+    {
+      "source_id": "flip04-unchanged",
+      "success_matches": true,
+      "terminal_step_matches": true,
+      "public_digest_sequence_matches": true
+    },
+    {
+      "source_id": "flip04-confirm5",
+      "success_matches": true,
+      "terminal_step_matches": true,
+      "public_digest_sequence_matches": true
+    },
+    {
+      "source_id": "flip05-unchanged",
+      "success_matches": true,
+      "terminal_step_matches": true,
+      "public_digest_sequence_matches": true
+    },
+    {
+      "source_id": "flip05-confirm5",
+      "success_matches": true,
+      "terminal_step_matches": true,
+      "public_digest_sequence_matches": true
+    },
+    {
+      "source_id": "flip06-unchanged",
+      "success_matches": true,
+      "terminal_step_matches": true,
+      "public_digest_sequence_matches": true
+    },
+    {
+      "source_id": "flip06-confirm5",
+      "success_matches": true,
+      "terminal_step_matches": true,
+      "public_digest_sequence_matches": true
+    },
+    {
+      "source_id": "flip08-unchanged",
+      "success_matches": true,
+      "terminal_step_matches": true,
+      "public_digest_sequence_matches": true
+    },
+    {
+      "source_id": "flip08-confirm5",
+      "success_matches": true,
+      "terminal_step_matches": true,
+      "public_digest_sequence_matches": true
+    },
+    {
+      "source_id": "flip09-unchanged",
+      "success_matches": true,
+      "terminal_step_matches": true,
+      "public_digest_sequence_matches": true
+    },
+    {
+      "source_id": "flip09-confirm5",
+      "success_matches": true,
+      "terminal_step_matches": true,
+      "public_digest_sequence_matches": true
+    },
+    {
+      "source_id": "flip10-unchanged",
+      "success_matches": true,
+      "terminal_step_matches": true,
+      "public_digest_sequence_matches": true
+    },
+    {
+      "source_id": "flip10-confirm5",
+      "success_matches": true,
+      "terminal_step_matches": true,
+      "public_digest_sequence_matches": true
+    },
+    {
+      "source_id": "flip11-unchanged",
+      "success_matches": true,
+      "terminal_step_matches": true,
+      "public_digest_sequence_matches": true
+    },
+    {
+      "source_id": "flip11-confirm5",
+      "success_matches": true,
+      "terminal_step_matches": true,
+      "public_digest_sequence_matches": true
+    },
+    {
+      "source_id": "flip12-unchanged",
+      "success_matches": true,
+      "terminal_step_matches": true,
+      "public_digest_sequence_matches": true
+    },
+    {
+      "source_id": "flip12-confirm5",
+      "success_matches": true,
+      "terminal_step_matches": true,
+      "public_digest_sequence_matches": true
+    }
+  ],
+  "paired_csv": {
+    "path": "/data/zl202621/KECRL/results/libero-task7-action-chunk-20261118-v5/paired-endpoints.csv",
+    "sha256": "0fa4719ec1fb0f500a25e01afb13e395cec4b9e459445bfecffcca6d99a7e0f8"
+  },
+  "pipeline": {
+    "status": "candidate_stopped_at_handoff_gate",
+    "handoff_decision": {
+      "stage": "handoff",
+      "totals": {
+        "h1_spatial_control": 11,
+        "joint_h4_k1_spatial": 7
+      },
+      "per_seed": {
+        "20261106": {
+          "h1_spatial_control": 8,
+          "joint_h4_k1_spatial": 5
+        },
+        "20261107": {
+          "h1_spatial_control": 3,
+          "joint_h4_k1_spatial": 0
+        },
+        "20261108": {
+          "h1_spatial_control": 0,
+          "joint_h4_k1_spatial": 2
+        }
+      },
+      "pairs": 22,
+      "required_net": 4,
+      "gain_fraction": "-2/11",
+      "gates": {
+        "net_gain_at_least_threshold": false,
+        "each_seed_nonregressing": false
+      },
+      "passed": false
+    },
+    "full_episodes": 0
+  },
+  "summary_script": {
+    "path": "/data/zl202621/KECRL/logs/libero-task7-action-chunk-execution-20261118-v5/summarize.py",
+    "sha256": "13eb966864b7b1b681ff84cfb8600f7a7395d3589243926a4125d6cc1e976588"
+  },
+  "posthoc_reads": {
+    "JSON_metadata_only": true,
+    "extra_checkpoint_reads": 0,
+    "extra_HDF5_reads": 0,
+    "extra_NPZ_reads": 0,
+    "extra_initial_state_reads": 0,
+    "extra_policy_forwards": 0,
+    "extra_native_steps": 0
+  }
+}

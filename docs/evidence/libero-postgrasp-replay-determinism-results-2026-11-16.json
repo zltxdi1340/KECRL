@@ -1,0 +1,122 @@
+{
+  "status": "two_fresh_prefixes_complete_readonly_reaudit_passed_original_audit_failure_retained",
+  "at_UTC": "2026-11-16T11:03:11.914292+00:00",
+  "science": {
+    "path": "/data/zl202621/KECRL/configs/libero-postgrasp-replay-determinism_v1.json",
+    "sha256": "1c2f94ae8194addcb5e69c14df47d982184d1e591863f115036e888d6446905d"
+  },
+  "binding": {
+    "path": "/data/zl202621/KECRL/configs/libero-postgrasp-replay-determinism-binding_v1.json",
+    "sha256": "0f48ffaf5736be8e794f356d272b632d3943219b5561080aa63709236ddbcd34"
+  },
+  "prepare": {
+    "path": "/data/zl202621/KECRL/results/libero-postgrasp-replay-determinism-20261116-v1/prepare.json",
+    "sha256": "fd3c5e074ef9ef097476b33d2320a74f3b4fa03b818a0fd519bdb69c767b6e58"
+  },
+  "arms": {
+    "A_no_geometry": {
+      "path": "/data/zl202621/KECRL/results/libero-postgrasp-replay-determinism-20261116-v1/A_no_geometry/result.json",
+      "sha256": "783844d6b10a46057fc7732561b1a7e251ebd7caeb064cbca93599acb7596f0e"
+    },
+    "B_geometry": {
+      "path": "/data/zl202621/KECRL/results/libero-postgrasp-replay-determinism-20261116-v1/B_geometry/result.json",
+      "sha256": "c825899107fc6845e399a0c4a806c1d1506dcbf61479921dc137f496cbffbc2b"
+    }
+  },
+  "original_driver_failure": {
+    "path": "/data/zl202621/KECRL/logs/libero-postgrasp-replay-determinism-20261116-v1/processes/process.json",
+    "sha256": "d3b1ba9f6b8bf79dcf5146fbd03164b42484a21ffe7f75d3ac0f70e4a7516aa0"
+  },
+  "original_audit_console": {
+    "path": "/data/zl202621/KECRL/logs/libero-postgrasp-replay-determinism-20261116-v1/processes/audit.txt",
+    "sha256": "a58e4ca28fe3ff6023345b02e65c7b2b159166849be1b3f1c1f8f5cd82ed6f02"
+  },
+  "original_auditor": {
+    "path": "/data/zl202621/KECRL/experiments/audit_libero_postgrasp_determinism.py",
+    "sha256": "707d7a15e28b022587ebcb54a39ce35e1136aad7a89493a4e129b7e28258fcba"
+  },
+  "readonly_science": {
+    "path": "/data/zl202621/KECRL/configs/libero-postgrasp-determinism-reaudit_v2.json",
+    "sha256": "e504a4df701f11e82a7af82fcbeac18979b1844b5453bb7676027d98d5679d87"
+  },
+  "readonly_binding": {
+    "path": "/data/zl202621/KECRL/configs/libero-postgrasp-determinism-reaudit-binding_v2.json",
+    "sha256": "bbfcbc4c2e739025b884879d6580fd471070c2f4f9b7af9e59a33fb7d99d5622"
+  },
+  "readonly_audit": {
+    "path": "/data/zl202621/KECRL/results/libero-postgrasp-replay-determinism-reaudit-20261116-v2/audit.json",
+    "sha256": "3633d2bc8ef0c7ab65d134f12254b2d61bda66b1525f0405e2ae652914f13309"
+  },
+  "readonly_completion": {
+    "path": "/data/zl202621/KECRL/results/libero-postgrasp-replay-determinism-reaudit-20261116-v2/completion.json",
+    "sha256": "6b62d669bd0f01a035a623b1baa27d304268641492c264b301205d895816e70b"
+  },
+  "primary_dependencies": 896,
+  "readonly_dependencies": 899,
+  "tests_primary": 87,
+  "tests_reaudit": 3,
+  "full_pytest_run": false,
+  "native_steps": 366,
+  "zero_steps": 60,
+  "saved_actions": 306,
+  "adapters": 2,
+  "resets": 12,
+  "initial_bank_loads": 1,
+  "selected_initial_rows": 6,
+  "public_observations": 318,
+  "rgb_frames": 636,
+  "raw_rgb_bytes": 31260672,
+  "robot_snapshots_per_arm": 159,
+  "robot_scalar_comparisons": 2862,
+  "B_geometry_samples": 4,
+  "endpoint_values_per_arm": 107,
+  "checks": 4512,
+  "driver_elapsed_seconds": 22.6501868480118,
+  "public_exact_to_original": true,
+  "new_robot_float64_byte_equal": true,
+  "new_target_endpoint_byte_equal": true,
+  "recorded_query_side_effect_observed": false,
+  "cached_public_and_raw_same_instant_assumption_removed": true,
+  "raw_public_projection": {
+    "A_no_geometry": {
+      "joint_qpos": {
+        "different_frames": 154,
+        "max_abs": 0.0010223388671875,
+        "first_step": 0,
+        "admission_gate": false
+      },
+      "gripper_qpos": {
+        "different_frames": 154,
+        "max_abs": 0.0002498999238014221,
+        "first_step": 0,
+        "admission_gate": false
+      }
+    },
+    "B_geometry": {
+      "joint_qpos": {
+        "different_frames": 154,
+        "max_abs": 0.0010223388671875,
+        "first_step": 0,
+        "admission_gate": false
+      },
+      "gripper_qpos": {
+        "different_frames": 154,
+        "max_abs": 0.0002498999238014221,
+        "first_step": 0,
+        "admission_gate": false
+      }
+    }
+  },
+  "original_audit_implementation_error": "extra raw.astype(float32)==cached observable assertion; separate sampling channels",
+  "original_audit_failure_retained": true,
+  "additional_native_steps_for_reaudit": 0,
+  "serial_six_contexts_tested": false,
+  "pure_EGL_cause_proven": false,
+  "old_high_precision_physics_recovered": false,
+  "geometry_v2_run": false,
+  "model_v2_chosen": false,
+  "proposal": {
+    "path": "/data/zl202621/KECRL/results/libero-postgrasp-geometry-v2-revision-proposal-20261116/proposal.json",
+    "sha256": "3ba3ec231df8ca378de92a80144607589b13a4c1701c5c847b9d14fa97b5b895"
+  }
+}

@@ -1,0 +1,195 @@
+{
+  "kind": "libero_gripper_approach_video_execution_summary",
+  "status": "technical_capture_failure",
+  "formal_result": false,
+  "science": {
+    "path": "/data/zl202621/KECRL/configs/libero-gripper-approach-video-diagnostic_v1.json",
+    "sha256": "57796ec806cfed7403eeaa21adf57277cc5d6403eefc71efa27f0d24e61e0f0a"
+  },
+  "scientific_freeze": {
+    "path": "/data/zl202621/KECRL/configs/libero-gripper-approach-video-freeze-binding_v1.json",
+    "sha256": "1eb17c48be91a23804daa194ecb6749c96e38814610825563c71b4976a13289e"
+  },
+  "execution_binding": {
+    "path": "/data/zl202621/KECRL/configs/libero-gripper-approach-video-execution-binding_v1.json",
+    "sha256": "005885365c9b9e62a6decf1d07031e5b767dfb73cf81c38369be5fbd593f5045"
+  },
+  "authorization": {
+    "path": "/data/zl202621/KECRL/configs/libero-gripper-approach-video-source-initial-authorization_v1.json",
+    "sha256": "0c09c99faf9770641afa3e62e9d62c13881c897c9b2ae0e20dae5ad6dcec4be2"
+  },
+  "dependencies": 599,
+  "frozen_preparation_tests": 77,
+  "automatic_retry": false,
+  "full_capture_complete": false,
+  "full_capture_audit_passed": false,
+  "failure": {
+    "path": "/data/zl202621/KECRL/results/libero-gripper-approach-video-20261114-v1/capture-failure.json",
+    "sha256": "03654f59cb584a2fc629739e5e30a1983b6e952724e83c038649c574747b44d1"
+  },
+  "ledger": {
+    "caps": {
+      "adapters": 30,
+      "resets": 30,
+      "replay_prefixes": 30,
+      "saved_actions": 3000,
+      "native_steps": 3150,
+      "zero_steps": 150,
+      "numeric_rows": 10,
+      "initial_row_loads": 10,
+      "observations": 3030,
+      "rgb_frames": 6060,
+      "raw_rgb_bytes": 297861120,
+      "source_episode_parses": 30,
+      "source_episode_bytes": 67108864,
+      "policy_forwards": 0,
+      "backwards": 0,
+      "optimizer_updates": 0,
+      "model_creations": 0,
+      "checkpoint_reads": 0,
+      "hdf5_reads": 0,
+      "extra_render_calls": 0
+    },
+    "counts": {
+      "adapters": {
+        "attempted": 3,
+        "completed": 3
+      },
+      "resets": {
+        "attempted": 3,
+        "completed": 3
+      },
+      "replay_prefixes": {
+        "attempted": 3,
+        "completed": 2
+      },
+      "saved_actions": {
+        "attempted": 200,
+        "completed": 200
+      },
+      "native_steps": {
+        "attempted": 215,
+        "completed": 215
+      },
+      "zero_steps": {
+        "attempted": 15,
+        "completed": 15
+      },
+      "numeric_rows": {
+        "attempted": 10,
+        "completed": 10
+      },
+      "initial_row_loads": {
+        "attempted": 10,
+        "completed": 10
+      },
+      "observations": {
+        "attempted": 202,
+        "completed": 202
+      },
+      "rgb_frames": {
+        "attempted": 404,
+        "completed": 404
+      },
+      "raw_rgb_bytes": {
+        "attempted": 19857408,
+        "completed": 19857408
+      },
+      "source_episode_parses": {
+        "attempted": 3,
+        "completed": 3
+      },
+      "source_episode_bytes": {
+        "attempted": 650514,
+        "completed": 650514
+      },
+      "policy_forwards": {
+        "attempted": 0,
+        "completed": 0
+      },
+      "backwards": {
+        "attempted": 0,
+        "completed": 0
+      },
+      "optimizer_updates": {
+        "attempted": 0,
+        "completed": 0
+      },
+      "model_creations": {
+        "attempted": 0,
+        "completed": 0
+      },
+      "checkpoint_reads": {
+        "attempted": 0,
+        "completed": 0
+      },
+      "hdf5_reads": {
+        "attempted": 0,
+        "completed": 0
+      },
+      "extra_render_calls": {
+        "attempted": 0,
+        "completed": 0
+      }
+    },
+    "elapsed_seconds": 8.69626196299214
+  },
+  "failed_prefix_inferred_from_fixed_order": {
+    "case_id": "case01",
+    "slot": "A",
+    "task": 4,
+    "seed": 20261106,
+    "initial_state_index": 7,
+    "arm": "frozen_resnet18"
+  },
+  "accepted_complete_prefixes": 2,
+  "source_case": {
+    "case_id": "case00",
+    "task": 4,
+    "seed": 20261106,
+    "initial_state_index": 0
+  },
+  "missing_task7_footage": true,
+  "close_events_in_retained_prefixes": 0,
+  "gripper_timing_conclusion": null,
+  "causal_effect_established": false,
+  "new_success_rate_estimate": false,
+  "partial_prefix_audit": {
+    "path": "/data/zl202621/KECRL/results/libero-gripper-approach-video-20261114-v1/partial-prefix-audit.json",
+    "sha256": "d977576633217d5ee5234c0ffe114c8b951d824bb66553b1f3bc0a30b59cf0eb"
+  },
+  "partial_coordinate_digest_checks": 3420,
+  "partial_media": {
+    "path": "/data/zl202621/KECRL/results/libero-gripper-approach-video-20261114-v1/partial-media.json",
+    "sha256": "b035e1b58684cde8a0cad12a04bda5a2a243565812054903423f1a348fd3e4f7"
+  },
+  "partial_media_audit": {
+    "path": "/data/zl202621/KECRL/results/libero-gripper-approach-video-20261114-v1/partial-media-audit.json",
+    "sha256": "cd6aac322a7cecf0a7db1f109fca29770adbe19ef124096cd0560afa279d43f3"
+  },
+  "annotations": {
+    "path": "/data/zl202621/KECRL/results/libero-gripper-approach-video-20261114-v1/partial-annotations.csv",
+    "sha256": "4001aece30e7ffd70d8c71b47757f2307c745fa27ff4077fd2ebadf7681068be"
+  },
+  "review_page": {
+    "path": "/data/zl202621/KECRL/results/libero-gripper-approach-video-20261114-v1/partial-review.html",
+    "sha256": "c3a2ef2218281af50ca64a4e29204bff22b416fb378432ad8ebb62ce8ec4f050"
+  },
+  "failure_receipt_missing_initial_access": true,
+  "failure_receipt_missing_failed_reset_components": true,
+  "lifecycle_difference_observed": true,
+  "lifecycle_difference_proven_cause": false,
+  "post_failure_native_steps": 0,
+  "post_failure_initial_row_loads": 0,
+  "post_failure_policy_forwards": 0,
+  "future_reset_diagnostic_status": "proposal_only_not_bound_authorized_or_executed",
+  "unchanged_policy_updates": 500,
+  "unchanged_stabilization_steps": 5,
+  "loss_changed": false,
+  "sealed_evaluation_accessed": false,
+  "report": {
+    "path": "/data/zl202621/KECRL/docs/libero-gripper-approach-video-execution-2026-11-14.md",
+    "sha256": "a8048243abe949d9d49163d23fed0373e63db582b5ce06c5b6b0a4a5f4886e52"
+  },
+  "evidence_logs": "/data/zl202621/KECRL/logs/libero-gripper-approach-video-execution-20261114-v1"
+}

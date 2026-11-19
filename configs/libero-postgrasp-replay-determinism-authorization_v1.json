@@ -1,0 +1,56 @@
+{
+  "user_approved": true,
+  "science": {
+    "path": "/data/zl202621/KECRL/configs/libero-postgrasp-replay-determinism_v1.json",
+    "sha256": "1c2f94ae8194addcb5e69c14df47d982184d1e591863f115036e888d6446905d"
+  },
+  "tasks": [
+    7
+  ],
+  "total_native_steps_max": 366,
+  "initial_indices": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5
+  ],
+  "objects": [
+    "akita_black_bowl_1",
+    "plate_1"
+  ],
+  "arms": [
+    "A_no_geometry",
+    "B_geometry"
+  ],
+  "sealed_roles_allowed": [],
+  "training_allowed": false,
+  "RGB_tolerance_allowed": false,
+  "user_text": "批准执行 docs/libero-postgrasp-replay-determinism-proposal-2026-11-16.md（最多366物理步、0训练、0模型前向）。严格限制在最多366物理步，不放宽本次零误差中止门。",
+  "diagnostic_extension": "Current user requests qpos/qvel/gripper and exact bowl/plate/contact comparison; source diagnostic exception only.",
+  "robot_fields": {
+    "joint_qpos": 7,
+    "joint_qvel": 7,
+    "gripper_qpos": 2,
+    "gripper_qvel": 2
+  },
+  "target_endpoint_fields": {
+    "bowl_pos": 3,
+    "bowl_quat": 4,
+    "bowl_joint_qpos": 7,
+    "bowl_joint_qvel": 6,
+    "plate_pos": 3,
+    "plate_quat": 4,
+    "plate_joint_qpos": 7,
+    "plate_joint_qvel": 6,
+    "eef_pos": 3
+  },
+  "endpoint_contact_fields": [
+    "bowl_plate_contact",
+    "left_finger_contact",
+    "right_finger_contact"
+  ],
+  "scope_resolution": "Serial first-six prefix costs2123 and is excluded under explicit366 cap; original two fresh153 prefixes proceed.",
+  "at_UTC": "2026-11-16T10:46:24.301765+00:00"
+}

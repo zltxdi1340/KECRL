@@ -1,0 +1,456 @@
+{
+  "kind": "real_LIBERO_source_development_paired_closed_loop_result",
+  "version": 1,
+  "formal_result": false,
+  "status": "complete_audited_source_control_development",
+  "completed_at_UTC": "2026-11-13T16:17:48.820877+00:00",
+  "completed_at_Asia_Shanghai": "2026-11-14T00:17:48.820877+08:00",
+  "science": {
+    "path": "/data/zl202621/KECRL/configs/libero-pretrained-vision-control-diagnostic_v1.json",
+    "sha256": "d2a39cb0e1f18f817b582d2013ec9a68a049ee90c78aea09a2d3b9657b634a92"
+  },
+  "evaluation_binding": {
+    "path": "/data/zl202621/KECRL/configs/libero-pretrained-vision-control-evaluation-binding_v1.json",
+    "sha256": "63dfed3a38e31ef2654229498807c69a7d29d1158ca37797dc7e9da9b12d0d1a"
+  },
+  "source_initial_authorization": {
+    "path": "/data/zl202621/KECRL/configs/libero-pretrained-vision-control-source-initial-authorization_v1.json",
+    "sha256": "c93c590904c81849e606f07becebd8b34f865bed305b69f896c42e409a20bbbd"
+  },
+  "training": {
+    "path": "/data/zl202621/KECRL/results/libero-pretrained-vision-control-20261113-v1/training.json",
+    "sha256": "a5f1eaa20c005e6c0dba3161b4b1745bc019f29eee7f944388f94a4ccb426907"
+  },
+  "training_audit": {
+    "path": "/data/zl202621/KECRL/results/libero-pretrained-vision-control-20261113-v1/training-audit.json",
+    "sha256": "04929c87316bfabc718fa010000c8d4b9c875c1aedad7f99d3b3142b5855dc06"
+  },
+  "evaluation": {
+    "path": "/data/zl202621/KECRL/results/libero-pretrained-vision-control-20261113-v1/evaluation.json",
+    "sha256": "eef3025e3c6a238b5496bfb0321abb3b9143ccede7443c409491f13123eca16f"
+  },
+  "completion": {
+    "path": "/data/zl202621/KECRL/results/libero-pretrained-vision-control-20261113-v1/completion.json",
+    "sha256": "581562267370a1b54ed6ea5dc8295dc4f6c8bd51614a2466754bbc759abf890d"
+  },
+  "scope": {
+    "tasks": [
+      4,
+      7
+    ],
+    "seeds": [
+      20261106,
+      20261107,
+      20261108
+    ],
+    "arms": [
+      "scratch_cnn",
+      "frozen_imagenet_resnet18"
+    ],
+    "policy_updates_per_model": 500,
+    "stabilization_steps": 5,
+    "initial_role": "candidate_nonregression",
+    "initial_indices": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      15,
+      16,
+      17,
+      18,
+      19
+    ],
+    "unique_initial_rows": 40,
+    "fresh_episodes": 240,
+    "episodes_per_arm": 120,
+    "source_query_allowed": false,
+    "formal_evaluation_allowed": false
+  },
+  "overall": {
+    "cnn_successes": 8,
+    "resnet_successes": 16,
+    "episodes_per_arm": 120,
+    "cnn_percent": 6.666666666666667,
+    "resnet_percent": 13.333333333333334,
+    "gain_fraction": "1/15",
+    "gain_percentage_points": 6.666666666666667
+  },
+  "per_task": [
+    {
+      "task": 4,
+      "cnn_successes": 0,
+      "resnet_successes": 7,
+      "episodes_per_arm": 60,
+      "cnn_percent": 0.0,
+      "resnet_percent": 11.666666666666666,
+      "gain_fraction": "7/60",
+      "gain_percentage_points": 11.666666666666666
+    },
+    {
+      "task": 7,
+      "cnn_successes": 8,
+      "resnet_successes": 9,
+      "episodes_per_arm": 60,
+      "cnn_percent": 13.333333333333334,
+      "resnet_percent": 15.0,
+      "gain_fraction": "1/60",
+      "gain_percentage_points": 1.6666666666666667
+    }
+  ],
+  "per_seed": [
+    {
+      "seed": 20261106,
+      "cnn_successes": 1,
+      "resnet_successes": 7,
+      "episodes_per_arm": 40,
+      "gain_fraction": "3/20",
+      "gain_percentage_points": 15.0
+    },
+    {
+      "seed": 20261107,
+      "cnn_successes": 6,
+      "resnet_successes": 7,
+      "episodes_per_arm": 40,
+      "gain_fraction": "1/40",
+      "gain_percentage_points": 2.5
+    },
+    {
+      "seed": 20261108,
+      "cnn_successes": 1,
+      "resnet_successes": 2,
+      "episodes_per_arm": 40,
+      "gain_fraction": "1/40",
+      "gain_percentage_points": 2.5
+    }
+  ],
+  "per_model": [
+    {
+      "task": 4,
+      "seed": 20261106,
+      "arm": "scratch_cnn",
+      "successes": 0,
+      "episodes": 20
+    },
+    {
+      "task": 4,
+      "seed": 20261106,
+      "arm": "frozen_imagenet_resnet18",
+      "successes": 6,
+      "episodes": 20
+    },
+    {
+      "task": 4,
+      "seed": 20261107,
+      "arm": "scratch_cnn",
+      "successes": 0,
+      "episodes": 20
+    },
+    {
+      "task": 4,
+      "seed": 20261107,
+      "arm": "frozen_imagenet_resnet18",
+      "successes": 1,
+      "episodes": 20
+    },
+    {
+      "task": 4,
+      "seed": 20261108,
+      "arm": "scratch_cnn",
+      "successes": 0,
+      "episodes": 20
+    },
+    {
+      "task": 4,
+      "seed": 20261108,
+      "arm": "frozen_imagenet_resnet18",
+      "successes": 0,
+      "episodes": 20
+    },
+    {
+      "task": 7,
+      "seed": 20261106,
+      "arm": "scratch_cnn",
+      "successes": 1,
+      "episodes": 20
+    },
+    {
+      "task": 7,
+      "seed": 20261106,
+      "arm": "frozen_imagenet_resnet18",
+      "successes": 1,
+      "episodes": 20
+    },
+    {
+      "task": 7,
+      "seed": 20261107,
+      "arm": "scratch_cnn",
+      "successes": 6,
+      "episodes": 20
+    },
+    {
+      "task": 7,
+      "seed": 20261107,
+      "arm": "frozen_imagenet_resnet18",
+      "successes": 6,
+      "episodes": 20
+    },
+    {
+      "task": 7,
+      "seed": 20261108,
+      "arm": "scratch_cnn",
+      "successes": 1,
+      "episodes": 20
+    },
+    {
+      "task": 7,
+      "seed": 20261108,
+      "arm": "frozen_imagenet_resnet18",
+      "successes": 2,
+      "episodes": 20
+    }
+  ],
+  "paired_counts_per_task": {
+    "4": {
+      "both_success": 0,
+      "cnn_only": 0,
+      "resnet_only": 7,
+      "both_failure": 53
+    },
+    "7": {
+      "both_success": 2,
+      "cnn_only": 6,
+      "resnet_only": 7,
+      "both_failure": 45
+    }
+  },
+  "paired_counts_overall": {
+    "both_success": 2,
+    "cnn_only": 6,
+    "resnet_only": 14,
+    "both_failure": 98
+  },
+  "frozen_decision": {
+    "continue_to_all_source_development": false,
+    "gates": {
+      "mean_gain_at_least_ten_percentage_points": false,
+      "both_task_means_nonregressing": true,
+      "all_seed_means_nonregressing": true
+    },
+    "mean_delta_fraction": "1/15",
+    "task_delta_fraction": {
+      "4": "7/60",
+      "7": "1/60"
+    },
+    "seed_delta_fraction": {
+      "20261106": "3/20",
+      "20261107": "1/40",
+      "20261108": "1/40"
+    },
+    "counts": [
+      {
+        "task": 4,
+        "seed": 20261106,
+        "arm": "scratch_cnn",
+        "successes": 0,
+        "episodes": 20
+      },
+      {
+        "task": 4,
+        "seed": 20261106,
+        "arm": "frozen_imagenet_resnet18",
+        "successes": 6,
+        "episodes": 20
+      },
+      {
+        "task": 4,
+        "seed": 20261107,
+        "arm": "scratch_cnn",
+        "successes": 0,
+        "episodes": 20
+      },
+      {
+        "task": 4,
+        "seed": 20261107,
+        "arm": "frozen_imagenet_resnet18",
+        "successes": 1,
+        "episodes": 20
+      },
+      {
+        "task": 4,
+        "seed": 20261108,
+        "arm": "scratch_cnn",
+        "successes": 0,
+        "episodes": 20
+      },
+      {
+        "task": 4,
+        "seed": 20261108,
+        "arm": "frozen_imagenet_resnet18",
+        "successes": 0,
+        "episodes": 20
+      },
+      {
+        "task": 7,
+        "seed": 20261106,
+        "arm": "scratch_cnn",
+        "successes": 1,
+        "episodes": 20
+      },
+      {
+        "task": 7,
+        "seed": 20261106,
+        "arm": "frozen_imagenet_resnet18",
+        "successes": 1,
+        "episodes": 20
+      },
+      {
+        "task": 7,
+        "seed": 20261107,
+        "arm": "scratch_cnn",
+        "successes": 6,
+        "episodes": 20
+      },
+      {
+        "task": 7,
+        "seed": 20261107,
+        "arm": "frozen_imagenet_resnet18",
+        "successes": 6,
+        "episodes": 20
+      },
+      {
+        "task": 7,
+        "seed": 20261108,
+        "arm": "scratch_cnn",
+        "successes": 1,
+        "episodes": 20
+      },
+      {
+        "task": 7,
+        "seed": 20261108,
+        "arm": "frozen_imagenet_resnet18",
+        "successes": 2,
+        "episodes": 20
+      }
+    ],
+    "formal_transfer_or_module_admitted": false,
+    "stay_in_LIBERO": true
+  },
+  "actual": {
+    "controlled_calls": {
+      "train_forward": {
+        "attempted": 0,
+        "completed": 0
+      },
+      "backward": {
+        "attempted": 0,
+        "completed": 0
+      },
+      "optimizer": {
+        "attempted": 0,
+        "completed": 0
+      },
+      "checkpoint": {
+        "attempted": 0,
+        "completed": 0
+      },
+      "frozen_encoder": {
+        "attempted": 0,
+        "completed": 0
+      },
+      "parity_forward": {
+        "attempted": 0,
+        "completed": 0
+      },
+      "dataset_items": {
+        "attempted": 0,
+        "completed": 0
+      },
+      "source_sha": {
+        "attempted": 0,
+        "completed": 0
+      },
+      "model_create": {
+        "attempted": 12,
+        "completed": 12
+      },
+      "adapter": {
+        "attempted": 12,
+        "completed": 12
+      },
+      "reset": {
+        "attempted": 240,
+        "completed": 240
+      },
+      "episode": {
+        "attempted": 240,
+        "completed": 240
+      },
+      "policy_forward": {
+        "attempted": 69009,
+        "completed": 69009
+      },
+      "policy_action": {
+        "attempted": 69009,
+        "completed": 69009
+      },
+      "zero_step": {
+        "attempted": 1200,
+        "completed": 1200
+      },
+      "native_step": {
+        "attempted": 70209,
+        "completed": 70209
+      },
+      "numeric_rows": {
+        "attempted": 40,
+        "completed": 40
+      }
+    },
+    "evaluation_internal_seconds": 1219.3056645749894,
+    "reset_references": 40,
+    "reset_comparisons": 200,
+    "peak_torch_cuda_allocated_bytes": 112289792,
+    "technical_aborts": 0
+  },
+  "additional_initial_scope_check": "passed_exact_two_source_banks_rows_0_to_19_no_other_numeric_rows_no_pickle_execution",
+  "unchanged_roles": [
+    "source_meta_query",
+    "validation",
+    "H",
+    "qualification",
+    "reserved",
+    "final",
+    "other_initial_rows"
+  ],
+  "outcome_interpretation": "Observed source-development success gain of 1/15; preset 1/10 expansion gate not met. Remain in LIBERO; no formal transfer/SPT/Module admission.",
+  "CSVs": [
+    {
+      "path": "/data/zl202621/KECRL/results/libero-pretrained-vision-control-20261113-v1/paired-outcomes.csv",
+      "sha256": "da407c88e05d46237b274c85822da4ffeb5852a5461d37479ac438290f4beaf2"
+    },
+    {
+      "path": "/data/zl202621/KECRL/results/libero-pretrained-vision-control-20261113-v1/per-model-success.csv",
+      "sha256": "c40a4e2eef747f4a8b12d40834ff5790f574cde24b173c5328662b3ccb00d0f9"
+    },
+    {
+      "path": "/data/zl202621/KECRL/results/libero-pretrained-vision-control-20261113-v1/per-task-success.csv",
+      "sha256": "0afb6d613ad9fec0ce70a26491d5f68c7afa1ba9d90ef51b2622cb7452484f75"
+    },
+    {
+      "path": "/data/zl202621/KECRL/results/libero-pretrained-vision-control-20261113-v1/per-seed-success.csv",
+      "sha256": "c7cc68b68e8caff4e2b6ecdeaf52b408b8e947c3ce2d13e85421387f3769f4cd"
+    }
+  ]
+}

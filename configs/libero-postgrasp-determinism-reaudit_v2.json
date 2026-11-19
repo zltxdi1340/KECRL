@@ -1,0 +1,47 @@
+{
+  "kind": "libero_determinism_readonly_reaudit",
+  "version": 2,
+  "native_steps": 0,
+  "model_reads": 0,
+  "initial_bank_reads": 0,
+  "training_updates": 0,
+  "removed_invalid_assumption": "raw_post_step_equals_cached_public_sensor",
+  "public_RGB_gate": "exact_original_digest",
+  "physics_gate": "byte_identical_between_new_arms",
+  "parents": {
+    "science": {
+      "path": "/data/zl202621/KECRL/configs/libero-postgrasp-replay-determinism_v1.json",
+      "sha256": "1c2f94ae8194addcb5e69c14df47d982184d1e591863f115036e888d6446905d"
+    },
+    "binding": {
+      "path": "/data/zl202621/KECRL/configs/libero-postgrasp-replay-determinism-binding_v1.json",
+      "sha256": "0f48ffaf5736be8e794f356d272b632d3943219b5561080aa63709236ddbcd34"
+    },
+    "prepare": {
+      "path": "/data/zl202621/KECRL/results/libero-postgrasp-replay-determinism-20261116-v1/prepare.json",
+      "sha256": "fd3c5e074ef9ef097476b33d2320a74f3b4fa03b818a0fd519bdb69c767b6e58"
+    },
+    "driver_failure": {
+      "path": "/data/zl202621/KECRL/logs/libero-postgrasp-replay-determinism-20261116-v1/processes/process.json",
+      "sha256": "d3b1ba9f6b8bf79dcf5146fbd03164b42484a21ffe7f75d3ac0f70e4a7516aa0"
+    },
+    "original_auditor": {
+      "path": "/data/zl202621/KECRL/experiments/audit_libero_postgrasp_determinism.py",
+      "sha256": "707d7a15e28b022587ebcb54a39ce35e1136aad7a89493a4e129b7e28258fcba"
+    },
+    "A_no_geometry": {
+      "path": "/data/zl202621/KECRL/results/libero-postgrasp-replay-determinism-20261116-v1/A_no_geometry/result.json",
+      "sha256": "783844d6b10a46057fc7732561b1a7e251ebd7caeb064cbca93599acb7596f0e"
+    },
+    "B_geometry": {
+      "path": "/data/zl202621/KECRL/results/libero-postgrasp-replay-determinism-20261116-v1/B_geometry/result.json",
+      "sha256": "c825899107fc6845e399a0c4a806c1d1506dcbf61479921dc137f496cbffbc2b"
+    }
+  },
+  "protocol": {
+    "path": "/data/zl202621/KECRL/docs/libero-postgrasp-determinism-readonly-reaudit-2026-11-16.md",
+    "sha256": "eae3dfab25aeef647621b8858688da641a96e2a5692bed9183179218e5a9bd33"
+  },
+  "output": "/data/zl202621/KECRL/results/libero-postgrasp-replay-determinism-reaudit-20261116-v2",
+  "at_UTC": "2026-11-16T10:56:58.787916+00:00"
+}

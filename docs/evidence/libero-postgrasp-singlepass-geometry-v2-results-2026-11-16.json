@@ -1,0 +1,182 @@
+{
+  "status": "complete_audited_singlepass_geometry_v2_unique_model_candidate_selected",
+  "at_UTC": "2026-11-16T14:41:28.079925+00:00",
+  "science": {
+    "path": "/data/zl202621/KECRL/configs/libero-postgrasp-geometry-replay_v2.json",
+    "sha256": "ac289c3694a9deb419a645bb85f0685e9a28f77d272325c1c7f88b7c34a251b6"
+  },
+  "binding": {
+    "path": "/data/zl202621/KECRL/configs/libero-postgrasp-geometry-replay-binding_v2.json",
+    "sha256": "1e9a84c216466babb7287651d2568bed9d91497a0812cc758081d06a9d8b1868"
+  },
+  "completion": {
+    "path": "/data/zl202621/KECRL/results/libero-postgrasp-geometry-replay-20261116-v2/completion.json",
+    "sha256": "0e1ef31c38d3f3d693dfbc6c19a37383910e356d3ad0ec443c53f68ffd5dae1d"
+  },
+  "capture": {
+    "path": "/data/zl202621/KECRL/results/libero-postgrasp-geometry-replay-20261116-v2/capture.json",
+    "sha256": "8785bc0fe971951138de362c0cf7b5a15f716aad544aeae5703bd2004f8f1a95"
+  },
+  "analysis": {
+    "path": "/data/zl202621/KECRL/results/libero-postgrasp-geometry-replay-20261116-v2/analysis.json",
+    "sha256": "979ac518ea8f2f7d55a5bbfaff19b99d09109c9bc97a98a8ba963070410efb87"
+  },
+  "audit": {
+    "path": "/data/zl202621/KECRL/results/libero-postgrasp-geometry-replay-20261116-v2/audit.json",
+    "sha256": "6816439adb826249623f3d7fc5e9bd5869b2182ec9cd1f1d91853f6d55e63b2f"
+  },
+  "causes_csv": {
+    "path": "/data/zl202621/KECRL/results/libero-postgrasp-geometry-replay-20261116-v2/causes.csv",
+    "sha256": "7b392ca4605ca64da106417dba10d44e8271c6b05dca863c5a3883f43deaa17c"
+  },
+  "summary_csv": {
+    "path": "/data/zl202621/KECRL/results/libero-postgrasp-geometry-replay-20261116-v2/failure-summary.csv",
+    "sha256": "47b1bd258d4ab888cc75fbcf439060db5951b6e631d661ef8590bcc42b732c03"
+  },
+  "xy_csv": {
+    "path": "/data/zl202621/KECRL/results/libero-postgrasp-geometry-replay-20261116-v2/xy-unconditional.csv",
+    "sha256": "56a9b5e9f9f2b7be18ce7cceeabdf7428c7a91d5bfc11ff1c8bc168382c99d87"
+  },
+  "process": {
+    "path": "/data/zl202621/KECRL/logs/libero-postgrasp-geometry-replay-20261116-v2/processes/process.json",
+    "sha256": "80d5ab870b6482400927cd7744209cfcda9fe1ce34d1cd13c13983c58c05be00"
+  },
+  "model_candidate_document": {
+    "path": "/data/zl202621/KECRL/docs/libero-task7-eef-xyz-model-v2-selection-2026-11-16.md",
+    "sha256": "0ff0e624975115e08b62e2450be12a420401aab29999ea1631bdf2f0a0c07857"
+  },
+  "plan": "A_singlepass",
+  "trajectories": 36,
+  "pairs": 18,
+  "native_steps": 12970,
+  "training_updates": 0,
+  "policy_forwards": 0,
+  "dependencies": 906,
+  "tests": 105,
+  "full_pytest_run": false,
+  "actual": {
+    "adapters": 36,
+    "resets": 434,
+    "replay_episodes": 36,
+    "saved_actions": 10800,
+    "zero_steps": 2170,
+    "native_steps": 12970,
+    "initial_row_loads": 1,
+    "numeric_rows": 19,
+    "observations": 11234,
+    "rgb_frames": 22468,
+    "raw_rgb_bytes": 1104347136,
+    "source_archives": 36,
+    "source_numeric_members": 216,
+    "source_numeric_scalars": 205524,
+    "source_container_bytes": 480665323,
+    "geometry_samples": 7386,
+    "geometry_scalars": 1100514,
+    "calibrations": 36,
+    "calibration_scalars": 19800,
+    "diagnostic_predicate_calls": 36930,
+    "source_rgb_decodes": 22468,
+    "policy_forwards": 0,
+    "model_creations": 0,
+    "checkpoint_reads": 0,
+    "backwards": 0,
+    "optimizer_updates": 0,
+    "hdf5_reads": 0,
+    "extra_render_calls": 0,
+    "native_state_samples": 14772,
+    "native_state_scalars": 901092,
+    "source_warm_archives": 398,
+    "source_warm_numeric_members": 796,
+    "source_warm_numeric_scalars": 3582,
+    "source_RGB_members": 868,
+    "source_RGB_pixel_values": 1104347136,
+    "RGB_gate_checks": 22468,
+    "initial_cache_reads": 36,
+    "cached_numeric_rows": 684,
+    "workers": 36
+  },
+  "driver_elapsed_seconds": 662.0501923990087,
+  "audit_checks": 214851,
+  "formula_checks": 5928,
+  "RGB_warning_observations": 0,
+  "RGB_warning_camera_frames": 0,
+  "max_RGB_channel_error": 0,
+  "max_RGB_changed_pixels": 0,
+  "primary_mutually_exclusive_counts": {
+    "xy_5to6cm": 6,
+    "xy_3to5cm": 7,
+    "aligned_high_no_contact": 6,
+    "xy_6to10cm": 11,
+    "close_command_loss_descent": 4,
+    "plate_contact_without_On": 1,
+    "xy_ge10cm": 1
+  },
+  "unconditional_min_xy_counts": {
+    "5_to6cm": 6,
+    "3_to5cm": 7,
+    "lt3cm": 7,
+    "6_to10cm": 11,
+    "ge10cm": 5
+  },
+  "native_component_patterns_all": {
+    "Z1_XY0_C0": 4577,
+    "Z1_XY0_C1": 1303,
+    "Z0_XY0_C1": 1299,
+    "Z0_XY0_C0": 130,
+    "Z1_XY1_C0": 77
+  },
+  "native_component_patterns_last50": {
+    "Z0_XY0_C1": 178,
+    "Z1_XY0_C1": 333,
+    "Z1_XY0_C0": 1184,
+    "Z1_XY1_C0": 16,
+    "Z0_XY0_C0": 89
+  },
+  "handoff_both_fingers": 36,
+  "ever_XY_under_3cm": 7,
+  "ever_XY_under_3cm_and_contact": 0,
+  "ever_plate_contact": 23,
+  "plate_contact_frames": 2602,
+  "aligned_frames": 77,
+  "high_aligned_without_contact_trajectories": 6,
+  "drop_with_close_command": 4,
+  "drop_with_open_command": 0,
+  "spatial_first_symptoms_without_drop": 31,
+  "all_final_xy_outside_3cm": true,
+  "paired_native_anchor_byte_equal": 18,
+  "paired_terminal_regions": {
+    "far": 14,
+    "intermediate": 4
+  },
+  "descriptive": {
+    "frame_mlp": {
+      "min_xy_median_cm": 5.88113644339964,
+      "final_xy_median_cm": 13.672147327203016,
+      "last50_eef_std_xyz_median_cm": [
+        0.6971943210059731,
+        0.9487657324237814,
+        0.8648583168618402
+      ],
+      "last50_eef_drift_norm_median_cm": 5.336905131366381
+    },
+    "gru_window10": {
+      "min_xy_median_cm": 5.321800697605972,
+      "final_xy_median_cm": 19.28831193846983,
+      "last50_eef_std_xyz_median_cm": [
+        1.3189614140468364,
+        1.7911062759830016,
+        1.2402508224766644
+      ],
+      "last50_eef_drift_norm_median_cm": 7.987726478790975
+    }
+  },
+  "old_high_precision_reference_available": false,
+  "new_paired_physics_reference_run": false,
+  "pure_EGL_cause_proven": false,
+  "causal_root_cause_proven": false,
+  "model_v2_candidate": "frozen_resnet18_frame_mlp_cached_EEF_XYZ",
+  "model_v2_trained": false,
+  "model_v2_effect_proven": false,
+  "old_v1_preserved": true,
+  "formal_data_remain_sealed": true
+}

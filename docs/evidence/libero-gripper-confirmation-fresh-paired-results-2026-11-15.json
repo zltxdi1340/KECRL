@@ -1,0 +1,264 @@
+{
+  "status": "complete_audited_fresh_gripper_confirmation_control_v2",
+  "formal_result": false,
+  "report": {
+    "path": "/data/zl202621/KECRL/docs/libero-gripper-confirmation-fresh-paired-results-2026-11-15.md",
+    "sha256": "c5410d288c700aec792f20ba462169ed552208bf865e6fceaa919568608fd787"
+  },
+  "science": {
+    "path": "/data/zl202621/KECRL/configs/libero-task7-gripper-confirmation-fresh-control_v2.json",
+    "sha256": "203a420fbeea5538eb5a3917ac7f0591b62a20c5a2cea501472ec6b31b8823bf"
+  },
+  "binding": {
+    "path": "/data/zl202621/KECRL/configs/libero-task7-gripper-confirmation-fresh-execution-binding_v2.json",
+    "sha256": "ccc7f54da9dfcd76393bdbf9eb117f8a35d9fd30685c12eb6f0ba77592f14e4f"
+  },
+  "authorization": {
+    "path": "/data/zl202621/KECRL/configs/libero-task7-gripper-confirmation-fresh-authorization_v2.json",
+    "sha256": "855fedec95ec0bbfa4dbfe6e6b5ba5b0685b61da0eeb5f409a1404ecb4207dc1"
+  },
+  "completion": {
+    "path": "/data/zl202621/KECRL/results/libero-task7-gripper-confirmation-20261115-v2/completion.json",
+    "sha256": "0800a7786a26ec5903798aefd9a7aeeb0d7fa14a7e67b461a3bc777edca50066"
+  },
+  "audit": {
+    "path": "/data/zl202621/KECRL/results/libero-task7-gripper-confirmation-20261115-v2/independent-audit.json",
+    "sha256": "1bd27e2952dec5a7772ebaeaa3736f8a5579627d9011ce0d398893466f394cbe"
+  },
+  "result": {
+    "path": "/data/zl202621/KECRL/results/libero-task7-gripper-confirmation-20261115-v2/result.json",
+    "sha256": "ca92d90ef5336d9aff3b1430cbceb3f85ecb0bdcb7aa90bde5278ae159c3a440"
+  },
+  "decision": {
+    "cells": [
+      {
+        "seed": 20261106,
+        "policy_arm": "frozen_resnet18",
+        "n": 20,
+        "unchanged": 1,
+        "confirm5": 1
+      },
+      {
+        "seed": 20261106,
+        "policy_arm": "layer4_conv_finetune",
+        "n": 20,
+        "unchanged": 3,
+        "confirm5": 6
+      },
+      {
+        "seed": 20261107,
+        "policy_arm": "frozen_resnet18",
+        "n": 20,
+        "unchanged": 6,
+        "confirm5": 6
+      },
+      {
+        "seed": 20261107,
+        "policy_arm": "layer4_conv_finetune",
+        "n": 20,
+        "unchanged": 1,
+        "confirm5": 0
+      },
+      {
+        "seed": 20261108,
+        "policy_arm": "frozen_resnet18",
+        "n": 20,
+        "unchanged": 2,
+        "confirm5": 1
+      },
+      {
+        "seed": 20261108,
+        "policy_arm": "layer4_conv_finetune",
+        "n": 20,
+        "unchanged": 0,
+        "confirm5": 0
+      }
+    ],
+    "n_per_condition": 120,
+    "unchanged_successes": 13,
+    "confirm5_successes": 14,
+    "gain_fraction": 0.008333333333333333,
+    "paired": {
+      "both_success": 7,
+      "unchanged_only": 6,
+      "confirm5_only": 7,
+      "both_failure": 100
+    },
+    "gates": {
+      "overall_gain_at_least10pp": false,
+      "each_policy_arm_nonregressing": false,
+      "each_seed_nonregressing": false
+    },
+    "continue_this_candidate": false,
+    "formal_transfer_admitted": false,
+    "gripper_timing_universal_cause_proven": false
+  },
+  "policy_arm_totals": [
+    {
+      "policy_arm": "frozen_resnet18",
+      "n": 60,
+      "unchanged": 9,
+      "confirm5": 8,
+      "gain_percentage_points": -1.6666666666666667
+    },
+    {
+      "policy_arm": "layer4_conv_finetune",
+      "n": 60,
+      "unchanged": 4,
+      "confirm5": 6,
+      "gain_percentage_points": 3.3333333333333335
+    }
+  ],
+  "ledger": {
+    "caps": {
+      "model_create": 6,
+      "checkpoint_sha": 6,
+      "checkpoint_load": 6,
+      "model_weight_checks": 18,
+      "adapters": 12,
+      "resets": 240,
+      "episodes": 240,
+      "policy_forward": 72000,
+      "policy_actions": 72000,
+      "prefix_forward": 144000,
+      "layer4_forward": 144000,
+      "zero_steps": 1200,
+      "native_steps": 73200,
+      "numeric_rows": 20,
+      "initial_row_loads": 1,
+      "source_episode_parses": 120,
+      "source_episode_bytes": 67108864,
+      "backwards": 0,
+      "optimizer_updates": 0,
+      "dataset_reads": 0,
+      "public_initialization_weight_reads": 0,
+      "checkpoint_writes": 0,
+      "extra_render_calls": 0,
+      "failure_observations": 1,
+      "paired_reset_comparisons": 120,
+      "paired_initial_action_checks": 120
+    },
+    "counts": {
+      "model_create": {
+        "attempted": 6,
+        "completed": 6
+      },
+      "checkpoint_sha": {
+        "attempted": 6,
+        "completed": 6
+      },
+      "checkpoint_load": {
+        "attempted": 6,
+        "completed": 6
+      },
+      "model_weight_checks": {
+        "attempted": 18,
+        "completed": 18
+      },
+      "adapters": {
+        "attempted": 12,
+        "completed": 12
+      },
+      "resets": {
+        "attempted": 240,
+        "completed": 240
+      },
+      "episodes": {
+        "attempted": 240,
+        "completed": 240
+      },
+      "policy_forward": {
+        "attempted": 68319,
+        "completed": 68319
+      },
+      "policy_actions": {
+        "attempted": 68319,
+        "completed": 68319
+      },
+      "prefix_forward": {
+        "attempted": 136638,
+        "completed": 136638
+      },
+      "layer4_forward": {
+        "attempted": 136638,
+        "completed": 136638
+      },
+      "zero_steps": {
+        "attempted": 1200,
+        "completed": 1200
+      },
+      "native_steps": {
+        "attempted": 69519,
+        "completed": 69519
+      },
+      "numeric_rows": {
+        "attempted": 20,
+        "completed": 20
+      },
+      "initial_row_loads": {
+        "attempted": 1,
+        "completed": 1
+      },
+      "source_episode_parses": {
+        "attempted": 120,
+        "completed": 120
+      },
+      "source_episode_bytes": {
+        "attempted": 26041679,
+        "completed": 26041679
+      },
+      "backwards": {
+        "attempted": 0,
+        "completed": 0
+      },
+      "optimizer_updates": {
+        "attempted": 0,
+        "completed": 0
+      },
+      "dataset_reads": {
+        "attempted": 0,
+        "completed": 0
+      },
+      "public_initialization_weight_reads": {
+        "attempted": 0,
+        "completed": 0
+      },
+      "checkpoint_writes": {
+        "attempted": 0,
+        "completed": 0
+      },
+      "extra_render_calls": {
+        "attempted": 0,
+        "completed": 0
+      },
+      "failure_observations": {
+        "attempted": 0,
+        "completed": 0
+      },
+      "paired_reset_comparisons": {
+        "attempted": 120,
+        "completed": 120
+      },
+      "paired_initial_action_checks": {
+        "attempted": 120,
+        "completed": 120
+      }
+    },
+    "elapsed_seconds": 1308.0162562410114
+  },
+  "audit_checks": 1024115,
+  "tests_passed": 161,
+  "code_dependencies": 663,
+  "current_exact_reset_pairs": 120,
+  "current_exact_initial_action_pairs": 120,
+  "historical_exact_episodes": 118,
+  "historical_action_mismatch_steps": 292,
+  "historical_outcome_matches": 120,
+  "old_v1_failure_unchanged": {
+    "path": "/data/zl202621/KECRL/results/libero-task7-gripper-confirmation-20261114-v1/failure.json",
+    "sha256": "53a7272e1f142316280531621158f82812a3ace83f64e349c3666bd836881437"
+  },
+  "old_partial_episodes_reused": false,
+  "model_training_updates": 0,
+  "sealed_evaluation_accessed": false
+}

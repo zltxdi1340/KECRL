@@ -1,0 +1,60 @@
+{
+  "kind": "explicit_three_step_sequential_replay_authorization",
+  "user_approved": true,
+  "user_quote": "按三步推进",
+  "science": {
+    "path": "/data/zl202621/KECRL/configs/libero-task7-gripper-approach-video-execution_v2.json",
+    "sha256": "3193efe3019cadb8aad64ec5b90169d0e990e37d7c89cca434c0650a13c95847"
+  },
+  "phase": "task7_visual_cases",
+  "tasks": [
+    7
+  ],
+  "indices": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14
+  ],
+  "role": "candidate_nonregression",
+  "caps": {
+    "adapters": 16,
+    "resets": 92,
+    "replay_prefixes": 16,
+    "saved_actions": 1600,
+    "zero_steps": 460,
+    "native_steps": 2060,
+    "initial_row_loads": 1,
+    "numeric_rows": 15,
+    "observations": 1692,
+    "rgb_frames": 3384,
+    "raw_rgb_bytes": 166330368,
+    "source_episode_parses": 27,
+    "source_episode_bytes": 8388608,
+    "policy_forwards": 0,
+    "backwards": 0,
+    "optimizer_updates": 0,
+    "model_creations": 0,
+    "checkpoint_reads": 0,
+    "hdf5_reads": 0,
+    "extra_render_calls": 0
+  },
+  "sealed_roles_allowed": [],
+  "model_reads_allowed": false,
+  "hdf5_allowed": false,
+  "policy_inference_allowed": false,
+  "previous_failed_run_resumed": false,
+  "scope_context": "User approved the three-step progression; this binding admits only this fixed phase after its preceding gate.",
+  "at_UTC": "2026-11-14T13:04:11.062657+00:00"
+}

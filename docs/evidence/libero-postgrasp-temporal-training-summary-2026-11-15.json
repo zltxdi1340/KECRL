@@ -1,0 +1,159 @@
+{
+  "status": "postgrasp_training_audited_evaluation_not_yet_reported",
+  "at_UTC": "2026-11-15T08:33:11.527720+00:00",
+  "science": {
+    "path": "/data/zl202621/KECRL/configs/libero-postgrasp-temporal-control_v1.json",
+    "sha256": "84210afdea68ab17b11aa1864c357bf9b25099f67d64f4345660407fb81d1db4"
+  },
+  "training_binding": {
+    "path": "/data/zl202621/KECRL/configs/libero-postgrasp-temporal-control-training-binding_v1.json",
+    "sha256": "766dd093301a81803de960cfda6a713c87419d65197887dfdc45a0c244d52158"
+  },
+  "handoff_binding": {
+    "path": "/data/zl202621/KECRL/configs/libero-postgrasp-temporal-control-handoff-binding_v1.json",
+    "sha256": "658d1570970ad3a1469674dd9ace3a3652f6561966bcd88dfc912f15ce46c5ea"
+  },
+  "training": {
+    "path": "/data/zl202621/KECRL/results/libero-postgrasp-temporal-control-20261115-v1/train/training.json",
+    "sha256": "5f58711a55a787da7e6ba01cb9d38f32425b73a8ae7008397d8c186a303e60c0"
+  },
+  "training_audit": {
+    "path": "/data/zl202621/KECRL/results/libero-postgrasp-temporal-control-20261115-v1/train/independent-audit.json",
+    "sha256": "0e192b725aa57f0f45c2e18df65c991eca0aa2d50984a21f728b664b21801c6b"
+  },
+  "training_completion": {
+    "path": "/data/zl202621/KECRL/results/libero-postgrasp-temporal-control-20261115-v1/train/completion.json",
+    "sha256": "54ea0cdd7fc0552c7fc10eb58405a4f9016227473130647e9307d08648090c6b"
+  },
+  "models": [
+    {
+      "seed": 20261106,
+      "controller": "frame_mlp",
+      "total_parameters": 12689864,
+      "trainable_parameters": 1513352,
+      "actual_optimizer_steps": [
+        500
+      ],
+      "first50_loss": 0.07957751426845788,
+      "last50_loss": 0.024855327690020204,
+      "clipped_updates": 32,
+      "checkpoint": {
+        "path": "/data/zl202621/KECRL/results/libero-postgrasp-temporal-control-20261115-v1/train/task7-seed20261106-frame_mlp-u500.pt",
+        "sha256": "57c6ec13714c334f8ce05fb935c1e90e91e8e76ad5389f4ad2b5d7cf9b2f50ca",
+        "weight_hash": "60ae3fa9651de8c7c46a469da911e29f7214bd761be00f3023f87a8865690ef0"
+      }
+    },
+    {
+      "seed": 20261106,
+      "controller": "gru_window10",
+      "total_parameters": 12689863,
+      "trainable_parameters": 1513351,
+      "actual_optimizer_steps": [
+        500
+      ],
+      "first50_loss": 0.08092327013611794,
+      "last50_loss": 0.02340031649917364,
+      "clipped_updates": 55,
+      "checkpoint": {
+        "path": "/data/zl202621/KECRL/results/libero-postgrasp-temporal-control-20261115-v1/train/task7-seed20261106-gru_window10-u500.pt",
+        "sha256": "27dda867157136d02193558addbaba9c437193b506b9e17180bf117436cd1b6b",
+        "weight_hash": "93efdafdf18ec555684786793d0d07f85cbaa0611770b9208233d8168adcc494"
+      }
+    },
+    {
+      "seed": 20261107,
+      "controller": "frame_mlp",
+      "total_parameters": 12689864,
+      "trainable_parameters": 1513352,
+      "actual_optimizer_steps": [
+        500
+      ],
+      "first50_loss": 0.0766941923648119,
+      "last50_loss": 0.02736847572028637,
+      "clipped_updates": 51,
+      "checkpoint": {
+        "path": "/data/zl202621/KECRL/results/libero-postgrasp-temporal-control-20261115-v1/train/task7-seed20261107-frame_mlp-u500.pt",
+        "sha256": "bda7b403ee291a05fb0e9c49a92b6cf1697961d66b919c9c36c9d6b0bb142332",
+        "weight_hash": "593cde9adedd10c094ca009e62cadab8b9202f23740efef1ef1403a8faab5829"
+      }
+    },
+    {
+      "seed": 20261107,
+      "controller": "gru_window10",
+      "total_parameters": 12689863,
+      "trainable_parameters": 1513351,
+      "actual_optimizer_steps": [
+        500
+      ],
+      "first50_loss": 0.08005599401891232,
+      "last50_loss": 0.023109609335660933,
+      "clipped_updates": 60,
+      "checkpoint": {
+        "path": "/data/zl202621/KECRL/results/libero-postgrasp-temporal-control-20261115-v1/train/task7-seed20261107-gru_window10-u500.pt",
+        "sha256": "5d2f84abc45ccecfb369191947bf5e2f83c6ec3cfa425beedbcdc619af5646c7",
+        "weight_hash": "6cfcebc93d777b08d23cef279bf0982a13c3a9f0b61841afc0939c25e6d47866"
+      }
+    },
+    {
+      "seed": 20261108,
+      "controller": "frame_mlp",
+      "total_parameters": 12689864,
+      "trainable_parameters": 1513352,
+      "actual_optimizer_steps": [
+        500
+      ],
+      "first50_loss": 0.07854904644191266,
+      "last50_loss": 0.02859738933853805,
+      "clipped_updates": 43,
+      "checkpoint": {
+        "path": "/data/zl202621/KECRL/results/libero-postgrasp-temporal-control-20261115-v1/train/task7-seed20261108-frame_mlp-u500.pt",
+        "sha256": "d88a62e32d42cc58d8bc6c25c250d3075da8c619fa74fc54c4ae98cdd3b397c9",
+        "weight_hash": "3cf1611a32aa0d94073bdb24e4557ebe1b756c75cbaaecd1d83a23b549e0ceb8"
+      }
+    },
+    {
+      "seed": 20261108,
+      "controller": "gru_window10",
+      "total_parameters": 12689863,
+      "trainable_parameters": 1513351,
+      "actual_optimizer_steps": [
+        500
+      ],
+      "first50_loss": 0.08848035719245673,
+      "last50_loss": 0.0291774414665997,
+      "clipped_updates": 69,
+      "checkpoint": {
+        "path": "/data/zl202621/KECRL/results/libero-postgrasp-temporal-control-20261115-v1/train/task7-seed20261108-gru_window10-u500.pt",
+        "sha256": "cd4b041d96a91ced89afd875fb7f90001b07f1b19c30c706fce8cb8c787d87e4",
+        "weight_hash": "3db8b597f5ba140e9e9ea09fdbc27112d8dda576130f373a66a5f4b5ba26a566"
+      }
+    }
+  ],
+  "actual": {
+    "train_forward": 3000,
+    "backward": 3000,
+    "optimizer": 3000,
+    "checkpoint": 6,
+    "model_create": 7,
+    "dataset_items": 432,
+    "source_sha": 1,
+    "public_weight_sha": 1,
+    "public_weight_load": 1,
+    "frozen_encoder": 120,
+    "parity_forward": 6,
+    "hdf5_opens": 2,
+    "hdf5_slices": 2160,
+    "initial_row_loads": 0,
+    "numeric_rows": 0,
+    "native_steps": 0,
+    "policy_forward": 0
+  },
+  "seconds": 132.10422289400594,
+  "runtime_device": {
+    "device": "cpu",
+    "cpu_threads": 1,
+    "cuda_used": false
+  },
+  "peak_rss_bytes": 1631248384,
+  "new_closed_loop_effect_reported": false
+}

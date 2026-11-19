@@ -1,0 +1,48 @@
+{
+  "status": "first_two_complete_third_technical_failure_no_retry",
+  "formal_result": false,
+  "last_job_status": "confirmation_run_failed_no_retry",
+  "report": {
+    "path": "/data/zl202621/KECRL/docs/libero-gripper-three-step-results-2026-11-14.md",
+    "sha256": "637883da51f29e841120992f1782ed1e782a40a3baf58159ce81d67cc56daa61"
+  },
+  "science": {
+    "path": "/data/zl202621/KECRL/configs/libero-task7-gripper-confirmation-control_v1.json",
+    "sha256": "8903e21d041ff9d501ced7898df8e74e007a15dd047fde324775275fbe19f1e9"
+  },
+  "binding": {
+    "path": "/data/zl202621/KECRL/configs/libero-task7-gripper-confirmation-execution-binding_v1.json",
+    "sha256": "ca029c559cf439f5f85b7bbe3984a43c81e177fa133cca3572bbc3a4658adabf"
+  },
+  "decision": null,
+  "previous_stages_native_steps": 2340,
+  "tests_passed": 151,
+  "source_task": 7,
+  "initial_indices": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19
+  ],
+  "policy_training_updates": 0,
+  "policy_updates_unchanged": 500,
+  "stabilization_steps_unchanged": 5,
+  "loss_changed": false,
+  "sealed_evaluation_accessed": false
+}

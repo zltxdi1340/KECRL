@@ -1,0 +1,84 @@
+{
+  "status": "first_two_steps_complete_third_bound_waiting_for_GPU1",
+  "formal_result": false,
+  "user_quote": "按三步推进",
+  "stages": [
+    {
+      "phase": "task4_prefix_gate",
+      "completion": {
+        "path": "/data/zl202621/KECRL/results/libero-gripper-prefix-replay-20261114-v2/completion.json",
+        "sha256": "a2013c9d9876d5697d5d0c34298b92bda3b9051578f4988894228d717aa3d595"
+      },
+      "native_steps": 280,
+      "prefixes": 2,
+      "audit_checks": 3294
+    },
+    {
+      "phase": "task7_visual_cases",
+      "completion": {
+        "path": "/data/zl202621/KECRL/results/libero-task7-gripper-approach-video-20261114-v2/completion.json",
+        "sha256": "bf94722e0b98c16b6c9571431a58e4a023d269efa7fb8c7b3a809f663b9aa90e"
+      },
+      "native_steps": 2060,
+      "prefixes": 16,
+      "audit_checks": 26068
+    }
+  ],
+  "visual_report": {
+    "path": "/data/zl202621/KECRL/docs/libero-gripper-approach-visual-results-2026-11-14.md",
+    "sha256": "5d1c897e8ea54f7e9dc1eadf2ee1f3575d9408c34f84df863cdd8c9603999224"
+  },
+  "visual_record_audit": {
+    "path": "/data/zl202621/KECRL/results/libero-task7-gripper-approach-video-20261114-v2/visual-record-audit.json",
+    "sha256": "df000e7af5cc91eb0f76a9a861052b937eb9f2533215b3738938165cf3815ff1"
+  },
+  "visual_judgements": {
+    "clearly_before_visible_alignment": 1,
+    "not_assessable": 15,
+    "clear_case": "case09-B",
+    "clear_case_policy": "frozen_resnet18",
+    "causal_effect_established": false
+  },
+  "confirmation_prebinding": {
+    "path": "/data/zl202621/KECRL/logs/libero-gripper-three-step-20261114-v1/confirmation-prepayload-binding.json",
+    "sha256": "4544ff162952bb878782932d259c988ff94b537662c0283a93a35e1366c7283d"
+  },
+  "confirmation_scope": {
+    "new_episodes_max": 240,
+    "source_task": 7,
+    "initial_indices": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      15,
+      16,
+      17,
+      18,
+      19
+    ],
+    "fixed_models": 6,
+    "policy_forwards_max": 72000,
+    "native_steps_max": 73200,
+    "training_updates": 0
+  },
+  "tests_passed": 151,
+  "code_dependencies": 651,
+  "progress_report": {
+    "path": "/data/zl202621/KECRL/docs/libero-gripper-three-step-progress-2026-11-14.md",
+    "sha256": "0f1883b325b09980136d565cfe7d9c0509f35be4ca16a01f33fdca56735173df"
+  },
+  "old_failure_retained": true,
+  "sealed_query_validation_heldout_final_opened": false
+}

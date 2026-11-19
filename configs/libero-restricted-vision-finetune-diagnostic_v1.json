@@ -1,0 +1,300 @@
+{
+  "kind": "libero_restricted_visual_finetune_source_development",
+  "version": 1,
+  "status": "scientific_frozen_execution_unbound",
+  "formal_result": false,
+  "frozen_at_UTC": "2026-11-13T20:22:49.790657+00:00",
+  "user_instruction": "下一步准备受限视觉微调对照；本轮只准备，不执行研究训练/闭环或转用上一轮初态授权。",
+  "tasks": [
+    4,
+    7
+  ],
+  "seeds": [
+    20261106,
+    20261107,
+    20261108
+  ],
+  "arms": [
+    "frozen_resnet18",
+    "layer4_conv_finetune"
+  ],
+  "updates_per_policy": 500,
+  "stabilization_steps": 5,
+  "demonstrations": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20,
+    21,
+    22,
+    23,
+    24,
+    25,
+    26,
+    27,
+    28,
+    29
+  ],
+  "initial_indices": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19
+  ],
+  "loss": "uniform_masked_seven_dimensional_mse",
+  "source_meta_query_allowed": false,
+  "formal_evaluation_allowed": false,
+  "source_role": "meta_support",
+  "initial_role": "candidate_nonregression",
+  "policy": {
+    "cnn_channels": [
+      32,
+      64,
+      128
+    ],
+    "spatial_pool_size": 4,
+    "visual_embedding_dim": 128,
+    "fusion_dim": 256,
+    "recurrent_hidden_dim": 256,
+    "action_dimension": 7,
+    "memory_mode": "cnn_only"
+  },
+  "metadata": {
+    "transfer": {
+      "path": "/data/zl202621/KECRL/configs/libero_spatial_transfer_split_candidate_v1.json",
+      "sha256": "6cdc8c3eeaa90886ad0e15f0f4ebbe260aa972b6e69b1f122e95f65ab63dd7d6"
+    },
+    "dataset_manifest": {
+      "path": "/data/zl202621/KECRL/configs/libero_spatial_dataset_manifest_v1.json",
+      "sha256": "866429693febf966a38b48e3b89faa54623acace5d3c50cd67c5c7978010eaf6"
+    }
+  },
+  "data_root": "/data/zl202621/KECRL/third_party/LIBERO/datasets",
+  "sources": {
+    "4": {
+      "path": "/data/zl202621/KECRL/third_party/LIBERO/datasets/libero_spatial/pick_up_the_black_bowl_in_the_top_drawer_of_the_wooden_cabinet_and_place_it_on_the_plate_demo.hdf5",
+      "sha256": "7ff1ee60447875c152d8c7819f499d23dbc0eb4d4bf045225d5d87a2cdad99bd",
+      "size_bytes": 748271833
+    },
+    "7": {
+      "path": "/data/zl202621/KECRL/third_party/LIBERO/datasets/libero_spatial/pick_up_the_black_bowl_on_the_stove_and_place_it_on_the_plate_demo.hdf5",
+      "sha256": "1fcb3990cf9fd6185f56531cc9f6dec0a77a59bfa0c7f39dff95b7e43cf6aeaa",
+      "size_bytes": 711715594
+    }
+  },
+  "initial_banks": {
+    "4": {
+      "path": "/data/zl202621/KECRL/third_party/LIBERO/libero/libero/init_files/libero_spatial/pick_up_the_black_bowl_in_the_top_drawer_of_the_wooden_cabinet_and_place_it_on_the_plate.pruned_init",
+      "sha256": "deef3df529e0bb57658b973bbb3baf02b02922db065c025a73ebfcd11eb54d46",
+      "size_bytes": 44591,
+      "pickle_header_sha256": "22f103ab49c6f3be149e78cbda2075b4499fdbc19b15043497f3fdcadef24708"
+    },
+    "7": {
+      "path": "/data/zl202621/KECRL/third_party/LIBERO/libero/libero/init_files/libero_spatial/pick_up_the_black_bowl_on_the_stove_and_place_it_on_the_plate.pruned_init",
+      "sha256": "ea9cba2814bc166f3682f3f5a97329467839bcf584069cd419191b6c17adae25",
+      "size_bytes": 44335,
+      "pickle_header_sha256": "c70b3fd4769c65750584c42a6161a6bd45fb3bb5673a32f1e20691687c50ba96"
+    }
+  },
+  "public_weights": {
+    "path": "/data/zl202621/KECRL/cache/torch/hub/checkpoints/resnet18-f37072fd.pth",
+    "sha256": "f37072fd47e89c5e827621c5baffa7500819f7896bbacec160b1a16c560e07ec",
+    "size_bytes": 46830571,
+    "url": "https://download.pytorch.org/models/resnet18-f37072fd.pth",
+    "weight_enum": "ResNet18_Weights.IMAGENET1K_V1"
+  },
+  "preprocessing": {
+    "image_size": 128,
+    "resize": false,
+    "crop": false,
+    "rgb_mean": [
+      0.485,
+      0.456,
+      0.406
+    ],
+    "rgb_std": [
+      0.229,
+      0.224,
+      0.225
+    ],
+    "frozen_BN_missing_serialized_counters": "zero_int64_unchanged"
+  },
+  "runtime_environment": {
+    "CUDA_VISIBLE_DEVICES": "1",
+    "MUJOCO_EGL_DEVICE_ID": "1",
+    "MUJOCO_GL": "egl",
+    "OMP_NUM_THREADS": "1",
+    "OPENBLAS_NUM_THREADS": "1",
+    "MKL_NUM_THREADS": "1",
+    "PYTHONHASHSEED": "0",
+    "CUBLAS_WORKSPACE_CONFIG": ":4096:8"
+  },
+  "versions": {
+    "torch": "2.4.1+cu124",
+    "torchvision": "0.19.1+cu124",
+    "numpy": "1.22.4",
+    "h5py": "3.11.0",
+    "robosuite": "1.4.0",
+    "mujoco": "3.2.3"
+  },
+  "libero_revision": "8f1084e3132a39270c3a13ebe37270a43ece2a01",
+  "artifacts": "/data/zl202621/KECRL/results/libero-restricted-vision-finetune-20261114-v1",
+  "decision": {
+    "minimum_equal_weight_mean_gain_fraction": "1/10",
+    "each_task_mean_nonregressing": true,
+    "each_seed_mean_nonregressing": true,
+    "paired_retention": "descriptive_only_all_120_pairs",
+    "formal_transfer_admitted": false,
+    "stay_in_LIBERO": true
+  },
+  "scientific_protocol": {
+    "path": "/data/zl202621/KECRL/docs/libero-restricted-vision-finetune-protocol-2026-11-14.md",
+    "sha256": "12c6179863c9f242392202e89f28a0a8f10ee3f5d46f165754279edc30961c39"
+  },
+  "training_caps": {
+    "train_forward": 6000,
+    "backward": 6000,
+    "optimizer": 6000,
+    "checkpoint": 12,
+    "prefix_forward": 302,
+    "layer4_forward": 12024,
+    "parity_forward": 12,
+    "dataset_items": 1100,
+    "source_sha": 2,
+    "model_create": 14,
+    "adapter": 0,
+    "reset": 0,
+    "episode": 0,
+    "policy_forward": 0,
+    "policy_action": 0,
+    "zero_step": 0,
+    "native_step": 0,
+    "numeric_rows": 0
+  },
+  "evaluation_caps": {
+    "train_forward": 0,
+    "backward": 0,
+    "optimizer": 0,
+    "checkpoint": 0,
+    "prefix_forward": 144000,
+    "layer4_forward": 144000,
+    "parity_forward": 0,
+    "dataset_items": 0,
+    "source_sha": 0,
+    "model_create": 12,
+    "adapter": 12,
+    "reset": 240,
+    "episode": 240,
+    "policy_forward": 72000,
+    "policy_action": 72000,
+    "zero_step": 1200,
+    "native_step": 73200,
+    "numeric_rows": 40
+  },
+  "optimizer": {
+    "name": "Adam",
+    "lr": 0.0003,
+    "betas": [
+      0.9,
+      0.999
+    ],
+    "eps": 1e-08,
+    "weight_decay": 0.0,
+    "amsgrad": false,
+    "global_gradient_clip": 1.0
+  },
+  "cache": {
+    "stage": "layer3",
+    "shape": [
+      256,
+      8,
+      8
+    ],
+    "dtype": "float32",
+    "batch_windows": 8,
+    "raw_bytes_per_task_max": 2147483648,
+    "prefix_bytes_per_task_max": 2147483648,
+    "immutable": true,
+    "final_feature_cache_allowed": false
+  },
+  "mask": {
+    "candidate": "layer4_convolutions_only",
+    "frozen_BN_affine": true,
+    "frozen_BN_statistics": true,
+    "frozen_stem_and_layer1_to_3": true,
+    "control_trainable": 1513352,
+    "candidate_trainable": 9901960,
+    "total_parameters": 12689864,
+    "extra_convolution_parameters": 8388608,
+    "same_full_initial_state": true
+  },
+  "training_wall_seconds_max": 1800,
+  "evaluation_wall_seconds_max": 7200,
+  "batch_size": 8,
+  "sequence_length": 10,
+  "stride": 10,
+  "max_policy_steps": 300,
+  "start": "fresh_same_initialization_no_u500_resume",
+  "scientific_freeze_path": "/data/zl202621/KECRL/configs/libero-restricted-vision-finetune-freeze-binding_v1.json",
+  "previous_trial": {
+    "science": {
+      "path": "/data/zl202621/KECRL/configs/libero-pretrained-vision-control-diagnostic_v1.json",
+      "sha256": "d2a39cb0e1f18f817b582d2013ec9a68a049ee90c78aea09a2d3b9657b634a92"
+    },
+    "result_report": {
+      "path": "/data/zl202621/KECRL/docs/libero-pretrained-vision-control-results-2026-11-14.md",
+      "sha256": "b6497a4acd83f48d0e2163d33e89d960f03826ab1843ff6c3ef238f297f88dce"
+    },
+    "compact_summary": {
+      "path": "/data/zl202621/KECRL/docs/evidence/libero-pretrained-vision-control-closed-loop-summary-2026-11-14.json",
+      "sha256": "154ae96cc2c0ab3ad707569a03e7527fb2cc08d256395ecabec4e513dd443d13"
+    },
+    "old_initial_authorization_transfers": false,
+    "old_16_of_120_is_new_control": false
+  },
+  "preparation": {
+    "research_payload_reads": 0,
+    "research_payload_sha": 0,
+    "research_training_updates": 0,
+    "real_episodes": 0,
+    "execution_authorized": false,
+    "source_initial_authorized": false
+  },
+  "execution_bindings": {
+    "train": "/data/zl202621/KECRL/configs/libero-restricted-vision-finetune-training-binding_v1.json",
+    "evaluate": "/data/zl202621/KECRL/configs/libero-restricted-vision-finetune-evaluation-binding_v1.json"
+  }
+}

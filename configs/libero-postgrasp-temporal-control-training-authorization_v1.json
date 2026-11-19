@@ -1,0 +1,72 @@
+{
+  "user_approved": true,
+  "user_instruction": "测试抓起后的搬运与放置控制，说明每一步目的、配置及实验结果",
+  "authorization_basis": "Current explicit test request; bounded new source-only paired500 fitting, followed by separately bound conditional evaluation in the same used Task7 development scope.",
+  "science": {
+    "path": "/data/zl202621/KECRL/configs/libero-postgrasp-temporal-control_v1.json",
+    "sha256": "84210afdea68ab17b11aa1864c357bf9b25099f67d64f4345660407fb81d1db4"
+  },
+  "stage": "train",
+  "tasks": [
+    7
+  ],
+  "sealed_roles_allowed": [],
+  "previous_episode_permission_reused": false,
+  "caps": {
+    "train_forward": 3000,
+    "backward": 3000,
+    "optimizer": 3000,
+    "checkpoint": 6,
+    "model_create": 7,
+    "dataset_items": 550,
+    "source_sha": 1,
+    "public_weight_sha": 1,
+    "public_weight_load": 1,
+    "frozen_encoder": 150,
+    "parity_forward": 6,
+    "hdf5_opens": 2,
+    "hdf5_slices": 2750,
+    "initial_row_loads": 0,
+    "numeric_rows": 0,
+    "native_steps": 0,
+    "policy_forward": 0
+  },
+  "hdf5_allowed": true,
+  "initial_indices": [],
+  "demonstrations": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20,
+    21,
+    22,
+    23,
+    24,
+    25,
+    26,
+    27,
+    28,
+    29
+  ],
+  "source_paths": [
+    "/data/zl202621/KECRL/third_party/LIBERO/datasets/libero_spatial/pick_up_the_black_bowl_on_the_stove_and_place_it_on_the_plate_demo.hdf5"
+  ],
+  "training_device": "cpu"
+}

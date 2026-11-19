@@ -1,0 +1,206 @@
+{
+  "kind": "libero_reset_reproducibility_summary",
+  "status": "complete_audited_reset_reproducibility_probe",
+  "formal_result": false,
+  "science": {
+    "path": "/data/zl202621/KECRL/configs/libero-reset-reproducibility-diagnostic_v1.json",
+    "sha256": "a5d083380101b45ac5fb83f25ba1d460494b7d82eaa23dfb678d106ebce12ffc"
+  },
+  "execution_binding": {
+    "path": "/data/zl202621/KECRL/configs/libero-reset-reproducibility-execution-binding_v1.json",
+    "sha256": "4d28dbb8c2c3d57745baa9980ecc870b463114b3589a550be5563126a6c3a813"
+  },
+  "authorization": {
+    "path": "/data/zl202621/KECRL/configs/libero-reset-reproducibility-source-initial-authorization_v1.json",
+    "sha256": "62690d17856e8b30ff51e8c4333d9e6b39459f8ab3f04eb59dfe756db420b08f"
+  },
+  "code_dependencies": 612,
+  "target_task": 4,
+  "target_seed": 20261106,
+  "target_arm": "frozen_resnet18",
+  "target_initial_index": 7,
+  "comparison": {
+    "direct_matches_source": false,
+    "sequential_matches_source": true,
+    "branches_match_each_other": false,
+    "reset_only_probe": true,
+    "original_full_episode_history_reproduced": false,
+    "sole_cause_identified": false,
+    "gripper_timing_identified": false
+  },
+  "target_branch_differences": {
+    "agentview_rgb": {
+      "changed_values": 4465,
+      "max_absolute_error": 155.0
+    },
+    "eye_in_hand_rgb": {
+      "changed_values": 7880,
+      "max_absolute_error": 186.0
+    },
+    "joint_states": {
+      "changed_values": 0,
+      "max_absolute_error": 0.0
+    },
+    "gripper_states": {
+      "changed_values": 0,
+      "max_absolute_error": 0.0
+    }
+  },
+  "target_state_component_bytes_equal": {
+    "joint_states": true,
+    "gripper_states": true
+  },
+  "direct_difference_category": "rgb_only_difference",
+  "sequential_source_digest_matches": 8,
+  "sequential_resets": 8,
+  "ledger": {
+    "caps": {
+      "adapters": 2,
+      "resets": 9,
+      "native_steps": 45,
+      "zero_steps": 45,
+      "numeric_rows": 8,
+      "initial_row_loads": 1,
+      "observations": 9,
+      "rgb_frames": 18,
+      "raw_rgb_bytes": 884736,
+      "source_episode_parses": 8,
+      "source_episode_bytes": 8388608,
+      "saved_actions": 0,
+      "policy_forwards": 0,
+      "backwards": 0,
+      "optimizer_updates": 0,
+      "model_creations": 0,
+      "checkpoint_reads": 0,
+      "hdf5_reads": 0,
+      "extra_render_calls": 0
+    },
+    "counts": {
+      "adapters": {
+        "attempted": 2,
+        "completed": 2
+      },
+      "resets": {
+        "attempted": 9,
+        "completed": 9
+      },
+      "native_steps": {
+        "attempted": 45,
+        "completed": 45
+      },
+      "zero_steps": {
+        "attempted": 45,
+        "completed": 45
+      },
+      "numeric_rows": {
+        "attempted": 8,
+        "completed": 8
+      },
+      "initial_row_loads": {
+        "attempted": 1,
+        "completed": 1
+      },
+      "observations": {
+        "attempted": 9,
+        "completed": 9
+      },
+      "rgb_frames": {
+        "attempted": 18,
+        "completed": 18
+      },
+      "raw_rgb_bytes": {
+        "attempted": 884736,
+        "completed": 884736
+      },
+      "source_episode_parses": {
+        "attempted": 8,
+        "completed": 8
+      },
+      "source_episode_bytes": {
+        "attempted": 1714487,
+        "completed": 1714487
+      },
+      "saved_actions": {
+        "attempted": 0,
+        "completed": 0
+      },
+      "policy_forwards": {
+        "attempted": 0,
+        "completed": 0
+      },
+      "backwards": {
+        "attempted": 0,
+        "completed": 0
+      },
+      "optimizer_updates": {
+        "attempted": 0,
+        "completed": 0
+      },
+      "model_creations": {
+        "attempted": 0,
+        "completed": 0
+      },
+      "checkpoint_reads": {
+        "attempted": 0,
+        "completed": 0
+      },
+      "hdf5_reads": {
+        "attempted": 0,
+        "completed": 0
+      },
+      "extra_render_calls": {
+        "attempted": 0,
+        "completed": 0
+      }
+    },
+    "elapsed_seconds": 9.485283586982405
+  },
+  "independent_audit_checks": 82,
+  "main_source_episode_parses": 8,
+  "audit_source_episode_parses": 8,
+  "total_source_episode_bytes": 3428974,
+  "model_reads": 0,
+  "policy_forwards": 0,
+  "optimizer_updates": 0,
+  "new_saved_actions": 0,
+  "original_full_episode_history_reproduced": false,
+  "original_failed_video_resumed": false,
+  "sole_cause_identified": false,
+  "gripper_timing_identified": false,
+  "tests_passed": 104,
+  "new_tests_passed": 27,
+  "full_pytest_run": false,
+  "result": {
+    "path": "/data/zl202621/KECRL/results/libero-reset-reproducibility-20261114-v1/reset-probe.json",
+    "sha256": "5cadb53c4aa3006bfa89d84c5c1d026ddcbc5c2f5af510aa899a96a334781dc0"
+  },
+  "audit": {
+    "path": "/data/zl202621/KECRL/results/libero-reset-reproducibility-20261114-v1/independent-audit.json",
+    "sha256": "bd5b04e80389c794dbd7b665021f86ccb147d87ec4e42c85ba97173238642390"
+  },
+  "completion": {
+    "path": "/data/zl202621/KECRL/results/libero-reset-reproducibility-20261114-v1/completion.json",
+    "sha256": "1d507123092c8665c854d93fd82d6d14ccad6c21c845ec4369548a1b0c64fc67"
+  },
+  "initial_access": {
+    "path": "/data/zl202621/KECRL/results/libero-reset-reproducibility-20261114-v1/initial-access.json",
+    "sha256": "39530c60536850bd049fc949b50ed0c8c1c994cccdc1c5a6f644fdb754b3f32c"
+  },
+  "media": {
+    "path": "/data/zl202621/KECRL/results/libero-reset-reproducibility-20261114-v1/reset-media.json",
+    "sha256": "fb9666f4842246a1941a680c1358a19a2f8ce655b1bf89ba221c4851601e42ce"
+  },
+  "review_page": {
+    "path": "/data/zl202621/KECRL/results/libero-reset-reproducibility-20261114-v1/reset-review.html",
+    "sha256": "462d77167b4c12c6a814bfb465d890268a9389e2331198b36c1b2af73069197c"
+  },
+  "report": {
+    "path": "/data/zl202621/KECRL/docs/libero-reset-reproducibility-results-2026-11-14.md",
+    "sha256": "f1612c53e3ac22fb8aad3bf0fee712b476147862f4f962dce26fb78ed3dcdb92"
+  },
+  "evidence_logs": "/data/zl202621/KECRL/logs/libero-reset-reproducibility-20261114-v1",
+  "policy_updates_unchanged": 500,
+  "stabilization_steps_unchanged": 5,
+  "loss_changed": false,
+  "sealed_evaluation_accessed": false
+}

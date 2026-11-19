@@ -1,0 +1,259 @@
+{
+  "kind": "libero_fixed500_control_configuration_continuation_review",
+  "version": 1,
+  "at_UTC": "2026-11-13T13:21:54.710686+00:00",
+  "formal_result": false,
+  "status": "completed_report_level_gate_review",
+  "decision": "close_current_configuration_no_new_transfer",
+  "basis": "Qualitative continuation review of existing project reports and implemented candidate families, not a new numerical experiment or global architecture search.",
+  "scope": {
+    "policy": "current CNN-only full seven-dimensional controller and listed existing variants",
+    "policy_updates": 500,
+    "stabilization_steps": 5,
+    "existing_loss": "uniform masked seven-dimensional action MSE",
+    "downstream_goal": "source-feedback SPT improvement of future SPI learning at comparable finite budgets",
+    "candidate_catalogue_exhaustive_for_all_methods": false
+  },
+  "admission_requirements": [
+    "A specific falsifiable full-control hypothesis with an evidence-to-intervention connection; prior proof of winning is not required.",
+    "A substantive new basis relative to stopped configurations; rename, neighboring coefficients, restarts, seeds or budget expansion alone are insufficient.",
+    "Comparable complete action interface, fixed budget/loss/stabilization, permitted observations and explicit capacity/external-data/compute accounting.",
+    "One paired scope, main success/nonregression measures, prespecified worthwhile improvement, budgets and outcome-dependent stopping/continuation actions before a new run."
+  ],
+  "new_experiment_numeric_thresholds_defined": false,
+  "old_G_rules_changed": false,
+  "candidates": [
+    {
+      "id": "C00",
+      "name": "repeat_current_configuration",
+      "admitted_to_new_control_trial": false,
+      "disposition": "no_new_intervention",
+      "rationale": "Original G did not meet its frozen transfer and source-guard conditions; restoration or repetition is not a new intervention.",
+      "evidence_reports": [
+        "docs/libero-formal-G-results-2026-11-06.md",
+        "docs/libero-postmaintenance-A-rebuild-results-2026-11-13.md"
+      ],
+      "evidence_level": "historical_report_not_raw_reaudited",
+      "limitation": "This is not a claim that low absolute success prevents all meta-learning gains."
+    },
+    {
+      "id": "C01",
+      "name": "phase_or_gripper_weighting",
+      "admitted_to_new_control_trial": false,
+      "disposition": "retain_stopped_branch_and_existing_loss",
+      "rationale": "The tested local weighting branch failed its original rules; the current task preserves the existing loss.",
+      "evidence_reports": [
+        "docs/libero-task4-task7-local-gripper-loss-diagnostic-2026-11-01.md"
+      ],
+      "evidence_level": "historical_report_not_raw_reaudited",
+      "limitation": "Does not reject every possible loss; the unrelated phase/gripper report worktree edit is preserved."
+    },
+    {
+      "id": "C02",
+      "name": "public_state_jitter_500",
+      "admitted_to_new_control_trial": false,
+      "disposition": "retain_stopped_configuration",
+      "rationale": "The documented 500-update closed-loop comparison did not support an aggregate repair.",
+      "evidence_reports": [
+        "docs/libero-task4-task7-public-state-jitter-500-closed-loop-diagnostic-2026-10-31.md"
+      ],
+      "evidence_level": "historical_report_not_raw_reaudited",
+      "limitation": "The old baseline was a pinned prior reference, not a fresh arm in that run; do not pool it with other experiments."
+    },
+    {
+      "id": "C03",
+      "name": "original_cnn_gru_variant",
+      "admitted_to_new_control_trial": false,
+      "disposition": "not_selected_no_new_basis_to_reopen",
+      "rationale": "The capacity-matched original GRU contrast did not establish an overall fit advantage to motivate reopening that configuration.",
+      "evidence_reports": [
+        "docs/libero-memory-representation-diagnostic-2026-10-25.md"
+      ],
+      "evidence_level": "historical_report_not_raw_reaudited",
+      "limitation": "Two tasks, one seed, phase-balanced offline setting; no universal or closed-loop GRU rejection."
+    },
+    {
+      "id": "C04",
+      "name": "tested_motion_history_route",
+      "admitted_to_new_control_trial": false,
+      "disposition": "retain_stopped_configuration",
+      "rationale": "Offline improvement did not carry through to the documented paired routed-controller episodes.",
+      "evidence_reports": [
+        "docs/libero-task1-b-routed-history-closed-loop-diagnostic-2026-11-04.md"
+      ],
+      "evidence_level": "historical_report_not_raw_reaudited",
+      "limitation": "The current_all7 baseline is a newly fitted readout, not the original B action head; does not reject all history architectures."
+    },
+    {
+      "id": "C05",
+      "name": "repeat_current_input_same_history_head",
+      "admitted_to_new_control_trial": false,
+      "disposition": "not_selected_seed_local_signal",
+      "rationale": "All documented additional successes came from one seed; this does not justify treating the alias input as a stable full-controller repair.",
+      "evidence_reports": [
+        "docs/libero-task1-b-fixed-head-input-closed-loop-results-2026-11-04.md"
+      ],
+      "evidence_level": "historical_report_not_raw_reaudited",
+      "limitation": "Both arms use the same candidate head, so the original B Policy is not the comparator."
+    },
+    {
+      "id": "C06",
+      "name": "remove_stabilization",
+      "admitted_to_new_control_trial": false,
+      "disposition": "keep_stabilization_five",
+      "rationale": "The same-stack fresh zero/five comparison did not establish common task/seed improvement; five is fixed in the current task.",
+      "evidence_reports": [
+        "docs/libero-task4-task7-stabilization-contemporary-closed-loop-diagnostic-2026-11-02.md"
+      ],
+      "evidence_level": "historical_report_not_raw_reaudited",
+      "limitation": "No claim that all reset interventions are ineffective."
+    },
+    {
+      "id": "C07",
+      "name": "task7_single_component_auxiliary_search",
+      "admitted_to_new_control_trial": false,
+      "disposition": "optional_mechanism_only_not_full_control_candidate",
+      "rationale": "The retained signals are fit-only and affect one action component; no operational full seven-dimensional control intervention is defined.",
+      "evidence_reports": [
+        "docs/libero-task7-residual-harm-protection-results-2026-11-08.md",
+        "docs/libero-task7-reference-joint-reachability-results-2026-11-11.md",
+        "docs/libero-task7-diagnostic-decision-review-2026-11-13.md"
+      ],
+      "evidence_level": "historical_report_not_raw_reaudited",
+      "limitation": "SLSQP remains scientifically frozen and unexecuted; not_found is not global infeasibility."
+    },
+    {
+      "id": "C08",
+      "name": "extend_policy_updates",
+      "admitted_to_new_control_trial": false,
+      "disposition": "outside_fixed_500_question",
+      "rationale": "The current question fixes 500 updates; old longer-budget offline curves are not fixed-500 closed-loop evidence.",
+      "evidence_reports": [
+        "docs/libero-task4-task7-public-state-jitter-budget-sweep-diagnostic-2026-10-31.md"
+      ],
+      "evidence_level": "historical_report_not_raw_reaudited",
+      "limitation": "Does not claim training converged at 500 or that larger budgets can never help."
+    }
+  ],
+  "screened_catalogue_entries": 9,
+  "admitted_candidates": 0,
+  "selected_candidate": null,
+  "unassessed_new_backend_alternatives": {
+    "rejected_as_scientifically_ineffective": false,
+    "note": "External pretrained encoders, other action models or new collection schemes have no single operational design in this review; a substantively new proposal can reopen the decision."
+  },
+  "existing_evidence": {
+    "old_G": "not_admitted_under_original_rules",
+    "old_H": "not_run",
+    "historical_raw_outputs_reaudited_this_turn": false,
+    "reconstruction": "15 A-origin byte counterparts reported previously; not reopened or rehashed here",
+    "documentation_source_pins": [
+      {
+        "path": "AGENTS.md",
+        "sha256": "a53eb15d679a8e72f3fe74a189fe20e7265c31689d95048861db498dedebf197"
+      },
+      {
+        "path": "PROJECT_BIBLE.md",
+        "sha256": "b0b0360da935f6d65147f188151bb4b527dd77b10e2a320a0f92f99fbc8ea880"
+      },
+      {
+        "path": "docs/libero-formal-G-results-2026-11-06.md",
+        "sha256": "0f52bccd9f9f6f5111bf9b672a34bd56b7f714f4b61e8adbe2900d17652ab245"
+      },
+      {
+        "path": "docs/libero-memory-representation-diagnostic-2026-10-25.md",
+        "sha256": "5558a68911243416c0641bbeb397155bc8e306c02f3605a641bc0c2d87cd7c7b"
+      },
+      {
+        "path": "docs/libero-postmaintenance-A-rebuild-results-2026-11-13.md",
+        "sha256": "f4fd6db3cd16fc4d4b5ae41d466a5246ed1d76365dd3ca9cdd7eb86277b2ff1a"
+      },
+      {
+        "path": "docs/libero-source-candidate-native-goal-pose-results-2026-11-07.md",
+        "sha256": "1e905cb00fab83c9e62ac275fa1a7881c0144638d8f2254198836c4c3b4d7a1d"
+      },
+      {
+        "path": "docs/libero-source-expert-component3-observability-results-2026-11-07.md",
+        "sha256": "cf9acb65fec5e2082dddc184a78fb28df2fe4f2d9ca53e0cecc4280f9f7972a2"
+      },
+      {
+        "path": "docs/libero-source-internal-geometry-extension-results-2026-11-05.md",
+        "sha256": "6db0f0313f1efbf0389a4904f56e594f2526494fc6e666968f570faf32d9c6e4"
+      },
+      {
+        "path": "docs/libero-source-internal-spt-spi-closed-loop-diagnostic-2026-11-03.md",
+        "sha256": "79dcc27c517a65cdac43a080f72c73d23a9197d5db8abdc0e2a9ba707f35a3d2"
+      },
+      {
+        "path": "docs/libero-task1-b-fixed-head-input-closed-loop-results-2026-11-04.md",
+        "sha256": "a0323d59f53a30966f4c793fb848b804a9462324e17228af0d18f3829827c719"
+      },
+      {
+        "path": "docs/libero-task1-b-routed-history-closed-loop-diagnostic-2026-11-04.md",
+        "sha256": "a803ffb412f009e22c0070a5a4edd2ef818575ac6e1c0c111546efe67d68f23b"
+      },
+      {
+        "path": "docs/libero-task4-task7-local-gripper-loss-diagnostic-2026-11-01.md",
+        "sha256": "f6b44770ff3220338989d5be03319d670caab8a3af29b96fcd9b4a5dc43525c6"
+      },
+      {
+        "path": "docs/libero-task4-task7-public-state-jitter-500-closed-loop-diagnostic-2026-10-31.md",
+        "sha256": "a1f552cc437067bc367d5d6b6dd1d8707fd143b9b7ae25c2b4cb614d7f70d89b"
+      },
+      {
+        "path": "docs/libero-task4-task7-public-state-jitter-budget-sweep-diagnostic-2026-10-31.md",
+        "sha256": "e98c103ccfc7182c42e0f6387aee3f18a49a4600c8fd194842f4c364a8210d0d"
+      },
+      {
+        "path": "docs/libero-task4-task7-stabilization-contemporary-closed-loop-diagnostic-2026-11-02.md",
+        "sha256": "7ba93611d81f48510713ab764ba8345f879b9bbcd98004a338936ca4f0005e7c"
+      },
+      {
+        "path": "docs/libero-task7-diagnostic-decision-review-2026-11-13.md",
+        "sha256": "904a4e256733b8ddf608b5035cd6f0de7966287bc9e66eac5b29923b55d31530"
+      },
+      {
+        "path": "docs/libero-task7-reference-joint-reachability-results-2026-11-11.md",
+        "sha256": "fa5dd7b3deaee984297a7af50eb56afcab0b2e2d588a034562b076c27860afb1"
+      },
+      {
+        "path": "docs/libero-task7-residual-harm-protection-results-2026-11-08.md",
+        "sha256": "adf3ffb18ddce2db44c9d2a940d66438e56de619c0f54a79c1ae8407ce036033"
+      },
+      {
+        "path": "src/algorithms/libero_bc_fomaml.py",
+        "sha256": "d428efc93e56caec7f917daeb3f9374cfbb60329949dad7300c3c46364341ac8"
+      },
+      {
+        "path": "src/algorithms/libero_bc_policy.py",
+        "sha256": "a3098a68b5ceab21495207856c9d94fd4a6d26c1668737625ecb7b5d46977735"
+      }
+    ]
+  },
+  "scope_preserved": {
+    "source_meta_query": "sealed_for_this_review",
+    "validation": "no_new_access_or_claim_of_unseen_development_data",
+    "held_out": "sealed",
+    "qualification": "sealed",
+    "reserved": "sealed",
+    "final": "sealed",
+    "initial_states": "no_numeric_decode",
+    "active_SPT_updates": 0,
+    "Knowledge_updates": 0,
+    "Module_registrations": 0
+  },
+  "new_work": {
+    "policy_optimizer_updates": 0,
+    "auxiliary_optimizer_updates": 0,
+    "research_forward_or_gradient_calls": 0,
+    "SLSQP_calls": 0,
+    "episodes": 0,
+    "environment_steps": 0,
+    "initial_state_numeric_decodes": 0,
+    "research_payload_reads_or_SHA": 0
+  },
+  "missing_artifacts_are_scientific_negative_evidence": false,
+  "counterfactual": "Restoring all old artifacts does not by itself supply a new intervention or reverse this review.",
+  "next_main_task": "Independent Continual World feasibility and task-stream protocol design; no CW training has been started.",
+  "review_report": "docs/libero-fixed500-control-gate-decision-2026-11-13.md"
+}

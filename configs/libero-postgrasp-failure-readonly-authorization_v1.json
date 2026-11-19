@@ -1,0 +1,168 @@
+{
+  "user_approved": true,
+  "science": {
+    "path": "/data/zl202621/KECRL/configs/libero-postgrasp-failure-readonly_v1.json",
+    "sha256": "f09167d72ccb5aa9679997b97a9ca662b2564b64149f0384b76129b4a42c64dd"
+  },
+  "caps": {
+    "npz_parses": 36,
+    "numeric_member_decodes": 216,
+    "numeric_scalars": 205524,
+    "container_bytes_max": 2147483648,
+    "rgb_pixel_decodes": 0,
+    "policy_forwards": 0,
+    "native_steps": 0,
+    "checkpoint_reads": 0,
+    "hdf5_reads": 0,
+    "initial_bank_reads": 0
+  },
+  "source_archives": [
+    {
+      "path": "/data/zl202621/KECRL/results/libero-postgrasp-temporal-control-20261115-v1/handoff/flip00-unchanged-frame_mlp-episode.npz",
+      "sha256": "7df1f6714d05f9fe9d1e76d10acaefefb64bf6ec16516de31d2bcbc9bf4d6584"
+    },
+    {
+      "path": "/data/zl202621/KECRL/results/libero-postgrasp-temporal-control-20261115-v1/handoff/flip00-unchanged-gru_window10-episode.npz",
+      "sha256": "8b6d37447df4508b8afb8bdf7fe6531ad6bc7dec573a13157da6cb1cfcc03ddb"
+    },
+    {
+      "path": "/data/zl202621/KECRL/results/libero-postgrasp-temporal-control-20261115-v1/handoff/flip00-confirm5-frame_mlp-episode.npz",
+      "sha256": "47ba4c9939bcbb235b6a9b6da2f275fcc896353b7eb21e948c234f885c21e1be"
+    },
+    {
+      "path": "/data/zl202621/KECRL/results/libero-postgrasp-temporal-control-20261115-v1/handoff/flip00-confirm5-gru_window10-episode.npz",
+      "sha256": "d1c9772fa16837face36b3626656783814b54e93c1c8c00c2a2972c722b5305d"
+    },
+    {
+      "path": "/data/zl202621/KECRL/results/libero-postgrasp-temporal-control-20261115-v1/handoff/flip01-unchanged-frame_mlp-episode.npz",
+      "sha256": "f581be0ee7685b48a6ef4e6a179c676b55e8a2221af97d9ef15b3cbe63aa30bb"
+    },
+    {
+      "path": "/data/zl202621/KECRL/results/libero-postgrasp-temporal-control-20261115-v1/handoff/flip01-unchanged-gru_window10-episode.npz",
+      "sha256": "c85bfa627837a3f01bcaa5f30f82b9b6a59e328854ac49f60fc5147b1761510a"
+    },
+    {
+      "path": "/data/zl202621/KECRL/results/libero-postgrasp-temporal-control-20261115-v1/handoff/flip01-confirm5-frame_mlp-episode.npz",
+      "sha256": "afdc8e6cbb91d5efdf13347148c6c5404a61f0860adf25ad9b9f73afd04bf09d"
+    },
+    {
+      "path": "/data/zl202621/KECRL/results/libero-postgrasp-temporal-control-20261115-v1/handoff/flip01-confirm5-gru_window10-episode.npz",
+      "sha256": "5009bee41b12eea4234f86e7dcd37227323f6156ff5b40e02004b50e3a8be5cc"
+    },
+    {
+      "path": "/data/zl202621/KECRL/results/libero-postgrasp-temporal-control-20261115-v1/handoff/flip03-unchanged-frame_mlp-episode.npz",
+      "sha256": "c3f2e8282d92af13270d7c35f516a26deb171bae1bc3a2e3ae2c88aac7c01c70"
+    },
+    {
+      "path": "/data/zl202621/KECRL/results/libero-postgrasp-temporal-control-20261115-v1/handoff/flip03-unchanged-gru_window10-episode.npz",
+      "sha256": "13ac32b4aaab563fccfb6d63275b7fb1bf0c6a7f38eefaa3d7ba5a1e389508ed"
+    },
+    {
+      "path": "/data/zl202621/KECRL/results/libero-postgrasp-temporal-control-20261115-v1/handoff/flip03-confirm5-frame_mlp-episode.npz",
+      "sha256": "a9b3780dfd3fcb6ceb7e6e6694a6d4f9a3195aa6b8de65b233fea2d697d19c25"
+    },
+    {
+      "path": "/data/zl202621/KECRL/results/libero-postgrasp-temporal-control-20261115-v1/handoff/flip03-confirm5-gru_window10-episode.npz",
+      "sha256": "8468649c3542af3b735d49c9e5f0c705d553d798adfbf754040eb7f707047347"
+    },
+    {
+      "path": "/data/zl202621/KECRL/results/libero-postgrasp-temporal-control-20261115-v1/handoff/flip04-unchanged-frame_mlp-episode.npz",
+      "sha256": "465ba83d0b9799cdab5215b434e13acd5e2f0daf2b533b595d38ff5d886dc833"
+    },
+    {
+      "path": "/data/zl202621/KECRL/results/libero-postgrasp-temporal-control-20261115-v1/handoff/flip04-unchanged-gru_window10-episode.npz",
+      "sha256": "de1053ff28c63b0f739f0b923fe91e951df83529b97a015089db02ca5888608c"
+    },
+    {
+      "path": "/data/zl202621/KECRL/results/libero-postgrasp-temporal-control-20261115-v1/handoff/flip04-confirm5-frame_mlp-episode.npz",
+      "sha256": "7ed6b54a03bb0608cc55aee099eb991c358dc10607012885947a63e71f300cb1"
+    },
+    {
+      "path": "/data/zl202621/KECRL/results/libero-postgrasp-temporal-control-20261115-v1/handoff/flip04-confirm5-gru_window10-episode.npz",
+      "sha256": "e74085233cd47121505b02bd1fc0f455547fa9ae50b1ee81d8a4601d4d7c35f2"
+    },
+    {
+      "path": "/data/zl202621/KECRL/results/libero-postgrasp-temporal-control-20261115-v1/handoff/flip05-confirm5-frame_mlp-episode.npz",
+      "sha256": "995c1fd1413c2e0f78ea0ec34ad6ed3508d9ff4ebbcbe7eaac08af4d86dea85f"
+    },
+    {
+      "path": "/data/zl202621/KECRL/results/libero-postgrasp-temporal-control-20261115-v1/handoff/flip05-confirm5-gru_window10-episode.npz",
+      "sha256": "ada1ac4a8e8cf3e4cd27664f3195b05d1deb90737ed3faf7af703fd32427cbdb"
+    },
+    {
+      "path": "/data/zl202621/KECRL/results/libero-postgrasp-temporal-control-20261115-v1/handoff/flip06-unchanged-frame_mlp-episode.npz",
+      "sha256": "5d54585c720f2c08cfaeab0313d209c7668ef8edb7e1b05ca284a19db4630aaf"
+    },
+    {
+      "path": "/data/zl202621/KECRL/results/libero-postgrasp-temporal-control-20261115-v1/handoff/flip06-unchanged-gru_window10-episode.npz",
+      "sha256": "e0b51f6bdaf3d97ae7661ee7bdaf766e16e3ed01c10c01939c6ee9cd4dc25f9a"
+    },
+    {
+      "path": "/data/zl202621/KECRL/results/libero-postgrasp-temporal-control-20261115-v1/handoff/flip06-confirm5-frame_mlp-episode.npz",
+      "sha256": "ce1ee499bc9df5ee61f2de1371e75daf8ec27d29225a82c97d30cbe2701df4c6"
+    },
+    {
+      "path": "/data/zl202621/KECRL/results/libero-postgrasp-temporal-control-20261115-v1/handoff/flip06-confirm5-gru_window10-episode.npz",
+      "sha256": "a6e2adb93919802f35107d8fb0f31b3053fd92c01e3a12b2f9d3b7161b674ed4"
+    },
+    {
+      "path": "/data/zl202621/KECRL/results/libero-postgrasp-temporal-control-20261115-v1/handoff/flip08-unchanged-frame_mlp-episode.npz",
+      "sha256": "e59a24c9f8312ec9bcf2bebfd2a074729a6eabad2e8844f32f397be5c1de8f61"
+    },
+    {
+      "path": "/data/zl202621/KECRL/results/libero-postgrasp-temporal-control-20261115-v1/handoff/flip08-unchanged-gru_window10-episode.npz",
+      "sha256": "5b616ce21649423257b177d7bbd904fbbc0a2be40da2ce1a0702f49b109b995b"
+    },
+    {
+      "path": "/data/zl202621/KECRL/results/libero-postgrasp-temporal-control-20261115-v1/handoff/flip08-confirm5-frame_mlp-episode.npz",
+      "sha256": "10afa32471e73b4f83f50b14b9293793292972dd813912658b8e404201133c64"
+    },
+    {
+      "path": "/data/zl202621/KECRL/results/libero-postgrasp-temporal-control-20261115-v1/handoff/flip08-confirm5-gru_window10-episode.npz",
+      "sha256": "7332f7aa91cec6a4456fcf619fea3222c3bd3d14022d950fb7a98afaeb1699a5"
+    },
+    {
+      "path": "/data/zl202621/KECRL/results/libero-postgrasp-temporal-control-20261115-v1/handoff/flip09-confirm5-frame_mlp-episode.npz",
+      "sha256": "6ecd75a2f0fd667c97933328d47d3f8908bead0c9947db289e3194b051495492"
+    },
+    {
+      "path": "/data/zl202621/KECRL/results/libero-postgrasp-temporal-control-20261115-v1/handoff/flip09-confirm5-gru_window10-episode.npz",
+      "sha256": "9b639e25d87c3a410c45bfd13f2694d8abb0d0906f7ab7bf8ef5ee555aa26be7"
+    },
+    {
+      "path": "/data/zl202621/KECRL/results/libero-postgrasp-temporal-control-20261115-v1/handoff/flip10-unchanged-frame_mlp-episode.npz",
+      "sha256": "e356d541af8808d0fcf0ff96be67b789c2a77a11efe1403d0dc99ff9317ce2f5"
+    },
+    {
+      "path": "/data/zl202621/KECRL/results/libero-postgrasp-temporal-control-20261115-v1/handoff/flip10-unchanged-gru_window10-episode.npz",
+      "sha256": "9529d269d1335af63a8cbaf4ba7bd81b52f116efaa8f6e708dbceeff0895cc4e"
+    },
+    {
+      "path": "/data/zl202621/KECRL/results/libero-postgrasp-temporal-control-20261115-v1/handoff/flip10-confirm5-frame_mlp-episode.npz",
+      "sha256": "f6c7fac340515b7baa36c19f99425a9c792f3a825fe4063094610e060a366e21"
+    },
+    {
+      "path": "/data/zl202621/KECRL/results/libero-postgrasp-temporal-control-20261115-v1/handoff/flip10-confirm5-gru_window10-episode.npz",
+      "sha256": "c4b4d99f0b92eec14561d9dcd69ae52bdf5d0bf9d04175215686c53904e1cd2a"
+    },
+    {
+      "path": "/data/zl202621/KECRL/results/libero-postgrasp-temporal-control-20261115-v1/handoff/flip12-unchanged-frame_mlp-episode.npz",
+      "sha256": "87e04f75c493bedde3f388a482add1d0ab8d06468af3a45521792fb75cecbda8"
+    },
+    {
+      "path": "/data/zl202621/KECRL/results/libero-postgrasp-temporal-control-20261115-v1/handoff/flip12-unchanged-gru_window10-episode.npz",
+      "sha256": "30332deddb846d9499c86713d075de257683cd3c4ecefce55bdc93b4ffc006bc"
+    },
+    {
+      "path": "/data/zl202621/KECRL/results/libero-postgrasp-temporal-control-20261115-v1/handoff/flip12-confirm5-frame_mlp-episode.npz",
+      "sha256": "1f6bf75e99f44cb07e6a2362f5c235bafe8c03def8b2fd44b785a3ef5ed0b241"
+    },
+    {
+      "path": "/data/zl202621/KECRL/results/libero-postgrasp-temporal-control-20261115-v1/handoff/flip12-confirm5-gru_window10-episode.npz",
+      "sha256": "00091114a169b55c6da62e63e778fbcaef12e36ad80a588429c68858bf81fd4e"
+    }
+  ],
+  "sealed_roles_allowed": [],
+  "user_instruction": "只读分析18个共同失败状态的后半程轨迹，核对夹爪、空间对准与原生谓词；不重训，先纯分析。",
+  "actual_pose_or_contact_reconstruction_allowed": false
+}

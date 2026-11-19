@@ -1,0 +1,123 @@
+{
+  "status": "readonly_failure_events_complete_geometric_attribution_unavailable",
+  "at_UTC": "2026-11-16T09:19:34.328141+00:00",
+  "science": {
+    "path": "/data/zl202621/KECRL/configs/libero-postgrasp-failure-readonly_v1.json",
+    "sha256": "f09167d72ccb5aa9679997b97a9ca662b2564b64149f0384b76129b4a42c64dd"
+  },
+  "binding": {
+    "path": "/data/zl202621/KECRL/configs/libero-postgrasp-failure-readonly-binding_v1.json",
+    "sha256": "b34f66cbc950c2aaf89b1c609959fac11d4b24f50da93f86117295eccd4157c8"
+  },
+  "completion": {
+    "path": "/data/zl202621/KECRL/results/libero-postgrasp-failure-readonly-20261116-v1/completion.json",
+    "sha256": "dba1f227c3c6d12edebe0dc5bc6296a756ce590ea8ffde2938e13aef94c2a25c"
+  },
+  "analysis": {
+    "path": "/data/zl202621/KECRL/results/libero-postgrasp-failure-readonly-20261116-v1/analysis.json",
+    "sha256": "9135598e6e225db1fdd88d1b1e6bf815f0cee186c2fe532585808024db6a7a7b"
+  },
+  "events_csv": {
+    "path": "/data/zl202621/KECRL/results/libero-postgrasp-failure-readonly-20261116-v1/events.csv",
+    "sha256": "0c0e4b2ed1f3b5f083a92dea405457e0e4b13a69800ee7419fe0be9a9d687c1b"
+  },
+  "anchor_strata": {
+    "path": "/data/zl202621/KECRL/results/libero-postgrasp-failure-readonly-20261116-v1/anchor-strata.csv",
+    "sha256": "b634166293b1ba7cdfaa78ea433f99b015cf8f16f57b83958643a2718146630a"
+  },
+  "summary": {
+    "frame_mlp": {
+      "trajectories": 18,
+      "any_open_command": 4,
+      "no_open_command": 14,
+      "last50_any_open": 2,
+      "first_open_offset_min": 18,
+      "first_open_offset_max": 91,
+      "geometric_failure_unknown": 18,
+      "native_goal_success_true_last50": 0
+    },
+    "gru_window10": {
+      "trajectories": 18,
+      "any_open_command": 7,
+      "no_open_command": 11,
+      "last50_any_open": 2,
+      "first_open_offset_min": 16,
+      "first_open_offset_max": 192,
+      "geometric_failure_unknown": 18,
+      "native_goal_success_true_last50": 0
+    }
+  },
+  "descriptive_metrics": {
+    "frame_mlp": {
+      "last50_translation_command_mean_abs": {
+        "min": 0.038761652819036194,
+        "median": 0.07793084639260389,
+        "max": 0.19959639640524984
+      },
+      "last50_rotation_command_mean_abs": {
+        "min": 0.018293980939003328,
+        "median": 0.03816539217950776,
+        "max": 0.07539118117342393
+      },
+      "last50_joint_path_radians": {
+        "min": 0.3196208749714766,
+        "median": 0.8106549656930088,
+        "max": 4.162693187180655
+      },
+      "finger_gap_final": {
+        "min": 0.0009996078442782164,
+        "median": 0.010796773014590144,
+        "max": 0.07980906963348389
+      }
+    },
+    "gru_window10": {
+      "last50_translation_command_mean_abs": {
+        "min": 0.051213525575585665,
+        "median": 0.09780724891461431,
+        "max": 0.2238532973329226
+      },
+      "last50_rotation_command_mean_abs": {
+        "min": 0.030137728822495168,
+        "median": 0.05242309992056107,
+        "max": 0.08635813407599927
+      },
+      "last50_joint_path_radians": {
+        "min": 0.2339796809742786,
+        "median": 1.7268046916622388,
+        "max": 5.108524195806561
+      },
+      "finger_gap_final": {
+        "min": 0.0009995513537432998,
+        "median": 0.011137318797409534,
+        "max": 0.03585387021303177
+      }
+    }
+  },
+  "pairs": 18,
+  "trajectories": 36,
+  "any_open_command": 11,
+  "no_open_command": 25,
+  "last50_any_open": 4,
+  "native_success_true_last50": 0,
+  "native_success_observations_last50": 1800,
+  "geometric_categories_identified": false,
+  "geometric_unresolved_trajectories": 36,
+  "next_version_frozen": false,
+  "geometry_replay_proposal": {
+    "path": "/data/zl202621/KECRL/results/libero-postgrasp-failure-readonly-20261116-v1/geometry-replay-proposal.json",
+    "sha256": "ad47f263eaa8af7cc3bcd0ea325c364c083a80219d4a3703519ffaa8d5f99db6"
+  },
+  "actual": {
+    "npz_parses": 36,
+    "numeric_member_decodes": 216,
+    "numeric_scalars": 205524,
+    "rgb_pixel_decodes": 0,
+    "policy_forwards": 0,
+    "native_steps": 0,
+    "checkpoint_reads": 0,
+    "hdf5_reads": 0,
+    "initial_bank_reads": 0,
+    "container_bytes": 463475921
+  },
+  "numeric_formula_checks": 720
+}

@@ -1,0 +1,110 @@
+{
+  "kind": "libero_restricted_visual_existing_paired_trace_analysis",
+  "version": 1,
+  "formal_result": false,
+  "status": "metrics_fixed_after_outcomes_known",
+  "tasks": [
+    4,
+    7
+  ],
+  "seeds": [
+    20261106,
+    20261107,
+    20261108
+  ],
+  "arms": [
+    "frozen_resnet18",
+    "layer4_conv_finetune"
+  ],
+  "initial_indices": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19
+  ],
+  "horizons": [
+    1,
+    5,
+    20,
+    50,
+    100
+  ],
+  "primary_prefix": 50,
+  "gripper_command_deadband": 0.1,
+  "saturation_absolute_threshold": 0.95,
+  "delta_sign_zero_absolute_tolerance": 1e-12,
+  "caps": {
+    "json_parses_per_role": 244,
+    "source_bytes_per_role": 268435456,
+    "episodes": 240,
+    "pairs": 120,
+    "prefix_rows": 600,
+    "training_models": 12,
+    "policy_forwards": 0,
+    "backwards": 0,
+    "optimizer_updates": 0,
+    "environment_steps": 0,
+    "new_episodes": 0,
+    "checkpoint_reads": 0,
+    "hdf5_reads": 0,
+    "initial_bank_reads": 0
+  },
+  "causal_identification": false,
+  "outcomes_previously_known": true,
+  "no_padding_or_time_warp": true,
+  "per_episode_equal_weight": true,
+  "source_archive": "/data/zl202621/KECRL/results/libero-restricted-vision-finetune-20261114-v1",
+  "output": "/data/zl202621/KECRL/results/libero-restricted-vision-paired-trace-analysis-20261114-v1",
+  "sources": {
+    "training": {
+      "path": "/data/zl202621/KECRL/results/libero-restricted-vision-finetune-20261114-v1/training.json",
+      "sha256": "bfe606987a00c49fec3c054aca695c00960a5f049ef48da7ed6028b6fb8723c9"
+    },
+    "training_audit": {
+      "path": "/data/zl202621/KECRL/results/libero-restricted-vision-finetune-20261114-v1/training-audit.json",
+      "sha256": "8d44d565fe9e11fb67fc028f9897319af67568fa2dfcadf4658bdf1489a7b171"
+    },
+    "evaluation": {
+      "path": "/data/zl202621/KECRL/results/libero-restricted-vision-finetune-20261114-v1/evaluation.json",
+      "sha256": "4e6d56c7e99a59b101dd42e8374c202c3d52958ef1b2fc85d2d6a1d77832184c"
+    },
+    "completion": {
+      "path": "/data/zl202621/KECRL/results/libero-restricted-vision-finetune-20261114-v1/completion.json",
+      "sha256": "e9639de47048a8438fc5e17b55b00941439fb186f4b8144369a316bddea73fe9"
+    }
+  },
+  "trial_science": {
+    "path": "/data/zl202621/KECRL/configs/libero-restricted-vision-finetune-diagnostic_v1.json",
+    "sha256": "48868dfe74a51e31e571e9efc58372299f9bc9e8fe283e498f953be39a42bce0"
+  },
+  "scientific_protocol": {
+    "path": "/data/zl202621/KECRL/docs/libero-restricted-vision-paired-trace-protocol-2026-11-14.md",
+    "sha256": "985b281c6859355be8b21eb65fc6b980dc62b255d2fbcb3c360ac11e531867b9"
+  },
+  "runtime": {
+    "python": "3.10.22",
+    "numpy": "1.22.4",
+    "device": "cpu",
+    "threads": 1
+  },
+  "recorded_at_UTC": "2026-11-14T07:08:48.904024+00:00",
+  "user_quote": "好的，按照你说的三种原因进行测试1. 视觉与控制器的联合更新不合适。2. 示教拟合与自由运行存在差距。 3. 动作时序建模不足。下一项先分析本轮配对轨迹",
+  "first_example_trace_inspected_before_metrics": true,
+  "original_success_gate_unchanged": true
+}

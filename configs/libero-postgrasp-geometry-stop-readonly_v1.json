@@ -1,0 +1,73 @@
+{
+  "kind": "libero_postgrasp_geometry_stop_readonly",
+  "version": 1,
+  "frames": [
+    152,
+    153
+  ],
+  "image_member": "eye_in_hand_rgb.npy",
+  "native_steps": 0,
+  "policy_forwards": 0,
+  "initial_bank_reads": 0,
+  "training_updates": 0,
+  "model_reads": 0,
+  "original": {
+    "path": "/data/zl202621/KECRL/results/libero-postgrasp-temporal-control-20261115-v1/handoff/flip01-confirm5-frame_mlp-episode.npz",
+    "sha256": "afdc8e6cbb91d5efdf13347148c6c5404a61f0860adf25ad9b9f73afd04bf09d"
+  },
+  "replay": {
+    "path": "/data/zl202621/KECRL/results/libero-postgrasp-geometry-replay-20261116-v1/flip01-confirm5-frame_mlp-partial-public.npz",
+    "sha256": "1be063a228c12b48a88b2abb386e35852531f6db75033395ad0b1f1113c3f3bf"
+  },
+  "failure": {
+    "path": "/data/zl202621/KECRL/results/libero-postgrasp-geometry-replay-20261116-v1/failure.json",
+    "sha256": "c90ebb006ea4b8a77ce0963556db5dc4791bff2c154edb3bad1485be2da98e69"
+  },
+  "original_journal": {
+    "path": "/data/zl202621/KECRL/results/libero-postgrasp-temporal-control-20261115-v1/handoff/observations.jsonl",
+    "sha256": "decd9dd8f1a23655448b9c3b3d3d41c8232db845106a6b8f46052d428fbf0eb0"
+  },
+  "replay_journal": {
+    "path": "/data/zl202621/KECRL/results/libero-postgrasp-geometry-replay-20261116-v1/observations.jsonl",
+    "sha256": "5b21a7e2338f36741ecd699e316f6fdd602e9ea2bbb01a8f0394f907abf62804"
+  },
+  "pixel_values_cap": 196608,
+  "member_uncompressed_bytes_cap": 15139328,
+  "parents": [
+    {
+      "path": "/data/zl202621/KECRL/configs/libero-postgrasp-geometry-replay_v1.json",
+      "sha256": "ec1f96a4b6c98634a02dfe24b054705be99d41f9b51ab327dd6bc83873d9a8e6"
+    },
+    {
+      "path": "/data/zl202621/KECRL/configs/libero-postgrasp-geometry-replay-binding_v1.json",
+      "sha256": "aedf8862e2623615222c896dc87e4eaa13dc558004b73ea966d547d872a18559"
+    },
+    {
+      "path": "/data/zl202621/KECRL/configs/libero-postgrasp-geometry-replay-authorization_v1.json",
+      "sha256": "917419b080b06f5a7f0b1bb70f588ddb11de6ca36164ec71c75cdce0acebcfa6"
+    },
+    {
+      "path": "/data/zl202621/KECRL/results/libero-postgrasp-geometry-replay-20261116-v1/failure.json",
+      "sha256": "c90ebb006ea4b8a77ce0963556db5dc4791bff2c154edb3bad1485be2da98e69"
+    },
+    {
+      "path": "/data/zl202621/KECRL/results/libero-postgrasp-temporal-control-20261115-v1/handoff/observations.jsonl",
+      "sha256": "decd9dd8f1a23655448b9c3b3d3d41c8232db845106a6b8f46052d428fbf0eb0"
+    },
+    {
+      "path": "/data/zl202621/KECRL/results/libero-postgrasp-geometry-replay-20261116-v1/observations.jsonl",
+      "sha256": "5b21a7e2338f36741ecd699e316f6fdd602e9ea2bbb01a8f0394f907abf62804"
+    },
+    {
+      "path": "/data/zl202621/KECRL/results/libero-postgrasp-temporal-control-20261115-v1/handoff/result.json",
+      "sha256": "bf741c2ad4de6585755524a01da056ca08fab770ab2b232d8795e682c5664bc4"
+    },
+    {
+      "path": "/data/zl202621/KECRL/docs/libero-postgrasp-geometry-stop-readonly-protocol-2026-11-16.md",
+      "sha256": "60a6ad73e9bb506b2719448a38d548731a7b76485a72791dd63c7a5fccbe4315"
+    }
+  ],
+  "authorization_basis": "Current user explicitly requires stop on any public difference and investigation of deterministic settings; bounded readonly retained-data diagnosis only.",
+  "output": "/data/zl202621/KECRL/results/libero-postgrasp-geometry-stop-readonly-20261116-v1",
+  "at_UTC": "2026-11-16T10:11:35.891250+00:00"
+}

@@ -1,0 +1,103 @@
+{
+  "status": "scientific_frozen_execution_not_bound",
+  "science": {
+    "path": "/data/zl202621/KECRL/configs/libero-task7-spatial-readout_v3.json",
+    "sha256": "95b0b7e1cf18349b3fd851c8fd298d9d2788431d24e501924376ab2acdabc009"
+  },
+  "freeze_binding": {
+    "path": "/data/zl202621/KECRL/configs/libero-task7-spatial-readout-freeze-binding_v3.json",
+    "sha256": "7763db8609559363a9ca36b4df13ffff49e8c06d338fef1b77c0d407b25e146b"
+  },
+  "dependencies": 942,
+  "tests_passed": 165,
+  "new_tests_passed": 79,
+  "previous_regression_tests": 86,
+  "research_payload_reads": 0,
+  "research_source_hashes": 0,
+  "real_training_updates": 0,
+  "real_native_steps": 0,
+  "execution_denied": [
+    "train",
+    "handoff",
+    "full"
+  ],
+  "protocol": {
+    "path": "/data/zl202621/KECRL/docs/libero-task7-spatial-readout-protocol-v3-2026-11-17.md",
+    "sha256": "1e1f8566b0ba8010be9b7d4afe274f81a1b5e062abc57688f646b7497fcd6976"
+  },
+  "module": {
+    "path": "/data/zl202621/KECRL/src/algorithms/libero_spatial_readout_policy_v3.py",
+    "sha256": "5a74d15edd900f1ebad7ea64173ec7c2f487115b847a2f76c2b7af5d25a76887"
+  },
+  "candidate": "3A_only",
+  "trainable_parameters": {
+    "flat_zero_xyz": 1514120,
+    "spatial_coordinates_zero_xyz": 1499144
+  },
+  "readout_parameters": {
+    "flat_zero_xyz": 1048704,
+    "spatial_coordinates_zero_xyz": 1033728
+  },
+  "candidate_parameter_difference": -14976,
+  "candidate_parameter_difference_percent": -0.9890893720444879,
+  "entropy": {
+    "temperature": 1.0,
+    "temperature_trainable": false,
+    "log_base": "e",
+    "maximum_nats": "ln(16)",
+    "normalization": "H/ln(16)",
+    "channels": 256,
+    "views": 2,
+    "exclude_padding": true,
+    "loss_weight": 0.0,
+    "training_source": "cached_train_forward_before_optimizer_and_parity",
+    "control_value": null,
+    "diagnostic_only": true,
+    "success_gate": false,
+    "extra_forwards": 0,
+    "range_tolerance_nats": 1e-06,
+    "valid_row_weighting": "equal_valid_frame_view_channel",
+    "full_heatmaps_saved": false,
+    "max_retained_entropy_scalars": 61440
+  },
+  "future_training": {
+    "models": 6,
+    "updates": 3000,
+    "device": "cpu"
+  },
+  "future_handoff": {
+    "paired_states": 22,
+    "episodes": 44,
+    "native_steps_max": 15980
+  },
+  "future_full": {
+    "conditional": true,
+    "episodes": 120,
+    "native_steps_max": 36600
+  },
+  "actual_research_training_updates": 0,
+  "actual_research_episodes": 0,
+  "actual_research_native_steps": 0,
+  "public_weights_loaded": 0,
+  "source_HDF5_reads": 0,
+  "source_initial_rows_decoded": 0,
+  "initial_failures": {
+    "module_tests": {
+      "passed": 22,
+      "failed": 0
+    },
+    "protocol_tests": {
+      "passed": 49,
+      "failed": 3
+    },
+    "regression_tests": {
+      "passed": 162,
+      "failed": 3
+    },
+    "cause": "full episode IDs end in initial index; fixed paired-ID verification before freeze",
+    "preserved": true
+  },
+  "complete_synthetic_runtime_pipeline_tested": false,
+  "actual_experiment_executed": false,
+  "full_pytest_run": false
+}

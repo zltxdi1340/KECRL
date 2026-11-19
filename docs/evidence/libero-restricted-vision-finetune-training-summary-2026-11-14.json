@@ -1,0 +1,661 @@
+{
+  "status": "passed_audited_restricted_visual_training_only",
+  "formal_result": false,
+  "science": {
+    "path": "/data/zl202621/KECRL/configs/libero-restricted-vision-finetune-diagnostic_v1.json",
+    "sha256": "48868dfe74a51e31e571e9efc58372299f9bc9e8fe283e498f953be39a42bce0"
+  },
+  "scientific_freeze": {
+    "path": "/data/zl202621/KECRL/configs/libero-restricted-vision-finetune-freeze-binding_v1.json",
+    "sha256": "6e63ec3a656196480cb4f896d4956f3eeb3a950ad73259d1c9f5bc29729cf397"
+  },
+  "training_binding": {
+    "path": "/data/zl202621/KECRL/configs/libero-restricted-vision-finetune-training-binding_v1.json",
+    "sha256": "a602d74792a3ec66e1e690e31824bb603d57d8a379576f5e06d90ecb4521d816"
+  },
+  "initial_authorization": {
+    "path": "/data/zl202621/KECRL/configs/libero-restricted-vision-finetune-source-initial-authorization_v1.json",
+    "sha256": "53ea952a030036230662c144ffcda9752ecccf0107426495602482c21eed2a1e"
+  },
+  "training": {
+    "path": "/data/zl202621/KECRL/results/libero-restricted-vision-finetune-20261114-v1/training.json",
+    "sha256": "bfe606987a00c49fec3c054aca695c00960a5f049ef48da7ed6028b6fb8723c9"
+  },
+  "training_audit": {
+    "path": "/data/zl202621/KECRL/results/libero-restricted-vision-finetune-20261114-v1/training-audit.json",
+    "sha256": "8d44d565fe9e11fb67fc028f9897319af67568fa2dfcadf4658bdf1489a7b171"
+  },
+  "started_at_UTC": "2026-11-14T05:00:41.601261+00:00",
+  "finished_at_UTC": "2026-11-14T05:01:54.520070+00:00",
+  "ledger": {
+    "caps": {
+      "train_forward": 6000,
+      "backward": 6000,
+      "optimizer": 6000,
+      "checkpoint": 12,
+      "prefix_forward": 302,
+      "layer4_forward": 12024,
+      "parity_forward": 12,
+      "dataset_items": 1100,
+      "source_sha": 2,
+      "model_create": 14,
+      "adapter": 0,
+      "reset": 0,
+      "episode": 0,
+      "policy_forward": 0,
+      "policy_action": 0,
+      "zero_step": 0,
+      "native_step": 0,
+      "numeric_rows": 0
+    },
+    "counts": {
+      "train_forward": {
+        "attempted": 6000,
+        "completed": 6000
+      },
+      "backward": {
+        "attempted": 6000,
+        "completed": 6000
+      },
+      "optimizer": {
+        "attempted": 6000,
+        "completed": 6000
+      },
+      "checkpoint": {
+        "attempted": 12,
+        "completed": 12
+      },
+      "prefix_forward": {
+        "attempted": 248,
+        "completed": 248
+      },
+      "layer4_forward": {
+        "attempted": 12024,
+        "completed": 12024
+      },
+      "parity_forward": {
+        "attempted": 12,
+        "completed": 12
+      },
+      "dataset_items": {
+        "attempted": 890,
+        "completed": 890
+      },
+      "source_sha": {
+        "attempted": 2,
+        "completed": 2
+      },
+      "model_create": {
+        "attempted": 14,
+        "completed": 14
+      },
+      "adapter": {
+        "attempted": 0,
+        "completed": 0
+      },
+      "reset": {
+        "attempted": 0,
+        "completed": 0
+      },
+      "episode": {
+        "attempted": 0,
+        "completed": 0
+      },
+      "policy_forward": {
+        "attempted": 0,
+        "completed": 0
+      },
+      "policy_action": {
+        "attempted": 0,
+        "completed": 0
+      },
+      "zero_step": {
+        "attempted": 0,
+        "completed": 0
+      },
+      "native_step": {
+        "attempted": 0,
+        "completed": 0
+      },
+      "numeric_rows": {
+        "attempted": 0,
+        "completed": 0
+      }
+    },
+    "elapsed_seconds": 72.91871947899926
+  },
+  "source_access": [
+    {
+      "task_id": 4,
+      "task_name": "pick_up_the_black_bowl_in_the_top_drawer_of_the_wooden_cabinet_and_place_it_on_the_plate",
+      "task_role": "source_spi",
+      "demonstration_role": "meta_support",
+      "demonstration_indices": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21,
+        22,
+        23,
+        24,
+        25,
+        26,
+        27,
+        28,
+        29
+      ],
+      "access_phase": "post_method_freeze",
+      "locked_before_method_freeze": false,
+      "dataset_path": "/data/zl202621/KECRL/third_party/LIBERO/datasets/libero_spatial/pick_up_the_black_bowl_in_the_top_drawer_of_the_wooden_cabinet_and_place_it_on_the_plate_demo.hdf5",
+      "dataset_sha256_verified": false,
+      "sequence_length": 10,
+      "stride": 10,
+      "window_count": 458,
+      "observation_action_alignment": "causal_pre_action_t_ge_1",
+      "causal_initial_observation_count": 0,
+      "t0_excluded": true,
+      "simulator_state_access": false,
+      "entry_file_sha256_verified": true,
+      "input_pin": {
+        "path": "/data/zl202621/KECRL/third_party/LIBERO/datasets/libero_spatial/pick_up_the_black_bowl_in_the_top_drawer_of_the_wooden_cabinet_and_place_it_on_the_plate_demo.hdf5",
+        "sha256": "7ff1ee60447875c152d8c7819f499d23dbc0eb4d4bf045225d5d87a2cdad99bd",
+        "size_bytes": 748271833
+      }
+    },
+    {
+      "task_id": 7,
+      "task_name": "pick_up_the_black_bowl_on_the_stove_and_place_it_on_the_plate",
+      "task_role": "source_spi",
+      "demonstration_role": "meta_support",
+      "demonstration_indices": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21,
+        22,
+        23,
+        24,
+        25,
+        26,
+        27,
+        28,
+        29
+      ],
+      "access_phase": "post_method_freeze",
+      "locked_before_method_freeze": false,
+      "dataset_path": "/data/zl202621/KECRL/third_party/LIBERO/datasets/libero_spatial/pick_up_the_black_bowl_on_the_stove_and_place_it_on_the_plate_demo.hdf5",
+      "dataset_sha256_verified": false,
+      "sequence_length": 10,
+      "stride": 10,
+      "window_count": 432,
+      "observation_action_alignment": "causal_pre_action_t_ge_1",
+      "causal_initial_observation_count": 0,
+      "t0_excluded": true,
+      "simulator_state_access": false,
+      "entry_file_sha256_verified": true,
+      "input_pin": {
+        "path": "/data/zl202621/KECRL/third_party/LIBERO/datasets/libero_spatial/pick_up_the_black_bowl_on_the_stove_and_place_it_on_the_plate_demo.hdf5",
+        "sha256": "1fcb3990cf9fd6185f56531cc9f6dec0a77a59bfa0c7f39dff95b7e43cf6aeaa",
+        "size_bytes": 711715594
+      }
+    }
+  ],
+  "hdf5_decode_counts": {
+    "opens": 4,
+    "opens_completed": 4,
+    "array_slices": 4450,
+    "array_slices_completed": 4450
+  },
+  "caches": [
+    {
+      "task": 4,
+      "items": 458,
+      "raw_bytes": 450530020,
+      "prefix_bytes": 600309760,
+      "stage": "layer3",
+      "shape": [
+        256,
+        8,
+        8
+      ],
+      "before_sha256": "a93139714e9b7b9cae77802c12d172dc235d49c5ac99d0d4f7e8eab7dace4b4a",
+      "after_sha256": "a93139714e9b7b9cae77802c12d172dc235d49c5ac99d0d4f7e8eab7dace4b4a"
+    },
+    {
+      "task": 7,
+      "items": 432,
+      "raw_bytes": 424954080,
+      "prefix_bytes": 566231040,
+      "stage": "layer3",
+      "shape": [
+        256,
+        8,
+        8
+      ],
+      "before_sha256": "22494f0f842b20e5ae8c2000214123019da4a197ddf3bb8c2414d48aab0cff94",
+      "after_sha256": "22494f0f842b20e5ae8c2000214123019da4a197ddf3bb8c2414d48aab0cff94"
+    }
+  ],
+  "gpu": {
+    "gpu_rows_before_run": "0, GPU-beb93e4f-e8b8-8589-1e45-06ad2b320bbe, NVIDIA GeForce RTX 4090, 1, 0\n1, GPU-d90bd7b2-16f6-c0fe-fbc1-7ed4060e95ff, NVIDIA GeForce RTX 4090, 1, 0\n",
+    "compute_processes_before_run": "",
+    "target_gpu": [
+      "1",
+      "GPU-d90bd7b2-16f6-c0fe-fbc1-7ed4060e95ff",
+      "NVIDIA GeForce RTX 4090",
+      "1",
+      "0"
+    ]
+  },
+  "peak_cuda_allocated_bytes": 389347840,
+  "versions": {
+    "torch": "2.4.1+cu124",
+    "torchvision": "0.19.1+cu124",
+    "numpy": "1.22.4",
+    "h5py": "3.11.0",
+    "robosuite": "1.4.0",
+    "mujoco": "3.2.3"
+  },
+  "python": "3.10.22",
+  "cuda": "12.4",
+  "models": [
+    {
+      "task": 4,
+      "seed": 20261106,
+      "arm": "frozen_resnet18",
+      "checkpoint": {
+        "path": "/data/zl202621/KECRL/results/libero-restricted-vision-finetune-20261114-v1/task4-seed20261106-frozen_resnet18-u500.pt",
+        "sha256": "af6a0ea6ddfab1c3863c35c47327ececbde3d9ada70db1c43c1dfd30ef6d485b",
+        "weight_hash": "7df9df3cf9de599301992e49a76510cbb27d27e831bb9716817c4b8bc692a675"
+      },
+      "initial_full_state_sha256": "ebdfd2d9bb31fcd043bc3bc4bf2bb67cf1aafaa49733800eb47b7586c1c71547",
+      "sampling_sha256": "0097d576de9bf9006a137367403e81578f82487e184b6177361a4a7e2343bd10",
+      "immutable_before": "3438c218bc563ebac21b26ad976ca462590cecc029cd1180e1657d314f5a94c7",
+      "immutable_after": "3438c218bc563ebac21b26ad976ca462590cecc029cd1180e1657d314f5a94c7",
+      "total_parameters": 12689864,
+      "trainable_parameters": 1513352,
+      "trainable_backbone_names": [],
+      "trainable_tensor_count": 10,
+      "actual_optimizer_state_steps": [
+        500
+      ],
+      "actual_optimizer_state_count": 10,
+      "actual_update_records": 500,
+      "clipped_updates": 69,
+      "first_minibatch_loss": 0.21287672221660614,
+      "last_minibatch_loss": 0.04756905511021614,
+      "mean_last50_minibatch_loss": 0.025438641523942353
+    },
+    {
+      "task": 4,
+      "seed": 20261106,
+      "arm": "layer4_conv_finetune",
+      "checkpoint": {
+        "path": "/data/zl202621/KECRL/results/libero-restricted-vision-finetune-20261114-v1/task4-seed20261106-layer4_conv_finetune-u500.pt",
+        "sha256": "d15b82cd142dec50d2c47e9a8b5c94cd94ea7c83defaf2a1c98b91bde332541b",
+        "weight_hash": "6d84886023475fd2e2f478292e1af9c12b5071df14ab026252eba4b5ac462787"
+      },
+      "initial_full_state_sha256": "ebdfd2d9bb31fcd043bc3bc4bf2bb67cf1aafaa49733800eb47b7586c1c71547",
+      "sampling_sha256": "0097d576de9bf9006a137367403e81578f82487e184b6177361a4a7e2343bd10",
+      "immutable_before": "594908ae42287f3aac5e4dfb97e78e685e585bee673e8f0f5e9da67ca9c23c20",
+      "immutable_after": "594908ae42287f3aac5e4dfb97e78e685e585bee673e8f0f5e9da67ca9c23c20",
+      "total_parameters": 12689864,
+      "trainable_parameters": 9901960,
+      "trainable_backbone_names": [
+        "visual_encoder.backbone.7.0.conv1.weight",
+        "visual_encoder.backbone.7.0.conv2.weight",
+        "visual_encoder.backbone.7.0.downsample.0.weight",
+        "visual_encoder.backbone.7.1.conv1.weight",
+        "visual_encoder.backbone.7.1.conv2.weight"
+      ],
+      "trainable_tensor_count": 15,
+      "actual_optimizer_state_steps": [
+        500
+      ],
+      "actual_optimizer_state_count": 15,
+      "actual_update_records": 500,
+      "clipped_updates": 23,
+      "first_minibatch_loss": 0.21287672221660614,
+      "last_minibatch_loss": 0.04978727549314499,
+      "mean_last50_minibatch_loss": 0.02507445133291185
+    },
+    {
+      "task": 4,
+      "seed": 20261107,
+      "arm": "frozen_resnet18",
+      "checkpoint": {
+        "path": "/data/zl202621/KECRL/results/libero-restricted-vision-finetune-20261114-v1/task4-seed20261107-frozen_resnet18-u500.pt",
+        "sha256": "5f3a31f603e7144dc218cb18bcb6625c9e0f3a70d1e21f9c7d219d394b97c768",
+        "weight_hash": "c0a60217ab6f28b8087301be15bba3c3d42e5112b222810ad396672b35bef9ff"
+      },
+      "initial_full_state_sha256": "57e338c143fc96b555cf2b949260515245fa03e5ecb6172180694e6151c4ffae",
+      "sampling_sha256": "58a2601b46807ecfb564cb532cfd9330fc4c2348851a86ce1a9187c5ca7acef4",
+      "immutable_before": "3438c218bc563ebac21b26ad976ca462590cecc029cd1180e1657d314f5a94c7",
+      "immutable_after": "3438c218bc563ebac21b26ad976ca462590cecc029cd1180e1657d314f5a94c7",
+      "total_parameters": 12689864,
+      "trainable_parameters": 1513352,
+      "trainable_backbone_names": [],
+      "trainable_tensor_count": 10,
+      "actual_optimizer_state_steps": [
+        500
+      ],
+      "actual_optimizer_state_count": 10,
+      "actual_update_records": 500,
+      "clipped_updates": 53,
+      "first_minibatch_loss": 0.21400722861289978,
+      "last_minibatch_loss": 0.041909534484148026,
+      "mean_last50_minibatch_loss": 0.0277346558123827
+    },
+    {
+      "task": 4,
+      "seed": 20261107,
+      "arm": "layer4_conv_finetune",
+      "checkpoint": {
+        "path": "/data/zl202621/KECRL/results/libero-restricted-vision-finetune-20261114-v1/task4-seed20261107-layer4_conv_finetune-u500.pt",
+        "sha256": "22107f2320e404353d5385242d4640e6a828a7aa806a08e484c204b0bec17d4e",
+        "weight_hash": "b30173b64e952d84b04461f16976fd45ce733e5dc3abb7bb4a7715145ab6b7a8"
+      },
+      "initial_full_state_sha256": "57e338c143fc96b555cf2b949260515245fa03e5ecb6172180694e6151c4ffae",
+      "sampling_sha256": "58a2601b46807ecfb564cb532cfd9330fc4c2348851a86ce1a9187c5ca7acef4",
+      "immutable_before": "594908ae42287f3aac5e4dfb97e78e685e585bee673e8f0f5e9da67ca9c23c20",
+      "immutable_after": "594908ae42287f3aac5e4dfb97e78e685e585bee673e8f0f5e9da67ca9c23c20",
+      "total_parameters": 12689864,
+      "trainable_parameters": 9901960,
+      "trainable_backbone_names": [
+        "visual_encoder.backbone.7.0.conv1.weight",
+        "visual_encoder.backbone.7.0.conv2.weight",
+        "visual_encoder.backbone.7.0.downsample.0.weight",
+        "visual_encoder.backbone.7.1.conv1.weight",
+        "visual_encoder.backbone.7.1.conv2.weight"
+      ],
+      "trainable_tensor_count": 15,
+      "actual_optimizer_state_steps": [
+        500
+      ],
+      "actual_optimizer_state_count": 15,
+      "actual_update_records": 500,
+      "clipped_updates": 14,
+      "first_minibatch_loss": 0.21400722861289978,
+      "last_minibatch_loss": 0.028210757300257683,
+      "mean_last50_minibatch_loss": 0.023060942133888603
+    },
+    {
+      "task": 4,
+      "seed": 20261108,
+      "arm": "frozen_resnet18",
+      "checkpoint": {
+        "path": "/data/zl202621/KECRL/results/libero-restricted-vision-finetune-20261114-v1/task4-seed20261108-frozen_resnet18-u500.pt",
+        "sha256": "12a30ffd3b612f6e3687c1c30c8ee0a3a00210759930df88bec84aaf2c628c29",
+        "weight_hash": "cfa52a8b1453fddeb9e988cec46904b896b7138d57f16eed2d51a6e9ba333dcc"
+      },
+      "initial_full_state_sha256": "5340759b18118f645d7004fb4b2b6a773b12751f1b1476a70c187231e3177f1e",
+      "sampling_sha256": "781b5ab6b0043637ce2143c19bd5aba1dd6e4ac64ab54f575d1f1b78ad52c1e8",
+      "immutable_before": "3438c218bc563ebac21b26ad976ca462590cecc029cd1180e1657d314f5a94c7",
+      "immutable_after": "3438c218bc563ebac21b26ad976ca462590cecc029cd1180e1657d314f5a94c7",
+      "total_parameters": 12689864,
+      "trainable_parameters": 1513352,
+      "trainable_backbone_names": [],
+      "trainable_tensor_count": 10,
+      "actual_optimizer_state_steps": [
+        500
+      ],
+      "actual_optimizer_state_count": 10,
+      "actual_update_records": 500,
+      "clipped_updates": 55,
+      "first_minibatch_loss": 0.23361407220363617,
+      "last_minibatch_loss": 0.030860641971230507,
+      "mean_last50_minibatch_loss": 0.024738888489082456
+    },
+    {
+      "task": 4,
+      "seed": 20261108,
+      "arm": "layer4_conv_finetune",
+      "checkpoint": {
+        "path": "/data/zl202621/KECRL/results/libero-restricted-vision-finetune-20261114-v1/task4-seed20261108-layer4_conv_finetune-u500.pt",
+        "sha256": "846e3e56f73c68afba32dedb835fa7e965044d18178d8362c3d1d1c83497d92f",
+        "weight_hash": "c0872127fd4a7e437d9413873d6f484ee8435eb7de11fef211da73ccfd71b689"
+      },
+      "initial_full_state_sha256": "5340759b18118f645d7004fb4b2b6a773b12751f1b1476a70c187231e3177f1e",
+      "sampling_sha256": "781b5ab6b0043637ce2143c19bd5aba1dd6e4ac64ab54f575d1f1b78ad52c1e8",
+      "immutable_before": "594908ae42287f3aac5e4dfb97e78e685e585bee673e8f0f5e9da67ca9c23c20",
+      "immutable_after": "594908ae42287f3aac5e4dfb97e78e685e585bee673e8f0f5e9da67ca9c23c20",
+      "total_parameters": 12689864,
+      "trainable_parameters": 9901960,
+      "trainable_backbone_names": [
+        "visual_encoder.backbone.7.0.conv1.weight",
+        "visual_encoder.backbone.7.0.conv2.weight",
+        "visual_encoder.backbone.7.0.downsample.0.weight",
+        "visual_encoder.backbone.7.1.conv1.weight",
+        "visual_encoder.backbone.7.1.conv2.weight"
+      ],
+      "trainable_tensor_count": 15,
+      "actual_optimizer_state_steps": [
+        500
+      ],
+      "actual_optimizer_state_count": 15,
+      "actual_update_records": 500,
+      "clipped_updates": 18,
+      "first_minibatch_loss": 0.23361407220363617,
+      "last_minibatch_loss": 0.030979575589299202,
+      "mean_last50_minibatch_loss": 0.020959527157247068
+    },
+    {
+      "task": 7,
+      "seed": 20261106,
+      "arm": "frozen_resnet18",
+      "checkpoint": {
+        "path": "/data/zl202621/KECRL/results/libero-restricted-vision-finetune-20261114-v1/task7-seed20261106-frozen_resnet18-u500.pt",
+        "sha256": "120c166b7f2c66abbb934999a3cc98d5d072a8f247dd716e297506a5c634936a",
+        "weight_hash": "523764885273c8fd4b551a312b3db0e0a35608eeac2387c3f0c8a24ff9939ec0"
+      },
+      "initial_full_state_sha256": "ebdfd2d9bb31fcd043bc3bc4bf2bb67cf1aafaa49733800eb47b7586c1c71547",
+      "sampling_sha256": "cc7cad5079f7a4f875761c5196203f21a27ffdf1d3ffc23191ca2db85b77dc15",
+      "immutable_before": "3438c218bc563ebac21b26ad976ca462590cecc029cd1180e1657d314f5a94c7",
+      "immutable_after": "3438c218bc563ebac21b26ad976ca462590cecc029cd1180e1657d314f5a94c7",
+      "total_parameters": 12689864,
+      "trainable_parameters": 1513352,
+      "trainable_backbone_names": [],
+      "trainable_tensor_count": 10,
+      "actual_optimizer_state_steps": [
+        500
+      ],
+      "actual_optimizer_state_count": 10,
+      "actual_update_records": 500,
+      "clipped_updates": 37,
+      "first_minibatch_loss": 0.21968665719032288,
+      "last_minibatch_loss": 0.01235995814204216,
+      "mean_last50_minibatch_loss": 0.02479795248247683
+    },
+    {
+      "task": 7,
+      "seed": 20261106,
+      "arm": "layer4_conv_finetune",
+      "checkpoint": {
+        "path": "/data/zl202621/KECRL/results/libero-restricted-vision-finetune-20261114-v1/task7-seed20261106-layer4_conv_finetune-u500.pt",
+        "sha256": "4532a7184f3e9731acd99ce46b748f435a6ca0dfeb2eb93349c2ce57c94e5498",
+        "weight_hash": "fe0d1fb7729ec19d50d938123e9b4f9c0a825d58ef192f94e40b441fc199eb59"
+      },
+      "initial_full_state_sha256": "ebdfd2d9bb31fcd043bc3bc4bf2bb67cf1aafaa49733800eb47b7586c1c71547",
+      "sampling_sha256": "cc7cad5079f7a4f875761c5196203f21a27ffdf1d3ffc23191ca2db85b77dc15",
+      "immutable_before": "594908ae42287f3aac5e4dfb97e78e685e585bee673e8f0f5e9da67ca9c23c20",
+      "immutable_after": "594908ae42287f3aac5e4dfb97e78e685e585bee673e8f0f5e9da67ca9c23c20",
+      "total_parameters": 12689864,
+      "trainable_parameters": 9901960,
+      "trainable_backbone_names": [
+        "visual_encoder.backbone.7.0.conv1.weight",
+        "visual_encoder.backbone.7.0.conv2.weight",
+        "visual_encoder.backbone.7.0.downsample.0.weight",
+        "visual_encoder.backbone.7.1.conv1.weight",
+        "visual_encoder.backbone.7.1.conv2.weight"
+      ],
+      "trainable_tensor_count": 15,
+      "actual_optimizer_state_steps": [
+        500
+      ],
+      "actual_optimizer_state_count": 15,
+      "actual_update_records": 500,
+      "clipped_updates": 17,
+      "first_minibatch_loss": 0.21968665719032288,
+      "last_minibatch_loss": 0.013213850557804108,
+      "mean_last50_minibatch_loss": 0.024292045934125782
+    },
+    {
+      "task": 7,
+      "seed": 20261107,
+      "arm": "frozen_resnet18",
+      "checkpoint": {
+        "path": "/data/zl202621/KECRL/results/libero-restricted-vision-finetune-20261114-v1/task7-seed20261107-frozen_resnet18-u500.pt",
+        "sha256": "7b27bd3afff568bb46c6095fa66e55fb80a96ee78b0b99cf465965067f2fddf9",
+        "weight_hash": "4a657ec9506aecadcd09cbbdb94f98cea6fe2d8496c0faaa22d1ea7dbdb6f2a5"
+      },
+      "initial_full_state_sha256": "57e338c143fc96b555cf2b949260515245fa03e5ecb6172180694e6151c4ffae",
+      "sampling_sha256": "377e6dd12d743dd61008d31101b79f74c5392d791d02a23b2614aaa8aed92353",
+      "immutable_before": "3438c218bc563ebac21b26ad976ca462590cecc029cd1180e1657d314f5a94c7",
+      "immutable_after": "3438c218bc563ebac21b26ad976ca462590cecc029cd1180e1657d314f5a94c7",
+      "total_parameters": 12689864,
+      "trainable_parameters": 1513352,
+      "trainable_backbone_names": [],
+      "trainable_tensor_count": 10,
+      "actual_optimizer_state_steps": [
+        500
+      ],
+      "actual_optimizer_state_count": 10,
+      "actual_update_records": 500,
+      "clipped_updates": 46,
+      "first_minibatch_loss": 0.23015157878398895,
+      "last_minibatch_loss": 0.010855166241526604,
+      "mean_last50_minibatch_loss": 0.02335909279063344
+    },
+    {
+      "task": 7,
+      "seed": 20261107,
+      "arm": "layer4_conv_finetune",
+      "checkpoint": {
+        "path": "/data/zl202621/KECRL/results/libero-restricted-vision-finetune-20261114-v1/task7-seed20261107-layer4_conv_finetune-u500.pt",
+        "sha256": "773601ef3bc0f158aaac0ca3c8aa6c9adaf7a9694b9d8b4abec5a439063bac05",
+        "weight_hash": "e72ca1d27cea1bd7863188032fc9a491e02e1cb37692c3312486f0c74fb7f1c6"
+      },
+      "initial_full_state_sha256": "57e338c143fc96b555cf2b949260515245fa03e5ecb6172180694e6151c4ffae",
+      "sampling_sha256": "377e6dd12d743dd61008d31101b79f74c5392d791d02a23b2614aaa8aed92353",
+      "immutable_before": "594908ae42287f3aac5e4dfb97e78e685e585bee673e8f0f5e9da67ca9c23c20",
+      "immutable_after": "594908ae42287f3aac5e4dfb97e78e685e585bee673e8f0f5e9da67ca9c23c20",
+      "total_parameters": 12689864,
+      "trainable_parameters": 9901960,
+      "trainable_backbone_names": [
+        "visual_encoder.backbone.7.0.conv1.weight",
+        "visual_encoder.backbone.7.0.conv2.weight",
+        "visual_encoder.backbone.7.0.downsample.0.weight",
+        "visual_encoder.backbone.7.1.conv1.weight",
+        "visual_encoder.backbone.7.1.conv2.weight"
+      ],
+      "trainable_tensor_count": 15,
+      "actual_optimizer_state_steps": [
+        500
+      ],
+      "actual_optimizer_state_count": 15,
+      "actual_update_records": 500,
+      "clipped_updates": 20,
+      "first_minibatch_loss": 0.23015157878398895,
+      "last_minibatch_loss": 0.011285100132226944,
+      "mean_last50_minibatch_loss": 0.02522620546631515
+    },
+    {
+      "task": 7,
+      "seed": 20261108,
+      "arm": "frozen_resnet18",
+      "checkpoint": {
+        "path": "/data/zl202621/KECRL/results/libero-restricted-vision-finetune-20261114-v1/task7-seed20261108-frozen_resnet18-u500.pt",
+        "sha256": "e12e00a88357a9bdd0cf20f51f464d47d7341a3121cebedf046d18f207ea8165",
+        "weight_hash": "edc1b528a770214cce9309fbed8522170bf4542259e3256a429de8a08e1a094c"
+      },
+      "initial_full_state_sha256": "5340759b18118f645d7004fb4b2b6a773b12751f1b1476a70c187231e3177f1e",
+      "sampling_sha256": "0e6989d8af9e79664a3ce3f59ba5cfa8849482b7716add727d991965ecba60d3",
+      "immutable_before": "3438c218bc563ebac21b26ad976ca462590cecc029cd1180e1657d314f5a94c7",
+      "immutable_after": "3438c218bc563ebac21b26ad976ca462590cecc029cd1180e1657d314f5a94c7",
+      "total_parameters": 12689864,
+      "trainable_parameters": 1513352,
+      "trainable_backbone_names": [],
+      "trainable_tensor_count": 10,
+      "actual_optimizer_state_steps": [
+        500
+      ],
+      "actual_optimizer_state_count": 10,
+      "actual_update_records": 500,
+      "clipped_updates": 46,
+      "first_minibatch_loss": 0.22376693785190582,
+      "last_minibatch_loss": 0.016647683456540108,
+      "mean_last50_minibatch_loss": 0.033136584339663384
+    },
+    {
+      "task": 7,
+      "seed": 20261108,
+      "arm": "layer4_conv_finetune",
+      "checkpoint": {
+        "path": "/data/zl202621/KECRL/results/libero-restricted-vision-finetune-20261114-v1/task7-seed20261108-layer4_conv_finetune-u500.pt",
+        "sha256": "1b0e5273d2e1bb671c53dd29db2b82065f9674c042e86720b7718e1702b9c38e",
+        "weight_hash": "bf6a73069b4ce1d8232cdc20b7b50dca56b0ec545b5b62e496de94dc01c33812"
+      },
+      "initial_full_state_sha256": "5340759b18118f645d7004fb4b2b6a773b12751f1b1476a70c187231e3177f1e",
+      "sampling_sha256": "0e6989d8af9e79664a3ce3f59ba5cfa8849482b7716add727d991965ecba60d3",
+      "immutable_before": "594908ae42287f3aac5e4dfb97e78e685e585bee673e8f0f5e9da67ca9c23c20",
+      "immutable_after": "594908ae42287f3aac5e4dfb97e78e685e585bee673e8f0f5e9da67ca9c23c20",
+      "total_parameters": 12689864,
+      "trainable_parameters": 9901960,
+      "trainable_backbone_names": [
+        "visual_encoder.backbone.7.0.conv1.weight",
+        "visual_encoder.backbone.7.0.conv2.weight",
+        "visual_encoder.backbone.7.0.downsample.0.weight",
+        "visual_encoder.backbone.7.1.conv1.weight",
+        "visual_encoder.backbone.7.1.conv2.weight"
+      ],
+      "trainable_tensor_count": 15,
+      "actual_optimizer_state_steps": [
+        500
+      ],
+      "actual_optimizer_state_count": 15,
+      "actual_update_records": 500,
+      "clipped_updates": 16,
+      "first_minibatch_loss": 0.22376693785190582,
+      "last_minibatch_loss": 0.01409542839974165,
+      "mean_last50_minibatch_loss": 0.022260666824877262
+    }
+  ],
+  "closed_loop_conclusion": null,
+  "training_loss_used_for_checkpoint_selection": false
+}

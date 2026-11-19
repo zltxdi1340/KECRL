@@ -1,0 +1,572 @@
+{
+  "status": "complete_audited_v3_3A_not_admitted_to_full",
+  "formal_result": false,
+  "science": {
+    "path": "/data/zl202621/KECRL/configs/libero-task7-spatial-readout_v3.json",
+    "sha256": "95b0b7e1cf18349b3fd851c8fd298d9d2788431d24e501924376ab2acdabc009"
+  },
+  "scientific_freeze": {
+    "path": "/data/zl202621/KECRL/configs/libero-task7-spatial-readout-freeze-binding_v3.json",
+    "sha256": "7763db8609559363a9ca36b4df13ffff49e8c06d338fef1b77c0d407b25e146b"
+  },
+  "bindings": {
+    "training": {
+      "path": "/data/zl202621/KECRL/configs/libero-task7-spatial-readout-training-binding_v3.json",
+      "sha256": "166b53387be662416929d3313ad86a9f1491a35735a6808bfa3701a08f2d8393"
+    },
+    "handoff": {
+      "path": "/data/zl202621/KECRL/configs/libero-task7-spatial-readout-handoff-binding_v3.json",
+      "sha256": "2e3ee54f68391094e21f6250eca7f42c3f4c3f2ef62886583a3d4bb559fc0208"
+    }
+  },
+  "dependency_counts": {
+    "training": 950,
+    "handoff": 953
+  },
+  "training_summary": {
+    "path": "/data/zl202621/KECRL/results/libero-task7-spatial-readout-20261117-v3/training-summary.json",
+    "sha256": "df69fb75658000a9afd3910ff38e150c09707c90dec8586e4015e819cce50999"
+  },
+  "training_completion": {
+    "path": "/data/zl202621/KECRL/results/libero-task7-spatial-readout-20261117-v3/train/completion.json",
+    "sha256": "7c8e973377c5ffa5bf021963d4d9d8af31a40bec7ede6988ff7a64472eb57231"
+  },
+  "handoff_result": {
+    "path": "/data/zl202621/KECRL/results/libero-task7-spatial-readout-20261117-v3/handoff/result.json",
+    "sha256": "34ee495b6f4048269ae4e525d8a38bb974c89a2aad4fbec5ddcad1ebbdee95f9"
+  },
+  "handoff_audit": {
+    "path": "/data/zl202621/KECRL/results/libero-task7-spatial-readout-20261117-v3/handoff/independent-audit.json",
+    "sha256": "ec799c925f31de48a853c0c05a0b7dab295db6c05d603e8b40933f417aae7ac3"
+  },
+  "handoff_completion": {
+    "path": "/data/zl202621/KECRL/results/libero-task7-spatial-readout-20261117-v3/handoff/completion.json",
+    "sha256": "83945d2df8a2960afb260d1b385e58ed13920546e210635c3a3b3b399508e8d0"
+  },
+  "paired_csv": {
+    "path": "/data/zl202621/KECRL/results/libero-task7-spatial-readout-20261117-v3/paired-handoff-results.csv",
+    "sha256": "a41d6c1def13a2639277ca267e191d3da3d1d4a0c4f752564f762909ce9d5373"
+  },
+  "control_reproduction": {
+    "path": "/data/zl202621/KECRL/results/libero-task7-spatial-readout-20261117-v3/control-reproduction.json",
+    "sha256": "b5e3e15831b55690a613a84d48485e8278e19fb7f00fdc500e820ce46157eb1b"
+  },
+  "decision": {
+    "stage": "handoff",
+    "pairs": 22,
+    "totals": {
+      "flat_zero_xyz": 8,
+      "spatial_coordinates_zero_xyz": 11
+    },
+    "per_seed": {
+      "20261106": {
+        "flat_zero_xyz": 4,
+        "spatial_coordinates_zero_xyz": 8
+      },
+      "20261107": {
+        "flat_zero_xyz": 4,
+        "spatial_coordinates_zero_xyz": 3
+      },
+      "20261108": {
+        "flat_zero_xyz": 0,
+        "spatial_coordinates_zero_xyz": 0
+      }
+    },
+    "required_net": 4,
+    "gain_fraction": "3/22",
+    "gates": {
+      "net_gain_at_least_threshold": false,
+      "each_seed_nonregressing": false
+    },
+    "passed": false
+  },
+  "paired_counts": {
+    "spatial_only": 6,
+    "both_success": 5,
+    "both_failure": 8,
+    "flat_only": 3
+  },
+  "paired_rows": [
+    {
+      "source_id": "flip00-unchanged",
+      "seed": 20261106,
+      "initial_state_index": 3,
+      "condition": "unchanged",
+      "anchor_step": 75,
+      "flat_success": false,
+      "spatial_success": true,
+      "flat_terminal_step": 300,
+      "spatial_terminal_step": 116,
+      "bucket": "spatial_only"
+    },
+    {
+      "source_id": "flip00-confirm5",
+      "seed": 20261106,
+      "initial_state_index": 3,
+      "condition": "confirm5",
+      "anchor_step": 75,
+      "flat_success": true,
+      "spatial_success": true,
+      "flat_terminal_step": 146,
+      "spatial_terminal_step": 134,
+      "bucket": "both_success"
+    },
+    {
+      "source_id": "flip01-unchanged",
+      "seed": 20261106,
+      "initial_state_index": 5,
+      "condition": "unchanged",
+      "anchor_step": 150,
+      "flat_success": false,
+      "spatial_success": false,
+      "flat_terminal_step": 300,
+      "spatial_terminal_step": 300,
+      "bucket": "both_failure"
+    },
+    {
+      "source_id": "flip01-confirm5",
+      "seed": 20261106,
+      "initial_state_index": 5,
+      "condition": "confirm5",
+      "anchor_step": 150,
+      "flat_success": false,
+      "spatial_success": false,
+      "flat_terminal_step": 300,
+      "spatial_terminal_step": 300,
+      "bucket": "both_failure"
+    },
+    {
+      "source_id": "flip03-unchanged",
+      "seed": 20261106,
+      "initial_state_index": 11,
+      "condition": "unchanged",
+      "anchor_step": 75,
+      "flat_success": true,
+      "spatial_success": true,
+      "flat_terminal_step": 174,
+      "spatial_terminal_step": 142,
+      "bucket": "both_success"
+    },
+    {
+      "source_id": "flip03-confirm5",
+      "seed": 20261106,
+      "initial_state_index": 11,
+      "condition": "confirm5",
+      "anchor_step": 75,
+      "flat_success": false,
+      "spatial_success": true,
+      "flat_terminal_step": 300,
+      "spatial_terminal_step": 132,
+      "bucket": "spatial_only"
+    },
+    {
+      "source_id": "flip04-unchanged",
+      "seed": 20261106,
+      "initial_state_index": 13,
+      "condition": "unchanged",
+      "anchor_step": 75,
+      "flat_success": false,
+      "spatial_success": true,
+      "flat_terminal_step": 300,
+      "spatial_terminal_step": 212,
+      "bucket": "spatial_only"
+    },
+    {
+      "source_id": "flip04-confirm5",
+      "seed": 20261106,
+      "initial_state_index": 13,
+      "condition": "confirm5",
+      "anchor_step": 75,
+      "flat_success": false,
+      "spatial_success": false,
+      "flat_terminal_step": 300,
+      "spatial_terminal_step": 300,
+      "bucket": "both_failure"
+    },
+    {
+      "source_id": "flip05-unchanged",
+      "seed": 20261106,
+      "initial_state_index": 15,
+      "condition": "unchanged",
+      "anchor_step": 100,
+      "flat_success": true,
+      "spatial_success": true,
+      "flat_terminal_step": 160,
+      "spatial_terminal_step": 145,
+      "bucket": "both_success"
+    },
+    {
+      "source_id": "flip05-confirm5",
+      "seed": 20261106,
+      "initial_state_index": 15,
+      "condition": "confirm5",
+      "anchor_step": 100,
+      "flat_success": false,
+      "spatial_success": true,
+      "flat_terminal_step": 300,
+      "spatial_terminal_step": 173,
+      "bucket": "spatial_only"
+    },
+    {
+      "source_id": "flip06-unchanged",
+      "seed": 20261106,
+      "initial_state_index": 17,
+      "condition": "unchanged",
+      "anchor_step": 75,
+      "flat_success": true,
+      "spatial_success": true,
+      "flat_terminal_step": 139,
+      "spatial_terminal_step": 126,
+      "bucket": "both_success"
+    },
+    {
+      "source_id": "flip06-confirm5",
+      "seed": 20261106,
+      "initial_state_index": 17,
+      "condition": "confirm5",
+      "anchor_step": 75,
+      "flat_success": false,
+      "spatial_success": false,
+      "flat_terminal_step": 300,
+      "spatial_terminal_step": 300,
+      "bucket": "both_failure"
+    },
+    {
+      "source_id": "flip08-unchanged",
+      "seed": 20261107,
+      "initial_state_index": 13,
+      "condition": "unchanged",
+      "anchor_step": 100,
+      "flat_success": true,
+      "spatial_success": false,
+      "flat_terminal_step": 130,
+      "spatial_terminal_step": 300,
+      "bucket": "flat_only"
+    },
+    {
+      "source_id": "flip08-confirm5",
+      "seed": 20261107,
+      "initial_state_index": 13,
+      "condition": "confirm5",
+      "anchor_step": 100,
+      "flat_success": true,
+      "spatial_success": false,
+      "flat_terminal_step": 138,
+      "spatial_terminal_step": 300,
+      "bucket": "flat_only"
+    },
+    {
+      "source_id": "flip09-unchanged",
+      "seed": 20261107,
+      "initial_state_index": 14,
+      "condition": "unchanged",
+      "anchor_step": 125,
+      "flat_success": true,
+      "spatial_success": true,
+      "flat_terminal_step": 132,
+      "spatial_terminal_step": 133,
+      "bucket": "both_success"
+    },
+    {
+      "source_id": "flip09-confirm5",
+      "seed": 20261107,
+      "initial_state_index": 14,
+      "condition": "confirm5",
+      "anchor_step": 125,
+      "flat_success": false,
+      "spatial_success": false,
+      "flat_terminal_step": 300,
+      "spatial_terminal_step": 300,
+      "bucket": "both_failure"
+    },
+    {
+      "source_id": "flip10-unchanged",
+      "seed": 20261107,
+      "initial_state_index": 18,
+      "condition": "unchanged",
+      "anchor_step": 100,
+      "flat_success": true,
+      "spatial_success": false,
+      "flat_terminal_step": 158,
+      "spatial_terminal_step": 300,
+      "bucket": "flat_only"
+    },
+    {
+      "source_id": "flip10-confirm5",
+      "seed": 20261107,
+      "initial_state_index": 18,
+      "condition": "confirm5",
+      "anchor_step": 100,
+      "flat_success": false,
+      "spatial_success": false,
+      "flat_terminal_step": 300,
+      "spatial_terminal_step": 300,
+      "bucket": "both_failure"
+    },
+    {
+      "source_id": "flip11-unchanged",
+      "seed": 20261107,
+      "initial_state_index": 14,
+      "condition": "unchanged",
+      "anchor_step": 200,
+      "flat_success": false,
+      "spatial_success": true,
+      "flat_terminal_step": 300,
+      "spatial_terminal_step": 222,
+      "bucket": "spatial_only"
+    },
+    {
+      "source_id": "flip11-confirm5",
+      "seed": 20261107,
+      "initial_state_index": 14,
+      "condition": "confirm5",
+      "anchor_step": 200,
+      "flat_success": false,
+      "spatial_success": true,
+      "flat_terminal_step": 300,
+      "spatial_terminal_step": 225,
+      "bucket": "spatial_only"
+    },
+    {
+      "source_id": "flip12-unchanged",
+      "seed": 20261108,
+      "initial_state_index": 5,
+      "condition": "unchanged",
+      "anchor_step": 100,
+      "flat_success": false,
+      "spatial_success": false,
+      "flat_terminal_step": 300,
+      "spatial_terminal_step": 300,
+      "bucket": "both_failure"
+    },
+    {
+      "source_id": "flip12-confirm5",
+      "seed": 20261108,
+      "initial_state_index": 5,
+      "condition": "confirm5",
+      "anchor_step": 100,
+      "flat_success": false,
+      "spatial_success": false,
+      "flat_terminal_step": 300,
+      "spatial_terminal_step": 300,
+      "bucket": "both_failure"
+    }
+  ],
+  "training_audit_checks": 4017,
+  "handoff_audit_checks": 152867,
+  "training_actual": {
+    "caps": {
+      "train_forward": 3000,
+      "backward": 3000,
+      "optimizer": 3000,
+      "checkpoint": 6,
+      "model_create": 7,
+      "dataset_items": 550,
+      "source_sha": 1,
+      "public_weight_sha": 1,
+      "public_weight_load": 1,
+      "frozen_encoder": 150,
+      "parity_forward": 6,
+      "hdf5_opens": 2,
+      "hdf5_slices": 2750,
+      "flat_readout": 3006,
+      "spatial_readout": 3006,
+      "flat_image_rows": 240480,
+      "spatial_image_rows": 240480,
+      "spatial_heatmaps": 61562880,
+      "spatial_probability_values": 985006080,
+      "spatial_coordinate_values": 123125760,
+      "spatial_entropy_values": 61562880,
+      "entropy_training_summaries": 1500,
+      "zero_xyz_coordinate_writes": 721440,
+      "initial_row_loads": 0,
+      "numeric_rows": 0,
+      "native_steps": 0,
+      "policy_forward": 0,
+      "eef_payload_reads": 0,
+      "private_object_state_reads": 0,
+      "extra_render_calls": 0
+    },
+    "counts": {
+      "train_forward": {
+        "attempted": 3000,
+        "completed": 3000
+      },
+      "backward": {
+        "attempted": 3000,
+        "completed": 3000
+      },
+      "optimizer": {
+        "attempted": 3000,
+        "completed": 3000
+      },
+      "checkpoint": {
+        "attempted": 6,
+        "completed": 6
+      },
+      "model_create": {
+        "attempted": 7,
+        "completed": 7
+      },
+      "dataset_items": {
+        "attempted": 432,
+        "completed": 432
+      },
+      "source_sha": {
+        "attempted": 1,
+        "completed": 1
+      },
+      "public_weight_sha": {
+        "attempted": 1,
+        "completed": 1
+      },
+      "public_weight_load": {
+        "attempted": 1,
+        "completed": 1
+      },
+      "frozen_encoder": {
+        "attempted": 120,
+        "completed": 120
+      },
+      "parity_forward": {
+        "attempted": 6,
+        "completed": 6
+      },
+      "hdf5_opens": {
+        "attempted": 2,
+        "completed": 2
+      },
+      "hdf5_slices": {
+        "attempted": 2160,
+        "completed": 2160
+      },
+      "flat_readout": {
+        "attempted": 3006,
+        "completed": 3006
+      },
+      "spatial_readout": {
+        "attempted": 3006,
+        "completed": 3006
+      },
+      "flat_image_rows": {
+        "attempted": 240480,
+        "completed": 240480
+      },
+      "spatial_image_rows": {
+        "attempted": 240480,
+        "completed": 240480
+      },
+      "spatial_heatmaps": {
+        "attempted": 61562880,
+        "completed": 61562880
+      },
+      "spatial_probability_values": {
+        "attempted": 985006080,
+        "completed": 985006080
+      },
+      "spatial_coordinate_values": {
+        "attempted": 123125760,
+        "completed": 123125760
+      },
+      "spatial_entropy_values": {
+        "attempted": 61562880,
+        "completed": 61562880
+      },
+      "entropy_training_summaries": {
+        "attempted": 1500,
+        "completed": 1500
+      },
+      "zero_xyz_coordinate_writes": {
+        "attempted": 721440,
+        "completed": 721440
+      },
+      "initial_row_loads": {
+        "attempted": 0,
+        "completed": 0
+      },
+      "numeric_rows": {
+        "attempted": 0,
+        "completed": 0
+      },
+      "native_steps": {
+        "attempted": 0,
+        "completed": 0
+      },
+      "policy_forward": {
+        "attempted": 0,
+        "completed": 0
+      },
+      "eef_payload_reads": {
+        "attempted": 0,
+        "completed": 0
+      },
+      "private_object_state_reads": {
+        "attempted": 0,
+        "completed": 0
+      },
+      "extra_render_calls": {
+        "attempted": 0,
+        "completed": 0
+      }
+    },
+    "elapsed_seconds": 159.06790335598635
+  },
+  "handoff_actual": {
+    "model_create": 6,
+    "checkpoint_sha": 6,
+    "checkpoint_load": 6,
+    "model_weight_checks": 12,
+    "adapters": 44,
+    "resets": 556,
+    "episodes": 44,
+    "prefix_actions": 4700,
+    "warm_forward": 396,
+    "policy_forward": 5737,
+    "policy_actions": 5737,
+    "frozen_encoder": 12266,
+    "temporal_rows": 6133,
+    "flat_readout": 6450,
+    "spatial_readout": 5816,
+    "flat_image_rows": 6450,
+    "spatial_image_rows": 5816,
+    "spatial_heatmaps": 1488896,
+    "spatial_probability_values": 23822336,
+    "spatial_coordinate_values": 2977792,
+    "spatial_entropy_values": 1488896,
+    "entropy_evaluation_summaries": 2908,
+    "zero_xyz_coordinate_writes": 18399,
+    "zero_steps": 2780,
+    "native_steps": 13217,
+    "initial_row_loads": 1,
+    "numeric_rows": 19,
+    "observations": 10993,
+    "rgb_frames": 21986,
+    "raw_rgb_bytes": 1080655872,
+    "source_episode_parses": 22,
+    "source_episode_bytes": 4642666,
+    "source_scalar_projections": 58948,
+    "backwards": 0,
+    "optimizer_updates": 0,
+    "hdf5_reads": 0,
+    "public_weight_reads": 0,
+    "eef_payload_reads": 0,
+    "private_object_state_reads": 0,
+    "extra_render_calls": 0
+  },
+  "handoff_ledger_seconds": 668.1016523879953,
+  "training_process": {
+    "status": "training_worker_exited",
+    "returncode": 0,
+    "elapsed_seconds": 161.57849662104854
+  },
+  "evaluation_process": {
+    "status": "evaluation_pipeline_exited",
+    "returncode": 0,
+    "elapsed_seconds": 683.2209099130123
+  },
+  "tests_passed": 32,
+  "full_episodes": 0,
+  "full_binding_created": false,
+  "native_success_metric": "original_task7_On",
+  "no_posthoc_seed_or_checkpoint_selection": true
+}

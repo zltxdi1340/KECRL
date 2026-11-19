@@ -1,0 +1,454 @@
+{
+  "kind": "libero_task7_v2_v3_readonly_overlap_actions",
+  "version": 1,
+  "formal_result": false,
+  "parents": {
+    "v2": {
+      "science": {
+        "path": "/data/zl202621/KECRL/configs/libero-task7-eef-xyz-control_v2.json",
+        "sha256": "fc72b27fb2e472eaea6719ebd6f67506a2fef4874dd8bbd8c998db986c060281"
+      },
+      "binding": {
+        "path": "/data/zl202621/KECRL/configs/libero-task7-eef-xyz-control-handoff-binding_v2.json",
+        "sha256": "6105bb30fb4ca05ec7c65564169253456c53d63b9dadad7e173b43076841918f"
+      },
+      "completion": {
+        "path": "/data/zl202621/KECRL/results/libero-task7-eef-xyz-control-20261117-v2/handoff/completion.json",
+        "sha256": "ed589d79d4ef37fc7d321984358bb8999ad0deead7db38cf42ac23e807b21e1f"
+      },
+      "result": {
+        "path": "/data/zl202621/KECRL/results/libero-task7-eef-xyz-control-20261117-v2/handoff/result.json",
+        "sha256": "309139b704470e1a600006745c9a02778f035109126f633faf1eaaec6cdf459b"
+      },
+      "audit": {
+        "path": "/data/zl202621/KECRL/results/libero-task7-eef-xyz-control-20261117-v2/handoff/independent-audit.json",
+        "sha256": "9849c58e86046dadcbab3f0a08ad866999515d9a5675b5032dbd0e115c0b851e"
+      }
+    },
+    "v3": {
+      "science": {
+        "path": "/data/zl202621/KECRL/configs/libero-task7-spatial-readout_v3.json",
+        "sha256": "95b0b7e1cf18349b3fd851c8fd298d9d2788431d24e501924376ab2acdabc009"
+      },
+      "binding": {
+        "path": "/data/zl202621/KECRL/configs/libero-task7-spatial-readout-handoff-binding_v3.json",
+        "sha256": "2e3ee54f68391094e21f6250eca7f42c3f4c3f2ef62886583a3d4bb559fc0208"
+      },
+      "completion": {
+        "path": "/data/zl202621/KECRL/results/libero-task7-spatial-readout-20261117-v3/handoff/completion.json",
+        "sha256": "83945d2df8a2960afb260d1b385e58ed13920546e210635c3a3b3b399508e8d0"
+      },
+      "result": {
+        "path": "/data/zl202621/KECRL/results/libero-task7-spatial-readout-20261117-v3/handoff/result.json",
+        "sha256": "34ee495b6f4048269ae4e525d8a38bb974c89a2aad4fbec5ddcad1ebbdee95f9"
+      },
+      "audit": {
+        "path": "/data/zl202621/KECRL/results/libero-task7-spatial-readout-20261117-v3/handoff/independent-audit.json",
+        "sha256": "ec799c925f31de48a853c0c05a0b7dab295db6c05d603e8b40933f417aae7ac3"
+      }
+    }
+  },
+  "pairs": [
+    {
+      "source_id": "flip00-unchanged",
+      "seed": 20261106,
+      "initial_state_index": 3,
+      "anchor_step": 75,
+      "control_success": false,
+      "v2_xyz_success": true,
+      "v3_spatial_success": true,
+      "control_steps": 300,
+      "v2_steps": 119,
+      "v3_steps": 116
+    },
+    {
+      "source_id": "flip00-confirm5",
+      "seed": 20261106,
+      "initial_state_index": 3,
+      "anchor_step": 75,
+      "control_success": true,
+      "v2_xyz_success": true,
+      "v3_spatial_success": true,
+      "control_steps": 146,
+      "v2_steps": 154,
+      "v3_steps": 134
+    },
+    {
+      "source_id": "flip01-unchanged",
+      "seed": 20261106,
+      "initial_state_index": 5,
+      "anchor_step": 150,
+      "control_success": false,
+      "v2_xyz_success": false,
+      "v3_spatial_success": false,
+      "control_steps": 300,
+      "v2_steps": 300,
+      "v3_steps": 300
+    },
+    {
+      "source_id": "flip01-confirm5",
+      "seed": 20261106,
+      "initial_state_index": 5,
+      "anchor_step": 150,
+      "control_success": false,
+      "v2_xyz_success": false,
+      "v3_spatial_success": false,
+      "control_steps": 300,
+      "v2_steps": 300,
+      "v3_steps": 300
+    },
+    {
+      "source_id": "flip03-unchanged",
+      "seed": 20261106,
+      "initial_state_index": 11,
+      "anchor_step": 75,
+      "control_success": true,
+      "v2_xyz_success": true,
+      "v3_spatial_success": true,
+      "control_steps": 174,
+      "v2_steps": 194,
+      "v3_steps": 142
+    },
+    {
+      "source_id": "flip03-confirm5",
+      "seed": 20261106,
+      "initial_state_index": 11,
+      "anchor_step": 75,
+      "control_success": false,
+      "v2_xyz_success": true,
+      "v3_spatial_success": true,
+      "control_steps": 300,
+      "v2_steps": 148,
+      "v3_steps": 132
+    },
+    {
+      "source_id": "flip04-unchanged",
+      "seed": 20261106,
+      "initial_state_index": 13,
+      "anchor_step": 75,
+      "control_success": false,
+      "v2_xyz_success": true,
+      "v3_spatial_success": true,
+      "control_steps": 300,
+      "v2_steps": 184,
+      "v3_steps": 212
+    },
+    {
+      "source_id": "flip04-confirm5",
+      "seed": 20261106,
+      "initial_state_index": 13,
+      "anchor_step": 75,
+      "control_success": false,
+      "v2_xyz_success": false,
+      "v3_spatial_success": false,
+      "control_steps": 300,
+      "v2_steps": 300,
+      "v3_steps": 300
+    },
+    {
+      "source_id": "flip05-unchanged",
+      "seed": 20261106,
+      "initial_state_index": 15,
+      "anchor_step": 100,
+      "control_success": true,
+      "v2_xyz_success": true,
+      "v3_spatial_success": true,
+      "control_steps": 160,
+      "v2_steps": 178,
+      "v3_steps": 145
+    },
+    {
+      "source_id": "flip05-confirm5",
+      "seed": 20261106,
+      "initial_state_index": 15,
+      "anchor_step": 100,
+      "control_success": false,
+      "v2_xyz_success": false,
+      "v3_spatial_success": true,
+      "control_steps": 300,
+      "v2_steps": 300,
+      "v3_steps": 173
+    },
+    {
+      "source_id": "flip06-unchanged",
+      "seed": 20261106,
+      "initial_state_index": 17,
+      "anchor_step": 75,
+      "control_success": true,
+      "v2_xyz_success": true,
+      "v3_spatial_success": true,
+      "control_steps": 139,
+      "v2_steps": 141,
+      "v3_steps": 126
+    },
+    {
+      "source_id": "flip06-confirm5",
+      "seed": 20261106,
+      "initial_state_index": 17,
+      "anchor_step": 75,
+      "control_success": false,
+      "v2_xyz_success": false,
+      "v3_spatial_success": false,
+      "control_steps": 300,
+      "v2_steps": 300,
+      "v3_steps": 300
+    },
+    {
+      "source_id": "flip08-unchanged",
+      "seed": 20261107,
+      "initial_state_index": 13,
+      "anchor_step": 100,
+      "control_success": true,
+      "v2_xyz_success": false,
+      "v3_spatial_success": false,
+      "control_steps": 130,
+      "v2_steps": 300,
+      "v3_steps": 300
+    },
+    {
+      "source_id": "flip08-confirm5",
+      "seed": 20261107,
+      "initial_state_index": 13,
+      "anchor_step": 100,
+      "control_success": true,
+      "v2_xyz_success": false,
+      "v3_spatial_success": false,
+      "control_steps": 138,
+      "v2_steps": 300,
+      "v3_steps": 300
+    },
+    {
+      "source_id": "flip09-unchanged",
+      "seed": 20261107,
+      "initial_state_index": 14,
+      "anchor_step": 125,
+      "control_success": true,
+      "v2_xyz_success": true,
+      "v3_spatial_success": true,
+      "control_steps": 132,
+      "v2_steps": 141,
+      "v3_steps": 133
+    },
+    {
+      "source_id": "flip09-confirm5",
+      "seed": 20261107,
+      "initial_state_index": 14,
+      "anchor_step": 125,
+      "control_success": false,
+      "v2_xyz_success": false,
+      "v3_spatial_success": false,
+      "control_steps": 300,
+      "v2_steps": 300,
+      "v3_steps": 300
+    },
+    {
+      "source_id": "flip10-unchanged",
+      "seed": 20261107,
+      "initial_state_index": 18,
+      "anchor_step": 100,
+      "control_success": true,
+      "v2_xyz_success": false,
+      "v3_spatial_success": false,
+      "control_steps": 158,
+      "v2_steps": 300,
+      "v3_steps": 300
+    },
+    {
+      "source_id": "flip10-confirm5",
+      "seed": 20261107,
+      "initial_state_index": 18,
+      "anchor_step": 100,
+      "control_success": false,
+      "v2_xyz_success": false,
+      "v3_spatial_success": false,
+      "control_steps": 300,
+      "v2_steps": 300,
+      "v3_steps": 300
+    },
+    {
+      "source_id": "flip11-unchanged",
+      "seed": 20261107,
+      "initial_state_index": 14,
+      "anchor_step": 200,
+      "control_success": false,
+      "v2_xyz_success": true,
+      "v3_spatial_success": true,
+      "control_steps": 300,
+      "v2_steps": 219,
+      "v3_steps": 222
+    },
+    {
+      "source_id": "flip11-confirm5",
+      "seed": 20261107,
+      "initial_state_index": 14,
+      "anchor_step": 200,
+      "control_success": false,
+      "v2_xyz_success": true,
+      "v3_spatial_success": true,
+      "control_steps": 300,
+      "v2_steps": 221,
+      "v3_steps": 225
+    },
+    {
+      "source_id": "flip12-unchanged",
+      "seed": 20261108,
+      "initial_state_index": 5,
+      "anchor_step": 100,
+      "control_success": false,
+      "v2_xyz_success": false,
+      "v3_spatial_success": false,
+      "control_steps": 300,
+      "v2_steps": 300,
+      "v3_steps": 300
+    },
+    {
+      "source_id": "flip12-confirm5",
+      "seed": 20261108,
+      "initial_state_index": 5,
+      "anchor_step": 100,
+      "control_success": false,
+      "v2_xyz_success": false,
+      "v3_spatial_success": false,
+      "control_steps": 300,
+      "v2_steps": 300,
+      "v3_steps": 300
+    }
+  ],
+  "archives": [
+    {
+      "source_id": "flip08-unchanged",
+      "controller": "control",
+      "family": "v3",
+      "seed": 20261107,
+      "anchor_step": 100,
+      "steps": 130,
+      "success": true,
+      "frames": {
+        "path": "/data/zl202621/KECRL/results/libero-task7-spatial-readout-20261117-v3/handoff/flip08-unchanged-flat_zero_xyz-episode.npz",
+        "sha256": "78f1625c5e51550cd21e7bb829ed367dc0da6030e85abc2890447b06c6b5febc"
+      }
+    },
+    {
+      "source_id": "flip08-unchanged",
+      "controller": "v2_xyz",
+      "family": "v2",
+      "seed": 20261107,
+      "anchor_step": 100,
+      "steps": 300,
+      "success": false,
+      "frames": {
+        "path": "/data/zl202621/KECRL/results/libero-task7-eef-xyz-control-20261117-v2/handoff/flip08-unchanged-cached_xyz_mlp-episode.npz",
+        "sha256": "83a2d94707848e8571e291792dc3d38a12569cff19481eba532e2d232a03c03d"
+      }
+    },
+    {
+      "source_id": "flip08-unchanged",
+      "controller": "v3_spatial",
+      "family": "v3",
+      "seed": 20261107,
+      "anchor_step": 100,
+      "steps": 300,
+      "success": false,
+      "frames": {
+        "path": "/data/zl202621/KECRL/results/libero-task7-spatial-readout-20261117-v3/handoff/flip08-unchanged-spatial_coordinates_zero_xyz-episode.npz",
+        "sha256": "a6b379831176fe851a7acdd24fc5cb1a053f452dbc2a918367f0e5d7876726a0"
+      }
+    },
+    {
+      "source_id": "flip08-confirm5",
+      "controller": "control",
+      "family": "v3",
+      "seed": 20261107,
+      "anchor_step": 100,
+      "steps": 138,
+      "success": true,
+      "frames": {
+        "path": "/data/zl202621/KECRL/results/libero-task7-spatial-readout-20261117-v3/handoff/flip08-confirm5-flat_zero_xyz-episode.npz",
+        "sha256": "1096d732abc41c51598542f30a5ecaafb4c78e61db71a8eab1a9fd8e3cfb0518"
+      }
+    },
+    {
+      "source_id": "flip08-confirm5",
+      "controller": "v2_xyz",
+      "family": "v2",
+      "seed": 20261107,
+      "anchor_step": 100,
+      "steps": 300,
+      "success": false,
+      "frames": {
+        "path": "/data/zl202621/KECRL/results/libero-task7-eef-xyz-control-20261117-v2/handoff/flip08-confirm5-cached_xyz_mlp-episode.npz",
+        "sha256": "375b90cb7e61fd6be4581dbab90961abe8914ef34487fbb929f7b67103bd227e"
+      }
+    },
+    {
+      "source_id": "flip08-confirm5",
+      "controller": "v3_spatial",
+      "family": "v3",
+      "seed": 20261107,
+      "anchor_step": 100,
+      "steps": 300,
+      "success": false,
+      "frames": {
+        "path": "/data/zl202621/KECRL/results/libero-task7-spatial-readout-20261117-v3/handoff/flip08-confirm5-spatial_coordinates_zero_xyz-episode.npz",
+        "sha256": "54d733fba74451cba479913f56d7c00fdb6ad42c962d0a4fa04104debe885fb5"
+      }
+    },
+    {
+      "source_id": "flip10-unchanged",
+      "controller": "control",
+      "family": "v3",
+      "seed": 20261107,
+      "anchor_step": 100,
+      "steps": 158,
+      "success": true,
+      "frames": {
+        "path": "/data/zl202621/KECRL/results/libero-task7-spatial-readout-20261117-v3/handoff/flip10-unchanged-flat_zero_xyz-episode.npz",
+        "sha256": "50ab948178ffefa0ce9bc5c620d935078e94e87c597cd90f576bc54d62425cd8"
+      }
+    },
+    {
+      "source_id": "flip10-unchanged",
+      "controller": "v2_xyz",
+      "family": "v2",
+      "seed": 20261107,
+      "anchor_step": 100,
+      "steps": 300,
+      "success": false,
+      "frames": {
+        "path": "/data/zl202621/KECRL/results/libero-task7-eef-xyz-control-20261117-v2/handoff/flip10-unchanged-cached_xyz_mlp-episode.npz",
+        "sha256": "e2274fbd924cf92d152fcfdf256168953afe04c7ca12b4143ba32f77fe65dbb8"
+      }
+    },
+    {
+      "source_id": "flip10-unchanged",
+      "controller": "v3_spatial",
+      "family": "v3",
+      "seed": 20261107,
+      "anchor_step": 100,
+      "steps": 300,
+      "success": false,
+      "frames": {
+        "path": "/data/zl202621/KECRL/results/libero-task7-spatial-readout-20261117-v3/handoff/flip10-unchanged-spatial_coordinates_zero_xyz-episode.npz",
+        "sha256": "3f53a1132d76b1552aab724042c5479234b811f69fc81b80afe6dee0baf6b61f"
+      }
+    }
+  ],
+  "caps": {
+    "npz_parses": 9,
+    "numeric_member_decodes": 9,
+    "numeric_scalars": 15582,
+    "source_container_bytes": 96206559,
+    "rgb_pixel_decodes": 0,
+    "eef_decodes": 0,
+    "object_state_reads": 0,
+    "policy_forwards": 0,
+    "model_constructions": 0,
+    "checkpoint_reads": 0,
+    "hdf5_reads": 0,
+    "initial_bank_reads": 0,
+    "optimizer_updates": 0,
+    "native_steps": 0
+  },
+  "output": "/data/zl202621/KECRL/results/libero-task7-v2-v3-crosscheck-20261118-v1",
+  "combination_model_tested": false
+}

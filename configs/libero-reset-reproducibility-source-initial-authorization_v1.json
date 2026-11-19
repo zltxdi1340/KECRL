@@ -1,0 +1,40 @@
+{
+  "kind": "explicit_source_development_reset_probe_authorization",
+  "version": 1,
+  "user_approved": true,
+  "science": {
+    "path": "/data/zl202621/KECRL/configs/libero-reset-reproducibility-diagnostic_v1.json",
+    "sha256": "a5d083380101b45ac5fb83f25ba1d460494b7d82eaa23dfb678d106ebce12ffc"
+  },
+  "user_quote": "为什么第3段的初始观测与原记录不一致，按协议停止。下一步先核对环境reset能否复现，再继续夹爪时机分析",
+  "scope_context": "Implements the immediately preceding report proposal: direct7 vs sequential0..7, 2 environments, 9 resets, 45 zero steps, 8 source rows; no original video retry.",
+  "tasks": [
+    4
+  ],
+  "indices": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7
+  ],
+  "role": "candidate_nonregression",
+  "native_steps_max": 45,
+  "resets_max": 9,
+  "numeric_rows_max": 8,
+  "initial_row_loads_max": 1,
+  "adapters_max": 2,
+  "policy_forwards_max": 0,
+  "optimizer_updates_max": 0,
+  "saved_actions_max": 0,
+  "previous_video_permission_reused": false,
+  "model_reads_allowed": false,
+  "hdf5_allowed": false,
+  "source_meta_query_allowed": false,
+  "extra_cameras_allowed": false,
+  "sealed_roles_allowed": [],
+  "recorded_at_UTC": "2026-11-14T08:50:20.836919+00:00"
+}

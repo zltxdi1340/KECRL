@@ -1,0 +1,58 @@
+{
+  "kind": "libero_task7_view_specific_readout_v4_scientific_freeze",
+  "status": "passed_v4_scientific_freeze_execution_denied",
+  "formal_result": false,
+  "report": {
+    "path": "/data/zl202621/KECRL/docs/libero-task7-view-specific-readout-freeze-v4-2026-11-18.md",
+    "sha256": "9d15909c209654c7d1f040b1109b78ba6a6c936bcfb5d3dcea6bb21a618dc170"
+  },
+  "protocol": {
+    "path": "/data/zl202621/KECRL/docs/libero-task7-view-specific-readout-protocol-v4-2026-11-18.md",
+    "sha256": "a973a834847532e252c47f327e68d6eb192fb6bb730e13e48d4830e20d881a10"
+  },
+  "science": {
+    "path": "/data/zl202621/KECRL/configs/libero-task7-view-specific-readout_v4.json",
+    "sha256": "41288dc87132847bd6f4a220a5c45020e8f7c4643b56b9b4fd7182906bd65608"
+  },
+  "binding": {
+    "path": "/data/zl202621/KECRL/configs/libero-task7-view-specific-readout-freeze-binding_v4.json",
+    "sha256": "ee55b62f7a3823ce4ff17857c22fcf8863cb719eed4811ec77afdc31f99c5599"
+  },
+  "dependencies": 975,
+  "validation": [
+    {
+      "path": "/data/zl202621/KECRL/logs/libero-task7-view-specific-readout-freeze-20261118-v4/tests-bound.txt",
+      "sha256": "57473ace50f70b4c30cebe8e646cf94b19cce737f36a9e8480cc0786b14ff9f6"
+    },
+    {
+      "path": "/data/zl202621/KECRL/logs/libero-task7-view-specific-readout-freeze-20261118-v4/tests-bound.xml",
+      "sha256": "4208770f78330ae13bb69531b738d2039c8074a0e11ea31c49d89296f500c407"
+    },
+    {
+      "path": "/data/zl202621/KECRL/logs/libero-task7-view-specific-readout-freeze-20261118-v4/environment.txt",
+      "sha256": "d90966e5dd83e5135b8cfd0add1b8edae2103040873be71d494412be2a7d19c3"
+    }
+  ],
+  "tests": 136,
+  "new_v4_tests": 57,
+  "parent_v3_tests": 79,
+  "readout_seed_offsets": {
+    "agentview": 9400001,
+    "eye_in_hand": 9500001
+  },
+  "trainable_parameters": {
+    "flat_zero_xyz": 1514120,
+    "view_specific_spatial_zero_xyz": 1507272
+  },
+  "scientific_freeze_authorizes_execution": false,
+  "stages_denied": [
+    "train",
+    "handoff",
+    "full"
+  ],
+  "research_payload_reads": 0,
+  "research_payload_hashes": 0,
+  "real_optimizer_updates": 0,
+  "native_steps": 0,
+  "new_research_results": false
+}

@@ -5,7 +5,9 @@
 观测协议已经冻结：HDF5 causal observation 用作完整离线 BC 数据，当前 runtime 只用于闭环和对齐诊断。本次在该协议下检验两个动作损失假设：
 
 1. `phase_balanced`：按 support 示教中 approach/transport/release 的步数做逆频率加权，让出现较少的 release 阶段在训练中获得更高权重；
-2. `gripper_weighted`：保持阶段均衡不变，只把 gripper 这一维的 MSE 权重固定为 6，使其总贡献与 6 个机械臂动作维度同量级。
+2. `gripper_weighted`：采用 uniform phase，只把 gripper 这一维的 MSE 权重固定为 6，其他六维权重为 1，分母为 `12 × valid_step_count`。
+
+实现核对修订（2026-11-01）：此前此处写成“保持阶段均衡不变”不准确。冻结配置中的模式为 `uniform_phase_gripper_6x_action_mse`，runner 的该分支将所有 step weights 设为 1，没有叠加 phase-balanced。本修订只更正说明，不改变历史配置、代码、artifact 或下表数值。
 
 三臂均使用 task 3、task 7、seed `20261021`、causal pre-action HDF5 view、相同初始化、相同 DataLoader 顺序和 500 次 Adam update：`baseline`、`phase_balanced`、`gripper_weighted`。没有执行 Policy 闭环动作，没有访问 validation/held-out/qualification，没有选择 checkpoint，也没有更新 SPT/Knowledge 或注册 Module。
 

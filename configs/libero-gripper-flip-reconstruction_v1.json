@@ -1,0 +1,1054 @@
+{
+  "kind": "libero_all13_flip_saved_applied_reconstruction",
+  "version": 1,
+  "task": 7,
+  "formal_result": false,
+  "initial_role": "candidate_nonregression",
+  "environment_seed": 20261022,
+  "stabilization_steps": 5,
+  "horizon": 300,
+  "image_size": 128,
+  "policy_inference": false,
+  "actions": "saved_applied_only",
+  "new_success_rate_estimate": false,
+  "no_automatic_retry": true,
+  "warmup": "sequential_resets_0_through_target",
+  "previous_full_episodes_replayed": false,
+  "exact_target_reset_required": true,
+  "exact_public_trace_required": true,
+  "private_state_equivalence_proven": false,
+  "runtime_environment": {
+    "CUDA_VISIBLE_DEVICES": "1",
+    "MUJOCO_EGL_DEVICE_ID": "1",
+    "MUJOCO_GL": "egl",
+    "OMP_NUM_THREADS": "1",
+    "OPENBLAS_NUM_THREADS": "1",
+    "MKL_NUM_THREADS": "1",
+    "PYTHONHASHSEED": "0",
+    "CUBLAS_WORKSPACE_CONFIG": ":4096:8"
+  },
+  "wall_seconds_max": 1800,
+  "cases": [
+    {
+      "case_id": "flip00",
+      "seed": 20261106,
+      "policy_arm": "layer4_conv_finetune",
+      "initial_state_index": 3,
+      "outcome": "gained",
+      "episodes": {
+        "unchanged": {
+          "seed": 20261106,
+          "policy_arm": "layer4_conv_finetune",
+          "condition": "unchanged",
+          "initial_state_index": 3,
+          "success": false,
+          "steps": 300,
+          "masked_steps": 0,
+          "path": "/data/zl202621/KECRL/results/libero-task7-gripper-confirmation-20261115-v2/episodes/20261106-layer4_conv_finetune-unchanged-03.json",
+          "sha256": "de939edf211fb94440fdc77b83d933418fe25f39390770cfff6eef2cc6aa017a"
+        },
+        "confirm5": {
+          "seed": 20261106,
+          "policy_arm": "layer4_conv_finetune",
+          "condition": "confirm5",
+          "initial_state_index": 3,
+          "success": true,
+          "steps": 124,
+          "masked_steps": 5,
+          "path": "/data/zl202621/KECRL/results/libero-task7-gripper-confirmation-20261115-v2/episodes/20261106-layer4_conv_finetune-confirm5-03.json",
+          "sha256": "ce47bb858324a7206ac573b781381e9b8406d56a7b394c5455044d57decead11"
+        }
+      }
+    },
+    {
+      "case_id": "flip01",
+      "seed": 20261106,
+      "policy_arm": "layer4_conv_finetune",
+      "initial_state_index": 5,
+      "outcome": "lost",
+      "episodes": {
+        "unchanged": {
+          "seed": 20261106,
+          "policy_arm": "layer4_conv_finetune",
+          "condition": "unchanged",
+          "initial_state_index": 5,
+          "success": true,
+          "steps": 257,
+          "masked_steps": 0,
+          "path": "/data/zl202621/KECRL/results/libero-task7-gripper-confirmation-20261115-v2/episodes/20261106-layer4_conv_finetune-unchanged-05.json",
+          "sha256": "e31fca65f5eff72489dbb1a3fd4cea95195b8dc6fa78e097bcf0072adcb684d0"
+        },
+        "confirm5": {
+          "seed": 20261106,
+          "policy_arm": "layer4_conv_finetune",
+          "condition": "confirm5",
+          "initial_state_index": 5,
+          "success": false,
+          "steps": 300,
+          "masked_steps": 21,
+          "path": "/data/zl202621/KECRL/results/libero-task7-gripper-confirmation-20261115-v2/episodes/20261106-layer4_conv_finetune-confirm5-05.json",
+          "sha256": "0b670a4cc7351f62142ceb2f4fa257a376f882fc5a0941cfcf39f639e2ef7f90"
+        }
+      }
+    },
+    {
+      "case_id": "flip02",
+      "seed": 20261106,
+      "policy_arm": "layer4_conv_finetune",
+      "initial_state_index": 9,
+      "outcome": "gained",
+      "episodes": {
+        "unchanged": {
+          "seed": 20261106,
+          "policy_arm": "layer4_conv_finetune",
+          "condition": "unchanged",
+          "initial_state_index": 9,
+          "success": false,
+          "steps": 300,
+          "masked_steps": 0,
+          "path": "/data/zl202621/KECRL/results/libero-task7-gripper-confirmation-20261115-v2/episodes/20261106-layer4_conv_finetune-unchanged-09.json",
+          "sha256": "83e40fdb87c86e94d427c8e25f430f2b6f9dd1cb0c6a14ed8d81fa495b296bbe"
+        },
+        "confirm5": {
+          "seed": 20261106,
+          "policy_arm": "layer4_conv_finetune",
+          "condition": "confirm5",
+          "initial_state_index": 9,
+          "success": true,
+          "steps": 115,
+          "masked_steps": 5,
+          "path": "/data/zl202621/KECRL/results/libero-task7-gripper-confirmation-20261115-v2/episodes/20261106-layer4_conv_finetune-confirm5-09.json",
+          "sha256": "1c278ddce65169fb9bbdcdc3c9699abc27b1914d91653a78c5db6ebc3ea90c6d"
+        }
+      }
+    },
+    {
+      "case_id": "flip03",
+      "seed": 20261106,
+      "policy_arm": "layer4_conv_finetune",
+      "initial_state_index": 11,
+      "outcome": "gained",
+      "episodes": {
+        "unchanged": {
+          "seed": 20261106,
+          "policy_arm": "layer4_conv_finetune",
+          "condition": "unchanged",
+          "initial_state_index": 11,
+          "success": false,
+          "steps": 300,
+          "masked_steps": 0,
+          "path": "/data/zl202621/KECRL/results/libero-task7-gripper-confirmation-20261115-v2/episodes/20261106-layer4_conv_finetune-unchanged-11.json",
+          "sha256": "98e56ad1bde2d8e97a697f2494466cf7bc9b367cb5dbe1cb761872950ed54ee9"
+        },
+        "confirm5": {
+          "seed": 20261106,
+          "policy_arm": "layer4_conv_finetune",
+          "condition": "confirm5",
+          "initial_state_index": 11,
+          "success": true,
+          "steps": 128,
+          "masked_steps": 5,
+          "path": "/data/zl202621/KECRL/results/libero-task7-gripper-confirmation-20261115-v2/episodes/20261106-layer4_conv_finetune-confirm5-11.json",
+          "sha256": "5b9ca1e71c3d3ef174a1d5c1fdd6692c8ff2c0ed0a52746c929565d993df36e5"
+        }
+      }
+    },
+    {
+      "case_id": "flip04",
+      "seed": 20261106,
+      "policy_arm": "layer4_conv_finetune",
+      "initial_state_index": 13,
+      "outcome": "gained",
+      "episodes": {
+        "unchanged": {
+          "seed": 20261106,
+          "policy_arm": "layer4_conv_finetune",
+          "condition": "unchanged",
+          "initial_state_index": 13,
+          "success": false,
+          "steps": 300,
+          "masked_steps": 0,
+          "path": "/data/zl202621/KECRL/results/libero-task7-gripper-confirmation-20261115-v2/episodes/20261106-layer4_conv_finetune-unchanged-13.json",
+          "sha256": "5cd0eddffb112f739ff946fb2cc2b2dc993fe109bdf9be50b5236f75a1287f57"
+        },
+        "confirm5": {
+          "seed": 20261106,
+          "policy_arm": "layer4_conv_finetune",
+          "condition": "confirm5",
+          "initial_state_index": 13,
+          "success": true,
+          "steps": 217,
+          "masked_steps": 6,
+          "path": "/data/zl202621/KECRL/results/libero-task7-gripper-confirmation-20261115-v2/episodes/20261106-layer4_conv_finetune-confirm5-13.json",
+          "sha256": "2b55e1fb975cffbf6131b3be889cbafa062081eacccb216e418edf10cefd649b"
+        }
+      }
+    },
+    {
+      "case_id": "flip05",
+      "seed": 20261106,
+      "policy_arm": "layer4_conv_finetune",
+      "initial_state_index": 15,
+      "outcome": "gained",
+      "episodes": {
+        "unchanged": {
+          "seed": 20261106,
+          "policy_arm": "layer4_conv_finetune",
+          "condition": "unchanged",
+          "initial_state_index": 15,
+          "success": false,
+          "steps": 300,
+          "masked_steps": 0,
+          "path": "/data/zl202621/KECRL/results/libero-task7-gripper-confirmation-20261115-v2/episodes/20261106-layer4_conv_finetune-unchanged-15.json",
+          "sha256": "3786d3f8115a0009edcdd66e023671d794de3cb2ad958e1f153f287a19de859a"
+        },
+        "confirm5": {
+          "seed": 20261106,
+          "policy_arm": "layer4_conv_finetune",
+          "condition": "confirm5",
+          "initial_state_index": 15,
+          "success": true,
+          "steps": 162,
+          "masked_steps": 5,
+          "path": "/data/zl202621/KECRL/results/libero-task7-gripper-confirmation-20261115-v2/episodes/20261106-layer4_conv_finetune-confirm5-15.json",
+          "sha256": "1c0296866d0160565cb04befe5591ebde61275f2c4d639c8390386cf1f76b943"
+        }
+      }
+    },
+    {
+      "case_id": "flip06",
+      "seed": 20261106,
+      "policy_arm": "layer4_conv_finetune",
+      "initial_state_index": 17,
+      "outcome": "lost",
+      "episodes": {
+        "unchanged": {
+          "seed": 20261106,
+          "policy_arm": "layer4_conv_finetune",
+          "condition": "unchanged",
+          "initial_state_index": 17,
+          "success": true,
+          "steps": 109,
+          "masked_steps": 0,
+          "path": "/data/zl202621/KECRL/results/libero-task7-gripper-confirmation-20261115-v2/episodes/20261106-layer4_conv_finetune-unchanged-17.json",
+          "sha256": "37e54ee2063562c831eb91d94156ddda864a1fc29288c4b1d114809b57be1ce6"
+        },
+        "confirm5": {
+          "seed": 20261106,
+          "policy_arm": "layer4_conv_finetune",
+          "condition": "confirm5",
+          "initial_state_index": 17,
+          "success": false,
+          "steps": 300,
+          "masked_steps": 10,
+          "path": "/data/zl202621/KECRL/results/libero-task7-gripper-confirmation-20261115-v2/episodes/20261106-layer4_conv_finetune-confirm5-17.json",
+          "sha256": "047d1641e80ca66bfc1ce68242ded9cbe86115b8ea10876f6a62e5a3ab02f6e1"
+        }
+      }
+    },
+    {
+      "case_id": "flip07",
+      "seed": 20261107,
+      "policy_arm": "frozen_resnet18",
+      "initial_state_index": 10,
+      "outcome": "gained",
+      "episodes": {
+        "unchanged": {
+          "seed": 20261107,
+          "policy_arm": "frozen_resnet18",
+          "condition": "unchanged",
+          "initial_state_index": 10,
+          "success": false,
+          "steps": 300,
+          "masked_steps": 0,
+          "path": "/data/zl202621/KECRL/results/libero-task7-gripper-confirmation-20261115-v2/episodes/20261107-frozen_resnet18-unchanged-10.json",
+          "sha256": "06a81191d66341215d67375a691f7a30c32b588b37ad3e9b6c20923e9469919d"
+        },
+        "confirm5": {
+          "seed": 20261107,
+          "policy_arm": "frozen_resnet18",
+          "condition": "confirm5",
+          "initial_state_index": 10,
+          "success": true,
+          "steps": 298,
+          "masked_steps": 25,
+          "path": "/data/zl202621/KECRL/results/libero-task7-gripper-confirmation-20261115-v2/episodes/20261107-frozen_resnet18-confirm5-10.json",
+          "sha256": "ff2698114603171db89b7b2a07f0f13f755799f13cb60f0cd614724891fe14b2"
+        }
+      }
+    },
+    {
+      "case_id": "flip08",
+      "seed": 20261107,
+      "policy_arm": "frozen_resnet18",
+      "initial_state_index": 13,
+      "outcome": "lost",
+      "episodes": {
+        "unchanged": {
+          "seed": 20261107,
+          "policy_arm": "frozen_resnet18",
+          "condition": "unchanged",
+          "initial_state_index": 13,
+          "success": true,
+          "steps": 167,
+          "masked_steps": 0,
+          "path": "/data/zl202621/KECRL/results/libero-task7-gripper-confirmation-20261115-v2/episodes/20261107-frozen_resnet18-unchanged-13.json",
+          "sha256": "6b1691086e5145fdc58d6614ca3014ba59d93760fd565c19073fe22e31a37ac7"
+        },
+        "confirm5": {
+          "seed": 20261107,
+          "policy_arm": "frozen_resnet18",
+          "condition": "confirm5",
+          "initial_state_index": 13,
+          "success": false,
+          "steps": 300,
+          "masked_steps": 5,
+          "path": "/data/zl202621/KECRL/results/libero-task7-gripper-confirmation-20261115-v2/episodes/20261107-frozen_resnet18-confirm5-13.json",
+          "sha256": "fd647d5fd055947d28a206dcf8e9975d31d4311f51f9d731bf8ec29017baca0d"
+        }
+      }
+    },
+    {
+      "case_id": "flip09",
+      "seed": 20261107,
+      "policy_arm": "frozen_resnet18",
+      "initial_state_index": 14,
+      "outcome": "lost",
+      "episodes": {
+        "unchanged": {
+          "seed": 20261107,
+          "policy_arm": "frozen_resnet18",
+          "condition": "unchanged",
+          "initial_state_index": 14,
+          "success": true,
+          "steps": 134,
+          "masked_steps": 0,
+          "path": "/data/zl202621/KECRL/results/libero-task7-gripper-confirmation-20261115-v2/episodes/20261107-frozen_resnet18-unchanged-14.json",
+          "sha256": "3589ed595ec2de48d24807bb1eded1f62f89da99a0c3fdb4a5d441933917cb76"
+        },
+        "confirm5": {
+          "seed": 20261107,
+          "policy_arm": "frozen_resnet18",
+          "condition": "confirm5",
+          "initial_state_index": 14,
+          "success": false,
+          "steps": 300,
+          "masked_steps": 5,
+          "path": "/data/zl202621/KECRL/results/libero-task7-gripper-confirmation-20261115-v2/episodes/20261107-frozen_resnet18-confirm5-14.json",
+          "sha256": "2d917f020c422d7a7a0d51d93b5e4d22af5fa383c22a18f66a3a3d07ebf3228c"
+        }
+      }
+    },
+    {
+      "case_id": "flip10",
+      "seed": 20261107,
+      "policy_arm": "frozen_resnet18",
+      "initial_state_index": 18,
+      "outcome": "gained",
+      "episodes": {
+        "unchanged": {
+          "seed": 20261107,
+          "policy_arm": "frozen_resnet18",
+          "condition": "unchanged",
+          "initial_state_index": 18,
+          "success": false,
+          "steps": 300,
+          "masked_steps": 0,
+          "path": "/data/zl202621/KECRL/results/libero-task7-gripper-confirmation-20261115-v2/episodes/20261107-frozen_resnet18-unchanged-18.json",
+          "sha256": "7233b5a51d110da191e8ea6afea66c2d1f3d2b5855d2c8975ad3f93655b2abfc"
+        },
+        "confirm5": {
+          "seed": 20261107,
+          "policy_arm": "frozen_resnet18",
+          "condition": "confirm5",
+          "initial_state_index": 18,
+          "success": true,
+          "steps": 251,
+          "masked_steps": 5,
+          "path": "/data/zl202621/KECRL/results/libero-task7-gripper-confirmation-20261115-v2/episodes/20261107-frozen_resnet18-confirm5-18.json",
+          "sha256": "be5e22b56e7f9bb4d064dd48026d4c76cd7fceebffc504e36d7241c7abc47478"
+        }
+      }
+    },
+    {
+      "case_id": "flip11",
+      "seed": 20261107,
+      "policy_arm": "layer4_conv_finetune",
+      "initial_state_index": 14,
+      "outcome": "lost",
+      "episodes": {
+        "unchanged": {
+          "seed": 20261107,
+          "policy_arm": "layer4_conv_finetune",
+          "condition": "unchanged",
+          "initial_state_index": 14,
+          "success": true,
+          "steps": 219,
+          "masked_steps": 0,
+          "path": "/data/zl202621/KECRL/results/libero-task7-gripper-confirmation-20261115-v2/episodes/20261107-layer4_conv_finetune-unchanged-14.json",
+          "sha256": "9ca63447f23f43fe4f0093f0365e415ef83599d7c205f1c48f01035caef76b3a"
+        },
+        "confirm5": {
+          "seed": 20261107,
+          "policy_arm": "layer4_conv_finetune",
+          "condition": "confirm5",
+          "initial_state_index": 14,
+          "success": false,
+          "steps": 300,
+          "masked_steps": 5,
+          "path": "/data/zl202621/KECRL/results/libero-task7-gripper-confirmation-20261115-v2/episodes/20261107-layer4_conv_finetune-confirm5-14.json",
+          "sha256": "f750975c3e1578d9722ca80b135f57c173babba32077d72bf86fff0bd1fe6a98"
+        }
+      }
+    },
+    {
+      "case_id": "flip12",
+      "seed": 20261108,
+      "policy_arm": "frozen_resnet18",
+      "initial_state_index": 5,
+      "outcome": "lost",
+      "episodes": {
+        "unchanged": {
+          "seed": 20261108,
+          "policy_arm": "frozen_resnet18",
+          "condition": "unchanged",
+          "initial_state_index": 5,
+          "success": true,
+          "steps": 149,
+          "masked_steps": 0,
+          "path": "/data/zl202621/KECRL/results/libero-task7-gripper-confirmation-20261115-v2/episodes/20261108-frozen_resnet18-unchanged-05.json",
+          "sha256": "5343c794bbe1a7814095a2c72ff8a668f69e9a7818167356bf1a013a241e1059"
+        },
+        "confirm5": {
+          "seed": 20261108,
+          "policy_arm": "frozen_resnet18",
+          "condition": "confirm5",
+          "initial_state_index": 5,
+          "success": false,
+          "steps": 300,
+          "masked_steps": 5,
+          "path": "/data/zl202621/KECRL/results/libero-task7-gripper-confirmation-20261115-v2/episodes/20261108-frozen_resnet18-confirm5-05.json",
+          "sha256": "8e8dea04fe2d01f2d8fc2737648d02d1da88c5c06c2c65a753e8c7837de4f28e"
+        }
+      }
+    }
+  ],
+  "problems": [
+    {
+      "problem_id": "flip00-unchanged",
+      "case_id": "flip00",
+      "task": 7,
+      "seed": 20261106,
+      "policy_arm": "layer4_conv_finetune",
+      "initial_state_index": 3,
+      "condition": "unchanged",
+      "source": {
+        "seed": 20261106,
+        "policy_arm": "layer4_conv_finetune",
+        "condition": "unchanged",
+        "initial_state_index": 3,
+        "success": false,
+        "steps": 300,
+        "masked_steps": 0,
+        "path": "/data/zl202621/KECRL/results/libero-task7-gripper-confirmation-20261115-v2/episodes/20261106-layer4_conv_finetune-unchanged-03.json",
+        "sha256": "de939edf211fb94440fdc77b83d933418fe25f39390770cfff6eef2cc6aa017a"
+      }
+    },
+    {
+      "problem_id": "flip00-confirm5",
+      "case_id": "flip00",
+      "task": 7,
+      "seed": 20261106,
+      "policy_arm": "layer4_conv_finetune",
+      "initial_state_index": 3,
+      "condition": "confirm5",
+      "source": {
+        "seed": 20261106,
+        "policy_arm": "layer4_conv_finetune",
+        "condition": "confirm5",
+        "initial_state_index": 3,
+        "success": true,
+        "steps": 124,
+        "masked_steps": 5,
+        "path": "/data/zl202621/KECRL/results/libero-task7-gripper-confirmation-20261115-v2/episodes/20261106-layer4_conv_finetune-confirm5-03.json",
+        "sha256": "ce47bb858324a7206ac573b781381e9b8406d56a7b394c5455044d57decead11"
+      }
+    },
+    {
+      "problem_id": "flip01-unchanged",
+      "case_id": "flip01",
+      "task": 7,
+      "seed": 20261106,
+      "policy_arm": "layer4_conv_finetune",
+      "initial_state_index": 5,
+      "condition": "unchanged",
+      "source": {
+        "seed": 20261106,
+        "policy_arm": "layer4_conv_finetune",
+        "condition": "unchanged",
+        "initial_state_index": 5,
+        "success": true,
+        "steps": 257,
+        "masked_steps": 0,
+        "path": "/data/zl202621/KECRL/results/libero-task7-gripper-confirmation-20261115-v2/episodes/20261106-layer4_conv_finetune-unchanged-05.json",
+        "sha256": "e31fca65f5eff72489dbb1a3fd4cea95195b8dc6fa78e097bcf0072adcb684d0"
+      }
+    },
+    {
+      "problem_id": "flip01-confirm5",
+      "case_id": "flip01",
+      "task": 7,
+      "seed": 20261106,
+      "policy_arm": "layer4_conv_finetune",
+      "initial_state_index": 5,
+      "condition": "confirm5",
+      "source": {
+        "seed": 20261106,
+        "policy_arm": "layer4_conv_finetune",
+        "condition": "confirm5",
+        "initial_state_index": 5,
+        "success": false,
+        "steps": 300,
+        "masked_steps": 21,
+        "path": "/data/zl202621/KECRL/results/libero-task7-gripper-confirmation-20261115-v2/episodes/20261106-layer4_conv_finetune-confirm5-05.json",
+        "sha256": "0b670a4cc7351f62142ceb2f4fa257a376f882fc5a0941cfcf39f639e2ef7f90"
+      }
+    },
+    {
+      "problem_id": "flip02-unchanged",
+      "case_id": "flip02",
+      "task": 7,
+      "seed": 20261106,
+      "policy_arm": "layer4_conv_finetune",
+      "initial_state_index": 9,
+      "condition": "unchanged",
+      "source": {
+        "seed": 20261106,
+        "policy_arm": "layer4_conv_finetune",
+        "condition": "unchanged",
+        "initial_state_index": 9,
+        "success": false,
+        "steps": 300,
+        "masked_steps": 0,
+        "path": "/data/zl202621/KECRL/results/libero-task7-gripper-confirmation-20261115-v2/episodes/20261106-layer4_conv_finetune-unchanged-09.json",
+        "sha256": "83e40fdb87c86e94d427c8e25f430f2b6f9dd1cb0c6a14ed8d81fa495b296bbe"
+      }
+    },
+    {
+      "problem_id": "flip02-confirm5",
+      "case_id": "flip02",
+      "task": 7,
+      "seed": 20261106,
+      "policy_arm": "layer4_conv_finetune",
+      "initial_state_index": 9,
+      "condition": "confirm5",
+      "source": {
+        "seed": 20261106,
+        "policy_arm": "layer4_conv_finetune",
+        "condition": "confirm5",
+        "initial_state_index": 9,
+        "success": true,
+        "steps": 115,
+        "masked_steps": 5,
+        "path": "/data/zl202621/KECRL/results/libero-task7-gripper-confirmation-20261115-v2/episodes/20261106-layer4_conv_finetune-confirm5-09.json",
+        "sha256": "1c278ddce65169fb9bbdcdc3c9699abc27b1914d91653a78c5db6ebc3ea90c6d"
+      }
+    },
+    {
+      "problem_id": "flip03-unchanged",
+      "case_id": "flip03",
+      "task": 7,
+      "seed": 20261106,
+      "policy_arm": "layer4_conv_finetune",
+      "initial_state_index": 11,
+      "condition": "unchanged",
+      "source": {
+        "seed": 20261106,
+        "policy_arm": "layer4_conv_finetune",
+        "condition": "unchanged",
+        "initial_state_index": 11,
+        "success": false,
+        "steps": 300,
+        "masked_steps": 0,
+        "path": "/data/zl202621/KECRL/results/libero-task7-gripper-confirmation-20261115-v2/episodes/20261106-layer4_conv_finetune-unchanged-11.json",
+        "sha256": "98e56ad1bde2d8e97a697f2494466cf7bc9b367cb5dbe1cb761872950ed54ee9"
+      }
+    },
+    {
+      "problem_id": "flip03-confirm5",
+      "case_id": "flip03",
+      "task": 7,
+      "seed": 20261106,
+      "policy_arm": "layer4_conv_finetune",
+      "initial_state_index": 11,
+      "condition": "confirm5",
+      "source": {
+        "seed": 20261106,
+        "policy_arm": "layer4_conv_finetune",
+        "condition": "confirm5",
+        "initial_state_index": 11,
+        "success": true,
+        "steps": 128,
+        "masked_steps": 5,
+        "path": "/data/zl202621/KECRL/results/libero-task7-gripper-confirmation-20261115-v2/episodes/20261106-layer4_conv_finetune-confirm5-11.json",
+        "sha256": "5b9ca1e71c3d3ef174a1d5c1fdd6692c8ff2c0ed0a52746c929565d993df36e5"
+      }
+    },
+    {
+      "problem_id": "flip04-unchanged",
+      "case_id": "flip04",
+      "task": 7,
+      "seed": 20261106,
+      "policy_arm": "layer4_conv_finetune",
+      "initial_state_index": 13,
+      "condition": "unchanged",
+      "source": {
+        "seed": 20261106,
+        "policy_arm": "layer4_conv_finetune",
+        "condition": "unchanged",
+        "initial_state_index": 13,
+        "success": false,
+        "steps": 300,
+        "masked_steps": 0,
+        "path": "/data/zl202621/KECRL/results/libero-task7-gripper-confirmation-20261115-v2/episodes/20261106-layer4_conv_finetune-unchanged-13.json",
+        "sha256": "5cd0eddffb112f739ff946fb2cc2b2dc993fe109bdf9be50b5236f75a1287f57"
+      }
+    },
+    {
+      "problem_id": "flip04-confirm5",
+      "case_id": "flip04",
+      "task": 7,
+      "seed": 20261106,
+      "policy_arm": "layer4_conv_finetune",
+      "initial_state_index": 13,
+      "condition": "confirm5",
+      "source": {
+        "seed": 20261106,
+        "policy_arm": "layer4_conv_finetune",
+        "condition": "confirm5",
+        "initial_state_index": 13,
+        "success": true,
+        "steps": 217,
+        "masked_steps": 6,
+        "path": "/data/zl202621/KECRL/results/libero-task7-gripper-confirmation-20261115-v2/episodes/20261106-layer4_conv_finetune-confirm5-13.json",
+        "sha256": "2b55e1fb975cffbf6131b3be889cbafa062081eacccb216e418edf10cefd649b"
+      }
+    },
+    {
+      "problem_id": "flip05-unchanged",
+      "case_id": "flip05",
+      "task": 7,
+      "seed": 20261106,
+      "policy_arm": "layer4_conv_finetune",
+      "initial_state_index": 15,
+      "condition": "unchanged",
+      "source": {
+        "seed": 20261106,
+        "policy_arm": "layer4_conv_finetune",
+        "condition": "unchanged",
+        "initial_state_index": 15,
+        "success": false,
+        "steps": 300,
+        "masked_steps": 0,
+        "path": "/data/zl202621/KECRL/results/libero-task7-gripper-confirmation-20261115-v2/episodes/20261106-layer4_conv_finetune-unchanged-15.json",
+        "sha256": "3786d3f8115a0009edcdd66e023671d794de3cb2ad958e1f153f287a19de859a"
+      }
+    },
+    {
+      "problem_id": "flip05-confirm5",
+      "case_id": "flip05",
+      "task": 7,
+      "seed": 20261106,
+      "policy_arm": "layer4_conv_finetune",
+      "initial_state_index": 15,
+      "condition": "confirm5",
+      "source": {
+        "seed": 20261106,
+        "policy_arm": "layer4_conv_finetune",
+        "condition": "confirm5",
+        "initial_state_index": 15,
+        "success": true,
+        "steps": 162,
+        "masked_steps": 5,
+        "path": "/data/zl202621/KECRL/results/libero-task7-gripper-confirmation-20261115-v2/episodes/20261106-layer4_conv_finetune-confirm5-15.json",
+        "sha256": "1c0296866d0160565cb04befe5591ebde61275f2c4d639c8390386cf1f76b943"
+      }
+    },
+    {
+      "problem_id": "flip06-unchanged",
+      "case_id": "flip06",
+      "task": 7,
+      "seed": 20261106,
+      "policy_arm": "layer4_conv_finetune",
+      "initial_state_index": 17,
+      "condition": "unchanged",
+      "source": {
+        "seed": 20261106,
+        "policy_arm": "layer4_conv_finetune",
+        "condition": "unchanged",
+        "initial_state_index": 17,
+        "success": true,
+        "steps": 109,
+        "masked_steps": 0,
+        "path": "/data/zl202621/KECRL/results/libero-task7-gripper-confirmation-20261115-v2/episodes/20261106-layer4_conv_finetune-unchanged-17.json",
+        "sha256": "37e54ee2063562c831eb91d94156ddda864a1fc29288c4b1d114809b57be1ce6"
+      }
+    },
+    {
+      "problem_id": "flip06-confirm5",
+      "case_id": "flip06",
+      "task": 7,
+      "seed": 20261106,
+      "policy_arm": "layer4_conv_finetune",
+      "initial_state_index": 17,
+      "condition": "confirm5",
+      "source": {
+        "seed": 20261106,
+        "policy_arm": "layer4_conv_finetune",
+        "condition": "confirm5",
+        "initial_state_index": 17,
+        "success": false,
+        "steps": 300,
+        "masked_steps": 10,
+        "path": "/data/zl202621/KECRL/results/libero-task7-gripper-confirmation-20261115-v2/episodes/20261106-layer4_conv_finetune-confirm5-17.json",
+        "sha256": "047d1641e80ca66bfc1ce68242ded9cbe86115b8ea10876f6a62e5a3ab02f6e1"
+      }
+    },
+    {
+      "problem_id": "flip07-unchanged",
+      "case_id": "flip07",
+      "task": 7,
+      "seed": 20261107,
+      "policy_arm": "frozen_resnet18",
+      "initial_state_index": 10,
+      "condition": "unchanged",
+      "source": {
+        "seed": 20261107,
+        "policy_arm": "frozen_resnet18",
+        "condition": "unchanged",
+        "initial_state_index": 10,
+        "success": false,
+        "steps": 300,
+        "masked_steps": 0,
+        "path": "/data/zl202621/KECRL/results/libero-task7-gripper-confirmation-20261115-v2/episodes/20261107-frozen_resnet18-unchanged-10.json",
+        "sha256": "06a81191d66341215d67375a691f7a30c32b588b37ad3e9b6c20923e9469919d"
+      }
+    },
+    {
+      "problem_id": "flip07-confirm5",
+      "case_id": "flip07",
+      "task": 7,
+      "seed": 20261107,
+      "policy_arm": "frozen_resnet18",
+      "initial_state_index": 10,
+      "condition": "confirm5",
+      "source": {
+        "seed": 20261107,
+        "policy_arm": "frozen_resnet18",
+        "condition": "confirm5",
+        "initial_state_index": 10,
+        "success": true,
+        "steps": 298,
+        "masked_steps": 25,
+        "path": "/data/zl202621/KECRL/results/libero-task7-gripper-confirmation-20261115-v2/episodes/20261107-frozen_resnet18-confirm5-10.json",
+        "sha256": "ff2698114603171db89b7b2a07f0f13f755799f13cb60f0cd614724891fe14b2"
+      }
+    },
+    {
+      "problem_id": "flip08-unchanged",
+      "case_id": "flip08",
+      "task": 7,
+      "seed": 20261107,
+      "policy_arm": "frozen_resnet18",
+      "initial_state_index": 13,
+      "condition": "unchanged",
+      "source": {
+        "seed": 20261107,
+        "policy_arm": "frozen_resnet18",
+        "condition": "unchanged",
+        "initial_state_index": 13,
+        "success": true,
+        "steps": 167,
+        "masked_steps": 0,
+        "path": "/data/zl202621/KECRL/results/libero-task7-gripper-confirmation-20261115-v2/episodes/20261107-frozen_resnet18-unchanged-13.json",
+        "sha256": "6b1691086e5145fdc58d6614ca3014ba59d93760fd565c19073fe22e31a37ac7"
+      }
+    },
+    {
+      "problem_id": "flip08-confirm5",
+      "case_id": "flip08",
+      "task": 7,
+      "seed": 20261107,
+      "policy_arm": "frozen_resnet18",
+      "initial_state_index": 13,
+      "condition": "confirm5",
+      "source": {
+        "seed": 20261107,
+        "policy_arm": "frozen_resnet18",
+        "condition": "confirm5",
+        "initial_state_index": 13,
+        "success": false,
+        "steps": 300,
+        "masked_steps": 5,
+        "path": "/data/zl202621/KECRL/results/libero-task7-gripper-confirmation-20261115-v2/episodes/20261107-frozen_resnet18-confirm5-13.json",
+        "sha256": "fd647d5fd055947d28a206dcf8e9975d31d4311f51f9d731bf8ec29017baca0d"
+      }
+    },
+    {
+      "problem_id": "flip09-unchanged",
+      "case_id": "flip09",
+      "task": 7,
+      "seed": 20261107,
+      "policy_arm": "frozen_resnet18",
+      "initial_state_index": 14,
+      "condition": "unchanged",
+      "source": {
+        "seed": 20261107,
+        "policy_arm": "frozen_resnet18",
+        "condition": "unchanged",
+        "initial_state_index": 14,
+        "success": true,
+        "steps": 134,
+        "masked_steps": 0,
+        "path": "/data/zl202621/KECRL/results/libero-task7-gripper-confirmation-20261115-v2/episodes/20261107-frozen_resnet18-unchanged-14.json",
+        "sha256": "3589ed595ec2de48d24807bb1eded1f62f89da99a0c3fdb4a5d441933917cb76"
+      }
+    },
+    {
+      "problem_id": "flip09-confirm5",
+      "case_id": "flip09",
+      "task": 7,
+      "seed": 20261107,
+      "policy_arm": "frozen_resnet18",
+      "initial_state_index": 14,
+      "condition": "confirm5",
+      "source": {
+        "seed": 20261107,
+        "policy_arm": "frozen_resnet18",
+        "condition": "confirm5",
+        "initial_state_index": 14,
+        "success": false,
+        "steps": 300,
+        "masked_steps": 5,
+        "path": "/data/zl202621/KECRL/results/libero-task7-gripper-confirmation-20261115-v2/episodes/20261107-frozen_resnet18-confirm5-14.json",
+        "sha256": "2d917f020c422d7a7a0d51d93b5e4d22af5fa383c22a18f66a3a3d07ebf3228c"
+      }
+    },
+    {
+      "problem_id": "flip10-unchanged",
+      "case_id": "flip10",
+      "task": 7,
+      "seed": 20261107,
+      "policy_arm": "frozen_resnet18",
+      "initial_state_index": 18,
+      "condition": "unchanged",
+      "source": {
+        "seed": 20261107,
+        "policy_arm": "frozen_resnet18",
+        "condition": "unchanged",
+        "initial_state_index": 18,
+        "success": false,
+        "steps": 300,
+        "masked_steps": 0,
+        "path": "/data/zl202621/KECRL/results/libero-task7-gripper-confirmation-20261115-v2/episodes/20261107-frozen_resnet18-unchanged-18.json",
+        "sha256": "7233b5a51d110da191e8ea6afea66c2d1f3d2b5855d2c8975ad3f93655b2abfc"
+      }
+    },
+    {
+      "problem_id": "flip10-confirm5",
+      "case_id": "flip10",
+      "task": 7,
+      "seed": 20261107,
+      "policy_arm": "frozen_resnet18",
+      "initial_state_index": 18,
+      "condition": "confirm5",
+      "source": {
+        "seed": 20261107,
+        "policy_arm": "frozen_resnet18",
+        "condition": "confirm5",
+        "initial_state_index": 18,
+        "success": true,
+        "steps": 251,
+        "masked_steps": 5,
+        "path": "/data/zl202621/KECRL/results/libero-task7-gripper-confirmation-20261115-v2/episodes/20261107-frozen_resnet18-confirm5-18.json",
+        "sha256": "be5e22b56e7f9bb4d064dd48026d4c76cd7fceebffc504e36d7241c7abc47478"
+      }
+    },
+    {
+      "problem_id": "flip11-unchanged",
+      "case_id": "flip11",
+      "task": 7,
+      "seed": 20261107,
+      "policy_arm": "layer4_conv_finetune",
+      "initial_state_index": 14,
+      "condition": "unchanged",
+      "source": {
+        "seed": 20261107,
+        "policy_arm": "layer4_conv_finetune",
+        "condition": "unchanged",
+        "initial_state_index": 14,
+        "success": true,
+        "steps": 219,
+        "masked_steps": 0,
+        "path": "/data/zl202621/KECRL/results/libero-task7-gripper-confirmation-20261115-v2/episodes/20261107-layer4_conv_finetune-unchanged-14.json",
+        "sha256": "9ca63447f23f43fe4f0093f0365e415ef83599d7c205f1c48f01035caef76b3a"
+      }
+    },
+    {
+      "problem_id": "flip11-confirm5",
+      "case_id": "flip11",
+      "task": 7,
+      "seed": 20261107,
+      "policy_arm": "layer4_conv_finetune",
+      "initial_state_index": 14,
+      "condition": "confirm5",
+      "source": {
+        "seed": 20261107,
+        "policy_arm": "layer4_conv_finetune",
+        "condition": "confirm5",
+        "initial_state_index": 14,
+        "success": false,
+        "steps": 300,
+        "masked_steps": 5,
+        "path": "/data/zl202621/KECRL/results/libero-task7-gripper-confirmation-20261115-v2/episodes/20261107-layer4_conv_finetune-confirm5-14.json",
+        "sha256": "f750975c3e1578d9722ca80b135f57c173babba32077d72bf86fff0bd1fe6a98"
+      }
+    },
+    {
+      "problem_id": "flip12-unchanged",
+      "case_id": "flip12",
+      "task": 7,
+      "seed": 20261108,
+      "policy_arm": "frozen_resnet18",
+      "initial_state_index": 5,
+      "condition": "unchanged",
+      "source": {
+        "seed": 20261108,
+        "policy_arm": "frozen_resnet18",
+        "condition": "unchanged",
+        "initial_state_index": 5,
+        "success": true,
+        "steps": 149,
+        "masked_steps": 0,
+        "path": "/data/zl202621/KECRL/results/libero-task7-gripper-confirmation-20261115-v2/episodes/20261108-frozen_resnet18-unchanged-05.json",
+        "sha256": "5343c794bbe1a7814095a2c72ff8a668f69e9a7818167356bf1a013a241e1059"
+      }
+    },
+    {
+      "problem_id": "flip12-confirm5",
+      "case_id": "flip12",
+      "task": 7,
+      "seed": 20261108,
+      "policy_arm": "frozen_resnet18",
+      "initial_state_index": 5,
+      "condition": "confirm5",
+      "source": {
+        "seed": 20261108,
+        "policy_arm": "frozen_resnet18",
+        "condition": "confirm5",
+        "initial_state_index": 5,
+        "success": false,
+        "steps": 300,
+        "masked_steps": 5,
+        "path": "/data/zl202621/KECRL/results/libero-task7-gripper-confirmation-20261115-v2/episodes/20261108-frozen_resnet18-confirm5-05.json",
+        "sha256": "8e8dea04fe2d01f2d8fc2737648d02d1da88c5c06c2c65a753e8c7837de4f28e"
+      }
+    }
+  ],
+  "caps": {
+    "adapters": 26,
+    "resets": 320,
+    "replay_episodes": 26,
+    "saved_actions": 6230,
+    "zero_steps": 1600,
+    "native_steps": 7830,
+    "initial_row_loads": 1,
+    "numeric_rows": 19,
+    "observations": 6550,
+    "rgb_frames": 13100,
+    "raw_rgb_bytes": 643891200,
+    "source_episode_parses": 26,
+    "source_episode_bytes": 16777216,
+    "source_scalar_projections": 155984,
+    "policy_forwards": 0,
+    "model_creations": 0,
+    "checkpoint_reads": 0,
+    "backwards": 0,
+    "optimizer_updates": 0,
+    "hdf5_reads": 0,
+    "extra_render_calls": 0
+  },
+  "initial_indices": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18
+  ],
+  "initial_bank": {
+    "path": "/data/zl202621/KECRL/third_party/LIBERO/libero/libero/init_files/libero_spatial/pick_up_the_black_bowl_on_the_stove_and_place_it_on_the_plate.pruned_init",
+    "sha256": "ea9cba2814bc166f3682f3f5a97329467839bcf584069cd419191b6c17adae25",
+    "size_bytes": 44335,
+    "pickle_header_sha256": "c70b3fd4769c65750584c42a6161a6bd45fb3bb5673a32f1e20691687c50ba96"
+  },
+  "versions": {
+    "torch": "2.4.1+cu124",
+    "torchvision": "0.19.1+cu124",
+    "numpy": "1.22.4",
+    "h5py": "3.11.0",
+    "robosuite": "1.4.0",
+    "mujoco": "3.2.3",
+    "Pillow": "12.3.0",
+    "imageio": "2.35.1",
+    "imageio-ffmpeg": "0.5.1"
+  },
+  "libero_revision": "8f1084e3132a39270c3a13ebe37270a43ece2a01",
+  "ffmpeg_binary": {
+    "path": "/home/zl202621/.conda/envs/libero-kecrl/lib/python3.10/site-packages/imageio_ffmpeg/binaries/ffmpeg-linux64-v4.2.2",
+    "sha256": "700073daef5c23bbcb18c2eae60553a454a5221ec19b4a88c8c367a664671a7c"
+  },
+  "analysis_science": {
+    "path": "/data/zl202621/KECRL/configs/libero-gripper-flip-pair-analysis_v1.json",
+    "sha256": "5678cc1c5a11cc82a35c1c55c894d7caac9e19a9bbad9413b12da6ed565efee9"
+  },
+  "analysis_binding": {
+    "path": "/data/zl202621/KECRL/configs/libero-gripper-flip-pair-analysis-execution-binding_v1.json",
+    "sha256": "6f2d5f2957ad1367ff70017c5af557fbfdd891630979e7044ed0916412c07d3b"
+  },
+  "analysis_completion": {
+    "path": "/data/zl202621/KECRL/results/libero-gripper-flip-pair-analysis-20261115-v1/completion.json",
+    "sha256": "c956ab8d3a60027e77e764771e5a6f98949a0d3a56ca13714da304a02796d8f3"
+  },
+  "analysis_result": {
+    "path": "/data/zl202621/KECRL/results/libero-gripper-flip-pair-analysis-20261115-v1/analysis.json",
+    "sha256": "ccf6c88c1ecc12694b14abeed939fa13446fead3a318be33f17a3fa510e9f117"
+  },
+  "analysis_audit": {
+    "path": "/data/zl202621/KECRL/results/libero-gripper-flip-pair-analysis-20261115-v1/independent-audit.json",
+    "sha256": "51a8be716f285348c9ddcfbafbdad5f85531aabfe4c2ec1545527c0e3b1d1762"
+  },
+  "source_science": {
+    "path": "/data/zl202621/KECRL/configs/libero-task7-gripper-confirmation-fresh-control_v2.json",
+    "sha256": "203a420fbeea5538eb5a3917ac7f0591b62a20c5a2cea501472ec6b31b8823bf"
+  },
+  "protocol": {
+    "path": "/data/zl202621/KECRL/docs/libero-gripper-flip-reconstruction-protocol-2026-11-15.md",
+    "sha256": "2c86fea5d4eea2e9dfdc5541da54ae61612cc962e0f06fe0945abae41f252915"
+  },
+  "output": "/data/zl202621/KECRL/results/libero-gripper-flip-reconstruction-20261115-v1",
+  "at_UTC": "2026-11-15T05:10:19.666761+00:00"
+}

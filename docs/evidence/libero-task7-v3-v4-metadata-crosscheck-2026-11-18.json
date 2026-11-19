@@ -1,0 +1,146 @@
+{
+  "status": "complete_readonly_v3_v4_metadata_crosscheck",
+  "formal_result": false,
+  "report": {
+    "path": "/data/zl202621/KECRL/docs/libero-task7-v3-v4-metadata-crosscheck-2026-11-18.md",
+    "sha256": "2864fde8ca67f6c43e09b1163512a25c227ea4a58e6ca77c9b2502d9d524fe1e"
+  },
+  "analysis": {
+    "path": "/data/zl202621/KECRL/results/libero-task7-v3-v4-metadata-crosscheck-20261118-v1/analysis.json",
+    "sha256": "ea5df26fd5a2aa4fe2821eb6b86a95e0ddd36ea5243179a4d9748983b57508fd"
+  },
+  "paired_csv": {
+    "path": "/data/zl202621/KECRL/results/libero-task7-v3-v4-metadata-crosscheck-20261118-v1/paired-states.csv",
+    "sha256": "f8096b8738c9b77a7fbc451edc58a87b917451d2a5d21d23d47bfe418edcd94a"
+  },
+  "input_metadata": [
+    {
+      "path": "/data/zl202621/KECRL/docs/evidence/libero-task7-spatial-readout-results-2026-11-17.json",
+      "sha256": "e4e79b3042373df7d31b1b37300ee2a204f432ffb2959f51c0661ebfcaccfe13",
+      "bytes": 15921
+    },
+    {
+      "path": "/data/zl202621/KECRL/results/libero-task7-spatial-readout-20261117-v3/handoff/completion.json",
+      "sha256": "83945d2df8a2960afb260d1b385e58ed13920546e210635c3a3b3b399508e8d0",
+      "bytes": 1123
+    },
+    {
+      "path": "/data/zl202621/KECRL/results/libero-task7-spatial-readout-20261117-v3/train/completion.json",
+      "sha256": "7c8e973377c5ffa5bf021963d4d9d8af31a40bec7ede6988ff7a64472eb57231",
+      "bytes": 474
+    },
+    {
+      "path": "/data/zl202621/KECRL/results/libero-task7-spatial-readout-20261117-v3/handoff/result.json",
+      "sha256": "34ee495b6f4048269ae4e525d8a38bb974c89a2aad4fbec5ddcad1ebbdee95f9",
+      "bytes": 3354873
+    },
+    {
+      "path": "/data/zl202621/KECRL/results/libero-task7-spatial-readout-20261117-v3/handoff/independent-audit.json",
+      "sha256": "ec799c925f31de48a853c0c05a0b7dab295db6c05d603e8b40933f417aae7ac3",
+      "bytes": 2678
+    },
+    {
+      "path": "/data/zl202621/KECRL/results/libero-task7-spatial-readout-20261117-v3/train/training.json",
+      "sha256": "78ed229581327c0eb90b53829427015d64ac6d9d1db644918e30b42e6023f74c",
+      "bytes": 3200861
+    },
+    {
+      "path": "/data/zl202621/KECRL/results/libero-task7-spatial-readout-20261117-v3/train/independent-audit.json",
+      "sha256": "2712b6b975a00b2dea423785efe1a20ce41b266512761a463c6464fcc1e589ed",
+      "bytes": 1073
+    },
+    {
+      "path": "/data/zl202621/KECRL/results/libero-task7-spatial-readout-20261117-v3/paired-handoff-results.csv",
+      "sha256": "a41d6c1def13a2639277ca267e191d3da3d1d4a0c4f752564f762909ce9d5373",
+      "bytes": 1765
+    },
+    {
+      "path": "/data/zl202621/KECRL/docs/evidence/libero-task7-view-specific-readout-results-2026-11-18.json",
+      "sha256": "e89eee71940a73dc35d41dd0eeee646db77ebce141b182262d357a2f772d2996",
+      "bytes": 4663
+    },
+    {
+      "path": "/data/zl202621/KECRL/results/libero-task7-view-specific-readout-20261118-v4/handoff/completion.json",
+      "sha256": "70d8f19d669fe5d7b790d92d40982c25ee1d2d109c644a7fef12423cec2e3817",
+      "bytes": 1142
+    },
+    {
+      "path": "/data/zl202621/KECRL/results/libero-task7-view-specific-readout-20261118-v4/train/completion.json",
+      "sha256": "178b0e1af84c63896d31d6e0e580d5c5f69a601b5357e82321842f4fe0fac30e",
+      "bytes": 486
+    },
+    {
+      "path": "/data/zl202621/KECRL/results/libero-task7-view-specific-readout-20261118-v4/handoff/result.json",
+      "sha256": "2898e76b4a7ba2b7da9532a61bf67a698d5477928d7148c98fcfa82a563e6348",
+      "bytes": 3511553
+    },
+    {
+      "path": "/data/zl202621/KECRL/results/libero-task7-view-specific-readout-20261118-v4/handoff/independent-audit.json",
+      "sha256": "6b54867f3d9f1ddec85ea176dfc5197ba5d3647c07d3b1725913e403320c6113",
+      "bytes": 3269
+    },
+    {
+      "path": "/data/zl202621/KECRL/results/libero-task7-view-specific-readout-20261118-v4/train/training.json",
+      "sha256": "ed833f163a308431db99743c0366044597a5e6b15c3a04f486af9d310d66e6cc",
+      "bytes": 3356290
+    },
+    {
+      "path": "/data/zl202621/KECRL/results/libero-task7-view-specific-readout-20261118-v4/train/independent-audit.json",
+      "sha256": "031b67b92654b181ee070999dbcf6b1bfae69f9089ec964d8f7311e3096b870c",
+      "bytes": 1091
+    },
+    {
+      "path": "/data/zl202621/KECRL/results/libero-task7-view-specific-readout-20261118-v4/paired-handoff-results.csv",
+      "sha256": "e327ad7faa85308f75c52b162b653312a2284d1299b320624302f46aac0d6570",
+      "bytes": 1257
+    }
+  ],
+  "counts": {
+    "both_success": 9,
+    "v3_only": 2,
+    "v4_only": 1,
+    "both_fail": 10
+  },
+  "union": 12,
+  "controls": {
+    "successes": 8,
+    "endpoint_booleans_equal": 22,
+    "terminal_steps_equal": 22,
+    "training_checks": [
+      {
+        "seed": 20261106,
+        "weight_tensor_hash_equal": true,
+        "sampling_hash_equal": true,
+        "all500_control_losses_equal": true
+      },
+      {
+        "seed": 20261107,
+        "weight_tensor_hash_equal": true,
+        "sampling_hash_equal": true,
+        "all500_control_losses_equal": true
+      },
+      {
+        "seed": 20261108,
+        "weight_tensor_hash_equal": true,
+        "sampling_hash_equal": true,
+        "all500_control_losses_equal": true
+      }
+    ],
+    "recorded_archive_sha_equal": 22,
+    "recorded_observation_digest_sequences_equal": 22,
+    "no_new_archive_bytes_read": true
+  },
+  "actual": {
+    "training_updates": 0,
+    "model_constructions": 0,
+    "model_forwards": 0,
+    "native_steps": 0,
+    "hdf5_reads": 0,
+    "checkpoint_reads": 0,
+    "npz_opens": 0,
+    "array_decodes": 0,
+    "RGB_decodes": 0,
+    "private_coordinate_reads": 0
+  },
+  "union_is_executable_policy_score": false
+}

@@ -1,0 +1,53 @@
+{
+  "kind": "explicit_user_saved_action_video_replay_authorization",
+  "version": 1,
+  "user_approved": true,
+  "recorded_at_UTC": "2026-11-14T08:20:35.776499+00:00",
+  "user_quote": "继续下一步",
+  "scientific_configuration": {
+    "path": "/data/zl202621/KECRL/configs/libero-gripper-approach-video-diagnostic_v1.json",
+    "sha256": "57796ec806cfed7403eeaa21adf57277cc5d6403eefc71efa27f0d24e61e0f0a"
+  },
+  "scope_context": "Immediately preceding prepared15 pairs/30 prefixes, 100 saved actions each, selected10 source-development initial rows.",
+  "tasks": [
+    4,
+    7
+  ],
+  "indices_by_task": {
+    "4": [
+      0,
+      1,
+      2,
+      7,
+      12
+    ],
+    "7": [
+      0,
+      3,
+      5,
+      11,
+      14
+    ]
+  },
+  "role": "candidate_nonregression",
+  "replay_prefixes_max": 30,
+  "saved_actions_max": 3000,
+  "native_steps_max": 3150,
+  "stabilization_steps": 5,
+  "numeric_rows_max": 10,
+  "policy_forwards_max": 0,
+  "optimizer_updates_max": 0,
+  "model_reads_allowed": false,
+  "hdf5_allowed": false,
+  "source_meta_query_allowed": false,
+  "validation_allowed": false,
+  "H_allowed": false,
+  "held_out_allowed": false,
+  "qualification_allowed": false,
+  "reserved_allowed": false,
+  "final_allowed": false,
+  "extra_cameras_allowed": false,
+  "purpose": "原样重放已保存动作并补录原Policy可见RGB，核对原公开前缀后检查合爪前可见对准；不重新估计成功率。",
+  "original_240_episode_permission_reused": false,
+  "visual_review_of_captured_frames_authorized": true
+}

@@ -1,0 +1,109 @@
+{
+  "kind": "libero_task7_view_specific_readout_v4_real_paired_evidence",
+  "formal_result": false,
+  "report": {
+    "path": "/data/zl202621/KECRL/docs/libero-task7-view-specific-readout-results-v4-2026-11-18.md",
+    "sha256": "5cedfdbd30afd737201c2dacf8596f0a6c2ec40c4617101d515ccea448f8ee37"
+  },
+  "science": {
+    "path": "/data/zl202621/KECRL/configs/libero-task7-view-specific-readout_v4.json",
+    "sha256": "41288dc87132847bd6f4a220a5c45020e8f7c4643b56b9b4fd7182906bd65608"
+  },
+  "scientific_freeze": {
+    "path": "/data/zl202621/KECRL/configs/libero-task7-view-specific-readout-freeze-binding_v4.json",
+    "sha256": "ee55b62f7a3823ce4ff17857c22fcf8863cb719eed4811ec77afdc31f99c5599"
+  },
+  "training_binding": {
+    "path": "/data/zl202621/KECRL/configs/libero-task7-view-specific-readout-training-binding_v4.json",
+    "sha256": "2f4ee534860aa10b51f791cf5063811a08b69b2d6a30d5fb9449bfe70108e7d6"
+  },
+  "handoff_binding": {
+    "path": "/data/zl202621/KECRL/configs/libero-task7-view-specific-readout-handoff-binding_v4.json",
+    "sha256": "0c0077cd6f900c91ece251a89ab12d2400f7151dff794a6cb757d5bcc7df7ceb"
+  },
+  "training_completion": {
+    "path": "/data/zl202621/KECRL/results/libero-task7-view-specific-readout-20261118-v4/train/completion.json",
+    "sha256": "178b0e1af84c63896d31d6e0e580d5c5f69a601b5357e82321842f4fe0fac30e"
+  },
+  "handoff_completion": {
+    "path": "/data/zl202621/KECRL/results/libero-task7-view-specific-readout-20261118-v4/handoff/completion.json",
+    "sha256": "70d8f19d669fe5d7b790d92d40982c25ee1d2d109c644a7fef12423cec2e3817"
+  },
+  "training_audit": {
+    "path": "/data/zl202621/KECRL/results/libero-task7-view-specific-readout-20261118-v4/train/independent-audit.json",
+    "sha256": "031b67b92654b181ee070999dbcf6b1bfae69f9089ec964d8f7311e3096b870c"
+  },
+  "handoff_audit": {
+    "path": "/data/zl202621/KECRL/results/libero-task7-view-specific-readout-20261118-v4/handoff/independent-audit.json",
+    "sha256": "6b54867f3d9f1ddec85ea176dfc5197ba5d3647c07d3b1725913e403320c6113"
+  },
+  "paired_csv": {
+    "path": "/data/zl202621/KECRL/results/libero-task7-view-specific-readout-20261118-v4/paired-handoff-results.csv",
+    "sha256": "e327ad7faa85308f75c52b162b653312a2284d1299b320624302f46aac0d6570"
+  },
+  "paired_summary": {
+    "path": "/data/zl202621/KECRL/results/libero-task7-view-specific-readout-20261118-v4/paired-handoff-summary.json",
+    "sha256": "e2bb32733124fdb70b38181d7c83481ebb7041103dda543ed80682d582c78b40"
+  },
+  "training_summary": {
+    "path": "/data/zl202621/KECRL/results/libero-task7-view-specific-readout-20261118-v4/training-summary.json",
+    "sha256": "1e08a3ab7e5fa29bb15a8bb95e78b4bacff3c6c020190600f74115b3f16029c6"
+  },
+  "control_reproduction": {
+    "path": "/data/zl202621/KECRL/results/libero-task7-view-specific-readout-20261118-v4/control-reproduction.json",
+    "sha256": "abaec0201a16e143cfc54bde038362a46ddf91d480db04fd3c0a130058274352"
+  },
+  "evaluation_pipeline": {
+    "path": "/data/zl202621/KECRL/logs/libero-task7-view-specific-readout-execution-20261118-v4/evaluation-pipeline.json",
+    "sha256": "a397adcfd6b1f34214308c31024fb06b35966d51007feb07fca2f2a468ad0d26"
+  },
+  "validation": [
+    {
+      "path": "/data/zl202621/KECRL/logs/libero-task7-view-specific-readout-execution-20261118-v4/tests-bound.txt",
+      "sha256": "a595f0bb8ae4452f214e704756ef15da74a4372ba3708f8848120017f6ba82a4"
+    },
+    {
+      "path": "/data/zl202621/KECRL/logs/libero-task7-view-specific-readout-execution-20261118-v4/tests-bound.xml",
+      "sha256": "628ea4dd8ae2b78957217baff5dcd8b5ac32153655eff34fcbd1a104b348c245"
+    },
+    {
+      "path": "/data/zl202621/KECRL/logs/libero-task7-view-specific-readout-execution-20261118-v4/environment.txt",
+      "sha256": "d90966e5dd83e5135b8cfd0add1b8edae2103040873be71d494412be2a7d19c3"
+    }
+  ],
+  "decision": {
+    "stage": "handoff",
+    "totals": {
+      "flat_zero_xyz": 8,
+      "view_specific_spatial_zero_xyz": 10
+    },
+    "per_seed": {
+      "20261106": {
+        "flat_zero_xyz": 4,
+        "view_specific_spatial_zero_xyz": 6
+      },
+      "20261107": {
+        "flat_zero_xyz": 4,
+        "view_specific_spatial_zero_xyz": 4
+      },
+      "20261108": {
+        "flat_zero_xyz": 0,
+        "view_specific_spatial_zero_xyz": 0
+      }
+    },
+    "pairs": 22,
+    "required_net": 4,
+    "gain_fraction": "1/11",
+    "gates": {
+      "net_gain_at_least_threshold": false,
+      "each_seed_nonregressing": true
+    },
+    "passed": false
+  },
+  "optimizer_updates": 3000,
+  "native_steps": 13462,
+  "training_audit_checks": 4086,
+  "handoff_audit_checks": 156542,
+  "full_episodes": 0,
+  "new_geometry_reads": 0
+}

@@ -1,0 +1,107 @@
+{
+  "kind": "readonly_v2_v3_crosscheck_evidence",
+  "formal_result": false,
+  "report": {
+    "path": "/data/zl202621/KECRL/docs/libero-task7-v2-v3-crosscheck-results-2026-11-18.md",
+    "sha256": "696f445d7bdd24b64165c9d5be8798bdae53f980687e409b0424b100a78d1c16"
+  },
+  "scope": {
+    "path": "/data/zl202621/KECRL/configs/libero-task7-v2-v3-readonly-crosscheck_v1.json",
+    "sha256": "f932af19814d1fe8b83583d9ac7e753f7d77ef0edcaefa4b63d5431a7511cb2d"
+  },
+  "binding": {
+    "path": "/data/zl202621/KECRL/configs/libero-task7-v2-v3-readonly-crosscheck-binding_v1.json",
+    "sha256": "ff7f98440b542e4370e7f1d1671dedf31a0e3cb085615dce9636dfd3215f56be"
+  },
+  "parents": {
+    "v2": {
+      "science": {
+        "path": "/data/zl202621/KECRL/configs/libero-task7-eef-xyz-control_v2.json",
+        "sha256": "fc72b27fb2e472eaea6719ebd6f67506a2fef4874dd8bbd8c998db986c060281"
+      },
+      "binding": {
+        "path": "/data/zl202621/KECRL/configs/libero-task7-eef-xyz-control-handoff-binding_v2.json",
+        "sha256": "6105bb30fb4ca05ec7c65564169253456c53d63b9dadad7e173b43076841918f"
+      },
+      "completion": {
+        "path": "/data/zl202621/KECRL/results/libero-task7-eef-xyz-control-20261117-v2/handoff/completion.json",
+        "sha256": "ed589d79d4ef37fc7d321984358bb8999ad0deead7db38cf42ac23e807b21e1f"
+      },
+      "result": {
+        "path": "/data/zl202621/KECRL/results/libero-task7-eef-xyz-control-20261117-v2/handoff/result.json",
+        "sha256": "309139b704470e1a600006745c9a02778f035109126f633faf1eaaec6cdf459b"
+      },
+      "audit": {
+        "path": "/data/zl202621/KECRL/results/libero-task7-eef-xyz-control-20261117-v2/handoff/independent-audit.json",
+        "sha256": "9849c58e86046dadcbab3f0a08ad866999515d9a5675b5032dbd0e115c0b851e"
+      }
+    },
+    "v3": {
+      "science": {
+        "path": "/data/zl202621/KECRL/configs/libero-task7-spatial-readout_v3.json",
+        "sha256": "95b0b7e1cf18349b3fd851c8fd298d9d2788431d24e501924376ab2acdabc009"
+      },
+      "binding": {
+        "path": "/data/zl202621/KECRL/configs/libero-task7-spatial-readout-handoff-binding_v3.json",
+        "sha256": "2e3ee54f68391094e21f6250eca7f42c3f4c3f2ef62886583a3d4bb559fc0208"
+      },
+      "completion": {
+        "path": "/data/zl202621/KECRL/results/libero-task7-spatial-readout-20261117-v3/handoff/completion.json",
+        "sha256": "83945d2df8a2960afb260d1b385e58ed13920546e210635c3a3b3b399508e8d0"
+      },
+      "result": {
+        "path": "/data/zl202621/KECRL/results/libero-task7-spatial-readout-20261117-v3/handoff/result.json",
+        "sha256": "34ee495b6f4048269ae4e525d8a38bb974c89a2aad4fbec5ddcad1ebbdee95f9"
+      },
+      "audit": {
+        "path": "/data/zl202621/KECRL/results/libero-task7-spatial-readout-20261117-v3/handoff/independent-audit.json",
+        "sha256": "ec799c925f31de48a853c0c05a0b7dab295db6c05d603e8b40933f417aae7ac3"
+      }
+    }
+  },
+  "completion": {
+    "path": "/data/zl202621/KECRL/results/libero-task7-v2-v3-crosscheck-20261118-v1/completion.json",
+    "sha256": "177fcdc9f50d7e4839ca32beb51e844debec2bbd61c0b5da9abc534d082ae8ca"
+  },
+  "analysis": {
+    "path": "/data/zl202621/KECRL/results/libero-task7-v2-v3-crosscheck-20261118-v1/analysis.json",
+    "sha256": "39140aad0b6233b32eaf64648e0d3dda4d3c60ebf639e67b3877970817e1b9f6"
+  },
+  "validation": [
+    {
+      "path": "/data/zl202621/KECRL/logs/libero-task7-v2-v3-crosscheck-20261118-v1/tests.txt",
+      "sha256": "e4765994e99dd2ca83f2e149132a0dbcdd16854f0ac3f6b132f5437e55ea7570"
+    },
+    {
+      "path": "/data/zl202621/KECRL/logs/libero-task7-v2-v3-crosscheck-20261118-v1/tests.xml",
+      "sha256": "1b59609031ab41fb8b1fd3ff7cf6f1448bae741e4c915bd7789c35bf519726ac"
+    }
+  ],
+  "successful_set_counts": {
+    "v2": 10,
+    "v3": 11,
+    "intersection": 10,
+    "union": 11,
+    "v2_only": 0,
+    "v3_only": 1
+  },
+  "actual": {
+    "npz_parses": 9,
+    "numeric_member_decodes": 9,
+    "numeric_scalars": 15582,
+    "source_container_bytes": 96206559,
+    "rgb_pixel_decodes": 0,
+    "eef_decodes": 0,
+    "object_state_reads": 0,
+    "policy_forwards": 0,
+    "model_constructions": 0,
+    "checkpoint_reads": 0,
+    "hdf5_reads": 0,
+    "initial_bank_reads": 0,
+    "optimizer_updates": 0,
+    "native_steps": 0
+  },
+  "scalar_formula_checks": 234,
+  "geometric_cause_identified": false,
+  "combination_model_tested": false
+}

@@ -1,0 +1,48 @@
+{
+  "user_approved": true,
+  "user_instruction": "继续下一步。每次执行命令前告诉我实验配置，这个实验的目的是什么",
+  "scope": "Read only all13 outcome-discordant saved source pairs; no new simulation or policy",
+  "science": {
+    "path": "/data/zl202621/KECRL/configs/libero-gripper-flip-pair-analysis_v1.json",
+    "sha256": "5678cc1c5a11cc82a35c1c55c894d7caac9e19a9bbad9413b12da6ed565efee9"
+  },
+  "source_paths": [
+    "/data/zl202621/KECRL/results/libero-task7-gripper-confirmation-20261115-v2/episodes/20261106-layer4_conv_finetune-unchanged-03.json",
+    "/data/zl202621/KECRL/results/libero-task7-gripper-confirmation-20261115-v2/episodes/20261106-layer4_conv_finetune-confirm5-03.json",
+    "/data/zl202621/KECRL/results/libero-task7-gripper-confirmation-20261115-v2/episodes/20261106-layer4_conv_finetune-unchanged-05.json",
+    "/data/zl202621/KECRL/results/libero-task7-gripper-confirmation-20261115-v2/episodes/20261106-layer4_conv_finetune-confirm5-05.json",
+    "/data/zl202621/KECRL/results/libero-task7-gripper-confirmation-20261115-v2/episodes/20261106-layer4_conv_finetune-unchanged-09.json",
+    "/data/zl202621/KECRL/results/libero-task7-gripper-confirmation-20261115-v2/episodes/20261106-layer4_conv_finetune-confirm5-09.json",
+    "/data/zl202621/KECRL/results/libero-task7-gripper-confirmation-20261115-v2/episodes/20261106-layer4_conv_finetune-unchanged-11.json",
+    "/data/zl202621/KECRL/results/libero-task7-gripper-confirmation-20261115-v2/episodes/20261106-layer4_conv_finetune-confirm5-11.json",
+    "/data/zl202621/KECRL/results/libero-task7-gripper-confirmation-20261115-v2/episodes/20261106-layer4_conv_finetune-unchanged-13.json",
+    "/data/zl202621/KECRL/results/libero-task7-gripper-confirmation-20261115-v2/episodes/20261106-layer4_conv_finetune-confirm5-13.json",
+    "/data/zl202621/KECRL/results/libero-task7-gripper-confirmation-20261115-v2/episodes/20261106-layer4_conv_finetune-unchanged-15.json",
+    "/data/zl202621/KECRL/results/libero-task7-gripper-confirmation-20261115-v2/episodes/20261106-layer4_conv_finetune-confirm5-15.json",
+    "/data/zl202621/KECRL/results/libero-task7-gripper-confirmation-20261115-v2/episodes/20261106-layer4_conv_finetune-unchanged-17.json",
+    "/data/zl202621/KECRL/results/libero-task7-gripper-confirmation-20261115-v2/episodes/20261106-layer4_conv_finetune-confirm5-17.json",
+    "/data/zl202621/KECRL/results/libero-task7-gripper-confirmation-20261115-v2/episodes/20261107-frozen_resnet18-unchanged-10.json",
+    "/data/zl202621/KECRL/results/libero-task7-gripper-confirmation-20261115-v2/episodes/20261107-frozen_resnet18-confirm5-10.json",
+    "/data/zl202621/KECRL/results/libero-task7-gripper-confirmation-20261115-v2/episodes/20261107-frozen_resnet18-unchanged-13.json",
+    "/data/zl202621/KECRL/results/libero-task7-gripper-confirmation-20261115-v2/episodes/20261107-frozen_resnet18-confirm5-13.json",
+    "/data/zl202621/KECRL/results/libero-task7-gripper-confirmation-20261115-v2/episodes/20261107-frozen_resnet18-unchanged-14.json",
+    "/data/zl202621/KECRL/results/libero-task7-gripper-confirmation-20261115-v2/episodes/20261107-frozen_resnet18-confirm5-14.json",
+    "/data/zl202621/KECRL/results/libero-task7-gripper-confirmation-20261115-v2/episodes/20261107-frozen_resnet18-unchanged-18.json",
+    "/data/zl202621/KECRL/results/libero-task7-gripper-confirmation-20261115-v2/episodes/20261107-frozen_resnet18-confirm5-18.json",
+    "/data/zl202621/KECRL/results/libero-task7-gripper-confirmation-20261115-v2/episodes/20261107-layer4_conv_finetune-unchanged-14.json",
+    "/data/zl202621/KECRL/results/libero-task7-gripper-confirmation-20261115-v2/episodes/20261107-layer4_conv_finetune-confirm5-14.json",
+    "/data/zl202621/KECRL/results/libero-task7-gripper-confirmation-20261115-v2/episodes/20261108-frozen_resnet18-unchanged-05.json",
+    "/data/zl202621/KECRL/results/libero-task7-gripper-confirmation-20261115-v2/episodes/20261108-frozen_resnet18-confirm5-05.json"
+  ],
+  "caps": {
+    "source_episode_parses": 26,
+    "source_episode_bytes": 16777216,
+    "public_scalar_projections": 155984,
+    "policy_forwards": 0,
+    "native_steps": 0,
+    "model_reads": 0,
+    "initial_bank_reads": 0
+  },
+  "sealed_roles_allowed": [],
+  "at_UTC": "2026-11-15T04:56:43.370425+00:00"
+}

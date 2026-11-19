@@ -1,0 +1,56 @@
+{
+  "status": "historical_control_public_digest_difference_metadata_note",
+  "source_id": "flip01-confirm5",
+  "seed": 20261106,
+  "anchor_step": 150,
+  "matched_through_step": 164,
+  "first_difference": {
+    "step": 165,
+    "components": [
+      "eye_in_hand_rgb"
+    ]
+  },
+  "total_different_observations": 136,
+  "last_difference": 300,
+  "components": {
+    "eye_in_hand_rgb": {
+      "count": 136,
+      "first": 165,
+      "last": 300
+    },
+    "joint_states": {
+      "count": 135,
+      "first": 166,
+      "last": 300
+    },
+    "gripper_states": {
+      "count": 135,
+      "first": 166,
+      "last": 300
+    },
+    "agentview_rgb": {
+      "count": 134,
+      "first": 167,
+      "last": 300
+    }
+  },
+  "journals": {
+    "old": {
+      "path": "/data/zl202621/KECRL/results/libero-task7-spatial-readout-20261117-v3/handoff/observations.jsonl",
+      "sha256": "d6191e98a8883446b9394343b7a1f3575c1f82b79f6165cf47407c8fd662eb1f"
+    },
+    "new": {
+      "path": "/data/zl202621/KECRL/results/libero-task7-window-focus-20261119-v6/handoff/observations.jsonl",
+      "sha256": "04b338652134d3d0f5c1402a230f0184a62d19744df841158ef9d2aeabe45064"
+    }
+  },
+  "endpoint_same": true,
+  "current_source_and_pair_prefix_strict_gates_passed": true,
+  "reason_unconfirmed": true,
+  "no_pixel_magnitude_or_private_physics_claim": true,
+  "extra_HDF5_reads": 0,
+  "extra_NPZ_reads": 0,
+  "extra_pixel_decodes": 0,
+  "extra_model_forwards": 0,
+  "extra_native_steps": 0
+}

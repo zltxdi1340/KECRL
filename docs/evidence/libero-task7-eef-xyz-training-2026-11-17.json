@@ -1,0 +1,252 @@
+{
+  "status": "complete_independently_audited_eef_xyz_paired_training",
+  "formal_result": false,
+  "science": {
+    "path": "/data/zl202621/KECRL/configs/libero-task7-eef-xyz-control_v2.json",
+    "sha256": "fc72b27fb2e472eaea6719ebd6f67506a2fef4874dd8bbd8c998db986c060281"
+  },
+  "binding": {
+    "path": "/data/zl202621/KECRL/configs/libero-task7-eef-xyz-control-training-binding_v2.json",
+    "sha256": "b21d8a48971d9d871e6ec21bc0f2423d9bd711e6ddce791cf4edb816f2c93d21"
+  },
+  "training": {
+    "path": "/data/zl202621/KECRL/results/libero-task7-eef-xyz-control-20261117-v2/train/training.json",
+    "sha256": "fe325bae25d239f733fdfa03bad30af70ea9737590380ee753a0679a007b0a3d"
+  },
+  "audit": {
+    "path": "/data/zl202621/KECRL/results/libero-task7-eef-xyz-control-20261117-v2/train/independent-audit.json",
+    "sha256": "81e77c4ef9a6d7846ef1d6f97a7412cbc9770a74cb2ff154134655ab64d7cbc9"
+  },
+  "completion": {
+    "path": "/data/zl202621/KECRL/results/libero-task7-eef-xyz-control-20261117-v2/train/completion.json",
+    "sha256": "e04e7054ea21f368df85454772703f082cef5a0f0b090613d308243fb96ec1f4"
+  },
+  "ledger": {
+    "caps": {
+      "train_forward": 3000,
+      "backward": 3000,
+      "optimizer": 3000,
+      "checkpoint": 6,
+      "model_create": 7,
+      "dataset_items": 550,
+      "source_sha": 1,
+      "public_weight_sha": 1,
+      "public_weight_load": 1,
+      "frozen_encoder": 150,
+      "parity_forward": 6,
+      "hdf5_opens": 2,
+      "hdf5_slices": 3300,
+      "eef_slices": 550,
+      "eef_coordinates": 16500,
+      "initial_row_loads": 0,
+      "numeric_rows": 0,
+      "native_steps": 0,
+      "policy_forward": 0
+    },
+    "counts": {
+      "train_forward": {
+        "attempted": 3000,
+        "completed": 3000
+      },
+      "backward": {
+        "attempted": 3000,
+        "completed": 3000
+      },
+      "optimizer": {
+        "attempted": 3000,
+        "completed": 3000
+      },
+      "checkpoint": {
+        "attempted": 6,
+        "completed": 6
+      },
+      "model_create": {
+        "attempted": 7,
+        "completed": 7
+      },
+      "dataset_items": {
+        "attempted": 432,
+        "completed": 432
+      },
+      "source_sha": {
+        "attempted": 1,
+        "completed": 1
+      },
+      "public_weight_sha": {
+        "attempted": 1,
+        "completed": 1
+      },
+      "public_weight_load": {
+        "attempted": 1,
+        "completed": 1
+      },
+      "frozen_encoder": {
+        "attempted": 120,
+        "completed": 120
+      },
+      "parity_forward": {
+        "attempted": 6,
+        "completed": 6
+      },
+      "hdf5_opens": {
+        "attempted": 2,
+        "completed": 2
+      },
+      "hdf5_slices": {
+        "attempted": 2592,
+        "completed": 2592
+      },
+      "eef_slices": {
+        "attempted": 432,
+        "completed": 432
+      },
+      "eef_coordinates": {
+        "attempted": 12564,
+        "completed": 12564
+      },
+      "initial_row_loads": {
+        "attempted": 0,
+        "completed": 0
+      },
+      "numeric_rows": {
+        "attempted": 0,
+        "completed": 0
+      },
+      "native_steps": {
+        "attempted": 0,
+        "completed": 0
+      },
+      "policy_forward": {
+        "attempted": 0,
+        "completed": 0
+      }
+    },
+    "elapsed_seconds": 127.86459354299586
+  },
+  "support": {
+    "status": "passed_independent_cached_eef_support_audit",
+    "demonstrations": 30,
+    "windows": 432,
+    "valid_xyz_rows": 4188,
+    "xyz_scalar_reads": 12564,
+    "hdf5_reads": 0
+  },
+  "xyz_cache": {
+    "status": "passed_independent_xyz_cache_audit",
+    "archive_reads": 1,
+    "padded_xyz_coordinates": 12960,
+    "valid_rows": 4188,
+    "hdf5_reads": 0
+  },
+  "models": [
+    {
+      "seed": 20261106,
+      "controller": "zero_xyz_mlp",
+      "total_parameters": 12690632,
+      "trainable_parameters": 1514120,
+      "initial_state_sha256": "d95fdee18ea822a745fe38d07d86153c86475aa38dd439fa20656aa26f87ab12",
+      "sampling_sha256": "cc7cad5079f7a4f875761c5196203f21a27ffdf1d3ffc23191ca2db85b77dc15",
+      "checkpoint": {
+        "path": "/data/zl202621/KECRL/checkpoints/libero-task7-eef-xyz-control-20261117-v2/task7-seed20261106-zero_xyz_mlp-u500.pt",
+        "sha256": "edc15361fecb793d24af97df6c24045205a3a2341afd121876852751aa3f655d",
+        "weight_hash": "d20ab38400e4549ef76869af7a8bce3f5878e1af58ae4f3e07a39da0df7fe3df"
+      },
+      "first50_mean_loss": 0.07957800474017858,
+      "last50_mean_loss": 0.024766755178570746,
+      "xyz_nonzero_gradient_updates": 0,
+      "mean_xyz_gradient_norm": 0.0,
+      "mean_joint_gradient_norm": 0.01655880363099277
+    },
+    {
+      "seed": 20261106,
+      "controller": "cached_xyz_mlp",
+      "total_parameters": 12690632,
+      "trainable_parameters": 1514120,
+      "initial_state_sha256": "d95fdee18ea822a745fe38d07d86153c86475aa38dd439fa20656aa26f87ab12",
+      "sampling_sha256": "cc7cad5079f7a4f875761c5196203f21a27ffdf1d3ffc23191ca2db85b77dc15",
+      "checkpoint": {
+        "path": "/data/zl202621/KECRL/checkpoints/libero-task7-eef-xyz-control-20261117-v2/task7-seed20261106-cached_xyz_mlp-u500.pt",
+        "sha256": "81189073840908178f3d38b8e5af8b847c1c101909e4c7bb08c39c6598b39741",
+        "weight_hash": "28cf10aff26e636ce538cbf3074cd5561e185c563ba52e2a6c7f1d2f45bf84d1"
+      },
+      "first50_mean_loss": 0.07844607844948769,
+      "last50_mean_loss": 0.026782519845291973,
+      "xyz_nonzero_gradient_updates": 500,
+      "mean_xyz_gradient_norm": 0.00511975994380191,
+      "mean_joint_gradient_norm": 0.017002230515237898
+    },
+    {
+      "seed": 20261107,
+      "controller": "zero_xyz_mlp",
+      "total_parameters": 12690632,
+      "trainable_parameters": 1514120,
+      "initial_state_sha256": "02f9b07ef6ed062f8faa62b77a8ebc6e6ed63476a67d0df4fa818b54e7af9bf9",
+      "sampling_sha256": "377e6dd12d743dd61008d31101b79f74c5392d791d02a23b2614aaa8aed92353",
+      "checkpoint": {
+        "path": "/data/zl202621/KECRL/checkpoints/libero-task7-eef-xyz-control-20261117-v2/task7-seed20261107-zero_xyz_mlp-u500.pt",
+        "sha256": "9a9bbae2f3598674ce19db7280d725daf7c2e30f5b3747ea10e4af938e6f91e6",
+        "weight_hash": "45e2922c25cb148b0cd2a94a697b14ac31ea6e258cc15f07f6bd0a0f8ee146a3"
+      },
+      "first50_mean_loss": 0.07669419225305318,
+      "last50_mean_loss": 0.02611662993207574,
+      "xyz_nonzero_gradient_updates": 0,
+      "mean_xyz_gradient_norm": 0.0,
+      "mean_joint_gradient_norm": 0.01710864273039624
+    },
+    {
+      "seed": 20261107,
+      "controller": "cached_xyz_mlp",
+      "total_parameters": 12690632,
+      "trainable_parameters": 1514120,
+      "initial_state_sha256": "02f9b07ef6ed062f8faa62b77a8ebc6e6ed63476a67d0df4fa818b54e7af9bf9",
+      "sampling_sha256": "377e6dd12d743dd61008d31101b79f74c5392d791d02a23b2614aaa8aed92353",
+      "checkpoint": {
+        "path": "/data/zl202621/KECRL/checkpoints/libero-task7-eef-xyz-control-20261117-v2/task7-seed20261107-cached_xyz_mlp-u500.pt",
+        "sha256": "7ebcb61be3845ceed22ef3cf29b57ed81c4bf754ee1f7c88f2c14cc062960823",
+        "weight_hash": "06e12da9c693aa42e054c649b7eeb3e63243e41327a95f75815a7001fdc04a3a"
+      },
+      "first50_mean_loss": 0.07706724729388953,
+      "last50_mean_loss": 0.02263954401947558,
+      "xyz_nonzero_gradient_updates": 500,
+      "mean_xyz_gradient_norm": 0.005311136458534748,
+      "mean_joint_gradient_norm": 0.017591255134902894
+    },
+    {
+      "seed": 20261108,
+      "controller": "zero_xyz_mlp",
+      "total_parameters": 12690632,
+      "trainable_parameters": 1514120,
+      "initial_state_sha256": "477636baadd3f1b615cd513221ae7a4877a2fdd47f069a40a5eb7fd75f6dfcdc",
+      "sampling_sha256": "0e6989d8af9e79664a3ce3f59ba5cfa8849482b7716add727d991965ecba60d3",
+      "checkpoint": {
+        "path": "/data/zl202621/KECRL/checkpoints/libero-task7-eef-xyz-control-20261117-v2/task7-seed20261108-zero_xyz_mlp-u500.pt",
+        "sha256": "a8b1d77be7e15cac2c0ff0f46b30f8f64c19039b3842bff8387c06ef022242e9",
+        "weight_hash": "cbf815bd48a48fe273c88bb1b81a072be2bcf02c77d340ba1b233ff39371710a"
+      },
+      "first50_mean_loss": 0.07854904543608426,
+      "last50_mean_loss": 0.02692466358654201,
+      "xyz_nonzero_gradient_updates": 0,
+      "mean_xyz_gradient_norm": 0.0,
+      "mean_joint_gradient_norm": 0.01584066569618881
+    },
+    {
+      "seed": 20261108,
+      "controller": "cached_xyz_mlp",
+      "total_parameters": 12690632,
+      "trainable_parameters": 1514120,
+      "initial_state_sha256": "477636baadd3f1b615cd513221ae7a4877a2fdd47f069a40a5eb7fd75f6dfcdc",
+      "sampling_sha256": "0e6989d8af9e79664a3ce3f59ba5cfa8849482b7716add727d991965ecba60d3",
+      "checkpoint": {
+        "path": "/data/zl202621/KECRL/checkpoints/libero-task7-eef-xyz-control-20261117-v2/task7-seed20261108-cached_xyz_mlp-u500.pt",
+        "sha256": "2c452e40dd35ca17ecda2103e0ea84cea9555897843dca3eae59fb6e91e3cd25",
+        "weight_hash": "fa8df9cf7a992037a36d723f9355694b630281dd19efa29abf3c4efd972061fd"
+      },
+      "first50_mean_loss": 0.07762037485837936,
+      "last50_mean_loss": 0.030990721350535752,
+      "xyz_nonzero_gradient_updates": 500,
+      "mean_xyz_gradient_norm": 0.004924802196677775,
+      "mean_joint_gradient_norm": 0.016488642575684935
+    }
+  ],
+  "closed_loop_effect_not_inferred_from_training_loss": true
+}

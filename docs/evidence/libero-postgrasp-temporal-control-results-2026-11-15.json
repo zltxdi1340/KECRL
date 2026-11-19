@@ -1,0 +1,106 @@
+{
+  "status": "complete_postgrasp_controller_test_candidate_stopped",
+  "formal_result": false,
+  "at_UTC": "2026-11-15T08:53:42.256560+00:00",
+  "science": {
+    "path": "/data/zl202621/KECRL/configs/libero-postgrasp-temporal-control_v1.json",
+    "sha256": "84210afdea68ab17b11aa1864c357bf9b25099f67d64f4345660407fb81d1db4"
+  },
+  "training_binding": {
+    "path": "/data/zl202621/KECRL/configs/libero-postgrasp-temporal-control-training-binding_v1.json",
+    "sha256": "766dd093301a81803de960cfda6a713c87419d65197887dfdc45a0c244d52158"
+  },
+  "handoff_binding": {
+    "path": "/data/zl202621/KECRL/configs/libero-postgrasp-temporal-control-handoff-binding_v1.json",
+    "sha256": "658d1570970ad3a1469674dd9ace3a3652f6561966bcd88dfc912f15ce46c5ea"
+  },
+  "training_completion": {
+    "path": "/data/zl202621/KECRL/results/libero-postgrasp-temporal-control-20261115-v1/train/completion.json",
+    "sha256": "54ea0cdd7fc0552c7fc10eb58405a4f9016227473130647e9307d08648090c6b"
+  },
+  "handoff_completion": {
+    "path": "/data/zl202621/KECRL/results/libero-postgrasp-temporal-control-20261115-v1/handoff/completion.json",
+    "sha256": "d763da70bfa927b81785a025c94bf48e7406cc3f8ee652e678c950de084397e1"
+  },
+  "handoff_audit": {
+    "path": "/data/zl202621/KECRL/results/libero-postgrasp-temporal-control-20261115-v1/handoff/independent-audit.json",
+    "sha256": "566f06cd155473ebd38f32fa8b232f0713bb5a3ea9774bfac688867dd0149a90"
+  },
+  "paired_analysis": {
+    "path": "/data/zl202621/KECRL/results/libero-postgrasp-temporal-control-20261115-v1/handoff/paired-analysis-final.json",
+    "sha256": "ba2ac90258cdd36df0d405a591c7700069de48b3c5fa06820cbbf1e30aa27642"
+  },
+  "decision": {
+    "stage": "handoff",
+    "totals": {
+      "frame_mlp": 3,
+      "gru_window10": 4
+    },
+    "per_seed": {
+      "20261106": {
+        "frame_mlp": 0,
+        "gru_window10": 1
+      },
+      "20261107": {
+        "frame_mlp": 3,
+        "gru_window10": 3
+      },
+      "20261108": {
+        "frame_mlp": 0,
+        "gru_window10": 0
+      }
+    },
+    "pairs": 22,
+    "required_net": 4,
+    "gain_fraction": "1/22",
+    "gates": {
+      "net_gain_at_least_threshold": false,
+      "each_seed_nonregressing": true
+    },
+    "passed": false
+  },
+  "four_cell": {
+    "both_success": 3,
+    "mlp_only": 0,
+    "gru_only": 1,
+    "both_fail": 18
+  },
+  "training_actual_updates": 3000,
+  "training_seconds": 132.10422289400594,
+  "handoff_seconds": 713.0274556399672,
+  "handoff_actual": {
+    "model_create": 6,
+    "checkpoint_sha": 6,
+    "checkpoint_load": 6,
+    "model_weight_checks": 12,
+    "adapters": 44,
+    "resets": 556,
+    "episodes": 44,
+    "prefix_actions": 4700,
+    "warm_forward": 396,
+    "policy_forward": 7722,
+    "policy_actions": 7722,
+    "frozen_encoder": 16236,
+    "temporal_rows": 43011,
+    "zero_steps": 2780,
+    "native_steps": 15202,
+    "initial_row_loads": 1,
+    "numeric_rows": 19,
+    "observations": 12978,
+    "rgb_frames": 25956,
+    "raw_rgb_bytes": 1275789312,
+    "source_episode_parses": 22,
+    "source_episode_bytes": 4642666,
+    "source_scalar_projections": 58948,
+    "backwards": 0,
+    "optimizer_updates": 0,
+    "hdf5_reads": 0,
+    "public_weight_reads": 0,
+    "extra_render_calls": 0
+  },
+  "independent_handoff_checks": 174524,
+  "full_episodes": 0,
+  "full_binding_created": false,
+  "complete_task_success_rate_claim": false,
+  "causal_history_necessity_proven": false
+}

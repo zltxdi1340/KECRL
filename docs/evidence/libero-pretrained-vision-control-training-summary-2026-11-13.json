@@ -1,0 +1,265 @@
+{
+  "kind": "real_source_support_training_only_not_closed_loop_result",
+  "at_UTC": "2026-11-13T14:21:39.055638+00:00",
+  "formal_result": false,
+  "user_directive": "Continue LIBERO; do not conduct Continual World.",
+  "status": "real_training_complete_independent_training_audit_passed",
+  "science": {
+    "path": "/data/zl202621/KECRL/configs/libero-pretrained-vision-control-diagnostic_v1.json",
+    "sha256": "d2a39cb0e1f18f817b582d2013ec9a68a049ee90c78aea09a2d3b9657b634a92"
+  },
+  "execution_binding": {
+    "path": "/data/zl202621/KECRL/configs/libero-pretrained-vision-control-training-binding_v1.json",
+    "sha256": "dbfcded732ffc6f68f80317b0129005512c759465bc5f93addcbfd39637b2e73"
+  },
+  "training": {
+    "path": "/data/zl202621/KECRL/results/libero-pretrained-vision-control-20261113-v1/training.json",
+    "sha256": "a5f1eaa20c005e6c0dba3161b4b1745bc019f29eee7f944388f94a4ccb426907"
+  },
+  "training_audit": {
+    "path": "/data/zl202621/KECRL/results/libero-pretrained-vision-control-20261113-v1/training-audit.json",
+    "sha256": "04929c87316bfabc718fa010000c8d4b9c875c1aedad7f99d3b3142b5855dc06"
+  },
+  "actual": {
+    "models": 12,
+    "policy_updates_per_model": 500,
+    "policy_optimizer_updates": 6000,
+    "backward_calls": 6000,
+    "source_windows": 890,
+    "frozen_encoder_calls": 224,
+    "cache_pixel_parity_forwards": 6,
+    "source_file_SHA_passes": 2,
+    "HDF5": {
+      "opens": 4,
+      "opens_completed": 4,
+      "array_slices": 4450,
+      "array_slices_completed": 4450
+    },
+    "training_stage_internal_seconds": 37.59070616000099,
+    "peak_torch_cuda_allocated_bytes": 363711488,
+    "initial_numeric_rows": 0,
+    "episodes": 0,
+    "source_query_numeric_decodes": 0
+  },
+  "source_scope": {
+    "tasks": [
+      4,
+      7
+    ],
+    "demonstrations": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      15,
+      16,
+      17,
+      18,
+      19,
+      20,
+      21,
+      22,
+      23,
+      24,
+      25,
+      26,
+      27,
+      28,
+      29
+    ],
+    "alignment": "obs[t-1] to action[t], t>=1",
+    "source_meta_query_allowed": false
+  },
+  "initialization_and_frozen_state": {
+    "nonvisual_initialization_and_sampler_paired": true,
+    "candidate_backbone_and_BN_unchanged": "6/6"
+  },
+  "closed_loop_success_rate": null,
+  "execution_of_240_episodes": "waiting_for_explicit_source_candidate_initial_authorization",
+  "models": [
+    {
+      "task": 4,
+      "seed": 20261106,
+      "arm": "scratch_cnn",
+      "checkpoint": {
+        "path": "/data/zl202621/KECRL/results/libero-pretrained-vision-control-20261113-v1/task4-seed20261106-scratch_cnn-u500.pt",
+        "sha256": "d9af03031d5f252e1ca0c43d32e9d3b87c90dcf5bf07043b4bdb75b48ca013b9",
+        "weight_hash": "fe5e5367c59dc20fb5b6c8fc7804f40662d93c1c6026e636fe005ce3c3dfb5bf"
+      },
+      "actual_optimizer_steps_min": 500,
+      "actual_optimizer_steps_max": 500,
+      "trainable_parameters": 821704,
+      "sampling_sha256": "0097d576de9bf9006a137367403e81578f82487e184b6177361a4a7e2343bd10"
+    },
+    {
+      "task": 4,
+      "seed": 20261106,
+      "arm": "frozen_imagenet_resnet18",
+      "checkpoint": {
+        "path": "/data/zl202621/KECRL/results/libero-pretrained-vision-control-20261113-v1/task4-seed20261106-frozen_imagenet_resnet18-u500.pt",
+        "sha256": "af6a0ea6ddfab1c3863c35c47327ececbde3d9ada70db1c43c1dfd30ef6d485b",
+        "weight_hash": "7df9df3cf9de599301992e49a76510cbb27d27e831bb9716817c4b8bc692a675"
+      },
+      "actual_optimizer_steps_min": 500,
+      "actual_optimizer_steps_max": 500,
+      "trainable_parameters": 1513352,
+      "sampling_sha256": "0097d576de9bf9006a137367403e81578f82487e184b6177361a4a7e2343bd10"
+    },
+    {
+      "task": 4,
+      "seed": 20261107,
+      "arm": "scratch_cnn",
+      "checkpoint": {
+        "path": "/data/zl202621/KECRL/results/libero-pretrained-vision-control-20261113-v1/task4-seed20261107-scratch_cnn-u500.pt",
+        "sha256": "b60eaf36dc14b3eda10d135c349a6554f68533c9116c515a2afa4bb6b58e1409",
+        "weight_hash": "3157820d53e46c1533ea65e7d781e8b44e39a2993e43e71a8fb3c333999306c9"
+      },
+      "actual_optimizer_steps_min": 500,
+      "actual_optimizer_steps_max": 500,
+      "trainable_parameters": 821704,
+      "sampling_sha256": "58a2601b46807ecfb564cb532cfd9330fc4c2348851a86ce1a9187c5ca7acef4"
+    },
+    {
+      "task": 4,
+      "seed": 20261107,
+      "arm": "frozen_imagenet_resnet18",
+      "checkpoint": {
+        "path": "/data/zl202621/KECRL/results/libero-pretrained-vision-control-20261113-v1/task4-seed20261107-frozen_imagenet_resnet18-u500.pt",
+        "sha256": "5f3a31f603e7144dc218cb18bcb6625c9e0f3a70d1e21f9c7d219d394b97c768",
+        "weight_hash": "c0a60217ab6f28b8087301be15bba3c3d42e5112b222810ad396672b35bef9ff"
+      },
+      "actual_optimizer_steps_min": 500,
+      "actual_optimizer_steps_max": 500,
+      "trainable_parameters": 1513352,
+      "sampling_sha256": "58a2601b46807ecfb564cb532cfd9330fc4c2348851a86ce1a9187c5ca7acef4"
+    },
+    {
+      "task": 4,
+      "seed": 20261108,
+      "arm": "scratch_cnn",
+      "checkpoint": {
+        "path": "/data/zl202621/KECRL/results/libero-pretrained-vision-control-20261113-v1/task4-seed20261108-scratch_cnn-u500.pt",
+        "sha256": "54fc4bc3976694f65dfd978a8a0d6234a7bbc628ed8f849d03ab3ea3c8b226ec",
+        "weight_hash": "b2e5707cb5aa156439baf9bb8b2416074bee3a1f7b75f67602524a716627b0c9"
+      },
+      "actual_optimizer_steps_min": 500,
+      "actual_optimizer_steps_max": 500,
+      "trainable_parameters": 821704,
+      "sampling_sha256": "781b5ab6b0043637ce2143c19bd5aba1dd6e4ac64ab54f575d1f1b78ad52c1e8"
+    },
+    {
+      "task": 4,
+      "seed": 20261108,
+      "arm": "frozen_imagenet_resnet18",
+      "checkpoint": {
+        "path": "/data/zl202621/KECRL/results/libero-pretrained-vision-control-20261113-v1/task4-seed20261108-frozen_imagenet_resnet18-u500.pt",
+        "sha256": "12a30ffd3b612f6e3687c1c30c8ee0a3a00210759930df88bec84aaf2c628c29",
+        "weight_hash": "cfa52a8b1453fddeb9e988cec46904b896b7138d57f16eed2d51a6e9ba333dcc"
+      },
+      "actual_optimizer_steps_min": 500,
+      "actual_optimizer_steps_max": 500,
+      "trainable_parameters": 1513352,
+      "sampling_sha256": "781b5ab6b0043637ce2143c19bd5aba1dd6e4ac64ab54f575d1f1b78ad52c1e8"
+    },
+    {
+      "task": 7,
+      "seed": 20261106,
+      "arm": "scratch_cnn",
+      "checkpoint": {
+        "path": "/data/zl202621/KECRL/results/libero-pretrained-vision-control-20261113-v1/task7-seed20261106-scratch_cnn-u500.pt",
+        "sha256": "c5cb770a456185a5ef4885311ba4aab452aa287039c8d6b9fda48d9f895a9909",
+        "weight_hash": "a4e74450ffa2b38e51bd175a6e57d6e368c9cc00b687c8b9c43342606f61b200"
+      },
+      "actual_optimizer_steps_min": 500,
+      "actual_optimizer_steps_max": 500,
+      "trainable_parameters": 821704,
+      "sampling_sha256": "cc7cad5079f7a4f875761c5196203f21a27ffdf1d3ffc23191ca2db85b77dc15"
+    },
+    {
+      "task": 7,
+      "seed": 20261106,
+      "arm": "frozen_imagenet_resnet18",
+      "checkpoint": {
+        "path": "/data/zl202621/KECRL/results/libero-pretrained-vision-control-20261113-v1/task7-seed20261106-frozen_imagenet_resnet18-u500.pt",
+        "sha256": "120c166b7f2c66abbb934999a3cc98d5d072a8f247dd716e297506a5c634936a",
+        "weight_hash": "523764885273c8fd4b551a312b3db0e0a35608eeac2387c3f0c8a24ff9939ec0"
+      },
+      "actual_optimizer_steps_min": 500,
+      "actual_optimizer_steps_max": 500,
+      "trainable_parameters": 1513352,
+      "sampling_sha256": "cc7cad5079f7a4f875761c5196203f21a27ffdf1d3ffc23191ca2db85b77dc15"
+    },
+    {
+      "task": 7,
+      "seed": 20261107,
+      "arm": "scratch_cnn",
+      "checkpoint": {
+        "path": "/data/zl202621/KECRL/results/libero-pretrained-vision-control-20261113-v1/task7-seed20261107-scratch_cnn-u500.pt",
+        "sha256": "2058d4d47f5293e77c596f5a104529708b03a6a89052a8423c82e2030ed13ace",
+        "weight_hash": "0273bc2183d1d0f3810458306cedc378d3f481632fadc5f969a90a57371373bb"
+      },
+      "actual_optimizer_steps_min": 500,
+      "actual_optimizer_steps_max": 500,
+      "trainable_parameters": 821704,
+      "sampling_sha256": "377e6dd12d743dd61008d31101b79f74c5392d791d02a23b2614aaa8aed92353"
+    },
+    {
+      "task": 7,
+      "seed": 20261107,
+      "arm": "frozen_imagenet_resnet18",
+      "checkpoint": {
+        "path": "/data/zl202621/KECRL/results/libero-pretrained-vision-control-20261113-v1/task7-seed20261107-frozen_imagenet_resnet18-u500.pt",
+        "sha256": "7b27bd3afff568bb46c6095fa66e55fb80a96ee78b0b99cf465965067f2fddf9",
+        "weight_hash": "4a657ec9506aecadcd09cbbdb94f98cea6fe2d8496c0faaa22d1ea7dbdb6f2a5"
+      },
+      "actual_optimizer_steps_min": 500,
+      "actual_optimizer_steps_max": 500,
+      "trainable_parameters": 1513352,
+      "sampling_sha256": "377e6dd12d743dd61008d31101b79f74c5392d791d02a23b2614aaa8aed92353"
+    },
+    {
+      "task": 7,
+      "seed": 20261108,
+      "arm": "scratch_cnn",
+      "checkpoint": {
+        "path": "/data/zl202621/KECRL/results/libero-pretrained-vision-control-20261113-v1/task7-seed20261108-scratch_cnn-u500.pt",
+        "sha256": "b264be47a6ca54a1370fbdd53a2d5f0f96615f8c2f19207afef3f977e41b1538",
+        "weight_hash": "fbfd635652d71fa60019e1152060f722e795ee0c65ca431da6877e66c175cd67"
+      },
+      "actual_optimizer_steps_min": 500,
+      "actual_optimizer_steps_max": 500,
+      "trainable_parameters": 821704,
+      "sampling_sha256": "0e6989d8af9e79664a3ce3f59ba5cfa8849482b7716add727d991965ecba60d3"
+    },
+    {
+      "task": 7,
+      "seed": 20261108,
+      "arm": "frozen_imagenet_resnet18",
+      "checkpoint": {
+        "path": "/data/zl202621/KECRL/results/libero-pretrained-vision-control-20261113-v1/task7-seed20261108-frozen_imagenet_resnet18-u500.pt",
+        "sha256": "e12e00a88357a9bdd0cf20f51f464d47d7341a3121cebedf046d18f207ea8165",
+        "weight_hash": "edc1b528a770214cce9309fbed8522170bf4542259e3256a429de8a08e1a094c"
+      },
+      "actual_optimizer_steps_min": 500,
+      "actual_optimizer_steps_max": 500,
+      "trainable_parameters": 1513352,
+      "sampling_sha256": "0e6989d8af9e79664a3ce3f59ba5cfa8849482b7716add727d991965ecba60d3"
+    }
+  ],
+  "limitations": [
+    "No closed-loop improvement demonstrated yet.",
+    "Source development only; not a new G/H, formal transfer, active SPT update or Module qualification.",
+    "External ImageNet pretraining and capacity differ between the control backends."
+  ]
+}

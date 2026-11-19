@@ -1,0 +1,192 @@
+{
+  "status": "technical_geometry_replay_stop_incomplete_no_v2_decision",
+  "at_UTC": "2026-11-16T10:19:13.745166+00:00",
+  "science": {
+    "path": "/data/zl202621/KECRL/configs/libero-postgrasp-geometry-replay_v1.json",
+    "sha256": "ec1f96a4b6c98634a02dfe24b054705be99d41f9b51ab327dd6bc83873d9a8e6"
+  },
+  "binding": {
+    "path": "/data/zl202621/KECRL/configs/libero-postgrasp-geometry-replay-binding_v1.json",
+    "sha256": "aedf8862e2623615222c896dc87e4eaa13dc558004b73ea966d547d872a18559"
+  },
+  "protocol": {
+    "path": "/data/zl202621/KECRL/docs/libero-postgrasp-geometry-replay-protocol-2026-11-16.md",
+    "sha256": "436f415b13c10149818cb957f3769c59b3d27356fb6b64c6430a832ae4e8a4c9"
+  },
+  "failure": {
+    "path": "/data/zl202621/KECRL/results/libero-postgrasp-geometry-replay-20261116-v1/failure.json",
+    "sha256": "c90ebb006ea4b8a77ce0963556db5dc4791bff2c154edb3bad1485be2da98e69"
+  },
+  "journal": {
+    "path": "/data/zl202621/KECRL/results/libero-postgrasp-geometry-replay-20261116-v1/observations.jsonl",
+    "sha256": "5b21a7e2338f36741ecd699e316f6fdd602e9ea2bbb01a8f0394f907abf62804"
+  },
+  "process": {
+    "path": "/data/zl202621/KECRL/logs/libero-postgrasp-geometry-replay-20261116-v1/processes/process.json",
+    "sha256": "e18246b87c4ee681455b27b36623ee96cabddebd0e8d695f43786d77f97fb2c8"
+  },
+  "pixels": {
+    "path": "/data/zl202621/KECRL/results/libero-postgrasp-geometry-stop-readonly-20261116-v1/pixels.json",
+    "sha256": "81512f6be1a6124cca15a160c3880d211e413cfd811e124f673cb209983c65a8"
+  },
+  "pixel_science": {
+    "path": "/data/zl202621/KECRL/configs/libero-postgrasp-geometry-stop-readonly_v1.json",
+    "sha256": "57eab85e065b3e03eee5dae2d232478bb63bf1d9b2295e026d631adfa13fa3ca"
+  },
+  "pixel_binding": {
+    "path": "/data/zl202621/KECRL/configs/libero-postgrasp-geometry-stop-readonly-binding_v1.json",
+    "sha256": "f00d09feb91a9d95e7261a6059c003f5de420abe33869fe71c53163d020a6664"
+  },
+  "admission_status": {
+    "path": "/data/zl202621/KECRL/results/libero-postgrasp-geometry-replay-20261116-v1/admission-status.csv",
+    "sha256": "03f0a26e2f3b425c0eaa1571c3b57d01ffdb97b536b82f911e42797ea7554e49"
+  },
+  "code_dependencies": 886,
+  "pixel_code_dependencies": 889,
+  "tests": {
+    "primary_regression": 99,
+    "readonly_stop_checks": 7,
+    "full_pytest_run": false
+  },
+  "episodes": {
+    "planned": 36,
+    "primary_complete": 6,
+    "stopped_partial": 1,
+    "not_started": 29,
+    "whole_run_audited": false
+  },
+  "primary_actual": {
+    "adapters": 7,
+    "resets": 34,
+    "replay_episodes": 6,
+    "saved_actions": 1953,
+    "zero_steps": 170,
+    "native_steps": 2123,
+    "initial_row_loads": 1,
+    "numeric_rows": 19,
+    "observations": 1987,
+    "rgb_frames": 3974,
+    "raw_rgb_bytes": 195330048,
+    "source_archives": 36,
+    "source_numeric_members": 216,
+    "source_numeric_scalars": 205524,
+    "source_container_bytes": 463475921,
+    "geometry_samples": 1209,
+    "geometry_scalars": 32643,
+    "calibrations": 7,
+    "calibration_scalars": 3850,
+    "diagnostic_predicate_calls": 6045,
+    "source_rgb_decodes": 0,
+    "policy_forwards": 0,
+    "model_creations": 0,
+    "checkpoint_reads": 0,
+    "backwards": 0,
+    "optimizer_updates": 0,
+    "hdf5_reads": 0,
+    "extra_render_calls": 0
+  },
+  "attempted_replay_episodes": 7,
+  "primary_elapsed_seconds": 62.82396042702021,
+  "driver_elapsed_seconds": 64.44439544400666,
+  "failed_public_component": "eye_in_hand_rgb",
+  "failed_step": 153,
+  "failed_problem": "flip01-confirm5-frame_mlp",
+  "public_journal_comparison": {
+    "public_events": 1987,
+    "matching_public_events": 1986,
+    "differences": [
+      {
+        "problem_id": "flip01-confirm5-frame_mlp",
+        "step": 153,
+        "components": [
+          "eye_in_hand_rgb"
+        ]
+      }
+    ],
+    "provenance": "journal hash comparison; not a new independent decoding of every image"
+  },
+  "pixel_comparison": [
+    {
+      "step": 152,
+      "exact": true,
+      "different_channels": 0,
+      "different_pixels": 0,
+      "maximum_channel_error": 0,
+      "mean_channel_error": 0.0,
+      "signed_channel_error_sum": 0,
+      "first_differences": []
+    },
+    {
+      "step": 153,
+      "exact": false,
+      "different_channels": 5,
+      "different_pixels": 4,
+      "maximum_channel_error": 1,
+      "mean_channel_error": 0.00010172526041666667,
+      "signed_channel_error_sum": 5,
+      "first_differences": [
+        {
+          "row": 86,
+          "column": 108,
+          "channel": 1,
+          "original": 166,
+          "replay": 167,
+          "delta": 1
+        },
+        {
+          "row": 86,
+          "column": 109,
+          "channel": 0,
+          "original": 166,
+          "replay": 167,
+          "delta": 1
+        },
+        {
+          "row": 86,
+          "column": 110,
+          "channel": 1,
+          "original": 163,
+          "replay": 164,
+          "delta": 1
+        },
+        {
+          "row": 86,
+          "column": 110,
+          "channel": 2,
+          "original": 160,
+          "replay": 161,
+          "delta": 1
+        },
+        {
+          "row": 87,
+          "column": 111,
+          "channel": 2,
+          "original": 161,
+          "replay": 162,
+          "delta": 1
+        }
+      ]
+    }
+  ],
+  "pixel_role_actual": {
+    "source_archives": 2,
+    "image_members": 2,
+    "pixel_values_decoded": 196608,
+    "member_uncompressed_bytes_consumed": 15139072,
+    "native_steps": 0,
+    "policy_forwards": 0,
+    "initial_bank_reads": 0,
+    "model_reads": 0
+  },
+  "native_steps_after_stop": 0,
+  "automatic_retries": 0,
+  "physical_cause_counts": null,
+  "next_version_frozen": false,
+  "raw_private_samples_independently_audited": false,
+  "root_cause": "unresolved",
+  "followup_proposal": {
+    "path": "/data/zl202621/KECRL/docs/libero-postgrasp-replay-determinism-proposal-2026-11-16.md",
+    "sha256": "61a71324fc68bcea5aef50db56d84f2de9affe6da8d6922bfd64ca160572e92b"
+  },
+  "followup_proposal_execution_authorized": false
+}

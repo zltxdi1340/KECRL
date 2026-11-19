@@ -1,0 +1,62 @@
+{
+  "kind": "explicit_user_source_development_initial_authorization",
+  "version": 1,
+  "user_approved": true,
+  "recorded_at_UTC": "2026-11-14T05:00:40.546615+00:00",
+  "user_quote": "建立本轮执行绑定后训练。授权后续240条配对闭环",
+  "scientific_configuration": {
+    "path": "/data/zl202621/KECRL/configs/libero-restricted-vision-finetune-diagnostic_v1.json",
+    "sha256": "48868dfe74a51e31e571e9efc58372299f9bc9e8fe283e498f953be39a42bce0"
+  },
+  "tasks": [
+    4,
+    7
+  ],
+  "seeds": [
+    20261106,
+    20261107,
+    20261108
+  ],
+  "arms": [
+    "frozen_resnet18",
+    "layer4_conv_finetune"
+  ],
+  "indices": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19
+  ],
+  "role": "candidate_nonregression",
+  "episodes_max": 240,
+  "paired_episodes": 240,
+  "policy_actions_per_episode_max": 300,
+  "stabilization_steps": 5,
+  "purpose": "本轮同初始化冻结ResNet/仅layer4卷积微调对照；仅训练核对通过后的240条source开发闭环。",
+  "source_meta_query_allowed": false,
+  "validation_allowed": false,
+  "held_out_allowed": false,
+  "H_allowed": false,
+  "qualification_allowed": false,
+  "reserved_allowed": false,
+  "final_allowed": false,
+  "other_source_tasks_allowed": false,
+  "training_audit_required_before_numeric_initial_access": true,
+  "old_permission_reused": false
+}

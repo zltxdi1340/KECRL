@@ -1,0 +1,148 @@
+{
+  "status": "all13_flips_numeric_and_reconstruction_analysis_complete",
+  "formal_result": false,
+  "at_UTC": "2026-11-15T05:31:13.121215+00:00",
+  "readonly_analysis_completion": {
+    "path": "/data/zl202621/KECRL/results/libero-gripper-flip-pair-analysis-20261115-v1/completion.json",
+    "sha256": "c956ab8d3a60027e77e764771e5a6f98949a0d3a56ca13714da304a02796d8f3"
+  },
+  "readonly_analysis": {
+    "path": "/data/zl202621/KECRL/results/libero-gripper-flip-pair-analysis-20261115-v1/analysis.json",
+    "sha256": "ccf6c88c1ecc12694b14abeed939fa13446fead3a318be33f17a3fa510e9f117"
+  },
+  "readonly_audit": {
+    "path": "/data/zl202621/KECRL/results/libero-gripper-flip-pair-analysis-20261115-v1/independent-audit.json",
+    "sha256": "51a8be716f285348c9ddcfbafbdad5f85531aabfe4c2ec1545527c0e3b1d1762"
+  },
+  "reconstruction_science": {
+    "path": "/data/zl202621/KECRL/configs/libero-gripper-flip-reconstruction_v1.json",
+    "sha256": "ec71571ff9d7f2a78926e7123c533a386b8cd6e50c8c90554e19880a16d00718"
+  },
+  "reconstruction_binding": {
+    "path": "/data/zl202621/KECRL/configs/libero-gripper-flip-reconstruction-execution-binding_v1.json",
+    "sha256": "b9251c767f1e9db643f5519202c90a8f0db2898c55740741b0f69a6f8b6e1c97"
+  },
+  "completion": {
+    "path": "/data/zl202621/KECRL/results/libero-gripper-flip-reconstruction-20261115-v1/review-completion.json",
+    "sha256": "30b16525798416768fa7d8932046c49b56d3c49c889986072317dacc3d591f5e"
+  },
+  "capture_audit": {
+    "path": "/data/zl202621/KECRL/results/libero-gripper-flip-reconstruction-20261115-v1/independent-audit.json",
+    "sha256": "650e304112e7acbdac4a60e976073ff0f14e41bd343735fafd8b899a15463110"
+  },
+  "media_audit": {
+    "path": "/data/zl202621/KECRL/results/libero-gripper-flip-reconstruction-20261115-v1/media-audit.json",
+    "sha256": "2609ee4f887bbd83555283d1d667793991d0b2ab9c75bad6e958cd2cc337d36e"
+  },
+  "visual_record": {
+    "path": "/data/zl202621/KECRL/results/libero-gripper-flip-reconstruction-20261115-v1/visual-review-v2.json",
+    "sha256": "0e37e7d2a5caa83364fea3cffbdddb03f5f5f0401d14520d3df347e06dcb7117"
+  },
+  "visual_record_integrity": {
+    "path": "/data/zl202621/KECRL/results/libero-gripper-flip-reconstruction-20261115-v1/visual-review-integrity-v2.json",
+    "sha256": "892a2c3be2cd7c59e337da639b09be0a6ae4adf8e116d28e949dc0cbae167ff4"
+  },
+  "visual_stage_counts": {
+    "transport_or_release_failure": 10,
+    "lift_then_drop": 1,
+    "unknown_occluded_or_ambiguous": 2,
+    "no_visible_lift": 0
+  },
+  "capture_seconds": 361.12954115701723,
+  "actual": {
+    "adapters": {
+      "attempted": 26,
+      "completed": 26
+    },
+    "resets": {
+      "attempted": 320,
+      "completed": 320
+    },
+    "replay_episodes": {
+      "attempted": 26,
+      "completed": 26
+    },
+    "saved_actions": {
+      "attempted": 6230,
+      "completed": 6230
+    },
+    "zero_steps": {
+      "attempted": 1600,
+      "completed": 1600
+    },
+    "native_steps": {
+      "attempted": 7830,
+      "completed": 7830
+    },
+    "initial_row_loads": {
+      "attempted": 1,
+      "completed": 1
+    },
+    "numeric_rows": {
+      "attempted": 19,
+      "completed": 19
+    },
+    "observations": {
+      "attempted": 6550,
+      "completed": 6550
+    },
+    "rgb_frames": {
+      "attempted": 13100,
+      "completed": 13100
+    },
+    "raw_rgb_bytes": {
+      "attempted": 643891200,
+      "completed": 643891200
+    },
+    "source_episode_parses": {
+      "attempted": 26,
+      "completed": 26
+    },
+    "source_episode_bytes": {
+      "attempted": 5545650,
+      "completed": 5545650
+    },
+    "source_scalar_projections": {
+      "attempted": 155984,
+      "completed": 155984
+    },
+    "policy_forwards": {
+      "attempted": 0,
+      "completed": 0
+    },
+    "model_creations": {
+      "attempted": 0,
+      "completed": 0
+    },
+    "checkpoint_reads": {
+      "attempted": 0,
+      "completed": 0
+    },
+    "backwards": {
+      "attempted": 0,
+      "completed": 0
+    },
+    "optimizer_updates": {
+      "attempted": 0,
+      "completed": 0
+    },
+    "hdf5_reads": {
+      "attempted": 0,
+      "completed": 0
+    },
+    "extra_render_calls": {
+      "attempted": 0,
+      "completed": 0
+    }
+  },
+  "independent_capture_checks": 132685,
+  "media_frames_decoded": 6256,
+  "lossless_panels_exact": 453,
+  "source_population_pairs": 120,
+  "outcome_selected_pairs": 13,
+  "no_new_success_rate_estimate": true,
+  "original_later_RGB_recovered": false,
+  "private_state_equivalence_proven": false,
+  "independent_visual_truth_verified": false,
+  "confirm5_continue_gate_remains": false
+}

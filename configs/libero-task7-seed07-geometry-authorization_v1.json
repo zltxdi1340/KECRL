@@ -1,0 +1,654 @@
+{
+  "user_approved": true,
+  "approved_native_steps": 2931,
+  "budget_correction": "User explicitly replaced1800 with2931 for all9",
+  "science": {
+    "path": "/data/zl202621/KECRL/configs/libero-task7-seed07-geometry_v1.json",
+    "sha256": "986eb493a635bb64585c2bd355d995abff8a44e1fda3ac09d2b58f2e328be638"
+  },
+  "caps": {
+    "adapters": 9,
+    "resets": 141,
+    "replay_episodes": 9,
+    "saved_actions": 2226,
+    "zero_steps": 705,
+    "native_steps": 2931,
+    "initial_row_loads": 1,
+    "numeric_rows": 19,
+    "observations": 2367,
+    "rgb_frames": 4734,
+    "raw_rgb_bytes": 232685568,
+    "source_archives": 9,
+    "source_numeric_members": 54,
+    "source_numeric_scalars": 42375,
+    "source_container_bytes": 2147483648,
+    "geometry_samples": 1335,
+    "geometry_scalars": 198915,
+    "calibrations": 9,
+    "calibration_scalars": 4950,
+    "diagnostic_predicate_calls": 6675,
+    "source_rgb_decodes": 4734,
+    "policy_forwards": 0,
+    "model_creations": 0,
+    "checkpoint_reads": 0,
+    "backwards": 0,
+    "optimizer_updates": 0,
+    "hdf5_reads": 0,
+    "extra_render_calls": 0,
+    "native_state_samples": 2670,
+    "native_state_scalars": 162870,
+    "source_warm_archives": 132,
+    "source_warm_numeric_members": 264,
+    "source_warm_numeric_scalars": 1188,
+    "source_RGB_members": 282,
+    "source_RGB_pixel_values": 232685568,
+    "RGB_gate_checks": 4734,
+    "initial_cache_reads": 9,
+    "cached_numeric_rows": 171,
+    "workers": 9
+  },
+  "initial_indices": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18
+  ],
+  "objects": [
+    "akita_black_bowl_1",
+    "plate_1"
+  ],
+  "source_archives": [
+    {
+      "path": "/data/zl202621/KECRL/results/libero-task7-spatial-readout-20261117-v3/handoff/flip08-unchanged-flat_zero_xyz-episode.npz",
+      "sha256": "78f1625c5e51550cd21e7bb829ed367dc0da6030e85abc2890447b06c6b5febc"
+    },
+    {
+      "path": "/data/zl202621/KECRL/results/libero-task7-eef-xyz-control-20261117-v2/handoff/flip08-unchanged-cached_xyz_mlp-episode.npz",
+      "sha256": "83a2d94707848e8571e291792dc3d38a12569cff19481eba532e2d232a03c03d"
+    },
+    {
+      "path": "/data/zl202621/KECRL/results/libero-task7-spatial-readout-20261117-v3/handoff/flip08-unchanged-spatial_coordinates_zero_xyz-episode.npz",
+      "sha256": "a6b379831176fe851a7acdd24fc5cb1a053f452dbc2a918367f0e5d7876726a0"
+    },
+    {
+      "path": "/data/zl202621/KECRL/results/libero-task7-spatial-readout-20261117-v3/handoff/flip08-confirm5-flat_zero_xyz-episode.npz",
+      "sha256": "1096d732abc41c51598542f30a5ecaafb4c78e61db71a8eab1a9fd8e3cfb0518"
+    },
+    {
+      "path": "/data/zl202621/KECRL/results/libero-task7-eef-xyz-control-20261117-v2/handoff/flip08-confirm5-cached_xyz_mlp-episode.npz",
+      "sha256": "375b90cb7e61fd6be4581dbab90961abe8914ef34487fbb929f7b67103bd227e"
+    },
+    {
+      "path": "/data/zl202621/KECRL/results/libero-task7-spatial-readout-20261117-v3/handoff/flip08-confirm5-spatial_coordinates_zero_xyz-episode.npz",
+      "sha256": "54d733fba74451cba479913f56d7c00fdb6ad42c962d0a4fa04104debe885fb5"
+    },
+    {
+      "path": "/data/zl202621/KECRL/results/libero-task7-spatial-readout-20261117-v3/handoff/flip10-unchanged-flat_zero_xyz-episode.npz",
+      "sha256": "50ab948178ffefa0ce9bc5c620d935078e94e87c597cd90f576bc54d62425cd8"
+    },
+    {
+      "path": "/data/zl202621/KECRL/results/libero-task7-eef-xyz-control-20261117-v2/handoff/flip10-unchanged-cached_xyz_mlp-episode.npz",
+      "sha256": "e2274fbd924cf92d152fcfdf256168953afe04c7ca12b4143ba32f77fe65dbb8"
+    },
+    {
+      "path": "/data/zl202621/KECRL/results/libero-task7-spatial-readout-20261117-v3/handoff/flip10-unchanged-spatial_coordinates_zero_xyz-episode.npz",
+      "sha256": "3f53a1132d76b1552aab724042c5479234b811f69fc81b80afe6dee0baf6b61f"
+    }
+  ],
+  "warmup_archives": [
+    {
+      "path": "/data/zl202621/KECRL/results/libero-task7-spatial-readout-20261117-v3/handoff/flip08-unchanged-flat_zero_xyz-reset-00.npz",
+      "sha256": "87883bf98965fe7e2fdb374cb0c0a2fe8242346a98da712e1d953651c0f92779"
+    },
+    {
+      "path": "/data/zl202621/KECRL/results/libero-task7-spatial-readout-20261117-v3/handoff/flip08-unchanged-flat_zero_xyz-reset-01.npz",
+      "sha256": "12f7c29c35b2bf535419a3ac45808a54957fcc40d6a4b6cc803a2a596482fe6a"
+    },
+    {
+      "path": "/data/zl202621/KECRL/results/libero-task7-spatial-readout-20261117-v3/handoff/flip08-unchanged-flat_zero_xyz-reset-02.npz",
+      "sha256": "70e62cf050183d959f8f6c13984e673cfc9e99b5dcdc41c9c493e3dedd892399"
+    },
+    {
+      "path": "/data/zl202621/KECRL/results/libero-task7-spatial-readout-20261117-v3/handoff/flip08-unchanged-flat_zero_xyz-reset-03.npz",
+      "sha256": "f4cf7ec0f43012f787e50d5b7b4c929a641d485865b535fc6cfa558bed6b63a0"
+    },
+    {
+      "path": "/data/zl202621/KECRL/results/libero-task7-spatial-readout-20261117-v3/handoff/flip08-unchanged-flat_zero_xyz-reset-04.npz",
+      "sha256": "109e98293154333608c0c56beaadc24132e8ff504d0d42fd919316ab0942ac6a"
+    },
+    {
+      "path": "/data/zl202621/KECRL/results/libero-task7-spatial-readout-20261117-v3/handoff/flip08-unchanged-flat_zero_xyz-reset-05.npz",
+      "sha256": "374556c13d83ec7cdfad35195b6aef5f203f76a0d00a3970c4025518d3e17c63"
+    },
+    {
+      "path": "/data/zl202621/KECRL/results/libero-task7-spatial-readout-20261117-v3/handoff/flip08-unchanged-flat_zero_xyz-reset-06.npz",
+      "sha256": "a0a66819e459ad7f3a3b117178b9a7c86c502b79c9886fcc1f991dde1a9016e5"
+    },
+    {
+      "path": "/data/zl202621/KECRL/results/libero-task7-spatial-readout-20261117-v3/handoff/flip08-unchanged-flat_zero_xyz-reset-07.npz",
+      "sha256": "b9f9a52f581bd4733bdbf3d2e5bebb03e2c017f9fdd369047a8a31916ad2bdbf"
+    },
+    {
+      "path": "/data/zl202621/KECRL/results/libero-task7-spatial-readout-20261117-v3/handoff/flip08-unchanged-flat_zero_xyz-reset-08.npz",
+      "sha256": "c2aeba151e2f0c254c26f67858c28e831337251839bd5f687ab93cf3a68a480d"
+    },
+    {
+      "path": "/data/zl202621/KECRL/results/libero-task7-spatial-readout-20261117-v3/handoff/flip08-unchanged-flat_zero_xyz-reset-09.npz",
+      "sha256": "696ff9a179a9e6fdf817c8dcd80414bf61d1dbdb91e19efe0b5f17784f788825"
+    },
+    {
+      "path": "/data/zl202621/KECRL/results/libero-task7-spatial-readout-20261117-v3/handoff/flip08-unchanged-flat_zero_xyz-reset-10.npz",
+      "sha256": "1db1f2fe163aca16b919e3fb0feec428c112d6a806ff99b69db361caedb36cb7"
+    },
+    {
+      "path": "/data/zl202621/KECRL/results/libero-task7-spatial-readout-20261117-v3/handoff/flip08-unchanged-flat_zero_xyz-reset-11.npz",
+      "sha256": "11cb3134b2a06669fad32ed2205e72749f879a2b94081e2cfc8178c9e9d7c2e5"
+    },
+    {
+      "path": "/data/zl202621/KECRL/results/libero-task7-spatial-readout-20261117-v3/handoff/flip08-unchanged-flat_zero_xyz-reset-12.npz",
+      "sha256": "574110846ea0d34c4e4497523cd9926a5184e6c4f8b039f2aa69be0efdbfbadf"
+    },
+    {
+      "path": "/data/zl202621/KECRL/results/libero-task7-eef-xyz-control-20261117-v2/handoff/flip08-unchanged-cached_xyz_mlp-reset-00.npz",
+      "sha256": "b4888c230a17991eb71ae4f2044b22694452ee8157c4394179cc89c880ac60f6"
+    },
+    {
+      "path": "/data/zl202621/KECRL/results/libero-task7-eef-xyz-control-20261117-v2/handoff/flip08-unchanged-cached_xyz_mlp-reset-01.npz",
+      "sha256": "e10f51cb1218653e2edd5338eb52f9a7babfc3627bc60a55033c76778cafb988"
+    },
+    {
+      "path": "/data/zl202621/KECRL/results/libero-task7-eef-xyz-control-20261117-v2/handoff/flip08-unchanged-cached_xyz_mlp-reset-02.npz",
+      "sha256": "ee39b91b367cf49e3c49fe90066d5f28c24557452ee2d8b06d908ec6d30ccdec"
+    },
+    {
+      "path": "/data/zl202621/KECRL/results/libero-task7-eef-xyz-control-20261117-v2/handoff/flip08-unchanged-cached_xyz_mlp-reset-03.npz",
+      "sha256": "366a79ec4b9c5561fc97bc95b2f8d6dbd4a615d34839cfd590c80755360fd870"
+    },
+    {
+      "path": "/data/zl202621/KECRL/results/libero-task7-eef-xyz-control-20261117-v2/handoff/flip08-unchanged-cached_xyz_mlp-reset-04.npz",
+      "sha256": "d7b0759bdd8c696e8e2d2f252c400f15255e82f9cd8c484bba72f8cf0df5d6d2"
+    },
+    {
+      "path": "/data/zl202621/KECRL/results/libero-task7-eef-xyz-control-20261117-v2/handoff/flip08-unchanged-cached_xyz_mlp-reset-05.npz",
+      "sha256": "4191d5853094ee5d498d92d170c4c0fc7c1adfd193b0b11b90968441c51dc643"
+    },
+    {
+      "path": "/data/zl202621/KECRL/results/libero-task7-eef-xyz-control-20261117-v2/handoff/flip08-unchanged-cached_xyz_mlp-reset-06.npz",
+      "sha256": "1e250337fb8574da43f62c70d62b140b2181ec91065244a00fbb4ff3849e8784"
+    },
+    {
+      "path": "/data/zl202621/KECRL/results/libero-task7-eef-xyz-control-20261117-v2/handoff/flip08-unchanged-cached_xyz_mlp-reset-07.npz",
+      "sha256": "b06f16f26f72fb48de32b5be6e06d1fa5eb3dfc0fc860bc08d216858f9e3d022"
+    },
+    {
+      "path": "/data/zl202621/KECRL/results/libero-task7-eef-xyz-control-20261117-v2/handoff/flip08-unchanged-cached_xyz_mlp-reset-08.npz",
+      "sha256": "aad08757a356695bffbdd1d1399effcbcbf0329c317c27459daf36ee165e1f59"
+    },
+    {
+      "path": "/data/zl202621/KECRL/results/libero-task7-eef-xyz-control-20261117-v2/handoff/flip08-unchanged-cached_xyz_mlp-reset-09.npz",
+      "sha256": "9d7955e323f54909633c414f5b4229e0b88e98c32f3922e83c4e91526cba627c"
+    },
+    {
+      "path": "/data/zl202621/KECRL/results/libero-task7-eef-xyz-control-20261117-v2/handoff/flip08-unchanged-cached_xyz_mlp-reset-10.npz",
+      "sha256": "6d39a2a60b2ef21f398a70ea8dafcd81e35bd1ca0d06fe43478f551a7e0c8e8d"
+    },
+    {
+      "path": "/data/zl202621/KECRL/results/libero-task7-eef-xyz-control-20261117-v2/handoff/flip08-unchanged-cached_xyz_mlp-reset-11.npz",
+      "sha256": "ae3a417f1908d1d7895ee12b8f3a05fbd44613c516e06dc5b21a59d157dd9b88"
+    },
+    {
+      "path": "/data/zl202621/KECRL/results/libero-task7-eef-xyz-control-20261117-v2/handoff/flip08-unchanged-cached_xyz_mlp-reset-12.npz",
+      "sha256": "0cfdcd818c79d3cf4a730bce16cb482c6af8bf27e375020951dacbd95d349d74"
+    },
+    {
+      "path": "/data/zl202621/KECRL/results/libero-task7-spatial-readout-20261117-v3/handoff/flip08-unchanged-spatial_coordinates_zero_xyz-reset-00.npz",
+      "sha256": "87883bf98965fe7e2fdb374cb0c0a2fe8242346a98da712e1d953651c0f92779"
+    },
+    {
+      "path": "/data/zl202621/KECRL/results/libero-task7-spatial-readout-20261117-v3/handoff/flip08-unchanged-spatial_coordinates_zero_xyz-reset-01.npz",
+      "sha256": "12f7c29c35b2bf535419a3ac45808a54957fcc40d6a4b6cc803a2a596482fe6a"
+    },
+    {
+      "path": "/data/zl202621/KECRL/results/libero-task7-spatial-readout-20261117-v3/handoff/flip08-unchanged-spatial_coordinates_zero_xyz-reset-02.npz",
+      "sha256": "70e62cf050183d959f8f6c13984e673cfc9e99b5dcdc41c9c493e3dedd892399"
+    },
+    {
+      "path": "/data/zl202621/KECRL/results/libero-task7-spatial-readout-20261117-v3/handoff/flip08-unchanged-spatial_coordinates_zero_xyz-reset-03.npz",
+      "sha256": "f4cf7ec0f43012f787e50d5b7b4c929a641d485865b535fc6cfa558bed6b63a0"
+    },
+    {
+      "path": "/data/zl202621/KECRL/results/libero-task7-spatial-readout-20261117-v3/handoff/flip08-unchanged-spatial_coordinates_zero_xyz-reset-04.npz",
+      "sha256": "109e98293154333608c0c56beaadc24132e8ff504d0d42fd919316ab0942ac6a"
+    },
+    {
+      "path": "/data/zl202621/KECRL/results/libero-task7-spatial-readout-20261117-v3/handoff/flip08-unchanged-spatial_coordinates_zero_xyz-reset-05.npz",
+      "sha256": "374556c13d83ec7cdfad35195b6aef5f203f76a0d00a3970c4025518d3e17c63"
+    },
+    {
+      "path": "/data/zl202621/KECRL/results/libero-task7-spatial-readout-20261117-v3/handoff/flip08-unchanged-spatial_coordinates_zero_xyz-reset-06.npz",
+      "sha256": "a0a66819e459ad7f3a3b117178b9a7c86c502b79c9886fcc1f991dde1a9016e5"
+    },
+    {
+      "path": "/data/zl202621/KECRL/results/libero-task7-spatial-readout-20261117-v3/handoff/flip08-unchanged-spatial_coordinates_zero_xyz-reset-07.npz",
+      "sha256": "b9f9a52f581bd4733bdbf3d2e5bebb03e2c017f9fdd369047a8a31916ad2bdbf"
+    },
+    {
+      "path": "/data/zl202621/KECRL/results/libero-task7-spatial-readout-20261117-v3/handoff/flip08-unchanged-spatial_coordinates_zero_xyz-reset-08.npz",
+      "sha256": "c2aeba151e2f0c254c26f67858c28e831337251839bd5f687ab93cf3a68a480d"
+    },
+    {
+      "path": "/data/zl202621/KECRL/results/libero-task7-spatial-readout-20261117-v3/handoff/flip08-unchanged-spatial_coordinates_zero_xyz-reset-09.npz",
+      "sha256": "696ff9a179a9e6fdf817c8dcd80414bf61d1dbdb91e19efe0b5f17784f788825"
+    },
+    {
+      "path": "/data/zl202621/KECRL/results/libero-task7-spatial-readout-20261117-v3/handoff/flip08-unchanged-spatial_coordinates_zero_xyz-reset-10.npz",
+      "sha256": "1db1f2fe163aca16b919e3fb0feec428c112d6a806ff99b69db361caedb36cb7"
+    },
+    {
+      "path": "/data/zl202621/KECRL/results/libero-task7-spatial-readout-20261117-v3/handoff/flip08-unchanged-spatial_coordinates_zero_xyz-reset-11.npz",
+      "sha256": "11cb3134b2a06669fad32ed2205e72749f879a2b94081e2cfc8178c9e9d7c2e5"
+    },
+    {
+      "path": "/data/zl202621/KECRL/results/libero-task7-spatial-readout-20261117-v3/handoff/flip08-unchanged-spatial_coordinates_zero_xyz-reset-12.npz",
+      "sha256": "574110846ea0d34c4e4497523cd9926a5184e6c4f8b039f2aa69be0efdbfbadf"
+    },
+    {
+      "path": "/data/zl202621/KECRL/results/libero-task7-spatial-readout-20261117-v3/handoff/flip08-confirm5-flat_zero_xyz-reset-00.npz",
+      "sha256": "87883bf98965fe7e2fdb374cb0c0a2fe8242346a98da712e1d953651c0f92779"
+    },
+    {
+      "path": "/data/zl202621/KECRL/results/libero-task7-spatial-readout-20261117-v3/handoff/flip08-confirm5-flat_zero_xyz-reset-01.npz",
+      "sha256": "12f7c29c35b2bf535419a3ac45808a54957fcc40d6a4b6cc803a2a596482fe6a"
+    },
+    {
+      "path": "/data/zl202621/KECRL/results/libero-task7-spatial-readout-20261117-v3/handoff/flip08-confirm5-flat_zero_xyz-reset-02.npz",
+      "sha256": "70e62cf050183d959f8f6c13984e673cfc9e99b5dcdc41c9c493e3dedd892399"
+    },
+    {
+      "path": "/data/zl202621/KECRL/results/libero-task7-spatial-readout-20261117-v3/handoff/flip08-confirm5-flat_zero_xyz-reset-03.npz",
+      "sha256": "f4cf7ec0f43012f787e50d5b7b4c929a641d485865b535fc6cfa558bed6b63a0"
+    },
+    {
+      "path": "/data/zl202621/KECRL/results/libero-task7-spatial-readout-20261117-v3/handoff/flip08-confirm5-flat_zero_xyz-reset-04.npz",
+      "sha256": "109e98293154333608c0c56beaadc24132e8ff504d0d42fd919316ab0942ac6a"
+    },
+    {
+      "path": "/data/zl202621/KECRL/results/libero-task7-spatial-readout-20261117-v3/handoff/flip08-confirm5-flat_zero_xyz-reset-05.npz",
+      "sha256": "374556c13d83ec7cdfad35195b6aef5f203f76a0d00a3970c4025518d3e17c63"
+    },
+    {
+      "path": "/data/zl202621/KECRL/results/libero-task7-spatial-readout-20261117-v3/handoff/flip08-confirm5-flat_zero_xyz-reset-06.npz",
+      "sha256": "a0a66819e459ad7f3a3b117178b9a7c86c502b79c9886fcc1f991dde1a9016e5"
+    },
+    {
+      "path": "/data/zl202621/KECRL/results/libero-task7-spatial-readout-20261117-v3/handoff/flip08-confirm5-flat_zero_xyz-reset-07.npz",
+      "sha256": "b9f9a52f581bd4733bdbf3d2e5bebb03e2c017f9fdd369047a8a31916ad2bdbf"
+    },
+    {
+      "path": "/data/zl202621/KECRL/results/libero-task7-spatial-readout-20261117-v3/handoff/flip08-confirm5-flat_zero_xyz-reset-08.npz",
+      "sha256": "c2aeba151e2f0c254c26f67858c28e831337251839bd5f687ab93cf3a68a480d"
+    },
+    {
+      "path": "/data/zl202621/KECRL/results/libero-task7-spatial-readout-20261117-v3/handoff/flip08-confirm5-flat_zero_xyz-reset-09.npz",
+      "sha256": "696ff9a179a9e6fdf817c8dcd80414bf61d1dbdb91e19efe0b5f17784f788825"
+    },
+    {
+      "path": "/data/zl202621/KECRL/results/libero-task7-spatial-readout-20261117-v3/handoff/flip08-confirm5-flat_zero_xyz-reset-10.npz",
+      "sha256": "1db1f2fe163aca16b919e3fb0feec428c112d6a806ff99b69db361caedb36cb7"
+    },
+    {
+      "path": "/data/zl202621/KECRL/results/libero-task7-spatial-readout-20261117-v3/handoff/flip08-confirm5-flat_zero_xyz-reset-11.npz",
+      "sha256": "11cb3134b2a06669fad32ed2205e72749f879a2b94081e2cfc8178c9e9d7c2e5"
+    },
+    {
+      "path": "/data/zl202621/KECRL/results/libero-task7-spatial-readout-20261117-v3/handoff/flip08-confirm5-flat_zero_xyz-reset-12.npz",
+      "sha256": "574110846ea0d34c4e4497523cd9926a5184e6c4f8b039f2aa69be0efdbfbadf"
+    },
+    {
+      "path": "/data/zl202621/KECRL/results/libero-task7-eef-xyz-control-20261117-v2/handoff/flip08-confirm5-cached_xyz_mlp-reset-00.npz",
+      "sha256": "b4888c230a17991eb71ae4f2044b22694452ee8157c4394179cc89c880ac60f6"
+    },
+    {
+      "path": "/data/zl202621/KECRL/results/libero-task7-eef-xyz-control-20261117-v2/handoff/flip08-confirm5-cached_xyz_mlp-reset-01.npz",
+      "sha256": "e10f51cb1218653e2edd5338eb52f9a7babfc3627bc60a55033c76778cafb988"
+    },
+    {
+      "path": "/data/zl202621/KECRL/results/libero-task7-eef-xyz-control-20261117-v2/handoff/flip08-confirm5-cached_xyz_mlp-reset-02.npz",
+      "sha256": "ee39b91b367cf49e3c49fe90066d5f28c24557452ee2d8b06d908ec6d30ccdec"
+    },
+    {
+      "path": "/data/zl202621/KECRL/results/libero-task7-eef-xyz-control-20261117-v2/handoff/flip08-confirm5-cached_xyz_mlp-reset-03.npz",
+      "sha256": "366a79ec4b9c5561fc97bc95b2f8d6dbd4a615d34839cfd590c80755360fd870"
+    },
+    {
+      "path": "/data/zl202621/KECRL/results/libero-task7-eef-xyz-control-20261117-v2/handoff/flip08-confirm5-cached_xyz_mlp-reset-04.npz",
+      "sha256": "d7b0759bdd8c696e8e2d2f252c400f15255e82f9cd8c484bba72f8cf0df5d6d2"
+    },
+    {
+      "path": "/data/zl202621/KECRL/results/libero-task7-eef-xyz-control-20261117-v2/handoff/flip08-confirm5-cached_xyz_mlp-reset-05.npz",
+      "sha256": "4191d5853094ee5d498d92d170c4c0fc7c1adfd193b0b11b90968441c51dc643"
+    },
+    {
+      "path": "/data/zl202621/KECRL/results/libero-task7-eef-xyz-control-20261117-v2/handoff/flip08-confirm5-cached_xyz_mlp-reset-06.npz",
+      "sha256": "1e250337fb8574da43f62c70d62b140b2181ec91065244a00fbb4ff3849e8784"
+    },
+    {
+      "path": "/data/zl202621/KECRL/results/libero-task7-eef-xyz-control-20261117-v2/handoff/flip08-confirm5-cached_xyz_mlp-reset-07.npz",
+      "sha256": "b06f16f26f72fb48de32b5be6e06d1fa5eb3dfc0fc860bc08d216858f9e3d022"
+    },
+    {
+      "path": "/data/zl202621/KECRL/results/libero-task7-eef-xyz-control-20261117-v2/handoff/flip08-confirm5-cached_xyz_mlp-reset-08.npz",
+      "sha256": "aad08757a356695bffbdd1d1399effcbcbf0329c317c27459daf36ee165e1f59"
+    },
+    {
+      "path": "/data/zl202621/KECRL/results/libero-task7-eef-xyz-control-20261117-v2/handoff/flip08-confirm5-cached_xyz_mlp-reset-09.npz",
+      "sha256": "9d7955e323f54909633c414f5b4229e0b88e98c32f3922e83c4e91526cba627c"
+    },
+    {
+      "path": "/data/zl202621/KECRL/results/libero-task7-eef-xyz-control-20261117-v2/handoff/flip08-confirm5-cached_xyz_mlp-reset-10.npz",
+      "sha256": "6d39a2a60b2ef21f398a70ea8dafcd81e35bd1ca0d06fe43478f551a7e0c8e8d"
+    },
+    {
+      "path": "/data/zl202621/KECRL/results/libero-task7-eef-xyz-control-20261117-v2/handoff/flip08-confirm5-cached_xyz_mlp-reset-11.npz",
+      "sha256": "ae3a417f1908d1d7895ee12b8f3a05fbd44613c516e06dc5b21a59d157dd9b88"
+    },
+    {
+      "path": "/data/zl202621/KECRL/results/libero-task7-eef-xyz-control-20261117-v2/handoff/flip08-confirm5-cached_xyz_mlp-reset-12.npz",
+      "sha256": "0cfdcd818c79d3cf4a730bce16cb482c6af8bf27e375020951dacbd95d349d74"
+    },
+    {
+      "path": "/data/zl202621/KECRL/results/libero-task7-spatial-readout-20261117-v3/handoff/flip08-confirm5-spatial_coordinates_zero_xyz-reset-00.npz",
+      "sha256": "87883bf98965fe7e2fdb374cb0c0a2fe8242346a98da712e1d953651c0f92779"
+    },
+    {
+      "path": "/data/zl202621/KECRL/results/libero-task7-spatial-readout-20261117-v3/handoff/flip08-confirm5-spatial_coordinates_zero_xyz-reset-01.npz",
+      "sha256": "12f7c29c35b2bf535419a3ac45808a54957fcc40d6a4b6cc803a2a596482fe6a"
+    },
+    {
+      "path": "/data/zl202621/KECRL/results/libero-task7-spatial-readout-20261117-v3/handoff/flip08-confirm5-spatial_coordinates_zero_xyz-reset-02.npz",
+      "sha256": "70e62cf050183d959f8f6c13984e673cfc9e99b5dcdc41c9c493e3dedd892399"
+    },
+    {
+      "path": "/data/zl202621/KECRL/results/libero-task7-spatial-readout-20261117-v3/handoff/flip08-confirm5-spatial_coordinates_zero_xyz-reset-03.npz",
+      "sha256": "f4cf7ec0f43012f787e50d5b7b4c929a641d485865b535fc6cfa558bed6b63a0"
+    },
+    {
+      "path": "/data/zl202621/KECRL/results/libero-task7-spatial-readout-20261117-v3/handoff/flip08-confirm5-spatial_coordinates_zero_xyz-reset-04.npz",
+      "sha256": "109e98293154333608c0c56beaadc24132e8ff504d0d42fd919316ab0942ac6a"
+    },
+    {
+      "path": "/data/zl202621/KECRL/results/libero-task7-spatial-readout-20261117-v3/handoff/flip08-confirm5-spatial_coordinates_zero_xyz-reset-05.npz",
+      "sha256": "374556c13d83ec7cdfad35195b6aef5f203f76a0d00a3970c4025518d3e17c63"
+    },
+    {
+      "path": "/data/zl202621/KECRL/results/libero-task7-spatial-readout-20261117-v3/handoff/flip08-confirm5-spatial_coordinates_zero_xyz-reset-06.npz",
+      "sha256": "a0a66819e459ad7f3a3b117178b9a7c86c502b79c9886fcc1f991dde1a9016e5"
+    },
+    {
+      "path": "/data/zl202621/KECRL/results/libero-task7-spatial-readout-20261117-v3/handoff/flip08-confirm5-spatial_coordinates_zero_xyz-reset-07.npz",
+      "sha256": "b9f9a52f581bd4733bdbf3d2e5bebb03e2c017f9fdd369047a8a31916ad2bdbf"
+    },
+    {
+      "path": "/data/zl202621/KECRL/results/libero-task7-spatial-readout-20261117-v3/handoff/flip08-confirm5-spatial_coordinates_zero_xyz-reset-08.npz",
+      "sha256": "c2aeba151e2f0c254c26f67858c28e831337251839bd5f687ab93cf3a68a480d"
+    },
+    {
+      "path": "/data/zl202621/KECRL/results/libero-task7-spatial-readout-20261117-v3/handoff/flip08-confirm5-spatial_coordinates_zero_xyz-reset-09.npz",
+      "sha256": "696ff9a179a9e6fdf817c8dcd80414bf61d1dbdb91e19efe0b5f17784f788825"
+    },
+    {
+      "path": "/data/zl202621/KECRL/results/libero-task7-spatial-readout-20261117-v3/handoff/flip08-confirm5-spatial_coordinates_zero_xyz-reset-10.npz",
+      "sha256": "1db1f2fe163aca16b919e3fb0feec428c112d6a806ff99b69db361caedb36cb7"
+    },
+    {
+      "path": "/data/zl202621/KECRL/results/libero-task7-spatial-readout-20261117-v3/handoff/flip08-confirm5-spatial_coordinates_zero_xyz-reset-11.npz",
+      "sha256": "11cb3134b2a06669fad32ed2205e72749f879a2b94081e2cfc8178c9e9d7c2e5"
+    },
+    {
+      "path": "/data/zl202621/KECRL/results/libero-task7-spatial-readout-20261117-v3/handoff/flip08-confirm5-spatial_coordinates_zero_xyz-reset-12.npz",
+      "sha256": "574110846ea0d34c4e4497523cd9926a5184e6c4f8b039f2aa69be0efdbfbadf"
+    },
+    {
+      "path": "/data/zl202621/KECRL/results/libero-task7-spatial-readout-20261117-v3/handoff/flip10-unchanged-flat_zero_xyz-reset-00.npz",
+      "sha256": "87883bf98965fe7e2fdb374cb0c0a2fe8242346a98da712e1d953651c0f92779"
+    },
+    {
+      "path": "/data/zl202621/KECRL/results/libero-task7-spatial-readout-20261117-v3/handoff/flip10-unchanged-flat_zero_xyz-reset-01.npz",
+      "sha256": "12f7c29c35b2bf535419a3ac45808a54957fcc40d6a4b6cc803a2a596482fe6a"
+    },
+    {
+      "path": "/data/zl202621/KECRL/results/libero-task7-spatial-readout-20261117-v3/handoff/flip10-unchanged-flat_zero_xyz-reset-02.npz",
+      "sha256": "70e62cf050183d959f8f6c13984e673cfc9e99b5dcdc41c9c493e3dedd892399"
+    },
+    {
+      "path": "/data/zl202621/KECRL/results/libero-task7-spatial-readout-20261117-v3/handoff/flip10-unchanged-flat_zero_xyz-reset-03.npz",
+      "sha256": "f4cf7ec0f43012f787e50d5b7b4c929a641d485865b535fc6cfa558bed6b63a0"
+    },
+    {
+      "path": "/data/zl202621/KECRL/results/libero-task7-spatial-readout-20261117-v3/handoff/flip10-unchanged-flat_zero_xyz-reset-04.npz",
+      "sha256": "109e98293154333608c0c56beaadc24132e8ff504d0d42fd919316ab0942ac6a"
+    },
+    {
+      "path": "/data/zl202621/KECRL/results/libero-task7-spatial-readout-20261117-v3/handoff/flip10-unchanged-flat_zero_xyz-reset-05.npz",
+      "sha256": "374556c13d83ec7cdfad35195b6aef5f203f76a0d00a3970c4025518d3e17c63"
+    },
+    {
+      "path": "/data/zl202621/KECRL/results/libero-task7-spatial-readout-20261117-v3/handoff/flip10-unchanged-flat_zero_xyz-reset-06.npz",
+      "sha256": "a0a66819e459ad7f3a3b117178b9a7c86c502b79c9886fcc1f991dde1a9016e5"
+    },
+    {
+      "path": "/data/zl202621/KECRL/results/libero-task7-spatial-readout-20261117-v3/handoff/flip10-unchanged-flat_zero_xyz-reset-07.npz",
+      "sha256": "b9f9a52f581bd4733bdbf3d2e5bebb03e2c017f9fdd369047a8a31916ad2bdbf"
+    },
+    {
+      "path": "/data/zl202621/KECRL/results/libero-task7-spatial-readout-20261117-v3/handoff/flip10-unchanged-flat_zero_xyz-reset-08.npz",
+      "sha256": "c2aeba151e2f0c254c26f67858c28e831337251839bd5f687ab93cf3a68a480d"
+    },
+    {
+      "path": "/data/zl202621/KECRL/results/libero-task7-spatial-readout-20261117-v3/handoff/flip10-unchanged-flat_zero_xyz-reset-09.npz",
+      "sha256": "696ff9a179a9e6fdf817c8dcd80414bf61d1dbdb91e19efe0b5f17784f788825"
+    },
+    {
+      "path": "/data/zl202621/KECRL/results/libero-task7-spatial-readout-20261117-v3/handoff/flip10-unchanged-flat_zero_xyz-reset-10.npz",
+      "sha256": "1db1f2fe163aca16b919e3fb0feec428c112d6a806ff99b69db361caedb36cb7"
+    },
+    {
+      "path": "/data/zl202621/KECRL/results/libero-task7-spatial-readout-20261117-v3/handoff/flip10-unchanged-flat_zero_xyz-reset-11.npz",
+      "sha256": "11cb3134b2a06669fad32ed2205e72749f879a2b94081e2cfc8178c9e9d7c2e5"
+    },
+    {
+      "path": "/data/zl202621/KECRL/results/libero-task7-spatial-readout-20261117-v3/handoff/flip10-unchanged-flat_zero_xyz-reset-12.npz",
+      "sha256": "574110846ea0d34c4e4497523cd9926a5184e6c4f8b039f2aa69be0efdbfbadf"
+    },
+    {
+      "path": "/data/zl202621/KECRL/results/libero-task7-spatial-readout-20261117-v3/handoff/flip10-unchanged-flat_zero_xyz-reset-13.npz",
+      "sha256": "512e8042aa5894094f2d13dd4c53f4fe9e98739f69adae6c6aee36a3e4bb07ac"
+    },
+    {
+      "path": "/data/zl202621/KECRL/results/libero-task7-spatial-readout-20261117-v3/handoff/flip10-unchanged-flat_zero_xyz-reset-14.npz",
+      "sha256": "4ca81b121b5b0651726d20db5b41b50d81e88f6b1e5d23f004f25e97a384f5bc"
+    },
+    {
+      "path": "/data/zl202621/KECRL/results/libero-task7-spatial-readout-20261117-v3/handoff/flip10-unchanged-flat_zero_xyz-reset-15.npz",
+      "sha256": "3e77d11e3db74ae016451438cf7f050cd9d84747da2c242f3c9455760750f1b9"
+    },
+    {
+      "path": "/data/zl202621/KECRL/results/libero-task7-spatial-readout-20261117-v3/handoff/flip10-unchanged-flat_zero_xyz-reset-16.npz",
+      "sha256": "e8401fb8e30597120fd892448f2b1bb7929b1c61ef705b7d6d2335eda78723d2"
+    },
+    {
+      "path": "/data/zl202621/KECRL/results/libero-task7-spatial-readout-20261117-v3/handoff/flip10-unchanged-flat_zero_xyz-reset-17.npz",
+      "sha256": "8ac63d03d9d705ad95fc91fd5b518b45c1312d639eda15604a55f419117de290"
+    },
+    {
+      "path": "/data/zl202621/KECRL/results/libero-task7-eef-xyz-control-20261117-v2/handoff/flip10-unchanged-cached_xyz_mlp-reset-00.npz",
+      "sha256": "b4888c230a17991eb71ae4f2044b22694452ee8157c4394179cc89c880ac60f6"
+    },
+    {
+      "path": "/data/zl202621/KECRL/results/libero-task7-eef-xyz-control-20261117-v2/handoff/flip10-unchanged-cached_xyz_mlp-reset-01.npz",
+      "sha256": "e10f51cb1218653e2edd5338eb52f9a7babfc3627bc60a55033c76778cafb988"
+    },
+    {
+      "path": "/data/zl202621/KECRL/results/libero-task7-eef-xyz-control-20261117-v2/handoff/flip10-unchanged-cached_xyz_mlp-reset-02.npz",
+      "sha256": "ee39b91b367cf49e3c49fe90066d5f28c24557452ee2d8b06d908ec6d30ccdec"
+    },
+    {
+      "path": "/data/zl202621/KECRL/results/libero-task7-eef-xyz-control-20261117-v2/handoff/flip10-unchanged-cached_xyz_mlp-reset-03.npz",
+      "sha256": "366a79ec4b9c5561fc97bc95b2f8d6dbd4a615d34839cfd590c80755360fd870"
+    },
+    {
+      "path": "/data/zl202621/KECRL/results/libero-task7-eef-xyz-control-20261117-v2/handoff/flip10-unchanged-cached_xyz_mlp-reset-04.npz",
+      "sha256": "d7b0759bdd8c696e8e2d2f252c400f15255e82f9cd8c484bba72f8cf0df5d6d2"
+    },
+    {
+      "path": "/data/zl202621/KECRL/results/libero-task7-eef-xyz-control-20261117-v2/handoff/flip10-unchanged-cached_xyz_mlp-reset-05.npz",
+      "sha256": "4191d5853094ee5d498d92d170c4c0fc7c1adfd193b0b11b90968441c51dc643"
+    },
+    {
+      "path": "/data/zl202621/KECRL/results/libero-task7-eef-xyz-control-20261117-v2/handoff/flip10-unchanged-cached_xyz_mlp-reset-06.npz",
+      "sha256": "1e250337fb8574da43f62c70d62b140b2181ec91065244a00fbb4ff3849e8784"
+    },
+    {
+      "path": "/data/zl202621/KECRL/results/libero-task7-eef-xyz-control-20261117-v2/handoff/flip10-unchanged-cached_xyz_mlp-reset-07.npz",
+      "sha256": "b06f16f26f72fb48de32b5be6e06d1fa5eb3dfc0fc860bc08d216858f9e3d022"
+    },
+    {
+      "path": "/data/zl202621/KECRL/results/libero-task7-eef-xyz-control-20261117-v2/handoff/flip10-unchanged-cached_xyz_mlp-reset-08.npz",
+      "sha256": "aad08757a356695bffbdd1d1399effcbcbf0329c317c27459daf36ee165e1f59"
+    },
+    {
+      "path": "/data/zl202621/KECRL/results/libero-task7-eef-xyz-control-20261117-v2/handoff/flip10-unchanged-cached_xyz_mlp-reset-09.npz",
+      "sha256": "9d7955e323f54909633c414f5b4229e0b88e98c32f3922e83c4e91526cba627c"
+    },
+    {
+      "path": "/data/zl202621/KECRL/results/libero-task7-eef-xyz-control-20261117-v2/handoff/flip10-unchanged-cached_xyz_mlp-reset-10.npz",
+      "sha256": "6d39a2a60b2ef21f398a70ea8dafcd81e35bd1ca0d06fe43478f551a7e0c8e8d"
+    },
+    {
+      "path": "/data/zl202621/KECRL/results/libero-task7-eef-xyz-control-20261117-v2/handoff/flip10-unchanged-cached_xyz_mlp-reset-11.npz",
+      "sha256": "ae3a417f1908d1d7895ee12b8f3a05fbd44613c516e06dc5b21a59d157dd9b88"
+    },
+    {
+      "path": "/data/zl202621/KECRL/results/libero-task7-eef-xyz-control-20261117-v2/handoff/flip10-unchanged-cached_xyz_mlp-reset-12.npz",
+      "sha256": "0cfdcd818c79d3cf4a730bce16cb482c6af8bf27e375020951dacbd95d349d74"
+    },
+    {
+      "path": "/data/zl202621/KECRL/results/libero-task7-eef-xyz-control-20261117-v2/handoff/flip10-unchanged-cached_xyz_mlp-reset-13.npz",
+      "sha256": "cd2f5a38e53df67e374977610b6665504830e98b57ec0dc88a4bd97d0928369d"
+    },
+    {
+      "path": "/data/zl202621/KECRL/results/libero-task7-eef-xyz-control-20261117-v2/handoff/flip10-unchanged-cached_xyz_mlp-reset-14.npz",
+      "sha256": "89bb138d006b840cab4ceaebf5c255bec36df4d5fd8551b63deee6657e433297"
+    },
+    {
+      "path": "/data/zl202621/KECRL/results/libero-task7-eef-xyz-control-20261117-v2/handoff/flip10-unchanged-cached_xyz_mlp-reset-15.npz",
+      "sha256": "8300342693e14cd052fc36f8624c312b71af8c8a4a8ac36f50fca625638d5ae9"
+    },
+    {
+      "path": "/data/zl202621/KECRL/results/libero-task7-eef-xyz-control-20261117-v2/handoff/flip10-unchanged-cached_xyz_mlp-reset-16.npz",
+      "sha256": "b1f0e639d5a5e0ad3ae5d6475fe63188c4836a5f865694ff0d22016bc19fc1f8"
+    },
+    {
+      "path": "/data/zl202621/KECRL/results/libero-task7-eef-xyz-control-20261117-v2/handoff/flip10-unchanged-cached_xyz_mlp-reset-17.npz",
+      "sha256": "a240e752ed1aa309164f298449d5c4390935613fce8cda02f3761c9618fae0ab"
+    },
+    {
+      "path": "/data/zl202621/KECRL/results/libero-task7-spatial-readout-20261117-v3/handoff/flip10-unchanged-spatial_coordinates_zero_xyz-reset-00.npz",
+      "sha256": "87883bf98965fe7e2fdb374cb0c0a2fe8242346a98da712e1d953651c0f92779"
+    },
+    {
+      "path": "/data/zl202621/KECRL/results/libero-task7-spatial-readout-20261117-v3/handoff/flip10-unchanged-spatial_coordinates_zero_xyz-reset-01.npz",
+      "sha256": "12f7c29c35b2bf535419a3ac45808a54957fcc40d6a4b6cc803a2a596482fe6a"
+    },
+    {
+      "path": "/data/zl202621/KECRL/results/libero-task7-spatial-readout-20261117-v3/handoff/flip10-unchanged-spatial_coordinates_zero_xyz-reset-02.npz",
+      "sha256": "70e62cf050183d959f8f6c13984e673cfc9e99b5dcdc41c9c493e3dedd892399"
+    },
+    {
+      "path": "/data/zl202621/KECRL/results/libero-task7-spatial-readout-20261117-v3/handoff/flip10-unchanged-spatial_coordinates_zero_xyz-reset-03.npz",
+      "sha256": "f4cf7ec0f43012f787e50d5b7b4c929a641d485865b535fc6cfa558bed6b63a0"
+    },
+    {
+      "path": "/data/zl202621/KECRL/results/libero-task7-spatial-readout-20261117-v3/handoff/flip10-unchanged-spatial_coordinates_zero_xyz-reset-04.npz",
+      "sha256": "109e98293154333608c0c56beaadc24132e8ff504d0d42fd919316ab0942ac6a"
+    },
+    {
+      "path": "/data/zl202621/KECRL/results/libero-task7-spatial-readout-20261117-v3/handoff/flip10-unchanged-spatial_coordinates_zero_xyz-reset-05.npz",
+      "sha256": "374556c13d83ec7cdfad35195b6aef5f203f76a0d00a3970c4025518d3e17c63"
+    },
+    {
+      "path": "/data/zl202621/KECRL/results/libero-task7-spatial-readout-20261117-v3/handoff/flip10-unchanged-spatial_coordinates_zero_xyz-reset-06.npz",
+      "sha256": "a0a66819e459ad7f3a3b117178b9a7c86c502b79c9886fcc1f991dde1a9016e5"
+    },
+    {
+      "path": "/data/zl202621/KECRL/results/libero-task7-spatial-readout-20261117-v3/handoff/flip10-unchanged-spatial_coordinates_zero_xyz-reset-07.npz",
+      "sha256": "b9f9a52f581bd4733bdbf3d2e5bebb03e2c017f9fdd369047a8a31916ad2bdbf"
+    },
+    {
+      "path": "/data/zl202621/KECRL/results/libero-task7-spatial-readout-20261117-v3/handoff/flip10-unchanged-spatial_coordinates_zero_xyz-reset-08.npz",
+      "sha256": "c2aeba151e2f0c254c26f67858c28e831337251839bd5f687ab93cf3a68a480d"
+    },
+    {
+      "path": "/data/zl202621/KECRL/results/libero-task7-spatial-readout-20261117-v3/handoff/flip10-unchanged-spatial_coordinates_zero_xyz-reset-09.npz",
+      "sha256": "696ff9a179a9e6fdf817c8dcd80414bf61d1dbdb91e19efe0b5f17784f788825"
+    },
+    {
+      "path": "/data/zl202621/KECRL/results/libero-task7-spatial-readout-20261117-v3/handoff/flip10-unchanged-spatial_coordinates_zero_xyz-reset-10.npz",
+      "sha256": "1db1f2fe163aca16b919e3fb0feec428c112d6a806ff99b69db361caedb36cb7"
+    },
+    {
+      "path": "/data/zl202621/KECRL/results/libero-task7-spatial-readout-20261117-v3/handoff/flip10-unchanged-spatial_coordinates_zero_xyz-reset-11.npz",
+      "sha256": "11cb3134b2a06669fad32ed2205e72749f879a2b94081e2cfc8178c9e9d7c2e5"
+    },
+    {
+      "path": "/data/zl202621/KECRL/results/libero-task7-spatial-readout-20261117-v3/handoff/flip10-unchanged-spatial_coordinates_zero_xyz-reset-12.npz",
+      "sha256": "574110846ea0d34c4e4497523cd9926a5184e6c4f8b039f2aa69be0efdbfbadf"
+    },
+    {
+      "path": "/data/zl202621/KECRL/results/libero-task7-spatial-readout-20261117-v3/handoff/flip10-unchanged-spatial_coordinates_zero_xyz-reset-13.npz",
+      "sha256": "512e8042aa5894094f2d13dd4c53f4fe9e98739f69adae6c6aee36a3e4bb07ac"
+    },
+    {
+      "path": "/data/zl202621/KECRL/results/libero-task7-spatial-readout-20261117-v3/handoff/flip10-unchanged-spatial_coordinates_zero_xyz-reset-14.npz",
+      "sha256": "4ca81b121b5b0651726d20db5b41b50d81e88f6b1e5d23f004f25e97a384f5bc"
+    },
+    {
+      "path": "/data/zl202621/KECRL/results/libero-task7-spatial-readout-20261117-v3/handoff/flip10-unchanged-spatial_coordinates_zero_xyz-reset-15.npz",
+      "sha256": "3e77d11e3db74ae016451438cf7f050cd9d84747da2c242f3c9455760750f1b9"
+    },
+    {
+      "path": "/data/zl202621/KECRL/results/libero-task7-spatial-readout-20261117-v3/handoff/flip10-unchanged-spatial_coordinates_zero_xyz-reset-16.npz",
+      "sha256": "e8401fb8e30597120fd892448f2b1bb7929b1c61ef705b7d6d2335eda78723d2"
+    },
+    {
+      "path": "/data/zl202621/KECRL/results/libero-task7-spatial-readout-20261117-v3/handoff/flip10-unchanged-spatial_coordinates_zero_xyz-reset-17.npz",
+      "sha256": "8ac63d03d9d705ad95fc91fd5b518b45c1312d639eda15604a55f419117de290"
+    }
+  ],
+  "RGB_rule": {
+    "max_channel_error": 1,
+    "max_changed_pixels": 16,
+    "pixels_per_frame": 16384,
+    "warning_tag": "bounded_RGB_difference_cause_unknown",
+    "schema": "uint8_128_128_3",
+    "resampling_allowed": false
+  },
+  "sealed_roles_allowed": [],
+  "training_allowed": false,
+  "model_reads_allowed": false
+}

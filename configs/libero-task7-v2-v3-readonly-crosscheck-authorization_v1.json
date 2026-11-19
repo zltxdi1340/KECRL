@@ -1,0 +1,66 @@
+{
+  "user_approved": true,
+  "scope": "readonly archived v2/v322 endpoints and all3 repeated losses; no v4 execution",
+  "science": {
+    "path": "/data/zl202621/KECRL/configs/libero-task7-v2-v3-readonly-crosscheck_v1.json",
+    "sha256": "f932af19814d1fe8b83583d9ac7e753f7d77ef0edcaefa4b63d5431a7511cb2d"
+  },
+  "caps": {
+    "npz_parses": 9,
+    "numeric_member_decodes": 9,
+    "numeric_scalars": 15582,
+    "source_container_bytes": 96206559,
+    "rgb_pixel_decodes": 0,
+    "eef_decodes": 0,
+    "object_state_reads": 0,
+    "policy_forwards": 0,
+    "model_constructions": 0,
+    "checkpoint_reads": 0,
+    "hdf5_reads": 0,
+    "initial_bank_reads": 0,
+    "optimizer_updates": 0,
+    "native_steps": 0
+  },
+  "source_archives": [
+    {
+      "path": "/data/zl202621/KECRL/results/libero-task7-spatial-readout-20261117-v3/handoff/flip08-unchanged-flat_zero_xyz-episode.npz",
+      "sha256": "78f1625c5e51550cd21e7bb829ed367dc0da6030e85abc2890447b06c6b5febc"
+    },
+    {
+      "path": "/data/zl202621/KECRL/results/libero-task7-eef-xyz-control-20261117-v2/handoff/flip08-unchanged-cached_xyz_mlp-episode.npz",
+      "sha256": "83a2d94707848e8571e291792dc3d38a12569cff19481eba532e2d232a03c03d"
+    },
+    {
+      "path": "/data/zl202621/KECRL/results/libero-task7-spatial-readout-20261117-v3/handoff/flip08-unchanged-spatial_coordinates_zero_xyz-episode.npz",
+      "sha256": "a6b379831176fe851a7acdd24fc5cb1a053f452dbc2a918367f0e5d7876726a0"
+    },
+    {
+      "path": "/data/zl202621/KECRL/results/libero-task7-spatial-readout-20261117-v3/handoff/flip08-confirm5-flat_zero_xyz-episode.npz",
+      "sha256": "1096d732abc41c51598542f30a5ecaafb4c78e61db71a8eab1a9fd8e3cfb0518"
+    },
+    {
+      "path": "/data/zl202621/KECRL/results/libero-task7-eef-xyz-control-20261117-v2/handoff/flip08-confirm5-cached_xyz_mlp-episode.npz",
+      "sha256": "375b90cb7e61fd6be4581dbab90961abe8914ef34487fbb929f7b67103bd227e"
+    },
+    {
+      "path": "/data/zl202621/KECRL/results/libero-task7-spatial-readout-20261117-v3/handoff/flip08-confirm5-spatial_coordinates_zero_xyz-episode.npz",
+      "sha256": "54d733fba74451cba479913f56d7c00fdb6ad42c962d0a4fa04104debe885fb5"
+    },
+    {
+      "path": "/data/zl202621/KECRL/results/libero-task7-spatial-readout-20261117-v3/handoff/flip10-unchanged-flat_zero_xyz-episode.npz",
+      "sha256": "50ab948178ffefa0ce9bc5c620d935078e94e87c597cd90f576bc54d62425cd8"
+    },
+    {
+      "path": "/data/zl202621/KECRL/results/libero-task7-eef-xyz-control-20261117-v2/handoff/flip10-unchanged-cached_xyz_mlp-episode.npz",
+      "sha256": "e2274fbd924cf92d152fcfdf256168953afe04c7ca12b4143ba32f77fe65dbb8"
+    },
+    {
+      "path": "/data/zl202621/KECRL/results/libero-task7-spatial-readout-20261117-v3/handoff/flip10-unchanged-spatial_coordinates_zero_xyz-episode.npz",
+      "sha256": "3f53a1132d76b1552aab724042c5479234b811f69fc81b80afe6dee0baf6b61f"
+    }
+  ],
+  "numeric_members": [
+    "actions"
+  ],
+  "sealed_roles_allowed": []
+}
